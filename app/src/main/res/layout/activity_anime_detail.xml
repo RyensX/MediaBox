@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.activity.AnimeDetailActivity">
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/srl_anime_detail_activity"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_anime_detail_activity_header"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="5dp">
+
+                    <com.skyd.imomoe.view.widget.RoundCornersImageView
+                        android:id="@+id/iv_anime_detail_activity_cover"
+                        android:layout_width="120dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/tv_anime_detail_activity_title"
+                        tools:src="@drawable/ic_launcher_background" />
+
+                    <com.skyd.imomoe.view.widget.TypefaceTextView
+                        android:id="@+id/tv_anime_detail_activity_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginEnd="16dp"
+                        android:textColor="@color/main_color_2"
+                        android:textSize="17sp"
+                        app:layout_constrainedWidth="true"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintStart_toEndOf="@id/iv_anime_detail_activity_cover"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="轻音少女" />
+
+                    <com.skyd.imomoe.view.widget.TypefaceTextView
+                        android:id="@+id/tv_anime_detail_activity_alias"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginEnd="16dp"
+                        android:textColor="@color/main_color_2"
+                        android:textSize="12sp"
+                        app:layout_constrainedWidth="true"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintStart_toStartOf="@id/tv_anime_detail_activity_title"
+                        app:layout_constraintTop_toBottomOf="@id/tv_anime_detail_activity_title"
+                        tools:text="@string/anime_detail_alias" />
+
+                    <com.skyd.imomoe.view.widget.TypefaceTextView
+                        android:id="@+id/tv_anime_detail_activity_area"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/main_color_2"
+                        android:textSize="12sp"
+                        app:layout_constrainedWidth="true"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintStart_toStartOf="@id/tv_anime_detail_activity_title"
+                        app:layout_constraintTop_toBottomOf="@id/tv_anime_detail_activity_alias"
+                        tools:text="日本" />
+
+                    <com.skyd.imomoe.view.widget.TypefaceTextView
+                        android:id="@+id/tv_anime_detail_activity_year"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginEnd="16dp"
+                        android:textColor="@color/main_color_2"
+                        android:textSize="12sp"
+                        app:layout_constrainedWidth="true"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintStart_toEndOf="@id/tv_anime_detail_activity_area"
+                        app:layout_constraintTop_toBottomOf="@id/tv_anime_detail_activity_alias"
+                        tools:text="2009" />
+
+                    <com.skyd.imomoe.view.widget.TypefaceTextView
+                        android:id="@+id/tv_anime_detail_activity_index"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginEnd="16dp"
+                        android:textColor="@color/main_color_2"
+                        android:textSize="12sp"
+                        app:layout_constrainedWidth="true"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintStart_toStartOf="@id/tv_anime_detail_activity_title"
+                        app:layout_constraintTop_toBottomOf="@id/tv_anime_detail_activity_area"
+                        tools:text="@string/anime_detail_index" />
+
+                    <LinearLayout
+                        android:id="@+id/ll_anime_detail_activity_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginEnd="16dp"
+                        android:orientation="horizontal"
+                        app:layout_constrainedWidth="true"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintStart_toStartOf="@id/tv_anime_detail_activity_title"
+                        app:layout_constraintTop_toBottomOf="@id/tv_anime_detail_activity_index">
+
+                        <com.skyd.imomoe.view.widget.TypefaceTextView
+                            android:id="@+id/tv_anime_detail_activity_type"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/anime_detail_type"
+                            android:textColor="@color/main_color_2"
+                            android:textSize="12sp" />
+
+                        <com.nex3z.flowlayout.FlowLayout
+                            android:id="@+id/fl_anime_detail_activity_type"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:flChildSpacing="4dp"
+                            app:flRowSpacing="5dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_anime_detail_activity_tag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginEnd="16dp"
+                        android:orientation="horizontal"
+                        app:layout_constrainedWidth="true"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintStart_toStartOf="@id/tv_anime_detail_activity_title"
+                        app:layout_constraintTop_toBottomOf="@id/ll_anime_detail_activity_type">
+
+                        <com.skyd.imomoe.view.widget.TypefaceTextView
+                            android:id="@+id/tv_anime_detail_activity_tag"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/anime_detail_tag"
+                            android:textColor="@color/main_color_2"
+                            android:textSize="12sp" />
+
+                        <com.nex3z.flowlayout.FlowLayout
+                            android:id="@+id/fl_anime_detail_activity_tag"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:flChildSpacing="4dp"
+                            app:flRowSpacing="5dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0"
+                            app:layout_constraintStart_toStartOf="@id/tv_anime_detail_activity_title"
+                            app:layout_constraintTop_toBottomOf="@id/tv_anime_detail_activity_tag" />
+                    </LinearLayout>
+
+                    <com.skyd.imomoe.view.widget.TypefaceTextView
+                        android:id="@+id/tv_anime_detail_activity_info"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginEnd="16dp"
+                        android:textColor="@color/main_color_2"
+                        android:textSize="12sp"
+                        app:layout_constrainedWidth="true"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintStart_toStartOf="@id/tv_anime_detail_activity_title"
+                        app:layout_constraintTop_toBottomOf="@id/ll_anime_detail_activity_tag"
+                        tools:text="14集全" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_anime_detail_activity_info"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:nestedScrollingEnabled="false" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</FrameLayout>

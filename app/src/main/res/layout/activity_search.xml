@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.activity.SearchActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_search_activity_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/main_color_2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <EditText
+            android:id="@+id/et_search_activity_search"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/shape_circle_corner_edge_main_color_50"
+            android:drawableStart="@drawable/ic_search_main_color_24"
+            android:drawablePadding="5dp"
+            android:gravity="center_vertical"
+            android:hint="@string/home_fragment_header_search"
+            android:imeOptions="actionSearch"
+            android:paddingStart="17dp"
+            android:paddingTop="7dp"
+            android:paddingEnd="17dp"
+            android:paddingBottom="7dp"
+            android:singleLine="true"
+            android:textColor="@color/main_color_2"
+            android:textColorHint="@color/main_color"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_search_activity_cancel"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.skyd.imomoe.view.widget.TypefaceTextView
+            android:id="@+id/tv_search_activity_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:background="?android:selectableItemBackground"
+            android:gravity="center"
+            android:paddingStart="15dp"
+            android:paddingEnd="16dp"
+            android:text="@string/search_activity_cancel"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/et_search_activity_search"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.skyd.imomoe.view.widget.TypefaceTextView
+        android:id="@+id/tv_search_activity_tip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="16dp"
+        android:textColor="@color/main_color_2"
+        android:textSize="13sp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cl_search_activity_header"
+        tools:text="@string/search_activity_tip" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_search_activity"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="12dp"
+        android:scrollbarSize="4dp"
+        android:scrollbarThumbVertical="@color/main_color_3"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_search_activity_tip"
+        tools:listitem="@layout/item_anime_cover_3" />
+</androidx.constraintlayout.widget.ConstraintLayout>

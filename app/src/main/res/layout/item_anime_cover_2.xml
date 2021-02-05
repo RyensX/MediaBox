@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="16dp"
+    android:background="?android:selectableItemBackground"
+    android:paddingBottom="3dp">
+
+    <com.skyd.imomoe.view.widget.TypefaceTextView
+        android:id="@+id/tv_anime_cover_2_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="中二病也要谈恋爱！" />
+
+    <com.skyd.imomoe.view.widget.TypefaceTextView
+        android:id="@+id/tv_anime_cover_2_episode"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:textColor="@color/main_color"
+        android:textSize="12sp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toEndOf="@id/tv_anime_cover_2_title"
+        app:layout_constraintStart_toStartOf="@id/tv_anime_cover_2_title"
+        app:layout_constraintTop_toBottomOf="@id/tv_anime_cover_2_title"
+        tools:text="全12集" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

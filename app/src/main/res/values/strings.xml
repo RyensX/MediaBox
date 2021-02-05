@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">樱花动漫</string>
+    <string name="home_fragment_header_search">搜索</string>
+    <string name="press_again_to_exit">再按一次退出</string>
+    <string name="currently_not_supported">目前尚未支持</string>
+    <string name="unknown_view_holder">未知类型的模块！</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="anime_detail_alias">别名：</string>
+    <string name="anime_detail_area">地区：</string>
+    <string name="anime_detail_year">年代：</string>
+    <string name="anime_detail_index">索引：</string>
+    <string name="anime_detail_type">类型：</string>
+    <string name="anime_detail_tag">标签：</string>
+    <string name="error_play_episode">播放集数解析错误！</string>
+    <string name="get_data_failed">获取数据失败！</string>
+    <string name="search_activity_cancel">取消</string>
+    <string name="search_activity_tip">“%s”搜索结果，共%d条</string>
+    <string name="search_input_keywords_tips">请输入搜索关键字</string>
+
+</resources>
