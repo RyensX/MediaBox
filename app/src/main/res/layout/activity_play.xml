@@ -6,11 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".view.activity.PlayActivity">
 
-    <com.skyd.imomoe.view.widget.RoundCornersImageView
-        android:id="@+id/iv_play_activity_background"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
     <com.skyd.imomoe.view.widget.AnimeVideoPlayer
         android:id="@+id/avp_play_activity"
         android:layout_width="match_parent"
@@ -22,48 +17,65 @@
         android:layout_height="match_parent"
         android:layout_below="@id/avp_play_activity">
 
-        <androidx.core.widget.NestedScrollView
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <ImageView
+                android:id="@+id/iv_play_activity_background"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent"
+                android:scaleType="fitXY" />
 
-                <com.skyd.imomoe.view.widget.TypefaceTextView
-                    android:id="@+id/tv_play_activity_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginBottom="12dp"
-                    android:textColor="@color/main_color_2"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="轻音少女" />
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-                <View
-                    android:id="@+id/view_play_activity_line_1"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:layout_marginHorizontal="16dp"
-                    android:layout_marginTop="12dp"
-                    android:background="@color/main_color_2"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_play_activity_title" />
+                    android:layout_height="wrap_content">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_play_activity"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:nestedScrollingEnabled="false"
-                    android:paddingTop="7dp"
-                    app:layout_constraintTop_toBottomOf="@id/view_play_activity_line_1" />
+                    <com.skyd.imomoe.view.widget.TypefaceTextView
+                        android:id="@+id/tv_play_activity_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="12dp"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        android:textColor="@color/main_color_2"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        app:layout_constrainedWidth="true"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="轻音少女" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.core.widget.NestedScrollView>
+                    <View
+                        android:id="@+id/view_play_activity_line_1"
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginTop="12dp"
+                        android:background="@color/main_color_2"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_play_activity_title" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_play_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:nestedScrollingEnabled="false"
+                        android:paddingTop="7dp"
+                        app:layout_constraintTop_toBottomOf="@id/view_play_activity_line_1" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.core.widget.NestedScrollView>
+        </FrameLayout>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </RelativeLayout>

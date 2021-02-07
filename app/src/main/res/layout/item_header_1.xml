@@ -5,13 +5,14 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:paddingStart="16dp"
-    android:paddingEnd="0dp">
+    android:paddingTop="10dp"
+    android:paddingEnd="0dp"
+    android:paddingBottom="2dp">
 
     <com.skyd.imomoe.view.widget.TypefaceTextView
         android:id="@+id/tv_header_1_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="7dp"
         android:textColor="@color/main_color_2"
         android:textSize="17sp"
         tools:text="动漫电影" />

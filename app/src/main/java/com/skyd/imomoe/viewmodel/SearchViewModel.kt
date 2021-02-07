@@ -22,6 +22,7 @@ class SearchViewModel : ViewModel() {
     private var requestTimes = 0
     var searchResultList: MutableList<AnimeCoverBean> = ArrayList()
     var mldSearchResultList: MutableLiveData<String> = MutableLiveData()
+    var mldFailed: MutableLiveData<Boolean> = MutableLiveData()
 
     fun getSearchData(keyWord: String) {
         Thread {
@@ -32,16 +33,8 @@ class SearchViewModel : ViewModel() {
                 searchResultList.clear()
                 searchResultList.addAll(parseLpic(lpic[0]))
                 mldSearchResultList.postValue(keyWord)
-            } catch (e: HttpStatusException) {
-                e.printStackTrace()
-                if (e.statusCode == 502) {
-                    if (requestTimes <= 2) {
-                        requestTimes++
-                        getSearchData(keyWord)
-                    } else requestTimes = 0
-                }
-                Log.e(TAG, e.message ?: "")
             } catch (e: Exception) {
+                mldFailed.postValue(true)
                 e.printStackTrace()
                 (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread()
             }

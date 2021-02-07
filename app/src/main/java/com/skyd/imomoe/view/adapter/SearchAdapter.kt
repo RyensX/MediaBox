@@ -1,5 +1,6 @@
 package com.skyd.imomoe.view.adapter
 
+import android.app.Activity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeCoverBean
+import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.util.AnimeCover3ViewHolder
 import com.skyd.imomoe.util.Util.gone
 import com.skyd.imomoe.util.Util.loadImage
@@ -16,10 +18,9 @@ import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.Util.visible
 import com.skyd.imomoe.util.ViewHolderUtil.Companion.getItemViewType
 import com.skyd.imomoe.util.ViewHolderUtil.Companion.getViewHolder
-import com.skyd.imomoe.view.activity.SearchActivity
 
 class SearchAdapter(
-    val activity: SearchActivity,
+    val activity: Activity,
     private val dataList: List<AnimeCoverBean>
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -60,7 +61,11 @@ class SearchAdapter(
                             linearLayout.findViewById<TextView>(R.id.tv_anime_type_1)
                         tvFlowLayout.text = it[i].title
                         tvFlowLayout.setOnClickListener { it1 ->
-                            process(activity, it[i].actionUrl, it[i].actionUrl)
+                            //此处是”类型“，若要修改，需要注意Tab大分类是否还是”类型“
+                            process(
+                                activity,
+                                "${Const.ActionUrl.ANIME_CLASSIFY}${it[i].actionUrl}类型/${it[i].title}"
+                            )
                         }
                         linearLayout.removeView(tvFlowLayout)
                         holder.flAnimeCover3Type.addView(tvFlowLayout)

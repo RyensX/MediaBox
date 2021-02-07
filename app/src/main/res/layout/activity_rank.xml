@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.activity.RankActivity">
+
+    <LinearLayout
+        android:id="@+id/ll_rank_activity_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/main_color_2"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/iv_rank_activity_back"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:adjustViewBounds="true"
+            android:background="?android:selectableItemBackground"
+            android:padding="12dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_arrow_back_white_24"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.skyd.imomoe.view.widget.TypefaceTextView
+            android:id="@+id/tv_rank_activity_toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="16dp"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:text="@string/rank_list"
+            android:textColor="@color/white"
+            android:textSize="17sp" />
+    </LinearLayout>
+
+    <com.skyd.imomoe.view.widget.VpSwipeRefreshLayout
+        android:id="@+id/srl_rank_activity"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/ll_rank_activity_toolbar">
+
+        <LinearLayout
+            android:id="@+id/ll_rank_activity"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tl_rank_activity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:tabGravity="center"
+                app:tabIndicatorColor="@color/main_color_2"
+                app:tabMode="scrollable"
+                app:tabTextColor="@color/main_color_2" />
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/vp2_rank_activity"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+    </com.skyd.imomoe.view.widget.VpSwipeRefreshLayout>
+</RelativeLayout>

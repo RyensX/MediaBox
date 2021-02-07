@@ -7,10 +7,27 @@
     android:background="?android:selectableItemBackground">
 
     <com.skyd.imomoe.view.widget.TypefaceTextView
+        android:id="@+id/tv_anime_cover_5_rank"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="27dp"
+        android:background="@drawable/shape_fill_circle_corner_edge_main_color_50"
+        android:paddingHorizontal="6dp"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="1"
+        tools:visibility="visible" />
+
+    <com.skyd.imomoe.view.widget.TypefaceTextView
         android:id="@+id/tv_anime_cover_5_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginEnd="12dp"
         android:background="?android:selectableItemBackground"
         android:ellipsize="end"
         android:maxLines="2"
@@ -20,7 +37,7 @@
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toStartOf="@id/tv_anime_cover_5_episode"
         app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tv_anime_cover_5_rank"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="中二病也要谈恋爱！" />
 

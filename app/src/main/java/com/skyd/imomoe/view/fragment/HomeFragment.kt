@@ -1,6 +1,7 @@
 package com.skyd.imomoe.view.fragment
 
 import android.content.Intent
+import android.icu.lang.UCharacter.GraphemeClusterBreak.L
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,12 +13,14 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.skyd.imomoe.R
+import com.skyd.imomoe.view.activity.ClassifyActivity
+import com.skyd.imomoe.view.activity.RankActivity
 import com.skyd.imomoe.view.activity.SearchActivity
 import com.skyd.imomoe.viewmodel.HomeViewModel
 import kotlinx.android.synthetic.main.fragment_home.*
 
 
-class HomeFragment : Fragment() {
+class HomeFragment : BaseFragment() {
     private lateinit var viewModel: HomeViewModel
     private lateinit var adapter: VpAdapter
     private var offscreenPageLimit = 1
@@ -28,6 +31,7 @@ class HomeFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
         viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+        adapter = VpAdapter(this)
         return view
     }
 
@@ -35,6 +39,27 @@ class HomeFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         vp2_home_fragment.offscreenPageLimit = offscreenPageLimit
+        vp2_home_fragment.adapter = adapter
+        val tabLayoutMediator = TabLayoutMediator(
+            tl_home_fragment, vp2_home_fragment
+        ) { tab, position ->
+            tab.text = viewModel.allTabList[position].title
+        }
+        tabLayoutMediator.attach()
+
+        iv_home_fragment_rank.setOnClickListener {
+            activity?.let {
+                it.startActivity(Intent(it, RankActivity::class.java))
+                it.overridePendingTransition(
+                    R.anim.anl_push_left_in,
+                    R.anim.anl_stay
+                )
+            }
+        }
+
+        iv_home_fragment_classify.setOnClickListener {
+            startActivity(Intent(activity, ClassifyActivity::class.java))
+        }
 
         tv_home_fragment_header_search.setOnClickListener {
             activity?.let {
@@ -60,39 +85,29 @@ class HomeFragment : Fragment() {
             }
         })
 
-        viewModel.mldGetLTabList.observe(viewLifecycleOwner, {
-            adapter = VpAdapter(activity!!)
-            vp2_home_fragment.adapter = adapter
-
-            val tabLayoutMediator = TabLayoutMediator(
-                tl_home_fragment, vp2_home_fragment
-            ) { tab, position ->
-
-            }
-            tabLayoutMediator.attach()
+        viewModel.mldGetAllTabList.observe(viewLifecycleOwner, {
+            adapter.clearAllFragment()
             for (i in it.indices) {
-                tl_home_fragment.addTab(tl_home_fragment.newTab().setText(it[i].title))
-
                 adapter.addFragment(AnimeShowFragment(it[i].actionUrl))
             }
-            viewModel.getRTabData()
+            adapter.notifyDataSetChanged()
         })
 
-        viewModel.mldGetRTabList.observe(viewLifecycleOwner, {
-            for (i in it.indices) {
-                tl_home_fragment.addTab(tl_home_fragment.newTab().setText(it[i].title))
-
-                adapter.addFragment(AnimeShowFragment(it[i].actionUrl))
-            }
-        })
-
-        viewModel.getLTabData()
+        viewModel.getAllTabData()
     }
 
-    inner class VpAdapter(fragmentActivity: FragmentActivity) :
-        FragmentStateAdapter(fragmentActivity) {
+    inner class VpAdapter :
+        FragmentStateAdapter {
+
+        constructor(fragmentActivity: FragmentActivity) : super(fragmentActivity)
+
+        constructor(fragment: Fragment) : super(fragment)
 
         private val fragments = mutableListOf<AnimeShowFragment>()
+
+        fun clearAllFragment() {
+            fragments.clear()
+        }
 
         fun addFragment(fragment: AnimeShowFragment) {
             fragments.add(fragment)

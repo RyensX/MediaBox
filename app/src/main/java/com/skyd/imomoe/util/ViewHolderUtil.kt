@@ -120,6 +120,7 @@ class AnimeCover5ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val tvAnimeCover5Area = view.findViewById<TextView>(R.id.tv_anime_cover_5_area)
     val tvAnimeCover5Date = view.findViewById<TextView>(R.id.tv_anime_cover_5_date)
     val tvAnimeCover5Episode = view.findViewById<TextView>(R.id.tv_anime_cover_5_episode)
+    val tvAnimeCover5Rank = view.findViewById<TextView>(R.id.tv_anime_cover_5_rank)
 }
 
 class AnimeEpisodeFlowLayout1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {

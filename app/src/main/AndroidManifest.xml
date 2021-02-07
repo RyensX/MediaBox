@@ -14,6 +14,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.樱花动漫">
+        <activity android:name=".view.activity.MonthAnimeActivity"></activity>
+        <activity android:name=".view.activity.ClassifyActivity" />
+        <activity android:name=".view.activity.RankActivity" />
         <activity
             android:name=".view.activity.SearchActivity"
             android:screenOrientation="portrait" />

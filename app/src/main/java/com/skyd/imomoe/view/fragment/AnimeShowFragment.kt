@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -13,13 +12,19 @@ import com.skyd.imomoe.view.adapter.AnimeShowAdapter
 import com.skyd.imomoe.viewmodel.AnimeShowViewModel
 import kotlinx.android.synthetic.main.fragment_anime_show.*
 
-class AnimeShowFragment constructor(
-    private val partUrl: String
-) : Fragment() {
+
+class AnimeShowFragment : BaseFragment {
+    private var partUrl: String = ""
     private lateinit var viewModel: AnimeShowViewModel
     private lateinit var adapter: AnimeShowAdapter
     private val srlOnRefreshListener =
         SwipeRefreshLayout.OnRefreshListener { viewModel.getAnimeShowData(partUrl) }
+
+    constructor(partUrl: String) {
+        this.partUrl = partUrl
+    }
+
+    constructor() : super()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,10 +48,9 @@ class AnimeShowFragment constructor(
         srl_anime_show_fragment.setOnRefreshListener(srlOnRefreshListener)
 
         viewModel.mldGetAnimeShowList.observe(viewLifecycleOwner, {
+            srl_anime_show_fragment.isRefreshing = false
             if (it) {
                 adapter.notifyDataSetChanged()
-                if (srl_anime_show_fragment.isRefreshing)
-                    srl_anime_show_fragment.isRefreshing = false
             }
         })
 

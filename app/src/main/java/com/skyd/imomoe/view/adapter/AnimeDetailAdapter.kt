@@ -1,9 +1,11 @@
 package com.skyd.imomoe.view.adapter
 
+import android.graphics.Color
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.skyd.imomoe.App
@@ -41,6 +43,7 @@ class AnimeDetailAdapter(
             is Header1ViewHolder -> {
                 holder.tvHeader1Title.textSize = 15f
                 holder.tvHeader1Title.text = item.title
+                holder.tvHeader1Title.setTextColor(Color.WHITE)
             }
             is GridRecyclerView1ViewHolder -> {
                 item.animeCoverList?.let {
@@ -56,7 +59,7 @@ class AnimeDetailAdapter(
                     }
                     holder.rvGridRecyclerView1.layoutManager = layoutManager
                     holder.rvGridRecyclerView1.adapter =
-                        AnimeShowAdapter.GridRecyclerView1Adapter(activity, it)
+                        AnimeShowAdapter.GridRecyclerView1Adapter(activity, it, Color.WHITE)
                 }
             }
             is AnimeEpisodeFlowLayout1ViewHolder -> {
@@ -71,6 +74,8 @@ class AnimeDetailAdapter(
                             ) as LinearLayout
                         val tvFlowLayout =
                             linearLayout.findViewById<TextView>(R.id.tv_anime_episode_1)
+                        tvFlowLayout.setBackgroundResource(R.drawable.shape_circle_corner_edge_white_ripper_50)
+                        tvFlowLayout.setTextColor(Color.WHITE)
                         tvFlowLayout.text = it[i].title
                         tvFlowLayout.setOnClickListener { it1 ->
                             process(activity, it[i].actionUrl, it[i].actionUrl)
@@ -83,6 +88,7 @@ class AnimeDetailAdapter(
             is AnimeDescribe1ViewHolder -> {
                 holder.tvAnimeDescribe1.text = item.describe
                 holder.tvAnimeDescribe1.setOnClickListener { }
+                holder.tvAnimeDescribe1.setTextColor(Color.WHITE)
             }
             else -> {
                 holder.itemView.visibility = View.GONE

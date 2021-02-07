@@ -8,17 +8,30 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.util.TypeFaceUtil
 
 class TypefaceTextView : AppCompatTextView {
+    var isFocused: Boolean? = null
+
     constructor(context: Context) : this(context, null)
 
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
 
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    ) {
         attrs?.let {
             val typedArray = context.obtainStyledAttributes(it, R.styleable.TypefaceTextView, 0, 0)
             val typefaceType = typedArray.getInt(R.styleable.TypefaceTextView_typeface, 0)
             typeface = getTypeface(typefaceType)
             typedArray.recycle()
         }
+    }
+
+    override fun isFocused(): Boolean {
+        isFocused?.let {
+            return it
+        }
+        return super.isFocused()
     }
 
     companion object {

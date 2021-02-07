@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.skyd.imomoe.view.widget.TypefaceTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tv_toast_1"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_fill_circle_corner_edge_main_color_50"
+    android:paddingHorizontal="15dp"
+    android:paddingVertical="9dp"
+    android:textColor="@color/white"
+    android:textStyle="bold"
+    tools:text="Toast">
+
+</com.skyd.imomoe.view.widget.TypefaceTextView>

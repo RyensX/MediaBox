@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.skyd.imomoe.view.widget.TypefaceTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tv_spinner_item_1"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:background="?android:selectableItemBackground"
+    android:gravity="center"
+    android:paddingStart="17dp"
+    android:paddingTop="10dp"
+    android:paddingEnd="17dp"
+    android:paddingBottom="10dp"
+    android:textColor="@color/main_color_2"
+    android:textSize="17sp"
+    tools:text="地区" />

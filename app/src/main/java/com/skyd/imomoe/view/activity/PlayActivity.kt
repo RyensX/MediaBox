@@ -47,8 +47,7 @@ class PlayActivity : BaseActivity() {
         srl_play_activity.setColorSchemeResources(R.color.main_color)
 
         viewModel.mldPlayBean.observe(this, {
-            if (srl_play_activity.isRefreshing)
-                srl_play_activity.isRefreshing = false
+            srl_play_activity.isRefreshing = false
 
             tv_play_activity_title.text = viewModel.playBean?.title?.title
 

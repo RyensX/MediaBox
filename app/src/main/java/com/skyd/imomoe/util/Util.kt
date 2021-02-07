@@ -14,7 +14,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -24,7 +23,10 @@ import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.view.activity.AnimeDetailActivity
+import com.skyd.imomoe.view.activity.ClassifyActivity
+import com.skyd.imomoe.view.activity.MonthAnimeActivity
 import com.skyd.imomoe.view.activity.PlayActivity
+import com.skyd.imomoe.view.widget.AnimeToast
 import java.net.URLDecoder
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -98,6 +100,17 @@ object Util {
         visibility = View.INVISIBLE
     }
 
+    fun setTransparentStatusBar(
+        window: Window,
+        isDark: Boolean = true
+    ) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (isDark) window.decorView.systemUiVisibility =
+                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR //实现状态栏图标和文字颜色为暗色
+            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        }
+    }
+
     fun setColorStatusBar(
         window: Window,
         statusBarColor: Int,
@@ -122,7 +135,7 @@ object Util {
     }
 
     fun CharSequence.showToast(duration: Int = Toast.LENGTH_SHORT) {
-        Toast.makeText(App.context, this, duration).show()
+        AnimeToast.makeText(App.context, this, duration).show()
     }
 
     fun CharSequence.showToastOnThread(duration: Int = Toast.LENGTH_SHORT) {
@@ -186,6 +199,10 @@ object Util {
         }
     }
 
+    fun String.isYearMonth(): Boolean {
+        return Pattern.compile("[1-9][0-9]{3}(0[1-9]|1[0-2])").matcher(this).matches()
+    }
+
     fun process(fragment: Fragment, actionUrl: String?, toastTitle: String = "") {
         val activity = fragment.activity
         if (activity != null)
@@ -213,9 +230,22 @@ object Util {
                     App.context.getString(R.string.error_play_episode).showToast()
                 }
             }
-            decodeUrl.length == 8 && decodeUrl.startsWith("/") && decodeUrl.endsWith("/")
-                    && decodeUrl.replace("/", "").length == 6 -> {     //如201907月新番列表
-                "${toastTitle},${App.context.resources.getString(R.string.currently_not_supported)}".showToast()
+            decodeUrl.replace("/", "").isYearMonth() -> {     //如201907月新番列表
+                activity.startActivity(
+                    Intent(activity, MonthAnimeActivity::class.java)
+                        .putExtra("partUrl", actionUrl)
+                )
+            }
+            decodeUrl.startsWith(Const.ActionUrl.ANIME_CLASSIFY) -> {     //如201907月新番列表
+                val paramList = actionUrl.replace(Const.ActionUrl.ANIME_CLASSIFY, "").split("/")
+                if (paramList.size == 4) {      //例如  /japan/地区/日本  分割后是4个参数：""，japan，地区，日本
+                    activity.startActivity(
+                        Intent(activity, ClassifyActivity::class.java)
+                            .putExtra("partUrl", "/" + paramList[1] + "/")
+                            .putExtra("classifyTabTitle", paramList[2])
+                            .putExtra("classifyTitle", paramList[3])
+                    )
+                } else App.context.resources.getString(R.string.action_url_format_error).showToast()
             }
             else -> {
                 "${toastTitle},${App.context.resources.getString(R.string.currently_not_supported)}".showToast()

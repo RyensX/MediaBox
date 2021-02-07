@@ -9,8 +9,8 @@ class AnimeDetailBean(
     var area: String,
     var year: String,
     var index: String,
-    var animeType: List<String>,
-    var tag: List<String>,
+    var animeType: List<AnimeTypeBean>,
+    var tag: List<AnimeTypeBean>,
     var info: String,
     var data: List<AnimeDetailDataBean>
 ) : BaseBean

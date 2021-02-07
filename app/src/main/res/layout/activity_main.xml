@@ -14,47 +14,81 @@
         android:layout_weight="1"
         android:background="@color/white" />
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/main_color" />
-
-    <LinearLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        app:cardElevation="15dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_home_button"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:background="?android:selectableItemBackground">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/iv_control_bar_home"
-                android:layout_width="25dp"
-                android:layout_height="20dp"
-                android:layout_marginTop="7dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/ic_home_main_color_24"
-                app:layout_constraintBottom_toTopOf="@id/tv_control_bar_home"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_home_button"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:background="?android:selectableItemBackground">
 
-            <TextView
-                android:id="@+id/tv_control_bar_home"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="7dp"
-                android:text="首页"
-                android:textColor="@color/main_color"
-                android:textSize="10sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@id/iv_control_bar_home"
-                app:layout_constraintStart_toStartOf="@id/iv_control_bar_home"
-                tools:ignore="SmallSp" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </LinearLayout>
+                <ImageView
+                    android:id="@+id/iv_control_bar_home"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginTop="7dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/ic_home_main_color_24"
+                    app:layout_constraintBottom_toTopOf="@id/tv_control_bar_home"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_control_bar_home"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="7dp"
+                    android:text="@string/home"
+                    android:textColor="@color/main_color"
+                    android:textSize="10sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@id/iv_control_bar_home"
+                    app:layout_constraintStart_toStartOf="@id/iv_control_bar_home"
+                    tools:ignore="SmallSp" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_everyday_anime_button"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:background="?android:selectableItemBackground">
+
+                <ImageView
+                    android:id="@+id/iv_control_bar_everyday_anime"
+                    android:layout_width="23dp"
+                    android:layout_height="23dp"
+                    android:layout_marginTop="7dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/ic_sunny_main_color_24"
+                    app:layout_constraintBottom_toTopOf="@id/tv_control_bar_everyday_anime"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_control_bar_everyday_anime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="7dp"
+                    android:text="@string/everyday_anime"
+                    android:textColor="@color/main_color"
+                    android:textSize="10sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@id/iv_control_bar_everyday_anime"
+                    app:layout_constraintStart_toStartOf="@id/iv_control_bar_everyday_anime"
+                    tools:ignore="SmallSp" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 </LinearLayout>

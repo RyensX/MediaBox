@@ -9,48 +9,73 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_home_fragment_header"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:background="@color/main_color_2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <ImageView
+            android:id="@+id/iv_home_fragment_rank"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="?android:selectableItemBackground"
+            android:padding="9dp"
+            android:src="@drawable/ic_bar_chart_white_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <com.skyd.imomoe.view.widget.TypefaceTextView
             android:id="@+id/tv_home_fragment_header_search"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="12dp"
             android:background="@drawable/shape_circle_corner_edge_main_color_50"
             android:drawableStart="@drawable/ic_search_main_color_24"
             android:drawablePadding="5dp"
             android:gravity="center_vertical"
-            android:paddingStart="17dp"
-            android:paddingTop="7dp"
-            android:paddingEnd="17dp"
-            android:paddingBottom="7dp"
+            android:paddingStart="15dp"
+            android:paddingTop="5dp"
+            android:paddingEnd="15dp"
+            android:paddingBottom="5dp"
             android:text="@string/home_fragment_header_search"
             android:textColor="@color/main_color"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="@id/cl_home_fragment_header"
-            app:layout_constraintEnd_toEndOf="@id/cl_home_fragment_header"
-            app:layout_constraintStart_toStartOf="@id/cl_home_fragment_header"
+            app:layout_constraintEnd_toStartOf="@id/iv_home_fragment_classify"
+            app:layout_constraintStart_toEndOf="@id/iv_home_fragment_rank"
             app:layout_constraintTop_toTopOf="@id/cl_home_fragment_header" />
 
+        <ImageView
+            android:id="@+id/iv_home_fragment_classify"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="?android:selectableItemBackground"
+            android:padding="11dp"
+            android:src="@drawable/ic_format_list_bulleted_white_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_home_fragment_header_search"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tl_home_fragment"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_home_fragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:cardElevation="6dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cl_home_fragment_header"
-        app:tabIndicatorColor="@color/main_color_2"
-        app:tabMode="scrollable"
-        app:tabTextColor="@color/main_color_2" />
+        app:layout_constraintTop_toBottomOf="@id/cl_home_fragment_header">
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tl_home_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabIndicatorColor="@color/main_color_2"
+            app:tabMode="scrollable"
+            app:tabTextColor="@color/main_color_2" />
+    </androidx.cardview.widget.CardView>
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/vp2_home_fragment"
@@ -59,6 +84,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tl_home_fragment"
+        app:layout_constraintTop_toBottomOf="@id/cv_home_fragment"
         tools:visibility="visible" />
 </androidx.constraintlayout.widget.ConstraintLayout>

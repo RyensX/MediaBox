@@ -1,6 +1,8 @@
 package com.skyd.imomoe.view.adapter
 
 import android.app.Activity
+import android.graphics.Color
+import android.graphics.Rect
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -12,6 +14,7 @@ import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.bean.AnimeShowBean
+import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.util.*
 import com.skyd.imomoe.util.Util.dp2px
 import com.skyd.imomoe.util.Util.gone
@@ -104,9 +107,15 @@ class AnimeShowAdapter(
 
     class GridRecyclerView1Adapter(
         private val activity: Activity,
-        private val dataList: List<AnimeCoverBean>
+        private val dataList: List<AnimeCoverBean>,
+        private var titleColor: Int = Color.BLACK
     ) :
         RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+        //必须四个参数都不是-1才生效
+        var padding = Rect(-1, -1, -1, -1)
+
+        //是否显示排行榜排行，目前仅支持animeCover5
+        var showRankNumber = false
 
         override fun getItemViewType(position: Int): Int =
             getItemViewType(dataList[position])
@@ -122,8 +131,20 @@ class AnimeShowAdapter(
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             val item = dataList[position]
 
+            if (padding.left != -1 && padding.top != -1 && padding.right != -1 && padding.bottom != -1) {
+                holder.itemView.post {
+                    holder.itemView.setPadding(
+                        padding.left,
+                        padding.top,
+                        padding.right,
+                        padding.bottom
+                    )
+                }
+            }
+
             when (holder) {
                 is AnimeCover1ViewHolder -> {
+                    holder.tvAnimeCover1Title.setTextColor(titleColor)
                     holder.ivAnimeCover1Cover.loadImage(item.cover)
                     holder.tvAnimeCover1Title.text = item.title
                     if (item.episode == "") {
@@ -137,6 +158,7 @@ class AnimeShowAdapter(
                     }
                 }
                 is AnimeCover3ViewHolder -> {
+                    holder.tvAnimeCover3Title.setTextColor(titleColor)
                     holder.ivAnimeCover3Cover.loadImage(item.cover)
                     holder.tvAnimeCover3Title.text = item.title
                     if (item.episode == "") {
@@ -158,7 +180,11 @@ class AnimeShowAdapter(
                                 linearLayout.findViewById<TextView>(R.id.tv_anime_type_1)
                             tvFlowLayout.text = it[i].title
                             tvFlowLayout.setOnClickListener { it1 ->
-                                process(activity, it[i].actionUrl, it[i].actionUrl)
+                                //此处是”类型“，若要修改，需要注意Tab大分类是否还是”类型“
+                                process(
+                                    activity,
+                                    "${Const.ActionUrl.ANIME_CLASSIFY}${it[i].actionUrl}类型/${it[i].title}"
+                                )
                             }
                             linearLayout.removeView(tvFlowLayout)
                             holder.flAnimeCover3Type.addView(tvFlowLayout)
@@ -170,6 +196,7 @@ class AnimeShowAdapter(
                     }
                 }
                 is AnimeCover4ViewHolder -> {
+                    holder.tvAnimeCover4Title.setTextColor(titleColor)
                     holder.ivAnimeCover4Cover.loadImage(item.cover)
                     holder.tvAnimeCover4Title.text = item.title
                     holder.itemView.setOnClickListener {
@@ -177,7 +204,25 @@ class AnimeShowAdapter(
                     }
                 }
                 is AnimeCover5ViewHolder -> {
-                    if (item.area?.title == "") {
+                    if (showRankNumber) {
+                        holder.tvAnimeCover5Rank.setTextColor(Color.WHITE)
+                        holder.tvAnimeCover5Rank.text = (position + 1).toString()
+                        if (position in 0..2) {
+                            val backgrounds = intArrayOf(
+                                R.drawable.shape_fill_circle_corner_edge_golden_50,
+                                R.drawable.shape_fill_circle_corner_edge_silvery_50,
+                                R.drawable.shape_fill_circle_corner_edge_coppery_50
+                            )
+                            holder.tvAnimeCover5Rank.setBackgroundResource(backgrounds[position])
+                        } else {
+                            holder.tvAnimeCover5Rank.setBackgroundResource(R.drawable.shape_fill_circle_corner_edge_main_color_50)
+                        }
+                        holder.tvAnimeCover5Rank.visible()
+                    } else {
+                        holder.tvAnimeCover5Rank.gone()
+                    }
+                    holder.tvAnimeCover5Title.setTextColor(titleColor)
+                    if (item.area == null || item.area?.title == "") {
                         holder.tvAnimeCover5Area.gone()
                         holder.tvAnimeCover5Date.post {
                             holder.tvAnimeCover5Date.setPadding(0, 0, 0, 0)
@@ -188,12 +233,23 @@ class AnimeShowAdapter(
                             holder.tvAnimeCover5Date.setPadding(dp2px(12f), 0, 0, 0)
                         }
                     }
+                    if (item.date == null || item.date == "") {
+                        holder.tvAnimeCover5Date.gone()
+                    } else {
+                        holder.tvAnimeCover5Date.visible()
+                    }
                     holder.tvAnimeCover5Title.text = item.title
                     holder.tvAnimeCover5Area.text = item.area?.title
                     holder.tvAnimeCover5Date.text = item.date
                     holder.tvAnimeCover5Episode.text = item.episodeClickable?.title
                     holder.itemView.setOnClickListener {
                         process(activity, item.episodeClickable?.actionUrl)
+                    }
+                    holder.tvAnimeCover5Area.setOnClickListener {
+                        process(
+                            activity,
+                            "${Const.ActionUrl.ANIME_CLASSIFY}${item.area?.actionUrl}地区/${item.area?.title}"
+                        )
                     }
                     holder.tvAnimeCover5Title.setOnClickListener {
                         process(activity, item.actionUrl)

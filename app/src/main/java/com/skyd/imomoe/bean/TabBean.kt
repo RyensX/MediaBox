@@ -1,6 +1,6 @@
 package com.skyd.imomoe.bean
 
-class HomeTabBean(
+class TabBean(
     override var type: String,
     override var actionUrl: String,
     var url: String,

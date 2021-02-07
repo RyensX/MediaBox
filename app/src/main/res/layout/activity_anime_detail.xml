@@ -1,15 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black"
     tools:context=".view.activity.AnimeDetailActivity">
+
+    <ImageView
+        android:id="@+id/iv_anime_detail_activity_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        tools:background="@color/main_color" />
+
+    <View
+        android:id="@+id/view_anime_detail_activity_status_bar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp" />
+
+    <LinearLayout
+        android:id="@+id/ll_anime_detail_activity_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/view_anime_detail_activity_status_bar"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/iv_anime_detail_activity_back"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:adjustViewBounds="true"
+            android:background="?android:selectableItemBackground"
+            android:padding="12dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_arrow_back_white_24"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.skyd.imomoe.view.widget.TypefaceTextView
+            android:id="@+id/tv_anime_detail_activity_toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="16dp"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            android:textSize="17sp"
+            tools:text="轻音少女" />
+    </LinearLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/srl_anime_detail_activity"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@id/ll_anime_detail_activity_toolbar">
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -42,7 +90,7 @@
                         android:layout_marginStart="12dp"
                         android:layout_marginTop="12dp"
                         android:layout_marginEnd="16dp"
-                        android:textColor="@color/main_color_2"
+                        android:textColor="@color/white"
                         android:textSize="17sp"
                         app:layout_constrainedWidth="true"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -57,7 +105,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:layout_marginEnd="16dp"
-                        android:textColor="@color/main_color_2"
+                        android:textColor="@color/white"
                         android:textSize="12sp"
                         app:layout_constrainedWidth="true"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -71,7 +119,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:textColor="@color/main_color_2"
+                        android:textColor="@color/white"
                         android:textSize="12sp"
                         app:layout_constrainedWidth="true"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -87,7 +135,7 @@
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="5dp"
                         android:layout_marginEnd="16dp"
-                        android:textColor="@color/main_color_2"
+                        android:textColor="@color/white"
                         android:textSize="12sp"
                         app:layout_constrainedWidth="true"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -102,7 +150,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:layout_marginEnd="16dp"
-                        android:textColor="@color/main_color_2"
+                        android:textColor="@color/white"
                         android:textSize="12sp"
                         app:layout_constrainedWidth="true"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -129,7 +177,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/anime_detail_type"
-                            android:textColor="@color/main_color_2"
+                            android:textColor="@color/white"
                             android:textSize="12sp" />
 
                         <com.nex3z.flowlayout.FlowLayout
@@ -158,7 +206,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/anime_detail_tag"
-                            android:textColor="@color/main_color_2"
+                            android:textColor="@color/white"
                             android:textSize="12sp" />
 
                         <com.nex3z.flowlayout.FlowLayout
@@ -179,7 +227,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:layout_marginEnd="16dp"
-                        android:textColor="@color/main_color_2"
+                        android:textColor="@color/white"
                         android:textSize="12sp"
                         app:layout_constrainedWidth="true"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -202,4 +250,4 @@
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-</FrameLayout>
+</RelativeLayout>

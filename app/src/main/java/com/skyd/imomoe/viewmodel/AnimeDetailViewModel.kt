@@ -8,6 +8,7 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeDetailBean
 import com.skyd.imomoe.bean.AnimeDetailDataBean
 import com.skyd.imomoe.bean.AnimeEpisodeDataBean
+import com.skyd.imomoe.bean.AnimeTypeBean
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.util.ParseHtmlUtil.parseBotit
 import com.skyd.imomoe.util.ParseHtmlUtil.parseDtit
@@ -47,8 +48,8 @@ class AnimeDetailViewModel : ViewModel() {
                                 var year = ""
                                 var index = ""
                                 var animeArea = ""
-                                val animeType: MutableList<String> = ArrayList()
-                                val tag: MutableList<String> = ArrayList()
+                                val animeType: MutableList<AnimeTypeBean> = ArrayList()
+                                val tag: MutableList<AnimeTypeBean> = ArrayList()
 
                                 val fireLChildren =
                                     areaChildren[j].select("[class=fire l]")[0].children()
@@ -75,11 +76,25 @@ class AnimeDetailViewModel : ViewModel() {
                                             index = span[3].select("a").text()
                                             val typeElements: Elements = span[2].select("a")
                                             for (l in typeElements.indices) {
-                                                animeType.add(typeElements[l].text())
+                                                animeType.add(
+                                                    AnimeTypeBean(
+                                                        "",
+                                                        typeElements[l].attr("href"),
+                                                        Api.MAIN_URL + typeElements[l].attr("href"),
+                                                        typeElements[l].text()
+                                                    )
+                                                )
                                             }
                                             val tagElements: Elements = span[4].select("a")
                                             for (l in tagElements.indices) {
-                                                tag.add(tagElements[l].text())
+                                                tag.add(
+                                                    AnimeTypeBean(
+                                                        "",
+                                                        tagElements[l].attr("href"),
+                                                        Api.MAIN_URL + tagElements[l].attr("href"),
+                                                        tagElements[l].text()
+                                                    )
+                                                )
                                             }
                                         }
                                         "tabs" -> {     //播放列表+header
