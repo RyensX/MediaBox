@@ -51,14 +51,12 @@ class SearchAdapter(
                 item.animeType?.let {
                     holder.flAnimeCover3Type.removeAllViews()
                     for (i in it.indices) {
-                        val linearLayout: LinearLayout = activity.layoutInflater
+                        val tvFlowLayout: TextView = activity.layoutInflater
                             .inflate(
                                 R.layout.item_anime_type_1,
                                 holder.flAnimeCover3Type,
                                 false
-                            ) as LinearLayout
-                        val tvFlowLayout =
-                            linearLayout.findViewById<TextView>(R.id.tv_anime_type_1)
+                            ) as TextView
                         tvFlowLayout.text = it[i].title
                         tvFlowLayout.setOnClickListener { it1 ->
                             //此处是”类型“，若要修改，需要注意Tab大分类是否还是”类型“
@@ -67,7 +65,6 @@ class SearchAdapter(
                                 "${Const.ActionUrl.ANIME_CLASSIFY}${it[i].actionUrl}类型/${it[i].title}"
                             )
                         }
-                        linearLayout.removeView(tvFlowLayout)
                         holder.flAnimeCover3Type.addView(tvFlowLayout)
                     }
                 }

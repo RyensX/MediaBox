@@ -2,6 +2,7 @@ package com.skyd.imomoe.view.activity
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -148,6 +149,15 @@ class PlayActivity : BaseActivity() {
 
         override fun onStartPrepared(url: String?, vararg objects: Any?) {
             super.onStartPrepared(url, *objects)
+        }
+
+        override fun onPrepared(url: String?, vararg objects: Any?) {
+            super.onPrepared(url, *objects)
+
+            //调整触摸滑动快进的比例
+            Log.e("/*-", avp_play_activity.duration.toString())
+            //毫秒,刚好划一屏1分35秒
+            avp_play_activity.seekRatio = avp_play_activity.duration / 90_000f
         }
 
         override fun onClickBlank(url: String?, vararg objects: Any?) {

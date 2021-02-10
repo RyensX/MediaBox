@@ -6,6 +6,8 @@ import androidx.fragment.app.FragmentTransaction
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.util.Util.showToast
+import com.skyd.imomoe.util.update.AppUpdateHelper
+import com.skyd.imomoe.util.update.AppUpdateStatus
 import com.skyd.imomoe.view.fragment.EverydayAnimeFragment
 import com.skyd.imomoe.view.fragment.HomeFragment
 import kotlinx.android.synthetic.main.activity_main.*
@@ -20,6 +22,17 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        //检查更新
+        val appUpdateHelper = AppUpdateHelper.getInstance()
+        appUpdateHelper.getUpdateStatus().observe(this, {
+            when (it) {
+                AppUpdateStatus.UNCHECK -> appUpdateHelper.checkUpdate()
+                AppUpdateStatus.DATED -> appUpdateHelper.noticeUpdate(this)
+                AppUpdateStatus.TO_BE_INSTALLED -> appUpdateHelper.installUpdate(this)
+                else -> Unit
+            }
+        })
 
         if (savedInstanceState != null) {
             homeFragment = supportFragmentManager.getFragment(

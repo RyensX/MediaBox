@@ -10,9 +10,16 @@ import com.skyd.imomoe.util.TypeFaceUtil
 class TypefaceTextView : AppCompatTextView {
     var isFocused: Boolean? = null
 
-    constructor(context: Context) : this(context, null)
+    constructor(context: Context) : super(context)
 
-    constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
+        attrs?.let {
+            val typedArray = context.obtainStyledAttributes(it, R.styleable.TypefaceTextView, 0, 0)
+            val typefaceType = typedArray.getInt(R.styleable.TypefaceTextView_typeface, 0)
+            typeface = getTypeface(typefaceType)
+            typedArray.recycle()
+        }
+    }
 
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
         context,
@@ -38,7 +45,6 @@ class TypefaceTextView : AppCompatTextView {
         fun getTypeface(typefaceType: Int?) = when (typefaceType) {
             TypeFaceUtil.FZLL_TYPEFACE -> TypeFaceUtil.getFzlLTypeface()
             TypeFaceUtil.FZDB1_TYPEFACE -> TypeFaceUtil.getFzdb1Typeface()
-            TypeFaceUtil.FUTURA_TYPEFACE -> TypeFaceUtil.getFuturaTypeface()
             TypeFaceUtil.DIN_TYPEFACE -> TypeFaceUtil.getDinTypeface()
             TypeFaceUtil.LOBSTER_TYPEFACE -> TypeFaceUtil.getLobsterTypeface()
             else -> Typeface.DEFAULT

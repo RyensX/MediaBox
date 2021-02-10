@@ -25,6 +25,8 @@ import com.skyd.imomoe.util.Util.visible
 import com.skyd.imomoe.util.ViewHolderUtil.Companion.getItemViewType
 import com.skyd.imomoe.util.ViewHolderUtil.Companion.getViewHolder
 import com.skyd.imomoe.view.fragment.AnimeShowFragment
+import com.skyd.imomoe.view.widget.bannerview.adapter.MyCycleBannerAdapter
+import com.skyd.imomoe.view.widget.bannerview.indicator.DotIndicator
 
 class AnimeShowAdapter(
     val fragment: AnimeShowFragment,
@@ -98,6 +100,15 @@ class AnimeShowAdapter(
             is Header1ViewHolder -> {
                 holder.tvHeader1Title.text = item.title
             }
+            is Banner1ViewHolder -> {
+                fragment.activity?.let {
+                    item.animeCoverList?.let { it1 ->
+                        holder.banner1.setAdapter(MyCycleBannerAdapter(it, it1))
+                        holder.banner1.setIndicator(DotIndicator(it))
+                        holder.banner1.startPlay(5000)
+                    }
+                }
+            }
             else -> {
                 holder.itemView.visibility = View.GONE
                 (App.context.resources.getString(R.string.unknown_view_holder) + position).showToast()
@@ -170,14 +181,12 @@ class AnimeShowAdapter(
                     item.animeType?.let {
                         holder.flAnimeCover3Type.removeAllViews()
                         for (i in it.indices) {
-                            val linearLayout: LinearLayout = activity.layoutInflater
+                            val tvFlowLayout: TextView = activity.layoutInflater
                                 .inflate(
                                     R.layout.item_anime_type_1,
                                     holder.flAnimeCover3Type,
                                     false
-                                ) as LinearLayout
-                            val tvFlowLayout =
-                                linearLayout.findViewById<TextView>(R.id.tv_anime_type_1)
+                                ) as TextView
                             tvFlowLayout.text = it[i].title
                             tvFlowLayout.setOnClickListener { it1 ->
                                 //此处是”类型“，若要修改，需要注意Tab大分类是否还是”类型“
@@ -186,7 +195,6 @@ class AnimeShowAdapter(
                                     "${Const.ActionUrl.ANIME_CLASSIFY}${it[i].actionUrl}类型/${it[i].title}"
                                 )
                             }
-                            linearLayout.removeView(tvFlowLayout)
                             holder.flAnimeCover3Type.addView(tvFlowLayout)
                         }
                     }

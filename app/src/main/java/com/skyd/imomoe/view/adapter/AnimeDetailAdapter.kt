@@ -66,21 +66,18 @@ class AnimeDetailAdapter(
                 item.episodeList?.let {
                     holder.flAnimeEpisodeFlowLayout1.removeAllViews()
                     for (i in it.indices) {
-                        val linearLayout: LinearLayout = activity.layoutInflater
+                        val tvFlowLayout: TextView = activity.layoutInflater
                             .inflate(
                                 R.layout.item_anime_episode_1,
                                 holder.flAnimeEpisodeFlowLayout1,
                                 false
-                            ) as LinearLayout
-                        val tvFlowLayout =
-                            linearLayout.findViewById<TextView>(R.id.tv_anime_episode_1)
+                            ) as TextView
                         tvFlowLayout.setBackgroundResource(R.drawable.shape_circle_corner_edge_white_ripper_50)
                         tvFlowLayout.setTextColor(Color.WHITE)
                         tvFlowLayout.text = it[i].title
                         tvFlowLayout.setOnClickListener { it1 ->
                             process(activity, it[i].actionUrl, it[i].actionUrl)
                         }
-                        linearLayout.removeView(tvFlowLayout)
                         holder.flAnimeEpisodeFlowLayout1.addView(tvFlowLayout)
                     }
                 }

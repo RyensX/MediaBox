@@ -21,7 +21,6 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:background="@android:color/black"
         android:scaleType="fitCenter" />
 
     <LinearLayout

@@ -69,19 +69,16 @@ class PlayAdapter(
                 item.episodeList?.let {
                     holder.flAnimeEpisodeFlowLayout1.removeAllViews()
                     for (i in it.indices) {
-                        val linearLayout: LinearLayout = activity.layoutInflater
+                        val tvFlowLayout: TextView = activity.layoutInflater
                             .inflate(
                                 R.layout.item_anime_episode_1,
                                 holder.flAnimeEpisodeFlowLayout1,
                                 false
-                            ) as LinearLayout
-                        val tvFlowLayout =
-                            linearLayout.findViewById<TextView>(R.id.tv_anime_episode_1)
+                            ) as TextView
                         tvFlowLayout.text = it[i].title
                         tvFlowLayout.setOnClickListener { it1 ->
                             activity.startPlay(it[i].actionUrl, it[i].title)
                         }
-                        linearLayout.removeView(tvFlowLayout)
                         holder.flAnimeEpisodeFlowLayout1.addView(tvFlowLayout)
                     }
                 }

@@ -8,6 +8,45 @@ import java.util.ArrayList
 
 object ParseHtmlUtil {
 
+    fun parseHeroWrap(      //banner
+        element: Element,
+        type: String = "animeCover6"
+    ): List<AnimeCoverBean> {
+        val list: MutableList<AnimeCoverBean> = ArrayList()
+        val liElements: Elements = element.select("[class=heros]").select("li")
+        for (i in liElements.indices) {
+            var episodeTitle = ""
+            var title = ""
+            var describe = ""
+            var url = ""
+            var cover = ""
+            val liChildren: Elements = liElements[i].children()
+            for (j in liChildren.indices) {
+                when (liChildren[j].tagName()) {
+                    "a" -> {
+                        url = liChildren[j].attr("href")
+                        cover = liChildren[j].select("img").attr("src")
+                        title = liChildren[j].select("p").first().ownText()
+                        describe = liChildren[j].select("p").select("span").text()
+                    }
+                    "em" -> {
+                        episodeTitle = liChildren[j].text()
+                    }
+                }
+            }
+            list.add(
+                AnimeCoverBean(
+                    type, url, Api.MAIN_URL + url,
+                    title, cover, "", null, describe,
+                    AnimeEpisodeDataBean("", "", episodeTitle),
+                    null,
+                    null
+                )
+            )
+        }
+        return list
+    }
+
     fun parseTers(
         element: Element,
         type: String = ""

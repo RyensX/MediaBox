@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="7dp"
     android:background="?android:selectableItemBackground"
+    android:orientation="vertical"
     android:paddingBottom="3dp">
 
     <com.skyd.imomoe.view.widget.RoundCornersImageView
@@ -13,9 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:scaleType="fitXY"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         tools:src="@drawable/ic_launcher_background" />
 
     <com.skyd.imomoe.view.widget.TypefaceTextView
@@ -26,11 +23,6 @@
         android:ellipsize="end"
         android:maxLines="3"
         android:textSize="13sp"
-        app:layout_constrainedWidth="true"
-        app:layout_constraintEnd_toEndOf="@id/iv_anime_cover_4_cover"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toStartOf="@id/iv_anime_cover_4_cover"
-        app:layout_constraintTop_toBottomOf="@id/iv_anime_cover_4_cover"
         tools:text="中二病也要谈恋爱！" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

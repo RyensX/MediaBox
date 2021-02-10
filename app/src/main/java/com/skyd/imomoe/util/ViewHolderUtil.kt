@@ -3,11 +3,13 @@ package com.skyd.imomoe.util
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.nex3z.flowlayout.FlowLayout
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.BaseBean
+import com.skyd.imomoe.view.widget.bannerview.BannerView
 import com.skyd.imomoe.view.widget.RoundCornersImageView
 
 class ViewHolderUtil {
@@ -20,9 +22,11 @@ class ViewHolderUtil {
             "animeCover3" -> ANIME_COVER_3
             "animeCover4" -> ANIME_COVER_4
             "animeCover5" -> ANIME_COVER_5
+            "animeCover6" -> ANIME_COVER_6
             "animeEpisodeFlowLayout1" -> ANIME_EPISODE_FLOW_LAYOUT_1
             "animeDescribe1" -> ANIME_DESCRIBE_1
             "gridRecyclerView1" -> GRID_RECYCLER_VIEW_1
+            "banner1" -> BANNER_1
             else -> UNKNOWN
         }
 
@@ -51,6 +55,10 @@ class ViewHolderUtil {
                 LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_anime_cover_5, parent, false)
             )
+            ANIME_COVER_6 -> AnimeCover6ViewHolder(
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_anime_cover_6, parent, false)
+            )
             ANIME_EPISODE_FLOW_LAYOUT_1 -> AnimeEpisodeFlowLayout1ViewHolder(
                 LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_anime_episode_flow_layout_1, parent, false)
@@ -62,6 +70,10 @@ class ViewHolderUtil {
             GRID_RECYCLER_VIEW_1 -> GridRecyclerView1ViewHolder(
                 LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_grid_recycler_view_1, parent, false)
+            )
+            BANNER_1 -> Banner1ViewHolder(
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_banner_1, parent, false)
             )
             else -> EmptyViewHolder(View(parent.context))
         }
@@ -76,6 +88,8 @@ class ViewHolderUtil {
         const val ANIME_COVER_4 = 7
         const val ANIME_COVER_5 = 8
         const val GRID_RECYCLER_VIEW_1 = 5
+        const val BANNER_1 = 9
+        const val ANIME_COVER_6 = 10
         const val MAX = 100   //避免外部其他类型与此处包含的某个类型重复。
     }
 }
@@ -123,11 +137,22 @@ class AnimeCover5ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val tvAnimeCover5Rank = view.findViewById<TextView>(R.id.tv_anime_cover_5_rank)
 }
 
+class AnimeCover6ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    val ivAnimeCover6Cover = view.findViewById<ImageView>(R.id.iv_anime_cover_6_cover)
+    val tvAnimeCover6Title = view.findViewById<TextView>(R.id.tv_anime_cover_6_title)
+    val tvAnimeCover6Episode = view.findViewById<TextView>(R.id.tv_anime_cover_6_episode)
+    val tvAnimeCover6Describe = view.findViewById<TextView>(R.id.tv_anime_cover_6_describe)
+}
+
 class AnimeEpisodeFlowLayout1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val flAnimeEpisodeFlowLayout1 = view.findViewById<FlowLayout>(R.id.fl_anime_episode)
 }
 
 class AnimeDescribe1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val tvAnimeDescribe1 = view.findViewById<TextView>(R.id.tv_anime_describe)
+}
+
+class Banner1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    val banner1 = view.findViewById<BannerView>(R.id.banner_1)
 }
 

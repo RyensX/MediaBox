@@ -102,14 +102,12 @@ class AnimeDetailActivity : BaseActivity() {
             tv_anime_detail_activity_type.visible()
             fl_anime_detail_activity_type.removeAllViews()
             for (i in it.animeType.indices) {
-                val linearLayout: LinearLayout = layoutInflater
+                val tvFlowLayout: TextView = layoutInflater
                     .inflate(
                         R.layout.item_anime_type_1,
                         fl_anime_detail_activity_type,
                         false
-                    ) as LinearLayout
-                val tvFlowLayout =
-                    linearLayout.findViewById<TextView>(R.id.tv_anime_type_1)
+                    ) as TextView
                 tvFlowLayout.text = it.animeType[i].title
                 tvFlowLayout.setOnClickListener { it1 ->
                     //此处是”类型“，若要修改，需要注意Tab大分类是否还是”类型“
@@ -119,20 +117,17 @@ class AnimeDetailActivity : BaseActivity() {
                                 "${it.animeType[i].actionUrl}类型/${it.animeType[i].title}"
                     )
                 }
-                linearLayout.removeView(tvFlowLayout)
                 fl_anime_detail_activity_type.addView(tvFlowLayout)
             }
             tv_anime_detail_activity_tag.visible()
             fl_anime_detail_activity_tag.removeAllViews()
             for (i in it.tag.indices) {
-                val linearLayout: LinearLayout = layoutInflater
+                val tvFlowLayout: TextView = layoutInflater
                     .inflate(
                         R.layout.item_anime_type_1,
                         fl_anime_detail_activity_tag,
                         false
-                    ) as LinearLayout
-                val tvFlowLayout =
-                    linearLayout.findViewById<TextView>(R.id.tv_anime_type_1)
+                    ) as TextView
                 tvFlowLayout.text = it.tag[i].title
                 tvFlowLayout.setOnClickListener { it1 ->
                     //此处是”标签“，由于分类没有这一大项，因此传入”“串
@@ -142,7 +137,6 @@ class AnimeDetailActivity : BaseActivity() {
                                 "${it.tag[i].actionUrl}/${it.tag[i].title}"
                     )
                 }
-                linearLayout.removeView(tvFlowLayout)
                 fl_anime_detail_activity_tag.addView(tvFlowLayout)
             }
             tv_anime_detail_activity_info.text = it.info

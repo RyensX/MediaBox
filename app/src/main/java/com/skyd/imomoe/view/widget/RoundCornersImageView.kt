@@ -5,6 +5,7 @@ import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatImageView
+import com.skyd.imomoe.util.Util.toBitmap
 
 
 class RoundCornersImageView : AppCompatImageView {
@@ -32,7 +33,7 @@ class RoundCornersImageView : AppCompatImageView {
     override fun onDraw(canvas: Canvas) {
         val drawable = drawable
         if (null != drawable) {
-            val bitmap = (drawable as BitmapDrawable).bitmap
+            val bitmap = drawable.toBitmap()
             val b = getRoundBitmap(bitmap, cornerSize)
             rectSrc.set(0, 0, b.width, b.height)
             rectDest.set(0, 0, width, height)

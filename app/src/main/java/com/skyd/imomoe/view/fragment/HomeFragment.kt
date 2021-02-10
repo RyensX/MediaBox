@@ -1,11 +1,11 @@
 package com.skyd.imomoe.view.fragment
 
 import android.content.Intent
-import android.icu.lang.UCharacter.GraphemeClusterBreak.L
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
@@ -13,9 +13,11 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.skyd.imomoe.R
+import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.view.activity.ClassifyActivity
 import com.skyd.imomoe.view.activity.RankActivity
 import com.skyd.imomoe.view.activity.SearchActivity
+import com.skyd.imomoe.view.activity.SettingActivity
 import com.skyd.imomoe.viewmodel.HomeViewModel
 import kotlinx.android.synthetic.main.fragment_home.*
 
@@ -71,6 +73,9 @@ class HomeFragment : BaseFragment() {
             }
         }
 
+        iv_home_fragment_setting.setOnClickListener {
+            startActivity(Intent(activity, SettingActivity::class.java))
+        }
 
         tl_home_fragment.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
@@ -86,6 +91,9 @@ class HomeFragment : BaseFragment() {
         })
 
         viewModel.mldGetAllTabList.observe(viewLifecycleOwner, {
+            if (viewModel.allTabList.size == 0) getString(R.string.get_home_tab_data_failed).showToast(
+                Toast.LENGTH_LONG
+            )
             adapter.clearAllFragment()
             for (i in it.indices) {
                 adapter.addFragment(AnimeShowFragment(it[i].actionUrl))

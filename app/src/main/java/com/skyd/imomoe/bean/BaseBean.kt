@@ -1,6 +1,8 @@
 package com.skyd.imomoe.bean
 
-interface BaseBean {
+import java.io.Serializable
+
+interface BaseBean : Serializable {
     var type: String
     var actionUrl: String
 }

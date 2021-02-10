@@ -9,6 +9,4 @@
     android:paddingVertical="9dp"
     android:textColor="@color/white"
     android:textStyle="bold"
-    tools:text="Toast">
-
-</com.skyd.imomoe.view.widget.TypefaceTextView>
+    tools:text="Toast" />

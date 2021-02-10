@@ -3,17 +3,28 @@ package com.skyd.imomoe.util
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.PixelFormat
 import android.graphics.Point
+import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Build
 import android.os.Looper
+import android.text.Html
+import android.view.LayoutInflater
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -33,6 +44,44 @@ import java.util.regex.Pattern
 
 
 object Util {
+    fun openBrowser(url: String) {
+        val uri: Uri = Uri.parse(url)
+        val intent = Intent(Intent.ACTION_VIEW, uri)
+        intent.flags = FLAG_ACTIVITY_NEW_TASK
+        App.context.startActivity(intent)
+    }
+
+    fun isNewVersion(version: String): Boolean {
+        val currentVersion = getAppVersionName()
+        return version.replace(".", "")
+            .replace("v", "")
+            .replace("V", "")
+            .replace(" ", "").toInt() >
+                currentVersion.replace(".", "").toInt()
+    }
+
+    fun getDialogBuilder(
+        context: Context,
+        title: String,
+        describe: String,
+        themeResId: Int = 0
+    ): AlertDialog.Builder {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(context, themeResId)
+        builder.setTitle(Html.fromHtml(title))
+        builder.setMessage(Html.fromHtml(describe))
+        return builder
+    }
+
+    fun getProgressBarCircleDialog(context: Context, text: String): AlertDialog {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(context)
+        val inflater: LayoutInflater = LayoutInflater.from(context)
+        val view: View = inflater.inflate(R.layout.dialog_progress_bar, null)
+        val tv: TextView = view.findViewById(R.id.tv_progress_bar_dialog)
+        tv.text = text
+        builder.setView(view)
+        return builder.create()
+    }
+
     fun getAppVersionCode(): Long {
         var appVersionCode: Long = 0
         try {
@@ -62,6 +111,21 @@ object Util {
         }
         return appVersionName
     }
+
+    fun getAppName(): String? {
+        return try {
+            val packageManager = App.context.packageManager
+            val packageInfo: PackageInfo = packageManager.getPackageInfo(
+                App.context.packageName, 0
+            )
+            val labelRes: Int = packageInfo.applicationInfo.labelRes
+            App.context.resources.getString(labelRes)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
 
     fun EditText.showKeyboard() {
         isFocusable = true
@@ -164,6 +228,24 @@ object Util {
         return outPoint.x
     }
 
+    fun Drawable.toBitmap(): Bitmap {
+        // 取 drawable 的长宽
+        val w: Int = this.intrinsicWidth
+        val h: Int = this.intrinsicHeight
+
+        // 取 drawable 的颜色格式
+        val config: Bitmap.Config =
+            if (opacity != PixelFormat.OPAQUE) Bitmap.Config.ARGB_8888 else Bitmap.Config.RGB_565
+        // 建立对应 bitmap
+        val bitmap: Bitmap = Bitmap.createBitmap(w, h, config)
+        // 建立对应 bitmap 的画布
+        val canvas = Canvas(bitmap)
+        setBounds(0, 0, w, h)
+        // 把 drawable 内容画到画布中
+        draw(canvas)
+        return bitmap
+    }
+
     fun ImageView.loadImage(
         url: String,
         round: Int = 0,
@@ -236,7 +318,7 @@ object Util {
                         .putExtra("partUrl", actionUrl)
                 )
             }
-            decodeUrl.startsWith(Const.ActionUrl.ANIME_CLASSIFY) -> {     //如201907月新番列表
+            decodeUrl.startsWith(Const.ActionUrl.ANIME_CLASSIFY) -> {     //如进入分类页面
                 val paramList = actionUrl.replace(Const.ActionUrl.ANIME_CLASSIFY, "").split("/")
                 if (paramList.size == 4) {      //例如  /japan/地区/日本  分割后是4个参数：""，japan，地区，日本
                     activity.startActivity(

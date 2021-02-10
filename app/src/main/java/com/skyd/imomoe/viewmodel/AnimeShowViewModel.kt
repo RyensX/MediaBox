@@ -1,18 +1,18 @@
 package com.skyd.imomoe.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeShowBean
 import com.skyd.imomoe.config.Api
+import com.skyd.imomoe.util.ParseHtmlUtil
 import com.skyd.imomoe.util.ParseHtmlUtil.parseDnews
+import com.skyd.imomoe.util.ParseHtmlUtil.parseHeroWrap
 import com.skyd.imomoe.util.ParseHtmlUtil.parseImg
 import com.skyd.imomoe.util.ParseHtmlUtil.parseLpic
 import com.skyd.imomoe.util.ParseHtmlUtil.parseTopli
 import com.skyd.imomoe.util.Util.showToastOnThread
-import org.jsoup.HttpStatusException
 import org.jsoup.Jsoup
 import org.jsoup.select.Elements
 import java.lang.Exception
@@ -20,7 +20,6 @@ import java.util.*
 
 
 class AnimeShowViewModel : ViewModel() {
-    private var requestTimes = 0
     var animeShowList: MutableList<AnimeShowBean> = ArrayList()
     var mldGetAnimeShowList: MutableLiveData<Boolean> = MutableLiveData()
 
@@ -29,10 +28,30 @@ class AnimeShowViewModel : ViewModel() {
         Thread {
             try {
                 val document = Jsoup.connect(Api.MAIN_URL + partUrl).get()
+                animeShowList.clear()
+
+                //banner
+                val foucsBgElements: Elements = document.getElementsByClass("foucs bg")
+                for (i in foucsBgElements.indices) {
+                    val foucsBgChildren: Elements = foucsBgElements[i].children()
+                    for (j in foucsBgChildren.indices) {
+                        when (foucsBgChildren[j].className()) {
+                            "hero-wrap" -> {
+                                animeShowList.add(
+                                    AnimeShowBean(
+                                        "banner1", "",
+                                        "", "", "", "", "",
+                                        parseHeroWrap(foucsBgChildren[j])
+                                    )
+                                )
+                            }
+                        }
+                    }
+                }
+                //area
                 var area: Elements = document.getElementsByClass("area")
                 if (partUrl == "/") //首页，有右边栏
                     area = document.getElementsByClass("area").select("[class=firs l]")
-                animeShowList.clear()
                 for (i in area.indices) {
                     val elements: Elements = area[i].children()
                     for (j in elements.indices) {
@@ -111,17 +130,7 @@ class AnimeShowViewModel : ViewModel() {
                         }
                     }
                 }
-
                 mldGetAnimeShowList.postValue(true)
-            } catch (e: HttpStatusException) {
-                e.printStackTrace()
-                if (e.statusCode == 502) {
-                    if (requestTimes <= 2) {
-                        requestTimes++
-                        getAnimeShowData(partUrl)
-                    } else requestTimes = 0
-                }
-                Log.e(TAG, e.message ?: "")
             } catch (e: Exception) {
                 e.printStackTrace()
                 (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread()

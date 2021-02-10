@@ -44,16 +44,6 @@ object TypeFaceUtil {
         fzdb1Typeface!!
     }
 
-    fun getFuturaTypeface() = if (futuraTypeface == null) {
-        try {
-            Typeface.createFromAsset(App.context.assets, "fonts/Futura-CondensedMedium.ttf")
-        } catch (e: RuntimeException) {
-            Typeface.DEFAULT
-        }
-    } else {
-        futuraTypeface!!
-    }
-
     fun getDinTypeface() = if (dinTypeface == null) {
         try {
             Typeface.createFromAsset(App.context.assets, "fonts/DIN-Condensed-Bold.ttf")

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginTop="12dp"
+    android:layout_marginEnd="16dp"
+    app:cardCornerRadius="6dp"
+    app:cardElevation="3dp">
+
+    <com.skyd.imomoe.view.widget.bannerview.BannerView
+        android:id="@+id/banner_1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:pageMargin="6dp" />
+
+</androidx.cardview.widget.CardView>

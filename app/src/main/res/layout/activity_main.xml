@@ -11,8 +11,7 @@
         android:id="@+id/fl_main_activity_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@color/white" />
+        android:layout_weight="1" />
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"

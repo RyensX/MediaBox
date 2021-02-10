@@ -4,6 +4,10 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
 
     <application
         android:name=".App"
@@ -11,31 +15,46 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.樱花动漫">
-        <activity android:name=".view.activity.MonthAnimeActivity"></activity>
+        <activity android:name=".view.activity.AboutActivity" />
+        <activity android:name=".view.activity.SettingActivity" />
+        <activity android:name=".view.activity.MonthAnimeActivity" />
         <activity android:name=".view.activity.ClassifyActivity" />
         <activity android:name=".view.activity.RankActivity" />
-        <activity
-            android:name=".view.activity.SearchActivity"
-            android:screenOrientation="portrait" />
+        <activity android:name=".view.activity.SearchActivity" />
         <activity
             android:name=".view.activity.PlayActivity"
             android:configChanges="orientation|screenSize" />
-        <activity
-            android:name=".view.activity.AnimeDetailActivity"
-            android:screenOrientation="portrait" />
+        <activity android:name=".view.activity.AnimeDetailActivity" />
         <activity android:name=".view.activity.BaseActivity" />
-        <activity
-            android:name=".view.activity.MainActivity"
-            android:screenOrientation="portrait">
+        <activity android:name=".view.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver
+            android:name=".util.update.UpdateNotificationReceiver"
+            android:exported="false"></receiver>
+
+        <service
+            android:name=".util.update.AppUpdateDownloadService"
+            android:enabled="true"
+            android:exported="true" />
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
 
 </manifest>
