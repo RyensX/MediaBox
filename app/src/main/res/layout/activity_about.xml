@@ -134,5 +134,31 @@
             android:src="@drawable/ic_arrow_right_main_color_2_24" />
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/rl_about_activity_license"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="?android:selectableItemBackground"
+        android:paddingStart="25dp"
+        android:paddingEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rl_about_activity_github">
 
+        <com.skyd.imomoe.view.widget.TypefaceTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/open_source_licenses"
+            android:textColor="@color/main_color_2"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_arrow_right_main_color_2_24" />
+    </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

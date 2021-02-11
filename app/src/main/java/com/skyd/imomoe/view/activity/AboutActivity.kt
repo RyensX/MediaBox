@@ -1,6 +1,7 @@
 package com.skyd.imomoe.view.activity
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.skyd.imomoe.R
@@ -25,6 +26,10 @@ class AboutActivity : AppCompatActivity() {
 
         rl_about_activity_github.setOnClickListener {
             openBrowser("https://github.com/SkyD666/Imomoe")
+        }
+
+        rl_about_activity_license.setOnClickListener {
+            startActivity(Intent(this, LicenseActivity::class.java))
         }
     }
 }

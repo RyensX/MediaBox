@@ -329,6 +329,10 @@ object Util {
                     )
                 } else App.context.resources.getString(R.string.action_url_format_error).showToast()
             }
+            decodeUrl.startsWith(Const.ActionUrl.ANIME_BROWSER) -> {     //打开浏览器
+                openBrowser(actionUrl.replaceFirst(Const.ActionUrl.ANIME_BROWSER, ""))
+            }
+
             else -> {
                 "${toastTitle},${App.context.resources.getString(R.string.currently_not_supported)}".showToast()
             }

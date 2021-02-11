@@ -27,6 +27,8 @@ class ViewHolderUtil {
             "animeDescribe1" -> ANIME_DESCRIBE_1
             "gridRecyclerView1" -> GRID_RECYCLER_VIEW_1
             "banner1" -> BANNER_1
+            "licenseHeader1" -> LICENSE_HEADER_1
+            "license1" -> LICENSE_1
             else -> UNKNOWN
         }
 
@@ -75,6 +77,14 @@ class ViewHolderUtil {
                 LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_banner_1, parent, false)
             )
+            LICENSE_HEADER_1 -> LicenseHeader1ViewHolder(
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_license_header_1, parent, false)
+            )
+            LICENSE_1 -> License1ViewHolder(
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_license_1, parent, false)
+            )
             else -> EmptyViewHolder(View(parent.context))
         }
 
@@ -90,6 +100,8 @@ class ViewHolderUtil {
         const val GRID_RECYCLER_VIEW_1 = 5
         const val BANNER_1 = 9
         const val ANIME_COVER_6 = 10
+        const val LICENSE_HEADER_1 = 11
+        const val LICENSE_1 = 12
         const val MAX = 100   //避免外部其他类型与此处包含的某个类型重复。
     }
 }
@@ -154,5 +166,15 @@ class AnimeDescribe1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
 class Banner1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val banner1 = view.findViewById<BannerView>(R.id.banner_1)
+}
+
+class LicenseHeader1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    val tvLicenseHeader1Name = view.findViewById<TextView>(R.id.tv_license_header_1_name)
+    val tvLicenseHeader1License = view.findViewById<TextView>(R.id.tv_license_header_1_license)
+}
+
+class License1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    val tvLicense1Name = view.findViewById<TextView>(R.id.tv_license_1_name)
+    val tvLicense1License = view.findViewById<TextView>(R.id.tv_license_1_license)
 }
 

@@ -38,5 +38,6 @@
     <string name="get_external_storage_permission_failed">外部存储权限获取失败</string>
     <string name="github">Github</string>
     <string name="imomoe">樱花动漫官网</string>
+    <string name="open_source_licenses">开放源代码许可</string>
 
 </resources>

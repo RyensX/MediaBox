@@ -19,6 +19,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.樱花动漫">
+        <activity android:name=".view.activity.LicenseActivity"></activity>
         <activity android:name=".view.activity.AboutActivity" />
         <activity android:name=".view.activity.SettingActivity" />
         <activity android:name=".view.activity.MonthAnimeActivity" />
@@ -40,12 +41,13 @@
 
         <receiver
             android:name=".util.update.UpdateNotificationReceiver"
-            android:exported="false"></receiver>
+            android:exported="false" />
 
         <service
             android:name=".util.update.AppUpdateDownloadService"
             android:enabled="true"
             android:exported="true" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileProvider"
