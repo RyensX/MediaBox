@@ -3,9 +3,13 @@ package com.skyd.imomoe.view.activity
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.nex3z.flowlayout.FlowLayout
 import com.shuyu.gsyvideoplayer.GSYVideoADManager
 import com.shuyu.gsyvideoplayer.GSYVideoManager
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack
@@ -14,6 +18,7 @@ import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer
 import com.skyd.imomoe.R
 import com.skyd.imomoe.util.Util.setColorStatusBar
 import com.skyd.imomoe.util.Util.showToast
+import com.skyd.imomoe.util.downloadanime.AnimeDownloadHelper
 import com.skyd.imomoe.view.adapter.PlayAdapter
 import com.skyd.imomoe.viewmodel.PlayViewModel
 import kotlinx.android.synthetic.main.activity_play.*
@@ -37,6 +42,11 @@ class PlayActivity : BaseActivity() {
 
         orientationUtils = OrientationUtils(this, avp_play_activity)
 
+        avp_play_activity.backButton?.setOnClickListener { finish() }
+        avp_play_activity.getDownloadButton()?.setOnClickListener {
+            getSheetDialog().show()
+        }
+
         partUrl = intent.getStringExtra("partUrl") ?: ""
 
         val layoutManager = LinearLayoutManager(this)
@@ -58,6 +68,17 @@ class PlayActivity : BaseActivity() {
                 avp_play_activity.startPlay()
                 isFirstTime = false
             }
+        })
+
+        //缓存番剧调用getAnimeEpisodeData()来获取视频url
+        viewModel.mldGetAnimeEpisodeData.observe(this, {
+            val url = viewModel.episodesList[it].videoUrl
+            AnimeDownloadHelper.instance.downloadAnime(
+                this,
+                url,
+                viewModel.playBean?.title?.title + "/" +
+                        viewModel.episodesList[it].title
+            )
         })
 
         srl_play_activity.isRefreshing = true
@@ -138,6 +159,31 @@ class PlayActivity : BaseActivity() {
         }
         //开始播放
         startPlayLogic()
+    }
+
+    private fun getSheetDialog(): BottomSheetDialog {
+        val bottomSheetDialog = BottomSheetDialog(this)
+        val contentView = View.inflate(this, R.layout.dialog_bottom_sheet_1, null)
+        bottomSheetDialog.setContentView(contentView)
+        val flowLayout = contentView.findViewById<FlowLayout>(R.id.fl_dialog_bottom_sheet_1)
+        viewModel.mldEpisodesList.observe(this, {
+            flowLayout.removeAllViews()
+            for (i in viewModel.episodesList.indices) {
+                val tvFlowLayout: TextView = layoutInflater
+                    .inflate(
+                        R.layout.item_anime_episode_1,
+                        flowLayout,
+                        false
+                    ) as TextView
+                tvFlowLayout.text = viewModel.episodesList[i].title
+                tvFlowLayout.setOnClickListener { it1 ->
+                    "解析视频中...".showToast()
+                    viewModel.getAnimeEpisodeData(viewModel.episodesList[i].actionUrl, i)
+                }
+                flowLayout.addView(tvFlowLayout)
+            }
+        })
+        return bottomSheetDialog
     }
 
     inner class VideoCallPlayBack : GSYSampleCallBack() {

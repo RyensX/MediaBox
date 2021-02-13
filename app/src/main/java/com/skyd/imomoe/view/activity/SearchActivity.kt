@@ -10,17 +10,20 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
+import com.skyd.imomoe.bean.SearchHistoryBean
 import com.skyd.imomoe.util.Util.gone
 import com.skyd.imomoe.util.Util.showKeyboard
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.Util.visible
 import com.skyd.imomoe.view.adapter.SearchAdapter
+import com.skyd.imomoe.view.adapter.SearchHistoryAdapter
 import com.skyd.imomoe.viewmodel.SearchViewModel
 import kotlinx.android.synthetic.main.activity_search.*
 
 class SearchActivity : BaseActivity() {
     private lateinit var viewModel: SearchViewModel
     private lateinit var adapter: SearchAdapter
+    private lateinit var historyAdapter: SearchHistoryAdapter
     private var lastRefreshTime: Long = System.currentTimeMillis()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,8 +32,7 @@ class SearchActivity : BaseActivity() {
 
         viewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
         adapter = SearchAdapter(this, viewModel.searchResultList)
-
-        cv_search_activity_tip.gone()
+        historyAdapter = SearchHistoryAdapter(this, viewModel.searchHistoryList)
 
         val layoutManager = LinearLayoutManager(this)
         rv_search_activity.layoutManager = layoutManager
@@ -45,8 +47,14 @@ class SearchActivity : BaseActivity() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (s == null || s.isEmpty()) iv_search_activity_clear_key_words.gone()
-                else iv_search_activity_clear_key_words.visible()
+                pb_search_activity_loading.gone()
+                if (s == null || s.isEmpty()) {
+                    tv_search_activity_tip.text = getString(R.string.search_history)
+                    iv_search_activity_clear_key_words.gone()
+                    viewModel.searchResultList.clear()
+                    rv_search_activity.adapter = historyAdapter
+                    historyAdapter.notifyDataSetChanged()
+                } else iv_search_activity_clear_key_words.visible()
             }
         })
 
@@ -60,12 +68,31 @@ class SearchActivity : BaseActivity() {
 
         viewModel.mldSearchResultList.observe(this, {
             pb_search_activity_loading.gone()
-            cv_search_activity_tip.visible()
-            tv_search_activity_tip.text = App.context.getString(
-                R.string.search_activity_tip, it,
-                viewModel.searchResultList.size
-            )
-            adapter.notifyDataSetChanged()
+            //仅在搜索框不为“”时展示搜索结果
+            if (et_search_activity_search.text.toString().isNotEmpty()) {
+                rv_search_activity.adapter = adapter
+                cv_search_activity_tip.visible()
+                tv_search_activity_tip.text = getString(
+                    R.string.search_activity_tip, it,
+                    viewModel.searchResultList.size
+                )
+                adapter.notifyDataSetChanged()
+            }
+        })
+
+        viewModel.mldSearchHistoryList.observe(this, {
+            if (viewModel.searchResultList.size == 0) {
+                tv_search_activity_tip.text = getString(R.string.search_history)
+                rv_search_activity.adapter = historyAdapter
+                historyAdapter.notifyDataSetChanged()
+            }
+        })
+
+        viewModel.mldDeleteCompleted.observe(this, {
+            if (viewModel.searchResultList.size == 0) {
+                rv_search_activity.adapter = historyAdapter
+                historyAdapter.notifyItemRemoved(it)
+            }
         })
 
         tv_search_activity_cancel.setOnClickListener { finish() }
@@ -76,7 +103,7 @@ class SearchActivity : BaseActivity() {
             TextView.OnEditorActionListener {
             override fun onEditorAction(v: TextView, actionId: Int, event: KeyEvent?): Boolean {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    if (v.text.toString().isEmpty()) {
+                    if (v.text.toString().isBlank()) {
                         App.context.resources.getString(R.string.search_input_keywords_tips)
                             .showToast()
                         return false
@@ -85,8 +112,7 @@ class SearchActivity : BaseActivity() {
                     //避免刷新间隔太短
                     return if (System.currentTimeMillis() - lastRefreshTime > 500) {
                         lastRefreshTime = System.currentTimeMillis()
-                        pb_search_activity_loading.visible()
-                        viewModel.getSearchData(et_search_activity_search.text.toString())
+                        search(v.text.toString())
                         true
                     } else {
                         false
@@ -95,6 +121,28 @@ class SearchActivity : BaseActivity() {
                 return true
             }
         })
+
+        viewModel.getSearchHistoryData()
+    }
+
+    fun search(key: String) {
+        viewModel.searchResultList.clear()
+        pb_search_activity_loading.visible()
+        rv_search_activity.adapter = adapter
+        et_search_activity_search.setText(key)
+        et_search_activity_search.setSelection(key.length)
+        pb_search_activity_loading.visible()
+        viewModel.insertSearchHistory(
+            SearchHistoryBean(
+                "searchHistory1",
+                "", System.currentTimeMillis(), key
+            )
+        )
+        viewModel.getSearchData(key)
+    }
+
+    fun deleteSearchHistory(position: Int) {
+        viewModel.deleteSearchHistory(position)
     }
 
     override fun finish() {

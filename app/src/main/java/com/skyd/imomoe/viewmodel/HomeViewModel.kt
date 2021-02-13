@@ -1,5 +1,6 @@
 package com.skyd.imomoe.viewmodel
 
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.skyd.imomoe.App
@@ -14,7 +15,6 @@ import java.util.*
 
 
 class HomeViewModel : ViewModel() {
-    private var requestTimes = 0
     var lTabList: MutableList<TabBean> = ArrayList()
     var mldGetLTabList: MutableLiveData<List<TabBean>> = MutableLiveData()
     var rTabList: MutableList<TabBean> = ArrayList()
@@ -41,7 +41,9 @@ class HomeViewModel : ViewModel() {
                 mldGetAllTabList.postValue(allTabList)
             } catch (e: Exception) {
                 e.printStackTrace()
-                (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread()
+                (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread(
+                    Toast.LENGTH_LONG
+                )
             }
         }.start()
     }
@@ -60,7 +62,9 @@ class HomeViewModel : ViewModel() {
                 mldGetLTabList.postValue(lTabList)
             } catch (e: Exception) {
                 e.printStackTrace()
-                (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread()
+                (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread(
+                    Toast.LENGTH_LONG
+                )
             }
         }.start()
     }
@@ -79,7 +83,9 @@ class HomeViewModel : ViewModel() {
                 mldGetRTabList.postValue(rTabList)
             } catch (e: Exception) {
                 e.printStackTrace()
-                (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread()
+                (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread(
+                    Toast.LENGTH_LONG
+                )
             }
         }.start()
     }

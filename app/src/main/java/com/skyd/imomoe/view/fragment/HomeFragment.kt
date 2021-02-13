@@ -12,12 +12,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.hjq.permissions.OnPermissionCallback
+import com.hjq.permissions.Permission
+import com.hjq.permissions.XXPermissions
 import com.skyd.imomoe.R
 import com.skyd.imomoe.util.Util.showToast
-import com.skyd.imomoe.view.activity.ClassifyActivity
-import com.skyd.imomoe.view.activity.RankActivity
-import com.skyd.imomoe.view.activity.SearchActivity
-import com.skyd.imomoe.view.activity.SettingActivity
+import com.skyd.imomoe.view.activity.*
 import com.skyd.imomoe.viewmodel.HomeViewModel
 import kotlinx.android.synthetic.main.fragment_home.*
 
@@ -71,6 +71,21 @@ class HomeFragment : BaseFragment() {
                     R.anim.anl_stay
                 )
             }
+        }
+
+        iv_home_fragment_anime_download.setOnClickListener {
+            XXPermissions.with(this).permission(Permission.MANAGE_EXTERNAL_STORAGE).request(
+                object : OnPermissionCallback {
+                    override fun onGranted(permissions: MutableList<String>?, all: Boolean) {
+                        startActivity(Intent(activity, AnimeDownloadActivity::class.java))
+                    }
+
+                    override fun onDenied(permissions: MutableList<String>?, never: Boolean) {
+                        super.onDenied(permissions, never)
+                        "无存储权限，无法播放本地缓存视频".showToast(Toast.LENGTH_LONG)
+                    }
+                }
+            )
         }
 
         iv_home_fragment_setting.setOnClickListener {

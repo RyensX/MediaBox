@@ -24,8 +24,10 @@ class PlayViewModel : ViewModel() {
     var mldPlayBean: MutableLiveData<PlayBean> = MutableLiveData()
     var playBeanDataList: MutableList<AnimeDetailDataBean> = ArrayList()
     val episodesList: MutableList<AnimeEpisodeDataBean> = ArrayList()
+    val mldEpisodesList: MutableLiveData<Boolean> = MutableLiveData()
     val animeEpisodeDataBean = AnimeEpisodeDataBean("animeEpisode1", "", "")
     val mldAnimeEpisodeDataRefreshed: MutableLiveData<Boolean> = MutableLiveData()
+    val mldGetAnimeEpisodeData: MutableLiveData<Int> = MutableLiveData()
 
     fun refreshAnimeEpisodeData(partUrl: String, title: String = "") {
         Thread {
@@ -51,6 +53,30 @@ class PlayViewModel : ViewModel() {
                 animeEpisodeDataBean.title = ""
                 animeEpisodeDataBean.videoUrl = ""
                 mldAnimeEpisodeDataRefreshed.postValue(true)
+                (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread()
+            }
+        }.start()
+    }
+
+    fun getAnimeEpisodeData(partUrl: String, position: Int) {
+        Thread {
+            try {
+                val document = Jsoup.connect(Api.MAIN_URL + partUrl).get()
+                val children: Elements = document.select("body")[0].children()
+                for (i in children.indices) {
+                    when (children[i].className()) {
+                        "play" -> {
+                            episodesList[position].videoUrl = children[i].select("[class=area]")
+                                .select("[class=bofang]").select("div").attr("data-vid")
+                                .replace("\$mp4", "")
+                            break
+                        }
+                    }
+                }
+                mldEpisodesList.postValue(true)
+                mldGetAnimeEpisodeData.postValue(position)
+            } catch (e: Exception) {
+                e.printStackTrace()
                 (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread()
             }
         }.start()
@@ -101,6 +127,12 @@ class PlayViewModel : ViewModel() {
                                         )
                                     }
                                     "movurls" -> {      //集数列表
+                                        episodesList.addAll(
+                                            parseMovurls(
+                                                areaChildren[j],
+                                                animeEpisodeDataBean
+                                            )
+                                        )
                                         playBeanDataList.add(
                                             AnimeDetailDataBean(
                                                 "animeEpisodeFlowLayout1",
@@ -108,7 +140,7 @@ class PlayViewModel : ViewModel() {
                                                 "",
                                                 "",
                                                 "",
-                                                parseMovurls(areaChildren[j], animeEpisodeDataBean)
+                                                episodesList
                                             )
                                         )
                                     }
@@ -131,6 +163,7 @@ class PlayViewModel : ViewModel() {
                     playBeanDataList
                 )
                 mldPlayBean.postValue(playBean)
+                mldEpisodesList.postValue(true)
             } catch (e: HttpStatusException) {
                 e.printStackTrace()
                 if (e.statusCode == 502) {
@@ -148,6 +181,6 @@ class PlayViewModel : ViewModel() {
     }
 
     companion object {
-        const val TAG = "HomeViewModel"
+        const val TAG = "PlayViewModel"
     }
 }

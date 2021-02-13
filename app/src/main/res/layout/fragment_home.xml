@@ -11,14 +11,15 @@
         android:id="@+id/cl_home_fragment_header"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/main_color_2">
+        android:background="@color/main_color_2"
+        android:paddingHorizontal="7dp">
 
         <ImageView
             android:id="@+id/iv_home_fragment_rank"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:background="?android:selectableItemBackground"
-            android:padding="9dp"
+            android:paddingVertical="4dp"
             android:src="@drawable/ic_bar_chart_white_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -28,6 +29,7 @@
             android:id="@+id/tv_home_fragment_header_search"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="7dp"
             android:background="@drawable/shape_circle_corner_edge_main_color_50"
             android:drawableStart="@drawable/ic_search_main_color_24"
             android:drawablePadding="5dp"
@@ -45,30 +47,39 @@
 
         <ImageView
             android:id="@+id/iv_home_fragment_classify"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:background="?android:selectableItemBackground"
-            android:paddingVertical="11dp"
-            android:paddingStart="11dp"
-            android:paddingEnd="5.5dp"
+            android:paddingHorizontal="7dp"
             android:src="@drawable/ic_format_list_bulleted_white_24"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/iv_home_fragment_setting"
+            app:layout_constraintEnd_toStartOf="@id/iv_home_fragment_anime_download"
             app:layout_constraintStart_toEndOf="@id/tv_home_fragment_header_search"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/iv_home_fragment_setting"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:id="@+id/iv_home_fragment_anime_download"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:background="?android:selectableItemBackground"
-            android:paddingVertical="11dp"
-            android:paddingStart="5.5dp"
-            android:paddingEnd="11dp"
+            android:paddingHorizontal="7dp"
+            android:paddingVertical="7dp"
+            android:src="@drawable/ic_arrow_circle_down_white_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/iv_home_fragment_setting"
+            app:layout_constraintStart_toEndOf="@id/iv_home_fragment_classify"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_home_fragment_setting"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?android:selectableItemBackground"
+            android:paddingHorizontal="7dp"
             android:src="@drawable/ic_settings_white_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/iv_home_fragment_classify"
+            app:layout_constraintStart_toEndOf="@id/iv_home_fragment_anime_download"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

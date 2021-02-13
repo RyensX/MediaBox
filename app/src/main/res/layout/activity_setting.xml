@@ -51,6 +51,49 @@
             android:orientation="vertical">
 
             <RelativeLayout
+                android:id="@+id/rl_setting_activity_download_path"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?android:selectableItemBackground"
+                android:paddingHorizontal="15dp"
+                android:paddingVertical="15dp">
+
+                <ImageView
+                    android:id="@+id/iv_setting_activity_download_path"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:padding="1dp"
+                    android:src="@drawable/ic_arrow_circle_down_main_color_2_24" />
+
+                <com.skyd.imomoe.view.widget.TypefaceTextView
+                    android:id="@+id/tv_setting_activity_download_path"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_toEndOf="@id/iv_setting_activity_download_path"
+                    android:text="@string/anime_download_path"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+
+                <com.skyd.imomoe.view.widget.TypefaceTextView
+                    android:id="@+id/tv_setting_activity_download_path_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_setting_activity_download_path"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_toEndOf="@id/iv_setting_activity_download_path"
+                    android:ellipsize="marquee"
+                    android:focusable="true"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:singleLine="true"
+                    android:textColor="@color/gray_1"
+                    android:textSize="12sp"
+                    tools:text="0" />
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:id="@+id/rl_setting_activity_update"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

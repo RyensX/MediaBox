@@ -10,6 +10,10 @@ import com.skyd.imomoe.util.TypeFaceUtil
 class TypefaceTextView : AppCompatTextView {
     var isFocused: Boolean? = null
 
+    fun setIsFocused(isFocused: Boolean?) {
+        this.isFocused = isFocused
+    }
+
     constructor(context: Context) : super(context)
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {

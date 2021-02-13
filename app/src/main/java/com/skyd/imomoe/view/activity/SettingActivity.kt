@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.skyd.imomoe.R
+import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.util.Util.getAppVersionName
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.update.AppUpdateHelper
@@ -28,10 +29,13 @@ class SettingActivity : AppCompatActivity() {
 
         iv_setting_activity_back.setOnClickListener { finish() }
 
+        tv_setting_activity_download_path_info.isFocused = true
+        tv_setting_activity_download_path_info.text = Const.DownloadAnime.animeFilePath
+
         tv_setting_activity_update_info.text =
             getString(R.string.current_version, getAppVersionName())
 
-        val appUpdateHelper = AppUpdateHelper.getInstance()
+        val appUpdateHelper = AppUpdateHelper.instance
         appUpdateHelper.getUpdateStatus().observe(this, {
             when (it) {
                 AppUpdateStatus.UNCHECK -> {
@@ -72,8 +76,8 @@ class SettingActivity : AppCompatActivity() {
 
         rl_setting_activity_update.setOnClickListener {
             selfUpdateCheck = true
-            val appUpdateService = AppUpdateHelper.getInstance()
-            when(appUpdateService.getUpdateStatus().value){
+            val appUpdateService = AppUpdateHelper.instance
+            when (appUpdateService.getUpdateStatus().value) {
                 AppUpdateStatus.DOWNLOADING -> {
                     "正在下载新版本，下拉可以查看进度".showToast()
                 }

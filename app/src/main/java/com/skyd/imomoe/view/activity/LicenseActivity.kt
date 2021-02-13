@@ -105,6 +105,15 @@ class LicenseActivity : AppCompatActivity() {
                 "Apache-2.0 License"
             )
         )
+        list.add(
+            LicenseBean(
+                "license1",
+                Const.ActionUrl.ANIME_BROWSER,
+                "https://github.com/lingochamp/FileDownloader",
+                "FileDownloader",
+                "Apache-2.0 License"
+            )
+        )
 
         adapter.notifyDataSetChanged()
     }

@@ -19,7 +19,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.樱花动漫">
-        <activity android:name=".view.activity.LicenseActivity"></activity>
+        <activity
+            android:name=".view.activity.SimplePlayActivity"
+            android:configChanges="orientation|screenSize" />
+        <activity android:name=".view.activity.AnimeDownloadActivity" />
+        <activity android:name=".view.activity.LicenseActivity" />
         <activity android:name=".view.activity.AboutActivity" />
         <activity android:name=".view.activity.SettingActivity" />
         <activity android:name=".view.activity.MonthAnimeActivity" />
@@ -28,7 +32,8 @@
         <activity android:name=".view.activity.SearchActivity" />
         <activity
             android:name=".view.activity.PlayActivity"
-            android:configChanges="orientation|screenSize" />
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:screenOrientation="portrait"/>
         <activity android:name=".view.activity.AnimeDetailActivity" />
         <activity android:name=".view.activity.BaseActivity" />
         <activity android:name=".view.activity.MainActivity">
@@ -41,6 +46,15 @@
 
         <receiver
             android:name=".util.update.UpdateNotificationReceiver"
+            android:exported="false" />
+
+        <service
+            android:name=".util.downloadanime.AnimeDownloadService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <receiver
+            android:name=".util.downloadanime.AnimeDownloadNotificationReceiver"
             android:exported="false" />
 
         <service

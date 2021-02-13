@@ -39,5 +39,10 @@
     <string name="github">Github</string>
     <string name="imomoe">樱花动漫官网</string>
     <string name="open_source_licenses">开放源代码许可</string>
+    <string name="search_history">搜索历史</string>
+    <string name="download_anime">缓存动漫</string>
+    <string name="anime_download_path">视频缓存目录</string>
+    <string name="offline_anime">离线缓存</string>
+    <string name="no_download_video">没有缓存视频</string>
 
 </resources>

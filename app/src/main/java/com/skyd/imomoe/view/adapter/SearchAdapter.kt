@@ -3,7 +3,6 @@ package com.skyd.imomoe.view.adapter
 import android.app.Activity
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.skyd.imomoe.App

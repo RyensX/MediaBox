@@ -5,11 +5,13 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
+import androidx.room.Room
 import com.afollestad.materialdialogs.MaterialDialog
 import com.hjq.permissions.OnPermissionCallback
 import com.hjq.permissions.Permission
 import com.hjq.permissions.XXPermissions
 import com.skyd.imomoe.config.Const.Update.Companion.updateFile
+import com.skyd.imomoe.database.AppDatabase
 import com.skyd.imomoe.model.AppUpdateModel
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.uri
@@ -18,16 +20,20 @@ import io.reactivex.rxjava3.subjects.PublishSubject
 
 class AppUpdateHelper private constructor() {
     companion object {
-        private var instance: AppUpdateHelper? = null
+//        private var instance: AppUpdateHelper? = null
 
-        fun getInstance(): AppUpdateHelper {
-            instance?.let {
-                return it
-            }
-            val ins = AppUpdateHelper()
-            instance = ins
-            return ins
+        val instance: AppUpdateHelper by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+            AppUpdateHelper()
         }
+
+//        fun getInstance(): AppUpdateHelper {
+//            instance?.let {
+//                return it
+//            }
+//            val ins = AppUpdateHelper()
+//            instance = ins
+//            return ins
+//        }
     }
 
     fun getUpdateStatus(): LiveData<AppUpdateStatus> = AppUpdateModel.status

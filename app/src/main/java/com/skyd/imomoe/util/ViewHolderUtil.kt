@@ -23,12 +23,15 @@ class ViewHolderUtil {
             "animeCover4" -> ANIME_COVER_4
             "animeCover5" -> ANIME_COVER_5
             "animeCover6" -> ANIME_COVER_6
+            "animeCover7" -> ANIME_COVER_7
             "animeEpisodeFlowLayout1" -> ANIME_EPISODE_FLOW_LAYOUT_1
             "animeDescribe1" -> ANIME_DESCRIBE_1
             "gridRecyclerView1" -> GRID_RECYCLER_VIEW_1
             "banner1" -> BANNER_1
             "licenseHeader1" -> LICENSE_HEADER_1
             "license1" -> LICENSE_1
+            "searchHistoryHeader1" -> SEARCH_HISTORY_HEADER_1
+            "searchHistory1" -> SEARCH_HISTORY_1
             else -> UNKNOWN
         }
 
@@ -61,6 +64,10 @@ class ViewHolderUtil {
                 LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_anime_cover_6, parent, false)
             )
+            ANIME_COVER_7 -> AnimeCover7ViewHolder(
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_anime_cover_7, parent, false)
+            )
             ANIME_EPISODE_FLOW_LAYOUT_1 -> AnimeEpisodeFlowLayout1ViewHolder(
                 LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_anime_episode_flow_layout_1, parent, false)
@@ -85,6 +92,14 @@ class ViewHolderUtil {
                 LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_license_1, parent, false)
             )
+            SEARCH_HISTORY_HEADER_1 -> SearchHistoryHeader1ViewHolder(
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_search_history_header_1, parent, false)
+            )
+            SEARCH_HISTORY_1 -> SearchHistory1ViewHolder(
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_search_history_1, parent, false)
+            )
             else -> EmptyViewHolder(View(parent.context))
         }
 
@@ -102,6 +117,9 @@ class ViewHolderUtil {
         const val ANIME_COVER_6 = 10
         const val LICENSE_HEADER_1 = 11
         const val LICENSE_1 = 12
+        const val SEARCH_HISTORY_HEADER_1 = 13
+        const val SEARCH_HISTORY_1 = 14
+        const val ANIME_COVER_7 = 15
         const val MAX = 100   //避免外部其他类型与此处包含的某个类型重复。
     }
 }
@@ -156,6 +174,12 @@ class AnimeCover6ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val tvAnimeCover6Describe = view.findViewById<TextView>(R.id.tv_anime_cover_6_describe)
 }
 
+class AnimeCover7ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    val tvAnimeCover7Title = view.findViewById<TextView>(R.id.tv_anime_cover_7_title)
+    val tvAnimeCover7Size = view.findViewById<TextView>(R.id.tv_anime_cover_7_size)
+    val tvAnimeCover7Episodes = view.findViewById<TextView>(R.id.tv_anime_cover_7_episodes)
+}
+
 class AnimeEpisodeFlowLayout1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val flAnimeEpisodeFlowLayout1 = view.findViewById<FlowLayout>(R.id.fl_anime_episode)
 }
@@ -178,3 +202,12 @@ class License1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val tvLicense1License = view.findViewById<TextView>(R.id.tv_license_1_license)
 }
 
+class SearchHistoryHeader1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    val tvSearchHistoryHeader1Title =
+        view.findViewById<TextView>(R.id.tv_search_history_header_1_title)
+}
+
+class SearchHistory1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    val tvSearchHistory1Title = view.findViewById<TextView>(R.id.tv_search_history_1_title)
+    val ivSearchHistory1Delete = view.findViewById<ImageView>(R.id.iv_search_history_1_delete)
+}

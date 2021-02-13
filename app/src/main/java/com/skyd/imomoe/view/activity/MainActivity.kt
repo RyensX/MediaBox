@@ -1,16 +1,21 @@
 package com.skyd.imomoe.view.activity
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
+import com.skyd.imomoe.config.Const
+import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.util.Util.showToast
+import com.skyd.imomoe.util.downloadanime.AnimeDownloadService
 import com.skyd.imomoe.util.update.AppUpdateHelper
 import com.skyd.imomoe.util.update.AppUpdateStatus
 import com.skyd.imomoe.view.fragment.EverydayAnimeFragment
 import com.skyd.imomoe.view.fragment.HomeFragment
 import kotlinx.android.synthetic.main.activity_main.*
+import java.io.File
 
 
 class MainActivity : BaseActivity() {
@@ -24,7 +29,7 @@ class MainActivity : BaseActivity() {
         setContentView(R.layout.activity_main)
 
         //检查更新
-        val appUpdateHelper = AppUpdateHelper.getInstance()
+        val appUpdateHelper = AppUpdateHelper.instance
         appUpdateHelper.getUpdateStatus().observe(this, {
             when (it) {
                 AppUpdateStatus.UNCHECK -> appUpdateHelper.checkUpdate()
@@ -143,7 +148,6 @@ class MainActivity : BaseActivity() {
         }
     }
 
-
     override fun onSaveInstanceState(outState: Bundle) {
         homeFragment?.let {
             supportFragmentManager.putFragment(outState, HOME_FRAGMENT_KEY, it)
@@ -157,6 +161,6 @@ class MainActivity : BaseActivity() {
 
     companion object {
         private const val HOME_FRAGMENT_KEY = "homeFragment"
-        private const val EVERYDAY_ANIME_FRAGMENT_KEY = "EverydayAnimeFragment"
+        private const val EVERYDAY_ANIME_FRAGMENT_KEY = "everydayAnimeFragment"
     }
 }

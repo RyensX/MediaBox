@@ -4,5 +4,9 @@
         <external-path
             name="download"
             path="Download" />
+
+        <root-path
+            name="root"
+            path="" />
     </paths>
 </resources>

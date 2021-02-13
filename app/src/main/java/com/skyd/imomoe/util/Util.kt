@@ -15,6 +15,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Looper
 import android.text.Html
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.Window
@@ -33,11 +34,11 @@ import com.bumptech.glide.request.RequestOptions
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Const
-import com.skyd.imomoe.view.activity.AnimeDetailActivity
-import com.skyd.imomoe.view.activity.ClassifyActivity
-import com.skyd.imomoe.view.activity.MonthAnimeActivity
-import com.skyd.imomoe.view.activity.PlayActivity
+import com.skyd.imomoe.util.Util.showToast
+import com.skyd.imomoe.view.activity.*
 import com.skyd.imomoe.view.widget.AnimeToast
+import java.io.File
+import java.io.FileInputStream
 import java.net.URLDecoder
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -175,6 +176,13 @@ object Util {
         }
     }
 
+    fun setFullScreen(window: Window) {
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        )
+    }
+
     fun setColorStatusBar(
         window: Window,
         statusBarColor: Int,
@@ -202,6 +210,12 @@ object Util {
         AnimeToast.makeText(App.context, this, duration).show()
     }
 
+    fun CharSequence.showToastOnThread(skin: Boolean, duration: Int = Toast.LENGTH_SHORT) {
+        Looper.prepare()
+        AnimeToast.makeText(App.context, this, duration).show()
+        Looper.loop()
+    }
+
     fun CharSequence.showToastOnThread(duration: Int = Toast.LENGTH_SHORT) {
         Looper.prepare()
         Toast.makeText(App.context, this, duration).show()
@@ -226,6 +240,30 @@ object Util {
         if (includeVirtualKey) display.getRealSize(outPoint)
         else display.getSize(outPoint)
         return outPoint.x
+    }
+
+    fun getFileSize(f: File): Long {
+        var s: Long = 0
+        if (f.exists() && f.isFile) {
+            val fis = FileInputStream(f)
+            s = fis.available().toLong()
+        }
+        return s
+    }
+
+    fun getDirectorySize(f: File): Long {
+        var size: Long = 0
+        val fList = f.listFiles()
+        fList?.let {
+            for (i in it.indices) {
+                size += if (it[i].isDirectory) {
+                    getDirectorySize(it[i])
+                } else {
+                    getFileSize(it[i])
+                }
+            }
+        }
+        return size
     }
 
     fun Drawable.toBitmap(): Bitmap {
@@ -332,7 +370,30 @@ object Util {
             decodeUrl.startsWith(Const.ActionUrl.ANIME_BROWSER) -> {     //打开浏览器
                 openBrowser(actionUrl.replaceFirst(Const.ActionUrl.ANIME_BROWSER, ""))
             }
-
+            decodeUrl.startsWith(Const.ActionUrl.ANIME_ANIME_DOWNLOAD_EPISODE) -> { //缓存的每一集列表
+                val directoryName =
+                    actionUrl.replaceFirst(Const.ActionUrl.ANIME_ANIME_DOWNLOAD_EPISODE, "")
+                activity.startActivity(
+                    Intent(activity, AnimeDownloadActivity::class.java)
+                        .putExtra("mode", 1)
+                        .putExtra("actionBarTitle", directoryName.replace("/", ""))
+                        .putExtra("directoryName", directoryName)
+                )
+            }
+            decodeUrl.startsWith(Const.ActionUrl.ANIME_ANIME_DOWNLOAD_PLAY) -> { //播放缓存的每一集
+                val filePath =
+                    actionUrl.replaceFirst(Const.ActionUrl.ANIME_ANIME_DOWNLOAD_PLAY + "/", "")
+                val fileName = filePath.split("/").last()
+                val title = fileName
+                activity.startActivity(
+                    Intent(activity, SimplePlayActivity::class.java)
+                        .putExtra("url", "file://$filePath")
+                        .putExtra("title", title)
+                )
+            }
+            decodeUrl.startsWith(Const.ActionUrl.ANIME_ANIME_DOWNLOAD_M3U8) -> { //播放缓存的每一集M3U8
+                "暂不支持m3u8格式 :(".showToast(Toast.LENGTH_LONG)
+            }
             else -> {
                 "${toastTitle},${App.context.resources.getString(R.string.currently_not_supported)}".showToast()
             }

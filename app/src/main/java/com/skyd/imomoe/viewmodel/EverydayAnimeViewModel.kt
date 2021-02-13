@@ -1,6 +1,7 @@
 package com.skyd.imomoe.viewmodel
 
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.skyd.imomoe.App
@@ -90,7 +91,9 @@ class EverydayAnimeViewModel : ViewModel() {
                 Log.e(TAG, e.message ?: "")
             } catch (e: Exception) {
                 e.printStackTrace()
-                (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread()
+                (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread(
+                    Toast.LENGTH_LONG
+                )
             }
         }.start()
     }
