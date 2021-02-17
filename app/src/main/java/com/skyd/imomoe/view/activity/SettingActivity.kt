@@ -11,23 +11,19 @@ import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.update.AppUpdateHelper
 import com.skyd.imomoe.util.update.AppUpdateStatus
 import kotlinx.android.synthetic.main.activity_setting.*
+import kotlinx.android.synthetic.main.layout_toolbar_1.*
 
 
 class SettingActivity : AppCompatActivity() {
     private var selfUpdateCheck = false
-
-    companion object {
-        private var checkingUpdate = false
-    }
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setting)
 
-        checkingUpdate = false
-
-        iv_setting_activity_back.setOnClickListener { finish() }
+        tv_toolbar_1_title.text = getString(R.string.setting)
+        iv_toolbar_1_back.setOnClickListener { finish() }
 
         tv_setting_activity_download_path_info.isFocused = true
         tv_setting_activity_download_path_info.text = Const.DownloadAnime.animeFilePath

@@ -9,6 +9,7 @@ import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.util.Util.getAppVersionName
 import com.skyd.imomoe.util.Util.openBrowser
 import kotlinx.android.synthetic.main.activity_about.*
+import kotlinx.android.synthetic.main.layout_toolbar_1.*
 
 class AboutActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
@@ -16,7 +17,8 @@ class AboutActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_about)
 
-        iv_about_activity_back.setOnClickListener { finish() }
+        iv_toolbar_1_back.setOnClickListener { finish() }
+        tv_toolbar_1_title.text = getString(R.string.about)
 
         tv_about_activity_version.text = "V " + getAppVersionName()
 

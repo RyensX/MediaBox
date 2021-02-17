@@ -111,7 +111,13 @@ class HomeFragment : BaseFragment() {
             )
             adapter.clearAllFragment()
             for (i in it.indices) {
-                adapter.addFragment(AnimeShowFragment(it[i].actionUrl))
+                val fragment = AnimeShowFragment()
+                val bundle = Bundle()
+                bundle.putString("partUrl", it[i].actionUrl)
+                bundle.putSerializable("viewPool", viewModel.viewPool)
+                bundle.putSerializable("childViewPool", viewModel.childViewPool)
+                fragment.arguments = bundle
+                adapter.addFragment(fragment)
             }
             adapter.notifyDataSetChanged()
         })

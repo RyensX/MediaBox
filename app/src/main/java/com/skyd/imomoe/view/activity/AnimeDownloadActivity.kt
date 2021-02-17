@@ -2,7 +2,6 @@ package com.skyd.imomoe.view.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.skyd.imomoe.R
@@ -11,6 +10,9 @@ import com.skyd.imomoe.util.Util.visible
 import com.skyd.imomoe.view.adapter.AnimeDownloadAdapter
 import com.skyd.imomoe.viewmodel.AnimeDownloadViewModel
 import kotlinx.android.synthetic.main.activity_anime_download.*
+import kotlinx.android.synthetic.main.layout_circle_progress_text_tip_1.*
+import kotlinx.android.synthetic.main.layout_image_text_tip_1.*
+import kotlinx.android.synthetic.main.layout_toolbar_1.*
 
 class AnimeDownloadActivity : AppCompatActivity() {
     private var mode = 0        //0是默认的，是番剧；1是番剧每一集
@@ -29,29 +31,38 @@ class AnimeDownloadActivity : AppCompatActivity() {
         directoryName =
             intent.getStringExtra("directoryName") ?: ""
 
-        tv_anime_download_activity_toolbar_title.text = actionBarTitle
+        tv_toolbar_1_title.text = actionBarTitle
 
         viewModel = ViewModelProvider(this).get(AnimeDownloadViewModel::class.java)
         adapter = AnimeDownloadAdapter(this, viewModel.animeCoverList)
 
-        iv_anime_download_activity_back.setOnClickListener { finish() }
+        iv_toolbar_1_back.setOnClickListener { finish() }
 
         rv_anime_download_activity.layoutManager = LinearLayoutManager(this)
         rv_anime_download_activity.adapter = adapter
 
+        layout_anime_download_loading.inflate()
+        tv_circle_progress_text_tip_1.text =
+            getString(R.string.compute_md5_read_database)
+
         viewModel.mldAnimeCoverList.observe(this, {
             if (it) {
-                ll_anime_download_loading.gone()
-                ll_anime_download_no_download.visibility =
-                    if (viewModel.animeCoverList.size == 0) View.VISIBLE
-                    else View.GONE
+                layout_circle_progress_text_tip_1.gone()
+                if (viewModel.animeCoverList.size == 0) {
+                    if (layout_anime_download_no_download != null) {
+                        layout_anime_download_no_download.inflate()
+                        tv_image_text_tip_1.text = getString(R.string.no_download_video)
+                    } else {
+                        layout_image_text_tip_1.visible()
+                    }
+                }
                 adapter.notifyDataSetChanged()
             }
         })
 
         if (mode == 0) viewModel.getAnimeCover()
         else if (mode == 1) {
-            ll_anime_download_loading.visible()
+            layout_circle_progress_text_tip_1.visible()
             viewModel.getAnimeCoverEpisode(directoryName)
         }
     }

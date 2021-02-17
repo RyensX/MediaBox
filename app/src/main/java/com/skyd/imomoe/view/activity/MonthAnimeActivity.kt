@@ -14,6 +14,7 @@ import com.skyd.imomoe.viewmodel.SearchViewModel
 import kotlinx.android.synthetic.main.activity_month_anime.*
 import kotlinx.android.synthetic.main.activity_rank.*
 import kotlinx.android.synthetic.main.activity_search.*
+import kotlinx.android.synthetic.main.layout_toolbar_1.*
 
 class MonthAnimeActivity : AppCompatActivity() {
     private var partUrl: String = ""
@@ -31,7 +32,7 @@ class MonthAnimeActivity : AppCompatActivity() {
         adapter = SearchAdapter(this, viewModel.monthAnimeList)
 
         val yearMonth = partUrl.replace("/", "")
-        tv_month_anime_activity_toolbar_title.text = getString(
+        tv_toolbar_1_title.text = getString(
             R.string.year_month_anime,
             yearMonth.substring(0, 4).toInt(),
             yearMonth.substring(4, 6).toInt()
@@ -42,7 +43,7 @@ class MonthAnimeActivity : AppCompatActivity() {
         rv_month_anime_activity.setHasFixedSize(true)
         rv_month_anime_activity.adapter = adapter
 
-        iv_month_anime_activity_back.setOnClickListener { finish() }
+        iv_toolbar_1_back.setOnClickListener { finish() }
         srl_month_anime_activity.setColorSchemeResources(R.color.main_color)
         srl_month_anime_activity.setOnRefreshListener { //避免刷新间隔太短
             if (System.currentTimeMillis() - lastRefreshTime > 500) {

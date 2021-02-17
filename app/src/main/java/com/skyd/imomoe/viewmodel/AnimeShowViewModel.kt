@@ -6,13 +6,16 @@ import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeShowBean
 import com.skyd.imomoe.config.Api
-import com.skyd.imomoe.util.ParseHtmlUtil
 import com.skyd.imomoe.util.ParseHtmlUtil.parseDnews
 import com.skyd.imomoe.util.ParseHtmlUtil.parseHeroWrap
 import com.skyd.imomoe.util.ParseHtmlUtil.parseImg
 import com.skyd.imomoe.util.ParseHtmlUtil.parseLpic
 import com.skyd.imomoe.util.ParseHtmlUtil.parseTopli
 import com.skyd.imomoe.util.Util.showToastOnThread
+import com.skyd.imomoe.view.adapter.SerializableRecycledViewPool
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.jsoup.Jsoup
 import org.jsoup.select.Elements
 import java.lang.Exception
@@ -20,12 +23,14 @@ import java.util.*
 
 
 class AnimeShowViewModel : ViewModel() {
+    var childViewPool: SerializableRecycledViewPool? = null
+    var viewPool: SerializableRecycledViewPool? = null
     var animeShowList: MutableList<AnimeShowBean> = ArrayList()
     var mldGetAnimeShowList: MutableLiveData<Boolean> = MutableLiveData()
 
     //http://www.yhdm.io版本
     fun getAnimeShowData(partUrl: String) {
-        Thread {
+        GlobalScope.launch(Dispatchers.IO) {
             try {
                 val document = Jsoup.connect(Api.MAIN_URL + partUrl).get()
                 animeShowList.clear()
@@ -135,7 +140,7 @@ class AnimeShowViewModel : ViewModel() {
                 e.printStackTrace()
                 (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread()
             }
-        }.start()
+        }
     }
 
     companion object {

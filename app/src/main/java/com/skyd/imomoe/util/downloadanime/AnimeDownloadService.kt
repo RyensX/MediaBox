@@ -26,9 +26,7 @@ import com.skyd.imomoe.util.downloadanime.AnimeDownloadHelper.Companion.download
 import com.skyd.imomoe.util.downloadanime.AnimeDownloadNotificationReceiver.Companion.DOWNLOAD_ANIME_NOTIFICATION_ID
 import com.skyd.imomoe.util.update.UpdateNotificationReceiver.Companion.UPDATE_NOTIFICATION_ID
 import com.skyd.imomoe.view.activity.MainActivity
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
+import kotlinx.coroutines.*
 import java.io.File
 import java.io.Serializable
 
@@ -59,13 +57,13 @@ class AnimeDownloadService : Service() {
                     val file = File("$animeFilePath$animeDir/$fileName")
                     if (file.exists()) {
                         downloadHashMap[key]?.postValue(AnimeDownloadStatus.COMPLETE)
-                        Thread {
+                        GlobalScope.launch(Dispatchers.IO) {
                             getMD5(file)?.let {
                                 getAppDataBase().animeDownloadDao().insertAnimeDownload(
                                     AnimeDownloadEntity(it, title)
                                 )
                             }
-                        }.start()
+                        }
                         "${key}下载完成".showToast()
                     } else {
                         if (downloadHashMap[key]?.value != AnimeDownloadStatus.CANCEL) {
@@ -119,6 +117,9 @@ class AnimeDownloadService : Service() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val importance = NotificationManager.IMPORTANCE_LOW
             createNotificationChannel(CHANNEL_ID, CHANNEL_NAME, importance)
+            downloadServiceHashMap[key]?.builder = NotificationCompat.Builder(this, CHANNEL_ID)
+        } else {
+            downloadServiceHashMap[key]?.builder = NotificationCompat.Builder(this)
         }
         val notificationId = downloadServiceHashMap[key]?.notificationId ?: -1
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -132,25 +133,31 @@ class AnimeDownloadService : Service() {
         clickIntent.setClass(this, MainActivity::class.java)
         clickIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         clickIntent.putExtra(UPDATE_NOTIFICATION_ID, notificationId)
-        downloadServiceHashMap[key]?.builder = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.mipmap.ic_launcher)
-            .setContentTitle("正在下载$key")
-            .setContentText("0%")
-            .setProgress(100, 0, false)
-            .setDeleteIntent(
-                PendingIntent.getBroadcast(
-                    this,
-                    //requestCode需要不一样才能接收每次的消息
-                    notificationId,
-                    stopIntent,
-                    PendingIntent.FLAG_CANCEL_CURRENT
+        downloadServiceHashMap[key]?.builder?.let {
+            it.setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle("正在下载$key")
+                .setContentText("0%")
+                .setProgress(100, 0, false)
+                .setDeleteIntent(
+                    PendingIntent.getBroadcast(
+                        this,
+                        //requestCode需要不一样才能接收每次的消息
+                        notificationId,
+                        stopIntent,
+                        PendingIntent.FLAG_CANCEL_CURRENT
+                    )
                 )
-            )
-            .setContentIntent(
-                PendingIntent.getActivity(this, 0, clickIntent, PendingIntent.FLAG_CANCEL_CURRENT)
-            )
-            .setAutoCancel(false)
-            .setTicker(key)
+                .setContentIntent(
+                    PendingIntent.getActivity(
+                        this,
+                        0,
+                        clickIntent,
+                        PendingIntent.FLAG_CANCEL_CURRENT
+                    )
+                )
+                .setAutoCancel(false)
+                .setTicker(key)
+        }
         val notification = downloadServiceHashMap[key]?.builder?.build()
         notificationManager?.notify(notificationId, notification)
     }

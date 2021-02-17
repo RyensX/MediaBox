@@ -10,6 +10,7 @@ import com.skyd.imomoe.view.adapter.LicenseAdapter
 import com.skyd.imomoe.view.adapter.SearchAdapter
 import kotlinx.android.synthetic.main.activity_license.*
 import kotlinx.android.synthetic.main.activity_search.*
+import kotlinx.android.synthetic.main.layout_toolbar_1.*
 
 class LicenseActivity : AppCompatActivity() {
     private val list: MutableList<LicenseBean> = ArrayList()
@@ -19,7 +20,8 @@ class LicenseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_license)
 
-        iv_license_activity_back.setOnClickListener { finish() }
+        tv_toolbar_1_title.text = getString(R.string.open_source_licenses)
+        iv_toolbar_1_back.setOnClickListener { finish() }
         rv_license_activity.layoutManager = LinearLayoutManager(this)
         rv_license_activity.adapter = adapter
 

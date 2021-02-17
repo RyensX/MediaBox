@@ -23,6 +23,7 @@ import com.skyd.imomoe.viewmodel.AnimeDetailViewModel
 import com.skyd.imomoe.viewmodel.RankViewModel
 import kotlinx.android.synthetic.main.activity_rank.*
 import kotlinx.android.synthetic.main.fragment_everyday_anime.*
+import kotlinx.android.synthetic.main.layout_toolbar_1.*
 
 class RankActivity : BaseActivity() {
     private lateinit var viewModel: RankViewModel
@@ -37,7 +38,8 @@ class RankActivity : BaseActivity() {
 
         viewModel = ViewModelProvider(this).get(RankViewModel::class.java)
 
-        iv_rank_activity_back.setOnClickListener { finish() }
+        tv_toolbar_1_title.text = getString(R.string.rank_list)
+        iv_toolbar_1_back.setOnClickListener { finish() }
 
         vp2_rank_activity.offscreenPageLimit = offscreenPageLimit
         srl_rank_activity.setColorSchemeResources(R.color.main_color)

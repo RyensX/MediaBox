@@ -6,42 +6,14 @@
     android:layout_height="match_parent"
     tools:context=".view.activity.AboutActivity">
 
-    <LinearLayout
+    <include
         android:id="@+id/ll_about_activity_toolbar"
+        layout="@layout/layout_toolbar_1"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/main_color_2"
-        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/iv_about_activity_back"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:adjustViewBounds="true"
-            android:background="?android:selectableItemBackground"
-            android:padding="12dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/ic_arrow_back_white_24"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <com.skyd.imomoe.view.widget.TypefaceTextView
-            android:id="@+id/tv_about_activity_toolbar_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="16dp"
-            android:ellipsize="marquee"
-            android:focusable="true"
-            android:marqueeRepeatLimit="marquee_forever"
-            android:singleLine="true"
-            android:text="@string/about"
-            android:textColor="@color/white"
-            android:textSize="17sp" />
-    </LinearLayout>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/iv_about_activity_icon"

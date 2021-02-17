@@ -10,6 +10,9 @@ import com.skyd.imomoe.util.Util.gone
 import com.skyd.imomoe.util.Util.setFullScreen
 import com.skyd.imomoe.util.Util.visible
 import kotlinx.android.synthetic.main.activity_simple_play.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.io.File
 
 
@@ -32,13 +35,13 @@ class SimplePlayActivity : BaseActivity() {
         avp_simple_play_activity.startPlayLogic()
         orientationUtils.resolveByClick()
 
-        Thread {
+        GlobalScope.launch(Dispatchers.IO) {
             val title = getAppDataBase().animeDownloadDao()
                 .getAnimeDownload(getMD5(File(url.replaceFirst("file://", ""))) ?: "")?.title
             runOnUiThread {
                 avp_simple_play_activity.titleTextView.text = title
             }
-        }.start()
+        }
     }
 
     private fun init() {

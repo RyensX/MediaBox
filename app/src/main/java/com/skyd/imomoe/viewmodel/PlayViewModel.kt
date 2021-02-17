@@ -1,6 +1,5 @@
 package com.skyd.imomoe.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.skyd.imomoe.App
@@ -11,7 +10,9 @@ import com.skyd.imomoe.util.ParseHtmlUtil
 import com.skyd.imomoe.util.ParseHtmlUtil.parseBotit
 import com.skyd.imomoe.util.ParseHtmlUtil.parseMovurls
 import com.skyd.imomoe.util.Util.showToastOnThread
-import org.jsoup.HttpStatusException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.jsoup.Jsoup
 import org.jsoup.select.Elements
 import java.lang.Exception
@@ -19,10 +20,9 @@ import java.util.*
 
 
 class PlayViewModel : ViewModel() {
-    private var requestTimes = 0
     var playBean: PlayBean? = null
     var mldPlayBean: MutableLiveData<PlayBean> = MutableLiveData()
-    var playBeanDataList: MutableList<AnimeDetailDataBean> = ArrayList()
+    var playBeanDataList: MutableList<AnimeDetailBean> = ArrayList()
     val episodesList: MutableList<AnimeEpisodeDataBean> = ArrayList()
     val mldEpisodesList: MutableLiveData<Boolean> = MutableLiveData()
     val animeEpisodeDataBean = AnimeEpisodeDataBean("animeEpisode1", "", "")
@@ -30,7 +30,7 @@ class PlayViewModel : ViewModel() {
     val mldGetAnimeEpisodeData: MutableLiveData<Int> = MutableLiveData()
 
     fun refreshAnimeEpisodeData(partUrl: String, title: String = "") {
-        Thread {
+        GlobalScope.launch(Dispatchers.IO) {
             try {
                 val document = Jsoup.connect(Api.MAIN_URL + partUrl).get()
                 val children: Elements = document.select("body")[0].children()
@@ -55,11 +55,11 @@ class PlayViewModel : ViewModel() {
                 mldAnimeEpisodeDataRefreshed.postValue(true)
                 (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread()
             }
-        }.start()
+        }
     }
 
     fun getAnimeEpisodeData(partUrl: String, position: Int) {
-        Thread {
+        GlobalScope.launch(Dispatchers.IO) {
             try {
                 val document = Jsoup.connect(Api.MAIN_URL + partUrl).get()
                 val children: Elements = document.select("body")[0].children()
@@ -79,11 +79,11 @@ class PlayViewModel : ViewModel() {
                 e.printStackTrace()
                 (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread()
             }
-        }.start()
+        }
     }
 
     fun getPlayData(partUrl: String) {
-        Thread {
+        GlobalScope.launch(Dispatchers.IO) {
             try {
                 val title = AnimeTitleBean("", "", "")
                 val episode =
@@ -116,13 +116,11 @@ class PlayViewModel : ViewModel() {
                                     }
                                     "botit" -> {
                                         playBeanDataList.add(
-                                            AnimeDetailDataBean(
+                                            AnimeDetailBean(
                                                 "header1",
                                                 "",
                                                 parseBotit(areaChildren[j]),
-                                                "",
-                                                "",
-                                                null
+                                                ""
                                             )
                                         )
                                     }
@@ -130,13 +128,13 @@ class PlayViewModel : ViewModel() {
                                         episodesList.addAll(
                                             parseMovurls(
                                                 areaChildren[j],
-                                                animeEpisodeDataBean
+                                                animeEpisodeDataBean,
+                                                "animeEpisode2"
                                             )
                                         )
                                         playBeanDataList.add(
-                                            AnimeDetailDataBean(
-                                                "animeEpisodeFlowLayout1",
-                                                "",
+                                            AnimeDetailBean(
+                                                "horizontalRecyclerView1",
                                                 "",
                                                 "",
                                                 "",
@@ -146,10 +144,10 @@ class PlayViewModel : ViewModel() {
                                     }
                                     "imgs" -> {
                                         playBeanDataList.add(
-                                            AnimeDetailDataBean(
+                                            AnimeDetailBean(
                                                 "gridRecyclerView1",
-                                                "", "", "", "", null,
-                                                ParseHtmlUtil.parseImg(areaChildren[j])
+                                                "", "", "",
+                                                animeCoverList = ParseHtmlUtil.parseImg(areaChildren[j])
                                             )
                                         )
                                     }
@@ -164,20 +162,11 @@ class PlayViewModel : ViewModel() {
                 )
                 mldPlayBean.postValue(playBean)
                 mldEpisodesList.postValue(true)
-            } catch (e: HttpStatusException) {
-                e.printStackTrace()
-                if (e.statusCode == 502) {
-                    if (requestTimes <= 2) {
-                        requestTimes++
-                        getPlayData(partUrl)
-                    } else requestTimes = 0
-                }
-                Log.e(TAG, e.message ?: "")
             } catch (e: Exception) {
                 e.printStackTrace()
                 (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread()
             }
-        }.start()
+        }
     }
 
     companion object {

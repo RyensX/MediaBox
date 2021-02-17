@@ -24,7 +24,9 @@ class ViewHolderUtil {
             "animeCover5" -> ANIME_COVER_5
             "animeCover6" -> ANIME_COVER_6
             "animeCover7" -> ANIME_COVER_7
+            "animeEpisode2" -> ANIME_EPISODE_2
             "animeEpisodeFlowLayout1" -> ANIME_EPISODE_FLOW_LAYOUT_1
+            "animeEpisodeFlowLayout2" -> ANIME_EPISODE_FLOW_LAYOUT_2
             "animeDescribe1" -> ANIME_DESCRIBE_1
             "gridRecyclerView1" -> GRID_RECYCLER_VIEW_1
             "banner1" -> BANNER_1
@@ -32,6 +34,8 @@ class ViewHolderUtil {
             "license1" -> LICENSE_1
             "searchHistoryHeader1" -> SEARCH_HISTORY_HEADER_1
             "searchHistory1" -> SEARCH_HISTORY_1
+            "animeInfo1" -> ANIME_INFO_1
+            "horizontalRecyclerView1" -> HORIZONTAL_RECYCLER_VIEW_1
             else -> UNKNOWN
         }
 
@@ -72,6 +76,10 @@ class ViewHolderUtil {
                 LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_anime_episode_flow_layout_1, parent, false)
             )
+            ANIME_EPISODE_FLOW_LAYOUT_2 -> AnimeEpisodeFlowLayout2ViewHolder(
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_anime_episode_flow_layout_2, parent, false)
+            )
             ANIME_DESCRIBE_1 -> AnimeDescribe1ViewHolder(
                 LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_anime_describe_1, parent, false)
@@ -100,6 +108,18 @@ class ViewHolderUtil {
                 LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_search_history_1, parent, false)
             )
+            ANIME_INFO_1 -> AnimeInfo1ViewHolder(
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_anime_info_1, parent, false)
+            )
+            HORIZONTAL_RECYCLER_VIEW_1 -> HorizontalRecyclerView1ViewHolder(
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_horizontal_recycler_view_1, parent, false)
+            )
+            ANIME_EPISODE_2 -> AnimeEpisode2ViewHolder(
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_anime_episode_2, parent, false)
+            )
             else -> EmptyViewHolder(View(parent.context))
         }
 
@@ -120,6 +140,10 @@ class ViewHolderUtil {
         const val SEARCH_HISTORY_HEADER_1 = 13
         const val SEARCH_HISTORY_1 = 14
         const val ANIME_COVER_7 = 15
+        const val ANIME_EPISODE_FLOW_LAYOUT_2 = 16
+        const val ANIME_INFO_1 = 17
+        const val HORIZONTAL_RECYCLER_VIEW_1 = 18
+        const val ANIME_EPISODE_2 = 19
         const val MAX = 100   //避免外部其他类型与此处包含的某个类型重复。
     }
 }
@@ -184,6 +208,10 @@ class AnimeEpisodeFlowLayout1ViewHolder(view: View) : RecyclerView.ViewHolder(vi
     val flAnimeEpisodeFlowLayout1 = view.findViewById<FlowLayout>(R.id.fl_anime_episode)
 }
 
+class AnimeEpisodeFlowLayout2ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    val rvAnimeEpisodeFlowLayout2 = view.findViewById<RecyclerView>(R.id.fl_anime_episode_2)
+}
+
 class AnimeDescribe1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val tvAnimeDescribe1 = view.findViewById<TextView>(R.id.tv_anime_describe)
 }
@@ -210,4 +238,27 @@ class SearchHistoryHeader1ViewHolder(view: View) : RecyclerView.ViewHolder(view)
 class SearchHistory1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val tvSearchHistory1Title = view.findViewById<TextView>(R.id.tv_search_history_1_title)
     val ivSearchHistory1Delete = view.findViewById<ImageView>(R.id.iv_search_history_1_delete)
+}
+
+class AnimeInfo1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    val ivAnimeInfo1Cover = view.findViewById<ImageView>(R.id.iv_anime_info_1_cover)
+    val tvAnimeInfo1Title = view.findViewById<TextView>(R.id.tv_anime_info_1_title)
+    val tvAnimeInfo1Alias = view.findViewById<TextView>(R.id.tv_anime_info_1_alias)
+    val tvAnimeInfo1Area = view.findViewById<TextView>(R.id.tv_anime_info_1_area)
+    val tvAnimeInfo1Year = view.findViewById<TextView>(R.id.tv_anime_info_1_year)
+    val tvAnimeInfo1Index = view.findViewById<TextView>(R.id.tv_anime_info_1_index)
+    val tvAnimeInfo1Type = view.findViewById<TextView>(R.id.tv_anime_info_1_type)
+    val flAnimeInfo1Type = view.findViewById<FlowLayout>(R.id.fl_anime_info_1_type)
+    val tvAnimeInfo1Tag = view.findViewById<TextView>(R.id.tv_anime_info_1_tag)
+    val flAnimeInfo1Tag = view.findViewById<FlowLayout>(R.id.fl_anime_info_1_tag)
+    val tvAnimeInfo1Info = view.findViewById<TextView>(R.id.tv_anime_info_1_info)
+}
+
+class HorizontalRecyclerView1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    val rvHorizontalRecyclerView1 = view.findViewById<RecyclerView>(R.id.rv_horizontal_recycler_view_1)
+    val ivHorizontalRecyclerView1More = view.findViewById<ImageView>(R.id.iv_horizontal_recycler_view_1_more)
+}
+
+class AnimeEpisode2ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    val tvAnimeEpisode2 = view.findViewById<TextView>(R.id.tv_anime_episode_2)
 }

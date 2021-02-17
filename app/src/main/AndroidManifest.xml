@@ -33,7 +33,7 @@
         <activity
             android:name=".view.activity.PlayActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity android:name=".view.activity.AnimeDetailActivity" />
         <activity android:name=".view.activity.BaseActivity" />
         <activity android:name=".view.activity.MainActivity">

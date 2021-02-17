@@ -152,13 +152,14 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
             actionBar,
             statusBar
         ) as AnimeVideoPlayer
+        mDownloadButton?.gone()
         player.mScaleIndex = mScaleIndex
         player.resolveTypeUI()
         return player
     }
 
     /**
-     * 推出全屏时将对应处理参数逻辑返回给非播放器
+     * 退出全屏时将对应处理参数逻辑返回给非播放器
      *
      * @param oldF
      * @param vp
@@ -170,6 +171,7 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
         gsyVideoPlayer: GSYVideoPlayer?
     ) {
         super.resolveNormalVideoShow(oldF, vp, gsyVideoPlayer)
+        mDownloadButton?.visible()
         if (gsyVideoPlayer != null) {
             val player = gsyVideoPlayer as AnimeVideoPlayer
             mScaleIndex = player.mScaleIndex

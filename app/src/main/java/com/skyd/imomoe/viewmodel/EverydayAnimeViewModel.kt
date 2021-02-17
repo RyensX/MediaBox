@@ -13,6 +13,9 @@ import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.util.ParseHtmlUtil.parseDtit
 import com.skyd.imomoe.util.ParseHtmlUtil.parseTlist
 import com.skyd.imomoe.util.Util.showToastOnThread
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.jsoup.HttpStatusException
 import org.jsoup.Jsoup
 import org.jsoup.select.Elements
@@ -33,7 +36,7 @@ class EverydayAnimeViewModel : ViewModel() {
     var mldEverydayAnimeList: MutableLiveData<List<List<AnimeCoverBean>>> = MutableLiveData()
 
     fun getEverydayAnimeData() {
-        Thread {
+        GlobalScope.launch(Dispatchers.IO) {
             try {
                 val document = Jsoup.connect(Api.MAIN_URL).get()
                 val areaChildren: Elements = document.select("[class=area]")[0].children()
@@ -95,7 +98,7 @@ class EverydayAnimeViewModel : ViewModel() {
                     Toast.LENGTH_LONG
                 )
             }
-        }.start()
+        }
     }
 
     companion object {

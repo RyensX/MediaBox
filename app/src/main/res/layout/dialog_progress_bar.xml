@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:indeterminateTint="@color/main_color_2"
+        android:indeterminateTintMode="src_atop"
         android:padding="20dp" />
 
     <com.skyd.imomoe.view.widget.TypefaceTextView

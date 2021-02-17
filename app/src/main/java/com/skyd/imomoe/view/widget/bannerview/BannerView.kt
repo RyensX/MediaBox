@@ -211,7 +211,7 @@ open class BannerView(context: Context, attrs: AttributeSet?) : RelativeLayout(c
         }
     }
 
-    /**
+    /*
      * 是否在自动轮播
      */
     fun isAutoPlay(): Boolean = this.isPlaying
@@ -263,10 +263,14 @@ open class BannerView(context: Context, attrs: AttributeSet?) : RelativeLayout(c
                 val distanceX = abs(endX - mStartX)
                 val distanceY = abs(endY - mStartY)
                 if (mViewPager2.orientation == ViewPager2.ORIENTATION_HORIZONTAL) {
-                    if (distanceX > distanceY) {
+                    if (abs(distanceX) < 0.0001) {
                         parent.requestDisallowInterceptTouchEvent(true)
                     } else {
-                        parent.requestDisallowInterceptTouchEvent(false)
+                        if (distanceX > distanceY) {
+                            parent.requestDisallowInterceptTouchEvent(true)
+                        } else {
+                            parent.requestDisallowInterceptTouchEvent(false)
+                        }
                     }
                 } else {
                     parent.requestDisallowInterceptTouchEvent(false)

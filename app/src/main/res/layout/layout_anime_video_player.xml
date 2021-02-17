@@ -129,6 +129,7 @@
         android:layout_gravity="center"
         android:indeterminate="true"
         android:indeterminateTint="@color/main_color"
+        android:indeterminateTintMode="src_atop"
         android:visibility="invisible" />
 
     <ImageView

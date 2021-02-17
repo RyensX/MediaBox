@@ -12,6 +12,9 @@ import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.util.ParseHtmlUtil.parseLpic
 import com.skyd.imomoe.util.ParseHtmlUtil.parseTers
 import com.skyd.imomoe.util.Util.showToastOnThread
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.jsoup.HttpStatusException
 import org.jsoup.Jsoup
 import org.jsoup.select.Elements
@@ -27,7 +30,7 @@ class ClassifyViewModel : ViewModel() {
     var mldClassifyList: MutableLiveData<Boolean> = MutableLiveData()
 
     fun getClassifyTabData() {
-        Thread {
+        GlobalScope.launch(Dispatchers.IO) {
             try {
                 val document = Jsoup.connect(Api.MAIN_URL + "/a/").get()
                 val areaElements: Elements = document.getElementsByClass("area")
@@ -47,11 +50,11 @@ class ClassifyViewModel : ViewModel() {
                 e.printStackTrace()
                 (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread()
             }
-        }.start()
+        }
     }
 
     fun getClassifyData(partUrl: String) {
-        Thread {
+        GlobalScope.launch(Dispatchers.IO) {
             try {
                 val document = Jsoup.connect(Api.MAIN_URL + partUrl).get()
                 val areaElements: Elements = document.getElementsByClass("area")
@@ -71,7 +74,7 @@ class ClassifyViewModel : ViewModel() {
                 e.printStackTrace()
                 (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread()
             }
-        }.start()
+        }
     }
 
     companion object {

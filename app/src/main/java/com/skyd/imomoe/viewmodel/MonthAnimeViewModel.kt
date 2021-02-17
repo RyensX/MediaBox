@@ -8,6 +8,9 @@ import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.util.ParseHtmlUtil.parseLpic
 import com.skyd.imomoe.util.Util.showToastOnThread
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.jsoup.Jsoup
 import org.jsoup.select.Elements
 import java.lang.Exception
@@ -19,7 +22,7 @@ class MonthAnimeViewModel : ViewModel() {
     var mldMonthAnimeList: MutableLiveData<Boolean> = MutableLiveData()
 
     fun getMonthAnimeData(partUrl: String) {
-        Thread {
+        GlobalScope.launch(Dispatchers.IO) {
             try {
                 val document = Jsoup.connect(Api.MAIN_URL + partUrl).get()
                 val areaElements: Elements = document.getElementsByClass("area")
@@ -39,7 +42,7 @@ class MonthAnimeViewModel : ViewModel() {
                 e.printStackTrace()
                 (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread()
             }
-        }.start()
+        }
     }
 
     companion object {

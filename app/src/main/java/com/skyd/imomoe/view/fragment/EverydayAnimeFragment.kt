@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,14 +15,11 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.util.GridRecyclerView1ViewHolder
-import com.skyd.imomoe.util.Util
 import com.skyd.imomoe.util.Util.dp2px
 import com.skyd.imomoe.util.ViewHolderUtil.Companion.GRID_RECYCLER_VIEW_1
 import com.skyd.imomoe.util.ViewHolderUtil.Companion.getViewHolder
 import com.skyd.imomoe.view.adapter.AnimeShowAdapter
 import com.skyd.imomoe.viewmodel.EverydayAnimeViewModel
-import kotlinx.android.synthetic.main.activity_anime_detail.*
-import kotlinx.android.synthetic.main.fragment_anime_show.*
 import kotlinx.android.synthetic.main.fragment_everyday_anime.*
 
 

@@ -8,6 +8,10 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.TabBean
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.util.Util.showToastOnThread
+import com.skyd.imomoe.view.adapter.SerializableRecycledViewPool
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.jsoup.Jsoup
 import org.jsoup.select.Elements
 import java.lang.Exception
@@ -15,6 +19,8 @@ import java.util.*
 
 
 class HomeViewModel : ViewModel() {
+    val childViewPool = SerializableRecycledViewPool()
+    val viewPool = SerializableRecycledViewPool()
     var lTabList: MutableList<TabBean> = ArrayList()
     var mldGetLTabList: MutableLiveData<List<TabBean>> = MutableLiveData()
     var rTabList: MutableList<TabBean> = ArrayList()
@@ -23,7 +29,7 @@ class HomeViewModel : ViewModel() {
     var mldGetAllTabList: MutableLiveData<List<TabBean>> = MutableLiveData()
 
     fun getAllTabData() {
-        Thread {
+        GlobalScope.launch(Dispatchers.IO) {
             try {
                 val document = Jsoup.connect(Api.MAIN_URL).get()
                 val menu: Elements = document.getElementsByClass("menu")
@@ -45,11 +51,11 @@ class HomeViewModel : ViewModel() {
                     Toast.LENGTH_LONG
                 )
             }
-        }.start()
+        }
     }
 
     fun getLTabData() {
-        Thread {
+        GlobalScope.launch(Dispatchers.IO) {
             try {
                 val document = Jsoup.connect(Api.MAIN_URL).get()
                 val menu: Elements = document.getElementsByClass("menu")
@@ -66,11 +72,11 @@ class HomeViewModel : ViewModel() {
                     Toast.LENGTH_LONG
                 )
             }
-        }.start()
+        }
     }
 
     fun getRTabData() {
-        Thread {
+        GlobalScope.launch(Dispatchers.IO) {
             try {
                 val document = Jsoup.connect(Api.MAIN_URL).get()
                 val menu: Elements = document.getElementsByClass("menu")
@@ -87,7 +93,7 @@ class HomeViewModel : ViewModel() {
                     Toast.LENGTH_LONG
                 )
             }
-        }.start()
+        }
     }
 
     companion object {

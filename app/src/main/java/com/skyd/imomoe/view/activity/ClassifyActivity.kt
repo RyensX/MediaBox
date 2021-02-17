@@ -21,6 +21,7 @@ import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.view.adapter.SearchAdapter
 import com.skyd.imomoe.viewmodel.ClassifyViewModel
 import kotlinx.android.synthetic.main.activity_classify.*
+import kotlinx.android.synthetic.main.layout_toolbar_1.*
 
 
 class ClassifyActivity : BaseActivity() {
@@ -45,8 +46,9 @@ class ClassifyActivity : BaseActivity() {
         classifyTabTitle = intent.getStringExtra("classifyTabTitle") ?: ""
         classifyTitle = intent.getStringExtra("classifyTitle") ?: ""
 
-        iv_classify_activity_back.setOnClickListener { finish() }
-        tv_classify_activity_toolbar_title.isFocused = true
+        iv_toolbar_1_back.setOnClickListener { finish() }
+        tv_toolbar_1_title.text = getString(R.string.anime_classify)
+        tv_toolbar_1_title.isFocused = true
 
         spinnerAdapter = ArrayAdapter(this, R.layout.item_spinner_item_1)
         classifyTabAdapter = ClassifyTabAdapter(this, classifyTabList)
@@ -108,7 +110,7 @@ class ClassifyActivity : BaseActivity() {
         viewModel.mldClassifyList.observe(this, {
             classifyAdapter.notifyDataSetChanged()
             srl_classify_activity.isRefreshing = false
-            tv_classify_activity_toolbar_title.text =
+            tv_toolbar_1_title.text =
                 if (classifyTabTitle.isEmpty()) "${getString(R.string.anime_classify)}  $classifyTitle"
                 else "${getString(R.string.anime_classify)}  $classifyTabTitle：$classifyTitle"
         })

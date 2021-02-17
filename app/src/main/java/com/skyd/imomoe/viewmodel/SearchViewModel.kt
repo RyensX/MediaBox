@@ -11,6 +11,9 @@ import com.skyd.imomoe.config.Const.ActionUrl.Companion.ANIME_SEARCH
 import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.util.ParseHtmlUtil.parseLpic
 import com.skyd.imomoe.util.Util.showToastOnThread
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.jsoup.Jsoup
 import org.jsoup.select.Elements
 import java.lang.Exception
@@ -28,7 +31,7 @@ class SearchViewModel : ViewModel() {
     var mldDeleteCompleted: MutableLiveData<Int> = MutableLiveData()
 
     fun getSearchData(keyWord: String) {
-        Thread {
+        GlobalScope.launch(Dispatchers.IO) {
             try {
                 val document = Jsoup.connect(Api.MAIN_URL + ANIME_SEARCH + keyWord).get()
                 val lpic: Elements = document.getElementsByClass("area")
@@ -41,11 +44,11 @@ class SearchViewModel : ViewModel() {
                 e.printStackTrace()
                 (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread()
             }
-        }.start()
+        }
     }
 
     fun getSearchHistoryData() {
-        Thread {
+        GlobalScope.launch(Dispatchers.IO) {
             try {
                 searchHistoryList.clear()
                 searchHistoryList.addAll(getAppDataBase().searchHistoryDao().getSearchHistoryList())
@@ -55,11 +58,11 @@ class SearchViewModel : ViewModel() {
             } finally {
                 mldSearchHistoryList.postValue(true)
             }
-        }.start()
+        }
     }
 
     fun insertSearchHistory(searchHistoryBean: SearchHistoryBean) {
-        Thread {
+        GlobalScope.launch(Dispatchers.IO) {
             try {
                 val index = searchHistoryList.indexOf(searchHistoryBean)
                 if (index != -1) {
@@ -76,11 +79,11 @@ class SearchViewModel : ViewModel() {
             } finally {
                 mldInsertCompleted.postValue(true)
             }
-        }.start()
+        }
     }
 
     fun updateSearchHistory(searchHistoryBean: SearchHistoryBean, itemPosition: Int) {
-        Thread {
+        GlobalScope.launch(Dispatchers.IO) {
             try {
                 searchHistoryList[itemPosition] = searchHistoryBean
                 getAppDataBase().searchHistoryDao().updateSearchHistory(searchHistoryBean)
@@ -89,11 +92,11 @@ class SearchViewModel : ViewModel() {
             } finally {
                 mldUpdateCompleted.postValue(itemPosition)
             }
-        }.start()
+        }
     }
 
     fun deleteSearchHistory(itemPosition: Int) {
-        Thread {
+        GlobalScope.launch(Dispatchers.IO) {
             try {
                 val searchHistoryBean = searchHistoryList.removeAt(itemPosition)
                 getAppDataBase().searchHistoryDao().deleteSearchHistory(searchHistoryBean.timeStamp)
@@ -102,7 +105,7 @@ class SearchViewModel : ViewModel() {
             } finally {
                 mldDeleteCompleted.postValue(itemPosition)
             }
-        }.start()
+        }
     }
 
     companion object {

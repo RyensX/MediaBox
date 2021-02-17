@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fl_anime_episode_2"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingStart="16dp"
+    android:paddingTop="5dp"
+    android:paddingEnd="16dp" />

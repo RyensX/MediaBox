@@ -44,5 +44,7 @@
     <string name="anime_download_path">视频缓存目录</string>
     <string name="offline_anime">离线缓存</string>
     <string name="no_download_video">没有缓存视频</string>
+    <string name="compute_md5_read_database">正在计算MD5码并读取数据库…</string>
+    <string name="play_list">播放列表</string>
 
 </resources>

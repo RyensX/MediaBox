@@ -19,6 +19,7 @@ import com.skyd.imomoe.view.adapter.SearchAdapter
 import com.skyd.imomoe.view.adapter.SearchHistoryAdapter
 import com.skyd.imomoe.viewmodel.SearchViewModel
 import kotlinx.android.synthetic.main.activity_search.*
+import kotlinx.android.synthetic.main.layout_circle_progress_text_tip_1.*
 
 class SearchActivity : BaseActivity() {
     private lateinit var viewModel: SearchViewModel
@@ -47,7 +48,7 @@ class SearchActivity : BaseActivity() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                pb_search_activity_loading.gone()
+                layout_circle_progress_text_tip_1?.gone()
                 if (s == null || s.isEmpty()) {
                     tv_search_activity_tip.text = getString(R.string.search_history)
                     iv_search_activity_clear_key_words.gone()
@@ -63,11 +64,11 @@ class SearchActivity : BaseActivity() {
         }
 
         viewModel.mldFailed.observe(this, {
-            pb_search_activity_loading.gone()
+            layout_circle_progress_text_tip_1.gone()
         })
 
         viewModel.mldSearchResultList.observe(this, {
-            pb_search_activity_loading.gone()
+            layout_circle_progress_text_tip_1.gone()
             //仅在搜索框不为“”时展示搜索结果
             if (et_search_activity_search.text.toString().isNotEmpty()) {
                 rv_search_activity.adapter = adapter
@@ -126,12 +127,17 @@ class SearchActivity : BaseActivity() {
     }
 
     fun search(key: String) {
-        viewModel.searchResultList.clear()
-        pb_search_activity_loading.visible()
-        rv_search_activity.adapter = adapter
+        //setText一定要在加载布局之前，否则progressbar会被gone掉
         et_search_activity_search.setText(key)
         et_search_activity_search.setSelection(key.length)
-        pb_search_activity_loading.visible()
+        if (layout_search_activity_loading == null) {
+            layout_circle_progress_text_tip_1.visible()
+        } else {
+            layout_search_activity_loading.inflate()
+        }
+        viewModel.searchResultList.clear()
+        tv_circle_progress_text_tip_1.gone()
+        rv_search_activity.adapter = adapter
         viewModel.insertSearchHistory(
             SearchHistoryBean(
                 "searchHistory1",

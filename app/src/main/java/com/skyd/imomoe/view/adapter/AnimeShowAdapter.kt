@@ -30,7 +30,8 @@ import com.skyd.imomoe.view.widget.bannerview.indicator.DotIndicator
 
 class AnimeShowAdapter(
     val fragment: AnimeShowFragment,
-    private val dataList: List<AnimeShowBean>
+    private val dataList: List<AnimeShowBean>,
+    private val childViewPool: RecyclerView.RecycledViewPool = RecyclerView.RecycledViewPool()
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -41,8 +42,16 @@ class AnimeShowAdapter(
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): RecyclerView.ViewHolder =
-        getViewHolder(parent, viewType)
+    ): RecyclerView.ViewHolder {
+        val holder = getViewHolder(parent, viewType)
+        when (holder) {
+            is GridRecyclerView1ViewHolder -> {
+                holder.rvGridRecyclerView1.setRecycledViewPool(childViewPool)
+                holder.rvGridRecyclerView1.setHasFixedSize(true)
+            }
+        }
+        return holder
+    }
 
     override fun getItemCount(): Int = dataList.size
 
@@ -55,13 +64,12 @@ class AnimeShowAdapter(
                     if (it.isNotEmpty()) {
                         when (it[0].type) {
                             "animeCover3", "animeCover5" -> {
-                                val layoutManager = LinearLayoutManager(fragment.activity)
-                                holder.rvGridRecyclerView1.setHasFixedSize(true)
-                                holder.rvGridRecyclerView1.layoutManager = layoutManager
+                                holder.rvGridRecyclerView1.layoutManager =
+                                    LinearLayoutManager(fragment.activity)
                             }
                             "animeCover1" -> {
-                                val layoutManager = GridLayoutManager(fragment.activity, 4)
-                                holder.rvGridRecyclerView1.setHasFixedSize(true)
+                                holder.rvGridRecyclerView1.layoutManager =
+                                    GridLayoutManager(fragment.activity, 4)
                                 if (holder.rvGridRecyclerView1.itemDecorationCount == 0) {
                                     holder.rvGridRecyclerView1.post {
                                         holder.rvGridRecyclerView1.setPadding(
@@ -71,11 +79,10 @@ class AnimeShowAdapter(
                                     }
                                     holder.rvGridRecyclerView1.addItemDecoration(gridItemDecoration)
                                 }
-                                holder.rvGridRecyclerView1.layoutManager = layoutManager
                             }
                             "animeCover4" -> {
-                                val layoutManager = GridLayoutManager(fragment.activity, 4)
-                                holder.rvGridRecyclerView1.setHasFixedSize(true)
+                                holder.rvGridRecyclerView1.layoutManager =
+                                    GridLayoutManager(fragment.activity, 4)
                                 if (holder.rvGridRecyclerView1.itemDecorationCount == 0) {
                                     holder.rvGridRecyclerView1.post {
                                         holder.rvGridRecyclerView1.setPadding(
@@ -85,7 +92,6 @@ class AnimeShowAdapter(
                                     }
                                     holder.rvGridRecyclerView1.addItemDecoration(gridItemDecoration)
                                 }
-                                holder.rvGridRecyclerView1.layoutManager = layoutManager
                             }
                             else -> {
                                 return@let
@@ -158,7 +164,7 @@ class AnimeShowAdapter(
                     holder.tvAnimeCover1Title.setTextColor(titleColor)
                     holder.ivAnimeCover1Cover.loadImage(item.cover)
                     holder.tvAnimeCover1Title.text = item.title
-                    if (item.episode == "") {
+                    if (item.episode.isBlank()) {
                         holder.tvAnimeCover1Episode.gone()
                     } else {
                         holder.tvAnimeCover1Episode.visible()
@@ -172,7 +178,7 @@ class AnimeShowAdapter(
                     holder.tvAnimeCover3Title.setTextColor(titleColor)
                     holder.ivAnimeCover3Cover.loadImage(item.cover)
                     holder.tvAnimeCover3Title.text = item.title
-                    if (item.episode == "") {
+                    if (item.episode.isBlank()) {
                         holder.tvAnimeCover3Episode.gone()
                     } else {
                         holder.tvAnimeCover3Episode.visible()

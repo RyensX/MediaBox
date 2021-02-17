@@ -23,6 +23,7 @@
             android:gravity="center_vertical"
             android:hint="@string/home_fragment_header_search"
             android:imeOptions="actionSearch"
+            android:inputType="text"
             android:paddingStart="15dp"
             android:paddingTop="5dp"
             android:paddingEnd="40dp"
@@ -99,12 +100,10 @@
         android:scrollbars="vertical"
         tools:listitem="@layout/item_anime_cover_3" />
 
-    <ProgressBar
-        android:id="@+id/pb_search_activity_loading"
+    <ViewStub
+        android:id="@+id/layout_search_activity_loading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:indeterminateTint="@color/main_color_2"
-        android:visibility="gone"
-        tools:visibility="visible" />
+        android:layout="@layout/layout_circle_progress_text_tip_1" />
 </RelativeLayout>

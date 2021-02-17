@@ -2,13 +2,12 @@ package com.skyd.imomoe.view.adapter
 
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
-import com.skyd.imomoe.bean.AnimeDetailDataBean
+import com.skyd.imomoe.bean.AnimeDetailBean
 import com.skyd.imomoe.util.*
 import com.skyd.imomoe.util.Util.gone
 import com.skyd.imomoe.util.Util.process
@@ -19,7 +18,7 @@ import com.skyd.imomoe.view.activity.PlayActivity
 
 class PlayAdapter(
     val activity: PlayActivity,
-    private val dataList: List<AnimeDetailDataBean>
+    private val dataList: List<AnimeDetailBean>
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -80,6 +79,21 @@ class PlayAdapter(
                             activity.startPlay(it[i].actionUrl, it[i].title)
                         }
                         holder.flAnimeEpisodeFlowLayout1.addView(tvFlowLayout)
+                    }
+                }
+            }
+            is HorizontalRecyclerView1ViewHolder -> {
+                item.episodeList?.let {
+                    val dialog = activity.getSheetDialog("play")
+                    if (holder.rvHorizontalRecyclerView1.adapter == null) {
+                        holder.rvHorizontalRecyclerView1.adapter =
+                            PlayActivity.EpisodeRecyclerViewAdapter(
+                                activity, it, dialog, 0, "play"
+                            )
+                    }
+                    holder.ivHorizontalRecyclerView1More.setImageResource(R.drawable.ic_keyboard_arrow_down_main_color_2_24)
+                    holder.ivHorizontalRecyclerView1More.setOnClickListener { it1 ->
+                        dialog.show()
                     }
                 }
             }

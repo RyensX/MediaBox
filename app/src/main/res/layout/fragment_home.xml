@@ -33,6 +33,7 @@
             android:background="@drawable/shape_circle_corner_edge_main_color_50"
             android:drawableStart="@drawable/ic_search_main_color_24"
             android:drawablePadding="5dp"
+            android:gravity="center_vertical"
             android:paddingStart="15dp"
             android:paddingTop="5dp"
             android:paddingEnd="15dp"

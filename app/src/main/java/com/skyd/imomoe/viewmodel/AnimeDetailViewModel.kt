@@ -1,13 +1,11 @@
 package com.skyd.imomoe.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeDetailBean
-import com.skyd.imomoe.bean.AnimeDetailDataBean
-import com.skyd.imomoe.bean.AnimeEpisodeDataBean
+import com.skyd.imomoe.bean.AnimeInfoBean
 import com.skyd.imomoe.bean.AnimeTypeBean
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.util.ParseHtmlUtil.parseBotit
@@ -15,7 +13,9 @@ import com.skyd.imomoe.util.ParseHtmlUtil.parseDtit
 import com.skyd.imomoe.util.ParseHtmlUtil.parseImg
 import com.skyd.imomoe.util.ParseHtmlUtil.parseMovurls
 import com.skyd.imomoe.util.Util.showToastOnThread
-import org.jsoup.HttpStatusException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.jsoup.Jsoup
 import org.jsoup.select.Elements
 import java.lang.Exception
@@ -23,17 +23,17 @@ import kotlin.collections.ArrayList
 
 
 class AnimeDetailViewModel : ViewModel() {
-    private var requestTimes = 0
-    var animeDetailBean: AnimeDetailBean? = null
-    var animeDetailBeanDataList: MutableList<AnimeDetailDataBean> = ArrayList()
-    var mldAnimeDetailData: MutableLiveData<AnimeDetailBean> = MutableLiveData()
+    var cover: String = ""
+    var title: String = ""
+    var animeDetailList: MutableList<AnimeDetailBean> = ArrayList()
+    var mldAnimeDetailList: MutableLiveData<Boolean> = MutableLiveData()
 
     //www.yhdm.io
     fun getAnimeDetailData(partUrl: String) {
-        Thread {
+        GlobalScope.launch(Dispatchers.IO) {
             try {
                 val document = Jsoup.connect(Api.MAIN_URL + partUrl).get()
-                animeDetailBeanDataList.clear()
+                animeDetailList.clear()
                 //番剧头部信息
                 val area: Elements = document.getElementsByClass("area")
                 for (i in area.indices) {
@@ -41,8 +41,6 @@ class AnimeDetailViewModel : ViewModel() {
                     for (j in areaChildren.indices) {
                         when (areaChildren[j].className()) {
                             "fire l" -> {
-                                var cover = ""
-                                var title = ""
                                 var alias = ""
                                 var info = ""
                                 var year = ""
@@ -98,22 +96,20 @@ class AnimeDetailViewModel : ViewModel() {
                                             }
                                         }
                                         "tabs" -> {     //播放列表+header
-                                            animeDetailBeanDataList.add(
-                                                AnimeDetailDataBean(
+                                            animeDetailList.add(
+                                                AnimeDetailBean(
                                                     "header1", "",
                                                     fireLChildren[k].select("[class=tabs]")
                                                         .select("[class=menu0]")
                                                         .select("li").text(),
                                                     "",
-                                                    "",
                                                     null
                                                 )
                                             )
 
-                                            animeDetailBeanDataList.add(
-                                                AnimeDetailDataBean(
-                                                    "animeEpisodeFlowLayout1",
-                                                    "",
+                                            animeDetailList.add(
+                                                AnimeDetailBean(
+                                                    "horizontalRecyclerView1",
                                                     "",
                                                     "",
                                                     "",
@@ -121,38 +117,36 @@ class AnimeDetailViewModel : ViewModel() {
                                                         fireLChildren[k]
                                                             .select("[class=main0]")
                                                             .select("[class=movurl]")[0],
-                                                        null
+                                                        null,
+                                                        type = "animeEpisode2"
                                                     )
                                                 )
                                             )
                                         }
                                         "botit" -> {     //其它header
-                                            animeDetailBeanDataList.add(
-                                                AnimeDetailDataBean(
+                                            animeDetailList.add(
+                                                AnimeDetailBean(
                                                     "header1", "",
                                                     parseBotit(fireLChildren[k]),
-                                                    "",
                                                     "",
                                                     null
                                                 )
                                             )
                                         }
                                         "dtit" -> {     //其它header
-                                            animeDetailBeanDataList.add(
-                                                AnimeDetailDataBean(
+                                            animeDetailList.add(
+                                                AnimeDetailBean(
                                                     "header1", "",
                                                     parseDtit(fireLChildren[k]),
-                                                    "",
                                                     "",
                                                     null
                                                 )
                                             )
                                         }
                                         "info" -> {         //动漫介绍
-                                            animeDetailBeanDataList.add(
-                                                AnimeDetailDataBean(
+                                            animeDetailList.add(
+                                                AnimeDetailBean(
                                                     "animeDescribe1", "",
-                                                    "",
                                                     "",
                                                     fireLChildren[k]
                                                         .select("[class=info]").text(),
@@ -161,10 +155,9 @@ class AnimeDetailViewModel : ViewModel() {
                                             )
                                         }
                                         "img" -> {         //系列动漫推荐
-                                            animeDetailBeanDataList.add(
-                                                AnimeDetailDataBean(
+                                            animeDetailList.add(
+                                                AnimeDetailBean(
                                                     "gridRecyclerView1", "",
-                                                    "",
                                                     "",
                                                     "",
                                                     null,
@@ -174,7 +167,7 @@ class AnimeDetailViewModel : ViewModel() {
                                         }
                                     }
                                 }
-                                animeDetailBean = AnimeDetailBean(
+                                val animeInfoBean = AnimeInfoBean(
                                     "",
                                     "",
                                     title,
@@ -185,28 +178,27 @@ class AnimeDetailViewModel : ViewModel() {
                                     index,
                                     animeType,
                                     tag,
-                                    info,
-                                    animeDetailBeanDataList
+                                    info
+                                )
+                                animeDetailList.add(
+                                    0,
+                                    AnimeDetailBean(
+                                        "animeInfo1", "",
+                                        "",
+                                        "",
+                                        headerInfo = animeInfoBean
+                                    )
                                 )
                             }
                         }
                     }
                 }
-                mldAnimeDetailData.postValue(animeDetailBean)
-            } catch (e: HttpStatusException) {
-                e.printStackTrace()
-                if (e.statusCode == 502) {
-                    if (requestTimes <= 2) {
-                        requestTimes++
-                        getAnimeDetailData(partUrl)
-                    } else requestTimes = 0
-                }
-                Log.e(TAG, e.message ?: "")
+                mldAnimeDetailList.postValue(true)
             } catch (e: Exception) {
                 e.printStackTrace()
                 (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread()
             }
-        }.start()
+        }
     }
 
     companion object {
