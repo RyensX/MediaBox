@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -8,12 +9,19 @@
     android:orientation="vertical"
     android:paddingBottom="3dp">
 
-    <com.skyd.imomoe.view.widget.RoundCornersImageView
-        android:id="@+id/iv_anime_cover_4_cover"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_anime_cover_4_cover"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:scaleType="fitXY"
-        tools:src="@drawable/ic_launcher_background" />
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="5dp">
+
+        <ImageView
+            android:id="@+id/iv_anime_cover_4_cover"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:scaleType="fitXY"
+            tools:src="@drawable/ic_launcher_background" />
+    </androidx.cardview.widget.CardView>
 
     <com.skyd.imomoe.view.widget.TypefaceTextView
         android:id="@+id/tv_anime_cover_4_title"

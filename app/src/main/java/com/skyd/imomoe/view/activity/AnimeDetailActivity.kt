@@ -10,11 +10,11 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import com.skyd.imomoe.R
 import com.skyd.imomoe.util.BlurUtils.blur
+import com.skyd.imomoe.util.GlideUtil.getGlideUrl
 import com.skyd.imomoe.util.Util.getStatusBarHeight
 import com.skyd.imomoe.util.Util.setTransparentStatusBar
 import com.skyd.imomoe.view.adapter.AnimeDetailAdapter
@@ -59,17 +59,14 @@ class AnimeDetailActivity : BaseActivity() {
             //先隐藏
             ObjectAnimator.ofFloat(iv_anime_detail_activity_background, "alpha", 1f, 0f)
                 .setDuration(250).start()
-            Glide.with(this).asBitmap().load(viewModel.cover).into(object : SimpleTarget<Bitmap>() {
+            val glideUrl = getGlideUrl(viewModel.cover.url, viewModel.cover.referer)
+            Glide.with(this).asBitmap().load(glideUrl).into(object : SimpleTarget<Bitmap>() {
                 override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                     val bitmapDrawable = BitmapDrawable(null, blur(resource))
                     bitmapDrawable.colorFilter = PorterDuffColorFilter(
                         Color.LTGRAY, PorterDuff.Mode.MULTIPLY
                     )
-                    Glide.with(this@AnimeDetailActivity)
-                        .load(bitmapDrawable)
-                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                        .skipMemoryCache(false)
-                        .into(iv_anime_detail_activity_background)
+                    iv_anime_detail_activity_background.setImageDrawable(bitmapDrawable)
 
                     //加载完背景图再显示
                     ObjectAnimator.ofFloat(iv_anime_detail_activity_background, "alpha", 0f, 1f)

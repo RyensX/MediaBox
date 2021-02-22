@@ -7,6 +7,7 @@ import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.bean.TabBean
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.config.Const.ActionUrl.Companion.ANIME_TOP
+import com.skyd.imomoe.util.JsoupUtil
 import com.skyd.imomoe.util.ParseHtmlUtil.parseDtit
 import com.skyd.imomoe.util.ParseHtmlUtil.parsePics
 import com.skyd.imomoe.util.ParseHtmlUtil.parseTopli
@@ -14,7 +15,6 @@ import com.skyd.imomoe.util.Util.showToastOnThread
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.jsoup.Jsoup
 import org.jsoup.select.Elements
 import java.lang.Exception
 import java.util.*
@@ -50,7 +50,7 @@ class RankViewModel : ViewModel() {
 
     private fun getAllRankData() {
         try {
-            val document = Jsoup.connect(Api.MAIN_URL + ANIME_TOP).get()
+            val document = JsoupUtil.getDocument(Api.MAIN_URL + ANIME_TOP)
             val areaChildren: Elements = document.select("[class=area]")[0].children()
             for (i in areaChildren.indices) {
                 when (areaChildren[i].className()) {
@@ -79,7 +79,8 @@ class RankViewModel : ViewModel() {
     private fun getWeekRankData() {
         bgTimes = 0
         try {
-            val document = Jsoup.connect(Api.MAIN_URL).get()
+            val url = Api.MAIN_URL
+            val document = JsoupUtil.getDocument(url)
             val areaChildren: Elements = document.select("[class=area]")[0].children()
             for (i in areaChildren.indices) {
                 when (areaChildren[i].className()) {
@@ -105,7 +106,7 @@ class RankViewModel : ViewModel() {
                                                 )
                                             }
                                             "pics" -> {
-                                                rankList.add(0, parsePics(bgChildren[k]))
+                                                rankList.add(0, parsePics(bgChildren[k], url))
                                             }
                                         }
                                     }

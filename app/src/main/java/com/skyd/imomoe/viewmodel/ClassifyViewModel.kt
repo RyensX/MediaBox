@@ -1,22 +1,19 @@
 package com.skyd.imomoe.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.bean.ClassifyBean
-import com.skyd.imomoe.bean.TabBean
 import com.skyd.imomoe.config.Api
+import com.skyd.imomoe.util.JsoupUtil
 import com.skyd.imomoe.util.ParseHtmlUtil.parseLpic
 import com.skyd.imomoe.util.ParseHtmlUtil.parseTers
 import com.skyd.imomoe.util.Util.showToastOnThread
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.jsoup.HttpStatusException
-import org.jsoup.Jsoup
 import org.jsoup.select.Elements
 import java.lang.Exception
 import java.util.*
@@ -32,7 +29,7 @@ class ClassifyViewModel : ViewModel() {
     fun getClassifyTabData() {
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                val document = Jsoup.connect(Api.MAIN_URL + "/a/").get()
+                val document = JsoupUtil.getDocument(Api.MAIN_URL + "/a/")
                 val areaElements: Elements = document.getElementsByClass("area")
                 classifyTabList.clear()
                 for (i in areaElements.indices) {
@@ -56,7 +53,8 @@ class ClassifyViewModel : ViewModel() {
     fun getClassifyData(partUrl: String) {
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                val document = Jsoup.connect(Api.MAIN_URL + partUrl).get()
+                val url = Api.MAIN_URL + partUrl
+                val document = JsoupUtil.getDocument(url)
                 val areaElements: Elements = document.getElementsByClass("area")
                 classifyList.clear()
                 for (i in areaElements.indices) {
@@ -64,7 +62,7 @@ class ClassifyViewModel : ViewModel() {
                     for (j in areaChildren.indices) {
                         when (areaChildren[j].className()) {
                             "fire l" -> {
-                                classifyList.addAll(parseLpic(areaChildren[j]))
+                                classifyList.addAll(parseLpic(areaChildren[j], url))
                             }
                         }
                     }

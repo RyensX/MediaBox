@@ -8,15 +8,22 @@
     android:background="?android:selectableItemBackground"
     android:paddingBottom="3dp">
 
-    <com.skyd.imomoe.view.widget.RoundCornersImageView
-        android:id="@+id/iv_anime_cover_1_cover"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_anime_cover_1_cover"
         android:layout_width="match_parent"
-        android:layout_height="110dp"
-        android:scaleType="fitXY"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/ic_launcher_background" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/iv_anime_cover_1_cover"
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
+            android:scaleType="fitXY"
+            tools:src="@drawable/ic_launcher_background" />
+    </androidx.cardview.widget.CardView>
 
     <com.skyd.imomoe.view.widget.TypefaceTextView
         android:id="@+id/tv_anime_cover_1_title"
@@ -27,10 +34,10 @@
         android:maxLines="3"
         android:textSize="13sp"
         app:layout_constrainedWidth="true"
-        app:layout_constraintEnd_toEndOf="@id/iv_anime_cover_1_cover"
+        app:layout_constraintEnd_toEndOf="@id/cv_anime_cover_1_cover"
         app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toStartOf="@id/iv_anime_cover_1_cover"
-        app:layout_constraintTop_toBottomOf="@id/iv_anime_cover_1_cover"
+        app:layout_constraintStart_toStartOf="@id/cv_anime_cover_1_cover"
+        app:layout_constraintTop_toBottomOf="@id/cv_anime_cover_1_cover"
         tools:text="中二病也要谈恋爱！" />
 
     <com.skyd.imomoe.view.widget.TypefaceTextView
@@ -41,9 +48,9 @@
         android:textColor="@color/main_color"
         android:textSize="12sp"
         app:layout_constrainedWidth="true"
-        app:layout_constraintEnd_toEndOf="@id/iv_anime_cover_1_cover"
+        app:layout_constraintEnd_toEndOf="@id/cv_anime_cover_1_cover"
         app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toStartOf="@id/iv_anime_cover_1_cover"
+        app:layout_constraintStart_toStartOf="@id/cv_anime_cover_1_cover"
         app:layout_constraintTop_toBottomOf="@id/tv_anime_cover_1_title"
         tools:text="全12集" />
 

@@ -46,5 +46,8 @@
     <string name="no_download_video">没有缓存视频</string>
     <string name="compute_md5_read_database">正在计算MD5码并读取数据库…</string>
     <string name="play_list">播放列表</string>
+    <string name="gitee">Gitee</string>
+    <string name="check_update_server">检查更新服务器</string>
+    <string name="play_speed">倍速</string>
 
 </resources>

@@ -30,6 +30,10 @@ class AboutActivity : AppCompatActivity() {
             openBrowser("https://github.com/SkyD666/Imomoe")
         }
 
+        rl_about_activity_gitee.setOnClickListener {
+            openBrowser("https://gitee.com/SkyD666/Imomoe")
+        }
+
         rl_about_activity_license.setOnClickListener {
             startActivity(Intent(this, LicenseActivity::class.java))
         }

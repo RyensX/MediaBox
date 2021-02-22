@@ -6,6 +6,7 @@ import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeShowBean
 import com.skyd.imomoe.config.Api
+import com.skyd.imomoe.util.JsoupUtil
 import com.skyd.imomoe.util.ParseHtmlUtil.parseDnews
 import com.skyd.imomoe.util.ParseHtmlUtil.parseHeroWrap
 import com.skyd.imomoe.util.ParseHtmlUtil.parseImg
@@ -16,7 +17,6 @@ import com.skyd.imomoe.view.adapter.SerializableRecycledViewPool
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.jsoup.Jsoup
 import org.jsoup.select.Elements
 import java.lang.Exception
 import java.util.*
@@ -32,9 +32,9 @@ class AnimeShowViewModel : ViewModel() {
     fun getAnimeShowData(partUrl: String) {
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                val document = Jsoup.connect(Api.MAIN_URL + partUrl).get()
+                val url = Api.MAIN_URL + partUrl
+                val document = JsoupUtil.getDocument(url)
                 animeShowList.clear()
-
                 //banner
                 val foucsBgElements: Elements = document.getElementsByClass("foucs bg")
                 for (i in foucsBgElements.indices) {
@@ -46,7 +46,7 @@ class AnimeShowViewModel : ViewModel() {
                                     AnimeShowBean(
                                         "banner1", "",
                                         "", "", "", "", "",
-                                        parseHeroWrap(foucsBgChildren[j])
+                                        parseHeroWrap(foucsBgChildren[j], url)
                                     )
                                 )
                             }
@@ -94,7 +94,7 @@ class AnimeShowViewModel : ViewModel() {
                                     AnimeShowBean(
                                         "gridRecyclerView1",
                                         "", "", "", "", "", "",
-                                        parseImg(elements[j])
+                                        parseImg(elements[j], url)
                                     )
                                 )
                             }
@@ -107,7 +107,7 @@ class AnimeShowViewModel : ViewModel() {
                                                 AnimeShowBean(
                                                     "gridRecyclerView1",
                                                     "", "", "", "", "", "",
-                                                    parseLpic(firsLChildren[k])
+                                                    parseLpic(firsLChildren[k], url)
                                                 )
                                             )
                                         }
@@ -119,7 +119,7 @@ class AnimeShowViewModel : ViewModel() {
                                     AnimeShowBean(
                                         "gridRecyclerView1",
                                         "", "", "", "", "", "",
-                                        parseDnews(elements[j])
+                                        parseDnews(elements[j], url)
                                     )
                                 )
                             }

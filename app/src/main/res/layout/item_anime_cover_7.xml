@@ -17,6 +17,11 @@
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
         android:layout_marginTop="7dp"
+        android:layout_toStartOf="@id/tv_anime_cover_7_size"
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:singleLine="true"
         android:textColor="@color/main_color_2"
         android:textSize="17sp"
         tools:text="Endro~" />
@@ -29,7 +34,13 @@
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:layout_toStartOf="@id/tv_anime_cover_7_episodes"
-        android:layout_toEndOf="@id/tv_anime_cover_7_title"
+        android:adjustViewBounds="true"
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:gravity="end"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:minWidth="45dp"
+        android:singleLine="true"
         android:textColor="@color/main_color"
         tools:text="300M" />
 

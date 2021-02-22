@@ -5,7 +5,6 @@ import android.graphics.Color
 import android.graphics.Rect
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,9 +15,9 @@ import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.bean.AnimeShowBean
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.util.*
+import com.skyd.imomoe.util.GlideUtil.loadImage
 import com.skyd.imomoe.util.Util.dp2px
 import com.skyd.imomoe.util.Util.gone
-import com.skyd.imomoe.util.Util.loadImage
 import com.skyd.imomoe.util.Util.process
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.Util.visible
@@ -62,15 +61,19 @@ class AnimeShowAdapter(
             is GridRecyclerView1ViewHolder -> {
                 item.animeCoverList?.let {
                     if (it.isNotEmpty()) {
+                        val itemDecorationCount = holder.rvGridRecyclerView1.itemDecorationCount
                         when (it[0].type) {
                             "animeCover3", "animeCover5" -> {
                                 holder.rvGridRecyclerView1.layoutManager =
                                     LinearLayoutManager(fragment.activity)
+                                for (i in 0 until itemDecorationCount) {
+                                    holder.rvGridRecyclerView1.removeItemDecorationAt(i)
+                                }
                             }
                             "animeCover1" -> {
                                 holder.rvGridRecyclerView1.layoutManager =
                                     GridLayoutManager(fragment.activity, 4)
-                                if (holder.rvGridRecyclerView1.itemDecorationCount == 0) {
+                                if (itemDecorationCount == 0) {
                                     holder.rvGridRecyclerView1.post {
                                         holder.rvGridRecyclerView1.setPadding(
                                             dp2px(16f), 0,
@@ -83,7 +86,7 @@ class AnimeShowAdapter(
                             "animeCover4" -> {
                                 holder.rvGridRecyclerView1.layoutManager =
                                     GridLayoutManager(fragment.activity, 4)
-                                if (holder.rvGridRecyclerView1.itemDecorationCount == 0) {
+                                if (itemDecorationCount == 0) {
                                     holder.rvGridRecyclerView1.post {
                                         holder.rvGridRecyclerView1.setPadding(
                                             dp2px(16f), 0,
@@ -162,7 +165,11 @@ class AnimeShowAdapter(
             when (holder) {
                 is AnimeCover1ViewHolder -> {
                     holder.tvAnimeCover1Title.setTextColor(titleColor)
-                    holder.ivAnimeCover1Cover.loadImage(item.cover)
+                    holder.ivAnimeCover1Cover.loadImage(
+                        activity,
+                        item.cover?.url ?: "",
+                        referer = item.cover?.referer
+                    )
                     holder.tvAnimeCover1Title.text = item.title
                     if (item.episode.isBlank()) {
                         holder.tvAnimeCover1Episode.gone()
@@ -176,7 +183,11 @@ class AnimeShowAdapter(
                 }
                 is AnimeCover3ViewHolder -> {
                     holder.tvAnimeCover3Title.setTextColor(titleColor)
-                    holder.ivAnimeCover3Cover.loadImage(item.cover)
+                    holder.ivAnimeCover3Cover.loadImage(
+                        activity,
+                        item.cover?.url ?: "",
+                        referer = item.cover?.referer
+                    )
                     holder.tvAnimeCover3Title.text = item.title
                     if (item.episode.isBlank()) {
                         holder.tvAnimeCover3Episode.gone()
@@ -211,7 +222,11 @@ class AnimeShowAdapter(
                 }
                 is AnimeCover4ViewHolder -> {
                     holder.tvAnimeCover4Title.setTextColor(titleColor)
-                    holder.ivAnimeCover4Cover.loadImage(item.cover)
+                    holder.ivAnimeCover4Cover.loadImage(
+                        activity,
+                        item.cover?.url ?: "",
+                        referer = item.cover?.referer
+                    )
                     holder.tvAnimeCover4Title.text = item.title
                     holder.itemView.setOnClickListener {
                         process(activity, item.actionUrl)

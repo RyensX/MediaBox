@@ -8,14 +8,22 @@
     android:paddingBottom="5dp"
     tools:background="@color/black">
 
-    <com.skyd.imomoe.view.widget.RoundCornersImageView
-        android:id="@+id/iv_anime_info_1_cover"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_anime_info_1_cover"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:background="@color/transparent"
+        app:cardCornerRadius="5dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tv_anime_info_1_title"
-        tools:src="@drawable/ic_launcher_background" />
+        app:layout_constraintTop_toTopOf="@id/tv_anime_info_1_title">
+
+        <ImageView
+            android:id="@+id/iv_anime_info_1_cover"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:src="@drawable/ic_launcher_background" />
+    </androidx.cardview.widget.CardView>
 
     <com.skyd.imomoe.view.widget.TypefaceTextView
         android:id="@+id/tv_anime_info_1_title"
@@ -29,7 +37,7 @@
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toEndOf="@id/iv_anime_info_1_cover"
+        app:layout_constraintStart_toEndOf="@id/cv_anime_info_1_cover"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="轻音少女" />
 

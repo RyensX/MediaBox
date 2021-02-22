@@ -2,30 +2,33 @@ package com.skyd.imomoe.util.update
 
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
-import android.app.*
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
+import com.liulishuo.filedownloader.BaseDownloadTask
+import com.liulishuo.filedownloader.FileDownloadListener
+import com.liulishuo.filedownloader.FileDownloader
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Const.Update.Companion.updateFile
+import com.skyd.imomoe.config.Const.Update.Companion.updateFileName
 import com.skyd.imomoe.config.Const.Update.Companion.updateFilePath
 import com.skyd.imomoe.model.AppUpdateModel
 import com.skyd.imomoe.util.Util.showToast
-import com.skyd.imomoe.util.Util.showToastOnThread
+import com.skyd.imomoe.util.downloadanime.DownloadListener
 import com.skyd.imomoe.util.update.UpdateNotificationReceiver.Companion.UPDATE_NOTIFICATION_ID
 import com.skyd.imomoe.view.activity.MainActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
 import java.io.File
-import java.io.FileOutputStream
-import java.net.HttpURLConnection
-import java.net.URL
 
 
 class AppUpdateDownloadService : Service() {
@@ -46,11 +49,10 @@ class AppUpdateDownloadService : Service() {
             stopSelf()
         } else if (isNetWorkAvailable()) {
             createNotification()
-            coroutineScope.launch {
-                val downloadResult = downloadApk(url)
-                (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager)
-                    .cancel(notificationId)
-                if (downloadResult) {
+            "开始下载新版樱花动漫...".showToast()
+            downloadApk(url, object : DownloadListener {
+                override fun complete(fileName: String) {
+                    deleteNotification()
                     val file = updateFile
                     if (file.exists()) {
                         AppUpdateModel.status.postValue(AppUpdateStatus.TO_BE_INSTALLED)
@@ -61,8 +63,13 @@ class AppUpdateDownloadService : Service() {
                         "安装包未找到，更新失败".showToast()
                     }
                 }
-            }
-            "开始下载新版樱花动漫...".showToast()
+
+                override fun error() {
+                    super.error()
+                    deleteNotification()
+                    AppUpdateModel.status.postValue(AppUpdateStatus.ERROR)
+                }
+            })
         }
         return START_NOT_STICKY
     }
@@ -78,6 +85,11 @@ class AppUpdateDownloadService : Service() {
         super.onDestroy()
         coroutineScope.cancel()
         AppUpdateModel.status.postValue(AppUpdateStatus.CANCEL)
+    }
+
+    private fun deleteNotification() {
+        (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager)
+            .cancel(notificationId)
     }
 
     private fun createNotification() {
@@ -145,59 +157,60 @@ class AppUpdateDownloadService : Service() {
         return null
     }
 
-    private fun downloadApk(param: String): Boolean {
-        var finish = false
-        try {
-            val url = URL(param)
-            val conn = url.openConnection() as HttpURLConnection
-            conn.requestMethod = "GET"
-            conn.connectTimeout = 10000
-            if (conn.responseCode == 200) {
-                val f = File(updateFilePath)
-                if (!f.isDirectory) {
-                    f.mkdirs()
-                }
-                val `is` = conn.inputStream
-                val length = conn.contentLength
-                val file = updateFile
-                if (file.exists()) {
-                    file.delete()  // I think maybe the existent file cause the update failure
-                }
-                val fos = FileOutputStream(file)
-                var count = 0
-                val buf = ByteArray(1024)
-                var progress: Int
-                var progressPre = 0
-
-                var numRead = `is`.read(buf)
-                while (numRead > 0) {
-                    if (AppUpdateModel.status.value == AppUpdateStatus.CANCEL) {
-                        return false
-                    }
-                    count += numRead
-                    progress = (count.toFloat() / length * 100).toInt()
-                    if (progress != progressPre) {
-                        onProgressUpdate(progress)
-                        progressPre = progress
-                    }
-                    fos.write(buf, 0, numRead)
-                    numRead = `is`.read(buf)
-                }
-                fos.flush()
-                fos.close()
-                `is`.close()
-                finish = true
-            } else {
-                AppUpdateModel.status.postValue(AppUpdateStatus.ERROR)
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            finish = false
-            AppUpdateModel.status.postValue(AppUpdateStatus.ERROR)
-            e.message?.showToastOnThread()
+    private fun downloadApk(param: String, listener: DownloadListener) {
+        AppUpdateModel.status.postValue(AppUpdateStatus.DOWNLOADING)
+        val f = File(updateFilePath)
+        if (!f.isDirectory) {
+            f.mkdirs()
+        }
+        val file = updateFile
+        if (file.exists()) {
+            file.delete()
         }
 
-        return finish
+        FileDownloader.getImpl().create(param)
+            .setPath(updateFilePath + updateFileName, false)
+            .setListener(object : FileDownloadListener() {
+                override fun pending(
+                    task: BaseDownloadTask?,
+                    soFarBytes: Int,
+                    totalBytes: Int
+                ) {
+                }
+
+                override fun progress(
+                    task: BaseDownloadTask?,
+                    soFarBytes: Int,
+                    totalBytes: Int
+                ) {
+                    if (AppUpdateModel.status.value == AppUpdateStatus.CANCEL) {
+                        task?.let {
+                            FileDownloader.getImpl().pause(it.id)
+                        }
+                        return
+                    }
+                    val progress = (soFarBytes.toFloat() / totalBytes * 100).toInt()
+                    onProgressUpdate(progress)
+                }
+
+                override fun completed(task: BaseDownloadTask?) {
+                    listener.complete(task?.filename ?: "")
+                }
+
+                override fun paused(task: BaseDownloadTask?, soFarBytes: Int, totalBytes: Int) {
+                }
+
+                override fun error(task: BaseDownloadTask?, e: Throwable?) {
+                    e?.printStackTrace()
+                    AppUpdateModel.status.postValue(AppUpdateStatus.ERROR)
+                    listener.error()
+                    e?.message?.showToast()
+                }
+
+                override fun warn(task: BaseDownloadTask?) {
+                }
+
+            }).start()
     }
 
     private fun onProgressUpdate(values: Int) {

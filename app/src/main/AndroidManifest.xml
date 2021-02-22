@@ -18,7 +18,8 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.樱花动漫">
+        android:theme="@style/Theme.樱花动漫"
+        android:usesCleartextTraffic="true">
         <activity
             android:name=".view.activity.SimplePlayActivity"
             android:configChanges="orientation|screenSize" />
@@ -32,8 +33,7 @@
         <activity android:name=".view.activity.SearchActivity" />
         <activity
             android:name=".view.activity.PlayActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
-            android:screenOrientation="portrait" />
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode" />
         <activity android:name=".view.activity.AnimeDetailActivity" />
         <activity android:name=".view.activity.BaseActivity" />
         <activity android:name=".view.activity.MainActivity">

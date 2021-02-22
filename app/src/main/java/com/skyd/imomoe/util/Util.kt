@@ -21,15 +21,19 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.transition.DrawableCrossFadeFactory
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Const
+import com.skyd.imomoe.util.GlideUtil.getGlideUrl
 import com.skyd.imomoe.view.activity.*
 import com.skyd.imomoe.view.widget.AnimeToast
 import java.io.File
@@ -286,41 +290,6 @@ object Util {
         // 把 drawable 内容画到画布中
         draw(canvas)
         return bitmap
-    }
-
-    fun ImageView.loadImage(
-        url: String,
-        round: Int = 0,
-        options: RequestOptions.() -> RequestOptions
-    ) {
-        if (round == 0) {
-            Glide.with(App.context).load(url)
-                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                .skipMemoryCache(false)
-                .apply(RequestOptions().options()).into(this)
-        } else {
-            Glide.with(App.context).load(url).apply(
-                RequestOptions.bitmapTransform(
-                    RoundedCorners(round)
-                )
-                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                    .skipMemoryCache(false)
-            ).apply(RequestOptions().options()).into(this)
-        }
-    }
-
-    fun ImageView.loadImage(url: String, round: Int = 0) {
-        if (round == 0) {
-            Glide.with(App.context).load(url)
-                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                .skipMemoryCache(false)
-                .into(this)
-        } else {
-            Glide.with(App.context).load(url).apply(
-                RequestOptions.bitmapTransform(RoundedCorners(round))
-            ).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                .skipMemoryCache(false).into(this)
-        }
     }
 
     fun String.isYearMonth(): Boolean {

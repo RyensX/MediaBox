@@ -8,7 +8,6 @@ import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.util.MD5.getMD5
 import com.skyd.imomoe.util.Util.gone
 import com.skyd.imomoe.util.Util.setFullScreen
-import com.skyd.imomoe.util.Util.visible
 import kotlinx.android.synthetic.main.activity_simple_play.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -34,6 +33,7 @@ class SimplePlayActivity : BaseActivity() {
 
         avp_simple_play_activity.startPlayLogic()
         orientationUtils.resolveByClick()
+        avp_simple_play_activity.startWindowFullscreen(this, actionBar = true, statusBar = true)
 
         GlobalScope.launch(Dispatchers.IO) {
             val title = getAppDataBase().animeDownloadDao()
@@ -50,7 +50,6 @@ class SimplePlayActivity : BaseActivity() {
             orientationUtils = OrientationUtils(this@SimplePlayActivity, avp_simple_play_activity)
             getDownloadButton()?.gone()
             fullscreenButton.gone()
-
             //是否开启自动旋转
             isRotateViewAuto = false
             //是否需要全屏锁定屏幕功能
@@ -58,10 +57,8 @@ class SimplePlayActivity : BaseActivity() {
             isNeedLockFull = true
             //设置触摸显示控制ui的消失时间
             dismissControlTime = 5000
-            //设置返回键
-            backButton.visible()
-            backButton.setOnClickListener { finish() }
-
+            //设置退出全屏的监听器
+            setBackFromFullScreenListener { finish() }
             //是否可以滑动调整
             setIsTouchWiget(true)
             setUp(url, false, title)

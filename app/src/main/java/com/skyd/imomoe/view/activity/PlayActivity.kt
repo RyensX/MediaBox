@@ -3,20 +3,16 @@ package com.skyd.imomoe.view.activity
 import android.app.Dialog
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.shuyu.gsyvideoplayer.GSYVideoADManager
-import com.shuyu.gsyvideoplayer.GSYVideoManager
-import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack
-import com.shuyu.gsyvideoplayer.utils.OrientationUtils
+import com.shuyu.gsyvideoplayer.GSYBaseActivityDetail
+import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
@@ -29,15 +25,16 @@ import com.skyd.imomoe.util.downloadanime.AnimeDownloadHelper
 import com.skyd.imomoe.view.adapter.AnimeDetailAdapter
 import com.skyd.imomoe.view.adapter.AnimeEpisodeItemDecoration
 import com.skyd.imomoe.view.adapter.PlayAdapter
+import com.skyd.imomoe.view.widget.AnimeVideoPlayer
 import com.skyd.imomoe.viewmodel.PlayViewModel
 import kotlinx.android.synthetic.main.activity_play.*
 
 
-class PlayActivity : BaseActivity() {
+class PlayActivity : GSYBaseActivityDetail<AnimeVideoPlayer>() {
+    private lateinit var videoPlayer: AnimeVideoPlayer
     private var partUrl: String = ""
     private lateinit var viewModel: PlayViewModel
     private lateinit var adapter: PlayAdapter
-    private var orientationUtils: OrientationUtils? = null
     private var isFirstTime = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,12 +46,15 @@ class PlayActivity : BaseActivity() {
         viewModel = ViewModelProvider(this).get(PlayViewModel::class.java)
         adapter = PlayAdapter(this, viewModel.playBeanDataList)
 
-        orientationUtils = OrientationUtils(this, avp_play_activity)
+        videoPlayer = findViewById(R.id.avp_play_activity)
+        initVideoBuilderMode()
 
-        avp_play_activity.backButton?.setOnClickListener { finish() }
-        avp_play_activity.getDownloadButton()?.setOnClickListener {
+        videoPlayer.getDownloadButton()?.setOnClickListener {
             getSheetDialog("download").show()
         }
+
+        //设置返回按键功能
+        videoPlayer.backButton?.setOnClickListener { onBackPressed() }
 
         partUrl = intent.getStringExtra("partUrl") ?: ""
 
@@ -74,7 +74,7 @@ class PlayActivity : BaseActivity() {
             adapter.notifyDataSetChanged()
 
             if (isFirstTime) {
-                avp_play_activity.startPlay()
+                videoPlayer.startPlay()
                 isFirstTime = false
             }
         })
@@ -94,72 +94,22 @@ class PlayActivity : BaseActivity() {
         viewModel.getPlayData(partUrl)
     }
 
-    override fun onPause() {
-        super.onPause()
-        avp_play_activity.onVideoPause()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        avp_play_activity.onVideoResume()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        GSYVideoADManager.releaseAllVideos()
-        orientationUtils?.releaseListener()
-        avp_play_activity.release()
-        avp_play_activity.setVideoAllCallBack(null)
-    }
-
-    override fun onBackPressed() {
-        orientationUtils?.backToProtVideo()
-        if (GSYVideoManager.backFromWindowFull(this)) return
-        super.onBackPressed()
-    }
-
     fun startPlay(url: String, title: String) {
         viewModel.mldAnimeEpisodeDataRefreshed.observe(this, {
             if (it) {
-                avp_play_activity.startPlay()
+                videoPlayer.startPlay()
             }
         })
         viewModel.refreshAnimeEpisodeData(url, title)
     }
 
     fun startPlay2(url: String, title: String) {
-        avp_play_activity.startPlay(url, title)
+        videoPlayer.startPlay(url, title)
     }
 
     private fun GSYVideoPlayer.startPlay(url: String = "", title: String = "") {
-        //设置全屏按键功能,这是使用的是选择屏幕，而不是全屏
-        fullscreenButton.setOnClickListener {
-            Log.e("---", orientationUtils?.isLand.toString())
-            orientationUtils?.run { resolveByClick() }
-            avp_play_activity.startWindowFullscreen(this@PlayActivity, true, true)
-        }
-        //防止错位设置
-        playTag = this.javaClass.simpleName
-        //音频焦点冲突时是否释放
-        isReleaseWhenLossAudio = false
-        //增加封面
-        val imageView = ImageView(this@PlayActivity)
-        imageView.scaleType = ImageView.ScaleType.CENTER_CROP
-        //imageView.loadImage(it.cover?.detail ?: "")
-        thumbImageView = imageView
-        //thumbImageView.setOnClickListener { switchTitleBarVisible() }
-        //是否开启自动旋转
-        isRotateViewAuto = false
-        //是否需要全屏锁定屏幕功能
-        isNeedLockFull = true
-        //是否可以滑动调整
-        setIsTouchWiget(true)
-        //设置触摸显示控制ui的消失时间
-        dismissControlTime = 5000
-        //设置播放过程中的回调
-        setVideoAllCallBack(VideoCallPlayBack())
         //设置播放URL
-        if (url == "") {
+        if (url.isBlank()) {
             setUp(
                 viewModel.animeEpisodeDataBean.videoUrl,
                 false, viewModel.animeEpisodeDataBean.title
@@ -170,6 +120,38 @@ class PlayActivity : BaseActivity() {
         //开始播放
         startPlayLogic()
     }
+
+    override fun onPlayError(url: String?, vararg objects: Any?) {
+        super.onPlayError(url, *objects)
+        (objects[0].toString() + ", " + getString(R.string.get_data_failed)).showToast()
+    }
+
+    override fun onPrepared(url: String?, vararg objects: Any?) {
+        super.onPrepared(url, *objects)
+        //调整触摸滑动快进的比例
+        //毫秒,刚好划一屏1分35秒
+        videoPlayer.seekRatio = videoPlayer.duration / 90_000f
+    }
+
+    override fun getGSYVideoPlayer(): AnimeVideoPlayer = videoPlayer
+
+    override fun getGSYVideoOptionBuilder(): GSYVideoOptionBuilder {
+        return GSYVideoOptionBuilder()
+            .setReleaseWhenLossAudio(false)         //音频焦点冲突时是否释放
+            .setPlayTag(this.javaClass.simpleName)  //防止错位设置
+            .setIsTouchWiget(true)
+            .setRotateViewAuto(false)
+            .setLockLand(false)
+            .setShowFullAnimation(false)            //打开动画
+            .setNeedLockFull(true)
+            .setDismissControlTime(5000)
+    }
+
+    override fun clickForFullScreen() {
+    }
+
+    override fun getDetailOrientationRotateAuto(): Boolean = true
+
 
     fun getSheetDialog(action: String): BottomSheetDialog {
         val bottomSheetDialog = BottomSheetDialog(this)
@@ -252,40 +234,6 @@ class PlayActivity : BaseActivity() {
                     (App.context.resources.getString(R.string.unknown_view_holder) + position).showToast()
                 }
             }
-        }
-    }
-
-    inner class VideoCallPlayBack : GSYSampleCallBack() {
-        override fun onPlayError(url: String?, vararg objects: Any?) {
-            super.onPlayError(url, *objects)
-
-            (objects[0].toString() + ", " + getString(R.string.get_data_failed)).showToast()
-        }
-
-        override fun onStartPrepared(url: String?, vararg objects: Any?) {
-            super.onStartPrepared(url, *objects)
-        }
-
-        override fun onPrepared(url: String?, vararg objects: Any?) {
-            super.onPrepared(url, *objects)
-
-            //调整触摸滑动快进的比例
-            //毫秒,刚好划一屏1分35秒
-            avp_play_activity.seekRatio = avp_play_activity.duration / 90_000f
-        }
-
-        override fun onClickBlank(url: String?, vararg objects: Any?) {
-            super.onClickBlank(url, *objects)
-//            switchTitleBarVisible()
-        }
-
-        override fun onClickStop(url: String?, vararg objects: Any?) {
-            super.onClickStop(url, *objects)
-//            delayHideBottomContainer()
-        }
-
-        override fun onAutoComplete(url: String?, vararg objects: Any?) {
-            super.onAutoComplete(url, *objects)
         }
     }
 

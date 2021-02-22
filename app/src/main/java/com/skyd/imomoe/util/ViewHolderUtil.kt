@@ -10,7 +10,7 @@ import com.nex3z.flowlayout.FlowLayout
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.BaseBean
 import com.skyd.imomoe.view.widget.bannerview.BannerView
-import com.skyd.imomoe.view.widget.RoundCornersImageView
+import com.skyd.imomoe.view.widget.TypefaceTextView
 
 class ViewHolderUtil {
     companion object {
@@ -159,7 +159,7 @@ class Header1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 }
 
 class AnimeCover1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val ivAnimeCover1Cover = view.findViewById<RoundCornersImageView>(R.id.iv_anime_cover_1_cover)
+    val ivAnimeCover1Cover = view.findViewById<ImageView>(R.id.iv_anime_cover_1_cover)
     val tvAnimeCover1Title = view.findViewById<TextView>(R.id.tv_anime_cover_1_title)
     val tvAnimeCover1Episode = view.findViewById<TextView>(R.id.tv_anime_cover_1_episode)
 }
@@ -170,7 +170,7 @@ class AnimeCover2ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 }
 
 class AnimeCover3ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val ivAnimeCover3Cover = view.findViewById<RoundCornersImageView>(R.id.iv_anime_cover_3_cover)
+    val ivAnimeCover3Cover = view.findViewById<ImageView>(R.id.iv_anime_cover_3_cover)
     val tvAnimeCover3Title = view.findViewById<TextView>(R.id.tv_anime_cover_3_title)
     val tvAnimeCover3Episode = view.findViewById<TextView>(R.id.tv_anime_cover_3_episode)
     val flAnimeCover3Type = view.findViewById<FlowLayout>(R.id.fl_anime_cover_3_type)
@@ -179,7 +179,7 @@ class AnimeCover3ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 }
 
 class AnimeCover4ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val ivAnimeCover4Cover = view.findViewById<RoundCornersImageView>(R.id.iv_anime_cover_4_cover)
+    val ivAnimeCover4Cover = view.findViewById<ImageView>(R.id.iv_anime_cover_4_cover)
     val tvAnimeCover4Title = view.findViewById<TextView>(R.id.tv_anime_cover_4_title)
 }
 
@@ -199,8 +199,8 @@ class AnimeCover6ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 }
 
 class AnimeCover7ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val tvAnimeCover7Title = view.findViewById<TextView>(R.id.tv_anime_cover_7_title)
-    val tvAnimeCover7Size = view.findViewById<TextView>(R.id.tv_anime_cover_7_size)
+    val tvAnimeCover7Title = view.findViewById<TypefaceTextView>(R.id.tv_anime_cover_7_title)
+    val tvAnimeCover7Size = view.findViewById<TypefaceTextView>(R.id.tv_anime_cover_7_size)
     val tvAnimeCover7Episodes = view.findViewById<TextView>(R.id.tv_anime_cover_7_episodes)
 }
 

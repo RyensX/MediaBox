@@ -7,7 +7,9 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeDetailBean
 import com.skyd.imomoe.bean.AnimeInfoBean
 import com.skyd.imomoe.bean.AnimeTypeBean
+import com.skyd.imomoe.bean.ImageBean
 import com.skyd.imomoe.config.Api
+import com.skyd.imomoe.util.JsoupUtil
 import com.skyd.imomoe.util.ParseHtmlUtil.parseBotit
 import com.skyd.imomoe.util.ParseHtmlUtil.parseDtit
 import com.skyd.imomoe.util.ParseHtmlUtil.parseImg
@@ -16,14 +18,13 @@ import com.skyd.imomoe.util.Util.showToastOnThread
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.jsoup.Jsoup
 import org.jsoup.select.Elements
 import java.lang.Exception
 import kotlin.collections.ArrayList
 
 
 class AnimeDetailViewModel : ViewModel() {
-    var cover: String = ""
+    var cover: ImageBean = ImageBean("", "", "", "")
     var title: String = ""
     var animeDetailList: MutableList<AnimeDetailBean> = ArrayList()
     var mldAnimeDetailList: MutableLiveData<Boolean> = MutableLiveData()
@@ -32,7 +33,8 @@ class AnimeDetailViewModel : ViewModel() {
     fun getAnimeDetailData(partUrl: String) {
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                val document = Jsoup.connect(Api.MAIN_URL + partUrl).get()
+                val url = Api.MAIN_URL + partUrl
+                val document = JsoupUtil.getDocument(url)
                 animeDetailList.clear()
                 //番剧头部信息
                 val area: Elements = document.getElementsByClass("area")
@@ -54,8 +56,9 @@ class AnimeDetailViewModel : ViewModel() {
                                 for (k in fireLChildren.indices) {
                                     when (fireLChildren[k].className()) {
                                         "thumb l" -> {
-                                            cover = fireLChildren[k]
+                                            cover.url = fireLChildren[k]
                                                 .select("img").attr("src")
+                                            cover.referer = url
                                         }
                                         "rate r" -> {
                                             val rateR = fireLChildren[k]
@@ -161,7 +164,7 @@ class AnimeDetailViewModel : ViewModel() {
                                                     "",
                                                     "",
                                                     null,
-                                                    parseImg(fireLChildren[k])
+                                                    parseImg(fireLChildren[k], url)
                                                 )
                                             )
                                         }
@@ -171,7 +174,7 @@ class AnimeDetailViewModel : ViewModel() {
                                     "",
                                     "",
                                     title,
-                                    cover,
+                                    ImageBean("", "", cover.url, url),
                                     alias,
                                     animeArea,
                                     year,

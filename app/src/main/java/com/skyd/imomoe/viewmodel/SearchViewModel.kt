@@ -9,12 +9,12 @@ import com.skyd.imomoe.bean.SearchHistoryBean
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.config.Const.ActionUrl.Companion.ANIME_SEARCH
 import com.skyd.imomoe.database.getAppDataBase
+import com.skyd.imomoe.util.JsoupUtil
 import com.skyd.imomoe.util.ParseHtmlUtil.parseLpic
 import com.skyd.imomoe.util.Util.showToastOnThread
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.jsoup.Jsoup
 import org.jsoup.select.Elements
 import java.lang.Exception
 import kotlin.collections.ArrayList
@@ -33,11 +33,12 @@ class SearchViewModel : ViewModel() {
     fun getSearchData(keyWord: String) {
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                val document = Jsoup.connect(Api.MAIN_URL + ANIME_SEARCH + keyWord).get()
+                val url = Api.MAIN_URL + ANIME_SEARCH + keyWord
+                val document = JsoupUtil.getDocument(url)
                 val lpic: Elements = document.getElementsByClass("area")
                     .select("[class=fire l]").select("[class=lpic]")
                 searchResultList.clear()
-                searchResultList.addAll(parseLpic(lpic[0]))
+                searchResultList.addAll(parseLpic(lpic[0], url))
                 mldSearchResultList.postValue(keyWord)
             } catch (e: Exception) {
                 mldFailed.postValue(true)

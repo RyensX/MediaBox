@@ -5,7 +5,10 @@ import com.skyd.imomoe.config.Api
 import retrofit2.Call
 import retrofit2.http.GET
 
-interface GithubService {
+interface UpdateService {
     @GET(Api.CHECK_UPDATE_URL)
     fun checkUpdate(): Call<UpdateBean>
+
+    @GET(Api.CHECK_UPDATE_URL_2)
+    fun checkUpdate2(): Call<UpdateBean>
 }

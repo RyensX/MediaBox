@@ -6,12 +6,12 @@ import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.config.Api
+import com.skyd.imomoe.util.JsoupUtil
 import com.skyd.imomoe.util.ParseHtmlUtil.parseLpic
 import com.skyd.imomoe.util.Util.showToastOnThread
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.jsoup.Jsoup
 import org.jsoup.select.Elements
 import java.lang.Exception
 import java.util.*
@@ -24,7 +24,8 @@ class MonthAnimeViewModel : ViewModel() {
     fun getMonthAnimeData(partUrl: String) {
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                val document = Jsoup.connect(Api.MAIN_URL + partUrl).get()
+                val url = Api.MAIN_URL + partUrl
+                val document = JsoupUtil.getDocument(url)
                 val areaElements: Elements = document.getElementsByClass("area")
                 monthAnimeList.clear()
                 for (i in areaElements.indices) {
@@ -32,7 +33,7 @@ class MonthAnimeViewModel : ViewModel() {
                     for (j in areaChildren.indices) {
                         when (areaChildren[j].className()) {
                             "lpic" -> {
-                                monthAnimeList.addAll(parseLpic(areaChildren[j]))
+                                monthAnimeList.addAll(parseLpic(areaChildren[j], url))
                             }
                         }
                     }

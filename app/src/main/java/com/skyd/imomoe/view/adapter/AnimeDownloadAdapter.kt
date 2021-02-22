@@ -12,6 +12,7 @@ import com.skyd.imomoe.util.AnimeCover7ViewHolder
 import com.skyd.imomoe.util.License1ViewHolder
 import com.skyd.imomoe.util.LicenseHeader1ViewHolder
 import com.skyd.imomoe.util.Util.gone
+import com.skyd.imomoe.util.Util.invisible
 import com.skyd.imomoe.util.Util.process
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.Util.visible
@@ -41,13 +42,15 @@ class AnimeDownloadAdapter(
 
         when (holder) {
             is AnimeCover7ViewHolder -> {
+                holder.tvAnimeCover7Title.isFocused = true
                 holder.tvAnimeCover7Title.text = item.title
+                holder.tvAnimeCover7Size.isFocused = true
                 holder.tvAnimeCover7Size.text = item.size
                 if (item.actionUrl.startsWith(Const.ActionUrl.ANIME_ANIME_DOWNLOAD_EPISODE)) {
                     holder.tvAnimeCover7Episodes.text = item.episodeCount
                     holder.tvAnimeCover7Episodes.visible()
                 } else {
-                    holder.tvAnimeCover7Episodes.gone()
+                    holder.tvAnimeCover7Episodes.invisible()
                 }
                 holder.itemView.setOnClickListener {
                     process(activity, item.actionUrl)

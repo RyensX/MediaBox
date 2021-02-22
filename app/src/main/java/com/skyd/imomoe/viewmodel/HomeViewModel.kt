@@ -7,12 +7,12 @@ import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.TabBean
 import com.skyd.imomoe.config.Api
+import com.skyd.imomoe.util.JsoupUtil
 import com.skyd.imomoe.util.Util.showToastOnThread
 import com.skyd.imomoe.view.adapter.SerializableRecycledViewPool
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.jsoup.Jsoup
 import org.jsoup.select.Elements
 import java.lang.Exception
 import java.util.*
@@ -31,7 +31,7 @@ class HomeViewModel : ViewModel() {
     fun getAllTabData() {
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                val document = Jsoup.connect(Api.MAIN_URL).get()
+                val document = JsoupUtil.getDocument(Api.MAIN_URL)
                 val menu: Elements = document.getElementsByClass("menu")
                 val dmx_l: Elements = menu.select("[class=dmx l]").select("li")
                 allTabList.clear()
@@ -57,7 +57,7 @@ class HomeViewModel : ViewModel() {
     fun getLTabData() {
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                val document = Jsoup.connect(Api.MAIN_URL).get()
+                val document = JsoupUtil.getDocument(Api.MAIN_URL)
                 val menu: Elements = document.getElementsByClass("menu")
                 val dmx_l: Elements = menu.select("[class=dmx l]").select("li")
                 lTabList.clear()
@@ -78,7 +78,7 @@ class HomeViewModel : ViewModel() {
     fun getRTabData() {
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                val document = Jsoup.connect(Api.MAIN_URL).get()
+                val document = JsoupUtil.getDocument(Api.MAIN_URL)
                 val menu: Elements = document.getElementsByClass("menu")
                 val dme_r: Elements = menu.select("[class=dme r]").select("li")
                 rTabList.clear()

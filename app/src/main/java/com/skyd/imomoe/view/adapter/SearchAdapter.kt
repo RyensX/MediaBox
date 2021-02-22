@@ -10,8 +10,8 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.util.AnimeCover3ViewHolder
+import com.skyd.imomoe.util.GlideUtil.loadImage
 import com.skyd.imomoe.util.Util.gone
-import com.skyd.imomoe.util.Util.loadImage
 import com.skyd.imomoe.util.Util.process
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.Util.visible
@@ -39,7 +39,11 @@ class SearchAdapter(
 
         when (holder) {
             is AnimeCover3ViewHolder -> {
-                holder.ivAnimeCover3Cover.loadImage(item.cover)
+                holder.ivAnimeCover3Cover.loadImage(
+                    activity,
+                    item.cover?.url ?: "",
+                    referer = item.cover?.referer
+                )
                 holder.tvAnimeCover3Title.text = item.title
                 if (item.episode == "") {
                     holder.tvAnimeCover3Episode.gone()

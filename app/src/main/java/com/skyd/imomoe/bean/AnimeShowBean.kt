@@ -16,7 +16,7 @@ class AnimeCoverBean(       //番剧卡片
     override var actionUrl: String,
     var url: String,
     var title: String,
-    var cover: String,
+    var cover: ImageBean?,
     var episode: String,
     var animeType: List<AnimeTypeBean>? = null,
     var describe: String? = null,
@@ -39,4 +39,11 @@ class AnimeAreaBean(       //番剧地区：包括地区名和链接
     override var actionUrl: String,
     var url: String,
     var title: String
+) : BaseBean
+
+class ImageBean(       //图片bean，带有referer信息
+    override var type: String,
+    override var actionUrl: String,
+    var url: String,
+    var referer: String
 ) : BaseBean

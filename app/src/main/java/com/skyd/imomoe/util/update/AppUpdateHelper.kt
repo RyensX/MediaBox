@@ -5,35 +5,38 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
-import androidx.room.Room
+import androidx.lifecycle.MutableLiveData
 import com.afollestad.materialdialogs.MaterialDialog
 import com.hjq.permissions.OnPermissionCallback
 import com.hjq.permissions.Permission
 import com.hjq.permissions.XXPermissions
+import com.skyd.imomoe.App
 import com.skyd.imomoe.config.Const.Update.Companion.updateFile
-import com.skyd.imomoe.database.AppDatabase
 import com.skyd.imomoe.model.AppUpdateModel
+import com.skyd.imomoe.util.Util.openBrowser
 import com.skyd.imomoe.util.Util.showToast
+import com.skyd.imomoe.util.editor
+import com.skyd.imomoe.util.sharedPreferences
 import com.skyd.imomoe.util.uri
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.PublishSubject
 
 class AppUpdateHelper private constructor() {
     companion object {
-//        private var instance: AppUpdateHelper? = null
+        const val UPDATE_SERVER_SP_KEY = "updateServer"
+        const val GITHUB = 0
+        const val GITEE = 1
+        val serverName = arrayOf("Github", "Gitee")
 
         val instance: AppUpdateHelper by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
             AppUpdateHelper()
         }
+    }
 
-//        fun getInstance(): AppUpdateHelper {
-//            instance?.let {
-//                return it
-//            }
-//            val ins = AppUpdateHelper()
-//            instance = ins
-//            return ins
-//        }
+    fun getUpdateServer(): LiveData<Int> = AppUpdateModel.mldUpdateServer
+
+    fun setUpdateServer(value: Int) {
+        AppUpdateModel.updateServer = value
     }
 
     fun getUpdateStatus(): LiveData<AppUpdateStatus> = AppUpdateModel.status
@@ -94,12 +97,21 @@ class AppUpdateHelper private constructor() {
     }
 
     private fun downloadUpdate(activity: AppCompatActivity) {
+        //gitee目前只能浏览器下载
+        if (getUpdateServer().value == 1) {
+            openBrowser(AppUpdateModel.updateBean?.assets?.get(0)?.browserDownloadUrl ?: return)
+            return
+        }
         AppUpdateModel.status.value = AppUpdateStatus.DOWNLOADING
         activity.startService(
             Intent(activity, AppUpdateDownloadService::class.java)
                 .putExtra(
                     "url",
                     AppUpdateModel.updateBean?.assets?.get(0)?.browserDownloadUrl ?: return
+                )
+                .putExtra(
+                    "name",
+                    AppUpdateModel.updateBean?.assets?.get(0)?.name ?: return
                 )
         )
     }

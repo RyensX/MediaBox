@@ -10,6 +10,7 @@ object ParseHtmlUtil {
 
     fun parseHeroWrap(      //banner
         element: Element,
+        imageReferer: String,
         type: String = "animeCover6"
     ): List<AnimeCoverBean> {
         val list: MutableList<AnimeCoverBean> = ArrayList()
@@ -37,7 +38,8 @@ object ParseHtmlUtil {
             list.add(
                 AnimeCoverBean(
                     type, url, Api.MAIN_URL + url,
-                    title, cover, "", null, describe,
+                    title, ImageBean("", "", cover, imageReferer),
+                    "", null, describe,
                     AnimeEpisodeDataBean("", "", episodeTitle),
                     null,
                     null
@@ -104,7 +106,7 @@ object ParseHtmlUtil {
                 liList.add(
                     AnimeCoverBean(
                         type, url, Api.MAIN_URL + url,
-                        title, "", "", null, null,
+                        title, null, "", null, null,
                         AnimeEpisodeDataBean("", episodeUrl, episodeTitle),
                         null,
                         null
@@ -150,7 +152,7 @@ object ParseHtmlUtil {
             animeShowList.add(
                 AnimeCoverBean(
                     type, url, Api.MAIN_URL + url,
-                    title, "", "", null, null,
+                    title, null, "", null, null,
                     AnimeEpisodeDataBean("", episodeUrl, episodeTitle),
                     AnimeAreaBean("", areaUrl, Api.MAIN_URL + areaUrl, areaTitle),
                     date
@@ -162,6 +164,7 @@ object ParseHtmlUtil {
 
     fun parseDnews(
         element: Element,
+        imageReferer: String,
         type: String = "animeCover4"
     ): List<AnimeCoverBean> {
         val animeShowList: MutableList<AnimeCoverBean> = ArrayList()
@@ -177,7 +180,7 @@ object ParseHtmlUtil {
             animeShowList.add(
                 AnimeCoverBean(
                     type, url, Api.MAIN_URL + url,
-                    title, cover, ""
+                    title, ImageBean("", "", cover, imageReferer), ""
                 )
             )
         }
@@ -186,6 +189,7 @@ object ParseHtmlUtil {
 
     fun parsePics(      //一周动漫排行榜
         element: Element,
+        imageReferer: String,
         type: String = "animeCover3"
     ): List<AnimeCoverBean> {
         val animeCover3List: MutableList<AnimeCoverBean> = ArrayList()
@@ -214,7 +218,13 @@ object ParseHtmlUtil {
             animeCover3List.add(
                 AnimeCoverBean(
                     "animeCover3",
-                    url, Api.MAIN_URL + url, title, cover, episode, animeType, describe
+                    url,
+                    Api.MAIN_URL + url,
+                    title,
+                    ImageBean("", "", cover, imageReferer),
+                    episode,
+                    animeType,
+                    describe
                 )
             )
         }
@@ -223,6 +233,7 @@ object ParseHtmlUtil {
 
     fun parseLpic(          //搜索
         element: Element,
+        imageReferer: String,
         type: String = "animeCover3"
     ): List<AnimeCoverBean> {
         val animeCover3List: MutableList<AnimeCoverBean> = ArrayList()
@@ -251,7 +262,13 @@ object ParseHtmlUtil {
             animeCover3List.add(
                 AnimeCoverBean(
                     "animeCover3",
-                    url, Api.MAIN_URL + url, title, cover, episode, animeType, describe
+                    url,
+                    Api.MAIN_URL + url,
+                    title,
+                    ImageBean("", "", cover, imageReferer),
+                    episode,
+                    animeType,
+                    describe
                 )
             )
         }
@@ -259,13 +276,13 @@ object ParseHtmlUtil {
     }
 
     fun parseDtit(
-        element: Element,
+        element: Element
     ): String {
         return element.children()[0].text()
     }
 
     fun parseBotit(
-        element: Element,
+        element: Element
     ): String {
         return element.select("h2").text()
     }
@@ -293,7 +310,11 @@ object ParseHtmlUtil {
         return animeEpisodeList
     }
 
-    fun parseImg(element: Element, type: String = "animeCover1"): List<AnimeCoverBean> {
+    fun parseImg(
+        element: Element,
+        imageReferer: String,
+        type: String = "animeCover1"
+    ): List<AnimeCoverBean> {
         val animeShowList: MutableList<AnimeCoverBean> = ArrayList()
         val elements: Elements = element.select("ul").select("li")
         for (i in elements.indices) {
@@ -311,7 +332,7 @@ object ParseHtmlUtil {
             animeShowList.add(
                 AnimeCoverBean(
                     type, url, Api.MAIN_URL + url,
-                    title, cover, episode
+                    title, ImageBean("", "", cover, imageReferer), episode
                 )
             )
         }

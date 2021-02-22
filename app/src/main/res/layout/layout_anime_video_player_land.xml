@@ -23,82 +23,122 @@
         android:layout_alignParentBottom="true"
         android:scaleType="fitCenter" />
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_bottom"
         android:layout_width="match_parent"
-        android:layout_height="35dp"
+        android:layout_height="65dp"
         android:layout_alignParentBottom="true"
-        android:background="#99000000"
-        android:orientation="horizontal"
-        android:visibility="invisible">
+        android:background="#54000000"
+        android:paddingBottom="5dp">
 
         <SeekBar
             android:id="@+id/progress"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1.0"
             android:background="@null"
             android:max="100"
             android:maxHeight="2dp"
             android:minHeight="2dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
             android:progressDrawable="@drawable/video_seek_progress"
-            android:thumb="@drawable/video_seek_thumb" />
+            android:thumb="@drawable/video_seek_thumb"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/start"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="10dp"
+            android:padding="5dp"
+            android:src="@drawable/ic_play_white_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/progress" />
 
         <com.skyd.imomoe.view.widget.TypefaceTextView
             android:id="@+id/current"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
+            android:layout_marginStart="16dp"
             android:textColor="@color/white"
-            android:textSize="12sp"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toBottomOf="@id/progress"
+            app:layout_constraintStart_toEndOf="@id/start"
+            app:layout_constraintTop_toBottomOf="parent"
             app:typeface="fzlLTypeface"
             tools:text="00:00" />
 
         <com.skyd.imomoe.view.widget.TypefaceTextView
+            android:id="@+id/split"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
             android:text="/"
             android:textColor="@color/white"
-            android:textSize="12sp"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toBottomOf="@id/progress"
+            app:layout_constraintStart_toEndOf="@id/current"
+            app:layout_constraintTop_toBottomOf="parent"
             app:typeface="fzlLTypeface" />
 
         <com.skyd.imomoe.view.widget.TypefaceTextView
             android:id="@+id/total"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
             android:textColor="@color/white"
-            android:textSize="12sp"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toBottomOf="@id/progress"
+            app:layout_constraintStart_toEndOf="@id/split"
+            app:layout_constraintTop_toBottomOf="parent"
             app:typeface="fzlLTypeface"
             tools:text="00:00" />
 
         <com.skyd.imomoe.view.widget.TypefaceTextView
             android:id="@+id/tv_speed"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
+            android:layout_height="0dp"
             android:gravity="center"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
             android:text="@string/play_speed"
             android:textColor="@color/white"
             android:textSize="13sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_more_scale"
+            app:layout_constraintTop_toBottomOf="@id/progress"
             app:typeface="fzlLTypeface" />
+
+        <com.skyd.imomoe.view.widget.TypefaceTextView
+            android:id="@+id/tv_more_scale"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:textColor="@color/white"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/fullscreen"
+            app:layout_constraintTop_toBottomOf="@id/progress"
+            app:typeface="fzlLTypeface"
+            tools:text="4:3" />
 
         <ImageView
             android:id="@+id/fullscreen"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginEnd="10dp"
             android:adjustViewBounds="true"
-            android:paddingStart="6dp"
-            android:paddingEnd="12dp"
-            android:src="@drawable/ic_fullscreen_white_24" />
-    </LinearLayout>
+            android:padding="12dp"
+            android:src="@drawable/ic_fullscreen_exit_white_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/progress" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ProgressBar
         android:id="@+id/bottom_progressbar"
@@ -127,13 +167,6 @@
         android:indeterminateTint="@color/main_color"
         android:indeterminateTintMode="src_atop"
         android:visibility="invisible" />
-
-    <ImageView
-        android:id="@+id/start"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_centerInParent="true"
-        android:src="@drawable/ic_play_white_24" />
 
     <ImageView
         android:id="@+id/lock_screen"
@@ -179,22 +212,9 @@
             android:textSize="18sp"
             app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/iv_download"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toEndOf="@id/back"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/iv_download"
-            android:layout_width="48dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="end"
-            android:paddingVertical="12dp"
-            android:paddingStart="0dp"
-            android:paddingEnd="10dp"
-            android:src="@drawable/ic_arrow_circle_down_white_24"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

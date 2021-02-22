@@ -6,6 +6,7 @@ import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.*
 import com.skyd.imomoe.config.Api
+import com.skyd.imomoe.util.JsoupUtil
 import com.skyd.imomoe.util.ParseHtmlUtil
 import com.skyd.imomoe.util.ParseHtmlUtil.parseBotit
 import com.skyd.imomoe.util.ParseHtmlUtil.parseMovurls
@@ -13,7 +14,6 @@ import com.skyd.imomoe.util.Util.showToastOnThread
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.jsoup.Jsoup
 import org.jsoup.select.Elements
 import java.lang.Exception
 import java.util.*
@@ -32,7 +32,7 @@ class PlayViewModel : ViewModel() {
     fun refreshAnimeEpisodeData(partUrl: String, title: String = "") {
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                val document = Jsoup.connect(Api.MAIN_URL + partUrl).get()
+                val document = JsoupUtil.getDocument(Api.MAIN_URL + partUrl)
                 val children: Elements = document.select("body")[0].children()
                 for (i in children.indices) {
                     when (children[i].className()) {
@@ -61,7 +61,7 @@ class PlayViewModel : ViewModel() {
     fun getAnimeEpisodeData(partUrl: String, position: Int) {
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                val document = Jsoup.connect(Api.MAIN_URL + partUrl).get()
+                val document = JsoupUtil.getDocument(Api.MAIN_URL + partUrl)
                 val children: Elements = document.select("body")[0].children()
                 for (i in children.indices) {
                     when (children[i].className()) {
@@ -91,7 +91,8 @@ class PlayViewModel : ViewModel() {
                         "", "",
                         ""
                     )
-                val document = Jsoup.connect(Api.MAIN_URL + partUrl).get()
+                val url = Api.MAIN_URL + partUrl
+                val document = JsoupUtil.getDocument(url)
                 val children: Elements = document.allElements
                 playBeanDataList.clear()
                 episodesList.clear()
@@ -147,7 +148,10 @@ class PlayViewModel : ViewModel() {
                                             AnimeDetailBean(
                                                 "gridRecyclerView1",
                                                 "", "", "",
-                                                animeCoverList = ParseHtmlUtil.parseImg(areaChildren[j])
+                                                animeCoverList = ParseHtmlUtil.parseImg(
+                                                    areaChildren[j],
+                                                    url
+                                                )
                                             )
                                         )
                                     }

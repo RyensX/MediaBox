@@ -11,7 +11,6 @@ import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.animation.addListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType
@@ -22,11 +21,9 @@ import com.shuyu.gsyvideoplayer.video.base.GSYVideoView
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.BaseBean
-import com.skyd.imomoe.util.SearchHistory1ViewHolder
 import com.skyd.imomoe.util.Util.dp2px
 import com.skyd.imomoe.util.Util.gone
 import com.skyd.imomoe.util.Util.visible
-import kotlinx.android.synthetic.main.layout_anime_video_player.view.*
 import java.io.File
 import java.io.Serializable
 
@@ -65,7 +62,8 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
 
-    override fun getLayoutId() = R.layout.layout_anime_video_player
+    override fun getLayoutId() = if (mIfCurrentIsFullscreen)
+        R.layout.layout_anime_video_player_land else R.layout.layout_anime_video_player
 
     override fun init(context: Context?) {
         super.init(context)
@@ -104,10 +102,16 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
                 cancelDismissControlViewTimer()
             }
         }
-//        mScaleIndex = mScaleStrings.indexOfFirst { GSYVideoType.getShowType() == it.second }
+        //重置视频比例
+        GSYVideoType.setShowType(mScaleStrings[mScaleIndex].second)
+        changeTextureViewShowType()
+        if (mTextureView != null) mTextureView.requestLayout()
+
         mMoreScaleTextView?.text = mScaleStrings[mScaleIndex].first
-        //切换清晰度
+
+        //切换视频比例
         mMoreScaleTextView?.setOnClickListener(OnClickListener {
+            startDismissControlViewTimer()      //重新开始ui消失时间计时
             if (!mHadPlay) {
                 return@OnClickListener
             }
@@ -152,8 +156,9 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
             actionBar,
             statusBar
         ) as AnimeVideoPlayer
-        mDownloadButton?.gone()
         player.mScaleIndex = mScaleIndex
+        player.mSpeedTextView?.text = mSpeedTextView?.text
+        player.mFullscreenButton.visibility = mFullscreenButton.visibility
         player.resolveTypeUI()
         return player
     }
@@ -171,12 +176,21 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
         gsyVideoPlayer: GSYVideoPlayer?
     ) {
         super.resolveNormalVideoShow(oldF, vp, gsyVideoPlayer)
-        mDownloadButton?.visible()
         if (gsyVideoPlayer != null) {
             val player = gsyVideoPlayer as AnimeVideoPlayer
             mScaleIndex = player.mScaleIndex
+            mFullscreenButton.visibility = player.mFullscreenButton.visibility
+            mSpeedTextView?.text = player.mSpeedTextView?.text
             resolveTypeUI()
         }
+    }
+
+    fun setShowType(index: Int) {
+        if (!mHadPlay || index !in mScaleStrings.indices) {
+            return
+        }
+        mScaleIndex = index
+        resolveTypeUI()
     }
 
     /**
@@ -215,19 +229,15 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
             when (mCurrentState) {
                 GSYVideoView.CURRENT_STATE_PLAYING -> {
                     imageView.setImageResource(R.drawable.ic_pause_white_24)
-                    imageView.setBackgroundResource(R.drawable.sel_pause_main_color_bg)
                 }
                 GSYVideoView.CURRENT_STATE_ERROR -> {
                     imageView.setImageResource(R.drawable.ic_play_white_24)
-                    imageView.setBackgroundResource(R.drawable.sel_play_main_color_bg)
                 }
                 GSYVideoView.CURRENT_STATE_AUTO_COMPLETE -> {
                     imageView.setImageResource(R.drawable.ic_refresh_white_24)
-                    imageView.setBackgroundResource(0)
                 }
                 else -> {
                     imageView.setImageResource(R.drawable.ic_play_white_24)
-                    imageView.setBackgroundResource(R.drawable.sel_play_main_color_bg)
                 }
             }
 
@@ -289,6 +299,7 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
             )
         }
 
+        @SuppressLint("SetTextI18n")
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             val item = list[position]
 
@@ -300,6 +311,11 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
                     holder.tvTitle.text = item.title
                     holder.itemView.setOnClickListener {
                         if (item.type == "speed") {
+                            if (item.title == "1") {
+                                mSpeedTextView?.text = App.context.getString(R.string.play_speed)
+                            } else {
+                                mSpeedTextView?.text = item.title + "X"
+                            }
                             setSpeed(item.title.toFloat(), true)
                         }
                         mRightContainer?.gone()

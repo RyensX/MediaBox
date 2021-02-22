@@ -19,7 +19,7 @@ class UpdateBean(
     var assets: List<AssetsBean>,
 
     @SerializedName("body")
-    var body: String,
+    var body: String
 
     ) : BaseBean {
 

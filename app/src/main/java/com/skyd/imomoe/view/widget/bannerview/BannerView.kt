@@ -2,6 +2,7 @@ package com.skyd.imomoe.view.widget.bannerview
 
 import android.content.Context
 import android.os.Handler
+import android.os.Looper
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.ViewConfiguration
@@ -15,12 +16,15 @@ import com.skyd.imomoe.view.widget.bannerview.BannerUtil.getPosition
 import com.skyd.imomoe.view.widget.bannerview.BannerUtil.getRealPosition
 import com.skyd.imomoe.view.widget.bannerview.indicator.Indicator
 import com.skyd.imomoe.view.widget.bannerview.indicator.SimpleIndicator
+import java.util.*
 import kotlin.math.abs
+
 
 /**
  * Created by Sky_D on 2021-02-08.
  */
-open class BannerView(context: Context, attrs: AttributeSet?) : RelativeLayout(context, attrs) {
+open class BannerView(mContext: Context, attrs: AttributeSet?) :
+    RelativeLayout(mContext, attrs) {
 
     companion object {
         /**
@@ -30,17 +34,23 @@ open class BannerView(context: Context, attrs: AttributeSet?) : RelativeLayout(c
         const val OFFSCREEN_PAGE_LIMIT_DEFAULT = -1
     }
 
-    private val mViewPager2: ViewPager2 = ViewPager2(context)
+    private val mViewPager2: ViewPager2 = ViewPager2(mContext)
 
     //自动轮播
     private var isPlaying: Boolean = false
     private var mAutoPlayInterval: Long = 0L
-    private val mHandler = Handler()
-    private val mRunnable = Runnable { nextPage() }
+    private var mTimer: Timer = Timer()
+    private val mHandler = Handler(Looper.getMainLooper())
+    private var mAutoPlayTask: TimerTask = object : TimerTask() {
+        override fun run() {
+            mHandler.post {
+                nextPage()
+            }
+        }
+    }
 
     private var mStartX = 0f
     private var mStartY = 0f
-    private val mTouchSlop: Int = ViewConfiguration.get(context).scaledTouchSlop
 
     private var mOffscreenPageLimit = 1
     private var mIndicator: Indicator = SimpleIndicator()
@@ -152,9 +162,7 @@ open class BannerView(context: Context, attrs: AttributeSet?) : RelativeLayout(c
      */
     fun setCurrentItem(index: Int, smoothScroll: Boolean) {
         mViewPager2.setCurrentItem(getRealPosition(index), smoothScroll)
-        if (!smoothScroll) {
-            mIndicator.onPageSelected(getCurrentItem())
-        }
+        mIndicator.onPageSelected(getCurrentItem())
     }
 
     /**
@@ -164,9 +172,7 @@ open class BannerView(context: Context, attrs: AttributeSet?) : RelativeLayout(c
      */
     fun setRealCurrentItem(index: Int, smoothScroll: Boolean) {
         mViewPager2.setCurrentItem(index, smoothScroll)
-        if (!smoothScroll) {
-            mIndicator.onPageSelected(getCurrentItem())
-        }
+        mIndicator.onPageSelected(getCurrentItem())
     }
 
     /**
@@ -196,7 +202,7 @@ open class BannerView(context: Context, attrs: AttributeSet?) : RelativeLayout(c
     fun startPlay(interval: Long) {
         if (!isPlaying && mViewPager2.adapter?.itemCount ?: 0 > 1) {
             mAutoPlayInterval = interval
-            mHandler.postDelayed(mRunnable, mAutoPlayInterval)
+            mTimer.schedule(mAutoPlayTask, mAutoPlayInterval, mAutoPlayInterval)
             isPlaying = true
         }
     }
@@ -206,7 +212,7 @@ open class BannerView(context: Context, attrs: AttributeSet?) : RelativeLayout(c
      */
     fun stopPlay() {
         if (isPlaying) {
-            mHandler.removeCallbacks(mRunnable)
+            mTimer.cancel()
             isPlaying = false
         }
     }
@@ -214,15 +220,14 @@ open class BannerView(context: Context, attrs: AttributeSet?) : RelativeLayout(c
     /*
      * 是否在自动轮播
      */
-    fun isAutoPlay(): Boolean = this.isPlaying
+    fun isAutoPlay(): Boolean = isPlaying
 
     /**
-     * 切换到下一页（会循环）
+     * 切换到下一页（不会循环）
      */
     private fun nextPage() {
         if (mViewPager2.adapter?.itemCount ?: 0 > 1 && isPlaying) {
             setCurrentItem(getCurrentItem() + 1, true)
-            mHandler.postDelayed(mRunnable, mAutoPlayInterval)
         }
     }
 

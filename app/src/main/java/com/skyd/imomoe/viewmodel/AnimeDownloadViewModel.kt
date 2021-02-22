@@ -36,7 +36,7 @@ class AnimeDownloadViewModel : ViewModel() {
                                 Const.ActionUrl.ANIME_ANIME_DOWNLOAD_EPISODE + "/" + file.name,
                                 "",
                                 file.name,
-                                "",
+                                null,
                                 "",
                                 size = String.format(
                                     "%.1fM",
@@ -73,7 +73,7 @@ class AnimeDownloadViewModel : ViewModel() {
                                         + "/" + file.path,
                                 "",
                                 title,
-                                "",
+                                null,
                                 "",
                                 size = String.format(
                                     "%.1fM",

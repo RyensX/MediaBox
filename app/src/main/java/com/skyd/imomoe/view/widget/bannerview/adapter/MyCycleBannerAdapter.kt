@@ -9,8 +9,8 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.bean.BaseBean
 import com.skyd.imomoe.util.AnimeCover6ViewHolder
+import com.skyd.imomoe.util.GlideUtil.loadImage
 import com.skyd.imomoe.util.Util.gone
-import com.skyd.imomoe.util.Util.loadImage
 import com.skyd.imomoe.util.Util.process
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.Util.visible
@@ -45,7 +45,11 @@ class MyCycleBannerAdapter(
         when (holder) {
             is AnimeCover6ViewHolder -> {
                 if (item is AnimeCoverBean) {
-                    holder.ivAnimeCover6Cover.loadImage(item.cover)
+                    holder.ivAnimeCover6Cover.loadImage(
+                        activity,
+                        item.cover?.url ?: "",
+                        referer = item.cover?.referer
+                    )
                     holder.tvAnimeCover6Title.text = item.title
                     holder.tvAnimeCover6Episode.text = item.episodeClickable?.title
                     if (item.describe.isNullOrEmpty()) {
