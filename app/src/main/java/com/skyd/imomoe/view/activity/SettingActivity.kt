@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.util.Util.getAppVersionName
@@ -36,13 +37,13 @@ class SettingActivity : AppCompatActivity() {
         tv_setting_activity_update_info.text =
             getString(R.string.current_version, getAppVersionName())
 
-        appUpdateHelper.getUpdateServer().observe(this, {
+        appUpdateHelper.getUpdateServer().observe(this, Observer {
             tv_setting_activity_update_info_server.text = AppUpdateHelper.serverName[it]
         })
         tv_setting_activity_update_info_server.text =
             AppUpdateHelper.serverName[appUpdateHelper.getUpdateServer().value ?: 0]
 
-        appUpdateHelper.getUpdateStatus().observe(this, {
+        appUpdateHelper.getUpdateStatus().observe(this, Observer {
             when (it) {
                 AppUpdateStatus.UNCHECK -> {
                     tv_setting_activity_update_tip.text = "未检查"
@@ -76,7 +77,7 @@ class SettingActivity : AppCompatActivity() {
                     tv_setting_activity_update_tip.text = "更新失败"
                     if (selfUpdateCheck) "获取更新失败！".showToast()
                 }
-                else -> return@observe
+                else -> return@Observer
             }
         })
 

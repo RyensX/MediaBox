@@ -15,7 +15,7 @@ import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.bean.AnimeShowBean
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.util.*
-import com.skyd.imomoe.util.GlideUtil.loadImage
+import com.skyd.imomoe.util.glide.GlideUtil.loadImage
 import com.skyd.imomoe.util.Util.dp2px
 import com.skyd.imomoe.util.Util.gone
 import com.skyd.imomoe.util.Util.process
@@ -66,6 +66,9 @@ class AnimeShowAdapter(
                             "animeCover3", "animeCover5" -> {
                                 holder.rvGridRecyclerView1.layoutManager =
                                     LinearLayoutManager(fragment.activity)
+                                holder.rvGridRecyclerView1.post {
+                                    holder.rvGridRecyclerView1.setPadding(0, 0, 0, 0)
+                                }
                                 for (i in 0 until itemDecorationCount) {
                                     holder.rvGridRecyclerView1.removeItemDecorationAt(i)
                                 }
@@ -165,11 +168,14 @@ class AnimeShowAdapter(
             when (holder) {
                 is AnimeCover1ViewHolder -> {
                     holder.tvAnimeCover1Title.setTextColor(titleColor)
-                    holder.ivAnimeCover1Cover.loadImage(
-                        activity,
-                        item.cover?.url ?: "",
-                        referer = item.cover?.referer
-                    )
+                    holder.ivAnimeCover1Cover.setTag(R.id.image_view_tag, item.cover?.url)
+                    if (holder.ivAnimeCover1Cover.getTag(R.id.image_view_tag) == item.cover?.url) {
+                        holder.ivAnimeCover1Cover.loadImage(
+                            activity,
+                            item.cover?.url ?: "",
+                            referer = item.cover?.referer
+                        )
+                    }
                     holder.tvAnimeCover1Title.text = item.title
                     if (item.episode.isBlank()) {
                         holder.tvAnimeCover1Episode.gone()
@@ -183,11 +189,14 @@ class AnimeShowAdapter(
                 }
                 is AnimeCover3ViewHolder -> {
                     holder.tvAnimeCover3Title.setTextColor(titleColor)
-                    holder.ivAnimeCover3Cover.loadImage(
-                        activity,
-                        item.cover?.url ?: "",
-                        referer = item.cover?.referer
-                    )
+                    holder.ivAnimeCover3Cover.setTag(R.id.image_view_tag, item.cover?.url)
+                    if (holder.ivAnimeCover3Cover.getTag(R.id.image_view_tag) == item.cover?.url) {
+                        holder.ivAnimeCover3Cover.loadImage(
+                            activity,
+                            item.cover?.url ?: "",
+                            referer = item.cover?.referer
+                        )
+                    }
                     holder.tvAnimeCover3Title.text = item.title
                     if (item.episode.isBlank()) {
                         holder.tvAnimeCover3Episode.gone()
@@ -222,11 +231,14 @@ class AnimeShowAdapter(
                 }
                 is AnimeCover4ViewHolder -> {
                     holder.tvAnimeCover4Title.setTextColor(titleColor)
-                    holder.ivAnimeCover4Cover.loadImage(
-                        activity,
-                        item.cover?.url ?: "",
-                        referer = item.cover?.referer
-                    )
+                    holder.ivAnimeCover4Cover.setTag(R.id.image_view_tag, item.cover?.url)
+                    if (holder.ivAnimeCover4Cover.getTag(R.id.image_view_tag) == item.cover?.url) {
+                        holder.ivAnimeCover4Cover.loadImage(
+                            activity,
+                            item.cover?.url ?: "",
+                            referer = item.cover?.referer
+                        )
+                    }
                     holder.tvAnimeCover4Title.text = item.title
                     holder.itemView.setOnClickListener {
                         process(activity, item.actionUrl)

@@ -8,6 +8,12 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:name=".App"
@@ -20,6 +26,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.樱花动漫"
         android:usesCleartextTraffic="true">
+        <activity android:name=".view.activity.DlnaControlActivity" />
+        <activity android:name=".view.activity.DlnaActivity" />
         <activity
             android:name=".view.activity.SimplePlayActivity"
             android:configChanges="orientation|screenSize" />
@@ -43,6 +51,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service android:name="com.skyd.imomoe.util.dlna.dmc.DLNACastService" />
 
         <receiver
             android:name=".util.update.UpdateNotificationReceiver"

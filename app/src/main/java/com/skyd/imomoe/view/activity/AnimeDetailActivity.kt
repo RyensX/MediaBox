@@ -7,6 +7,7 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -14,7 +15,7 @@ import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import com.skyd.imomoe.R
 import com.skyd.imomoe.util.BlurUtils.blur
-import com.skyd.imomoe.util.GlideUtil.getGlideUrl
+import com.skyd.imomoe.util.glide.GlideUtil.getGlideUrl
 import com.skyd.imomoe.util.Util.getStatusBarHeight
 import com.skyd.imomoe.util.Util.setTransparentStatusBar
 import com.skyd.imomoe.view.adapter.AnimeDetailAdapter
@@ -53,14 +54,14 @@ class AnimeDetailActivity : BaseActivity() {
         srl_anime_detail_activity.setOnRefreshListener { viewModel.getAnimeDetailData(partUrl) }
         srl_anime_detail_activity.setColorSchemeResources(R.color.main_color)
 
-        viewModel.mldAnimeDetailList.observe(this, {
+        viewModel.mldAnimeDetailList.observe(this, Observer {
             srl_anime_detail_activity.isRefreshing = false
 
             //先隐藏
             ObjectAnimator.ofFloat(iv_anime_detail_activity_background, "alpha", 1f, 0f)
                 .setDuration(250).start()
             val glideUrl = getGlideUrl(viewModel.cover.url, viewModel.cover.referer)
-            Glide.with(this).asBitmap().load(glideUrl).into(object : SimpleTarget<Bitmap>() {
+            Glide.with(this).asBitmap().load(glideUrl).dontAnimate().into(object : SimpleTarget<Bitmap>() {
                 override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                     val bitmapDrawable = BitmapDrawable(null, blur(resource))
                     bitmapDrawable.colorFilter = PorterDuffColorFilter(

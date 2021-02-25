@@ -6,6 +6,7 @@ import android.text.TextWatcher
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.skyd.imomoe.App
@@ -63,11 +64,11 @@ class SearchActivity : BaseActivity() {
             et_search_activity_search.setText("")
         }
 
-        viewModel.mldFailed.observe(this, {
+        viewModel.mldFailed.observe(this, Observer {
             layout_circle_progress_text_tip_1.gone()
         })
 
-        viewModel.mldSearchResultList.observe(this, {
+        viewModel.mldSearchResultList.observe(this, Observer {
             layout_circle_progress_text_tip_1.gone()
             //仅在搜索框不为“”时展示搜索结果
             if (et_search_activity_search.text.toString().isNotEmpty()) {
@@ -81,7 +82,7 @@ class SearchActivity : BaseActivity() {
             }
         })
 
-        viewModel.mldSearchHistoryList.observe(this, {
+        viewModel.mldSearchHistoryList.observe(this, Observer {
             if (viewModel.searchResultList.size == 0) {
                 tv_search_activity_tip.text = getString(R.string.search_history)
                 rv_search_activity.adapter = historyAdapter
@@ -89,7 +90,7 @@ class SearchActivity : BaseActivity() {
             }
         })
 
-        viewModel.mldDeleteCompleted.observe(this, {
+        viewModel.mldDeleteCompleted.observe(this, Observer {
             if (viewModel.searchResultList.size == 0) {
                 rv_search_activity.adapter = historyAdapter
                 historyAdapter.notifyItemRemoved(it)

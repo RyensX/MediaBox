@@ -16,7 +16,7 @@ import com.skyd.imomoe.bean.AnimeDetailBean
 import com.skyd.imomoe.bean.AnimeEpisodeDataBean
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.util.*
-import com.skyd.imomoe.util.GlideUtil.loadImage
+import com.skyd.imomoe.util.glide.GlideUtil.loadImage
 import com.skyd.imomoe.util.Util.dp2px
 import com.skyd.imomoe.util.Util.process
 import com.skyd.imomoe.util.Util.showToast
@@ -86,13 +86,16 @@ class AnimeDetailAdapter(
             }
             is AnimeInfo1ViewHolder -> {
                 item.headerInfo?.let {
-                    holder.ivAnimeInfo1Cover.loadImage(
-                        activity,
-                        it.cover.url,
-                        referer = it.cover.referer,
-                        placeholder = 0,
-                        error = 0
-                    )
+                    holder.ivAnimeInfo1Cover.setTag(R.id.image_view_tag, it.cover.url)
+                    if (holder.ivAnimeInfo1Cover.getTag(R.id.image_view_tag) == it.cover.url) {
+                        holder.ivAnimeInfo1Cover.loadImage(
+                            activity,
+                            it.cover.url,
+                            referer = it.cover.referer,
+                            placeholder = 0,
+                            error = 0
+                        )
+                    }
                     holder.tvAnimeInfo1Title.text = it.title
                     holder.tvAnimeInfo1Alias.text = it.alias
                     holder.tvAnimeInfo1Area.text = it.area

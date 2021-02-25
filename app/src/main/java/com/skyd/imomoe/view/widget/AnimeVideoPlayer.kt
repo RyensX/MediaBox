@@ -3,6 +3,7 @@ package com.skyd.imomoe.view.widget
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -24,6 +25,7 @@ import com.skyd.imomoe.bean.BaseBean
 import com.skyd.imomoe.util.Util.dp2px
 import com.skyd.imomoe.util.Util.gone
 import com.skyd.imomoe.util.Util.visible
+import com.skyd.imomoe.view.activity.DlnaActivity
 import java.io.File
 import java.io.Serializable
 
@@ -52,6 +54,9 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
     //倍速按钮
     private var mSpeedTextView: TextView? = null
 
+    //投屏按钮
+    private var mClingImageView: ImageView? = null
+
     //右侧弹出栏
     private var mRightContainer: ViewGroup? = null
     private var mRightContainerRecyclerView: RecyclerView? = null
@@ -71,6 +76,7 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
         mDownloadButton = findViewById(R.id.iv_download)
         mMoreScaleTextView = findViewById(R.id.tv_more_scale)
         mSpeedTextView = findViewById(R.id.tv_speed)
+        mClingImageView = findViewById(R.id.iv_cling)
         mRightContainer = findViewById(R.id.layout_right)
         mRightContainerRecyclerView = findViewById(R.id.rv_right)
 
@@ -118,6 +124,15 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
             mScaleIndex = (mScaleIndex + 1) % mScaleStrings.size
             resolveTypeUI()
         })
+
+        mClingImageView?.setOnClickListener {
+            mContext.startActivity(
+                Intent(mContext, DlnaActivity::class.java)
+                    .putExtra("url", mUrl)
+                    .putExtra("title", mTitle)
+            )
+            mOriginUrl
+        }
     }
 
     override fun hideAllWidget() {
@@ -278,6 +293,8 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
     fun getDownloadButton() = mDownloadButton
 
     fun getBottomContainer() = mBottomContainer
+
+    fun getClingImageView() = mClingImageView
 
     class RightRecyclerViewBean(
         override var type: String,

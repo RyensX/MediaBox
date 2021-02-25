@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -71,7 +72,7 @@ class AnimeShowFragment : BaseFragment() {
         srl_anime_show_fragment.setColorSchemeResources(R.color.main_color)
         srl_anime_show_fragment.setOnRefreshListener(srlOnRefreshListener)
 
-        viewModel.mldGetAnimeShowList.observe(viewLifecycleOwner, {
+        viewModel.mldGetAnimeShowList.observe(viewLifecycleOwner, Observer {
             srl_anime_show_fragment.isRefreshing = false
             if (it) {
                 adapter.notifyDataSetChanged()

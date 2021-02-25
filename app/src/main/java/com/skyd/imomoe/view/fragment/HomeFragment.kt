@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayout
@@ -105,7 +106,7 @@ class HomeFragment : BaseFragment() {
             }
         })
 
-        viewModel.mldGetAllTabList.observe(viewLifecycleOwner, {
+        viewModel.mldGetAllTabList.observe(viewLifecycleOwner, Observer {
             if (viewModel.allTabList.size == 0) getString(R.string.get_home_tab_data_failed).showToast(
                 Toast.LENGTH_LONG
             )

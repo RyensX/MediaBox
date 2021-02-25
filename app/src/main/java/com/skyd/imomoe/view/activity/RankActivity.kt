@@ -5,6 +5,7 @@ import android.graphics.Rect
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -67,7 +68,7 @@ class RankActivity : BaseActivity() {
 
         })
 
-        viewModel.mldRankData.observe(this, {
+        viewModel.mldRankData.observe(this, Observer {
             val selectedTabIndex = this.selectedTabIndex
             srl_rank_activity.isRefreshing = false
 

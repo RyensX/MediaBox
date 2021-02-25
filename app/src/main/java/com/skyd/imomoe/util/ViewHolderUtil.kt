@@ -36,6 +36,7 @@ class ViewHolderUtil {
             "searchHistory1" -> SEARCH_HISTORY_1
             "animeInfo1" -> ANIME_INFO_1
             "horizontalRecyclerView1" -> HORIZONTAL_RECYCLER_VIEW_1
+            "upnpDevice1" -> UPNP_DEVICE_1
             else -> UNKNOWN
         }
 
@@ -120,6 +121,10 @@ class ViewHolderUtil {
                 LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_anime_episode_2, parent, false)
             )
+            UPNP_DEVICE_1 -> UpnpDevice1ViewHolder(
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_dlna_device_1, parent, false)
+            )
             else -> EmptyViewHolder(View(parent.context))
         }
 
@@ -144,6 +149,7 @@ class ViewHolderUtil {
         const val ANIME_INFO_1 = 17
         const val HORIZONTAL_RECYCLER_VIEW_1 = 18
         const val ANIME_EPISODE_2 = 19
+        const val UPNP_DEVICE_1 = 20
         const val MAX = 100   //避免外部其他类型与此处包含的某个类型重复。
     }
 }
@@ -261,4 +267,8 @@ class HorizontalRecyclerView1ViewHolder(view: View) : RecyclerView.ViewHolder(vi
 
 class AnimeEpisode2ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val tvAnimeEpisode2 = view.findViewById<TextView>(R.id.tv_anime_episode_2)
+}
+
+class UpnpDevice1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    val tvUpnpDevice1Title = view.findViewById<TextView>(R.id.tv_upnp_device_1_title)
 }

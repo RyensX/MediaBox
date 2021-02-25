@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -68,11 +69,11 @@ class EverydayAnimeFragment : BaseFragment() {
 
         })
 
-        viewModel.mldHeader.observe(viewLifecycleOwner, {
+        viewModel.mldHeader.observe(viewLifecycleOwner, Observer {
             tv_everyday_anime_fragment_title.text = it.title
         })
 
-        viewModel.mldEverydayAnimeList.observe(viewLifecycleOwner, {
+        viewModel.mldEverydayAnimeList.observe(viewLifecycleOwner, Observer {
             val selectedTabIndex = this.selectedTabIndex
             srl_everyday_anime_fragment.isRefreshing = false
 

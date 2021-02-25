@@ -89,6 +89,17 @@
 #-------------------------RxJava
 -dontwarn java.util.concurrent.Flow*
 
+#-------------------------cling
+-dontwarn org.eclipse.jetty.**
+-dontwarn org.fourthline.cling.**
+-dontwarn org.seamless.**
+-keep class org.fourthline.cling.** {*;}
+-keepattributes Annotation
+
+#for media render state machine
+#-keep class org.seamless.statemachine.** {;}
+#-keepclassmembers class * implements org.fourthline.cling.support.avtransport.impl.state.AbstractState {;}
+
 #-------------------------
 -keep public class * extends android.app.Activity
 -keep public class * extends android.app.AppCompatActivity

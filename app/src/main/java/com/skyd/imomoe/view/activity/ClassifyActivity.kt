@@ -9,6 +9,7 @@ import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -90,7 +91,7 @@ class ClassifyActivity : BaseActivity() {
             }
         }
 
-        viewModel.mldClassifyTabList.observe(this, {
+        viewModel.mldClassifyTabList.observe(this, Observer {
             spinnerAdapter.clear()
             spinnerAdapter.addAll(it)
             spinnerAdapter.notifyDataSetChanged()
@@ -107,7 +108,7 @@ class ClassifyActivity : BaseActivity() {
             }
         })
 
-        viewModel.mldClassifyList.observe(this, {
+        viewModel.mldClassifyList.observe(this, Observer {
             classifyAdapter.notifyDataSetChanged()
             srl_classify_activity.isRefreshing = false
             tv_toolbar_1_title.text =

@@ -2,6 +2,7 @@ package com.skyd.imomoe.view.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.skyd.imomoe.R
@@ -45,7 +46,7 @@ class AnimeDownloadActivity : AppCompatActivity() {
         tv_circle_progress_text_tip_1.text =
             getString(R.string.compute_md5_read_database)
 
-        viewModel.mldAnimeCoverList.observe(this, {
+        viewModel.mldAnimeCoverList.observe(this, Observer {
             if (it) {
                 layout_circle_progress_text_tip_1.gone()
                 if (viewModel.animeCoverList.size == 0) {

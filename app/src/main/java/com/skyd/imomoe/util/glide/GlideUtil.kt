@@ -1,15 +1,20 @@
-package com.skyd.imomoe.util
+package com.skyd.imomoe.util.glide
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import androidx.annotation.DrawableRes
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.model.LazyHeaders
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
+import com.bumptech.glide.request.target.SimpleTarget
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Const
 import java.net.URL
+import java.net.URLEncoder
+import kotlin.random.Random
 
 
 object GlideUtil {
@@ -21,7 +26,10 @@ object GlideUtil {
             .addHeader("Accept", "*/*")
             .addHeader("Accept-Encoding", "gzip, deflate")
             .addHeader("Connection", "keep-alive")
-            .addHeader("User-Agent", Const.Request.USER_AGENT)
+            .addHeader(
+                "User-Agent",
+                Const.Request.USER_AGENT_ARRAY[Random.nextInt(Const.Request.USER_AGENT_ARRAY.size)]
+            )
             .build()
     )
 
@@ -32,13 +40,20 @@ object GlideUtil {
         @DrawableRes placeholder: Int = 0,
         @DrawableRes error: Int = R.drawable.ic_warning_main_color_3_24
     ) {
-        val glideUrl = getGlideUrl(url, referer ?: "http://www.yhdm.io/")
-        Glide.with(context).load(glideUrl)
+        var amendReferer = referer
+        if(amendReferer?.startsWith("http://www.yhdm.io") == false)
+            amendReferer = "http://www.yhdm.io/"
+        if (referer == "http://www.yhdm.io" || referer == "http://www.yhdm.io.") amendReferer += "/"
+        val glideUrl = getGlideUrl(url, amendReferer ?: "http://www.yhdm.io/")
+        //使用了自定义的OkHttp，OkHttpGlideModule，因此是GlideApp
+        GlideApp.with(context).load(glideUrl)
             .placeholder(placeholder)
             .error(error)
-            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+            .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
             .skipMemoryCache(false)
+            .dontAnimate()
 //            .transition(withCrossFade())
             .into(this)
+
     }
 }

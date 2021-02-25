@@ -18,26 +18,20 @@ import android.view.Window
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.request.transition.DrawableCrossFadeFactory
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Const
-import com.skyd.imomoe.util.GlideUtil.getGlideUrl
 import com.skyd.imomoe.view.activity.*
 import com.skyd.imomoe.view.widget.AnimeToast
 import java.io.File
 import java.io.FileInputStream
+import java.io.IOException
+import java.net.HttpURLConnection
+import java.net.URL
 import java.net.URLDecoder
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -49,6 +43,31 @@ object Util {
         val intent = Intent(Intent.ACTION_VIEW, uri)
         intent.flags = FLAG_ACTIVITY_NEW_TASK
         App.context.startActivity(intent)
+    }
+
+    /**
+     * 获取重定向最终的地址
+     * @param path
+     */
+    fun getRedirectUrl(path: String): String {
+        var url = path
+        return try {
+            var conn: HttpURLConnection
+            do {
+                conn = URL(url).openConnection() as HttpURLConnection
+                conn.headerFields
+                conn.instanceFollowRedirects = false
+                conn.connectTimeout = 5000
+                conn.getHeaderField("Location")?.let {
+                    url = conn.getHeaderField("Location")
+                }
+                conn.disconnect()
+            } while (conn.responseCode == 302 && conn.getHeaderField("Location") != null)
+            url
+        } catch (e: IOException) {
+            e.printStackTrace()
+            url
+        }
     }
 
     fun isNewVersion(version: String): Boolean {

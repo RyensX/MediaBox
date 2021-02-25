@@ -1,11 +1,13 @@
 package com.skyd.imomoe.view.activity
 
 import android.app.Dialog
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -66,7 +68,7 @@ class PlayActivity : GSYBaseActivityDetail<AnimeVideoPlayer>() {
         srl_play_activity.setOnRefreshListener { viewModel.getPlayData(partUrl) }
         srl_play_activity.setColorSchemeResources(R.color.main_color)
 
-        viewModel.mldPlayBean.observe(this, {
+        viewModel.mldPlayBean.observe(this, Observer {
             srl_play_activity.isRefreshing = false
 
             tv_play_activity_title.text = viewModel.playBean?.title?.title
@@ -80,7 +82,7 @@ class PlayActivity : GSYBaseActivityDetail<AnimeVideoPlayer>() {
         })
 
         //缓存番剧调用getAnimeEpisodeData()来获取视频url
-        viewModel.mldGetAnimeEpisodeData.observe(this, {
+        viewModel.mldGetAnimeEpisodeData.observe(this, Observer {
             val url = viewModel.episodesList[it].videoUrl
             AnimeDownloadHelper.instance.downloadAnime(
                 this,
@@ -95,7 +97,7 @@ class PlayActivity : GSYBaseActivityDetail<AnimeVideoPlayer>() {
     }
 
     fun startPlay(url: String, title: String) {
-        viewModel.mldAnimeEpisodeDataRefreshed.observe(this, {
+        viewModel.mldAnimeEpisodeDataRefreshed.observe(this, Observer {
             if (it) {
                 videoPlayer.startPlay()
             }
@@ -184,7 +186,7 @@ class PlayActivity : GSYBaseActivityDetail<AnimeVideoPlayer>() {
             action
         )
         recyclerView.adapter = adapter
-        viewModel.mldEpisodesList.observe(this, {
+        viewModel.mldEpisodesList.observe(this, Observer {
             adapter.notifyDataSetChanged()
         })
         return bottomSheetDialog

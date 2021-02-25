@@ -1,16 +1,15 @@
 package com.skyd.imomoe.view.activity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.LicenseBean
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.view.adapter.LicenseAdapter
-import com.skyd.imomoe.view.adapter.SearchAdapter
 import kotlinx.android.synthetic.main.activity_license.*
-import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.android.synthetic.main.layout_toolbar_1.*
+
 
 class LicenseActivity : AppCompatActivity() {
     private val list: MutableList<LicenseBean> = ArrayList()
@@ -59,6 +58,15 @@ class LicenseActivity : AppCompatActivity() {
                 Const.ActionUrl.ANIME_BROWSER,
                 "https://github.com/CarGuo/GSYVideoPlayer",
                 "GSYVideoPlayer",
+                "Apache-2.0 License"
+            )
+        )
+        list.add(
+            LicenseBean(
+                "license1",
+                Const.ActionUrl.ANIME_BROWSER,
+                "https://github.com/square/okhttp",
+                "okhttp",
                 "Apache-2.0 License"
             )
         )
@@ -116,7 +124,33 @@ class LicenseActivity : AppCompatActivity() {
                 "Apache-2.0 License"
             )
         )
-
+        list.add(
+            LicenseBean(
+                "license1",
+                Const.ActionUrl.ANIME_BROWSER,
+                "https://github.com/4thline/cling",
+                "cling",
+                "LGPL License"
+            )
+        )
+        list.add(
+            LicenseBean(
+                "license1",
+                Const.ActionUrl.ANIME_BROWSER,
+                "https://github.com/eclipse/jetty.project",
+                "jetty.project",
+                "EPL-2.0, Apache-2.0 License"
+            )
+        )
+        list.add(
+            LicenseBean(
+                "license1",
+                Const.ActionUrl.ANIME_BROWSER,
+                "https://github.com/NanoHttpd/nanohttpd",
+                "nanohttpd",
+                "BSD-3-Clause License"
+            )
+        )
         adapter.notifyDataSetChanged()
     }
 }

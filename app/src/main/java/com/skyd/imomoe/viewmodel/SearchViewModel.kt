@@ -17,6 +17,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.jsoup.select.Elements
 import java.lang.Exception
+import java.net.URLEncoder
 import kotlin.collections.ArrayList
 
 
@@ -33,7 +34,7 @@ class SearchViewModel : ViewModel() {
     fun getSearchData(keyWord: String) {
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                val url = Api.MAIN_URL + ANIME_SEARCH + keyWord
+                val url = Api.MAIN_URL + ANIME_SEARCH + URLEncoder.encode(keyWord, "utf-8")
                 val document = JsoupUtil.getDocument(url)
                 val lpic: Elements = document.getElementsByClass("area")
                     .select("[class=fire l]").select("[class=lpic]")

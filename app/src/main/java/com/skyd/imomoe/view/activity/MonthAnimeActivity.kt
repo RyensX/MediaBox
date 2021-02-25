@@ -2,6 +2,7 @@ package com.skyd.imomoe.view.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.skyd.imomoe.App
@@ -54,7 +55,7 @@ class MonthAnimeActivity : AppCompatActivity() {
             }
         }
 
-        viewModel.mldMonthAnimeList.observe(this, {
+        viewModel.mldMonthAnimeList.observe(this, Observer {
             srl_month_anime_activity.isRefreshing = false
             adapter.notifyDataSetChanged()
         })

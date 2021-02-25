@@ -1,21 +1,17 @@
 package com.skyd.imomoe.view.activity
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.Observer
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
-import com.skyd.imomoe.config.Const
-import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.util.Util.showToast
-import com.skyd.imomoe.util.downloadanime.AnimeDownloadService
 import com.skyd.imomoe.util.update.AppUpdateHelper
 import com.skyd.imomoe.util.update.AppUpdateStatus
 import com.skyd.imomoe.view.fragment.EverydayAnimeFragment
 import com.skyd.imomoe.view.fragment.HomeFragment
 import kotlinx.android.synthetic.main.activity_main.*
-import java.io.File
 
 
 class MainActivity : BaseActivity() {
@@ -30,7 +26,7 @@ class MainActivity : BaseActivity() {
 
         //检查更新
         val appUpdateHelper = AppUpdateHelper.instance
-        appUpdateHelper.getUpdateStatus().observe(this, {
+        appUpdateHelper.getUpdateStatus().observe(this, Observer {
             when (it) {
                 AppUpdateStatus.UNCHECK -> appUpdateHelper.checkUpdate()
                 AppUpdateStatus.DATED -> appUpdateHelper.noticeUpdate(this)

@@ -9,7 +9,7 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.bean.BaseBean
 import com.skyd.imomoe.util.AnimeCover6ViewHolder
-import com.skyd.imomoe.util.GlideUtil.loadImage
+import com.skyd.imomoe.util.glide.GlideUtil.loadImage
 import com.skyd.imomoe.util.Util.gone
 import com.skyd.imomoe.util.Util.process
 import com.skyd.imomoe.util.Util.showToast

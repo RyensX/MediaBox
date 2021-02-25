@@ -49,5 +49,7 @@
     <string name="gitee">Gitee</string>
     <string name="check_update_server">检查更新服务器</string>
     <string name="play_speed">倍速</string>
-
+    <string name="device_list">设备列表</string>
+    <string name="play_on_tv">投屏</string>
+    <string name="sending_data_please_wait">正在发送数据，请稍候…</string>
 </resources>
