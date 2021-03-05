@@ -14,6 +14,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/white"
         app:cardElevation="6dp">
 
         <LinearLayout
@@ -30,7 +31,7 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_classify_activity_tab"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="end" />
         </LinearLayout>

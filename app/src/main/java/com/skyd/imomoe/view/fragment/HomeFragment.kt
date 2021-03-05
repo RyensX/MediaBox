@@ -41,12 +41,13 @@ class HomeFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        vp2_home_fragment.offscreenPageLimit = offscreenPageLimit
-        vp2_home_fragment.adapter = adapter
+        vp2_home_fragment.setOffscreenPageLimit(offscreenPageLimit)
+        vp2_home_fragment.setAdapter(adapter)
         val tabLayoutMediator = TabLayoutMediator(
-            tl_home_fragment, vp2_home_fragment
+            tl_home_fragment, vp2_home_fragment.getViewPager()
         ) { tab, position ->
-            tab.text = viewModel.allTabList[position].title
+            if (position < viewModel.allTabList.size)
+                tab.text = viewModel.allTabList[position].title
         }
         tabLayoutMediator.attach()
 

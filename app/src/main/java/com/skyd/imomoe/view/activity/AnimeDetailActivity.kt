@@ -7,6 +7,7 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -61,19 +62,29 @@ class AnimeDetailActivity : BaseActivity() {
             ObjectAnimator.ofFloat(iv_anime_detail_activity_background, "alpha", 1f, 0f)
                 .setDuration(250).start()
             val glideUrl = getGlideUrl(viewModel.cover.url, viewModel.cover.referer)
-            Glide.with(this).asBitmap().load(glideUrl).dontAnimate().into(object : SimpleTarget<Bitmap>() {
-                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                    val bitmapDrawable = BitmapDrawable(null, blur(resource))
-                    bitmapDrawable.colorFilter = PorterDuffColorFilter(
-                        Color.LTGRAY, PorterDuff.Mode.MULTIPLY
-                    )
-                    iv_anime_detail_activity_background.setImageDrawable(bitmapDrawable)
+            Glide.with(this).asBitmap().load(glideUrl).dontAnimate()
+                .into(object : SimpleTarget<Bitmap>() {
+                    override fun onResourceReady(
+                        resource: Bitmap,
+                        transition: Transition<in Bitmap>?
+                    ) {
+                        val bitmapDrawable = BitmapDrawable(null, blur(resource))
+                        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+                            bitmapDrawable.colorFilter = PorterDuffColorFilter(
+                                Color.DKGRAY, PorterDuff.Mode.MULTIPLY
+                            )
+                        } else {
+                            bitmapDrawable.colorFilter = PorterDuffColorFilter(
+                                Color.LTGRAY, PorterDuff.Mode.MULTIPLY
+                            )
+                        }
+                        iv_anime_detail_activity_background.setImageDrawable(bitmapDrawable)
 
-                    //加载完背景图再显示
-                    ObjectAnimator.ofFloat(iv_anime_detail_activity_background, "alpha", 0f, 1f)
-                        .setDuration(250).start()
-                }
-            })
+                        //加载完背景图再显示
+                        ObjectAnimator.ofFloat(iv_anime_detail_activity_background, "alpha", 0f, 1f)
+                            .setDuration(250).start()
+                    }
+                })
             tv_toolbar_1_title.text = viewModel.title
             adapter.notifyDataSetChanged()
         })

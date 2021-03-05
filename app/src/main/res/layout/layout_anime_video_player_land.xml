@@ -23,12 +23,14 @@
         android:layout_alignParentBottom="true"
         android:scaleType="fitCenter" />
 
+    <!--高度都加了20dp，让阴影往下延伸一点-->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_bottom"
         android:layout_width="match_parent"
-        android:layout_height="65dp"
+        android:layout_height="85dp"
         android:layout_alignParentBottom="true"
-        android:background="#54000000"
+        android:background="@drawable/shape_gray_transparent_angle_90"
+        android:paddingTop="20dp"
         android:paddingBottom="5dp">
 
         <SeekBar
@@ -49,55 +51,54 @@
 
         <ImageView
             android:id="@+id/start"
-            android:layout_width="wrap_content"
+            android:layout_width="48dp"
             android:layout_height="0dp"
             android:layout_marginStart="10dp"
-            android:padding="5dp"
+            android:paddingHorizontal="5dp"
             android:src="@drawable/ic_play_white_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/progress" />
 
-        <com.skyd.imomoe.view.widget.TypefaceTextView
+        <com.skyd.imomoe.view.widget.textview.TypefaceTextView
             android:id="@+id/current"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:textColor="@color/white"
+            android:textColor="@color/foreground_white"
             android:textSize="13sp"
             app:layout_constraintBottom_toBottomOf="@id/progress"
             app:layout_constraintStart_toEndOf="@id/start"
             app:layout_constraintTop_toBottomOf="parent"
-            app:typeface="fzlLTypeface"
+            app:typeface="bPRTypeface"
             tools:text="00:00" />
 
-        <com.skyd.imomoe.view.widget.TypefaceTextView
+        <com.skyd.imomoe.view.widget.textview.TypefaceTextView
             android:id="@+id/split"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingStart="2dp"
             android:paddingEnd="2dp"
             android:text="/"
-            android:textColor="@color/white"
+            android:textColor="@color/foreground_white"
             android:textSize="13sp"
             app:layout_constraintBottom_toBottomOf="@id/progress"
             app:layout_constraintStart_toEndOf="@id/current"
-            app:layout_constraintTop_toBottomOf="parent"
-            app:typeface="fzlLTypeface" />
+            app:layout_constraintTop_toBottomOf="parent" />
 
-        <com.skyd.imomoe.view.widget.TypefaceTextView
+        <com.skyd.imomoe.view.widget.textview.TypefaceTextView
             android:id="@+id/total"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
+            android:textColor="@color/foreground_white"
             android:textSize="13sp"
             app:layout_constraintBottom_toBottomOf="@id/progress"
             app:layout_constraintStart_toEndOf="@id/split"
             app:layout_constraintTop_toBottomOf="parent"
-            app:typeface="fzlLTypeface"
+            app:typeface="bPRTypeface"
             tools:text="00:00" />
 
-        <com.skyd.imomoe.view.widget.TypefaceTextView
+        <com.skyd.imomoe.view.widget.textview.TypefaceTextView
             android:id="@+id/tv_speed"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
@@ -105,26 +106,26 @@
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
             android:text="@string/play_speed"
-            android:textColor="@color/white"
+            android:textColor="@color/foreground_white"
             android:textSize="13sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/tv_more_scale"
             app:layout_constraintTop_toBottomOf="@id/progress"
-            app:typeface="fzlLTypeface" />
+            app:typeface="bPRTypeface" />
 
-        <com.skyd.imomoe.view.widget.TypefaceTextView
+        <com.skyd.imomoe.view.widget.textview.TypefaceTextView
             android:id="@+id/tv_more_scale"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:gravity="center"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
-            android:textColor="@color/white"
+            android:textColor="@color/foreground_white"
             android:textSize="13sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/fullscreen"
             app:layout_constraintTop_toBottomOf="@id/progress"
-            app:typeface="fzlLTypeface"
+            app:typeface="bPRTypeface"
             tools:text="4:3" />
 
         <ImageView
@@ -179,12 +180,14 @@
         android:src="@drawable/unlock"
         android:visibility="gone" />
 
+    <!--高度都加了20dp，让阴影往下延伸一点-->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_top"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@drawable/video_title_bg"
-        android:gravity="center_vertical">
+        android:layout_height="68dp"
+        android:background="@drawable/shape_gray_transparent_angle_270"
+        android:gravity="center_vertical"
+        android:paddingBottom="20dp">
 
         <ImageView
             android:id="@+id/back"
@@ -198,7 +201,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.skyd.imomoe.view.widget.TypefaceTextView
+        <com.skyd.imomoe.view.widget.textview.TypefaceTextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -208,26 +211,27 @@
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
             android:singleLine="true"
-            android:textColor="@android:color/white"
+            android:textColor="@color/foreground_white"
             android:textSize="18sp"
             app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toEndOf="@id/back"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:typeface="bPRTypeface" />
 
-<!--        <ImageView-->
-<!--            android:id="@+id/iv_cling"-->
-<!--            android:layout_width="48dp"-->
-<!--            android:layout_height="48dp"-->
-<!--            android:paddingStart="0dp"-->
-<!--            android:paddingEnd="10dp"-->
-<!--            android:scaleType="centerInside"-->
-<!--            android:src="@drawable/ic_live_tv_white_24"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent" />-->
+        <!--        <ImageView-->
+        <!--            android:id="@+id/iv_cling"-->
+        <!--            android:layout_width="48dp"-->
+        <!--            android:layout_height="48dp"-->
+        <!--            android:paddingStart="0dp"-->
+        <!--            android:paddingEnd="10dp"-->
+        <!--            android:scaleType="centerInside"-->
+        <!--            android:src="@drawable/ic_live_tv_white_24"-->
+        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="parent" />-->
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <RelativeLayout

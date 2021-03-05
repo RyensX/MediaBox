@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/shape_circle_corner_bottom_dialog_white_12"
     android:orientation="vertical">
 
-    <com.skyd.imomoe.view.widget.TypefaceTextView
+    <com.skyd.imomoe.view.widget.textview.TypefaceTextView
         android:id="@+id/tv_dialog_bottom_sheet_2_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="@string/play_list"
-        android:textColor="@color/main_color_2"
-        android:textSize="17sp" />
+        android:textColor="@color/foreground_main_color_2"
+        android:textSize="17sp"
+        app:typeface="bPRTypeface" />
 
     <com.skyd.imomoe.view.widget.BottomSheetRecyclerView
         android:id="@+id/rv_dialog_bottom_sheet_2"

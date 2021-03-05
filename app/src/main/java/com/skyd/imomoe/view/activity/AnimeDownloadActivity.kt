@@ -44,7 +44,7 @@ class AnimeDownloadActivity : AppCompatActivity() {
 
         layout_anime_download_loading.inflate()
         tv_circle_progress_text_tip_1.text =
-            getString(R.string.compute_md5_read_database)
+            getString(R.string.read_download_data_file)
 
         viewModel.mldAnimeCoverList.observe(this, Observer {
             if (it) {

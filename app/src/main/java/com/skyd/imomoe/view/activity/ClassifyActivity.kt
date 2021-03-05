@@ -1,8 +1,11 @@
 package com.skyd.imomoe.view.activity
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
@@ -82,6 +85,7 @@ class ClassifyActivity : BaseActivity() {
                 parent: AdapterView<*>, view: View,
                 pos: Int, id: Long
             ) {
+                if (view is TextView) view.setTextColor(resources.getColor(R.color.foreground_main_color_2))
                 classifyTabList.clear()
                 classifyTabList.addAll(viewModel.classifyTabList[pos].classifyDataList)
                 classifyTabAdapter.notifyDataSetChanged()

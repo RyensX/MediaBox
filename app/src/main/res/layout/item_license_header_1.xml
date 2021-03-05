@@ -2,26 +2,26 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/gray_3"
+    android:background="@color/main_color"
     android:orientation="horizontal"
     android:paddingHorizontal="16dp"
     android:paddingVertical="10dp">
 
-    <com.skyd.imomoe.view.widget.TypefaceTextView
+    <com.skyd.imomoe.view.widget.textview.TypefaceTextView
         android:id="@+id/tv_license_header_1_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="名称"
-        android:textColor="@color/black"
+        android:text="@string/license_name"
+        android:textColor="@color/foreground_white"
         android:textSize="15sp" />
 
-    <com.skyd.imomoe.view.widget.TypefaceTextView
+    <com.skyd.imomoe.view.widget.textview.TypefaceTextView
         android:id="@+id/tv_license_header_1_license"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="许可证"
-        android:textColor="@color/black"
+        android:text="@string/license"
+        android:textColor="@color/foreground_white"
         android:textSize="15sp" />
 </LinearLayout>

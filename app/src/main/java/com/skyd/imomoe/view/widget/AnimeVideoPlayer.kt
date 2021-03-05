@@ -26,6 +26,7 @@ import com.skyd.imomoe.util.Util.dp2px
 import com.skyd.imomoe.util.Util.gone
 import com.skyd.imomoe.util.Util.visible
 import com.skyd.imomoe.view.activity.DlnaActivity
+import com.skyd.imomoe.view.widget.textview.TypefaceTextView
 import java.io.File
 import java.io.Serializable
 
@@ -323,7 +324,7 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
             when (holder) {
                 is RightRecyclerViewViewHolder -> {
                     if (item.title.toFloat() == speed) {
-                        holder.tvTitle.setTextColor(App.context.resources.getColor(R.color.main_color_2))
+                        holder.tvTitle.setTextColor(resources.getColor(R.color.unchanged_main_color_2))
                     }
                     holder.tvTitle.text = item.title
                     holder.itemView.setOnClickListener {

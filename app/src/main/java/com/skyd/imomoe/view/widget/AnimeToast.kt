@@ -1,14 +1,10 @@
 package com.skyd.imomoe.view.widget
 
 import android.content.Context
-import android.graphics.Point
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
-import android.view.WindowManager
 import android.widget.TextView
 import android.widget.Toast
-import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 
 object AnimeToast {

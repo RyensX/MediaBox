@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.skyd.imomoe.view.widget.TypefaceTextView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.skyd.imomoe.view.widget.textview.TypefaceTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/tv_header_1_title"
     android:layout_width="wrap_content"
@@ -8,6 +9,7 @@
     android:paddingTop="10dp"
     android:paddingEnd="16dp"
     android:paddingBottom="2dp"
-    android:textColor="@color/main_color_2"
+    android:textColor="@color/foreground_main_color_2"
     android:textSize="17sp"
+    app:typeface="bPRTypeface"
     tools:text="动漫电影" />

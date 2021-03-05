@@ -23,6 +23,7 @@ import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.util.MD5.getMD5
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.downloadanime.AnimeDownloadHelper.Companion.downloadHashMap
+import com.skyd.imomoe.util.downloadanime.AnimeDownloadHelper.Companion.save2Xml
 import com.skyd.imomoe.util.downloadanime.AnimeDownloadNotificationReceiver.Companion.DOWNLOAD_ANIME_NOTIFICATION_ID
 import com.skyd.imomoe.util.update.UpdateNotificationReceiver.Companion.UPDATE_NOTIFICATION_ID
 import com.skyd.imomoe.view.activity.MainActivity
@@ -59,9 +60,9 @@ class AnimeDownloadService : Service() {
                         downloadHashMap[key]?.postValue(AnimeDownloadStatus.COMPLETE)
                         GlobalScope.launch(Dispatchers.IO) {
                             getMD5(file)?.let {
-                                getAppDataBase().animeDownloadDao().insertAnimeDownload(
-                                    AnimeDownloadEntity(it, title)
-                                )
+                                val entity = AnimeDownloadEntity(it, title, fileName)
+                                getAppDataBase().animeDownloadDao().insertAnimeDownload(entity)
+                                save2Xml(animeDir, entity)
                             }
                         }
                         "${key}下载完成".showToast()

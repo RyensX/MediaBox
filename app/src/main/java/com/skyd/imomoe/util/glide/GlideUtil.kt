@@ -1,5 +1,6 @@
 package com.skyd.imomoe.util.glide
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
@@ -34,6 +35,16 @@ object GlideUtil {
     )
 
     fun ImageView.loadImage(
+        activity: Activity,
+        url: String,
+        referer: String? = null,
+        @DrawableRes placeholder: Int = 0,
+        @DrawableRes error: Int = R.drawable.ic_warning_main_color_3_24
+    ) {
+        if (!activity.isDestroyed) loadImage(activity as Context, url, referer, placeholder, error)
+    }
+
+    fun ImageView.loadImage(
         context: Context,
         url: String,
         referer: String? = null,
@@ -41,7 +52,7 @@ object GlideUtil {
         @DrawableRes error: Int = R.drawable.ic_warning_main_color_3_24
     ) {
         var amendReferer = referer
-        if(amendReferer?.startsWith("http://www.yhdm.io") == false)
+        if (amendReferer?.startsWith("http://www.yhdm.io") == false)
             amendReferer = "http://www.yhdm.io/"
         if (referer == "http://www.yhdm.io" || referer == "http://www.yhdm.io.") amendReferer += "/"
         val glideUrl = getGlideUrl(url, amendReferer ?: "http://www.yhdm.io/")
@@ -51,8 +62,8 @@ object GlideUtil {
             .error(error)
             .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
             .skipMemoryCache(false)
-            .dontAnimate()
-//            .transition(withCrossFade())
+//            .dontAnimate()
+            .transition(withCrossFade())
             .into(this)
 
     }

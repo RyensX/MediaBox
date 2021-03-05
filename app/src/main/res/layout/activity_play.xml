@@ -40,7 +40,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <com.skyd.imomoe.view.widget.TypefaceTextView
+                        <com.skyd.imomoe.view.widget.textview.TypefaceTextView
                             android:id="@+id/tv_play_activity_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -50,7 +50,7 @@
                             android:layout_marginBottom="12dp"
                             android:ellipsize="end"
                             android:maxLines="2"
-                            android:textColor="@color/main_color_2"
+                            android:textColor="@color/foreground_main_color_2"
                             android:textSize="20sp"
                             android:textStyle="bold"
                             app:layout_constrainedWidth="true"
@@ -58,6 +58,7 @@
                             app:layout_constraintHorizontal_bias="0"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
+                            app:typeface="bPRTypeface"
                             tools:text="轻音少女" />
 
                         <View
@@ -66,7 +67,7 @@
                             android:layout_height="1px"
                             android:layout_marginHorizontal="16dp"
                             android:layout_marginTop="12dp"
-                            android:background="@color/main_color_2"
+                            android:background="@color/foreground_main_color_2"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/tv_play_activity_title" />

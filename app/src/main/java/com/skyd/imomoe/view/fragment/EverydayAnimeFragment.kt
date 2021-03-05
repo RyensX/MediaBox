@@ -16,7 +16,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.util.GridRecyclerView1ViewHolder
-import com.skyd.imomoe.util.Util.dp2px
+import com.skyd.imomoe.util.Util
 import com.skyd.imomoe.util.ViewHolderUtil.Companion.GRID_RECYCLER_VIEW_1
 import com.skyd.imomoe.util.ViewHolderUtil.Companion.getViewHolder
 import com.skyd.imomoe.view.adapter.AnimeShowAdapter
@@ -43,7 +43,7 @@ class EverydayAnimeFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        vp2_everyday_anime_fragment.offscreenPageLimit = offscreenPageLimit
+        vp2_everyday_anime_fragment.setOffscreenPageLimit(offscreenPageLimit)
         srl_everyday_anime_fragment.setColorSchemeResources(R.color.main_color)
         srl_everyday_anime_fragment.setOnRefreshListener {
             //避免刷新间隔太短
@@ -83,10 +83,10 @@ class EverydayAnimeFragment : BaseFragment() {
                     .setDuration(270).start()
                 //添加rv
                 adapter = Vp2Adapter(it1, it)
-                vp2_everyday_anime_fragment.adapter = adapter
+                vp2_everyday_anime_fragment.setAdapter(adapter)
 
                 val tabLayoutMediator = TabLayoutMediator(
-                    tl_everyday_anime_fragment, vp2_everyday_anime_fragment
+                    tl_everyday_anime_fragment, vp2_everyday_anime_fragment.getViewPager()
                 ) { tab, position ->
                     tab.text = viewModel.tabList[position].title
                 }
@@ -112,6 +112,9 @@ class EverydayAnimeFragment : BaseFragment() {
         private var showRankNumber: BooleanArray = BooleanArray(0)
     ) :
         RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+        //必须四个参数都不是-1才生效
+        var childPadding = Rect(-1, -1, -1, -1)
 
         override fun getItemViewType(position: Int): Int = GRID_RECYCLER_VIEW_1
 
@@ -140,10 +143,7 @@ class EverydayAnimeFragment : BaseFragment() {
                     holder.rvGridRecyclerView1.layoutManager = layoutManager
                     holder.rvGridRecyclerView1.isNestedScrollingEnabled = true
                     val adapter = AnimeShowAdapter.GridRecyclerView1Adapter(activity, item)
-                    adapter.padding = Rect(
-                        dp2px(0f), dp2px(6f),
-                        dp2px(0f), dp2px(6f)
-                    )
+                    adapter.padding = childPadding
                     if (showRankNumber.isNotEmpty() && showRankNumber[position])
                         adapter.showRankNumber = true
                     holder.rvGridRecyclerView1.adapter = adapter

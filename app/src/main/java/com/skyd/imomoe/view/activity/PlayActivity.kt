@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -156,7 +157,7 @@ class PlayActivity : GSYBaseActivityDetail<AnimeVideoPlayer>() {
 
 
     fun getSheetDialog(action: String): BottomSheetDialog {
-        val bottomSheetDialog = BottomSheetDialog(this)
+        val bottomSheetDialog = BottomSheetDialog(this, R.style.BottomSheetDialogTheme)
         val contentView = View.inflate(this, R.layout.dialog_bottom_sheet_2, null)
         bottomSheetDialog.setContentView(contentView)
         val tvTitle =
@@ -206,7 +207,7 @@ class PlayActivity : GSYBaseActivityDetail<AnimeVideoPlayer>() {
             when (holder) {
                 is AnimeEpisode2ViewHolder -> {
                     holder.tvAnimeEpisode2.text = item.title
-                    holder.tvAnimeEpisode2.setTextColor(App.context.resources.getColor(R.color.main_color_2))
+                    holder.tvAnimeEpisode2.setTextColor(activity.resources.getColor(R.color.foreground_main_color_2))
                     val layoutParams = holder.itemView.layoutParams
                     if (showType == 0) {
                         layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT

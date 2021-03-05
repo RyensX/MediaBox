@@ -5,7 +5,6 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.view.View
 import android.widget.RelativeLayout
-import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.util.Util.dp2px
 
@@ -28,7 +27,7 @@ class DotIndicator : View, Indicator {
 
     constructor(context: Context) : super(context) {
         mSelectedColor = context.resources.getColor(R.color.main_color_2)
-        mUnSelectedColor = context.resources.getColor(R.color.white)
+        mUnSelectedColor = context.resources.getColor(R.color.foreground_white)
 
         val layoutParams: RelativeLayout.LayoutParams = RelativeLayout.LayoutParams(
             RelativeLayout.LayoutParams.WRAP_CONTENT,

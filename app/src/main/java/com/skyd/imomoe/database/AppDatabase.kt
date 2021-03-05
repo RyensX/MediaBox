@@ -16,7 +16,7 @@ import com.skyd.imomoe.database.entity.AnimeDownloadEntity
 
 @Database(
     entities = [SearchHistoryBean::class,
-        AnimeDownloadEntity::class], version = 1
+        AnimeDownloadEntity::class], version = 2
 )
 @TypeConverters(AnimeDownloadStatusConverter::class)
 abstract class AppDatabase : RoomDatabase() {
@@ -29,7 +29,7 @@ abstract class AppDatabase : RoomDatabase() {
 
         private val migration1To2 = object : Migration(1, 2) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                //用于升级数据库
+                database.execSQL("ALTER TABLE animeDownloadList add fileName TEXT")
             }
         }
 

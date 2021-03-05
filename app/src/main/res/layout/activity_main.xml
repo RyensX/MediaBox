@@ -16,6 +16,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/white"
         app:cardElevation="15dp">
 
         <LinearLayout
@@ -27,8 +28,7 @@
                 android:id="@+id/cl_home_button"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
-                android:layout_weight="1"
-                android:background="?android:selectableItemBackground">
+                android:layout_weight="1">
 
                 <ImageView
                     android:id="@+id/iv_control_bar_home"
@@ -60,8 +60,7 @@
                 android:id="@+id/cl_everyday_anime_button"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
-                android:layout_weight="1"
-                android:background="?android:selectableItemBackground">
+                android:layout_weight="1">
 
                 <ImageView
                     android:id="@+id/iv_control_bar_everyday_anime"

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -9,20 +10,22 @@
     android:paddingEnd="16dp"
     android:paddingBottom="3dp">
 
-    <com.skyd.imomoe.view.widget.TypefaceTextView
+    <com.skyd.imomoe.view.widget.textview.TypefaceTextView
         android:id="@+id/tv_anime_cover_2_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="7dp"
+        app:typeface="bPRTypeface"
         tools:text="中二病也要谈恋爱！" />
 
-    <com.skyd.imomoe.view.widget.TypefaceTextView
+    <com.skyd.imomoe.view.widget.textview.TypefaceTextView
         android:id="@+id/tv_anime_cover_2_episode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:textColor="@color/main_color"
         android:textSize="12sp"
+        app:typeface="bPRTypeface"
         tools:text="全12集" />
 
 </LinearLayout>

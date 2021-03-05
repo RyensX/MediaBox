@@ -2,28 +2,16 @@ package com.skyd.imomoe.view.activity
 
 import android.animation.ObjectAnimator
 import android.graphics.Rect
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.skyd.imomoe.R
-import com.skyd.imomoe.bean.AnimeCoverBean
-import com.skyd.imomoe.util.GridRecyclerView1ViewHolder
-import com.skyd.imomoe.util.Util
-import com.skyd.imomoe.util.ViewHolderUtil
-import com.skyd.imomoe.util.ViewHolderUtil.Companion.GRID_RECYCLER_VIEW_1
-import com.skyd.imomoe.view.adapter.AnimeDetailAdapter
-import com.skyd.imomoe.view.adapter.AnimeShowAdapter
+import com.skyd.imomoe.util.Util.dp2px
 import com.skyd.imomoe.view.fragment.EverydayAnimeFragment
-import com.skyd.imomoe.viewmodel.AnimeDetailViewModel
 import com.skyd.imomoe.viewmodel.RankViewModel
 import kotlinx.android.synthetic.main.activity_rank.*
-import kotlinx.android.synthetic.main.fragment_everyday_anime.*
 import kotlinx.android.synthetic.main.layout_toolbar_1.*
 
 class RankActivity : BaseActivity() {
@@ -42,7 +30,7 @@ class RankActivity : BaseActivity() {
         tv_toolbar_1_title.text = getString(R.string.rank_list)
         iv_toolbar_1_back.setOnClickListener { finish() }
 
-        vp2_rank_activity.offscreenPageLimit = offscreenPageLimit
+        vp2_rank_activity.setOffscreenPageLimit(offscreenPageLimit)
         srl_rank_activity.setColorSchemeResources(R.color.main_color)
         srl_rank_activity.setOnRefreshListener {
             //避免刷新间隔太短
@@ -83,10 +71,10 @@ class RankActivity : BaseActivity() {
             }
             //添加rv
             adapter = EverydayAnimeFragment.Vp2Adapter(this, viewModel.rankList, showRankNumber)
-            vp2_rank_activity.adapter = adapter
+            vp2_rank_activity.setAdapter(adapter)
 
             val tabLayoutMediator = TabLayoutMediator(
-                tl_rank_activity, vp2_rank_activity
+                tl_rank_activity, vp2_rank_activity.getViewPager()
             ) { tab, position ->
                 tab.text = viewModel.tabList[position].title
             }

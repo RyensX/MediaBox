@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.skyd.imomoe.view.widget.TypefaceTextView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.skyd.imomoe.view.widget.textview.TypefaceTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/tv_search_history_header_1_title"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -8,5 +9,6 @@
     android:paddingEnd="16dp"
     android:paddingBottom="2dp"
     android:text="@string/search_history"
-    android:textColor="@color/main_color_2"
-    android:textSize="17sp" />
+    android:textColor="@color/foreground_main_color_2"
+    android:textSize="17sp"
+    app:typeface="bPRTypeface" />

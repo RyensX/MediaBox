@@ -37,9 +37,11 @@ class SimplePlayActivity : BaseActivity() {
 
         GlobalScope.launch(Dispatchers.IO) {
             val title = getAppDataBase().animeDownloadDao()
-                .getAnimeDownload(getMD5(File(url.replaceFirst("file://", ""))) ?: "")?.title
+                .getAnimeDownloadTitleByMd5(getMD5(File(url.replaceFirst("file://", ""))) ?: "")
+                ?: this@SimplePlayActivity.title
             runOnUiThread {
-                avp_simple_play_activity.titleTextView.text = title
+                avp_simple_play_activity.titleTextView?.text = title
+                avp_simple_play_activity.fullWindowPlayer?.titleTextView?.text = title
             }
         }
     }

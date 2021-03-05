@@ -9,17 +9,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.skyd.imomoe.view.widget.TypefaceTextView
+        <com.skyd.imomoe.view.widget.textview.TypefaceTextView
             android:id="@+id/tv_dialog_bottom_sheet_1_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:text="@string/download_anime"
-            android:textColor="@color/main_color_2"
+            android:textColor="@color/foreground_main_color_2"
             android:textSize="17sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:typeface="bPRTypeface" />
 
         <include
             android:id="@+id/fl_dialog_bottom_sheet_1"

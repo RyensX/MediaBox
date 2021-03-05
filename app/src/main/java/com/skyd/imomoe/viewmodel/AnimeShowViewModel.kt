@@ -28,10 +28,14 @@ class AnimeShowViewModel : ViewModel() {
     var animeShowList: MutableList<AnimeShowBean> = ArrayList()
     var mldGetAnimeShowList: MutableLiveData<Boolean> = MutableLiveData()
 
+    private var isRequesting = false
+
     //http://www.yhdm.io版本
     fun getAnimeShowData(partUrl: String) {
         GlobalScope.launch(Dispatchers.IO) {
             try {
+                if (isRequesting) return@launch
+                isRequesting = true
                 val url = Api.MAIN_URL + partUrl
                 val document = JsoupUtil.getDocument(url)
                 animeShowList.clear()
@@ -139,6 +143,8 @@ class AnimeShowViewModel : ViewModel() {
             } catch (e: Exception) {
                 e.printStackTrace()
                 (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread()
+            } finally {
+                isRequesting = false
             }
         }
     }

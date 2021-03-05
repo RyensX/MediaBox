@@ -47,15 +47,6 @@ class LicenseActivity : AppCompatActivity() {
             LicenseBean(
                 "license1",
                 Const.ActionUrl.ANIME_BROWSER,
-                "https://github.com/nex3z/FlowLayout",
-                "FlowLayout",
-                "Apache-2.0 License"
-            )
-        )
-        list.add(
-            LicenseBean(
-                "license1",
-                Const.ActionUrl.ANIME_BROWSER,
                 "https://github.com/CarGuo/GSYVideoPlayer",
                 "GSYVideoPlayer",
                 "Apache-2.0 License"

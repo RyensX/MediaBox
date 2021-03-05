@@ -38,6 +38,24 @@ class AnimeShowAdapter(
 
     override fun getItemViewType(position: Int): Int = getItemViewType(dataList[position])
 
+    override fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder) {
+        super.onViewDetachedFromWindow(holder)
+        when (holder) {
+            is Banner1ViewHolder -> {
+                holder.banner1.stopPlay()
+            }
+        }
+    }
+
+    override fun onViewAttachedToWindow(holder: RecyclerView.ViewHolder) {
+        super.onViewAttachedToWindow(holder)
+        when (holder) {
+            is Banner1ViewHolder -> {
+                holder.banner1.startPlay(5000)
+            }
+        }
+    }
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -131,7 +149,7 @@ class AnimeShowAdapter(
     class GridRecyclerView1Adapter(
         private val activity: Activity,
         private val dataList: List<AnimeCoverBean>,
-        private var titleColor: Int = Color.BLACK
+        private var titleColor: Int = activity.resources.getColor(R.color.foreground_black)
     ) :
         RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         //必须四个参数都不是-1才生效
@@ -283,6 +301,18 @@ class AnimeShowAdapter(
                     holder.tvAnimeCover5Area.text = item.area?.title
                     holder.tvAnimeCover5Date.text = item.date
                     holder.tvAnimeCover5Episode.text = item.episodeClickable?.title
+                    if (holder.tvAnimeCover5Area.visibility == View.GONE &&
+                        holder.tvAnimeCover5Date.visibility == View.GONE
+                    ) {
+                        holder.tvAnimeCover5Title.post {
+                            holder.tvAnimeCover5Title.setPadding(
+                                holder.tvAnimeCover5Title.paddingStart,
+                                dp2px(12f),
+                                holder.tvAnimeCover5Title.paddingEnd,
+                                dp2px(12f)
+                            )
+                        }
+                    }
                     holder.itemView.setOnClickListener {
                         process(activity, item.episodeClickable?.actionUrl)
                     }

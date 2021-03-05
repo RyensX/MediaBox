@@ -33,6 +33,8 @@
 -dontwarn com.shuyu.gsyvideoplayer.utils.**
 -keep class tv.danmaku.ijk.** { *; }
 -dontwarn tv.danmaku.ijk.**
+# 不混淆AnimeVideoPlayer，否则SimplePlayActivity横屏后布局是未横屏的
+-keep class com.skyd.imomoe.view.widget.AnimeVideoPlayer { *; }
 
 -keep public class * extends android.view.View{
     *** get*();

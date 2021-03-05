@@ -1,11 +1,10 @@
-package com.skyd.imomoe.view.widget
+package com.skyd.imomoe.view.widget.textview
 
 import android.content.Context
 import android.graphics.Typeface
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatTextView
 import com.skyd.imomoe.R
-import com.skyd.imomoe.util.TypeFaceUtil
 
 class TypefaceTextView : AppCompatTextView {
     var isFocused: Boolean? = null
@@ -33,7 +32,10 @@ class TypefaceTextView : AppCompatTextView {
         attrs?.let {
             val typedArray = context.obtainStyledAttributes(it, R.styleable.TypefaceTextView, 0, 0)
             val typefaceType = typedArray.getInt(R.styleable.TypefaceTextView_typeface, 0)
-            typeface = getTypeface(typefaceType)
+            typeface =
+                getTypeface(
+                    typefaceType
+                )
             typedArray.recycle()
         }
     }
@@ -47,10 +49,7 @@ class TypefaceTextView : AppCompatTextView {
 
     companion object {
         fun getTypeface(typefaceType: Int?) = when (typefaceType) {
-            TypeFaceUtil.FZLL_TYPEFACE -> TypeFaceUtil.getFzlLTypeface()
-            TypeFaceUtil.FZDB1_TYPEFACE -> TypeFaceUtil.getFzdb1Typeface()
-            TypeFaceUtil.DIN_TYPEFACE -> TypeFaceUtil.getDinTypeface()
-            TypeFaceUtil.LOBSTER_TYPEFACE -> TypeFaceUtil.getLobsterTypeface()
+            TypefaceUtil.BPR_TYPEFACE -> TypefaceUtil.getBPRTypeface()
             else -> Typeface.DEFAULT
         }
     }

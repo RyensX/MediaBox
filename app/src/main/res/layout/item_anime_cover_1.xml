@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="7dp"
-    android:background="?android:selectableItemBackground"
     android:paddingBottom="3dp">
 
     <androidx.cardview.widget.CardView
@@ -23,24 +22,31 @@
             android:layout_height="110dp"
             android:scaleType="fitXY"
             tools:src="@drawable/ic_launcher_background" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
+            android:background="@color/transparent" />
     </androidx.cardview.widget.CardView>
 
-    <com.skyd.imomoe.view.widget.TypefaceTextView
+    <com.skyd.imomoe.view.widget.textview.TypefaceTextView
         android:id="@+id/tv_anime_cover_1_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:ellipsize="end"
         android:maxLines="3"
+        android:textColor="@color/foreground_black"
         android:textSize="13sp"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="@id/cv_anime_cover_1_cover"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="@id/cv_anime_cover_1_cover"
         app:layout_constraintTop_toBottomOf="@id/cv_anime_cover_1_cover"
+        app:typeface="bPRTypeface"
         tools:text="中二病也要谈恋爱！" />
 
-    <com.skyd.imomoe.view.widget.TypefaceTextView
+    <com.skyd.imomoe.view.widget.textview.TypefaceTextView
         android:id="@+id/tv_anime_cover_1_episode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -52,6 +58,7 @@
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="@id/cv_anime_cover_1_cover"
         app:layout_constraintTop_toBottomOf="@id/tv_anime_cover_1_title"
+        app:typeface="bPRTypeface"
         tools:text="全12集" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

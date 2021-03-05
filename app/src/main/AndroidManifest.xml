@@ -30,7 +30,7 @@
         <activity android:name=".view.activity.DlnaActivity" />
         <activity
             android:name=".view.activity.SimplePlayActivity"
-            android:configChanges="orientation|screenSize" />
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode" />
         <activity android:name=".view.activity.AnimeDownloadActivity" />
         <activity android:name=".view.activity.LicenseActivity" />
         <activity android:name=".view.activity.AboutActivity" />

@@ -1,5 +1,7 @@
 package com.skyd.imomoe.viewmodel
 
+import android.graphics.Bitmap
+import android.util.LruCache
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.skyd.imomoe.App

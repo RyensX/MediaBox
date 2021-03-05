@@ -19,7 +19,6 @@ import com.skyd.imomoe.util.dlna.dmc.control.ICastInterface
 import kotlinx.android.synthetic.main.activity_dlna_control.*
 import kotlinx.android.synthetic.main.layout_circle_progress_text_tip_1.*
 import org.fourthline.cling.model.meta.Device
-import org.fourthline.cling.support.model.MediaInfo
 import kotlin.collections.HashMap
 
 class DlnaControlActivity : AppCompatActivity() {

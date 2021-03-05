@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:selectableItemBackground">
-    <com.skyd.imomoe.view.widget.TypefaceTextView
+
+    <com.skyd.imomoe.view.widget.textview.TypefaceTextView
         android:id="@+id/tv_upnp_device_1_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -14,13 +15,14 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:singleLine="true"
-        android:textColor="@color/main_color_2"
+        android:textColor="@color/foreground_main_color_2"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:typeface="bPRTypeface"
         tools:text="客厅电视" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -23,13 +23,15 @@
         android:layout_alignParentBottom="true"
         android:scaleType="fitCenter" />
 
+    <!--高度都加了20dp，让阴影往下延伸一点-->
     <LinearLayout
         android:id="@+id/layout_bottom"
         android:layout_width="match_parent"
-        android:layout_height="35dp"
+        android:layout_height="55dp"
         android:layout_alignParentBottom="true"
-        android:background="#99000000"
+        android:background="@drawable/shape_gray_transparent_angle_90"
         android:orientation="horizontal"
+        android:paddingTop="20dp"
         android:visibility="invisible">
 
         <SeekBar
@@ -47,36 +49,35 @@
             android:progressDrawable="@drawable/video_seek_progress"
             android:thumb="@drawable/video_seek_thumb" />
 
-        <com.skyd.imomoe.view.widget.TypefaceTextView
+        <com.skyd.imomoe.view.widget.textview.TypefaceTextView
             android:id="@+id/current"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:textColor="@color/white"
+            android:textColor="@color/foreground_white"
             android:textSize="12sp"
-            app:typeface="fzlLTypeface"
+            app:typeface="bPRTypeface"
             tools:text="00:00" />
 
-        <com.skyd.imomoe.view.widget.TypefaceTextView
+        <com.skyd.imomoe.view.widget.textview.TypefaceTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:text="/"
-            android:textColor="@color/white"
-            android:textSize="12sp"
-            app:typeface="fzlLTypeface" />
+            android:textColor="@color/foreground_white"
+            android:textSize="12sp" />
 
-        <com.skyd.imomoe.view.widget.TypefaceTextView
+        <com.skyd.imomoe.view.widget.textview.TypefaceTextView
             android:id="@+id/total"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:textColor="@color/white"
+            android:textColor="@color/foreground_white"
             android:textSize="12sp"
-            app:typeface="fzlLTypeface"
+            app:typeface="bPRTypeface"
             tools:text="00:00" />
 
-        <com.skyd.imomoe.view.widget.TypefaceTextView
+        <com.skyd.imomoe.view.widget.textview.TypefaceTextView
             android:id="@+id/tv_speed"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -85,9 +86,9 @@
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
             android:text="@string/play_speed"
-            android:textColor="@color/white"
+            android:textColor="@color/foreground_white"
             android:textSize="13sp"
-            app:typeface="fzlLTypeface" />
+            app:typeface="bPRTypeface" />
 
         <ImageView
             android:id="@+id/fullscreen"
@@ -146,12 +147,14 @@
         android:src="@drawable/unlock"
         android:visibility="gone" />
 
+    <!--高度都加了20dp，让阴影往下延伸一点-->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_top"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@drawable/video_title_bg"
-        android:gravity="center_vertical">
+        android:layout_height="68dp"
+        android:background="@drawable/shape_gray_transparent_angle_270"
+        android:gravity="center_vertical"
+        android:paddingBottom="20dp">
 
         <ImageView
             android:id="@+id/back"
@@ -165,7 +168,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.skyd.imomoe.view.widget.TypefaceTextView
+        <com.skyd.imomoe.view.widget.textview.TypefaceTextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -175,14 +178,15 @@
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
             android:singleLine="true"
-            android:textColor="@android:color/white"
+            android:textColor="@color/foreground_white"
             android:textSize="18sp"
             app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/iv_download"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toEndOf="@id/back"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:typeface="bPRTypeface" />
 
         <ImageView
             android:id="@+id/iv_cling"

@@ -7,6 +7,7 @@ import androidx.lifecycle.Observer
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.util.Util.showToast
+import com.skyd.imomoe.util.clickScale
 import com.skyd.imomoe.util.update.AppUpdateHelper
 import com.skyd.imomoe.util.update.AppUpdateStatus
 import com.skyd.imomoe.view.fragment.EverydayAnimeFragment
@@ -47,10 +48,12 @@ class MainActivity : BaseActivity() {
         }
 
         cl_home_button.setOnClickListener {
+            it.clickScale(0.8f)
             setTabSelection(0)
         }
 
         cl_everyday_anime_button.setOnClickListener {
+            it.clickScale(0.8f)
             setTabSelection(1)
         }
 

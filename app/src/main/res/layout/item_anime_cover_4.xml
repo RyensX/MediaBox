@@ -21,9 +21,14 @@
             android:layout_height="55dp"
             android:scaleType="fitXY"
             tools:src="@drawable/ic_launcher_background" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="@color/transparent" />
     </androidx.cardview.widget.CardView>
 
-    <com.skyd.imomoe.view.widget.TypefaceTextView
+    <com.skyd.imomoe.view.widget.textview.TypefaceTextView
         android:id="@+id/tv_anime_cover_4_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -31,6 +36,7 @@
         android:ellipsize="end"
         android:maxLines="3"
         android:textSize="13sp"
+        app:typeface="bPRTypeface"
         tools:text="中二病也要谈恋爱！" />
 
 </LinearLayout>

@@ -28,7 +28,9 @@
         android:id="@+id/srl_anime_detail_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/ll_anime_detail_activity_toolbar">
+        android:layout_below="@id/ll_anime_detail_activity_toolbar"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_anime_detail_activity_info"

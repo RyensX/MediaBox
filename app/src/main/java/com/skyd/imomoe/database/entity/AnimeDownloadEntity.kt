@@ -11,8 +11,9 @@ class AnimeDownloadEntity(
     @ColumnInfo(name = "md5")
     var md5: String,        //md5
     @ColumnInfo(name = "title")
-    var title: String
-//    var status: AnimeDownloadStatus
+    var title: String,
+    @ColumnInfo(name = "fileName")
+    var fileName: String?
 ) : Serializable {
     override fun equals(other: Any?): Boolean {
         return this.md5 == (other as AnimeDownloadEntity).md5

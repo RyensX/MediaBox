@@ -7,11 +7,15 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.Observer
+import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.util.Util.getAppVersionName
 import com.skyd.imomoe.util.Util.showToast
+import com.skyd.imomoe.util.editor
+import com.skyd.imomoe.util.sharedPreferences
 import com.skyd.imomoe.util.update.AppUpdateHelper
 import com.skyd.imomoe.util.update.AppUpdateStatus
 import kotlinx.android.synthetic.main.activity_setting.*
@@ -20,6 +24,7 @@ import kotlinx.android.synthetic.main.layout_toolbar_1.*
 
 class SettingActivity : AppCompatActivity() {
     private var selfUpdateCheck = false
+    private var changeNightMode = true
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -124,5 +129,41 @@ class SettingActivity : AppCompatActivity() {
                 )
             )
         }
+        switch_setting_activity_download_night_mode.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (!changeNightMode) {
+                changeNightMode = true
+                return@setOnCheckedChangeListener
+            }
+            if (isChecked) {
+                //夜间
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                tv_setting_activity_download_night_mode_info.text = "夜间"
+            } else {
+                //日间
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                tv_setting_activity_download_night_mode_info.text = "白天"
+            }
+            App.context.sharedPreferences("nightMode").editor {
+                putBoolean("isNightMode", isChecked)
+            }
+        }
+
+        when (AppCompatDelegate.getDefaultNightMode()) {
+            AppCompatDelegate.MODE_NIGHT_YES -> {
+                tv_setting_activity_download_night_mode_info.text = "夜间"
+                if (!switch_setting_activity_download_night_mode.isChecked) {
+                    changeNightMode = false
+                    switch_setting_activity_download_night_mode.isChecked = true
+                }
+            }
+            else -> {
+                tv_setting_activity_download_night_mode_info.text = "白天"
+                if (switch_setting_activity_download_night_mode.isChecked) {
+                    changeNightMode = false
+                    switch_setting_activity_download_night_mode.isChecked = false
+                }
+            }
+        }
+
     }
 }

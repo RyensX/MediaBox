@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -49,7 +50,9 @@ class AnimeDetailAdapter(
             is Header1ViewHolder -> {
                 holder.tvHeader1Title.textSize = 15f
                 holder.tvHeader1Title.text = item.title
-                holder.tvHeader1Title.setTextColor(Color.WHITE)
+                holder.tvHeader1Title.setTextColor(
+                    activity.resources.getColor(R.color.foreground_white)
+                )
             }
             is GridRecyclerView1ViewHolder -> {
                 item.animeCoverList?.let {
@@ -65,7 +68,10 @@ class AnimeDetailAdapter(
                     }
                     holder.rvGridRecyclerView1.layoutManager = layoutManager
                     holder.rvGridRecyclerView1.adapter =
-                        AnimeShowAdapter.GridRecyclerView1Adapter(activity, it, Color.WHITE)
+                        AnimeShowAdapter.GridRecyclerView1Adapter(
+                            activity, it,
+                            activity.resources.getColor(R.color.foreground_white)
+                        )
                 }
             }
             is HorizontalRecyclerView1ViewHolder -> {
@@ -82,7 +88,9 @@ class AnimeDetailAdapter(
             is AnimeDescribe1ViewHolder -> {
                 holder.tvAnimeDescribe1.text = item.describe
                 holder.tvAnimeDescribe1.setOnClickListener { }
-                holder.tvAnimeDescribe1.setTextColor(Color.WHITE)
+                holder.tvAnimeDescribe1.setTextColor(
+                    activity.resources.getColor(R.color.foreground_white)
+                )
             }
             is AnimeInfo1ViewHolder -> {
                 item.headerInfo?.let {
@@ -153,7 +161,7 @@ class AnimeDetailAdapter(
 
     @SuppressLint("ClickableViewAccessibility")
     private fun showEpisodeSheetDialog(dataList: List<AnimeEpisodeDataBean>): BottomSheetDialog {
-        val bottomSheetDialog = BottomSheetDialog(activity)
+        val bottomSheetDialog = BottomSheetDialog(activity, R.style.BottomSheetDialogTheme)
         val contentView = View.inflate(activity, R.layout.dialog_bottom_sheet_2, null)
         bottomSheetDialog.setContentView(contentView)
         val recyclerView =
@@ -206,13 +214,14 @@ class AnimeDetailAdapter(
                             layoutParams.setMargins(0, dp2px(5f), dp2px(10f), dp2px(5f))
                         }
                         holder.itemView.layoutParams = layoutParams
+                        holder.tvAnimeEpisode2.setTextColor(activity.resources.getColor(R.color.foreground_white))
                     } else {
                         holder.itemView.setBackgroundResource(R.drawable.shape_circle_corner_edge_main_color_2_ripper_5)
                         val layoutParams = holder.itemView.layoutParams
                         layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
                         holder.itemView.setPadding(0, dp2px(10f), 0, dp2px(10f))
                         holder.itemView.layoutParams = layoutParams
-                        holder.tvAnimeEpisode2.setTextColor(App.context.resources.getColor(R.color.main_color_2))
+                        holder.tvAnimeEpisode2.setTextColor(activity.resources.getColor(R.color.foreground_main_color_2))
                     }
                     holder.itemView.setOnClickListener {
                         process(activity, item.actionUrl, item.actionUrl)

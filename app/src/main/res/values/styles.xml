@@ -1,20 +1,17 @@
 <resources>
 
-    <style name="AlertDialogCustom" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="android:background">#FFFFFF</item>
-        <item name="android:textColor">@color/main_color_2</item>
-        <item name="buttonBarPositiveButtonStyle">@style/positiveBtnStyle</item>
-        <item name="buttonBarNegativeButtonStyle">@style/negativeBtnStyle</item>
-    </style>
+    <style name="BottomSheetDialogTheme" parent="Theme.Design.BottomSheetDialog">
+        <!--        dialog是否有边框-->
+        <item name="android:windowFrame">@null</item>
+        <!--        dialog是否悬浮在activity上,设置为false，相当于布局在activity中，例如软键盘，可以顶起false的dialog-->
+        <item name="android:windowIsFloating">true</item>
 
-    <!--确定按钮样式-->
-    <style name="positiveBtnStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
-        <item name="android:textColor">@color/main_color_2</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <!--        去除dialog最底部的灰色背景-->
+        <item name="colorBackgroundFloating">@color/foreground_transparent</item>
+        <!--        去除dialog默认白色背景-->
+        <item name="android:background">@color/foreground_transparent</item>
+        <!--        是否加遮罩（对话框出现时，背景变暗。为true则充许变暗）-->
+        <item name="android:backgroundDimEnabled">true</item>
     </style>
-
-    <!--取消按钮样式-->
-    <style name="negativeBtnStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
-        <item name="android:textColor">@color/main_color_2</item>
-    </style>
-
 </resources>

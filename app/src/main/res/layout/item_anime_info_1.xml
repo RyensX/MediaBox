@@ -6,99 +6,123 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingBottom="5dp"
-    tools:background="@color/black">
+    tools:background="@color/foreground_black">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_anime_info_1_cover"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:background="@color/transparent"
+        android:background="@color/foreground_transparent"
         app:cardCornerRadius="5dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/tv_anime_info_1_title">
 
-        <ImageView
-            android:id="@+id/iv_anime_info_1_cover"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:src="@drawable/ic_launcher_background" />
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/iv_anime_info_1_cover"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/ic_launcher_background" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/transparent"
+                app:layout_constraintBottom_toBottomOf="@id/iv_anime_info_1_cover"
+                app:layout_constraintEnd_toEndOf="@id/iv_anime_info_1_cover"
+                app:layout_constraintStart_toStartOf="@id/iv_anime_info_1_cover"
+                app:layout_constraintTop_toTopOf="@id/iv_anime_info_1_cover" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.cardview.widget.CardView>
 
-    <com.skyd.imomoe.view.widget.TypefaceTextView
+    <com.skyd.imomoe.view.widget.textview.TypefaceTextView
         android:id="@+id/tv_anime_info_1_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="16dp"
-        android:textColor="@color/white"
+        android:textColor="@color/foreground_white"
         android:textSize="17sp"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toEndOf="@id/cv_anime_info_1_cover"
         app:layout_constraintTop_toTopOf="parent"
+        app:typeface="bPRTypeface"
         tools:text="轻音少女" />
 
-    <com.skyd.imomoe.view.widget.TypefaceTextView
+    <com.skyd.imomoe.view.widget.textview.TypefaceTextView
         android:id="@+id/tv_anime_info_1_alias"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="16dp"
-        android:textColor="@color/white"
+        android:textColor="@color/foreground_white"
         android:textSize="12sp"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="@id/tv_anime_info_1_title"
         app:layout_constraintTop_toBottomOf="@id/tv_anime_info_1_title"
+        app:typeface="bPRTypeface"
         tools:text="@string/anime_detail_alias" />
 
-    <com.skyd.imomoe.view.widget.TypefaceTextView
+    <com.skyd.imomoe.view.widget.textview.TypefaceTextView
         android:id="@+id/tv_anime_info_1_area"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:textColor="@color/white"
+        android:textColor="@color/foreground_white"
         android:textSize="12sp"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="@id/tv_anime_info_1_title"
         app:layout_constraintTop_toBottomOf="@id/tv_anime_info_1_alias"
+        app:typeface="bPRTypeface"
         tools:text="日本" />
 
-    <com.skyd.imomoe.view.widget.TypefaceTextView
+    <com.skyd.imomoe.view.widget.textview.TypefaceTextView
         android:id="@+id/tv_anime_info_1_year"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="16dp"
-        android:textColor="@color/white"
+        android:textColor="@color/foreground_white"
         android:textSize="12sp"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toEndOf="@id/tv_anime_info_1_area"
         app:layout_constraintTop_toBottomOf="@id/tv_anime_info_1_alias"
+        app:typeface="bPRTypeface"
         tools:text="2009" />
 
-    <com.skyd.imomoe.view.widget.TypefaceTextView
+    <com.skyd.imomoe.view.widget.textview.TypefaceTextView
         android:id="@+id/tv_anime_info_1_index"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="16dp"
-        android:textColor="@color/white"
+        android:textColor="@color/foreground_white"
         android:textSize="12sp"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="@id/tv_anime_info_1_title"
         app:layout_constraintTop_toBottomOf="@id/tv_anime_info_1_area"
+        app:typeface="bPRTypeface"
         tools:text="@string/anime_detail_index" />
 
     <LinearLayout
@@ -114,20 +138,21 @@
         app:layout_constraintStart_toStartOf="@id/tv_anime_info_1_title"
         app:layout_constraintTop_toBottomOf="@id/tv_anime_info_1_index">
 
-        <com.skyd.imomoe.view.widget.TypefaceTextView
+        <com.skyd.imomoe.view.widget.textview.TypefaceTextView
             android:id="@+id/tv_anime_info_1_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/anime_detail_type"
-            android:textColor="@color/white"
-            android:textSize="12sp" />
+            android:textColor="@color/foreground_white"
+            android:textSize="12sp"
+            app:typeface="bPRTypeface" />
 
-        <com.nex3z.flowlayout.FlowLayout
+        <com.skyd.imomoe.view.widget.FlowLayout
             android:id="@+id/fl_anime_info_1_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:flChildSpacing="4dp"
-            app:flRowSpacing="5dp" />
+            app:childSpacing="5dp"
+            app:rowSpacing="5dp" />
     </LinearLayout>
 
     <LinearLayout
@@ -143,38 +168,40 @@
         app:layout_constraintStart_toStartOf="@id/tv_anime_info_1_title"
         app:layout_constraintTop_toBottomOf="@id/ll_anime_info_1_type">
 
-        <com.skyd.imomoe.view.widget.TypefaceTextView
+        <com.skyd.imomoe.view.widget.textview.TypefaceTextView
             android:id="@+id/tv_anime_info_1_tag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/anime_detail_tag"
-            android:textColor="@color/white"
-            android:textSize="12sp" />
+            android:textColor="@color/foreground_white"
+            android:textSize="12sp"
+            app:typeface="bPRTypeface" />
 
-        <com.nex3z.flowlayout.FlowLayout
+        <com.skyd.imomoe.view.widget.FlowLayout
             android:id="@+id/fl_anime_info_1_tag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:flChildSpacing="4dp"
-            app:flRowSpacing="5dp"
+            app:childSpacing="5dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="@id/tv_anime_info_1_title"
-            app:layout_constraintTop_toBottomOf="@id/tv_anime_info_1_tag" />
+            app:layout_constraintTop_toBottomOf="@id/tv_anime_info_1_tag"
+            app:rowSpacing="5dp" />
     </LinearLayout>
 
-    <com.skyd.imomoe.view.widget.TypefaceTextView
+    <com.skyd.imomoe.view.widget.textview.TypefaceTextView
         android:id="@+id/tv_anime_info_1_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="16dp"
-        android:textColor="@color/white"
+        android:textColor="@color/foreground_white"
         android:textSize="12sp"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="@id/tv_anime_info_1_title"
         app:layout_constraintTop_toBottomOf="@id/ll_anime_info_1_tag"
+        app:typeface="bPRTypeface"
         tools:text="14集全" />
 </androidx.constraintlayout.widget.ConstraintLayout>

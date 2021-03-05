@@ -6,11 +6,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.nex3z.flowlayout.FlowLayout
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.BaseBean
 import com.skyd.imomoe.view.widget.bannerview.BannerView
-import com.skyd.imomoe.view.widget.TypefaceTextView
+import com.skyd.imomoe.view.widget.textview.TypefaceTextView
+import com.skyd.imomoe.view.widget.FlowLayout
 
 class ViewHolderUtil {
     companion object {

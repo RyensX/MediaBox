@@ -44,7 +44,7 @@
     <string name="anime_download_path">视频缓存目录</string>
     <string name="offline_anime">离线缓存</string>
     <string name="no_download_video">没有缓存视频</string>
-    <string name="compute_md5_read_database">正在计算MD5码并读取数据库…</string>
+    <string name="read_download_data_file">正在读取缓存文件…</string>
     <string name="play_list">播放列表</string>
     <string name="gitee">Gitee</string>
     <string name="check_update_server">检查更新服务器</string>
@@ -52,4 +52,8 @@
     <string name="device_list">设备列表</string>
     <string name="play_on_tv">投屏</string>
     <string name="sending_data_please_wait">正在发送数据，请稍候…</string>
+    <string name="night_mode">夜间模式</string>
+    <string name="license">许可证</string>
+    <string name="license_name">名称</string>
+    <string name="dlna_step">投屏步骤</string>
 </resources>

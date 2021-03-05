@@ -41,13 +41,19 @@ open class BannerView(mContext: Context, attrs: AttributeSet?) :
     private var mAutoPlayInterval: Long = 0L
     private var mTimer: Timer = Timer()
     private val mHandler = Handler(Looper.getMainLooper())
-    private var mAutoPlayTask: TimerTask = object : TimerTask() {
+    private val mAutoPlayRunnable: Runnable = object : Runnable {
         override fun run() {
-            mHandler.post {
-                nextPage()
-            }
+            nextPage()
+            mHandler.postDelayed(this, mAutoPlayInterval)
         }
     }
+//    private var mAutoPlayTask: TimerTask = object : TimerTask() {
+//        override fun run() {
+//            mHandler.post {
+//                nextPage()
+//            }
+//        }
+//    }
 
     private var mStartX = 0f
     private var mStartY = 0f
@@ -202,7 +208,8 @@ open class BannerView(mContext: Context, attrs: AttributeSet?) :
     fun startPlay(interval: Long) {
         if (!isPlaying && mViewPager2.adapter?.itemCount ?: 0 > 1) {
             mAutoPlayInterval = interval
-            mTimer.schedule(mAutoPlayTask, mAutoPlayInterval, mAutoPlayInterval)
+            mHandler.postDelayed(mAutoPlayRunnable, mAutoPlayInterval)
+//            mTimer.schedule(mAutoPlayTask, mAutoPlayInterval, mAutoPlayInterval)
             isPlaying = true
         }
     }
@@ -212,8 +219,9 @@ open class BannerView(mContext: Context, attrs: AttributeSet?) :
      */
     fun stopPlay() {
         if (isPlaying) {
-            mTimer.cancel()
+//            mTimer.cancel()
             isPlaying = false
+            mHandler.removeCallbacks(mAutoPlayRunnable)
         }
     }
 

@@ -29,7 +29,7 @@
             android:paddingEnd="40dp"
             android:paddingBottom="5dp"
             android:singleLine="true"
-            android:textColor="@color/main_color_2"
+            android:textColor="@color/foreground_main_color_2"
             android:textColorHint="@color/main_color"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -51,7 +51,7 @@
             app:layout_constraintTop_toTopOf="@id/et_search_activity_search"
             tools:visibility="visible" />
 
-        <com.skyd.imomoe.view.widget.TypefaceTextView
+        <com.skyd.imomoe.view.widget.textview.TypefaceTextView
             android:id="@+id/tv_search_activity_cancel"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
@@ -60,12 +60,13 @@
             android:paddingStart="15dp"
             android:paddingEnd="16dp"
             android:text="@string/search_activity_cancel"
-            android:textColor="@color/white"
+            android:textColor="@color/foreground_white"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/et_search_activity_search"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:typeface="bPRTypeface" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.cardview.widget.CardView
@@ -73,9 +74,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/cl_search_activity_header"
+        app:cardBackgroundColor="@color/white"
         app:cardElevation="6dp">
 
-        <com.skyd.imomoe.view.widget.TypefaceTextView
+        <com.skyd.imomoe.view.widget.textview.TypefaceTextView
             android:id="@+id/tv_search_activity_tip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -85,8 +87,9 @@
             android:layout_marginBottom="9dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textColor="@color/main_color_2"
+            android:textColor="@color/foreground_main_color_2"
             android:textSize="15sp"
+            app:typeface="bPRTypeface"
             tools:text="@string/search_activity_tip" />
     </androidx.cardview.widget.CardView>
 
