@@ -26,7 +26,9 @@
 
 ![search](https://github.com/SkyD666/Imomoe/raw/master/screenshot/search.jpg) ![play](https://github.com/SkyD666/Imomoe/raw/master/screenshot/play.jpg) 
 
-![classify](https://github.com/SkyD666/Imomoe/raw/master/screenshot/classify.jpg) ![rank](https://github.com/SkyD666/Imomoe/raw/master/screenshot/rank.jpg) 
+![classify](https://github.com/SkyD666/Imomoe/raw/master/screenshot/classify.jpg) ![rank](https://github.com/SkyD666/Imomoe/raw/master/screenshot/rank.jpg)
+
+![favorite](https://github.com/SkyD666/Imomoe/raw/master/screenshot/favorite.jpg) ![history](https://github.com/SkyD666/Imomoe/raw/master/screenshot/history.jpg) 
 
 ![player](https://github.com/SkyD666/Imomoe/raw/master/screenshot/player.jpg) 
 

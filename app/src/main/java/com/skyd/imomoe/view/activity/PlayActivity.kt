@@ -173,17 +173,6 @@ class PlayActivity : GSYBaseActivityDetail<AnimeVideoPlayer>() {
         viewModel.getAnimeCover(detailPartUrl)
     }
 
-    override fun attachBaseContext(newBase: Context?) {
-        super.attachBaseContext(object : ContextWrapper(newBase) {
-            override fun getSystemService(name: String): Any {
-                // 解决AudioManager的内存泄漏
-                return if (Context.AUDIO_SERVICE == name) {
-                    applicationContext.getSystemService(name)
-                } else super.getSystemService(name)
-            }
-        })
-    }
-
     fun startPlay(url: String, title: String) {
         viewModel.mldAnimeEpisodeDataRefreshed.observe(this, Observer {
             if (it) {
