@@ -5,6 +5,14 @@ import java.io.File
 import kotlin.random.Random
 
 interface Const {
+    interface Common {
+        companion object {
+            const val GITHUB_URL = "https://github.com/SkyD666/Imomoe"
+            const val GITHUB_NEW_ISSUE_URL = "https://github.com/SkyD666/Imomoe/issues/new"
+            const val GITEE_URL = "https://gitee.com/SkyD666/Imomoe"
+        }
+    }
+
     interface ActionUrl {
         companion object {
             const val ANIME_DETAIL = "/show/"
@@ -17,6 +25,7 @@ interface Const {
                 "/app/animeDownloadEpisode"      //此常量为自己定义，转到下载的每一集
             const val ANIME_ANIME_DOWNLOAD_PLAY = "/app/animeDownloadPlay"      //此常量为自己定义，播放这一集
             const val ANIME_ANIME_DOWNLOAD_M3U8 = "/app/animeDownloadM3U8"      //此常量为自己定义，m3u8格式
+            const val ANIME_LAUNCH_ACTIVITY = "/app/animeLaunchActivity"      //此常量为自己定义，启动Activity
         }
     }
 

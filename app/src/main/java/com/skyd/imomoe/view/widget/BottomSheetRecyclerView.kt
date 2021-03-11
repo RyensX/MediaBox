@@ -36,8 +36,8 @@ class BottomSheetRecyclerView : RecyclerView {
             if (!canScrollVertically(-1)) {
                 parent.requestDisallowInterceptTouchEvent(false)
             } else {
-                // 此处不能加判断abs(mStartY-ev.X)>0，加上容易下划时把dialog拉消失，
-                // 滑动很快时distance->0.0，因此不能判断abs(mStartY-ev.X)，很奇怪
+                // 此处不能加判断abs(mStartY-ev.Y)>0，加上容易下划时把dialog拉消失，
+                // 滑动很快时distance->0.0，因此不能判断abs(mStartY-ev.Y)，很奇怪
                 val endX = ev.x
                 val endY = ev.y
                 val distanceX = abs(endX - mStartX)

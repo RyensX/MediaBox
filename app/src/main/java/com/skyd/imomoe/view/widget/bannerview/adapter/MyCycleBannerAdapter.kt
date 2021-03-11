@@ -3,6 +3,7 @@ package com.skyd.imomoe.view.widget.bannerview.adapter
 import android.app.Activity
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
@@ -45,6 +46,12 @@ class MyCycleBannerAdapter(
         when (holder) {
             is AnimeCover6ViewHolder -> {
                 if (item is AnimeCoverBean) {
+                    holder.tvAnimeCover6Night.setBackgroundColor(
+                        ContextCompat.getColor(
+                            activity,
+                            R.color.transparent
+                        )
+                    )
                     holder.ivAnimeCover6Cover.loadImage(
                         activity,
                         item.cover?.url ?: "",

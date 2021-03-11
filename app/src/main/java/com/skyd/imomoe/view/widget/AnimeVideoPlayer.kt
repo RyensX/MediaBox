@@ -58,6 +58,12 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
     //投屏按钮
     private var mClingImageView: ImageView? = null
 
+    //分享按钮
+    private var mShareImageView: ImageView? = null
+
+    //下一集按钮
+    private var mNextImageView: ImageView? = null
+
     //右侧弹出栏
     private var mRightContainer: ViewGroup? = null
     private var mRightContainerRecyclerView: RecyclerView? = null
@@ -80,6 +86,8 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
         mClingImageView = findViewById(R.id.iv_cling)
         mRightContainer = findViewById(R.id.layout_right)
         mRightContainerRecyclerView = findViewById(R.id.rv_right)
+        mShareImageView = findViewById(R.id.iv_share)
+        mNextImageView = findViewById(R.id.iv_next)
 
         mRightContainer?.gone()
         mSpeedTextView?.setOnClickListener {
@@ -291,11 +299,15 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
         mBottomContainer.visibility = View.GONE
     }
 
+    fun getShareButton() = mShareImageView
+
     fun getDownloadButton() = mDownloadButton
 
     fun getBottomContainer() = mBottomContainer
 
     fun getClingImageView() = mClingImageView
+
+    fun getNextImageView() = mNextImageView
 
     class RightRecyclerViewBean(
         override var type: String,

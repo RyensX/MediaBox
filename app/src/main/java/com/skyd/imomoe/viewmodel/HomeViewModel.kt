@@ -21,12 +21,8 @@ import java.util.*
 class HomeViewModel : ViewModel() {
     val childViewPool = SerializableRecycledViewPool()
     val viewPool = SerializableRecycledViewPool()
-    var lTabList: MutableList<TabBean> = ArrayList()
-    var mldGetLTabList: MutableLiveData<List<TabBean>> = MutableLiveData()
-    var rTabList: MutableList<TabBean> = ArrayList()
-    var mldGetRTabList: MutableLiveData<List<TabBean>> = MutableLiveData()
     var allTabList: MutableList<TabBean> = ArrayList()
-    var mldGetAllTabList: MutableLiveData<List<TabBean>> = MutableLiveData()
+    var mldGetAllTabList: MutableLiveData<Boolean> = MutableLiveData()
 
     fun getAllTabData() {
         GlobalScope.launch(Dispatchers.IO) {
@@ -44,50 +40,10 @@ class HomeViewModel : ViewModel() {
                     val url = dme_r[i].select("a").attr("href")
                     allTabList.add(TabBean("", url, Api.MAIN_URL + url, dme_r[i].text()))
                 }
-                mldGetAllTabList.postValue(allTabList)
+                mldGetAllTabList.postValue(true)
             } catch (e: Exception) {
-                e.printStackTrace()
-                (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread(
-                    Toast.LENGTH_LONG
-                )
-            }
-        }
-    }
-
-    fun getLTabData() {
-        GlobalScope.launch(Dispatchers.IO) {
-            try {
-                val document = JsoupUtil.getDocument(Api.MAIN_URL)
-                val menu: Elements = document.getElementsByClass("menu")
-                val dmx_l: Elements = menu.select("[class=dmx l]").select("li")
-                lTabList.clear()
-                for (i in dmx_l.indices) {
-                    val url = dmx_l[i].select("a").attr("href")
-                    lTabList.add(TabBean("", url, Api.MAIN_URL + url, dmx_l[i].text()))
-                }
-                mldGetLTabList.postValue(lTabList)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread(
-                    Toast.LENGTH_LONG
-                )
-            }
-        }
-    }
-
-    fun getRTabData() {
-        GlobalScope.launch(Dispatchers.IO) {
-            try {
-                val document = JsoupUtil.getDocument(Api.MAIN_URL)
-                val menu: Elements = document.getElementsByClass("menu")
-                val dme_r: Elements = menu.select("[class=dme r]").select("li")
-                rTabList.clear()
-                for (i in dme_r.indices) {
-                    val url = dme_r[i].select("a").attr("href")
-                    rTabList.add(TabBean("", url, Api.MAIN_URL + url, dme_r[i].text()))
-                }
-                mldGetRTabList.postValue(rTabList)
-            } catch (e: Exception) {
+                allTabList.clear()
+                mldGetAllTabList.postValue(false)
                 e.printStackTrace()
                 (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread(
                     Toast.LENGTH_LONG

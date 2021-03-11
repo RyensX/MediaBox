@@ -1,13 +1,13 @@
 package com.skyd.imomoe.view.activity
 
 import android.app.Dialog
-import android.content.Intent
+import android.content.Context
+import android.content.ContextWrapper
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -20,6 +20,10 @@ import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeEpisodeDataBean
+import com.skyd.imomoe.bean.FavoriteAnimeBean
+import com.skyd.imomoe.config.Api
+import com.skyd.imomoe.database.getAppDataBase
+import com.skyd.imomoe.databinding.ActivityPlayBinding
 import com.skyd.imomoe.util.AnimeEpisode2ViewHolder
 import com.skyd.imomoe.util.Util.dp2px
 import com.skyd.imomoe.util.Util.setColorStatusBar
@@ -28,21 +32,34 @@ import com.skyd.imomoe.util.downloadanime.AnimeDownloadHelper
 import com.skyd.imomoe.view.adapter.AnimeDetailAdapter
 import com.skyd.imomoe.view.adapter.AnimeEpisodeItemDecoration
 import com.skyd.imomoe.view.adapter.PlayAdapter
+import com.skyd.imomoe.view.fragment.ShareDialogFragment
 import com.skyd.imomoe.view.widget.AnimeVideoPlayer
 import com.skyd.imomoe.viewmodel.PlayViewModel
-import kotlinx.android.synthetic.main.activity_play.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class PlayActivity : GSYBaseActivityDetail<AnimeVideoPlayer>() {
+    private lateinit var mBinding: ActivityPlayBinding
+    private var isFavorite: Boolean = false
+    private var favoriteBeanDataReady: Int = 0
+        set(value) {
+            field = value
+            if (value == 2) mBinding.ivPlayActivityFavorite.isEnabled = true
+        }
     private lateinit var videoPlayer: AnimeVideoPlayer
     private var partUrl: String = ""
+    private var detailPartUrl: String = ""
     private lateinit var viewModel: PlayViewModel
     private lateinit var adapter: PlayAdapter
     private var isFirstTime = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_play)
+        mBinding = ActivityPlayBinding.inflate(layoutInflater)
+        setContentView(mBinding.root)
 
         setColorStatusBar(window, Color.BLACK)
 
@@ -60,21 +77,79 @@ class PlayActivity : GSYBaseActivityDetail<AnimeVideoPlayer>() {
         videoPlayer.backButton?.setOnClickListener { onBackPressed() }
 
         partUrl = intent.getStringExtra("partUrl") ?: ""
+        detailPartUrl = intent.getStringExtra("detailPartUrl") ?: ""
 
-        val layoutManager = LinearLayoutManager(this)
-        rv_play_activity.layoutManager = layoutManager
-        rv_play_activity.setHasFixedSize(true)
-        rv_play_activity.adapter = adapter
+        //分享按钮
+        videoPlayer.getShareButton()?.setOnClickListener {
+            ShareDialogFragment().setShareContent(Api.MAIN_URL + viewModel.partUrl)
+                .show(supportFragmentManager, "share_dialog")
+        }
 
-        srl_play_activity.setOnRefreshListener { viewModel.getPlayData(partUrl) }
-        srl_play_activity.setColorSchemeResources(R.color.main_color)
+        mBinding.run {
+            rvPlayActivity.layoutManager = LinearLayoutManager(this@PlayActivity)
+            rvPlayActivity.setHasFixedSize(true)
+            rvPlayActivity.adapter = adapter
+
+            srlPlayActivity.setOnRefreshListener { viewModel.getPlayData(partUrl) }
+            srlPlayActivity.setColorSchemeResources(R.color.main_color)
+        }
+
+        GlobalScope.launch(Dispatchers.IO) {
+            val favoriteAnime = getAppDataBase().favoriteAnimeDao().getFavoriteAnime(detailPartUrl)
+            isFavorite = if (favoriteAnime == null) {
+                mBinding.ivPlayActivityFavorite.setImageResource(R.drawable.ic_star_border_main_color_2_24)
+                false
+            } else {
+                mBinding.ivPlayActivityFavorite.setImageResource(R.drawable.ic_star_main_color_2_24)
+                true
+            }
+            mBinding.ivPlayActivityFavorite.setOnClickListener {
+                GlobalScope.launch(Dispatchers.IO) {
+                    if (isFavorite) {
+                        getAppDataBase().favoriteAnimeDao().deleteFavoriteAnime(detailPartUrl)
+                        withContext(Dispatchers.Main) {
+                            isFavorite = false
+                            mBinding.ivPlayActivityFavorite.setImageResource(R.drawable.ic_star_border_main_color_2_24)
+                            "取消收藏成功".showToast()
+                        }
+                    } else {
+                        getAppDataBase().favoriteAnimeDao().insertFavoriteAnime(
+                            FavoriteAnimeBean(
+                                "animeCover8", "",
+                                detailPartUrl,
+                                viewModel.playBean?.title?.title ?: "",
+                                System.currentTimeMillis(),
+                                viewModel.animeCover,
+                                lastEpisodeUrl = viewModel.partUrl,
+                                lastEpisode = viewModel.animeEpisodeDataBean.title
+                            )
+                        )
+                        withContext(Dispatchers.Main) {
+                            isFavorite = true
+                            mBinding.ivPlayActivityFavorite.setImageResource(R.drawable.ic_star_main_color_2_24)
+                            "收藏成功".showToast()
+                        }
+                    }
+                }
+            }
+        }
+        mBinding.ivPlayActivityFavorite.isEnabled = false
+
+        viewModel.mldAnimeCover.observe(this, Observer {
+            if (it) {
+                favoriteBeanDataReady++
+            }
+        })
 
         viewModel.mldPlayBean.observe(this, Observer {
-            srl_play_activity.isRefreshing = false
+            mBinding.srlPlayActivity.isRefreshing = false
 
-            tv_play_activity_title.text = viewModel.playBean?.title?.title
+            val title = viewModel.playBean?.title?.title
+            mBinding.tvPlayActivityTitle.text = title
 
             adapter.notifyDataSetChanged()
+
+            favoriteBeanDataReady++
 
             if (isFirstTime) {
                 videoPlayer.startPlay()
@@ -93,8 +168,20 @@ class PlayActivity : GSYBaseActivityDetail<AnimeVideoPlayer>() {
             )
         })
 
-        srl_play_activity.isRefreshing = true
+        mBinding.srlPlayActivity.isRefreshing = true
         viewModel.getPlayData(partUrl)
+        viewModel.getAnimeCover(detailPartUrl)
+    }
+
+    override fun attachBaseContext(newBase: Context?) {
+        super.attachBaseContext(object : ContextWrapper(newBase) {
+            override fun getSystemService(name: String): Any {
+                // 解决AudioManager的内存泄漏
+                return if (Context.AUDIO_SERVICE == name) {
+                    applicationContext.getSystemService(name)
+                } else super.getSystemService(name)
+            }
+        })
     }
 
     fun startPlay(url: String, title: String) {
@@ -113,11 +200,27 @@ class PlayActivity : GSYBaseActivityDetail<AnimeVideoPlayer>() {
     private fun GSYVideoPlayer.startPlay(url: String = "", title: String = "") {
         //设置播放URL
         if (url.isBlank()) {
+            if (!isDestroyed) {
+                viewModel.updateFavoriteData(
+                    detailPartUrl,
+                    viewModel.partUrl,
+                    viewModel.animeEpisodeDataBean.title,
+                    System.currentTimeMillis()
+                )
+                viewModel.insertHistoryData(detailPartUrl)
+            }
             setUp(
                 viewModel.animeEpisodeDataBean.videoUrl,
                 false, viewModel.animeEpisodeDataBean.title
             )
         } else {
+            if (!isDestroyed) {
+                viewModel.updateFavoriteData(
+                    detailPartUrl, viewModel.partUrl, title,
+                    System.currentTimeMillis()
+                )
+                viewModel.insertHistoryData(detailPartUrl)
+            }
             setUp(url, false, title)
         }
         //开始播放

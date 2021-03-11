@@ -1,6 +1,8 @@
 package com.skyd.imomoe.util
 
 import android.app.Activity
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
@@ -10,31 +12,32 @@ import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
-import android.os.Looper
-import android.text.Html
-import android.view.LayoutInflater
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.view.activity.*
 import com.skyd.imomoe.view.widget.AnimeToast
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
+import java.math.BigDecimal
 import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLDecoder
+import java.util.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
+import kotlin.collections.ArrayList
 
 
 object Util {
@@ -70,6 +73,43 @@ object Util {
         }
     }
 
+
+    /**
+     * 计算距今时间
+     * @param timeStamp 过去的时间戳
+     */
+    fun time2Now(timeStamp: Long): String {
+        val nowTimeStamp = System.currentTimeMillis()
+        var result = "非法输入"
+        val dateDiff = nowTimeStamp - timeStamp
+        if (dateDiff >= 0) {
+            val bef = Calendar.getInstance().apply { time = Date(timeStamp) }
+            val aft = Calendar.getInstance().apply { time = Date(nowTimeStamp) }
+            val second = dateDiff / 1000.0
+            val minute = second / 60.0
+            val hour = minute / 60.0
+            val day = hour / 24.0
+            val month =
+                aft[Calendar.MONTH] - bef[Calendar.MONTH] + (aft[Calendar.YEAR] - bef[Calendar.YEAR]) * 12
+            val year = month / 12.0
+            result = when {
+                year.toInt() > 0 -> "${year.toInt()}年前"
+                month > 0 -> "${month}个月前"
+                day.toInt() > 0 -> "${day.toInt()}天前"
+                hour.toInt() > 0 -> "${hour.toInt()}小时前"
+                minute.toInt() > 0 -> "${minute.toInt()}分钟前"
+                else -> "刚刚"
+            }
+        }
+        return result
+    }
+
+    fun copyText2Clipboard(context: Context, text: String) {
+        val systemService: ClipboardManager =
+            context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        systemService.setPrimaryClip(ClipData.newPlainText("text", text))
+    }
+
     fun isNewVersion(version: String): Boolean {
         val currentVersion = getAppVersionName()
         return version.replace(".", "")
@@ -77,28 +117,6 @@ object Util {
             .replace("V", "")
             .replace(" ", "").toInt() >
                 currentVersion.replace(".", "").toInt()
-    }
-
-    fun getDialogBuilder(
-        context: Context,
-        title: String,
-        describe: String,
-        themeResId: Int = 0
-    ): AlertDialog.Builder {
-        val builder: AlertDialog.Builder = AlertDialog.Builder(context, themeResId)
-        builder.setTitle(Html.fromHtml(title))
-        builder.setMessage(Html.fromHtml(describe))
-        return builder
-    }
-
-    fun getProgressBarCircleDialog(context: Context, text: String): AlertDialog {
-        val builder: AlertDialog.Builder = AlertDialog.Builder(context)
-        val inflater: LayoutInflater = LayoutInflater.from(context)
-        val view: View = inflater.inflate(R.layout.dialog_progress_bar, null)
-        val tv: TextView = view.findViewById(R.id.tv_progress_bar_dialog)
-        tv.text = text
-        builder.setView(view)
-        return builder.create()
     }
 
     fun getAppVersionCode(): Long {
@@ -144,7 +162,6 @@ object Util {
             null
         }
     }
-
 
     fun EditText.showKeyboard() {
         isFocusable = true
@@ -237,16 +254,10 @@ object Util {
         AnimeToast.makeText(App.context, this, duration).show()
     }
 
-    fun CharSequence.showToastOnThread(skin: Boolean, duration: Int = Toast.LENGTH_SHORT) {
-        Looper.prepare()
-        AnimeToast.makeText(App.context, this, duration).show()
-        Looper.loop()
-    }
-
     fun CharSequence.showToastOnThread(duration: Int = Toast.LENGTH_SHORT) {
-        Looper.prepare()
-        Toast.makeText(App.context, this, duration).show()
-        Looper.loop()
+        GlobalScope.launch(Dispatchers.Main) {
+            this@showToastOnThread.showToast(duration)
+        }
     }
 
     fun getScreenHeight(includeVirtualKey: Boolean): Int {
@@ -293,6 +304,38 @@ object Util {
         return size
     }
 
+    /**
+     * 获取规整的文件大小
+     * @param size 文件大小
+     * @param newScale 精确到小数点几位
+     */
+    fun getFormatSize(size: Double, newScale: Int = 2): String {
+        val kiloByte = size / 1024
+        if (kiloByte < 1) {
+            return size.toString() + "B"
+        }
+        val megaByte = kiloByte / 1024
+        if (megaByte < 1) {
+            val result1 = BigDecimal(kiloByte.toString())
+            return result1.setScale(newScale, BigDecimal.ROUND_HALF_UP).toPlainString()
+                .toString() + "K"
+        }
+        val gigaByte = megaByte / 1024
+        if (gigaByte < 1) {
+            val result2 = BigDecimal(megaByte.toString())
+            return result2.setScale(newScale, BigDecimal.ROUND_HALF_UP).toPlainString()
+                .toString() + "M"
+        }
+        val teraBytes = gigaByte / 1024
+        if (teraBytes < 1) {
+            val result3 = BigDecimal(gigaByte.toString())
+            return result3.setScale(newScale, BigDecimal.ROUND_HALF_UP).toPlainString()
+                .toString() + "G"
+        }
+        val result4 = BigDecimal(teraBytes)
+        return result4.setScale(newScale, BigDecimal.ROUND_HALF_UP).toPlainString().toString() + "T"
+    }
+
     fun Drawable.toBitmap(): Bitmap {
         // 取 drawable 的长宽
         val w: Int = this.intrinsicWidth
@@ -334,9 +377,17 @@ object Util {
             decodeUrl.startsWith(Const.ActionUrl.ANIME_PLAY) -> {     //番剧每一集点击进入
                 val playCode = actionUrl.getSubString("\\/v\\/", "\\.")[0].split("-")
                 if (playCode.size >= 2) {
+                    var detailPartUrl = actionUrl.substringAfter(Const.ActionUrl.ANIME_DETAIL, "")
+                    if (detailPartUrl.isBlank()) App.context.getString(R.string.error_play_episode)
+                        .showToast()
+                    detailPartUrl = Const.ActionUrl.ANIME_DETAIL + detailPartUrl
                     activity.startActivity(
                         Intent(activity, PlayActivity::class.java)
-                            .putExtra("partUrl", actionUrl)
+                            .putExtra(
+                                "partUrl",
+                                actionUrl.substringBefore(Const.ActionUrl.ANIME_DETAIL)
+                            )
+                            .putExtra("detailPartUrl", detailPartUrl)
                     )
                 } else {
                     App.context.getString(R.string.error_play_episode).showToast()
@@ -385,6 +436,13 @@ object Util {
             }
             decodeUrl.startsWith(Const.ActionUrl.ANIME_ANIME_DOWNLOAD_M3U8) -> { //播放缓存的每一集M3U8
                 "暂不支持m3u8格式 :(".showToast(Toast.LENGTH_LONG)
+            }
+            decodeUrl.startsWith(Const.ActionUrl.ANIME_LAUNCH_ACTIVITY) -> { // 启动Activity
+                val cls = Class.forName(
+                    actionUrl.replaceFirst(Const.ActionUrl.ANIME_LAUNCH_ACTIVITY, "")
+                        .split("/").last()
+                )
+                activity.startActivity(Intent(activity, cls))
             }
             else -> {
                 "${toastTitle},${App.context.resources.getString(R.string.currently_not_supported)}".showToast()

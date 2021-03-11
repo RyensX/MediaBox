@@ -1,28 +1,28 @@
 package com.skyd.imomoe.view.activity
 
+import android.content.Context
+import android.content.ContextWrapper
 import android.os.Bundle
 import com.shuyu.gsyvideoplayer.GSYVideoManager
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils
-import com.skyd.imomoe.R
 import com.skyd.imomoe.database.getAppDataBase
+import com.skyd.imomoe.databinding.ActivitySimplePlayBinding
 import com.skyd.imomoe.util.MD5.getMD5
 import com.skyd.imomoe.util.Util.gone
 import com.skyd.imomoe.util.Util.setFullScreen
-import kotlinx.android.synthetic.main.activity_simple_play.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.File
 
 
-class SimplePlayActivity : BaseActivity() {
+class SimplePlayActivity : BaseActivity<ActivitySimplePlayBinding>() {
     private var url = ""
     private var title = ""
     private lateinit var orientationUtils: OrientationUtils
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_simple_play)
 
         setFullScreen(window)
 
@@ -31,25 +31,34 @@ class SimplePlayActivity : BaseActivity() {
 
         init()
 
-        avp_simple_play_activity.startPlayLogic()
-        orientationUtils.resolveByClick()
-        avp_simple_play_activity.startWindowFullscreen(this, actionBar = true, statusBar = true)
+        mBinding.run {
+            avpSimplePlayActivity.startPlayLogic()
+            orientationUtils.resolveByClick()
+            avpSimplePlayActivity.startWindowFullscreen(
+                this@SimplePlayActivity,
+                actionBar = true,
+                statusBar = true
+            )
 
-        GlobalScope.launch(Dispatchers.IO) {
-            val title = getAppDataBase().animeDownloadDao()
-                .getAnimeDownloadTitleByMd5(getMD5(File(url.replaceFirst("file://", ""))) ?: "")
-                ?: this@SimplePlayActivity.title
-            runOnUiThread {
-                avp_simple_play_activity.titleTextView?.text = title
-                avp_simple_play_activity.fullWindowPlayer?.titleTextView?.text = title
+            GlobalScope.launch(Dispatchers.IO) {
+                val title = getAppDataBase().animeDownloadDao()
+                    .getAnimeDownloadTitleByMd5(getMD5(File(url.replaceFirst("file://", ""))) ?: "")
+                    ?: this@SimplePlayActivity.title
+                runOnUiThread {
+                    avpSimplePlayActivity.titleTextView?.text = title
+                    avpSimplePlayActivity.fullWindowPlayer?.titleTextView?.text = title
+                }
             }
         }
     }
 
+    override fun getBinding(): ActivitySimplePlayBinding =
+        ActivitySimplePlayBinding.inflate(layoutInflater)
+
     private fun init() {
-        avp_simple_play_activity.run {
+        mBinding.avpSimplePlayActivity.run {
             //设置旋转
-            orientationUtils = OrientationUtils(this@SimplePlayActivity, avp_simple_play_activity)
+            orientationUtils = OrientationUtils(this@SimplePlayActivity, this)
             getDownloadButton()?.gone()
             fullscreenButton.gone()
             //是否开启自动旋转
@@ -69,19 +78,32 @@ class SimplePlayActivity : BaseActivity() {
 
     override fun onPause() {
         super.onPause()
-        avp_simple_play_activity.onVideoPause()
+        orientationUtils.setIsPause(true)
+        mBinding.avpSimplePlayActivity.onVideoPause()
     }
 
     override fun onResume() {
         super.onResume()
-        avp_simple_play_activity.onVideoResume()
+        orientationUtils.setIsPause(false)
+        mBinding.avpSimplePlayActivity.onVideoResume()
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        mBinding.avpSimplePlayActivity.currentPlayer.release()
+        mBinding.avpSimplePlayActivity.setVideoAllCallBack(null)
         GSYVideoManager.releaseAllVideos()
         orientationUtils.releaseListener()
-        avp_simple_play_activity.release()
-        avp_simple_play_activity.setVideoAllCallBack(null)
+    }
+
+    override fun attachBaseContext(newBase: Context?) {
+        super.attachBaseContext(object : ContextWrapper(newBase) {
+            override fun getSystemService(name: String): Any {
+                // 解决AudioManager的内存泄漏
+                return if (Context.AUDIO_SERVICE == name) {
+                    applicationContext.getSystemService(name)
+                } else super.getSystemService(name)
+            }
+        })
     }
 }

@@ -1,11 +1,8 @@
 package com.skyd.imomoe.view.activity
 
-import android.animation.AnimatorSet
-import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
@@ -21,14 +18,13 @@ import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.ClassifyBean
 import com.skyd.imomoe.bean.ClassifyDataBean
+import com.skyd.imomoe.databinding.ActivityClassifyBinding
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.view.adapter.SearchAdapter
 import com.skyd.imomoe.viewmodel.ClassifyViewModel
-import kotlinx.android.synthetic.main.activity_classify.*
-import kotlinx.android.synthetic.main.layout_toolbar_1.*
 
 
-class ClassifyActivity : BaseActivity() {
+class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
     private lateinit var viewModel: ClassifyViewModel
     private var lastRefreshTime: Long = System.currentTimeMillis()
     private lateinit var spinnerAdapter: ArrayAdapter<ClassifyBean>
@@ -42,7 +38,6 @@ class ClassifyActivity : BaseActivity() {
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_classify)
 
         viewModel = ViewModelProvider(this).get(ClassifyViewModel::class.java)
 
@@ -50,74 +45,88 @@ class ClassifyActivity : BaseActivity() {
         classifyTabTitle = intent.getStringExtra("classifyTabTitle") ?: ""
         classifyTitle = intent.getStringExtra("classifyTitle") ?: ""
 
-        iv_toolbar_1_back.setOnClickListener { finish() }
-        tv_toolbar_1_title.text = getString(R.string.anime_classify)
-        tv_toolbar_1_title.isFocused = true
+        mBinding.llClassifyActivityToolbar.run {
+            ivToolbar1Back.setOnClickListener { finish() }
+            tvToolbar1Title.text = getString(R.string.anime_classify)
+            tvToolbar1Title.isFocused = true
+        }
 
         spinnerAdapter = ArrayAdapter(this, R.layout.item_spinner_item_1)
         classifyTabAdapter = ClassifyTabAdapter(this, classifyTabList)
         classifyAdapter = SearchAdapter(this, viewModel.classifyList)
 
-        srl_classify_activity.setColorSchemeResources(R.color.main_color)
-        srl_classify_activity.setOnRefreshListener {
-            //避免刷新间隔太短
-            if (System.currentTimeMillis() - lastRefreshTime > 500) {
-                lastRefreshTime = System.currentTimeMillis()
-                viewModel.getClassifyData(currentPartUrl)
-            } else {
-                srl_classify_activity.isRefreshing = false
+        mBinding.run {
+            srlClassifyActivity.setColorSchemeResources(R.color.main_color)
+            srlClassifyActivity.setOnRefreshListener {
+                //避免刷新间隔太短
+                if (System.currentTimeMillis() - lastRefreshTime > 500) {
+                    lastRefreshTime = System.currentTimeMillis()
+                    if (viewModel.mldClassifyTabList.value == true)
+                        viewModel.getClassifyData(currentPartUrl)
+                    else viewModel.getClassifyTabData()
+                } else {
+                    srlClassifyActivity.isRefreshing = false
+                }
+            }
+
+            rvClassifyActivityTab.layoutManager =
+                GridLayoutManager(this@ClassifyActivity, 2, GridLayoutManager.HORIZONTAL, false)
+            rvClassifyActivityTab.setHasFixedSize(true)
+            rvClassifyActivityTab.adapter = classifyTabAdapter
+
+            val layoutManager2 = LinearLayoutManager(this@ClassifyActivity)
+            rvClassifyActivity.layoutManager = layoutManager2
+            rvClassifyActivity.setHasFixedSize(true)
+            rvClassifyActivity.adapter = classifyAdapter
+
+            spinnerClassifyActivity.adapter = spinnerAdapter
+            spinnerClassifyActivity.onItemSelectedListener = object : OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>, view: View,
+                    pos: Int, id: Long
+                ) {
+                    if (view is TextView) view.setTextColor(resources.getColor(R.color.foreground_main_color_2))
+                    classifyTabList.clear()
+                    classifyTabList.addAll(viewModel.classifyTabList[pos].classifyDataList)
+                    classifyTabAdapter.notifyDataSetChanged()
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>) {
+                }
             }
         }
 
-        val layoutManager = GridLayoutManager(this, 2, GridLayoutManager.HORIZONTAL, false)
-        rv_classify_activity_tab.layoutManager = layoutManager
-        rv_classify_activity_tab.setHasFixedSize(true)
-        rv_classify_activity_tab.adapter = classifyTabAdapter
-
-        val layoutManager2 = LinearLayoutManager(this)
-        rv_classify_activity.layoutManager = layoutManager2
-        rv_classify_activity.setHasFixedSize(true)
-        rv_classify_activity.adapter = classifyAdapter
-
-        spinner_classify_activity.adapter = spinnerAdapter
-        spinner_classify_activity.onItemSelectedListener = object : OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>, view: View,
-                pos: Int, id: Long
-            ) {
-                if (view is TextView) view.setTextColor(resources.getColor(R.color.foreground_main_color_2))
-                classifyTabList.clear()
-                classifyTabList.addAll(viewModel.classifyTabList[pos].classifyDataList)
-                classifyTabAdapter.notifyDataSetChanged()
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {
-            }
-        }
 
         viewModel.mldClassifyTabList.observe(this, Observer {
-            spinnerAdapter.clear()
-            spinnerAdapter.addAll(it)
-            spinnerAdapter.notifyDataSetChanged()
+            if (it) {
+                spinnerAdapter.clear()
+                spinnerAdapter.addAll(viewModel.classifyTabList)
+                spinnerAdapter.notifyDataSetChanged()
 
-            //自动选中第一个
-            if (currentPartUrl.isEmpty() && viewModel.classifyTabList.size > 0 &&
-                viewModel.classifyTabList[0].classifyDataList.size > 0
-            ) {
-                val firstItem = viewModel.classifyTabList[0].classifyDataList[0]
-                currentPartUrl = firstItem.actionUrl
-                classifyTabTitle = viewModel.classifyTabList[0].toString()
-                classifyTitle = firstItem.title
-                tabSelected(currentPartUrl)
+                //自动选中第一个
+                if (currentPartUrl.isEmpty() && viewModel.classifyTabList.size > 0 &&
+                    viewModel.classifyTabList[0].classifyDataList.size > 0
+                ) {
+                    val firstItem = viewModel.classifyTabList[0].classifyDataList[0]
+                    currentPartUrl = firstItem.actionUrl
+                    classifyTabTitle = viewModel.classifyTabList[0].toString()
+                    classifyTitle = firstItem.title
+                    tabSelected(currentPartUrl)
+                }
+            } else {
+                mBinding.srlClassifyActivity.isRefreshing = false
             }
         })
 
         viewModel.mldClassifyList.observe(this, Observer {
+            mBinding.srlClassifyActivity.isRefreshing = false
+            viewModel.isRequesting = false
+            if (it) {
+                mBinding.llClassifyActivityToolbar.tvToolbar1Title.text =
+                    if (classifyTabTitle.isEmpty()) "${getString(R.string.anime_classify)}  $classifyTitle"
+                    else "${getString(R.string.anime_classify)}  $classifyTabTitle：$classifyTitle"
+            }
             classifyAdapter.notifyDataSetChanged()
-            srl_classify_activity.isRefreshing = false
-            tv_toolbar_1_title.text =
-                if (classifyTabTitle.isEmpty()) "${getString(R.string.anime_classify)}  $classifyTitle"
-                else "${getString(R.string.anime_classify)}  $classifyTabTitle：$classifyTitle"
         })
 
         viewModel.getClassifyTabData()
@@ -127,9 +136,12 @@ class ClassifyActivity : BaseActivity() {
         }
     }
 
+    override fun getBinding(): ActivityClassifyBinding =
+        ActivityClassifyBinding.inflate(layoutInflater)
+
     private fun tabSelected(partUrl: String) {
         currentPartUrl = partUrl
-        srl_classify_activity.isRefreshing = true
+        mBinding.srlClassifyActivity.isRefreshing = true
         viewModel.getClassifyData(partUrl)
     }
 
@@ -167,7 +179,7 @@ class ClassifyActivity : BaseActivity() {
                     holder.textView.text = item.title
                     holder.itemView.setOnClickListener {
                         activity.classifyTabTitle = activity.spinnerAdapter.getItem(
-                            activity.spinner_classify_activity.selectedItemPosition
+                            activity.mBinding.spinnerClassifyActivity.selectedItemPosition
                         ).toString()
                         activity.classifyTitle = item.title
                         activity.tabSelected(item.actionUrl)

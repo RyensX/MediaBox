@@ -1,92 +1,133 @@
 package com.skyd.imomoe.view.activity
 
 import android.annotation.SuppressLint
-import android.content.DialogInterface
-import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import com.afollestad.materialdialogs.MaterialDialog
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Const
+import com.skyd.imomoe.databinding.ActivitySettingBinding
 import com.skyd.imomoe.util.Util.getAppVersionName
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.editor
 import com.skyd.imomoe.util.sharedPreferences
 import com.skyd.imomoe.util.update.AppUpdateHelper
 import com.skyd.imomoe.util.update.AppUpdateStatus
-import kotlinx.android.synthetic.main.activity_setting.*
-import kotlinx.android.synthetic.main.layout_toolbar_1.*
+import com.skyd.imomoe.viewmodel.SettingViewModel
 
 
-class SettingActivity : AppCompatActivity() {
+class SettingActivity : BaseActivity<ActivitySettingBinding>() {
+    private val viewModel: SettingViewModel by lazy { ViewModelProvider(this).get(SettingViewModel::class.java) }
     private var selfUpdateCheck = false
     private var changeNightMode = true
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_setting)
 
         val appUpdateHelper = AppUpdateHelper.instance
 
-        tv_toolbar_1_title.text = getString(R.string.setting)
-        iv_toolbar_1_back.setOnClickListener { finish() }
+        mBinding.run {
+            llSettingActivityToolbar.tvToolbar1Title.text = getString(R.string.setting)
+            llSettingActivityToolbar.ivToolbar1Back.setOnClickListener { finish() }
 
-        tv_setting_activity_download_path_info.isFocused = true
-        tv_setting_activity_download_path_info.text = Const.DownloadAnime.animeFilePath
+            tvSettingActivityDownloadPathInfo.isFocused = true
+            tvSettingActivityDownloadPathInfo.text = Const.DownloadAnime.animeFilePath
+        }
 
-        tv_setting_activity_update_info.text =
-            getString(R.string.current_version, getAppVersionName())
-
-        appUpdateHelper.getUpdateServer().observe(this, Observer {
-            tv_setting_activity_update_info_server.text = AppUpdateHelper.serverName[it]
+        // 清理历史记录
+        viewModel.mldDeleteAllHistory.observe(this, Observer {
+            if (it) getString(R.string.delete_all_history_succeed).showToast()
+            else getString(R.string.delete_all_history_failed).showToast()
         })
-        tv_setting_activity_update_info_server.text =
-            AppUpdateHelper.serverName[appUpdateHelper.getUpdateServer().value ?: 0]
-
-        appUpdateHelper.getUpdateStatus().observe(this, Observer {
-            when (it) {
-                AppUpdateStatus.UNCHECK -> {
-                    tv_setting_activity_update_tip.text = "未检查"
-//                    appUpdateHelper.checkUpdate()
-                }
-                AppUpdateStatus.CHECKING -> {
-                    tv_setting_activity_update_tip.text = "正在检查更新..."
-                }
-                AppUpdateStatus.DATED -> {
-                    tv_setting_activity_update_tip.text = "发现新版本"
-                    if (selfUpdateCheck) appUpdateHelper.noticeUpdate(this)
-                }
-                AppUpdateStatus.VALID -> {
-                    tv_setting_activity_update_tip.text = "已是最新版本"
-                    if (selfUpdateCheck) "已是最新版本".showToast()
-                }
-                AppUpdateStatus.LATER -> {
-                    tv_setting_activity_update_tip.text = "暂不更新"
-                }
-                AppUpdateStatus.DOWNLOADING -> {
-                    tv_setting_activity_update_tip.text = "新版本下载中..."
-                }
-                AppUpdateStatus.CANCEL -> {
-                    tv_setting_activity_update_tip.text = "下载被取消"
-                }
-                AppUpdateStatus.TO_BE_INSTALLED -> {
-                    tv_setting_activity_update_tip.text = "待安装"
-                    if (selfUpdateCheck) appUpdateHelper.installUpdate(this)
-                }
-                AppUpdateStatus.ERROR -> {
-                    tv_setting_activity_update_tip.text = "更新失败"
-                    if (selfUpdateCheck) "获取更新失败！".showToast()
-                }
-                else -> return@Observer
+        mBinding.tvSettingActivityDeleteAllHistoryInfo.isFocused = true
+        mBinding.rlSettingActivityDeleteAllHistory.setOnClickListener {
+            MaterialDialog(this).show {
+                icon(R.drawable.ic_delete_main_color_2_24)
+                title(text = "警告")
+                message(text = "确定要删除所有历史记录？包括搜索历史和观看历史")
+                positiveButton(text = "删除") { viewModel.deleteAllHistory() }
+                negativeButton(text = "取消") { dismiss() }
             }
-        })
+        }
 
-        rl_setting_activity_update.setOnClickListener {
+        // 清理缓存文件
+        viewModel.mldCacheSize.observe(this, Observer {
+            mBinding.tvSettingActivityClearCacheSize.text = it
+        })
+        viewModel.mldClearAllCache.observe(this, Observer {
+
+            viewModel.getCacheSize()
+            if (it) getString(R.string.clear_cache_succeed).showToast()
+            else getString(R.string.clear_cache_failed).showToast()
+        })
+        viewModel.getCacheSize()
+        mBinding.tvSettingActivityClearCache.isFocused = true
+        mBinding.rlSettingActivityClearCache.setOnClickListener {
+            MaterialDialog(this).show {
+                icon(R.drawable.ic_sd_storage_main_color_2_24)
+                title(text = "警告")
+                message(text = "确定清理所有缓存？不包括缓存视频")
+                positiveButton(text = "清理") { viewModel.clearAllCache() }
+                negativeButton(text = "取消") { dismiss() }
+            }
+        }
+
+        mBinding.run {
+            tvSettingActivityUpdateInfo.text =
+                getString(R.string.current_version, getAppVersionName())
+
+            appUpdateHelper.getUpdateServer().observe(this@SettingActivity, Observer {
+                tvSettingActivityUpdateInfoServer.text = AppUpdateHelper.serverName[it]
+            })
+            tvSettingActivityUpdateInfoServer.text =
+                AppUpdateHelper.serverName[appUpdateHelper.getUpdateServer().value ?: 0]
+
+            appUpdateHelper.getUpdateStatus().observe(this@SettingActivity, Observer {
+                when (it) {
+                    AppUpdateStatus.UNCHECK -> {
+                        tvSettingActivityUpdateInfo.text = "未检查"
+//                    appUpdateHelper.checkUpdate()
+                    }
+                    AppUpdateStatus.CHECKING -> {
+                        tvSettingActivityUpdateTip.text = "正在检查更新..."
+                    }
+                    AppUpdateStatus.DATED -> {
+                        tvSettingActivityUpdateTip.text = "发现新版本"
+                        if (selfUpdateCheck) appUpdateHelper.noticeUpdate(this@SettingActivity)
+                    }
+                    AppUpdateStatus.VALID -> {
+                        tvSettingActivityUpdateTip.text = "已是最新版本"
+                        if (selfUpdateCheck) "已是最新版本".showToast()
+                    }
+                    AppUpdateStatus.LATER -> {
+                        tvSettingActivityUpdateTip.text = "暂不更新"
+                    }
+                    AppUpdateStatus.DOWNLOADING -> {
+                        tvSettingActivityUpdateTip.text = "新版本下载中..."
+                    }
+                    AppUpdateStatus.CANCEL -> {
+                        tvSettingActivityUpdateTip.text = "下载被取消"
+                    }
+                    AppUpdateStatus.TO_BE_INSTALLED -> {
+                        tvSettingActivityUpdateTip.text = "待安装"
+                        if (selfUpdateCheck) appUpdateHelper.installUpdate(this@SettingActivity)
+                    }
+                    AppUpdateStatus.ERROR -> {
+                        tvSettingActivityUpdateTip.text = "更新失败"
+                        if (selfUpdateCheck) "获取更新失败！".showToast()
+                    }
+                    else -> return@Observer
+                }
+            })
+        }
+
+        mBinding.rlSettingActivityUpdate.setOnClickListener {
             selfUpdateCheck = true
             when (appUpdateHelper.getUpdateStatus().value) {
                 AppUpdateStatus.DOWNLOADING -> {
@@ -105,7 +146,7 @@ class SettingActivity : AppCompatActivity() {
             }
         }
 
-        rl_setting_activity_update_server.setOnClickListener {
+        mBinding.rlSettingActivityUpdateServer.setOnClickListener {
             val builder: AlertDialog.Builder = AlertDialog.Builder(this)
             builder.setTitle(R.string.check_update_server)
             builder.setIcon(R.drawable.ic_storage_main_color_2_24)
@@ -121,15 +162,7 @@ class SettingActivity : AppCompatActivity() {
             builder.create().show()
         }
 
-        rl_setting_activity_about.setOnClickListener {
-            startActivity(
-                Intent(
-                    this,
-                    AboutActivity::class.java
-                )
-            )
-        }
-        switch_setting_activity_download_night_mode.setOnCheckedChangeListener { buttonView, isChecked ->
+        mBinding.switchSettingActivityNightMode.setOnCheckedChangeListener { buttonView, isChecked ->
             if (!changeNightMode) {
                 changeNightMode = true
                 return@setOnCheckedChangeListener
@@ -137,33 +170,37 @@ class SettingActivity : AppCompatActivity() {
             if (isChecked) {
                 //夜间
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                tv_setting_activity_download_night_mode_info.text = "夜间"
+                mBinding.tvSettingActivityNightModeInfo.text = "夜间"
             } else {
                 //日间
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                tv_setting_activity_download_night_mode_info.text = "白天"
+                mBinding.tvSettingActivityNightModeInfo.text = "白天"
             }
             App.context.sharedPreferences("nightMode").editor {
                 putBoolean("isNightMode", isChecked)
             }
         }
 
-        when (AppCompatDelegate.getDefaultNightMode()) {
-            AppCompatDelegate.MODE_NIGHT_YES -> {
-                tv_setting_activity_download_night_mode_info.text = "夜间"
-                if (!switch_setting_activity_download_night_mode.isChecked) {
-                    changeNightMode = false
-                    switch_setting_activity_download_night_mode.isChecked = true
+        mBinding.run {
+            when (AppCompatDelegate.getDefaultNightMode()) {
+                AppCompatDelegate.MODE_NIGHT_YES -> {
+                    tvSettingActivityNightModeInfo.text = "夜间"
+                    if (!switchSettingActivityNightMode.isChecked) {
+                        changeNightMode = false
+                        switchSettingActivityNightMode.isChecked = true
+                    }
                 }
-            }
-            else -> {
-                tv_setting_activity_download_night_mode_info.text = "白天"
-                if (switch_setting_activity_download_night_mode.isChecked) {
-                    changeNightMode = false
-                    switch_setting_activity_download_night_mode.isChecked = false
+                else -> {
+                    tvSettingActivityNightModeInfo.text = "白天"
+                    if (switchSettingActivityNightMode.isChecked) {
+                        changeNightMode = false
+                        switchSettingActivityNightMode.isChecked = false
+                    }
                 }
             }
         }
-
     }
+
+    override fun getBinding(): ActivitySettingBinding =
+        ActivitySettingBinding.inflate(layoutInflater)
 }

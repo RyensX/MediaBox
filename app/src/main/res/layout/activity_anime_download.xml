@@ -15,12 +15,12 @@
         android:layout_height="match_parent"
         android:layout_below="@id/ll_anime_download_activity_toolbar" />
 
-    <ViewStub
+    <include
         android:id="@+id/layout_anime_download_loading"
+        layout="@layout/layout_circle_progress_text_tip_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout="@layout/layout_circle_progress_text_tip_1" />
+        android:layout_centerInParent="true" />
 
     <ViewStub
         android:id="@+id/layout_anime_download_no_download"

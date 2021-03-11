@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".view.fragment.MoreFragment">
+
+    <LinearLayout
+        android:id="@+id/cl_more_fragment_header"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/main_color_2"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/ic_beans_white_24" />
+
+        <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+            android:id="@+id/tv_more_fragment_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/more"
+            android:textColor="@color/foreground_white"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            app:typeface="bPRTypeface" />
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_more_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

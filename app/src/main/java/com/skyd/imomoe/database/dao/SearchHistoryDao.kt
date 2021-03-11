@@ -20,4 +20,7 @@ interface SearchHistoryDao {
 
     @Query(value = "DELETE FROM searchHistoryList WHERE id = :timeStamp")
     fun deleteSearchHistory(timeStamp: Long)
+
+    @Query(value = "DELETE FROM searchHistoryList")
+    fun deleteAllSearchHistory()
 }

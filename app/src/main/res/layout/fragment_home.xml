@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".view.fragment.HomeFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,7 +17,6 @@
             android:id="@+id/iv_home_fragment_rank"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:background="?android:selectableItemBackground"
             android:paddingVertical="4dp"
             android:src="@drawable/ic_bar_chart_white_24"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -51,7 +49,6 @@
             android:id="@+id/iv_home_fragment_classify"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:background="?android:selectableItemBackground"
             android:paddingHorizontal="7dp"
             android:src="@drawable/ic_format_list_bulleted_white_24"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -63,22 +60,20 @@
             android:id="@+id/iv_home_fragment_anime_download"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:background="?android:selectableItemBackground"
             android:paddingHorizontal="7dp"
             android:paddingVertical="7dp"
             android:src="@drawable/ic_arrow_circle_down_white_24"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/iv_home_fragment_setting"
+            app:layout_constraintEnd_toStartOf="@id/iv_home_fragment_favorite"
             app:layout_constraintStart_toEndOf="@id/iv_home_fragment_classify"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/iv_home_fragment_setting"
+            android:id="@+id/iv_home_fragment_favorite"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:background="?android:selectableItemBackground"
-            android:paddingHorizontal="7dp"
-            android:src="@drawable/ic_settings_white_24"
+            android:paddingHorizontal="6dp"
+            android:src="@drawable/ic_star_white_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/iv_home_fragment_anime_download"
@@ -89,6 +84,7 @@
         android:id="@+id/cv_home_fragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/cl_home_fragment_header"
         app:cardElevation="6dp">
 
         <com.google.android.material.tabs.TabLayout
@@ -105,5 +101,13 @@
         android:id="@+id/vp2_home_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/cv_home_fragment"
         tools:visibility="visible" />
-</LinearLayout>
+
+    <ViewStub
+        android:id="@+id/layout_home_fragment_load_failed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout="@layout/layout_image_text_tip_1" />
+</RelativeLayout>

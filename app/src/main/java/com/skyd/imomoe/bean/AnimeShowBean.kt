@@ -1,5 +1,7 @@
 package com.skyd.imomoe.bean
 
+import com.google.gson.annotations.SerializedName
+
 class AnimeShowBean(
     override var type: String,
     override var actionUrl: String,
@@ -42,8 +44,15 @@ class AnimeAreaBean(       //番剧地区：包括地区名和链接
 ) : BaseBean
 
 class ImageBean(       //图片bean，带有referer信息
+    @SerializedName("type")
     override var type: String,
+
+    @SerializedName("actionUrl")
     override var actionUrl: String,
+
+    @SerializedName("url")
     var url: String,
+
+    @SerializedName("referer")
     var referer: String
 ) : BaseBean

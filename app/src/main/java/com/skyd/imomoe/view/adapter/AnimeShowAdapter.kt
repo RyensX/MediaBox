@@ -6,6 +6,7 @@ import android.graphics.Rect
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -128,6 +129,14 @@ class AnimeShowAdapter(
                 }
             }
             is Header1ViewHolder -> {
+                fragment.activity?.let {
+                    holder.tvHeader1Title.setTextColor(
+                        ContextCompat.getColor(
+                            it,
+                            R.color.foreground_main_color_2
+                        )
+                    )
+                }
                 holder.tvHeader1Title.text = item.title
             }
             is Banner1ViewHolder -> {
@@ -185,7 +194,19 @@ class AnimeShowAdapter(
 
             when (holder) {
                 is AnimeCover1ViewHolder -> {
+                    holder.viewAnimeCover1Night.setBackgroundColor(
+                        ContextCompat.getColor(
+                            activity,
+                            R.color.transparent
+                        )
+                    )
                     holder.tvAnimeCover1Title.setTextColor(titleColor)
+                    holder.tvAnimeCover1Episode.setTextColor(
+                        ContextCompat.getColor(
+                            activity,
+                            R.color.main_color
+                        )
+                    )
                     holder.ivAnimeCover1Cover.setTag(R.id.image_view_tag, item.cover?.url)
                     if (holder.ivAnimeCover1Cover.getTag(R.id.image_view_tag) == item.cover?.url) {
                         holder.ivAnimeCover1Cover.loadImage(
@@ -206,7 +227,19 @@ class AnimeShowAdapter(
                     }
                 }
                 is AnimeCover3ViewHolder -> {
+                    holder.viewAnimeCover3Night.setBackgroundColor(
+                        ContextCompat.getColor(
+                            activity,
+                            R.color.transparent
+                        )
+                    )
                     holder.tvAnimeCover3Title.setTextColor(titleColor)
+                    holder.tvAnimeCover3Episode.setTextColor(
+                        ContextCompat.getColor(
+                            activity,
+                            R.color.main_color
+                        )
+                    )
                     holder.ivAnimeCover3Cover.setTag(R.id.image_view_tag, item.cover?.url)
                     if (holder.ivAnimeCover3Cover.getTag(R.id.image_view_tag) == item.cover?.url) {
                         holder.ivAnimeCover3Cover.loadImage(
@@ -232,6 +265,7 @@ class AnimeShowAdapter(
                                     false
                                 ) as TextView
                             tvFlowLayout.text = it[i].title
+                            tvFlowLayout.setBackgroundResource(R.drawable.shape_fill_circle_corner_edge_main_color_2_50)
                             tvFlowLayout.setOnClickListener { it1 ->
                                 //此处是”类型“，若要修改，需要注意Tab大分类是否还是”类型“
                                 process(
@@ -248,6 +282,12 @@ class AnimeShowAdapter(
                     }
                 }
                 is AnimeCover4ViewHolder -> {
+                    holder.viewAnimeCover4Night.setBackgroundColor(
+                        ContextCompat.getColor(
+                            activity,
+                            R.color.transparent
+                        )
+                    )
                     holder.tvAnimeCover4Title.setTextColor(titleColor)
                     holder.ivAnimeCover4Cover.setTag(R.id.image_view_tag, item.cover?.url)
                     if (holder.ivAnimeCover4Cover.getTag(R.id.image_view_tag) == item.cover?.url) {
@@ -274,7 +314,7 @@ class AnimeShowAdapter(
                             )
                             holder.tvAnimeCover5Rank.setBackgroundResource(backgrounds[position])
                         } else {
-                            holder.tvAnimeCover5Rank.setBackgroundResource(R.drawable.shape_fill_circle_corner_edge_main_color_50)
+                            holder.tvAnimeCover5Rank.setBackgroundResource(R.drawable.shape_fill_circle_corner_edge_main_color_2_50)
                         }
                         holder.tvAnimeCover5Rank.visible()
                     } else {
@@ -287,6 +327,7 @@ class AnimeShowAdapter(
                             holder.tvAnimeCover5Date.setPadding(0, 0, 0, 0)
                         }
                     } else {
+                        holder.tvAnimeCover5Area.setBackgroundResource(R.drawable.shape_fill_circle_corner_edge_main_color_2_50)
                         holder.tvAnimeCover5Area.visible()
                         holder.tvAnimeCover5Date.post {
                             holder.tvAnimeCover5Date.setPadding(dp2px(12f), 0, 0, 0)
@@ -295,11 +336,23 @@ class AnimeShowAdapter(
                     if (item.date == null || item.date == "") {
                         holder.tvAnimeCover5Date.gone()
                     } else {
+                        holder.tvAnimeCover5Date.setTextColor(
+                            ContextCompat.getColor(
+                                activity,
+                                R.color.main_color
+                            )
+                        )
                         holder.tvAnimeCover5Date.visible()
                     }
                     holder.tvAnimeCover5Title.text = item.title
                     holder.tvAnimeCover5Area.text = item.area?.title
                     holder.tvAnimeCover5Date.text = item.date
+                    holder.tvAnimeCover5Episode.setTextColor(
+                        ContextCompat.getColor(
+                            activity,
+                            R.color.foreground_main_color_2
+                        )
+                    )
                     holder.tvAnimeCover5Episode.text = item.episodeClickable?.title
                     if (holder.tvAnimeCover5Area.visibility == View.GONE &&
                         holder.tvAnimeCover5Date.visibility == View.GONE
@@ -314,7 +367,9 @@ class AnimeShowAdapter(
                         }
                     }
                     holder.itemView.setOnClickListener {
-                        process(activity, item.episodeClickable?.actionUrl)
+                        if (item.episodeClickable?.actionUrl.equals(item.actionUrl))
+                            process(activity, item.episodeClickable?.actionUrl)
+                        else process(activity, item.episodeClickable?.actionUrl + item.actionUrl)
                     }
                     holder.tvAnimeCover5Area.setOnClickListener {
                         process(

@@ -16,6 +16,7 @@
         tools:src="@drawable/ic_launcher_background" />
 
     <View
+        android:id="@+id/view_anime_cover_6_night"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/transparent"

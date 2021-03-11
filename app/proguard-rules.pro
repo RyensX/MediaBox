@@ -24,6 +24,37 @@
 -keep class * implements java.io.Serializable { *;}
 -keep class * implements android.os.Parcelable { *;}
 
+#-------------------------Bugly
+-dontwarn com.tencent.bugly.**
+-keep public class com.tencent.bugly.**{*;}
+#-------------------------Umeng
+-keep class com.umeng.** {*;}
+
+-keep class com.uc.** {*;}
+
+-keepclassmembers class * {
+   public <init> (org.json.JSONObject);
+}
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+-keep public class com.skyd.imomoe.R$*{
+public static final int *;
+}
+
+#-------------------------EventBus
+-keepattributes *Annotation*
+-keepclassmembers class * {
+    @org.greenrobot.eventbus.Subscribe <methods>;
+}
+-keep enum org.greenrobot.eventbus.ThreadMode { *; }
+
+# And if you use AsyncExecutor:
+-keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
+    <init>(java.lang.Throwable);
+}
+
 #-------------------------gsyvideoplayer播放器
 -keep class com.shuyu.gsyvideoplayer.video.** { *; }
 -dontwarn com.shuyu.gsyvideoplayer.video.**

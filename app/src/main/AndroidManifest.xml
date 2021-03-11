@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.skyd.imomoe">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -14,6 +15,9 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission
+        android:name="android.permission.READ_LOGS"
+        tools:ignore="ProtectedPermissions" />
 
     <application
         android:name=".App"
@@ -26,6 +30,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.樱花动漫"
         android:usesCleartextTraffic="true">
+        <activity android:name=".view.activity.CrashActivity" />
+        <activity android:name=".view.activity.HistoryActivity" />
+        <activity android:name=".view.activity.FavoriteActivity" />
         <activity android:name=".view.activity.DlnaControlActivity" />
         <activity android:name=".view.activity.DlnaActivity" />
         <activity
@@ -52,7 +59,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name="com.skyd.imomoe.util.dlna.dmc.DLNACastService" />
+        <service android:name=".util.dlna.dmc.DLNACastService" />
 
         <receiver
             android:name=".util.update.UpdateNotificationReceiver"

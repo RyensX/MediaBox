@@ -5,7 +5,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
 import android.view.MotionEvent
-import android.view.ViewConfiguration
+import android.view.View
 import android.widget.RelativeLayout
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.MarginPageTransformer
@@ -36,8 +36,11 @@ open class BannerView(mContext: Context, attrs: AttributeSet?) :
 
     private val mViewPager2: ViewPager2 = ViewPager2(mContext)
 
-    //自动轮播
-    private var isPlaying: Boolean = false
+    // 自动轮播
+    private var autoPlay: Boolean = false
+
+    // 轮播是否暂停
+    private var isPause: Boolean = false
     private var mAutoPlayInterval: Long = 0L
     private var mTimer: Timer = Timer()
     private val mHandler = Handler(Looper.getMainLooper())
@@ -97,6 +100,30 @@ open class BannerView(mContext: Context, attrs: AttributeSet?) :
             setPageMargin(attrs.getDimensionPixelSize(R.styleable.BannerView_pageMargin, 0))
             attrs.recycle()
         }
+    }
+
+    // 窗体不可见时暂停轮播
+    override fun onWindowVisibilityChanged(visibility: Int) {
+        super.onWindowVisibilityChanged(visibility)
+        if (visibility != View.VISIBLE) {
+            if (autoPlay) {
+                mHandler.removeCallbacks(mAutoPlayRunnable)
+                isPause = true
+            }
+        } else {
+            if (autoPlay && isPause) {
+                mHandler.postDelayed(mAutoPlayRunnable, mAutoPlayInterval)
+                isPause = false
+            }
+        }
+    }
+
+    // 当View离开附着的窗口时停止轮播
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        // 防止内存泄漏
+        mHandler.removeCallbacks(mAutoPlayRunnable)
+        autoPlay = false
     }
 
     /**
@@ -206,11 +233,11 @@ open class BannerView(mContext: Context, attrs: AttributeSet?) :
      * @param interval 轮播间隔，单位：毫秒
      */
     fun startPlay(interval: Long) {
-        if (!isPlaying && mViewPager2.adapter?.itemCount ?: 0 > 1) {
+        if (!autoPlay && mViewPager2.adapter?.itemCount ?: 0 > 1) {
             mAutoPlayInterval = interval
             mHandler.postDelayed(mAutoPlayRunnable, mAutoPlayInterval)
 //            mTimer.schedule(mAutoPlayTask, mAutoPlayInterval, mAutoPlayInterval)
-            isPlaying = true
+            autoPlay = true
         }
     }
 
@@ -218,9 +245,9 @@ open class BannerView(mContext: Context, attrs: AttributeSet?) :
      * 停止自动轮播
      */
     fun stopPlay() {
-        if (isPlaying) {
+        if (autoPlay) {
 //            mTimer.cancel()
-            isPlaying = false
+            autoPlay = false
             mHandler.removeCallbacks(mAutoPlayRunnable)
         }
     }
@@ -228,13 +255,13 @@ open class BannerView(mContext: Context, attrs: AttributeSet?) :
     /*
      * 是否在自动轮播
      */
-    fun isAutoPlay(): Boolean = isPlaying
+    fun isAutoPlay(): Boolean = autoPlay
 
     /**
      * 切换到下一页（不会循环）
      */
     private fun nextPage() {
-        if (mViewPager2.adapter?.itemCount ?: 0 > 1 && isPlaying) {
+        if (mViewPager2.adapter?.itemCount ?: 0 > 1 && autoPlay) {
             setCurrentItem(getCurrentItem() + 1, true)
         }
     }

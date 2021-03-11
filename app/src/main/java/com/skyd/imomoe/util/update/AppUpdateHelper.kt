@@ -67,7 +67,6 @@ class AppUpdateHelper private constructor() {
                 dismiss()
                 AppUpdateModel.status.value = AppUpdateStatus.LATER
             }
-            cornerRadius(literalDp = 7f)
         }
     }
 

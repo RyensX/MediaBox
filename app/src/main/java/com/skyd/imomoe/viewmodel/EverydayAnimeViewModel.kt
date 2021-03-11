@@ -1,6 +1,5 @@
 package com.skyd.imomoe.viewmodel
 
-import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,14 +16,12 @@ import com.skyd.imomoe.util.Util.showToastOnThread
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.jsoup.HttpStatusException
 import org.jsoup.select.Elements
 import java.lang.Exception
 import java.util.*
 
 
 class EverydayAnimeViewModel : ViewModel() {
-    private var requestTimes = 0
     var header: AnimeShowBean = AnimeShowBean(
         "", "", "", "",
         "", "", "", null
@@ -33,7 +30,7 @@ class EverydayAnimeViewModel : ViewModel() {
     var tabList: MutableList<TabBean> = ArrayList()
     var mldTabList: MutableLiveData<List<TabBean>> = MutableLiveData()
     var everydayAnimeList: MutableList<List<AnimeCoverBean>> = ArrayList()
-    var mldEverydayAnimeList: MutableLiveData<List<List<AnimeCoverBean>>> = MutableLiveData()
+    var mldEverydayAnimeList: MutableLiveData<Boolean> = MutableLiveData()
 
     fun getEverydayAnimeData() {
         GlobalScope.launch(Dispatchers.IO) {
@@ -82,17 +79,11 @@ class EverydayAnimeViewModel : ViewModel() {
                     }
                 }
                 mldTabList.postValue(tabList)
-                mldEverydayAnimeList.postValue(everydayAnimeList)
-            } catch (e: HttpStatusException) {
-                e.printStackTrace()
-                if (e.statusCode == 502) {
-                    if (requestTimes <= 2) {
-                        requestTimes++
-                        getEverydayAnimeData()
-                    } else requestTimes = 0
-                }
-                Log.e(TAG, e.message ?: "")
+                mldEverydayAnimeList.postValue(true)
             } catch (e: Exception) {
+                tabList.clear()
+                everydayAnimeList.clear()
+                mldEverydayAnimeList.postValue(false)
                 e.printStackTrace()
                 (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread(
                     Toast.LENGTH_LONG

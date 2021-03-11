@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewStub
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,16 +16,20 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeCoverBean
+import com.skyd.imomoe.databinding.FragmentEverydayAnimeBinding
 import com.skyd.imomoe.util.GridRecyclerView1ViewHolder
-import com.skyd.imomoe.util.Util
 import com.skyd.imomoe.util.ViewHolderUtil.Companion.GRID_RECYCLER_VIEW_1
 import com.skyd.imomoe.util.ViewHolderUtil.Companion.getViewHolder
+import com.skyd.imomoe.util.eventbus.EventBusSubscriber
+import com.skyd.imomoe.util.eventbus.MessageEvent
+import com.skyd.imomoe.util.eventbus.RefreshEvent
 import com.skyd.imomoe.view.adapter.AnimeShowAdapter
 import com.skyd.imomoe.viewmodel.EverydayAnimeViewModel
-import kotlinx.android.synthetic.main.fragment_everyday_anime.*
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 
-class EverydayAnimeFragment : BaseFragment() {
+class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), EventBusSubscriber {
     private lateinit var viewModel: EverydayAnimeViewModel
     private lateinit var adapter: Vp2Adapter
     private var offscreenPageLimit = 1
@@ -35,75 +40,109 @@ class EverydayAnimeFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_everyday_anime, container, false)
         viewModel = ViewModelProvider(this).get(EverydayAnimeViewModel::class.java)
-        return view
+        return super.onCreateView(inflater, container, savedInstanceState)
     }
+
+    override fun getBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentEverydayAnimeBinding =
+        FragmentEverydayAnimeBinding.inflate(inflater, container, false)
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        vp2_everyday_anime_fragment.setOffscreenPageLimit(offscreenPageLimit)
-        srl_everyday_anime_fragment.setColorSchemeResources(R.color.main_color)
-        srl_everyday_anime_fragment.setOnRefreshListener {
-            //避免刷新间隔太短
-            if (System.currentTimeMillis() - lastRefreshTime > 500) {
-                lastRefreshTime = System.currentTimeMillis()
-                viewModel.getEverydayAnimeData()
-            } else {
-                srl_everyday_anime_fragment.isRefreshing = false
-            }
+        mBinding.run {
+            vp2EverydayAnimeFragment.setOffscreenPageLimit(offscreenPageLimit)
+            srlEverydayAnimeFragment.setColorSchemeResources(R.color.main_color)
+            srlEverydayAnimeFragment.setOnRefreshListener { refresh() }
+
+            tlEverydayAnimeFragment.addOnTabSelectedListener(object :
+                TabLayout.OnTabSelectedListener {
+                override fun onTabSelected(tab: TabLayout.Tab) {
+                    selectedTabIndex = tab.position
+                }
+
+                override fun onTabUnselected(tab: TabLayout.Tab) {
+                }
+
+                override fun onTabReselected(tab: TabLayout.Tab) {
+                }
+
+            })
         }
 
-        tl_everyday_anime_fragment.addOnTabSelectedListener(object :
-            TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab) {
-                selectedTabIndex = tab.position
-            }
-
-            override fun onTabUnselected(tab: TabLayout.Tab) {
-            }
-
-            override fun onTabReselected(tab: TabLayout.Tab) {
-            }
-
-        })
-
         viewModel.mldHeader.observe(viewLifecycleOwner, Observer {
-            tv_everyday_anime_fragment_title.text = it.title
+            mBinding.tvEverydayAnimeFragmentTitle.text = it.title
         })
 
         viewModel.mldEverydayAnimeList.observe(viewLifecycleOwner, Observer {
-            val selectedTabIndex = this.selectedTabIndex
-            srl_everyday_anime_fragment.isRefreshing = false
+            mBinding.srlEverydayAnimeFragment.isRefreshing = false
 
-            activity?.let { it1 ->
-                //先隐藏
-                ObjectAnimator.ofFloat(ll_everyday_anime_fragment, "alpha", 1f, 0f)
-                    .setDuration(270).start()
-                //添加rv
-                adapter = Vp2Adapter(it1, it)
-                vp2_everyday_anime_fragment.setAdapter(adapter)
+            if (it) {
+                val selectedTabIndex = this.selectedTabIndex
+                activity?.let { it1 ->
+                    //先隐藏
+                    ObjectAnimator.ofFloat(mBinding.llEverydayAnimeFragment, "alpha", 1f, 0f)
+                        .setDuration(270).start()
+                    //添加rv
+                    adapter = Vp2Adapter(it1, viewModel.everydayAnimeList)
+                    mBinding.vp2EverydayAnimeFragment.setAdapter(adapter)
 
-                val tabLayoutMediator = TabLayoutMediator(
-                    tl_everyday_anime_fragment, vp2_everyday_anime_fragment.getViewPager()
-                ) { tab, position ->
-                    tab.text = viewModel.tabList[position].title
+                    val tabLayoutMediator = TabLayoutMediator(
+                        mBinding.tlEverydayAnimeFragment,
+                        mBinding.vp2EverydayAnimeFragment.getViewPager()
+                    ) { tab, position ->
+                        tab.text = viewModel.tabList[position].title
+                    }
+                    tabLayoutMediator.attach()
+
+                    if (selectedTabIndex < mBinding.tlEverydayAnimeFragment.tabCount)
+                        mBinding.vp2EverydayAnimeFragment.setCurrentItem(selectedTabIndex, false)
+
+                    //设置完数据后显示，避免闪烁
+                    ObjectAnimator.ofFloat(mBinding.llEverydayAnimeFragment, "alpha", 0f, 1f)
+                        .setDuration(270).start()
                 }
-                tabLayoutMediator.attach()
 
-                if (selectedTabIndex < tl_everyday_anime_fragment.tabCount)
-                    vp2_everyday_anime_fragment.setCurrentItem(selectedTabIndex, false)
-
-                //设置完数据后显示，避免闪烁
-                ObjectAnimator.ofFloat(ll_everyday_anime_fragment, "alpha", 0f, 1f)
-                    .setDuration(270).start()
+                hideLoadFailedTip()
+            } else {
+                if (this::adapter.isInitialized) adapter.notifyDataSetChanged()
+                showLoadFailedTip(
+                    getString(R.string.load_data_failed_click_to_retry),
+                    View.OnClickListener {
+                        viewModel.getEverydayAnimeData()
+                        hideLoadFailedTip()
+                    })
             }
         })
 
-        srl_everyday_anime_fragment.isRefreshing = true
+        mBinding.srlEverydayAnimeFragment.isRefreshing = true
         viewModel.getEverydayAnimeData()
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    override fun onMessageEvent(event: MessageEvent) {
+        when (event) {
+            is RefreshEvent -> {
+                refresh()
+            }
+        }
+    }
+
+    private fun refresh() {
+        //避免刷新间隔太短
+        if (System.currentTimeMillis() - lastRefreshTime > 500) {
+            mBinding.srlEverydayAnimeFragment.isRefreshing = true
+            lastRefreshTime = System.currentTimeMillis()
+            viewModel.getEverydayAnimeData()
+        } else {
+            mBinding.srlEverydayAnimeFragment.isRefreshing = false
+        }
+    }
+
+    override fun getLoadFailedTipView(): ViewStub? = mBinding.layoutEverydayAnimeFragmentLoadFailed
 
     class Vp2Adapter//默认初始化全为false
         (

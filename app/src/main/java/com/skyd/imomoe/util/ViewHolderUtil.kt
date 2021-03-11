@@ -24,6 +24,8 @@ class ViewHolderUtil {
             "animeCover5" -> ANIME_COVER_5
             "animeCover6" -> ANIME_COVER_6
             "animeCover7" -> ANIME_COVER_7
+            "animeCover8" -> ANIME_COVER_8
+            "animeCover9" -> ANIME_COVER_9
             "animeEpisode2" -> ANIME_EPISODE_2
             "animeEpisodeFlowLayout1" -> ANIME_EPISODE_FLOW_LAYOUT_1
             "animeEpisodeFlowLayout2" -> ANIME_EPISODE_FLOW_LAYOUT_2
@@ -37,6 +39,7 @@ class ViewHolderUtil {
             "animeInfo1" -> ANIME_INFO_1
             "horizontalRecyclerView1" -> HORIZONTAL_RECYCLER_VIEW_1
             "upnpDevice1" -> UPNP_DEVICE_1
+            "More1" -> MORE_1
             else -> UNKNOWN
         }
 
@@ -125,6 +128,18 @@ class ViewHolderUtil {
                 LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_dlna_device_1, parent, false)
             )
+            MORE_1 -> More1ViewHolder(
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_more_1, parent, false)
+            )
+            ANIME_COVER_8 -> AnimeCover8ViewHolder(
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_anime_cover_8, parent, false)
+            )
+            ANIME_COVER_9 -> AnimeCover9ViewHolder(
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_anime_cover_9, parent, false)
+            )
             else -> EmptyViewHolder(View(parent.context))
         }
 
@@ -150,6 +165,9 @@ class ViewHolderUtil {
         const val HORIZONTAL_RECYCLER_VIEW_1 = 18
         const val ANIME_EPISODE_2 = 19
         const val UPNP_DEVICE_1 = 20
+        const val MORE_1 = 21
+        const val ANIME_COVER_8 = 22
+        const val ANIME_COVER_9 = 23
         const val MAX = 100   //避免外部其他类型与此处包含的某个类型重复。
     }
 }
@@ -168,6 +186,7 @@ class AnimeCover1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val ivAnimeCover1Cover = view.findViewById<ImageView>(R.id.iv_anime_cover_1_cover)
     val tvAnimeCover1Title = view.findViewById<TextView>(R.id.tv_anime_cover_1_title)
     val tvAnimeCover1Episode = view.findViewById<TextView>(R.id.tv_anime_cover_1_episode)
+    val viewAnimeCover1Night = view.findViewById<View>(R.id.view_anime_cover_1_night)
 }
 
 class AnimeCover2ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -182,11 +201,13 @@ class AnimeCover3ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val flAnimeCover3Type = view.findViewById<FlowLayout>(R.id.fl_anime_cover_3_type)
     val tvAnimeCover3Describe = view.findViewById<TextView>(R.id.tv_anime_cover_3_describe)
     val tvAnimeCover3Alias = view.findViewById<TextView>(R.id.tv_anime_cover_3_alias)
+    val viewAnimeCover3Night = view.findViewById<View>(R.id.view_anime_cover_3_night)
 }
 
 class AnimeCover4ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val ivAnimeCover4Cover = view.findViewById<ImageView>(R.id.iv_anime_cover_4_cover)
     val tvAnimeCover4Title = view.findViewById<TextView>(R.id.tv_anime_cover_4_title)
+    val viewAnimeCover4Night = view.findViewById<View>(R.id.view_anime_cover_4_night)
 }
 
 class AnimeCover5ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -202,12 +223,29 @@ class AnimeCover6ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val tvAnimeCover6Title = view.findViewById<TextView>(R.id.tv_anime_cover_6_title)
     val tvAnimeCover6Episode = view.findViewById<TextView>(R.id.tv_anime_cover_6_episode)
     val tvAnimeCover6Describe = view.findViewById<TextView>(R.id.tv_anime_cover_6_describe)
+    val tvAnimeCover6Night = view.findViewById<View>(R.id.view_anime_cover_6_night)
 }
 
 class AnimeCover7ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val tvAnimeCover7Title = view.findViewById<TypefaceTextView>(R.id.tv_anime_cover_7_title)
     val tvAnimeCover7Size = view.findViewById<TypefaceTextView>(R.id.tv_anime_cover_7_size)
     val tvAnimeCover7Episodes = view.findViewById<TextView>(R.id.tv_anime_cover_7_episodes)
+}
+
+class AnimeCover8ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    val tvAnimeCover8Title = view.findViewById<TypefaceTextView>(R.id.tv_anime_cover_8_title)
+    val tvAnimeCover8Episodes = view.findViewById<TypefaceTextView>(R.id.tv_anime_cover_8_episode)
+    val ivAnimeCover8Cover = view.findViewById<ImageView>(R.id.iv_anime_cover_8_cover)
+}
+
+class AnimeCover9ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    val tvAnimeCover9Title = view.findViewById<TypefaceTextView>(R.id.tv_anime_cover_9_title)
+    val tvAnimeCover9Episodes = view.findViewById<TypefaceTextView>(R.id.tv_anime_cover_9_episode)
+    val tvAnimeCover9Time = view.findViewById<TypefaceTextView>(R.id.tv_anime_cover_9_time)
+    val tvAnimeCover9DetailPage =
+        view.findViewById<TypefaceTextView>(R.id.tv_anime_cover_9_detail_page)
+    val ivAnimeCover9Cover = view.findViewById<ImageView>(R.id.iv_anime_cover_9_cover)
+    val ivAnimeCover9Delete = view.findViewById<ImageView>(R.id.iv_anime_cover_9_delete)
 }
 
 class AnimeEpisodeFlowLayout1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -261,8 +299,10 @@ class AnimeInfo1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 }
 
 class HorizontalRecyclerView1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val rvHorizontalRecyclerView1 = view.findViewById<RecyclerView>(R.id.rv_horizontal_recycler_view_1)
-    val ivHorizontalRecyclerView1More = view.findViewById<ImageView>(R.id.iv_horizontal_recycler_view_1_more)
+    val rvHorizontalRecyclerView1 =
+        view.findViewById<RecyclerView>(R.id.rv_horizontal_recycler_view_1)
+    val ivHorizontalRecyclerView1More =
+        view.findViewById<ImageView>(R.id.iv_horizontal_recycler_view_1_more)
 }
 
 class AnimeEpisode2ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -271,4 +311,9 @@ class AnimeEpisode2ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
 class UpnpDevice1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val tvUpnpDevice1Title = view.findViewById<TextView>(R.id.tv_upnp_device_1_title)
+}
+
+class More1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    val ivMore1 = view.findViewById<ImageView>(R.id.iv_more_1)
+    val tvMore1 = view.findViewById<TextView>(R.id.tv_more_1)
 }

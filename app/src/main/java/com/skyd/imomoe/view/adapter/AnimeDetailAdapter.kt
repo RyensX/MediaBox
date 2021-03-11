@@ -3,11 +3,9 @@ package com.skyd.imomoe.view.adapter
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
-import android.graphics.Color
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -78,7 +76,11 @@ class AnimeDetailAdapter(
                 item.episodeList?.let {
                     if (holder.rvHorizontalRecyclerView1.adapter == null) {
                         holder.rvHorizontalRecyclerView1.adapter =
-                            EpisodeRecyclerView1Adapter(activity, it)
+                            EpisodeRecyclerView1Adapter(
+                                activity,
+                                it,
+                                detailPartUrl = activity.getPartUrl()
+                            )
                     }
                     holder.ivHorizontalRecyclerView1More.setOnClickListener { it1 ->
                         showEpisodeSheetDialog(it).show()
@@ -177,7 +179,13 @@ class AnimeDetailAdapter(
         if (recyclerView.itemDecorationCount == 0) {
             recyclerView.addItemDecoration(animeEpisodeItemDecoration)
         }
-        recyclerView.adapter = EpisodeRecyclerView1Adapter(activity, dataList, bottomSheetDialog, 1)
+        recyclerView.adapter = EpisodeRecyclerView1Adapter(
+            activity,
+            dataList,
+            bottomSheetDialog,
+            showType = 1,
+            detailPartUrl = activity.getPartUrl()
+        )
         return bottomSheetDialog
     }
 
@@ -185,7 +193,8 @@ class AnimeDetailAdapter(
         private val activity: Activity,
         private val dataList: List<AnimeEpisodeDataBean>,
         private val dialog: Dialog? = null,
-        private val showType: Int = 0    //0是横向，1是三列
+        private val showType: Int = 0,    //0是横向，1是三列
+        private val detailPartUrl: String = ""
     ) :
         RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -224,7 +233,7 @@ class AnimeDetailAdapter(
                         holder.tvAnimeEpisode2.setTextColor(activity.resources.getColor(R.color.foreground_main_color_2))
                     }
                     holder.itemView.setOnClickListener {
-                        process(activity, item.actionUrl, item.actionUrl)
+                        process(activity, item.actionUrl + detailPartUrl, item.actionUrl)
                         dialog?.dismiss()
                     }
                 }

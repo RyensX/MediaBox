@@ -1,18 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/srl_anime_show_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:descendantFocusability="blocksDescendants"
-    android:orientation="vertical"
     tools:context=".view.fragment.AnimeShowFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_anime_show_fragment"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/srl_anime_show_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbarSize="4dp"
-        android:scrollbarThumbVertical="@color/main_color_3"
-        android:scrollbars="vertical" />
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        android:descendantFocusability="blocksDescendants">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_anime_show_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbarSize="4dp"
+            android:scrollbarThumbVertical="@color/main_color_3"
+            android:scrollbars="vertical" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <ViewStub
+        android:id="@+id/layout_anime_show_fragment_load_failed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout="@layout/layout_image_text_tip_1" />
+</RelativeLayout>

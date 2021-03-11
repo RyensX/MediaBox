@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewStub
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -17,109 +18,132 @@ import com.hjq.permissions.OnPermissionCallback
 import com.hjq.permissions.Permission
 import com.hjq.permissions.XXPermissions
 import com.skyd.imomoe.R
+import com.skyd.imomoe.databinding.FragmentHomeBinding
 import com.skyd.imomoe.util.Util.showToast
+import com.skyd.imomoe.util.clickScale
+import com.skyd.imomoe.util.eventbus.EventBusSubscriber
+import com.skyd.imomoe.util.eventbus.MessageEvent
+import com.skyd.imomoe.util.eventbus.RefreshEvent
 import com.skyd.imomoe.view.activity.*
 import com.skyd.imomoe.viewmodel.HomeViewModel
-import kotlinx.android.synthetic.main.fragment_home.*
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 
-class HomeFragment : BaseFragment() {
+class HomeFragment : BaseFragment<FragmentHomeBinding>(), EventBusSubscriber {
     private lateinit var viewModel: HomeViewModel
     private lateinit var adapter: VpAdapter
+    private var currentTab = -1
     private var offscreenPageLimit = 1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_home, container, false)
         viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
         adapter = VpAdapter(this)
-        return view
+        return super.onCreateView(inflater, container, savedInstanceState)
     }
+
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentHomeBinding =
+        FragmentHomeBinding.inflate(inflater, container, false)
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        vp2_home_fragment.setOffscreenPageLimit(offscreenPageLimit)
-        vp2_home_fragment.setAdapter(adapter)
-        val tabLayoutMediator = TabLayoutMediator(
-            tl_home_fragment, vp2_home_fragment.getViewPager()
-        ) { tab, position ->
-            if (position < viewModel.allTabList.size)
-                tab.text = viewModel.allTabList[position].title
-        }
-        tabLayoutMediator.attach()
-
-        iv_home_fragment_rank.setOnClickListener {
-            activity?.let {
-                it.startActivity(Intent(it, RankActivity::class.java))
-                it.overridePendingTransition(
-                    R.anim.anl_push_left_in,
-                    R.anim.anl_stay
-                )
+        mBinding.run {
+            vp2HomeFragment.setOffscreenPageLimit(offscreenPageLimit)
+            vp2HomeFragment.setAdapter(adapter)
+            val tabLayoutMediator = TabLayoutMediator(
+                tlHomeFragment, vp2HomeFragment.getViewPager()
+            ) { tab, position ->
+                if (position < viewModel.allTabList.size)
+                    tab.text = viewModel.allTabList[position].title
             }
-        }
+            tabLayoutMediator.attach()
 
-        iv_home_fragment_classify.setOnClickListener {
-            startActivity(Intent(activity, ClassifyActivity::class.java))
-        }
-
-        tv_home_fragment_header_search.setOnClickListener {
-            activity?.let {
-                it.startActivity(Intent(it, SearchActivity::class.java))
-                it.overridePendingTransition(
-                    R.anim.anl_push_top_in,
-                    R.anim.anl_stay
-                )
-            }
-        }
-
-        iv_home_fragment_anime_download.setOnClickListener {
-            XXPermissions.with(this).permission(Permission.MANAGE_EXTERNAL_STORAGE).request(
-                object : OnPermissionCallback {
-                    override fun onGranted(permissions: MutableList<String>?, all: Boolean) {
-                        startActivity(Intent(activity, AnimeDownloadActivity::class.java))
-                    }
-
-                    override fun onDenied(permissions: MutableList<String>?, never: Boolean) {
-                        super.onDenied(permissions, never)
-                        "无存储权限，无法播放本地缓存视频".showToast(Toast.LENGTH_LONG)
-                    }
+            ivHomeFragmentRank.setOnClickListener {
+                it.clickScale(0.8f, 70)
+                activity?.let { it1 ->
+                    it1.startActivity(Intent(it1, RankActivity::class.java))
+                    it1.overridePendingTransition(
+                        R.anim.anl_push_left_in,
+                        R.anim.anl_stay
+                    )
                 }
-            )
+            }
+
+            ivHomeFragmentClassify.setOnClickListener {
+                it.clickScale(0.8f, 70)
+                startActivity(Intent(activity, ClassifyActivity::class.java))
+            }
+
+            tvHomeFragmentHeaderSearch.setOnClickListener {
+                activity?.let {
+                    it.startActivity(Intent(it, SearchActivity::class.java))
+                    it.overridePendingTransition(
+                        R.anim.anl_push_top_in,
+                        R.anim.anl_stay
+                    )
+                }
+            }
+
+            ivHomeFragmentAnimeDownload.setOnClickListener {
+                it.clickScale(0.8f, 70)
+                XXPermissions.with(this@HomeFragment).permission(Permission.MANAGE_EXTERNAL_STORAGE)
+                    .request(object : OnPermissionCallback {
+                        override fun onGranted(permissions: MutableList<String>?, all: Boolean) {
+                            startActivity(Intent(activity, AnimeDownloadActivity::class.java))
+                        }
+
+                        override fun onDenied(permissions: MutableList<String>?, never: Boolean) {
+                            super.onDenied(permissions, never)
+                            "无存储权限，无法播放本地缓存视频".showToast(Toast.LENGTH_LONG)
+                        }
+                    }
+                    )
+            }
+
+            ivHomeFragmentFavorite.setOnClickListener {
+                it.clickScale(0.8f, 70)
+                startActivity(Intent(activity, FavoriteActivity::class.java))
+            }
+
+            tlHomeFragment.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+                override fun onTabSelected(tab: TabLayout.Tab) {
+                    currentTab = tab.position
+                }
+
+                override fun onTabUnselected(tab: TabLayout.Tab) {
+                    //当选项卡变成未选中状态时调用
+                }
+
+                override fun onTabReselected(tab: TabLayout.Tab) {
+                    adapter.refresh(currentTab)
+                }
+            })
         }
-
-        iv_home_fragment_setting.setOnClickListener {
-            startActivity(Intent(activity, SettingActivity::class.java))
-        }
-
-        tl_home_fragment.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab) {
-            }
-
-            override fun onTabUnselected(tab: TabLayout.Tab) {
-                //当选项卡变成未选中状态时调用
-            }
-
-            override fun onTabReselected(tab: TabLayout.Tab) {
-                adapter.refresh(tab.position)
-            }
-        })
 
         viewModel.mldGetAllTabList.observe(viewLifecycleOwner, Observer {
-            if (viewModel.allTabList.size == 0) getString(R.string.get_home_tab_data_failed).showToast(
-                Toast.LENGTH_LONG
-            )
             adapter.clearAllFragment()
-            for (i in it.indices) {
-                val fragment = AnimeShowFragment()
-                val bundle = Bundle()
-                bundle.putString("partUrl", it[i].actionUrl)
-                bundle.putSerializable("viewPool", viewModel.viewPool)
-                bundle.putSerializable("childViewPool", viewModel.childViewPool)
-                fragment.arguments = bundle
-                adapter.addFragment(fragment)
+            if (!it) {
+                showLoadFailedTip(getString(R.string.load_data_failed_click_to_retry),
+                    View.OnClickListener {
+                        viewModel.getAllTabData()
+                        hideLoadFailedTip()
+                    })
+                getString(R.string.get_home_tab_data_failed).showToast(Toast.LENGTH_LONG)
+            } else {
+                hideLoadFailedTip()
+                for (i in viewModel.allTabList.indices) {
+                    val fragment = AnimeShowFragment()
+                    val bundle = Bundle()
+                    bundle.putString("partUrl", viewModel.allTabList[i].actionUrl)
+                    bundle.putSerializable("viewPool", viewModel.viewPool)
+                    bundle.putSerializable("childViewPool", viewModel.childViewPool)
+                    fragment.arguments = bundle
+                    adapter.addFragment(fragment)
+                }
             }
             adapter.notifyDataSetChanged()
         })
@@ -127,8 +151,21 @@ class HomeFragment : BaseFragment() {
         viewModel.getAllTabData()
     }
 
-    inner class VpAdapter :
-        FragmentStateAdapter {
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    override fun onMessageEvent(event: MessageEvent) {
+        when (event) {
+            is RefreshEvent -> {
+                // 如果获取首页信息成功了，则刷新每个tab内容，否则重新获取主页信息
+                if (viewModel.mldGetAllTabList.value == true)
+                    adapter.refresh(currentTab)
+                else viewModel.getAllTabData()
+            }
+        }
+    }
+
+    override fun getLoadFailedTipView(): ViewStub? = mBinding.layoutHomeFragmentLoadFailed
+
+    class VpAdapter : FragmentStateAdapter {
 
         constructor(fragmentActivity: FragmentActivity) : super(fragmentActivity)
 

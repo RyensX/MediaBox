@@ -140,11 +140,13 @@ class AnimeShowViewModel : ViewModel() {
                     }
                 }
                 mldGetAnimeShowList.postValue(true)
+                isRequesting = false
             } catch (e: Exception) {
+                animeShowList.clear()
+                mldGetAnimeShowList.postValue(false)
+                isRequesting = false
                 e.printStackTrace()
                 (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread()
-            } finally {
-                isRequesting = false
             }
         }
     }

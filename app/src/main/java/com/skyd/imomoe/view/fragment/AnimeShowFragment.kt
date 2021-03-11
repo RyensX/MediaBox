@@ -4,21 +4,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewStub
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.skyd.imomoe.R
+import com.skyd.imomoe.databinding.FragmentAnimeShowBinding
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.view.adapter.AnimeShowAdapter
 import com.skyd.imomoe.view.adapter.SerializableRecycledViewPool
 import com.skyd.imomoe.viewmodel.AnimeShowViewModel
-import kotlinx.android.synthetic.main.fragment_anime_show.*
 import java.lang.Exception
 
 
-class AnimeShowFragment : BaseFragment() {
+class AnimeShowFragment : BaseFragment<FragmentAnimeShowBinding>() {
     private var partUrl: String = ""
     private lateinit var viewModel: AnimeShowViewModel
     private lateinit var adapter: AnimeShowAdapter
@@ -43,13 +44,10 @@ class AnimeShowFragment : BaseFragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_anime_show, container, false)
-        return view
-    }
+    override fun getBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentAnimeShowBinding = FragmentAnimeShowBinding.inflate(inflater, container, false)
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -61,21 +59,30 @@ class AnimeShowFragment : BaseFragment() {
             AnimeShowAdapter(this, viewModel.animeShowList, childViewPool)
         }
 
-        val layoutManager = LinearLayoutManager(activity)
-        rv_anime_show_fragment.layoutManager = layoutManager
-        rv_anime_show_fragment.setHasFixedSize(true)
-        rv_anime_show_fragment.adapter = adapter
-        viewModel.viewPool?.let {
-            rv_anime_show_fragment.setRecycledViewPool(it)
+        mBinding.run {
+            rvAnimeShowFragment.layoutManager = LinearLayoutManager(activity)
+            rvAnimeShowFragment.setHasFixedSize(true)
+            rvAnimeShowFragment.adapter = adapter
+            srlAnimeShowFragment.setColorSchemeResources(R.color.main_color)
+            srlAnimeShowFragment.setOnRefreshListener(srlOnRefreshListener)
         }
 
-        srl_anime_show_fragment.setColorSchemeResources(R.color.main_color)
-        srl_anime_show_fragment.setOnRefreshListener(srlOnRefreshListener)
+        viewModel.viewPool?.let {
+            mBinding.rvAnimeShowFragment.setRecycledViewPool(it)
+        }
 
         viewModel.mldGetAnimeShowList.observe(viewLifecycleOwner, Observer {
-            srl_anime_show_fragment.isRefreshing = false
+            mBinding.srlAnimeShowFragment.isRefreshing = false
+            adapter.notifyDataSetChanged()
+
             if (it) {
-                adapter.notifyDataSetChanged()
+                hideLoadFailedTip()
+            } else {
+                showLoadFailedTip(getString(R.string.load_data_failed_click_to_retry),
+                    View.OnClickListener {
+                        viewModel.getAnimeShowData(partUrl)
+                        hideLoadFailedTip()
+                    })
             }
         })
 
@@ -83,9 +90,11 @@ class AnimeShowFragment : BaseFragment() {
     }
 
     fun refresh() {
-        srl_anime_show_fragment.isRefreshing = true
+        mBinding.srlAnimeShowFragment.isRefreshing = true
         srlOnRefreshListener.onRefresh()
     }
+
+    override fun getLoadFailedTipView(): ViewStub? = mBinding.layoutAnimeShowFragmentLoadFailed
 
     companion object {
         const val TAG = "AnimeShowFragment"

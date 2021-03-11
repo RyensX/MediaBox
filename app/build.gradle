@@ -2,8 +2,14 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
-    id 'kotlin-android-extensions'
     id 'AndResGuard'
+    id 'bugly'
+}
+
+bugly {
+    appId = '07cdf10759'                            // 注册时分配的App ID
+    appKey = '9a0f5bd2-1921-4664-95d9-b5f70b8eadae' // 注册时分配的App Key
+    debug = true                                    // 调试模式默认关闭，true是打开
 }
 
 android {
@@ -14,8 +20,8 @@ android {
         applicationId "com.skyd.imomoe"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 7
-        versionName "1.0.6"
+        versionCode 8
+        versionName "1.0.7"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -66,6 +72,10 @@ android {
     packagingOptions {
         exclude 'META-INF/beans.xml'
     }
+
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
@@ -109,6 +119,11 @@ dependencies {
     implementation 'org.eclipse.jetty:jetty-servlet:8.1.22.v20160922'
     implementation 'org.eclipse.jetty:jetty-client:8.1.22.v20160922'
     implementation 'org.nanohttpd:nanohttpd:2.3.1'
+//    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.4'
+    implementation 'com.tencent.bugly:crashreport:3.3.7'
+    implementation 'org.greenrobot:eventbus:3.2.0'
+    implementation "com.umeng.umsdk:common:9.3.6"
+    implementation "com.umeng.umsdk:asms:1.2.0" // asms包依赖
 }
 
 //AndResGuard资源混淆工具
@@ -136,7 +151,31 @@ andResGuard {
             "R.string.ga_trackingId",
             "R.string.firebase_database_url",
             "R.string.google_api_key",
-            "R.string.google_crash_reporting_api_key"
+            "R.string.google_crash_reporting_api_key",
+
+            // 友盟sdk
+            "R.anim.umeng*",
+            "R.string.umeng*",
+            "R.string.UM*",
+            "R.string.tb_*",
+            "R.layout.umeng*",
+            "R.layout.socialize_*",
+            "R.layout.*messager*",
+            "R.layout.tb_*",
+            "R.color.umeng*",
+            "R.color.tb_*",
+            "R.style.*UM*",
+            "R.style.umeng*",
+            "R.drawable.umeng*",
+            "R.drawable.tb_*",
+            "R.drawable.sina*",
+            "R.drawable.qq_*",
+            "R.drawable.tb_*",
+            "R.id.umeng*",
+            "R.id.*messager*",
+            "R.id.progress_bar_parent",
+            "R.id.socialize_*",
+            "R.id.webView"
     ]
     compressFilePattern = [
             "*.png",

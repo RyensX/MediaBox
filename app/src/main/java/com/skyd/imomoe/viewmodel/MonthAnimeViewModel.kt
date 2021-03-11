@@ -1,7 +1,5 @@
 package com.skyd.imomoe.viewmodel
 
-import android.graphics.Bitmap
-import android.util.LruCache
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.skyd.imomoe.App
@@ -42,6 +40,8 @@ class MonthAnimeViewModel : ViewModel() {
                 }
                 mldMonthAnimeList.postValue(true)
             } catch (e: Exception) {
+                monthAnimeList.clear()
+                mldMonthAnimeList.postValue(false)
                 e.printStackTrace()
                 (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread()
             }

@@ -36,7 +36,7 @@
                     android:layout_height="25dp"
                     android:layout_marginTop="7dp"
                     android:scaleType="fitXY"
-                    android:src="@drawable/ic_home_main_color_24"
+                    android:src="@drawable/selector_home_button"
                     app:layout_constraintBottom_toTopOf="@id/tv_control_bar_home"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -48,7 +48,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="7dp"
                     android:text="@string/home"
-                    android:textColor="@color/main_color"
+                    android:textColor="@drawable/selector_home_button"
                     android:textSize="10sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@id/iv_control_bar_home"
@@ -68,7 +68,7 @@
                     android:layout_height="23dp"
                     android:layout_marginTop="7dp"
                     android:scaleType="fitXY"
-                    android:src="@drawable/ic_sunny_main_color_24"
+                    android:src="@drawable/selector_everyday_anime_button"
                     app:layout_constraintBottom_toTopOf="@id/tv_control_bar_everyday_anime"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -80,11 +80,43 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="7dp"
                     android:text="@string/everyday_anime"
-                    android:textColor="@color/main_color"
+                    android:textColor="@drawable/selector_everyday_anime_button"
                     android:textSize="10sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@id/iv_control_bar_everyday_anime"
                     app:layout_constraintStart_toStartOf="@id/iv_control_bar_everyday_anime"
+                    tools:ignore="SmallSp" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_more_button"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/iv_control_bar_more"
+                    android:layout_width="23dp"
+                    android:layout_height="23dp"
+                    android:layout_marginTop="7dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/selector_more_button"
+                    app:layout_constraintBottom_toTopOf="@id/tv_control_bar_more"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_control_bar_more"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="7dp"
+                    android:text="@string/more"
+                    android:textColor="@drawable/selector_more_button"
+                    android:textSize="10sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@id/iv_control_bar_more"
+                    app:layout_constraintStart_toStartOf="@id/iv_control_bar_more"
                     tools:ignore="SmallSp" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>

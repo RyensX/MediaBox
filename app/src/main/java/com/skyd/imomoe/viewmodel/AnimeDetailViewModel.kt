@@ -198,6 +198,8 @@ class AnimeDetailViewModel : ViewModel() {
                 }
                 mldAnimeDetailList.postValue(true)
             } catch (e: Exception) {
+                animeDetailList.clear()
+                mldAnimeDetailList.postValue(false)
                 e.printStackTrace()
                 (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread()
             }

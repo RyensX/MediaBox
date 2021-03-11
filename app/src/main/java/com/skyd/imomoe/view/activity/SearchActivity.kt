@@ -5,6 +5,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
+import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.SearchHistoryBean
+import com.skyd.imomoe.databinding.ActivitySearchBinding
 import com.skyd.imomoe.util.Util.gone
 import com.skyd.imomoe.util.Util.showKeyboard
 import com.skyd.imomoe.util.Util.showToast
@@ -19,10 +21,10 @@ import com.skyd.imomoe.util.Util.visible
 import com.skyd.imomoe.view.adapter.SearchAdapter
 import com.skyd.imomoe.view.adapter.SearchHistoryAdapter
 import com.skyd.imomoe.viewmodel.SearchViewModel
-import kotlinx.android.synthetic.main.activity_search.*
-import kotlinx.android.synthetic.main.layout_circle_progress_text_tip_1.*
 
-class SearchActivity : BaseActivity() {
+class SearchActivity : BaseActivity<ActivitySearchBinding>() {
+    private lateinit var mLayoutCircleProgressTextTip1: RelativeLayout
+    private lateinit var tvCircleProgressTextTip1: TextView
     private lateinit var viewModel: SearchViewModel
     private lateinit var adapter: SearchAdapter
     private lateinit var historyAdapter: SearchHistoryAdapter
@@ -30,51 +32,57 @@ class SearchActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_search)
 
         viewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
         adapter = SearchAdapter(this, viewModel.searchResultList)
         historyAdapter = SearchHistoryAdapter(this, viewModel.searchHistoryList)
 
-        val layoutManager = LinearLayoutManager(this)
-        rv_search_activity.layoutManager = layoutManager
-        rv_search_activity.setHasFixedSize(true)
-        rv_search_activity.adapter = adapter
+        mBinding.run {
+            rvSearchActivity.layoutManager = LinearLayoutManager(this@SearchActivity)
+            rvSearchActivity.setHasFixedSize(true)
+            rvSearchActivity.adapter = adapter
 
-        et_search_activity_search.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
+            etSearchActivitySearch.addTextChangedListener(object : TextWatcher {
+                override fun afterTextChanged(s: Editable?) {
+                }
+
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    if (this@SearchActivity::mLayoutCircleProgressTextTip1.isInitialized)
+                        mLayoutCircleProgressTextTip1.gone()
+                    if (s == null || s.isEmpty()) {
+                        tvSearchActivityTip.text = getString(R.string.search_history)
+                        ivSearchActivityClearKeyWords.gone()
+                        viewModel.searchResultList.clear()
+                        rvSearchActivity.adapter = historyAdapter
+                        historyAdapter.notifyDataSetChanged()
+                    } else ivSearchActivityClearKeyWords.visible()
+                }
+            })
+
+            ivSearchActivityClearKeyWords.setOnClickListener {
+                etSearchActivitySearch.setText("")
             }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                layout_circle_progress_text_tip_1?.gone()
-                if (s == null || s.isEmpty()) {
-                    tv_search_activity_tip.text = getString(R.string.search_history)
-                    iv_search_activity_clear_key_words.gone()
-                    viewModel.searchResultList.clear()
-                    rv_search_activity.adapter = historyAdapter
-                    historyAdapter.notifyDataSetChanged()
-                } else iv_search_activity_clear_key_words.visible()
-            }
-        })
-
-        iv_search_activity_clear_key_words.setOnClickListener {
-            et_search_activity_search.setText("")
         }
 
         viewModel.mldFailed.observe(this, Observer {
-            layout_circle_progress_text_tip_1.gone()
+            if (this::mLayoutCircleProgressTextTip1.isInitialized) mLayoutCircleProgressTextTip1.gone()
         })
 
         viewModel.mldSearchResultList.observe(this, Observer {
-            layout_circle_progress_text_tip_1.gone()
+            if (this::mLayoutCircleProgressTextTip1.isInitialized) mLayoutCircleProgressTextTip1.gone()
             //仅在搜索框不为“”时展示搜索结果
-            if (et_search_activity_search.text.toString().isNotEmpty()) {
-                rv_search_activity.adapter = adapter
-                cv_search_activity_tip.visible()
-                tv_search_activity_tip.text = getString(
+            if (mBinding.etSearchActivitySearch.text.toString().isNotEmpty()) {
+                mBinding.rvSearchActivity.adapter = adapter
+                mBinding.cvSearchActivityTip.visible()
+                mBinding.tvSearchActivityTip.text = getString(
                     R.string.search_activity_tip, it,
                     viewModel.searchResultList.size
                 )
@@ -84,24 +92,24 @@ class SearchActivity : BaseActivity() {
 
         viewModel.mldSearchHistoryList.observe(this, Observer {
             if (viewModel.searchResultList.size == 0) {
-                tv_search_activity_tip.text = getString(R.string.search_history)
-                rv_search_activity.adapter = historyAdapter
+                mBinding.tvSearchActivityTip.text = getString(R.string.search_history)
+                mBinding.rvSearchActivity.adapter = historyAdapter
                 historyAdapter.notifyDataSetChanged()
             }
         })
 
         viewModel.mldDeleteCompleted.observe(this, Observer {
             if (viewModel.searchResultList.size == 0) {
-                rv_search_activity.adapter = historyAdapter
+                mBinding.rvSearchActivity.adapter = historyAdapter
                 historyAdapter.notifyItemRemoved(it)
             }
         })
 
-        tv_search_activity_cancel.setOnClickListener { finish() }
+        mBinding.tvSearchActivityCancel.setOnClickListener { finish() }
 
-        et_search_activity_search.showKeyboard()
+        mBinding.etSearchActivitySearch.showKeyboard()
 
-        et_search_activity_search.setOnEditorActionListener(object :
+        mBinding.etSearchActivitySearch.setOnEditorActionListener(object :
             TextView.OnEditorActionListener {
             override fun onEditorAction(v: TextView, actionId: Int, event: KeyEvent?): Boolean {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
@@ -127,18 +135,25 @@ class SearchActivity : BaseActivity() {
         viewModel.getSearchHistoryData()
     }
 
+    override fun getBinding(): ActivitySearchBinding = ActivitySearchBinding.inflate(layoutInflater)
+
     fun search(key: String) {
         //setText一定要在加载布局之前，否则progressbar会被gone掉
-        et_search_activity_search.setText(key)
-        et_search_activity_search.setSelection(key.length)
-        if (layout_search_activity_loading == null) {
-            layout_circle_progress_text_tip_1.visible()
-        } else {
-            layout_search_activity_loading.inflate()
+        mBinding.run {
+            etSearchActivitySearch.setText(key)
+            etSearchActivitySearch.setSelection(key.length)
+            if (this@SearchActivity::tvCircleProgressTextTip1.isInitialized) {
+                mLayoutCircleProgressTextTip1.visible()
+            } else {
+                mLayoutCircleProgressTextTip1 =
+                    layoutSearchActivityLoading.inflate() as RelativeLayout
+                tvCircleProgressTextTip1 =
+                    mLayoutCircleProgressTextTip1.findViewById(R.id.tv_circle_progress_text_tip_1)
+            }
+            viewModel.searchResultList.clear()
+            if (this@SearchActivity::tvCircleProgressTextTip1.isInitialized) tvCircleProgressTextTip1.gone()
+            rvSearchActivity.adapter = adapter
         }
-        viewModel.searchResultList.clear()
-        tv_circle_progress_text_tip_1.gone()
-        rv_search_activity.adapter = adapter
         viewModel.insertSearchHistory(
             SearchHistoryBean(
                 "searchHistory1",

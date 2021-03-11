@@ -20,11 +20,12 @@
 
     <com.skyd.imomoe.view.widget.textview.TypefaceTextView
         android:id="@+id/tv_toolbar_1_title"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="16dp"
+        android:layout_weight="1"
         android:ellipsize="marquee"
         android:focusable="true"
         android:marqueeRepeatLimit="marquee_forever"
@@ -33,4 +34,24 @@
         android:textSize="17sp"
         app:typeface="bPRTypeface"
         tools:text="标题" />
+
+    <ImageView
+        android:id="@+id/iv_toolbar_1_button_1"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="?android:selectableItemBackground"
+        android:padding="14dp"
+        android:src="@drawable/ic_share_white_24"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/iv_toolbar_1_button_2"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="?android:selectableItemBackground"
+        android:padding="11dp"
+        android:src="@drawable/ic_star_border_white_24"
+        android:visibility="gone"
+        tools:visibility="visible" />
 </LinearLayout>

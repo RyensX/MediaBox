@@ -9,6 +9,7 @@ import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.util.MD5.getMD5
 import com.skyd.imomoe.util.Util.getDirectorySize
 import com.skyd.imomoe.util.Util.getFileSize
+import com.skyd.imomoe.util.Util.getFormatSize
 import com.skyd.imomoe.util.downloadanime.AnimeDownloadHelper.Companion.deleteAnimeFromXml
 import com.skyd.imomoe.util.downloadanime.AnimeDownloadHelper.Companion.getAnimeFromXml
 import com.skyd.imomoe.util.downloadanime.AnimeDownloadHelper.Companion.save2Xml
@@ -43,10 +44,7 @@ class AnimeDownloadViewModel : ViewModel() {
                                 file.name,
                                 null,
                                 "",
-                                size = String.format(
-                                    "%.1fM",
-                                    getDirectorySize(file) / 1048576.0      //1024*1024==1048576
-                                ),
+                                size = getFormatSize(getDirectorySize(file).toDouble()),
                                 episodeCount = episodeCount.toString() + "P"
                             )
                         )
@@ -122,15 +120,13 @@ class AnimeDownloadViewModel : ViewModel() {
                             anime.title,
                             null,
                             "",
-                            size = String.format(
-                                "%.1fM",
+                            size = getFormatSize(
                                 getFileSize(
                                     File(
                                         Const.DownloadAnime.animeFilePath +
-                                                directoryName + "/" +
-                                                anime.fileName
+                                                directoryName + "/" + anime.fileName
                                     )
-                                ) / 1048576.0      //1024*1024==1048576
+                                ).toDouble()
                             )
                         )
                     )

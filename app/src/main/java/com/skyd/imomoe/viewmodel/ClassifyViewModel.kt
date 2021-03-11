@@ -20,9 +20,9 @@ import java.util.*
 
 
 class ClassifyViewModel : ViewModel() {
-    private var requestTimes = 0
+    var isRequesting = false
     var classifyTabList: MutableList<ClassifyBean> = ArrayList()        //上方分类数据
-    var mldClassifyTabList: MutableLiveData<List<ClassifyBean>> = MutableLiveData()
+    var mldClassifyTabList: MutableLiveData<Boolean> = MutableLiveData()
     var classifyList: MutableList<AnimeCoverBean> = ArrayList()       //下方tv数据
     var mldClassifyList: MutableLiveData<Boolean> = MutableLiveData()
 
@@ -42,8 +42,10 @@ class ClassifyViewModel : ViewModel() {
                         }
                     }
                 }
-                mldClassifyTabList.postValue(classifyTabList)
+                mldClassifyTabList.postValue(true)
             } catch (e: Exception) {
+                classifyTabList.clear()
+                mldClassifyTabList.postValue(false)
                 e.printStackTrace()
                 (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread()
             }
@@ -53,6 +55,8 @@ class ClassifyViewModel : ViewModel() {
     fun getClassifyData(partUrl: String) {
         GlobalScope.launch(Dispatchers.IO) {
             try {
+                if (isRequesting) return@launch
+                isRequesting = true
                 val url = Api.MAIN_URL + partUrl
                 val document = JsoupUtil.getDocument(url)
                 val areaElements: Elements = document.getElementsByClass("area")
@@ -69,6 +73,8 @@ class ClassifyViewModel : ViewModel() {
                 }
                 mldClassifyList.postValue(true)
             } catch (e: Exception) {
+                classifyList.clear()
+                mldClassifyList.postValue(false)
                 e.printStackTrace()
                 (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread()
             }

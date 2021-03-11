@@ -2,40 +2,42 @@ package com.skyd.imomoe.view.activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Api
+import com.skyd.imomoe.config.Const
+import com.skyd.imomoe.databinding.ActivityAboutBinding
 import com.skyd.imomoe.util.Util.getAppVersionName
 import com.skyd.imomoe.util.Util.openBrowser
-import kotlinx.android.synthetic.main.activity_about.*
-import kotlinx.android.synthetic.main.layout_toolbar_1.*
 
-class AboutActivity : AppCompatActivity() {
+class AboutActivity : BaseActivity<ActivityAboutBinding>() {
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_about)
 
-        iv_toolbar_1_back.setOnClickListener { finish() }
-        tv_toolbar_1_title.text = getString(R.string.about)
+        mBinding.run {
+            llAboutActivityToolbar.ivToolbar1Back.setOnClickListener { finish() }
+            llAboutActivityToolbar.tvToolbar1Title.text = getString(R.string.about)
 
-        tv_about_activity_version.text = "V " + getAppVersionName()
+            tvAboutActivityVersion.text = "V " + getAppVersionName()
 
-        rl_about_activity_imomoe.setOnClickListener {
-            openBrowser(Api.MAIN_URL)
-        }
+            rlAboutActivityImomoe.setOnClickListener {
+                openBrowser(Api.MAIN_URL)
+            }
 
-        rl_about_activity_github.setOnClickListener {
-            openBrowser("https://github.com/SkyD666/Imomoe")
-        }
+            rlAboutActivityGithub.setOnClickListener {
+                openBrowser(Const.Common.GITHUB_URL)
+            }
 
-        rl_about_activity_gitee.setOnClickListener {
-            openBrowser("https://gitee.com/SkyD666/Imomoe")
-        }
+            rlAboutActivityGitee.setOnClickListener {
+                openBrowser(Const.Common.GITEE_URL)
+            }
 
-        rl_about_activity_license.setOnClickListener {
-            startActivity(Intent(this, LicenseActivity::class.java))
+            rlAboutActivityLicense.setOnClickListener {
+                startActivity(Intent(this@AboutActivity, LicenseActivity::class.java))
+            }
         }
     }
+
+    override fun getBinding(): ActivityAboutBinding = ActivityAboutBinding.inflate(layoutInflater)
 }

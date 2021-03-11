@@ -2,23 +2,21 @@ package com.skyd.imomoe.view.activity
 
 import android.os.Bundle
 import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.skyd.imomoe.R
+import com.skyd.imomoe.databinding.ActivityDlnaBinding
 import com.skyd.imomoe.util.Util.getRedirectUrl
 import com.skyd.imomoe.util.dlna.dmc.DLNACastManager
 import com.skyd.imomoe.util.dlna.dmc.OnDeviceRegistryListener
 import com.skyd.imomoe.view.adapter.UpnpAdapter
 import com.skyd.imomoe.viewmodel.UpnpViewModel
-import kotlinx.android.synthetic.main.activity_dlna.*
-import kotlinx.android.synthetic.main.layout_toolbar_1.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.fourthline.cling.model.meta.Device
 
-class DlnaActivity : AppCompatActivity() {
+class DlnaActivity : BaseActivity<ActivityDlnaBinding>() {
     private lateinit var viewModel: UpnpViewModel
     private lateinit var adapter: UpnpAdapter
     lateinit var title: String
@@ -49,7 +47,6 @@ class DlnaActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_dlna)
 
         url = intent.getStringExtra("url") ?: ""
         title = intent.getStringExtra("title") ?: ""
@@ -59,11 +56,13 @@ class DlnaActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this).get(UpnpViewModel::class.java)
         adapter = UpnpAdapter(this, viewModel.deviceList)
 
-        tv_toolbar_1_title.text = getString(R.string.play_on_tv)
-        iv_toolbar_1_back.setOnClickListener { finish() }
+        mBinding.run {
+            tbDlnaActivity.tvToolbar1Title.text = getString(R.string.play_on_tv)
+            tbDlnaActivity.ivToolbar1Back.setOnClickListener { finish() }
 
-        rv_dlna_activity_device.layoutManager = LinearLayoutManager(this)
-        rv_dlna_activity_device.adapter = adapter
+            rvDlnaActivityDevice.layoutManager = LinearLayoutManager(this@DlnaActivity)
+            rvDlnaActivityDevice.adapter = adapter
+        }
 
         GlobalScope.launch(Dispatchers.IO) {
             url = getRedirectUrl(this@DlnaActivity.url)
@@ -87,4 +86,6 @@ class DlnaActivity : AppCompatActivity() {
         DLNACastManager.getInstance().unregisterListener(deviceRegistryListener)
         super.onDestroy()
     }
+
+    override fun getBinding(): ActivityDlnaBinding = ActivityDlnaBinding.inflate(layoutInflater)
 }

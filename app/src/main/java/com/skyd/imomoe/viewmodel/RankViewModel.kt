@@ -23,6 +23,7 @@ import kotlin.collections.ArrayList
 
 class RankViewModel : ViewModel() {
     private var bgTimes = 0
+    var isRequesting = false
     var tabList: MutableList<TabBean> = Collections.synchronizedList(ArrayList())
     var rankList: MutableList<List<AnimeCoverBean>> = Collections.synchronizedList(ArrayList())
     var mldRankData: MutableLiveData<Boolean> = MutableLiveData()
@@ -38,76 +39,80 @@ class RankViewModel : ViewModel() {
 
     fun getRankData() {
         GlobalScope.launch(Dispatchers.IO) {
-            tabList.clear()
-            rankList.clear()
+            try {
+                if (isRequesting) return@launch
+                isRequesting = true
 
-            //以下两个方法的list的add时必须加锁才能保证tab和rankData顺序相对应
-            //如：一周动漫排行榜都是第0个，动漫排行榜都是第0个
-            getWeekRankData()
-            getAllRankData()
+                tabList.clear()
+                rankList.clear()
+                // 以下两个方法的list的add时必须加锁才能保证tab和rankData顺序相对应
+                // 如：一周动漫排行榜都是第0个，动漫排行榜都是第0个
+                getWeekRankData()
+                getAllRankData()
+            } catch (e: Exception) {
+                getDataTimes = 0
+                mldRankData.postValue(false)
+                tabList.clear()
+                rankList.clear()
+                e.printStackTrace()
+                e.message?.showToastOnThread(Toast.LENGTH_LONG)
+            }
         }
     }
 
     private fun getAllRankData() {
-        try {
-            val document = JsoupUtil.getDocument(Api.MAIN_URL + ANIME_TOP)
-            val areaChildren: Elements = document.select("[class=area]")[0].children()
-            for (i in areaChildren.indices) {
-                when (areaChildren[i].className()) {
-                    "gohome" -> {
-                        tabList.add(
-                            tabList.size, TabBean(
-                                "",
-                                "",
-                                "",
-                                areaChildren[i].select("h1").select("a").text()
-                            )
+        val document = JsoupUtil.getDocument(Api.MAIN_URL + ANIME_TOP)
+        val areaChildren: Elements = document.select("[class=area]")[0].children()
+        for (i in areaChildren.indices) {
+            when (areaChildren[i].className()) {
+                "gohome" -> {
+                    tabList.add(
+                        tabList.size, TabBean(
+                            "",
+                            "",
+                            "",
+                            areaChildren[i].select("h1").select("a").text()
                         )
-                    }
-                    "topli" -> {
-                        rankList.add(rankList.size, parseTopli(areaChildren[i]))
-                    }
+                    )
+                }
+                "topli" -> {
+                    rankList.add(rankList.size, parseTopli(areaChildren[i]))
                 }
             }
-            getDataTimes++
-        } catch (e: Exception) {
-            e.printStackTrace()
-            e.message?.showToastOnThread(Toast.LENGTH_LONG)
         }
+        getDataTimes++
     }
 
     private fun getWeekRankData() {
         bgTimes = 0
-        try {
-            val url = Api.MAIN_URL
-            val document = JsoupUtil.getDocument(url)
-            val areaChildren: Elements = document.select("[class=area]")[0].children()
-            for (i in areaChildren.indices) {
-                when (areaChildren[i].className()) {
-                    "side r" -> {
-                        val sideRChildren = areaChildren[i].children()
-                        for (j in sideRChildren.indices) {
-                            when (sideRChildren[j].className()) {
-                                "bg" -> {
-                                    if (bgTimes++ == 0) continue
+        val url = Api.MAIN_URL
+        val document = JsoupUtil.getDocument(url)
+        val areaChildren: Elements = document.select("[class=area]")[0].children()
+        for (i in areaChildren.indices) {
+            when (areaChildren[i].className()) {
+                "side r" -> {
+                    val sideRChildren = areaChildren[i].children()
+                    for (j in sideRChildren.indices) {
+                        when (sideRChildren[j].className()) {
+                            "bg" -> {
+                                if (bgTimes++ == 0) continue
 
-                                    val bgChildren = sideRChildren[j].children()
-                                    for (k in bgChildren.indices) {
-                                        when (bgChildren[k].className()) {
-                                            "dtit" -> {
-                                                tabList.add(
-                                                    0,
-                                                    TabBean(
-                                                        "",
-                                                        "",
-                                                        "",
-                                                        parseDtit(bgChildren[k])
-                                                    )
+                                val bgChildren = sideRChildren[j].children()
+                                for (k in bgChildren.indices) {
+                                    when (bgChildren[k].className()) {
+                                        "dtit" -> {
+                                            tabList.add(
+                                                0,
+                                                TabBean(
+                                                    "",
+                                                    "",
+                                                    "",
+                                                    parseDtit(bgChildren[k])
                                                 )
-                                            }
-                                            "pics" -> {
-                                                rankList.add(0, parsePics(bgChildren[k], url))
-                                            }
+                                            )
+                                        }
+                                        "pics" -> {
+                                            rankList.add(0, parsePics(bgChildren[k], url))
                                         }
                                     }
                                 }
@@ -116,11 +121,8 @@ class RankViewModel : ViewModel() {
                     }
                 }
             }
-            getDataTimes++
-        } catch (e: Exception) {
-            e.printStackTrace()
-            e.message?.showToastOnThread(Toast.LENGTH_LONG)
         }
+        getDataTimes++
     }
 
     companion object {

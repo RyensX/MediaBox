@@ -10,26 +10,45 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.skyd.imomoe.App
 import com.skyd.imomoe.bean.SearchHistoryBean
 import com.skyd.imomoe.database.converter.AnimeDownloadStatusConverter
+import com.skyd.imomoe.database.converter.ImageBeanConverter
 import com.skyd.imomoe.database.dao.AnimeDownloadDao
+import com.skyd.imomoe.database.dao.FavoriteAnimeDao
 import com.skyd.imomoe.database.dao.SearchHistoryDao
 import com.skyd.imomoe.database.entity.AnimeDownloadEntity
+import com.skyd.imomoe.bean.FavoriteAnimeBean
+import com.skyd.imomoe.bean.HistoryBean
+import com.skyd.imomoe.database.dao.HistoryDao
 
 @Database(
     entities = [SearchHistoryBean::class,
-        AnimeDownloadEntity::class], version = 2
+        AnimeDownloadEntity::class,
+        FavoriteAnimeBean::class,
+        HistoryBean::class], version = 3
 )
-@TypeConverters(AnimeDownloadStatusConverter::class)
+@TypeConverters(
+    value = [AnimeDownloadStatusConverter::class,
+        ImageBeanConverter::class]
+)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun searchHistoryDao(): SearchHistoryDao
     abstract fun animeDownloadDao(): AnimeDownloadDao
+    abstract fun favoriteAnimeDao(): FavoriteAnimeDao
+    abstract fun historyDao(): HistoryDao
 
     companion object {
         private var instance: AppDatabase? = null
 
         private val migration1To2 = object : Migration(1, 2) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("ALTER TABLE animeDownloadList add fileName TEXT")
+                database.execSQL("ALTER TABLE animeDownloadList ADD fileName TEXT")
+            }
+        }
+
+        private val migration2To3 = object : Migration(2, 3) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("CREATE TABLE favoriteAnimeList(type TEXT NOT NULL, actionUrl TEXT NOT NULL, animeUrl TEXT PRIMARY KEY NOT NULL, animeTitle TEXT NOT NULL, time INTEGER NOT NULL, cover TEXT NOT NULL, lastEpisodeUrl TEXT, lastEpisode TEXT)")
+                database.execSQL("CREATE TABLE historyList(type TEXT NOT NULL, actionUrl TEXT NOT NULL, animeUrl TEXT PRIMARY KEY NOT NULL, animeTitle TEXT NOT NULL, time INTEGER NOT NULL, cover TEXT NOT NULL, lastEpisodeUrl TEXT, lastEpisode TEXT)")
             }
         }
 
@@ -42,7 +61,7 @@ abstract class AppDatabase : RoomDatabase() {
                         AppDatabase::class.java,
                         "app.db"
                     )
-                        .addMigrations(migration1To2)
+                        .addMigrations(migration1To2, migration2To3)
                         .build()
                 }
             } else {
