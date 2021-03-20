@@ -6,9 +6,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
+import com.skyd.imomoe.config.Const.ViewHolderTypeInt
 import com.skyd.imomoe.util.UpnpDevice1ViewHolder
 import com.skyd.imomoe.util.Util.showToast
-import com.skyd.imomoe.util.ViewHolderUtil
 import com.skyd.imomoe.util.ViewHolderUtil.Companion.getViewHolder
 import com.skyd.imomoe.view.activity.DlnaActivity
 import com.skyd.imomoe.view.activity.DlnaControlActivity
@@ -20,7 +20,7 @@ class UpnpAdapter(
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    override fun getItemViewType(position: Int): Int = ViewHolderUtil.UPNP_DEVICE_1
+    override fun getItemViewType(position: Int): Int = ViewHolderTypeInt.UPNP_DEVICE_1
 
     override fun onCreateViewHolder(
         parent: ViewGroup,

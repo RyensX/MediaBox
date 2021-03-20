@@ -1,5 +1,6 @@
 package com.skyd.imomoe.view.adapter
 
+import android.content.res.ColorStateList
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -9,7 +10,7 @@ import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeDetailBean
 import com.skyd.imomoe.util.*
-import com.skyd.imomoe.util.Util.gone
+import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.process
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.ViewHolderUtil.Companion.getViewHolder
@@ -75,8 +76,8 @@ class PlayAdapter(
                                 false
                             ) as TextView
                         tvFlowLayout.text = it[i].title
-                        tvFlowLayout.setOnClickListener { it1 ->
-                            activity.startPlay(it[i].actionUrl, it[i].title)
+                        tvFlowLayout.setOnClickListener { _ ->
+                            activity.startPlay(it[i].actionUrl, position, it[i].title)
                         }
                         holder.flAnimeEpisodeFlowLayout1.addView(tvFlowLayout)
                     }
@@ -92,9 +93,9 @@ class PlayAdapter(
                             )
                     }
                     holder.ivHorizontalRecyclerView1More.setImageResource(R.drawable.ic_keyboard_arrow_down_main_color_2_24)
-                    holder.ivHorizontalRecyclerView1More.setOnClickListener { it1 ->
-                        dialog.show()
-                    }
+                    holder.ivHorizontalRecyclerView1More.imageTintList =
+                        ColorStateList.valueOf(activity.getResColor(R.color.foreground_main_color_2))
+                    holder.ivHorizontalRecyclerView1More.setOnClickListener { dialog.show() }
                 }
             }
             else -> {

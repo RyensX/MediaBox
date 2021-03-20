@@ -9,14 +9,15 @@ import android.widget.RelativeLayout
 import android.widget.SeekBar
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.ActivityDlnaControlBinding
-import com.skyd.imomoe.util.Util.gone
+import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.setColorStatusBar
 import com.skyd.imomoe.util.Util.showToast
-import com.skyd.imomoe.util.Util.visible
 import com.skyd.imomoe.util.dlna.CastObject
 import com.skyd.imomoe.util.dlna.Utils
 import com.skyd.imomoe.util.dlna.dmc.DLNACastManager
 import com.skyd.imomoe.util.dlna.dmc.control.ICastInterface
+import com.skyd.imomoe.util.gone
+import com.skyd.imomoe.util.visible
 import org.fourthline.cling.model.meta.Device
 import kotlin.collections.HashMap
 
@@ -35,7 +36,7 @@ class DlnaControlActivity : BaseActivity<ActivityDlnaControlBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setColorStatusBar(window, resources.getColor(R.color.gray_5))
+        setColorStatusBar(window, getResColor(R.color.gray_5))
 
         layoutDlnaControlActivityLoading =
             mBinding.layoutDlnaControlActivityLoading.layoutCircleProgressTextTip1

@@ -18,7 +18,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginStart="16dp"
-            android:src="@drawable/ic_beans_white_24" />
+            android:src="@drawable/ic_beans_main_color_24"
+            app:tint="@color/foreground_white" />
 
         <com.skyd.imomoe.view.widget.textview.TypefaceTextView
             android:id="@+id/tv_more_fragment_title"

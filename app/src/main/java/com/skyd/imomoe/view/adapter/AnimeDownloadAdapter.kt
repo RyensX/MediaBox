@@ -6,20 +6,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeCoverBean
-import com.skyd.imomoe.bean.LicenseBean
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.util.AnimeCover7ViewHolder
-import com.skyd.imomoe.util.License1ViewHolder
-import com.skyd.imomoe.util.LicenseHeader1ViewHolder
-import com.skyd.imomoe.util.Util.gone
-import com.skyd.imomoe.util.Util.invisible
 import com.skyd.imomoe.util.Util.process
 import com.skyd.imomoe.util.Util.showToast
-import com.skyd.imomoe.util.Util.visible
 import com.skyd.imomoe.util.ViewHolderUtil.Companion.getItemViewType
 import com.skyd.imomoe.util.ViewHolderUtil.Companion.getViewHolder
+import com.skyd.imomoe.util.invisible
+import com.skyd.imomoe.util.visible
 import com.skyd.imomoe.view.activity.AnimeDownloadActivity
-import com.skyd.imomoe.view.activity.LicenseActivity
 
 class AnimeDownloadAdapter(
     val activity: AnimeDownloadActivity,

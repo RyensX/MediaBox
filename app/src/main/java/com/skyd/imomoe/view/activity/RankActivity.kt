@@ -58,6 +58,9 @@ class RankActivity : BaseActivity<ActivityRankBinding>() {
 
         viewModel.mldRankData.observe(this, Observer {
             mBinding.srlRankActivity.isRefreshing = false
+            // 如果初始化过了，再对其操作，否则会crash
+            if (this::adapter.isInitialized) adapter.notifyDataSetChanged()
+
             if (it) {
                 hideLoadFailedTip()
 
@@ -73,8 +76,11 @@ class RankActivity : BaseActivity<ActivityRankBinding>() {
                     showRankNumber[1] = true
                 }
                 //添加rv
-                adapter = EverydayAnimeFragment.Vp2Adapter(this, viewModel.rankList, showRankNumber)
-                mBinding.vp2RankActivity.setAdapter(adapter)
+                if (!this::adapter.isInitialized) {
+                    adapter =
+                        EverydayAnimeFragment.Vp2Adapter(this, viewModel.rankList, showRankNumber)
+                    mBinding.vp2RankActivity.setAdapter(adapter)
+                }
 
                 val tabLayoutMediator = TabLayoutMediator(
                     mBinding.tlRankActivity, mBinding.vp2RankActivity.getViewPager()
@@ -90,8 +96,6 @@ class RankActivity : BaseActivity<ActivityRankBinding>() {
                 ObjectAnimator.ofFloat(mBinding.llRankActivity, "alpha", 0f, 1f)
                     .setDuration(270).start()
             } else {
-                // 如果初始化过了，再对其操作，否则会crash
-                if (this::adapter.isInitialized) adapter.notifyDataSetChanged()
                 showLoadFailedTip(getString(R.string.load_data_failed_click_to_retry),
                     View.OnClickListener {
                         viewModel.getRankData()

@@ -17,6 +17,7 @@ import com.bumptech.glide.request.transition.Transition
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.FavoriteAnimeBean
 import com.skyd.imomoe.config.Api
+import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.databinding.ActivityAnimeDetailBinding
 import com.skyd.imomoe.util.BlurUtils.blur
@@ -24,7 +25,7 @@ import com.skyd.imomoe.util.glide.GlideUtil.getGlideUrl
 import com.skyd.imomoe.util.Util.getStatusBarHeight
 import com.skyd.imomoe.util.Util.setTransparentStatusBar
 import com.skyd.imomoe.util.Util.showToast
-import com.skyd.imomoe.util.Util.visible
+import com.skyd.imomoe.util.visible
 import com.skyd.imomoe.view.adapter.AnimeDetailAdapter
 import com.skyd.imomoe.view.fragment.ShareDialogFragment
 import com.skyd.imomoe.viewmodel.AnimeDetailViewModel
@@ -92,7 +93,7 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
                     } else {
                         getAppDataBase().favoriteAnimeDao().insertFavoriteAnime(
                             FavoriteAnimeBean(
-                                "animeCover8", "",
+                                Const.ViewHolderTypeString.ANIME_COVER_8, "",
                                 partUrl,
                                 viewModel.title,
                                 System.currentTimeMillis(),

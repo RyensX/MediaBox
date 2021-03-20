@@ -14,11 +14,13 @@ import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.databinding.ActivitySettingBinding
 import com.skyd.imomoe.util.Util.getAppVersionName
 import com.skyd.imomoe.util.Util.showToast
+import com.skyd.imomoe.util.Util.showToastOnThread
 import com.skyd.imomoe.util.editor
 import com.skyd.imomoe.util.sharedPreferences
 import com.skyd.imomoe.util.update.AppUpdateHelper
 import com.skyd.imomoe.util.update.AppUpdateStatus
 import com.skyd.imomoe.viewmodel.SettingViewModel
+import kotlinx.coroutines.*
 
 
 class SettingActivity : BaseActivity<ActivitySettingBinding>() {
@@ -42,8 +44,10 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
 
         // 清理历史记录
         viewModel.mldDeleteAllHistory.observe(this, Observer {
+            if (it == null) return@Observer
             if (it) getString(R.string.delete_all_history_succeed).showToast()
             else getString(R.string.delete_all_history_failed).showToast()
+            viewModel.mldDeleteAllHistory.postValue(null)
         })
         mBinding.tvSettingActivityDeleteAllHistoryInfo.isFocused = true
         mBinding.rlSettingActivityDeleteAllHistory.setOnClickListener {
@@ -61,10 +65,14 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
             mBinding.tvSettingActivityClearCacheSize.text = it
         })
         viewModel.mldClearAllCache.observe(this, Observer {
-
-            viewModel.getCacheSize()
-            if (it) getString(R.string.clear_cache_succeed).showToast()
-            else getString(R.string.clear_cache_failed).showToast()
+            if (it == null) return@Observer
+            GlobalScope.launch(Dispatchers.IO) {
+                delay(1000)
+                viewModel.getCacheSize()
+                if (it) getString(R.string.clear_cache_succeed).showToastOnThread()
+                else getString(R.string.clear_cache_failed).showToastOnThread()
+            }
+            viewModel.mldClearAllCache.postValue(null)
         })
         viewModel.getCacheSize()
         mBinding.tvSettingActivityClearCache.isFocused = true

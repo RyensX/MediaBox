@@ -13,11 +13,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.SearchHistoryBean
+import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.databinding.ActivitySearchBinding
-import com.skyd.imomoe.util.Util.gone
 import com.skyd.imomoe.util.Util.showKeyboard
 import com.skyd.imomoe.util.Util.showToast
-import com.skyd.imomoe.util.Util.visible
+import com.skyd.imomoe.util.gone
+import com.skyd.imomoe.util.visible
 import com.skyd.imomoe.view.adapter.SearchAdapter
 import com.skyd.imomoe.view.adapter.SearchHistoryAdapter
 import com.skyd.imomoe.viewmodel.SearchViewModel
@@ -38,9 +39,19 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
         historyAdapter = SearchHistoryAdapter(this, viewModel.searchHistoryList)
 
         mBinding.run {
+            srlSearchActivity.setEnableRefresh(false)
+            srlSearchActivity.setOnLoadMoreListener {
+                viewModel.pageNumberBean?.let {
+                    viewModel.getSearchData(viewModel.keyWord, isRefresh = false, it.actionUrl)
+                    return@setOnLoadMoreListener
+                }
+                mBinding.srlSearchActivity.finishLoadMore()
+                "没有更多了".showToast()
+            }
+
             rvSearchActivity.layoutManager = LinearLayoutManager(this@SearchActivity)
             rvSearchActivity.setHasFixedSize(true)
-            rvSearchActivity.adapter = adapter
+            setSearchAdapter()
 
             etSearchActivitySearch.addTextChangedListener(object : TextWatcher {
                 override fun afterTextChanged(s: Editable?) {
@@ -61,7 +72,7 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
                         tvSearchActivityTip.text = getString(R.string.search_history)
                         ivSearchActivityClearKeyWords.gone()
                         viewModel.searchResultList.clear()
-                        rvSearchActivity.adapter = historyAdapter
+                        setHistoryAdapter()
                         historyAdapter.notifyDataSetChanged()
                     } else ivSearchActivityClearKeyWords.visible()
                 }
@@ -77,13 +88,14 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
         })
 
         viewModel.mldSearchResultList.observe(this, Observer {
+            mBinding.srlSearchActivity.closeHeaderOrFooter()
             if (this::mLayoutCircleProgressTextTip1.isInitialized) mLayoutCircleProgressTextTip1.gone()
             //仅在搜索框不为“”时展示搜索结果
             if (mBinding.etSearchActivitySearch.text.toString().isNotEmpty()) {
-                mBinding.rvSearchActivity.adapter = adapter
+                if (mBinding.rvSearchActivity.adapter != adapter) setSearchAdapter()
                 mBinding.cvSearchActivityTip.visible()
                 mBinding.tvSearchActivityTip.text = getString(
-                    R.string.search_activity_tip, it,
+                    R.string.search_activity_tip, viewModel.keyWord,
                     viewModel.searchResultList.size
                 )
                 adapter.notifyDataSetChanged()
@@ -93,14 +105,14 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
         viewModel.mldSearchHistoryList.observe(this, Observer {
             if (viewModel.searchResultList.size == 0) {
                 mBinding.tvSearchActivityTip.text = getString(R.string.search_history)
-                mBinding.rvSearchActivity.adapter = historyAdapter
+                setHistoryAdapter()
                 historyAdapter.notifyDataSetChanged()
             }
         })
 
         viewModel.mldDeleteCompleted.observe(this, Observer {
             if (viewModel.searchResultList.size == 0) {
-                mBinding.rvSearchActivity.adapter = historyAdapter
+                setHistoryAdapter()
                 historyAdapter.notifyItemRemoved(it)
             }
         })
@@ -152,11 +164,11 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
             }
             viewModel.searchResultList.clear()
             if (this@SearchActivity::tvCircleProgressTextTip1.isInitialized) tvCircleProgressTextTip1.gone()
-            rvSearchActivity.adapter = adapter
+            setSearchAdapter()
         }
         viewModel.insertSearchHistory(
             SearchHistoryBean(
-                "searchHistory1",
+                Const.ViewHolderTypeString.SEARCH_HISTORY_1,
                 "", System.currentTimeMillis(), key
             )
         )
@@ -165,6 +177,16 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
 
     fun deleteSearchHistory(position: Int) {
         viewModel.deleteSearchHistory(position)
+    }
+
+    private fun setSearchAdapter() {
+        mBinding.rvSearchActivity.adapter = adapter
+        mBinding.srlSearchActivity.setEnableLoadMore(true)
+    }
+
+    private fun setHistoryAdapter() {
+        mBinding.rvSearchActivity.adapter = historyAdapter
+        mBinding.srlSearchActivity.setEnableLoadMore(false)
     }
 
     override fun finish() {

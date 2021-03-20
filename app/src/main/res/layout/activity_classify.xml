@@ -37,7 +37,7 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    <com.scwang.smart.refresh.layout.SmartRefreshLayout
         android:id="@+id/srl_classify_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -46,5 +46,5 @@
             android:id="@+id/rv_classify_activity"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 </LinearLayout>

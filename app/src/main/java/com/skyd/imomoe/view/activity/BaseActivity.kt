@@ -3,17 +3,16 @@ package com.skyd.imomoe.view.activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.ViewStub
 import android.widget.TextView
 import androidx.viewbinding.ViewBinding
 import com.skyd.imomoe.R
-import com.skyd.imomoe.util.Util.gone
+import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.setColorStatusBar
-import com.skyd.imomoe.util.Util.visible
 import com.skyd.imomoe.util.eventbus.EventBusSubscriber
+import com.skyd.imomoe.util.gone
+import com.skyd.imomoe.util.visible
 import org.greenrobot.eventbus.EventBus
 
 abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
@@ -25,7 +24,7 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         mBinding = getBinding()
         setContentView(mBinding.root)
-        setColorStatusBar(window, resources.getColor(R.color.main_color_2))
+        setColorStatusBar(window, getResColor(R.color.main_color_2))
     }
 
     protected abstract fun getBinding(): VB

@@ -2,12 +2,12 @@ package com.skyd.imomoe.view.activity
 
 import android.os.Bundle
 import android.view.ViewStub
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.ActivityFavoriteBinding
+import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.view.adapter.AnimeEpisodeItemDecoration
 import com.skyd.imomoe.view.adapter.FavoriteAdapter
 import com.skyd.imomoe.viewmodel.FavoriteViewModel
@@ -27,10 +27,7 @@ class FavoriteActivity : BaseActivity<ActivityFavoriteBinding>() {
             tbFavoriteActivity.tvToolbar1Title.text = getString(R.string.my_favorite)
 
             srlFavoriteActivity.setColorSchemeColors(
-                ContextCompat.getColor(
-                    this@FavoriteActivity,
-                    R.color.main_color
-                )
+                this@FavoriteActivity.getResColor(R.color.main_color)
             )
             srlFavoriteActivity.setOnRefreshListener { viewModel.getFavoriteData() }
             rvFavoriteActivity.layoutManager = GridLayoutManager(this@FavoriteActivity, 3)

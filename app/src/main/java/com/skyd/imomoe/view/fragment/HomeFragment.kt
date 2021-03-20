@@ -34,7 +34,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), EventBusSubscriber {
     private lateinit var viewModel: HomeViewModel
     private lateinit var adapter: VpAdapter
     private var currentTab = -1
-    private var offscreenPageLimit = 1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,7 +51,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), EventBusSubscriber {
         super.onActivityCreated(savedInstanceState)
 
         mBinding.run {
-            vp2HomeFragment.setOffscreenPageLimit(offscreenPageLimit)
             vp2HomeFragment.setAdapter(adapter)
             val tabLayoutMediator = TabLayoutMediator(
                 tlHomeFragment, vp2HomeFragment.getViewPager()
@@ -135,6 +133,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), EventBusSubscriber {
                 getString(R.string.get_home_tab_data_failed).showToast(Toast.LENGTH_LONG)
             } else {
                 hideLoadFailedTip()
+                mBinding.vp2HomeFragment.setOffscreenPageLimit(viewModel.allTabList.size)
                 for (i in viewModel.allTabList.indices) {
                     val fragment = AnimeShowFragment()
                     val bundle = Bundle()

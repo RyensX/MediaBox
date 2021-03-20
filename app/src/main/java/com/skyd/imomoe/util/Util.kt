@@ -9,7 +9,6 @@ import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.graphics.*
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.view.View
@@ -18,6 +17,8 @@ import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
+import androidx.annotation.ColorRes
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
@@ -49,6 +50,12 @@ object Util {
     }
 
     /**
+     * 由于SUNDAY == 1...，因此需要转换成SUNDAY == 7...
+     * @param day Calendar中的日期
+     */
+    fun getRealDayOfWeek(day: Int) = if (day == 1) 7 else day - 1
+
+    /**
      * 获取重定向最终的地址
      * @param path
      */
@@ -73,6 +80,10 @@ object Util {
         }
     }
 
+    /**
+     * 通过id获取颜色
+     */
+    fun Context.getResColor(@ColorRes id: Int) = ContextCompat.getColor(this, id)
 
     /**
      * 计算距今时间
@@ -105,18 +116,28 @@ object Util {
     }
 
     fun copyText2Clipboard(context: Context, text: String) {
-        val systemService: ClipboardManager =
-            context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        systemService.setPrimaryClip(ClipData.newPlainText("text", text))
+        try {
+            val systemService: ClipboardManager =
+                context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            systemService.setPrimaryClip(ClipData.newPlainText("text", text))
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     fun isNewVersion(version: String): Boolean {
         val currentVersion = getAppVersionName()
-        return version.replace(".", "")
-            .replace("v", "")
-            .replace("V", "")
-            .replace(" ", "").toInt() >
-                currentVersion.replace(".", "").toInt()
+        return try {
+            version.replace(".", "")
+                .replace("V", "", true)
+                .replace(" ", "").toInt() >
+                    currentVersion.replace(".", "").toInt()
+        } catch (e: NumberFormatException) {
+            e.printStackTrace()
+            "检查版本号失败，建议手动到Github查看是否有更新\n当前版本：$currentVersion".showToast(Toast.LENGTH_LONG)
+            false
+        }
+
     }
 
     fun getAppVersionCode(): Long {
@@ -188,18 +209,6 @@ object Util {
         return (dpValue * scale + 0.5f).toInt()
     }
 
-    fun View.gone() {
-        visibility = View.GONE
-    }
-
-    fun View.visible() {
-        visibility = View.VISIBLE
-    }
-
-    fun View.invisible() {
-        visibility = View.INVISIBLE
-    }
-
     fun setTransparentStatusBar(
         window: Window,
         isDark: Boolean = true
@@ -240,7 +249,6 @@ object Util {
     }
 
     fun getStatusBarHeight(): Int {
-        var height = 0
         val resourceId: Int =
             App.context.resources
                 .getIdentifier("status_bar_height", "dimen", "android")
@@ -334,24 +342,6 @@ object Util {
         }
         val result4 = BigDecimal(teraBytes)
         return result4.setScale(newScale, BigDecimal.ROUND_HALF_UP).toPlainString().toString() + "T"
-    }
-
-    fun Drawable.toBitmap(): Bitmap {
-        // 取 drawable 的长宽
-        val w: Int = this.intrinsicWidth
-        val h: Int = this.intrinsicHeight
-
-        // 取 drawable 的颜色格式
-        val config: Bitmap.Config =
-            if (opacity != PixelFormat.OPAQUE) Bitmap.Config.ARGB_8888 else Bitmap.Config.RGB_565
-        // 建立对应 bitmap
-        val bitmap: Bitmap = Bitmap.createBitmap(w, h, config)
-        // 建立对应 bitmap 的画布
-        val canvas = Canvas(bitmap)
-        setBounds(0, 0, w, h)
-        // 把 drawable 内容画到画布中
-        draw(canvas)
-        return bitmap
     }
 
     fun String.isYearMonth(): Boolean {

@@ -1,12 +1,10 @@
 package com.skyd.imomoe.view.activity
 
 import android.content.*
-import android.net.Uri
 import android.os.Bundle
 import android.os.Process
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.skyd.imomoe.config.Const
 import kotlin.system.exitProcess
 
 
@@ -25,7 +23,6 @@ class CrashActivity : AppCompatActivity() {
         }
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -34,7 +31,7 @@ class CrashActivity : AppCompatActivity() {
         val message = "CrashInfo:\n$crashInfo"
         AlertDialog.Builder(this).apply {
             setMessage(message)
-            setTitle("哦呼，樱花动漫崩溃了！快复制信息告诉作者吧。")
+            setTitle("哦呼，樱花动漫崩溃了！快去暴打作者")
             setPositiveButton("复制错误信息") { _: DialogInterface, i: Int ->
                 val cm =
                     this@CrashActivity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager

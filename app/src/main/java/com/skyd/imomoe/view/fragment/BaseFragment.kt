@@ -10,14 +10,15 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import com.skyd.imomoe.R
-import com.skyd.imomoe.util.Util.gone
-import com.skyd.imomoe.util.Util.visible
 import com.skyd.imomoe.util.eventbus.EventBusSubscriber
+import com.skyd.imomoe.util.gone
+import com.skyd.imomoe.util.visible
 import org.greenrobot.eventbus.EventBus
 
 
 abstract class BaseFragment<VB : ViewBinding> : Fragment() {
-    protected var binding: VB? = null
+    protected var isFirstLoadData = true
+    private var binding: VB? = null
     protected val mBinding get() = binding!!
     private lateinit var loadFailedTipView: View
     private lateinit var tvImageTextTip1: TextView

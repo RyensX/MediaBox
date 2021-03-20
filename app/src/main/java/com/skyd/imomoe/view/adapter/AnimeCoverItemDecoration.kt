@@ -3,7 +3,6 @@ package com.skyd.imomoe.view.adapter
 import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import com.skyd.imomoe.util.AnimeCover3ViewHolder
 
 class AnimeCoverItemDecoration : RecyclerView.ItemDecoration() {
     override fun getItemOffsets(
@@ -16,7 +15,7 @@ class AnimeCoverItemDecoration : RecyclerView.ItemDecoration() {
         val childPosition = parent.getChildAdapterPosition(view)
         when (childPosition % 4) {
             // 一共15*3px的间距，四个item，三个空白间距
-            // 每个item空白区域总宽度要一样才能让imageview图片宽度一样
+            // 每个item空白区域总宽度要一样才能让imageView图片宽度一样
             0 -> {
                 outRect.left = 0
                 outRect.right = 10

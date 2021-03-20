@@ -5,18 +5,15 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.afollestad.materialdialogs.MaterialDialog
 import com.hjq.permissions.OnPermissionCallback
 import com.hjq.permissions.Permission
 import com.hjq.permissions.XXPermissions
-import com.skyd.imomoe.App
 import com.skyd.imomoe.config.Const.Update.Companion.updateFile
 import com.skyd.imomoe.model.AppUpdateModel
+import com.skyd.imomoe.util.Util.getFormatSize
 import com.skyd.imomoe.util.Util.openBrowser
 import com.skyd.imomoe.util.Util.showToast
-import com.skyd.imomoe.util.editor
-import com.skyd.imomoe.util.sharedPreferences
 import com.skyd.imomoe.util.uri
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.PublishSubject
@@ -49,7 +46,11 @@ class AppUpdateHelper private constructor() {
         val updateBean = AppUpdateModel.updateBean ?: return
         MaterialDialog(activity).show {
             title(text = "发现新版本")
-            message(text = "最新版本：" + updateBean.name + "\n" + updateBean.body)
+            message(
+                text = "新版：" + updateBean.name + "  大小：" +
+                        getFormatSize(updateBean.assets[0].size.toDouble()) +
+                        "\n" + updateBean.body
+            )
             positiveButton(text = "更新") {
                 XXPermissions.with(activity).permission(Permission.MANAGE_EXTERNAL_STORAGE)
                     .request(object : OnPermissionCallback {

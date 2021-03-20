@@ -17,7 +17,7 @@ class AnimeEpisodeItemDecoration : RecyclerView.ItemDecoration() {
         val childCount = parent.adapter?.itemCount ?: 0
         when (childPosition % 3) {
             // 一共15*2px的间距，3个item，2个空白间距
-            // 每个item空白区域总宽度要一样才能让imageview图片宽度一样
+            // 每个item空白区域总宽度要一样才能让imageView图片宽度一样
             0 -> {
                 outRect.left = 0
                 outRect.right = 18

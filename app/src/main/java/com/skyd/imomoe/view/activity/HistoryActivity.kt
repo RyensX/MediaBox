@@ -2,7 +2,6 @@ package com.skyd.imomoe.view.activity
 
 import android.os.Bundle
 import android.view.ViewStub
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,7 +10,8 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.HistoryBean
 import com.skyd.imomoe.databinding.ActivityHistoryBinding
 import com.skyd.imomoe.util.Util.dp2px
-import com.skyd.imomoe.util.Util.visible
+import com.skyd.imomoe.util.Util.getResColor
+import com.skyd.imomoe.util.visible
 import com.skyd.imomoe.view.adapter.HistoryAdapter
 import com.skyd.imomoe.viewmodel.HistoryViewModel
 
@@ -30,10 +30,7 @@ class HistoryActivity : BaseActivity<ActivityHistoryBinding>() {
             tbHistoryActivity.tvToolbar1Title.text = getString(R.string.watch_history)
 
             srlHistoryActivity.setColorSchemeColors(
-                ContextCompat.getColor(
-                    this@HistoryActivity,
-                    R.color.main_color
-                )
+                this@HistoryActivity.getResColor(R.color.main_color)
             )
             srlHistoryActivity.setOnRefreshListener { viewModel.getHistoryList() }
 

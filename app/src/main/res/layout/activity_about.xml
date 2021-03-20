@@ -31,6 +31,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <ImageView
+                android:id="@+id/iv_about_activity_icon_egg"
+                android:layout_width="50dp"
+                android:layout_height="40dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="@id/iv_about_activity_icon"
+                app:layout_constraintTop_toTopOf="@id/iv_about_activity_icon"
+                tools:src="@drawable/ic_christmas_hat"
+                tools:visibility="visible" />
+
             <com.skyd.imomoe.view.widget.textview.TypefaceTextView
                 android:id="@+id/tv_about_activity_name"
                 android:layout_width="wrap_content"
@@ -49,7 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:textColor="@color/gray_1"
+                android:textColor="@color/foreground_main_color_2"
                 android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -72,13 +82,16 @@
                 <com.skyd.imomoe.view.widget.textview.TypefaceTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
+                    android:layout_toStartOf="@id/iv_about_activity_imomoe"
                     android:text="@string/imomoe"
                     android:textColor="@color/foreground_main_color_2"
                     android:textSize="16sp"
                     app:typeface="bPRTypeface" />
 
                 <ImageView
+                    android:id="@+id/iv_about_activity_imomoe"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_alignParentEnd="true"
@@ -101,13 +114,16 @@
                 <com.skyd.imomoe.view.widget.textview.TypefaceTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
+                    android:layout_toStartOf="@id/iv_about_activity_github"
                     android:text="@string/github"
                     android:textColor="@color/foreground_main_color_2"
                     android:textSize="16sp"
                     app:typeface="bPRTypeface" />
 
                 <ImageView
+                    android:id="@+id/iv_about_activity_github"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_alignParentEnd="true"
@@ -130,13 +146,16 @@
                 <com.skyd.imomoe.view.widget.textview.TypefaceTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
+                    android:layout_toStartOf="@id/iv_about_activity_gitee"
                     android:text="@string/gitee"
                     android:textColor="@color/foreground_main_color_2"
                     android:textSize="16sp"
                     app:typeface="bPRTypeface" />
 
                 <ImageView
+                    android:id="@+id/iv_about_activity_gitee"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_alignParentEnd="true"
@@ -159,13 +178,16 @@
                 <com.skyd.imomoe.view.widget.textview.TypefaceTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
+                    android:layout_toStartOf="@id/iv_about_activity_license"
                     android:text="@string/open_source_licenses"
                     android:textColor="@color/foreground_main_color_2"
                     android:textSize="16sp"
                     app:typeface="bPRTypeface" />
 
                 <ImageView
+                    android:id="@+id/iv_about_activity_license"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_alignParentEnd="true"
@@ -173,6 +195,51 @@
                     android:scaleType="fitXY"
                     android:src="@drawable/ic_arrow_right_main_color_2_24" />
             </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_about_activity_test_device"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="?android:selectableItemBackground"
+                android:paddingStart="25dp"
+                android:paddingEnd="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rl_about_activity_license">
+
+                <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@id/iv_about_activity_test_device"
+                    android:text="@string/test_device"
+                    android:textColor="@color/foreground_main_color_2"
+                    android:textSize="16sp"
+                    app:typeface="bPRTypeface" />
+
+                <ImageView
+                    android:id="@+id/iv_about_activity_test_device"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/ic_arrow_right_main_color_2_24" />
+            </RelativeLayout>
+
+            <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:text="@string/app_icon_describe"
+                android:textColor="@color/main_color"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rl_about_activity_test_device" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </LinearLayout>

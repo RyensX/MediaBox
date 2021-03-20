@@ -6,6 +6,7 @@ import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.*
 import com.skyd.imomoe.config.Api
+import com.skyd.imomoe.config.Const.ViewHolderTypeString
 import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.util.JsoupUtil
 import com.skyd.imomoe.util.ParseHtmlUtil
@@ -18,7 +19,6 @@ import kotlinx.coroutines.launch
 import org.jsoup.select.Elements
 import java.lang.Exception
 import java.util.*
-import kotlin.jvm.Throws
 
 
 class PlayViewModel : ViewModel() {
@@ -29,12 +29,13 @@ class PlayViewModel : ViewModel() {
     var mldPlayBean: MutableLiveData<PlayBean> = MutableLiveData()
     var playBeanDataList: MutableList<AnimeDetailBean> = ArrayList()
     val episodesList: MutableList<AnimeEpisodeDataBean> = ArrayList()
+    var currentEpisodeIndex = 0
     val mldEpisodesList: MutableLiveData<Boolean> = MutableLiveData()
     val animeEpisodeDataBean = AnimeEpisodeDataBean("animeEpisode1", "", "")
     val mldAnimeEpisodeDataRefreshed: MutableLiveData<Boolean> = MutableLiveData()
     val mldGetAnimeEpisodeData: MutableLiveData<Int> = MutableLiveData()
 
-    fun refreshAnimeEpisodeData(partUrl: String, title: String = "") {
+    fun refreshAnimeEpisodeData(partUrl: String, currentEpisodeIndex: Int, title: String = "") {
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 this@PlayViewModel.partUrl = partUrl
@@ -45,9 +46,13 @@ class PlayViewModel : ViewModel() {
                         "play" -> {
                             animeEpisodeDataBean.actionUrl = partUrl
                             animeEpisodeDataBean.title = title
-                            animeEpisodeDataBean.videoUrl = children[i].select("[class=area]")
+                            val rawUrl = children[i].select("[class=area]")
                                 .select("[class=bofang]").select("div").attr("data-vid")
-                                .replace("\$mp4", "")
+                            animeEpisodeDataBean.videoUrl = when {
+                                rawUrl.endsWith("\$mp4", true) -> rawUrl.replace("\$mp4", "")
+                                rawUrl.endsWith("\$url", true) -> rawUrl.replace("\$url", "")
+                                else -> ""
+                            }
                             break
                         }
                     }
@@ -58,9 +63,10 @@ class PlayViewModel : ViewModel() {
                 animeEpisodeDataBean.actionUrl = "animeEpisode1"
                 animeEpisodeDataBean.title = ""
                 animeEpisodeDataBean.videoUrl = ""
-                mldAnimeEpisodeDataRefreshed.postValue(true)
+                mldAnimeEpisodeDataRefreshed.postValue(false)
                 (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread()
             }
+            this@PlayViewModel.currentEpisodeIndex = currentEpisodeIndex
         }
     }
 
@@ -73,9 +79,13 @@ class PlayViewModel : ViewModel() {
                 for (i in children.indices) {
                     when (children[i].className()) {
                         "play" -> {
-                            episodesList[position].videoUrl = children[i].select("[class=area]")
+                            val rawUrl = children[i].select("[class=area]")
                                 .select("[class=bofang]").select("div").attr("data-vid")
-                                .replace("\$mp4", "")
+                            episodesList[position].videoUrl = when {
+                                rawUrl.endsWith("\$mp4", true) -> rawUrl.replace("\$mp4", "")
+                                rawUrl.endsWith("\$url", true) -> rawUrl.replace("\$url", "")
+                                else -> ""
+                            }
                             break
                         }
                     }
@@ -130,7 +140,7 @@ class PlayViewModel : ViewModel() {
                                     "botit" -> {
                                         playBeanDataList.add(
                                             AnimeDetailBean(
-                                                "header1",
+                                                ViewHolderTypeString.HEADER_1,
                                                 "",
                                                 parseBotit(areaChildren[j]),
                                                 ""
@@ -141,13 +151,12 @@ class PlayViewModel : ViewModel() {
                                         episodesList.addAll(
                                             parseMovurls(
                                                 areaChildren[j],
-                                                animeEpisodeDataBean,
-                                                "animeEpisode2"
+                                                animeEpisodeDataBean
                                             )
                                         )
                                         playBeanDataList.add(
                                             AnimeDetailBean(
-                                                "horizontalRecyclerView1",
+                                                ViewHolderTypeString.HORIZONTAL_RECYCLER_VIEW_1,
                                                 "",
                                                 "",
                                                 "",
@@ -158,7 +167,7 @@ class PlayViewModel : ViewModel() {
                                     "imgs" -> {
                                         playBeanDataList.add(
                                             AnimeDetailBean(
-                                                "gridRecyclerView1",
+                                                ViewHolderTypeString.GRID_RECYCLER_VIEW_1,
                                                 "", "", "",
                                                 animeCoverList = ParseHtmlUtil.parseImg(
                                                     areaChildren[j],
@@ -220,7 +229,7 @@ class PlayViewModel : ViewModel() {
                 } else animeCover
                 getAppDataBase().historyDao().insertHistory(
                     HistoryBean(
-                        "animeCover9", "", detailPartUrl,
+                        ViewHolderTypeString.ANIME_COVER_9, "", detailPartUrl,
                         playBean?.title?.title ?: "",
                         System.currentTimeMillis(),
                         cover,

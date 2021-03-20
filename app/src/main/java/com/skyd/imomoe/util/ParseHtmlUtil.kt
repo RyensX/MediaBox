@@ -5,13 +5,14 @@ import com.skyd.imomoe.config.Api
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
 import java.util.ArrayList
+import com.skyd.imomoe.config.Const.ViewHolderTypeString
 
 object ParseHtmlUtil {
 
     fun parseHeroWrap(      //banner
         element: Element,
         imageReferer: String,
-        type: String = "animeCover6"
+        type: String = ViewHolderTypeString.ANIME_COVER_6
     ): List<AnimeCoverBean> {
         val list: MutableList<AnimeCoverBean> = ArrayList()
         val liElements: Elements = element.select("[class=heros]").select("li")
@@ -51,7 +52,7 @@ object ParseHtmlUtil {
 
     fun parseTers(
         element: Element,
-        type: String = ""
+        type: String = ViewHolderTypeString.EMPTY_STRING
     ): List<ClassifyBean> {
         val list: MutableList<ClassifyBean> = ArrayList()
         val pElements: Elements = element.select("p")
@@ -91,7 +92,7 @@ object ParseHtmlUtil {
 
     fun parseTlist(
         element: Element,
-        type: String = "animeCover5"
+        type: String = ViewHolderTypeString.ANIME_COVER_5
     ): List<List<AnimeCoverBean>> {
         val ulList: MutableList<List<AnimeCoverBean>> = ArrayList()
         val ulElements: Elements = element.select("ul")
@@ -120,7 +121,7 @@ object ParseHtmlUtil {
 
     fun parseTopli(
         element: Element,
-        type: String = "animeCover5"
+        type: String = ViewHolderTypeString.ANIME_COVER_5
     ): List<AnimeCoverBean> {
         val animeShowList: MutableList<AnimeCoverBean> = ArrayList()
         val elements: Elements = element.select("ul").select("li")
@@ -165,7 +166,7 @@ object ParseHtmlUtil {
     fun parseDnews(
         element: Element,
         imageReferer: String,
-        type: String = "animeCover4"
+        type: String = ViewHolderTypeString.ANIME_COVER_4
     ): List<AnimeCoverBean> {
         val animeShowList: MutableList<AnimeCoverBean> = ArrayList()
         val elements: Elements = element.select("ul").select("li")
@@ -190,7 +191,7 @@ object ParseHtmlUtil {
     fun parsePics(      //一周动漫排行榜
         element: Element,
         imageReferer: String,
-        type: String = "animeCover3"
+        type: String = ViewHolderTypeString.ANIME_COVER_3
     ): List<AnimeCoverBean> {
         val animeCover3List: MutableList<AnimeCoverBean> = ArrayList()
         val results: Elements = element.select("ul").select("li")
@@ -217,7 +218,7 @@ object ParseHtmlUtil {
             val describe = results[i].select("p").text()
             animeCover3List.add(
                 AnimeCoverBean(
-                    "animeCover3",
+                    type,
                     url,
                     Api.MAIN_URL + url,
                     title,
@@ -234,7 +235,7 @@ object ParseHtmlUtil {
     fun parseLpic(          //搜索
         element: Element,
         imageReferer: String,
-        type: String = "animeCover3"
+        type: String = ViewHolderTypeString.ANIME_COVER_3
     ): List<AnimeCoverBean> {
         val animeCover3List: MutableList<AnimeCoverBean> = ArrayList()
         val results: Elements = element.select("ul").select("li")
@@ -261,7 +262,7 @@ object ParseHtmlUtil {
             val describe = results[i].select("p").text()
             animeCover3List.add(
                 AnimeCoverBean(
-                    "animeCover3",
+                    type,
                     url,
                     Api.MAIN_URL + url,
                     title,
@@ -273,6 +274,27 @@ object ParseHtmlUtil {
             )
         }
         return animeCover3List
+    }
+
+    /**
+     * 只获取下一页的地址，没有下一页则返回null
+     */
+    fun parseNextPages(
+        element: Element,
+        type: String = "pageNumber1"
+    ): PageNumberBean? {
+        val results: Elements = element.children()
+        var findCurrentPage = false
+        for (i in results.indices) {
+            if (findCurrentPage) {
+                if (results[i].className() == "a1") return null
+                val url = results[i].attr("href")
+                val title = results[i].text()
+                return PageNumberBean(type, url, Api.MAIN_URL + url, title)
+            }
+            if (results[i].tagName() == "span") findCurrentPage = true
+        }
+        return null
     }
 
     fun parseDtit(
@@ -289,8 +311,8 @@ object ParseHtmlUtil {
 
     fun parseMovurls(
         element: Element,
-        selected: AnimeEpisodeDataBean?,
-        type: String = "animeEpisode1"
+        selected: AnimeEpisodeDataBean? = null,
+        type: String = ViewHolderTypeString.ANIME_EPISODE_2
     ): List<AnimeEpisodeDataBean> {
         val animeEpisodeList: MutableList<AnimeEpisodeDataBean> = ArrayList()
         val elements: Elements = element.select("ul").select("li")
@@ -313,7 +335,7 @@ object ParseHtmlUtil {
     fun parseImg(
         element: Element,
         imageReferer: String,
-        type: String = "animeCover1"
+        type: String = ViewHolderTypeString.ANIME_COVER_1
     ): List<AnimeCoverBean> {
         val animeShowList: MutableList<AnimeCoverBean> = ArrayList()
         val elements: Elements = element.select("ul").select("li")

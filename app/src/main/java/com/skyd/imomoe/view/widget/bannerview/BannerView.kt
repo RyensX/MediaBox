@@ -16,7 +16,6 @@ import com.skyd.imomoe.view.widget.bannerview.BannerUtil.getPosition
 import com.skyd.imomoe.view.widget.bannerview.BannerUtil.getRealPosition
 import com.skyd.imomoe.view.widget.bannerview.indicator.Indicator
 import com.skyd.imomoe.view.widget.bannerview.indicator.SimpleIndicator
-import java.util.*
 import kotlin.math.abs
 
 
@@ -42,7 +41,6 @@ open class BannerView(mContext: Context, attrs: AttributeSet?) :
     // 轮播是否暂停
     private var isPause: Boolean = false
     private var mAutoPlayInterval: Long = 0L
-    private var mTimer: Timer = Timer()
     private val mHandler = Handler(Looper.getMainLooper())
     private val mAutoPlayRunnable: Runnable = object : Runnable {
         override fun run() {
@@ -50,13 +48,6 @@ open class BannerView(mContext: Context, attrs: AttributeSet?) :
             mHandler.postDelayed(this, mAutoPlayInterval)
         }
     }
-//    private var mAutoPlayTask: TimerTask = object : TimerTask() {
-//        override fun run() {
-//            mHandler.post {
-//                nextPage()
-//            }
-//        }
-//    }
 
     private var mStartX = 0f
     private var mStartY = 0f
@@ -122,7 +113,7 @@ open class BannerView(mContext: Context, attrs: AttributeSet?) :
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
         // 防止内存泄漏
-        mHandler.removeCallbacks(mAutoPlayRunnable)
+        mHandler.removeCallbacksAndMessages(null)
         autoPlay = false
     }
 
@@ -236,7 +227,6 @@ open class BannerView(mContext: Context, attrs: AttributeSet?) :
         if (!autoPlay && mViewPager2.adapter?.itemCount ?: 0 > 1) {
             mAutoPlayInterval = interval
             mHandler.postDelayed(mAutoPlayRunnable, mAutoPlayInterval)
-//            mTimer.schedule(mAutoPlayTask, mAutoPlayInterval, mAutoPlayInterval)
             autoPlay = true
         }
     }
@@ -246,7 +236,6 @@ open class BannerView(mContext: Context, attrs: AttributeSet?) :
      */
     fun stopPlay() {
         if (autoPlay) {
-//            mTimer.cancel()
             autoPlay = false
             mHandler.removeCallbacks(mAutoPlayRunnable)
         }

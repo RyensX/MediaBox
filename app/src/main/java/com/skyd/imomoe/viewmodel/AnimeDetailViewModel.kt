@@ -9,6 +9,8 @@ import com.skyd.imomoe.bean.AnimeInfoBean
 import com.skyd.imomoe.bean.AnimeTypeBean
 import com.skyd.imomoe.bean.ImageBean
 import com.skyd.imomoe.config.Api
+import com.skyd.imomoe.config.Const
+import com.skyd.imomoe.config.Const.ViewHolderTypeString
 import com.skyd.imomoe.util.JsoupUtil
 import com.skyd.imomoe.util.ParseHtmlUtil.parseBotit
 import com.skyd.imomoe.util.ParseHtmlUtil.parseDtit
@@ -101,7 +103,7 @@ class AnimeDetailViewModel : ViewModel() {
                                         "tabs" -> {     //播放列表+header
                                             animeDetailList.add(
                                                 AnimeDetailBean(
-                                                    "header1", "",
+                                                    ViewHolderTypeString.HEADER_1, "",
                                                     fireLChildren[k].select("[class=tabs]")
                                                         .select("[class=menu0]")
                                                         .select("li").text(),
@@ -112,16 +114,14 @@ class AnimeDetailViewModel : ViewModel() {
 
                                             animeDetailList.add(
                                                 AnimeDetailBean(
-                                                    "horizontalRecyclerView1",
+                                                    ViewHolderTypeString.HORIZONTAL_RECYCLER_VIEW_1,
                                                     "",
                                                     "",
                                                     "",
                                                     parseMovurls(
                                                         fireLChildren[k]
                                                             .select("[class=main0]")
-                                                            .select("[class=movurl]")[0],
-                                                        null,
-                                                        type = "animeEpisode2"
+                                                            .select("[class=movurl]")[0]
                                                     )
                                                 )
                                             )
@@ -129,7 +129,7 @@ class AnimeDetailViewModel : ViewModel() {
                                         "botit" -> {     //其它header
                                             animeDetailList.add(
                                                 AnimeDetailBean(
-                                                    "header1", "",
+                                                    ViewHolderTypeString.HEADER_1, "",
                                                     parseBotit(fireLChildren[k]),
                                                     "",
                                                     null
@@ -139,7 +139,7 @@ class AnimeDetailViewModel : ViewModel() {
                                         "dtit" -> {     //其它header
                                             animeDetailList.add(
                                                 AnimeDetailBean(
-                                                    "header1", "",
+                                                    ViewHolderTypeString.HEADER_1, "",
                                                     parseDtit(fireLChildren[k]),
                                                     "",
                                                     null
@@ -149,7 +149,7 @@ class AnimeDetailViewModel : ViewModel() {
                                         "info" -> {         //动漫介绍
                                             animeDetailList.add(
                                                 AnimeDetailBean(
-                                                    "animeDescribe1", "",
+                                                    ViewHolderTypeString.ANIME_DESCRIBE_1, "",
                                                     "",
                                                     fireLChildren[k]
                                                         .select("[class=info]").text(),
@@ -160,7 +160,8 @@ class AnimeDetailViewModel : ViewModel() {
                                         "img" -> {         //系列动漫推荐
                                             animeDetailList.add(
                                                 AnimeDetailBean(
-                                                    "gridRecyclerView1", "",
+                                                    ViewHolderTypeString.GRID_RECYCLER_VIEW_1,
+                                                    "",
                                                     "",
                                                     "",
                                                     null,
@@ -186,7 +187,7 @@ class AnimeDetailViewModel : ViewModel() {
                                 animeDetailList.add(
                                     0,
                                     AnimeDetailBean(
-                                        "animeInfo1", "",
+                                        ViewHolderTypeString.ANIME_INFO_1, "",
                                         "",
                                         "",
                                         headerInfo = animeInfoBean

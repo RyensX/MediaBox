@@ -7,13 +7,13 @@ import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.FavoriteAnimeBean
 import com.skyd.imomoe.util.AnimeCover8ViewHolder
-import com.skyd.imomoe.util.Util.gone
 import com.skyd.imomoe.util.Util.process
 import com.skyd.imomoe.util.Util.showToast
-import com.skyd.imomoe.util.Util.visible
 import com.skyd.imomoe.util.ViewHolderUtil.Companion.getItemViewType
 import com.skyd.imomoe.util.ViewHolderUtil.Companion.getViewHolder
 import com.skyd.imomoe.util.glide.GlideUtil.loadImage
+import com.skyd.imomoe.util.gone
+import com.skyd.imomoe.util.visible
 import com.skyd.imomoe.view.activity.FavoriteActivity
 
 class FavoriteAdapter(

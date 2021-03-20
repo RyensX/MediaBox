@@ -19,6 +19,7 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.ClassifyBean
 import com.skyd.imomoe.bean.ClassifyDataBean
 import com.skyd.imomoe.databinding.ActivityClassifyBinding
+import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.view.adapter.SearchAdapter
 import com.skyd.imomoe.viewmodel.ClassifyViewModel
@@ -56,7 +57,6 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
         classifyAdapter = SearchAdapter(this, viewModel.classifyList)
 
         mBinding.run {
-            srlClassifyActivity.setColorSchemeResources(R.color.main_color)
             srlClassifyActivity.setOnRefreshListener {
                 //避免刷新间隔太短
                 if (System.currentTimeMillis() - lastRefreshTime > 500) {
@@ -65,8 +65,16 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
                         viewModel.getClassifyData(currentPartUrl)
                     else viewModel.getClassifyTabData()
                 } else {
-                    srlClassifyActivity.isRefreshing = false
+                    srlClassifyActivity.finishRefresh()
                 }
+            }
+            srlClassifyActivity.setOnLoadMoreListener {
+                viewModel.pageNumberBean?.let {
+                    viewModel.getClassifyData(it.actionUrl, isRefresh = false)
+                    return@setOnLoadMoreListener
+                }
+                mBinding.srlClassifyActivity.finishLoadMore()
+                "没有更多了".showToast()
             }
 
             rvClassifyActivityTab.layoutManager =
@@ -74,8 +82,7 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
             rvClassifyActivityTab.setHasFixedSize(true)
             rvClassifyActivityTab.adapter = classifyTabAdapter
 
-            val layoutManager2 = LinearLayoutManager(this@ClassifyActivity)
-            rvClassifyActivity.layoutManager = layoutManager2
+            rvClassifyActivity.layoutManager = LinearLayoutManager(this@ClassifyActivity)
             rvClassifyActivity.setHasFixedSize(true)
             rvClassifyActivity.adapter = classifyAdapter
 
@@ -85,7 +92,7 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
                     parent: AdapterView<*>, view: View,
                     pos: Int, id: Long
                 ) {
-                    if (view is TextView) view.setTextColor(resources.getColor(R.color.foreground_main_color_2))
+                    if (view is TextView) view.setTextColor(getResColor(R.color.foreground_main_color_2))
                     classifyTabList.clear()
                     classifyTabList.addAll(viewModel.classifyTabList[pos].classifyDataList)
                     classifyTabAdapter.notifyDataSetChanged()
@@ -95,7 +102,6 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
                 }
             }
         }
-
 
         viewModel.mldClassifyTabList.observe(this, Observer {
             if (it) {
@@ -114,19 +120,26 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
                     tabSelected(currentPartUrl)
                 }
             } else {
-                mBinding.srlClassifyActivity.isRefreshing = false
+                mBinding.srlClassifyActivity.finishRefresh()
             }
         })
 
         viewModel.mldClassifyList.observe(this, Observer {
-            mBinding.srlClassifyActivity.isRefreshing = false
+            mBinding.srlClassifyActivity.closeHeaderOrFooter()
             viewModel.isRequesting = false
-            if (it) {
+            if (it == 0) {
                 mBinding.llClassifyActivityToolbar.tvToolbar1Title.text =
                     if (classifyTabTitle.isEmpty()) "${getString(R.string.anime_classify)}  $classifyTitle"
                     else "${getString(R.string.anime_classify)}  $classifyTabTitle：$classifyTitle"
+                classifyAdapter.notifyDataSetChanged()
+            } else if (it == 1) {
+                val pair = viewModel.newPageIndex
+                if (pair != null) {
+                    classifyAdapter.notifyItemRangeInserted(pair.first, pair.second)
+                } else classifyAdapter.notifyDataSetChanged()
+            } else if (it == -1) {
+                classifyAdapter.notifyDataSetChanged()
             }
-            classifyAdapter.notifyDataSetChanged()
         })
 
         viewModel.getClassifyTabData()
@@ -141,8 +154,7 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
 
     private fun tabSelected(partUrl: String) {
         currentPartUrl = partUrl
-        mBinding.srlClassifyActivity.isRefreshing = true
-        viewModel.getClassifyData(partUrl)
+        mBinding.srlClassifyActivity.autoRefresh()
     }
 
     class ClassifyTabAdapter(

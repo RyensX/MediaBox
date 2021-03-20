@@ -26,9 +26,10 @@
         android:layout_height="50dp"
         android:background="?android:selectableItemBackground"
         android:padding="12dp"
-        android:src="@drawable/ic_keyboard_arrow_down_white_24"
+        android:src="@drawable/ic_keyboard_arrow_down_main_color_2_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/foreground_white" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

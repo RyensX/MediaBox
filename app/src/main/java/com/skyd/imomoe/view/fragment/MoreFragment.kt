@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.MoreBean
+import com.skyd.imomoe.config.Const.ViewHolderTypeString
 import com.skyd.imomoe.config.Const.ActionUrl.Companion.ANIME_LAUNCH_ACTIVITY
 import com.skyd.imomoe.databinding.FragmentMoreBinding
 import com.skyd.imomoe.view.activity.AboutActivity
@@ -25,7 +26,7 @@ class MoreFragment : BaseFragment<FragmentMoreBinding>() {
 
         list.add(
             MoreBean(
-                "More1",
+                ViewHolderTypeString.MORE_1,
                 "$ANIME_LAUNCH_ACTIVITY/${HistoryActivity::class.qualifiedName}",
                 getString(R.string.watch_history),
                 R.drawable.ic_history_white_24
@@ -33,7 +34,7 @@ class MoreFragment : BaseFragment<FragmentMoreBinding>() {
         )
         list.add(
             MoreBean(
-                "More1",
+                ViewHolderTypeString.MORE_1,
                 "$ANIME_LAUNCH_ACTIVITY/${SettingActivity::class.qualifiedName}",
                 getString(R.string.setting),
                 R.drawable.ic_settings_white_24
@@ -41,7 +42,7 @@ class MoreFragment : BaseFragment<FragmentMoreBinding>() {
         )
         list.add(
             MoreBean(
-                "More1",
+                ViewHolderTypeString.MORE_1,
                 "$ANIME_LAUNCH_ACTIVITY/${AboutActivity::class.qualifiedName}",
                 getString(R.string.about),
                 R.drawable.ic_info_white_24

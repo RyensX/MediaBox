@@ -1,8 +1,6 @@
 package com.skyd.imomoe.view.activity
 
 import android.app.Dialog
-import android.content.Context
-import android.content.ContextWrapper
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
@@ -16,19 +14,22 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.shuyu.gsyvideoplayer.GSYBaseActivityDetail
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder
-import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer
+import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeEpisodeDataBean
 import com.skyd.imomoe.bean.FavoriteAnimeBean
 import com.skyd.imomoe.config.Api
+import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.databinding.ActivityPlayBinding
 import com.skyd.imomoe.util.AnimeEpisode2ViewHolder
 import com.skyd.imomoe.util.Util.dp2px
+import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.setColorStatusBar
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.downloadanime.AnimeDownloadHelper
+import com.skyd.imomoe.util.gone
 import com.skyd.imomoe.view.adapter.AnimeDetailAdapter
 import com.skyd.imomoe.view.adapter.AnimeEpisodeItemDecoration
 import com.skyd.imomoe.view.adapter.PlayAdapter
@@ -110,12 +111,12 @@ class PlayActivity : GSYBaseActivityDetail<AnimeVideoPlayer>() {
                         withContext(Dispatchers.Main) {
                             isFavorite = false
                             mBinding.ivPlayActivityFavorite.setImageResource(R.drawable.ic_star_border_main_color_2_24)
-                            "取消收藏成功".showToast()
+                            getString(R.string.remove_favorite_succeed).showToast()
                         }
                     } else {
                         getAppDataBase().favoriteAnimeDao().insertFavoriteAnime(
                             FavoriteAnimeBean(
-                                "animeCover8", "",
+                                Const.ViewHolderTypeString.ANIME_COVER_8, "",
                                 detailPartUrl,
                                 viewModel.playBean?.title?.title ?: "",
                                 System.currentTimeMillis(),
@@ -127,7 +128,7 @@ class PlayActivity : GSYBaseActivityDetail<AnimeVideoPlayer>() {
                         withContext(Dispatchers.Main) {
                             isFavorite = true
                             mBinding.ivPlayActivityFavorite.setImageResource(R.drawable.ic_star_main_color_2_24)
-                            "收藏成功".showToast()
+                            getString(R.string.favorite_succeed).showToast()
                         }
                     }
                 }
@@ -173,20 +174,20 @@ class PlayActivity : GSYBaseActivityDetail<AnimeVideoPlayer>() {
         viewModel.getAnimeCover(detailPartUrl)
     }
 
-    fun startPlay(url: String, title: String) {
+    fun startPlay(url: String, currentEpisodeIndex: Int, title: String) {
         viewModel.mldAnimeEpisodeDataRefreshed.observe(this, Observer {
             if (it) {
-                videoPlayer.startPlay()
+                videoPlayer.currentPlayer.startPlay()
             }
         })
-        viewModel.refreshAnimeEpisodeData(url, title)
+        viewModel.refreshAnimeEpisodeData(url, currentEpisodeIndex, title)
     }
 
     fun startPlay2(url: String, title: String) {
         videoPlayer.startPlay(url, title)
     }
 
-    private fun GSYVideoPlayer.startPlay(url: String = "", title: String = "") {
+    private fun GSYBaseVideoPlayer.startPlay(url: String = "", title: String = "") {
         //设置播放URL
         if (url.isBlank()) {
             if (!isDestroyed) {
@@ -281,6 +282,12 @@ class PlayActivity : GSYBaseActivityDetail<AnimeVideoPlayer>() {
         recyclerView.adapter = adapter
         viewModel.mldEpisodesList.observe(this, Observer {
             adapter.notifyDataSetChanged()
+            mBinding.avpPlayActivity.setEpisodeAdapter(
+                PlayerEpisodeRecyclerViewAdapter(
+                    this,
+                    viewModel.episodesList
+                )
+            )
         })
         return bottomSheetDialog
     }
@@ -299,7 +306,9 @@ class PlayActivity : GSYBaseActivityDetail<AnimeVideoPlayer>() {
             when (holder) {
                 is AnimeEpisode2ViewHolder -> {
                     holder.tvAnimeEpisode2.text = item.title
-                    holder.tvAnimeEpisode2.setTextColor(activity.resources.getColor(R.color.foreground_main_color_2))
+                    holder.tvAnimeEpisode2.setTextColor(
+                        activity.getResColor(R.color.foreground_main_color_2)
+                    )
                     val layoutParams = holder.itemView.layoutParams
                     if (showType == 0) {
                         layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
@@ -314,14 +323,54 @@ class PlayActivity : GSYBaseActivityDetail<AnimeVideoPlayer>() {
                     }
                     if (action == "play") {
                         holder.itemView.setOnClickListener {
-                            activity.startPlay(item.actionUrl, item.title)
+                            activity.startPlay(item.actionUrl, position, item.title)
                             dialog?.dismiss()
                         }
                     } else if (action == "download") {
                         holder.itemView.setOnClickListener {
-                            "解析视频中...".showToast()
+                            activity.getString(R.string.parsing_video).showToast()
                             activity.viewModel.getAnimeEpisodeData(item.actionUrl, position)
                         }
+                    }
+                }
+                else -> {
+                    holder.itemView.visibility = View.GONE
+                    (App.context.resources.getString(R.string.unknown_view_holder) + position).showToast()
+                }
+            }
+        }
+    }
+
+    class PlayerEpisodeRecyclerViewAdapter(
+        private val activity: PlayActivity,
+        private val dataList: List<AnimeEpisodeDataBean>,
+    ) : AnimeVideoPlayer.EpisodeRecyclerViewAdapter(activity, dataList) {
+
+        override val currentIndex: Int
+            get() = activity.viewModel.currentEpisodeIndex
+
+        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+            val item = dataList[position]
+
+            when (holder) {
+                is AnimeVideoPlayer.RightRecyclerViewViewHolder -> {
+                    holder.tvTitle.setTextColor(
+                        activity.getResColor(
+                            if (item.title == activity.viewModel.animeEpisodeDataBean.title)
+                                R.color.unchanged_main_color_2
+                            else R.color.foreground_white
+                        )
+                    )
+                    holder.tvTitle.text = item.title
+                    holder.itemView.setOnClickListener {
+                        activity.mBinding.avpPlayActivity.currentPlayer.run {
+                            if (this is AnimeVideoPlayer) {
+                                getRightContainer()?.gone()
+                                // 因为右侧界面显示时，不在xx秒后隐藏界面，所以要恢复xx秒后隐藏控制界面
+                                enableDismissControlViewTimer(true)
+                            }
+                        }
+                        activity.startPlay(item.actionUrl, position, item.title)
                     }
                 }
                 else -> {

@@ -3,12 +3,15 @@ package com.skyd.imomoe.view.activity
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import com.afollestad.materialdialogs.MaterialDialog
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.databinding.ActivityAboutBinding
 import com.skyd.imomoe.util.Util.getAppVersionName
 import com.skyd.imomoe.util.Util.openBrowser
+import com.skyd.imomoe.util.visible
+import java.util.*
 
 class AboutActivity : BaseActivity<ActivityAboutBinding>() {
     @SuppressLint("SetTextI18n")
@@ -18,6 +21,14 @@ class AboutActivity : BaseActivity<ActivityAboutBinding>() {
         mBinding.run {
             llAboutActivityToolbar.ivToolbar1Back.setOnClickListener { finish() }
             llAboutActivityToolbar.tvToolbar1Title.text = getString(R.string.about)
+
+            val c: Calendar = Calendar.getInstance()
+            val month = c.get(Calendar.MONTH)
+            val day = c.get(Calendar.DAY_OF_MONTH)
+            if (month == Calendar.DECEMBER && day == 25) {     // 圣诞节彩蛋
+                ivAboutActivityIconEgg.visible()
+                ivAboutActivityIconEgg.setImageResource(R.drawable.ic_christmas_hat)
+            }
 
             tvAboutActivityVersion.text = "V " + getAppVersionName()
 
@@ -35,6 +46,14 @@ class AboutActivity : BaseActivity<ActivityAboutBinding>() {
 
             rlAboutActivityLicense.setOnClickListener {
                 startActivity(Intent(this@AboutActivity, LicenseActivity::class.java))
+            }
+
+            rlAboutActivityTestDevice.setOnClickListener {
+                MaterialDialog(this@AboutActivity).show {
+                    title(res = R.string.test_device)
+                    message(text = "HONOR V20 Android 9\n别骂了别骂了QAQ，太穷了，没有Android 10/11的手机")
+                    positiveButton(text = "确定") { dismiss() }
+                }
             }
         }
     }

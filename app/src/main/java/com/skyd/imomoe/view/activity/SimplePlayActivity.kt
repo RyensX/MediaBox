@@ -1,15 +1,14 @@
 package com.skyd.imomoe.view.activity
 
-import android.content.Context
-import android.content.ContextWrapper
 import android.os.Bundle
+import android.view.View
 import com.shuyu.gsyvideoplayer.GSYVideoManager
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils
 import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.databinding.ActivitySimplePlayBinding
 import com.skyd.imomoe.util.MD5.getMD5
-import com.skyd.imomoe.util.Util.gone
 import com.skyd.imomoe.util.Util.setFullScreen
+import com.skyd.imomoe.util.gone
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -60,6 +59,7 @@ class SimplePlayActivity : BaseActivity<ActivitySimplePlayBinding>() {
             //设置旋转
             orientationUtils = OrientationUtils(this@SimplePlayActivity, this)
             getDownloadButton()?.gone()
+            setEpisodeButtonVisibility(View.GONE)
             fullscreenButton.gone()
             //是否开启自动旋转
             isRotateViewAuto = false

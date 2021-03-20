@@ -5,12 +5,15 @@ import androidx.lifecycle.ViewModel
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeShowBean
+import com.skyd.imomoe.bean.PageNumberBean
 import com.skyd.imomoe.config.Api
+import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.util.JsoupUtil
 import com.skyd.imomoe.util.ParseHtmlUtil.parseDnews
 import com.skyd.imomoe.util.ParseHtmlUtil.parseHeroWrap
 import com.skyd.imomoe.util.ParseHtmlUtil.parseImg
 import com.skyd.imomoe.util.ParseHtmlUtil.parseLpic
+import com.skyd.imomoe.util.ParseHtmlUtil.parseNextPages
 import com.skyd.imomoe.util.ParseHtmlUtil.parseTopli
 import com.skyd.imomoe.util.Util.showToastOnThread
 import com.skyd.imomoe.view.adapter.SerializableRecycledViewPool
@@ -26,19 +29,23 @@ class AnimeShowViewModel : ViewModel() {
     var childViewPool: SerializableRecycledViewPool? = null
     var viewPool: SerializableRecycledViewPool? = null
     var animeShowList: MutableList<AnimeShowBean> = ArrayList()
-    var mldGetAnimeShowList: MutableLiveData<Boolean> = MutableLiveData()
+    var mldGetAnimeShowList: MutableLiveData<Int> = MutableLiveData()   // value：-1错误；0重新获取；1刷新
+    var pageNumberBean: PageNumberBean? = null
+    var newPageIndex: Pair<Int, Int>? = null
 
     private var isRequesting = false
 
     //http://www.yhdm.io版本
-    fun getAnimeShowData(partUrl: String) {
+    fun getAnimeShowData(partUrl: String, isRefresh: Boolean = true) {
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 if (isRequesting) return@launch
                 isRequesting = true
+                pageNumberBean = null
                 val url = Api.MAIN_URL + partUrl
                 val document = JsoupUtil.getDocument(url)
-                animeShowList.clear()
+                if (isRefresh) animeShowList.clear()
+                val positionStart = animeShowList.size
                 //banner
                 val foucsBgElements: Elements = document.getElementsByClass("foucs bg")
                 for (i in foucsBgElements.indices) {
@@ -48,7 +55,7 @@ class AnimeShowViewModel : ViewModel() {
                             "hero-wrap" -> {
                                 animeShowList.add(
                                     AnimeShowBean(
-                                        "banner1", "",
+                                        Const.ViewHolderTypeString.BANNER_1, "",
                                         "", "", "", "", "",
                                         parseHeroWrap(foucsBgChildren[j], url)
                                     )
@@ -70,7 +77,7 @@ class AnimeShowViewModel : ViewModel() {
                                 if (a.size == 0) {      //只有一个标题
                                     animeShowList.add(
                                         AnimeShowBean(
-                                            "header1",
+                                            Const.ViewHolderTypeString.HEADER_1,
                                             "",
                                             "",
                                             elements[j].select("h2").text(),
@@ -82,7 +89,7 @@ class AnimeShowViewModel : ViewModel() {
                                 } else {        //有右侧“更多”
                                     animeShowList.add(
                                         AnimeShowBean(
-                                            "header1",
+                                            Const.ViewHolderTypeString.HEADER_1,
                                             a.attr("href"),
                                             Api.MAIN_URL + a.attr("href"),
                                             a.text(),
@@ -96,7 +103,7 @@ class AnimeShowViewModel : ViewModel() {
                             "img", "imgs" -> {
                                 animeShowList.add(
                                     AnimeShowBean(
-                                        "gridRecyclerView1",
+                                        Const.ViewHolderTypeString.GRID_RECYCLER_VIEW_1,
                                         "", "", "", "", "", "",
                                         parseImg(elements[j], url)
                                     )
@@ -109,11 +116,14 @@ class AnimeShowViewModel : ViewModel() {
                                         "lpic" -> {
                                             animeShowList.add(
                                                 AnimeShowBean(
-                                                    "gridRecyclerView1",
+                                                    Const.ViewHolderTypeString.GRID_RECYCLER_VIEW_1,
                                                     "", "", "", "", "", "",
                                                     parseLpic(firsLChildren[k], url)
                                                 )
                                             )
+                                        }
+                                        "pages" -> {
+                                            pageNumberBean = parseNextPages(firsLChildren[k])
                                         }
                                     }
                                 }
@@ -121,7 +131,7 @@ class AnimeShowViewModel : ViewModel() {
                             "dnews" -> {       //右侧后半tab内容，cover4
                                 animeShowList.add(
                                     AnimeShowBean(
-                                        "gridRecyclerView1",
+                                        Const.ViewHolderTypeString.GRID_RECYCLER_VIEW_1,
                                         "", "", "", "", "", "",
                                         parseDnews(elements[j], url)
                                     )
@@ -130,20 +140,24 @@ class AnimeShowViewModel : ViewModel() {
                             "topli" -> {       //右侧后半tab内容，cover5
                                 animeShowList.add(
                                     AnimeShowBean(
-                                        "gridRecyclerView1",
+                                        Const.ViewHolderTypeString.GRID_RECYCLER_VIEW_1,
                                         "", "", "", "", "", "",
                                         parseTopli(elements[j])
                                     )
                                 )
                             }
+                            "pages" -> {
+                                pageNumberBean = parseNextPages(elements[j])
+                            }
                         }
                     }
                 }
-                mldGetAnimeShowList.postValue(true)
+                newPageIndex = Pair(positionStart, animeShowList.size - positionStart)
+                mldGetAnimeShowList.postValue(if (isRefresh) 0 else 1)
                 isRequesting = false
             } catch (e: Exception) {
                 animeShowList.clear()
-                mldGetAnimeShowList.postValue(false)
+                mldGetAnimeShowList.postValue(-1)
                 isRequesting = false
                 e.printStackTrace()
                 (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread()

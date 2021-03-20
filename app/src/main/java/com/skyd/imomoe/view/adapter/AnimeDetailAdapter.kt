@@ -17,6 +17,7 @@ import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.util.*
 import com.skyd.imomoe.util.glide.GlideUtil.loadImage
 import com.skyd.imomoe.util.Util.dp2px
+import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.process
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.ViewHolderUtil.Companion.getItemViewType
@@ -49,7 +50,7 @@ class AnimeDetailAdapter(
                 holder.tvHeader1Title.textSize = 15f
                 holder.tvHeader1Title.text = item.title
                 holder.tvHeader1Title.setTextColor(
-                    activity.resources.getColor(R.color.foreground_white)
+                    activity.getResColor(R.color.foreground_white)
                 )
             }
             is GridRecyclerView1ViewHolder -> {
@@ -68,7 +69,7 @@ class AnimeDetailAdapter(
                     holder.rvGridRecyclerView1.adapter =
                         AnimeShowAdapter.GridRecyclerView1Adapter(
                             activity, it,
-                            activity.resources.getColor(R.color.foreground_white)
+                            activity.getResColor(R.color.foreground_white)
                         )
                 }
             }
@@ -91,7 +92,7 @@ class AnimeDetailAdapter(
                 holder.tvAnimeDescribe1.text = item.describe
                 holder.tvAnimeDescribe1.setOnClickListener { }
                 holder.tvAnimeDescribe1.setTextColor(
-                    activity.resources.getColor(R.color.foreground_white)
+                    activity.getResColor(R.color.foreground_white)
                 )
             }
             is AnimeInfo1ViewHolder -> {
@@ -142,7 +143,7 @@ class AnimeDetailAdapter(
                                 false
                             ) as TextView
                         tvFlowLayout.text = it.tag[i].title
-                        tvFlowLayout.setOnClickListener { it1 ->
+                        tvFlowLayout.setOnClickListener { _ ->
                             //此处是”标签“，由于分类没有这一大项，因此传入”“串
                             process(
                                 activity,
@@ -223,14 +224,14 @@ class AnimeDetailAdapter(
                             layoutParams.setMargins(0, dp2px(5f), dp2px(10f), dp2px(5f))
                         }
                         holder.itemView.layoutParams = layoutParams
-                        holder.tvAnimeEpisode2.setTextColor(activity.resources.getColor(R.color.foreground_white))
+                        holder.tvAnimeEpisode2.setTextColor(activity.getResColor(R.color.foreground_white))
                     } else {
                         holder.itemView.setBackgroundResource(R.drawable.shape_circle_corner_edge_main_color_2_ripper_5)
                         val layoutParams = holder.itemView.layoutParams
                         layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
                         holder.itemView.setPadding(0, dp2px(10f), 0, dp2px(10f))
                         holder.itemView.layoutParams = layoutParams
-                        holder.tvAnimeEpisode2.setTextColor(activity.resources.getColor(R.color.foreground_main_color_2))
+                        holder.tvAnimeEpisode2.setTextColor(activity.getResColor(R.color.foreground_main_color_2))
                     }
                     holder.itemView.setOnClickListener {
                         process(activity, item.actionUrl + detailPartUrl, item.actionUrl)

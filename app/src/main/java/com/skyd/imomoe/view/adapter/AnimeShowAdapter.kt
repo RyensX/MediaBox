@@ -6,7 +6,6 @@ import android.graphics.Rect
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,15 +17,15 @@ import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.util.*
 import com.skyd.imomoe.util.glide.GlideUtil.loadImage
 import com.skyd.imomoe.util.Util.dp2px
-import com.skyd.imomoe.util.Util.gone
 import com.skyd.imomoe.util.Util.process
 import com.skyd.imomoe.util.Util.showToast
-import com.skyd.imomoe.util.Util.visible
 import com.skyd.imomoe.util.ViewHolderUtil.Companion.getItemViewType
 import com.skyd.imomoe.util.ViewHolderUtil.Companion.getViewHolder
 import com.skyd.imomoe.view.fragment.AnimeShowFragment
 import com.skyd.imomoe.view.widget.bannerview.adapter.MyCycleBannerAdapter
 import com.skyd.imomoe.view.widget.bannerview.indicator.DotIndicator
+import com.skyd.imomoe.config.Const.ViewHolderTypeString
+import com.skyd.imomoe.util.Util.getResColor
 
 class AnimeShowAdapter(
     val fragment: AnimeShowFragment,
@@ -82,7 +81,7 @@ class AnimeShowAdapter(
                     if (it.isNotEmpty()) {
                         val itemDecorationCount = holder.rvGridRecyclerView1.itemDecorationCount
                         when (it[0].type) {
-                            "animeCover3", "animeCover5" -> {
+                            ViewHolderTypeString.ANIME_COVER_3, ViewHolderTypeString.ANIME_COVER_5 -> {
                                 holder.rvGridRecyclerView1.layoutManager =
                                     LinearLayoutManager(fragment.activity)
                                 holder.rvGridRecyclerView1.post {
@@ -92,7 +91,7 @@ class AnimeShowAdapter(
                                     holder.rvGridRecyclerView1.removeItemDecorationAt(i)
                                 }
                             }
-                            "animeCover1" -> {
+                            ViewHolderTypeString.ANIME_COVER_1 -> {
                                 holder.rvGridRecyclerView1.layoutManager =
                                     GridLayoutManager(fragment.activity, 4)
                                 if (itemDecorationCount == 0) {
@@ -105,7 +104,7 @@ class AnimeShowAdapter(
                                     holder.rvGridRecyclerView1.addItemDecoration(gridItemDecoration)
                                 }
                             }
-                            "animeCover4" -> {
+                            ViewHolderTypeString.ANIME_COVER_4 -> {
                                 holder.rvGridRecyclerView1.layoutManager =
                                     GridLayoutManager(fragment.activity, 4)
                                 if (itemDecorationCount == 0) {
@@ -130,12 +129,7 @@ class AnimeShowAdapter(
             }
             is Header1ViewHolder -> {
                 fragment.activity?.let {
-                    holder.tvHeader1Title.setTextColor(
-                        ContextCompat.getColor(
-                            it,
-                            R.color.foreground_main_color_2
-                        )
-                    )
+                    holder.tvHeader1Title.setTextColor(it.getResColor(R.color.foreground_main_color_2))
                 }
                 holder.tvHeader1Title.text = item.title
             }
@@ -158,7 +152,7 @@ class AnimeShowAdapter(
     class GridRecyclerView1Adapter(
         private val activity: Activity,
         private val dataList: List<AnimeCoverBean>,
-        private var titleColor: Int = activity.resources.getColor(R.color.foreground_black)
+        private var titleColor: Int = activity.getResColor(R.color.foreground_black)
     ) :
         RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         //必须四个参数都不是-1才生效
@@ -194,19 +188,9 @@ class AnimeShowAdapter(
 
             when (holder) {
                 is AnimeCover1ViewHolder -> {
-                    holder.viewAnimeCover1Night.setBackgroundColor(
-                        ContextCompat.getColor(
-                            activity,
-                            R.color.transparent
-                        )
-                    )
+                    holder.viewAnimeCover1Night.setBackgroundColor(activity.getResColor(R.color.transparent))
                     holder.tvAnimeCover1Title.setTextColor(titleColor)
-                    holder.tvAnimeCover1Episode.setTextColor(
-                        ContextCompat.getColor(
-                            activity,
-                            R.color.main_color
-                        )
-                    )
+                    holder.tvAnimeCover1Episode.setTextColor(activity.getResColor(R.color.main_color))
                     holder.ivAnimeCover1Cover.setTag(R.id.image_view_tag, item.cover?.url)
                     if (holder.ivAnimeCover1Cover.getTag(R.id.image_view_tag) == item.cover?.url) {
                         holder.ivAnimeCover1Cover.loadImage(
@@ -227,19 +211,9 @@ class AnimeShowAdapter(
                     }
                 }
                 is AnimeCover3ViewHolder -> {
-                    holder.viewAnimeCover3Night.setBackgroundColor(
-                        ContextCompat.getColor(
-                            activity,
-                            R.color.transparent
-                        )
-                    )
+                    holder.viewAnimeCover3Night.setBackgroundColor(activity.getResColor(R.color.transparent))
                     holder.tvAnimeCover3Title.setTextColor(titleColor)
-                    holder.tvAnimeCover3Episode.setTextColor(
-                        ContextCompat.getColor(
-                            activity,
-                            R.color.main_color
-                        )
-                    )
+                    holder.tvAnimeCover3Episode.setTextColor(activity.getResColor(R.color.main_color))
                     holder.ivAnimeCover3Cover.setTag(R.id.image_view_tag, item.cover?.url)
                     if (holder.ivAnimeCover3Cover.getTag(R.id.image_view_tag) == item.cover?.url) {
                         holder.ivAnimeCover3Cover.loadImage(
@@ -266,7 +240,7 @@ class AnimeShowAdapter(
                                 ) as TextView
                             tvFlowLayout.text = it[i].title
                             tvFlowLayout.setBackgroundResource(R.drawable.shape_fill_circle_corner_edge_main_color_2_50)
-                            tvFlowLayout.setOnClickListener { it1 ->
+                            tvFlowLayout.setOnClickListener { _ ->
                                 //此处是”类型“，若要修改，需要注意Tab大分类是否还是”类型“
                                 process(
                                     activity,
@@ -282,12 +256,7 @@ class AnimeShowAdapter(
                     }
                 }
                 is AnimeCover4ViewHolder -> {
-                    holder.viewAnimeCover4Night.setBackgroundColor(
-                        ContextCompat.getColor(
-                            activity,
-                            R.color.transparent
-                        )
-                    )
+                    holder.viewAnimeCover4Night.setBackgroundColor(activity.getResColor(R.color.transparent))
                     holder.tvAnimeCover4Title.setTextColor(titleColor)
                     holder.ivAnimeCover4Cover.setTag(R.id.image_view_tag, item.cover?.url)
                     if (holder.ivAnimeCover4Cover.getTag(R.id.image_view_tag) == item.cover?.url) {
@@ -336,23 +305,13 @@ class AnimeShowAdapter(
                     if (item.date == null || item.date == "") {
                         holder.tvAnimeCover5Date.gone()
                     } else {
-                        holder.tvAnimeCover5Date.setTextColor(
-                            ContextCompat.getColor(
-                                activity,
-                                R.color.main_color
-                            )
-                        )
+                        holder.tvAnimeCover5Date.setTextColor(activity.getResColor(R.color.main_color))
                         holder.tvAnimeCover5Date.visible()
                     }
                     holder.tvAnimeCover5Title.text = item.title
                     holder.tvAnimeCover5Area.text = item.area?.title
                     holder.tvAnimeCover5Date.text = item.date
-                    holder.tvAnimeCover5Episode.setTextColor(
-                        ContextCompat.getColor(
-                            activity,
-                            R.color.foreground_main_color_2
-                        )
-                    )
+                    holder.tvAnimeCover5Episode.setTextColor(activity.getResColor(R.color.foreground_main_color_2))
                     holder.tvAnimeCover5Episode.text = item.episodeClickable?.title
                     if (holder.tvAnimeCover5Area.visibility == View.GONE &&
                         holder.tvAnimeCover5Date.visibility == View.GONE

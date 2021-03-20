@@ -6,10 +6,19 @@ plugins {
     id 'bugly'
 }
 
+apply from: secret
+
+android.defaultConfig {
+    secret.buildConfigField.forEach({ k, v ->
+        buildConfigField("String", k, v)
+    })
+}
+
+// Bugly符号表
 bugly {
-    appId = '07cdf10759'                            // 注册时分配的App ID
-    appKey = '9a0f5bd2-1921-4664-95d9-b5f70b8eadae' // 注册时分配的App Key
-    debug = true                                    // 调试模式默认关闭，true是打开
+    appId = secret.buildConfigField.BUGLY_APP_ID    // 注册时分配的App ID
+    appKey = secret.buildConfigField.BUGLY_APP_KEY  // 注册时分配的App Key
+    debug = false                                   // 调试模式默认关闭，true是打开
 }
 
 android {
@@ -20,8 +29,8 @@ android {
         applicationId "com.skyd.imomoe"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 9
-        versionName "1.0.8"
+        versionCode 10
+        versionName "1.0.9"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -35,16 +44,16 @@ android {
         }
 
         ndk {
-            abiFilters 'armeabi-v7a', 'arm64-v8a'
+            abiFilters 'armeabi'
         }
     }
 
     signingConfigs {
         release {
-            keyAlias ''
-            keyPassword ''
-            storeFile file('E:\\Android\\Imomoe\\key.jks')
-            storePassword ''
+            keyAlias secret.sign.RELEASE_KEY_ALIAS
+            keyPassword secret.sign.RELEASE_KEY_PASSWORD
+            storeFile file('../key.jks')
+            storePassword secret.sign.RELEASE_STORE_PASSWORD
         }
     }
 
@@ -53,12 +62,21 @@ android {
             minifyEnabled false
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            ndk {
+                abiFilters 'armeabi', 'x86'
+            }
         }
         release {
             signingConfig signingConfigs.release    //签名
             minifyEnabled true
+            zipAlignEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            ndk {
+                abiFilters 'armeabi'
+            }
         }
     }
     compileOptions {
@@ -71,6 +89,11 @@ android {
 
     packagingOptions {
         exclude 'META-INF/beans.xml'
+        exclude 'META-INF/rxjava.properties'
+        exclude 'META-INF/README.md'
+        exclude 'META-INF/CHANGES'
+        exclude 'META-INF/LICENSE'
+        exclude 'about_files/LICENSE_CDDL.txt'
     }
 
     buildFeatures {
@@ -84,11 +107,8 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.3.2'
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.1'
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    testImplementation 'junit:junit:4.+'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation 'org.jsoup:jsoup:1.13.1'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation "androidx.viewpager2:viewpager2:1.0.0"
@@ -96,15 +116,13 @@ dependencies {
     implementation 'com.github.bumptech.glide:okhttp3-integration:4.9.0'
     kapt 'com.github.bumptech.glide:compiler:4.9.0'
     implementation "com.squareup.okhttp3:okhttp:4.9.0"
-    implementation 'com.shuyu:gsyVideoPlayer-java:8.1.0'
-    implementation 'com.shuyu:gsyVideoPlayer-armv7a:8.1.0'
-    implementation 'com.shuyu:gsyVideoPlayer-arm64:8.1.0'
+    implementation 'com.shuyu:GSYVideoPlayer:8.1.0'
     implementation 'com.squareup.retrofit2:retrofit:2.7.2'
     implementation 'com.squareup.retrofit2:converter-gson:2.7.2'
     implementation 'com.squareup.retrofit2:adapter-rxjava:2.7.2'
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
     implementation 'io.reactivex.rxjava3:rxjava:3.0.0'
-    implementation 'com.hjq:xxpermissions:9.8'
+    implementation 'com.hjq:xxpermissions:10.2'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9'
     implementation 'com.afollestad.material-dialogs:core:3.3.0'
     implementation "androidx.room:room-runtime:2.2.5"
@@ -124,6 +142,9 @@ dependencies {
     implementation 'org.greenrobot:eventbus:3.2.0'
     implementation "com.umeng.umsdk:common:9.3.6"
     implementation "com.umeng.umsdk:asms:1.2.0" // asms包依赖
+    implementation 'com.scwang.smart:refresh-layout-kernel:2.0.3'      //核心必须依赖
+    implementation 'com.scwang.smart:refresh-header-material:2.0.3'    //谷歌刷新头
+    implementation 'com.scwang.smart:refresh-footer-ball:2.0.3'        //球脉冲加载
 }
 
 //AndResGuard资源混淆工具
@@ -182,6 +203,7 @@ andResGuard {
             "*.jpg",
             "*.jpeg",
             "*.gif",
+            "resources.arsc"
     ]
     sevenzip {
         artifact = 'com.tencent.mm:SevenZip:1.2.20'

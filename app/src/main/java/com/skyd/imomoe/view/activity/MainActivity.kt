@@ -16,7 +16,6 @@ import com.skyd.imomoe.view.fragment.EverydayAnimeFragment
 import com.skyd.imomoe.view.fragment.HomeFragment
 import com.skyd.imomoe.view.fragment.MoreFragment
 import org.greenrobot.eventbus.EventBus
-import java.lang.RuntimeException
 
 
 class MainActivity : BaseActivity<ActivityMainBinding>() {
@@ -54,6 +53,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 savedInstanceState,
                 MORE_FRAGMENT_KEY
             ) as MoreFragment?
+            setTabSelection(savedInstanceState.getInt(SELECTED_TAB))
+        } else {
+            setTabSelection(0)
         }
 
         mBinding.run {
@@ -72,8 +74,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 setTabSelection(2)
             }
         }
-
-        setTabSelection(0)
     }
 
     override fun getBinding(): ActivityMainBinding = ActivityMainBinding.inflate(layoutInflater)
@@ -201,13 +201,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         moreFragment?.let {
             supportFragmentManager.putFragment(outState, MORE_FRAGMENT_KEY, it)
         }
+        outState.putInt(SELECTED_TAB, selectedTab)
         super.onSaveInstanceState(outState)
-
     }
 
     companion object {
         private const val HOME_FRAGMENT_KEY = "homeFragment"
         private const val EVERYDAY_ANIME_FRAGMENT_KEY = "everydayAnimeFragment"
         private const val MORE_FRAGMENT_KEY = "moreFragment"
+        private const val SELECTED_TAB = "selectedTab"
     }
 }

@@ -17,7 +17,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:background="@drawable/shape_circle_corner_edge_main_color_50"
+            android:background="@drawable/shape_circle_corner_edge_white_50"
             android:drawableStart="@drawable/ic_search_main_color_24"
             android:drawablePadding="5dp"
             android:gravity="center_vertical"
@@ -93,15 +93,21 @@
             tools:text="@string/search_activity_tip" />
     </androidx.cardview.widget.CardView>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_search_activity"
+    <com.scwang.smart.refresh.layout.SmartRefreshLayout
+        android:id="@+id/srl_search_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/cv_search_activity_tip"
-        android:scrollbarSize="4dp"
-        android:scrollbarThumbVertical="@color/main_color_3"
-        android:scrollbars="vertical"
-        tools:listitem="@layout/item_anime_cover_3" />
+        android:layout_below="@id/cv_search_activity_tip">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_search_activity"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbarSize="4dp"
+            android:scrollbarThumbVertical="@color/foreground_main_color_3"
+            android:scrollbars="vertical"
+            tools:listitem="@layout/item_anime_cover_3" />
+    </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 
     <ViewStub
         android:id="@+id/layout_search_activity_loading"

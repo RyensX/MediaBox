@@ -11,12 +11,12 @@ import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.util.AnimeCover3ViewHolder
 import com.skyd.imomoe.util.glide.GlideUtil.loadImage
-import com.skyd.imomoe.util.Util.gone
 import com.skyd.imomoe.util.Util.process
 import com.skyd.imomoe.util.Util.showToast
-import com.skyd.imomoe.util.Util.visible
 import com.skyd.imomoe.util.ViewHolderUtil.Companion.getItemViewType
 import com.skyd.imomoe.util.ViewHolderUtil.Companion.getViewHolder
+import com.skyd.imomoe.util.gone
+import com.skyd.imomoe.util.visible
 
 class SearchAdapter(
     val activity: Activity,
@@ -64,7 +64,7 @@ class SearchAdapter(
                                 false
                             ) as TextView
                         tvFlowLayout.text = it[i].title
-                        tvFlowLayout.setOnClickListener { it1 ->
+                        tvFlowLayout.setOnClickListener { _ ->
                             //此处是”类型“，若要修改，需要注意Tab大分类是否还是”类型“
                             process(
                                 activity,

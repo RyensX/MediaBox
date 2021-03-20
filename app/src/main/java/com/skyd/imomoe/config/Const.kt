@@ -2,7 +2,6 @@ package com.skyd.imomoe.config
 
 import android.os.Environment
 import java.io.File
-import kotlin.random.Random
 
 interface Const {
     interface Common {
@@ -26,6 +25,67 @@ interface Const {
             const val ANIME_ANIME_DOWNLOAD_PLAY = "/app/animeDownloadPlay"      //此常量为自己定义，播放这一集
             const val ANIME_ANIME_DOWNLOAD_M3U8 = "/app/animeDownloadM3U8"      //此常量为自己定义，m3u8格式
             const val ANIME_LAUNCH_ACTIVITY = "/app/animeLaunchActivity"      //此常量为自己定义，启动Activity
+        }
+    }
+
+    interface ViewHolderTypeInt {
+        companion object {
+            const val UNKNOWN = -1              //未知类型，使用EmptyViewHolder容错处理。
+            const val HEADER_1 = 0
+            const val ANIME_COVER_1 = 1
+            const val ANIME_COVER_2 = 2
+            const val ANIME_COVER_3 = 3
+            const val ANIME_COVER_4 = 4
+            const val ANIME_COVER_5 = 5
+            const val ANIME_COVER_6 = 6
+            const val ANIME_COVER_7 = 7
+            const val ANIME_COVER_8 = 8
+            const val ANIME_COVER_9 = 9
+            const val GRID_RECYCLER_VIEW_1 = 20
+            const val BANNER_1 = 21
+            const val LICENSE_HEADER_1 = 22
+            const val LICENSE_1 = 23
+            const val SEARCH_HISTORY_HEADER_1 = 24
+            const val SEARCH_HISTORY_1 = 25
+            const val ANIME_EPISODE_FLOW_LAYOUT_1 = 26
+            const val ANIME_EPISODE_FLOW_LAYOUT_2 = 27
+            const val ANIME_DESCRIBE_1 = 28
+            const val ANIME_INFO_1 = 29
+            const val HORIZONTAL_RECYCLER_VIEW_1 = 30
+            const val ANIME_EPISODE_2 = 31
+            const val UPNP_DEVICE_1 = 32
+            const val MORE_1 = 33
+        }
+    }
+
+    interface ViewHolderTypeString {
+        companion object {
+            const val EMPTY_STRING = ""               //未知类型，使用EmptyViewHolder容错处理。
+            const val UNKNOWN = "unknown"               //未知类型，使用EmptyViewHolder容错处理。
+            const val ANIME_COVER_1 = "animeCover1"
+            const val ANIME_COVER_2 = "animeCover2"
+            const val ANIME_COVER_3 = "animeCover3"
+            const val ANIME_COVER_4 = "animeCover4"
+            const val ANIME_COVER_5 = "animeCover5"
+            const val ANIME_COVER_6 = "animeCover6"
+            const val ANIME_COVER_7 = "animeCover7"
+            const val ANIME_COVER_8 = "animeCover8"
+            const val ANIME_COVER_9 = "animeCover9"
+            const val HEADER_1 = "header1"
+            const val ANIME_EPISODE_FLOW_LAYOUT_1 = "animeEpisodeFlowLayout1"
+            const val ANIME_EPISODE_FLOW_LAYOUT_2 = "animeEpisodeFlowLayout2"
+            const val ANIME_DESCRIBE_1 = "animeDescribe1"
+            const val GRID_RECYCLER_VIEW_1 = "gridRecyclerView1"
+            const val BANNER_1 = "banner1"
+            const val LICENSE_HEADER_1 = "licenseHeader1"
+            const val LICENSE_1 = "license1"
+            const val SEARCH_HISTORY_HEADER_1 = "searchHistoryHeader1"
+            const val SEARCH_HISTORY_1 = "searchHistory1"
+            const val ANIME_INFO_1 = "animeInfo1"
+            const val HORIZONTAL_RECYCLER_VIEW_1 = "horizontalRecyclerView1"
+            const val ANIME_EPISODE_2 = "animeEpisode2"
+            const val UPNP_DEVICE_1 = "upnpDevice1"
+            const val MORE_1 = "More1"
         }
     }
 

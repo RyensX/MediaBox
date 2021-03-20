@@ -7,8 +7,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.ActivityAnimeDownloadBinding
-import com.skyd.imomoe.util.Util.gone
-import com.skyd.imomoe.util.Util.visible
+import com.skyd.imomoe.util.gone
+import com.skyd.imomoe.util.visible
 import com.skyd.imomoe.view.adapter.AnimeDownloadAdapter
 import com.skyd.imomoe.viewmodel.AnimeDownloadViewModel
 

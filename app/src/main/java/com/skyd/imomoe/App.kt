@@ -4,14 +4,18 @@ import android.app.Application
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
 import com.liulishuo.filedownloader.FileDownloader
+import com.scwang.smart.refresh.footer.BallPulseFooter
+import com.scwang.smart.refresh.header.MaterialHeader
+import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import com.skyd.imomoe.util.CrashHandler
+import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.sharedPreferences
 import com.tencent.bugly.crashreport.CrashReport
 import com.umeng.analytics.MobclickAgent
 import com.umeng.commonsdk.UMConfigure
 
-class App : Application() {
 
+class App : Application() {
     override fun onCreate() {
         super.onCreate()
         context = this
@@ -20,13 +24,13 @@ class App : Application() {
         CrashHandler.getInstance(this)
 
         // Bugly APP ID
-        CrashReport.initCrashReport(applicationContext, "07cdf10759", true)
+        CrashReport.initCrashReport(applicationContext, BuildConfig.BUGLY_APP_ID, true)
 
         // 友盟
         // 初始化组件化基础库, 所有友盟业务SDK都必须调用此初始化接口。
         UMConfigure.init(
             this,
-            "6049a8dbb8c8d45c1395e180",
+            BuildConfig.UM_APP_KEY,
             "Github",
             UMConfigure.DEVICE_TYPE_PHONE,
             null
@@ -35,6 +39,8 @@ class App : Application() {
         MobclickAgent.setPageCollectionMode(MobclickAgent.PageMode.AUTO)
 
         FileDownloader.setup(this)
+
+        initSmartRefreshLayout()
 
         //夜间模式
         AppCompatDelegate.setDefaultNightMode(
@@ -46,5 +52,33 @@ class App : Application() {
 
     companion object {
         lateinit var context: Context
+
+        // 防止内存泄漏
+        private fun initSmartRefreshLayout() {
+            //设置全局默认配置（优先级最低，会被其他设置覆盖）
+            SmartRefreshLayout.setDefaultRefreshInitializer { context, layout -> //开始设置全局的基本参数（可以被下面的DefaultRefreshHeaderCreator覆盖）
+                layout.setReboundDuration(150)
+                layout.setFooterHeight(100f)
+                layout.setHeaderTriggerRate(0.5f)
+                layout.setDisableContentWhenLoading(false)
+                layout.setPrimaryColorsId(R.color.main_color_3)
+            }
+
+            //全局设置默认的 Header
+            SmartRefreshLayout.setDefaultRefreshHeaderCreator { context, layout -> //开始设置全局的基本参数（这里设置的属性只跟下面的MaterialHeader绑定，其他Header不会生效，能覆盖DefaultRefreshInitializer的属性和Xml设置的属性）
+                layout.setEnableHeaderTranslationContent(true)
+                    .setHeaderHeight(70f)
+                    .setDragRate(0.6f)
+                MaterialHeader(context).setColorSchemeResources(R.color.main_color)
+                    .setShowBezierWave(true)
+            }
+
+            SmartRefreshLayout.setDefaultRefreshFooterCreator { context, layout ->
+                layout.setEnableFooterTranslationContent(true)
+                BallPulseFooter(context).setAnimatingColor(
+                    context.getResColor(R.color.foreground_main_color_2)
+                )
+            }
+        }
     }
 }

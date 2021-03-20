@@ -13,7 +13,7 @@
     <string name="get_data_failed">获取数据失败！</string>
     <string name="delete_failed">刪除失败！</string>
     <string name="search_activity_cancel">取消</string>
-    <string name="search_activity_tip">“%s”搜索结果，共%d条</string>
+    <string name="search_activity_tip">“%s”搜索结果，加载了%d条</string>
     <string name="search_input_keywords_tips">请输入搜索关键字</string>
     <string name="home">首页</string>
     <string name="everyday_anime">每日更新</string>
@@ -77,4 +77,10 @@
     <string name="clear_cache_failed">清空缓存失败！</string>
     <string name="detail_page">详情页</string>
     <string name="load_data_failed_click_to_retry">加载数据失败，点击重试</string>
+    <string name="choose_episode">选集</string>
+    <string name="test_device">测试机型</string>
+    <string name="app_icon_describe">APP图标修改自动漫《日常》</string>
+    <string name="favorite_succeed">追番成功</string>
+    <string name="remove_favorite_succeed">取消追番成功</string>
+    <string name="parsing_video">解析视频中…</string>
 </resources>

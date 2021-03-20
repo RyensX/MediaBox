@@ -38,7 +38,7 @@ class AnimeDownloadViewModel : ViewModel() {
                         }?.size
                         animeCoverList.add(
                             animeCoverList.size, AnimeCoverBean(
-                                "animeCover7",
+                                Const.ViewHolderTypeString.ANIME_COVER_7,
                                 Const.ActionUrl.ANIME_ANIME_DOWNLOAD_EPISODE + "/" + file.name,
                                 "",
                                 file.name,
@@ -111,7 +111,7 @@ class AnimeDownloadViewModel : ViewModel() {
                         Const.DownloadAnime.animeFilePath + directoryName + "/" + anime.fileName
                     animeCoverList.add(
                         AnimeCoverBean(
-                            "animeCover7",
+                            Const.ViewHolderTypeString.ANIME_COVER_7,
                             (if (fileName.endsWith(".m3u8", true))
                                 Const.ActionUrl.ANIME_ANIME_DOWNLOAD_M3U8
                             else Const.ActionUrl.ANIME_ANIME_DOWNLOAD_PLAY)

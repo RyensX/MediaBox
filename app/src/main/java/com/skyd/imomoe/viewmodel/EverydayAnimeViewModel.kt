@@ -12,6 +12,7 @@ import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.util.JsoupUtil
 import com.skyd.imomoe.util.ParseHtmlUtil.parseDtit
 import com.skyd.imomoe.util.ParseHtmlUtil.parseTlist
+import com.skyd.imomoe.util.Util.getRealDayOfWeek
 import com.skyd.imomoe.util.Util.showToastOnThread
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -26,6 +27,7 @@ class EverydayAnimeViewModel : ViewModel() {
         "", "", "", "",
         "", "", "", null
     )
+    var selectedTabIndex = -1
     var mldHeader: MutableLiveData<AnimeShowBean> = MutableLiveData()
     var tabList: MutableList<TabBean> = ArrayList()
     var mldTabList: MutableLiveData<List<TabBean>> = MutableLiveData()
@@ -65,6 +67,10 @@ class EverydayAnimeViewModel : ViewModel() {
                                                             )
                                                         )
                                                     }
+                                                    selectedTabIndex = getRealDayOfWeek(
+                                                        Calendar.getInstance(Locale.getDefault())
+                                                            .get(Calendar.DAY_OF_WEEK)
+                                                    ) - 1
                                                 }
                                                 "tlist" -> {
                                                     everydayAnimeList.addAll(parseTlist(bgChildren[k]))
@@ -81,6 +87,7 @@ class EverydayAnimeViewModel : ViewModel() {
                 mldTabList.postValue(tabList)
                 mldEverydayAnimeList.postValue(true)
             } catch (e: Exception) {
+                selectedTabIndex = -1
                 tabList.clear()
                 everydayAnimeList.clear()
                 mldEverydayAnimeList.postValue(false)

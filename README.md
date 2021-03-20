@@ -20,17 +20,38 @@
 
 ## 运行截图
 
-![main](https://github.com/SkyD666/Imomoe/raw/master/screenshot/main.jpg) ![anime_detail](https://github.com/SkyD666/Imomoe/raw/master/screenshot/anime_detail.jpg)
+![main](screenshot/main.jpg) ![anime_detail](screenshot/anime_detail.jpg)
 
-![new_anime](https://github.com/SkyD666/Imomoe/raw/master/screenshot/new_anime.jpg) ![everyday_anime](https://github.com/SkyD666/Imomoe/raw/master/screenshot/everyday_anime.jpg) 
+![new_anime](screenshot/new_anime.jpg) ![everyday_anime](screenshot/everyday_anime.jpg) 
 
-![search](https://github.com/SkyD666/Imomoe/raw/master/screenshot/search.jpg) ![play](https://github.com/SkyD666/Imomoe/raw/master/screenshot/play.jpg) 
+![search](screenshot/search.jpg) ![play](screenshot/play.jpg) 
 
-![classify](https://github.com/SkyD666/Imomoe/raw/master/screenshot/classify.jpg) ![rank](https://github.com/SkyD666/Imomoe/raw/master/screenshot/rank.jpg)
+![classify](screenshot/classify.jpg) ![rank](screenshot/rank.jpg)
 
-![favorite](https://github.com/SkyD666/Imomoe/raw/master/screenshot/favorite.jpg) ![history](https://github.com/SkyD666/Imomoe/raw/master/screenshot/history.jpg) 
+![favorite](screenshot/favorite.jpg) ![history](screenshot/history.jpg) 
 
-![player](https://github.com/SkyD666/Imomoe/raw/master/screenshot/player.jpg) 
+![player](screenshot/player.jpg) 
+
+## 应用主要权限说明
+
+### 存储
+
+1. 读取存储卡中的内容：缓存动漫功能需要读取本地存储卡中缓存的视频文件
+2. 修改或删除存储卡中的内容：缓存动漫功能需要修改记录缓存信息的xml文件
+
+### 电话
+
+1. 读取设备通话状态和识别码：Bugly统计应用崩溃信息等需要
+
+### 位置信息
+
+1. 访问大致、确切位置：友盟SDK需要
+
+### 其它应用功能
+
+1. 应用内安装其他应用：应用安装更新apk需要
+2. 防止手机休眠：投屏到电视功能需要
+3. 允许接收WLAN多播：投屏到电视功能需要
 
 ## 附加说明
 

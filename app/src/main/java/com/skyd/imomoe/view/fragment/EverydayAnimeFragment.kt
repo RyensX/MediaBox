@@ -16,9 +16,9 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeCoverBean
+import com.skyd.imomoe.config.Const.ViewHolderTypeInt
 import com.skyd.imomoe.databinding.FragmentEverydayAnimeBinding
 import com.skyd.imomoe.util.GridRecyclerView1ViewHolder
-import com.skyd.imomoe.util.ViewHolderUtil.Companion.GRID_RECYCLER_VIEW_1
 import com.skyd.imomoe.util.ViewHolderUtil.Companion.getViewHolder
 import com.skyd.imomoe.util.eventbus.EventBusSubscriber
 import com.skyd.imomoe.util.eventbus.MessageEvent
@@ -79,6 +79,7 @@ class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), Even
 
         viewModel.mldEverydayAnimeList.observe(viewLifecycleOwner, Observer {
             mBinding.srlEverydayAnimeFragment.isRefreshing = false
+            if (this::adapter.isInitialized) adapter.notifyDataSetChanged()
 
             if (it) {
                 val selectedTabIndex = this.selectedTabIndex
@@ -87,8 +88,10 @@ class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), Even
                     ObjectAnimator.ofFloat(mBinding.llEverydayAnimeFragment, "alpha", 1f, 0f)
                         .setDuration(270).start()
                     //添加rv
-                    adapter = Vp2Adapter(it1, viewModel.everydayAnimeList)
-                    mBinding.vp2EverydayAnimeFragment.setAdapter(adapter)
+                    if (!this::adapter.isInitialized) {
+                        adapter = Vp2Adapter(it1, viewModel.everydayAnimeList)
+                        mBinding.vp2EverydayAnimeFragment.setAdapter(adapter)
+                    }
 
                     val tabLayoutMediator = TabLayoutMediator(
                         mBinding.tlEverydayAnimeFragment,
@@ -98,8 +101,13 @@ class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), Even
                     }
                     tabLayoutMediator.attach()
 
-                    if (selectedTabIndex < mBinding.tlEverydayAnimeFragment.tabCount)
+                    val tabCount = mBinding.tlEverydayAnimeFragment.tabCount
+                    if (selectedTabIndex != -1 && selectedTabIndex < tabCount)
                         mBinding.vp2EverydayAnimeFragment.setCurrentItem(selectedTabIndex, false)
+                    else if (selectedTabIndex == -1 && viewModel.selectedTabIndex < tabCount)
+                        mBinding.vp2EverydayAnimeFragment.setCurrentItem(
+                            viewModel.selectedTabIndex, false
+                        )
 
                     //设置完数据后显示，避免闪烁
                     ObjectAnimator.ofFloat(mBinding.llEverydayAnimeFragment, "alpha", 0f, 1f)
@@ -108,7 +116,6 @@ class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), Even
 
                 hideLoadFailedTip()
             } else {
-                if (this::adapter.isInitialized) adapter.notifyDataSetChanged()
                 showLoadFailedTip(
                     getString(R.string.load_data_failed_click_to_retry),
                     View.OnClickListener {
@@ -155,7 +162,7 @@ class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), Even
         //必须四个参数都不是-1才生效
         var childPadding = Rect(-1, -1, -1, -1)
 
-        override fun getItemViewType(position: Int): Int = GRID_RECYCLER_VIEW_1
+        override fun getItemViewType(position: Int): Int = ViewHolderTypeInt.GRID_RECYCLER_VIEW_1
 
         override fun onCreateViewHolder(
             parent: ViewGroup,
@@ -174,18 +181,17 @@ class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), Even
             val item = list[position]
             when (holder) {
                 is GridRecyclerView1ViewHolder -> {
-                    val layoutManager = LinearLayoutManager(activity)
                     val rvLayoutParams = holder.rvGridRecyclerView1.layoutParams
                     rvLayoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
+                    holder.rvGridRecyclerView1.layoutManager = LinearLayoutManager(activity)
                     holder.rvGridRecyclerView1.layoutParams = rvLayoutParams
-                    holder.rvGridRecyclerView1.setHasFixedSize(true)
-                    holder.rvGridRecyclerView1.layoutManager = layoutManager
                     holder.rvGridRecyclerView1.isNestedScrollingEnabled = true
                     val adapter = AnimeShowAdapter.GridRecyclerView1Adapter(activity, item)
                     adapter.padding = childPadding
                     if (showRankNumber.isNotEmpty() && showRankNumber[position])
                         adapter.showRankNumber = true
                     holder.rvGridRecyclerView1.adapter = adapter
+                    adapter.notifyDataSetChanged()
                 }
             }
         }
