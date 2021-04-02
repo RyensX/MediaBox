@@ -6,12 +6,12 @@
     android:layout_height="wrap_content"
     android:background="?android:selectableItemBackground">
 
-    <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+    <com.skyd.imomoe.view.component.textview.TypefaceTextView
         android:id="@+id/tv_anime_cover_5_rank"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="27dp"
-        android:background="@drawable/shape_fill_circle_corner_edge_main_color_2_50"
+        android:background="@drawable/shape_fill_circle_corner_main_color_2_50"
         android:paddingHorizontal="6dp"
         android:textColor="@color/foreground_white"
         android:textSize="15sp"
@@ -22,7 +22,7 @@
         tools:text="1"
         tools:visibility="visible" />
 
-    <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+    <com.skyd.imomoe.view.component.textview.TypefaceTextView
         android:id="@+id/tv_anime_cover_5_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -42,12 +42,12 @@
         app:typeface="bPRTypeface"
         tools:text="中二病也要谈恋爱！" />
 
-    <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+    <com.skyd.imomoe.view.component.textview.TypefaceTextView
         android:id="@+id/tv_anime_cover_5_area"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="9dp"
-        android:background="@drawable/shape_fill_circle_corner_edge_main_color_2_50"
+        android:background="@drawable/shape_fill_circle_corner_main_color_2_50"
         android:paddingHorizontal="7dp"
         android:paddingVertical="2dp"
         android:textColor="@color/foreground_white"
@@ -59,7 +59,7 @@
         app:layout_constraintTop_toBottomOf="@id/tv_anime_cover_5_title"
         tools:text="日本" />
 
-    <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+    <com.skyd.imomoe.view.component.textview.TypefaceTextView
         android:id="@+id/tv_anime_cover_5_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -75,7 +75,7 @@
         app:typeface="bPRTypeface"
         tools:text="2021-02-05" />
 
-    <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+    <com.skyd.imomoe.view.component.textview.TypefaceTextView
         android:id="@+id/tv_anime_cover_5_episode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -46,7 +46,7 @@
                 android:progressDrawable="@drawable/video_seek_progress"
                 android:thumb="@drawable/video_seek_thumb" />
 
-            <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+            <com.skyd.imomoe.view.component.textview.TypefaceTextView
                 android:id="@+id/tv_dlna_control_activity_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

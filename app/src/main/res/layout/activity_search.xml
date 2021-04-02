@@ -17,7 +17,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:background="@drawable/shape_circle_corner_edge_white_50"
+            android:background="@drawable/shape_circle_corner_white_50"
             android:drawableStart="@drawable/ic_search_main_color_24"
             android:drawablePadding="5dp"
             android:gravity="center_vertical"
@@ -51,7 +51,7 @@
             app:layout_constraintTop_toTopOf="@id/et_search_activity_search"
             tools:visibility="visible" />
 
-        <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+        <com.skyd.imomoe.view.component.textview.TypefaceTextView
             android:id="@+id/tv_search_activity_cancel"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
@@ -77,7 +77,7 @@
         app:cardBackgroundColor="@color/white"
         app:cardElevation="6dp">
 
-        <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+        <com.skyd.imomoe.view.component.textview.TypefaceTextView
             android:id="@+id/tv_search_activity_tip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

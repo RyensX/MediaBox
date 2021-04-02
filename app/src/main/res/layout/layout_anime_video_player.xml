@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/black"
-    tools:context=".view.widget.AnimeVideoPlayer">
+    tools:context=".view.component.AnimeVideoPlayer">
 
     <FrameLayout
         android:id="@+id/surface_container"
@@ -49,7 +49,7 @@
             android:progressDrawable="@drawable/video_seek_progress"
             android:thumb="@drawable/video_seek_thumb" />
 
-        <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+        <com.skyd.imomoe.view.component.textview.TypefaceTextView
             android:id="@+id/current"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -59,7 +59,7 @@
             app:typeface="bPRTypeface"
             tools:text="00:00" />
 
-        <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+        <com.skyd.imomoe.view.component.textview.TypefaceTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -67,7 +67,7 @@
             android:textColor="@color/foreground_white"
             android:textSize="12sp" />
 
-        <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+        <com.skyd.imomoe.view.component.textview.TypefaceTextView
             android:id="@+id/total"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -77,7 +77,7 @@
             app:typeface="bPRTypeface"
             tools:text="00:00" />
 
-        <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+        <com.skyd.imomoe.view.component.textview.TypefaceTextView
             android:id="@+id/tv_speed"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -168,7 +168,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+        <com.skyd.imomoe.view.component.textview.TypefaceTextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -21,7 +21,7 @@
             android:src="@drawable/ic_beans_main_color_24"
             app:tint="@color/foreground_white" />
 
-        <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+        <com.skyd.imomoe.view.component.textview.TypefaceTextView
             android:id="@+id/tv_more_fragment_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

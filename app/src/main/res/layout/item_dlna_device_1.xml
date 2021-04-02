@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:background="?android:selectableItemBackground">
 
-    <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+    <com.skyd.imomoe.view.component.textview.TypefaceTextView
         android:id="@+id/tv_upnp_device_1_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

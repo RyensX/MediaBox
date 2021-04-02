@@ -19,7 +19,7 @@
             android:layout_marginStart="16dp"
             android:src="@drawable/ic_sunny_white_24" />
 
-        <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+        <com.skyd.imomoe.view.component.textview.TypefaceTextView
             android:id="@+id/tv_everyday_anime_fragment_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
             tools:text="每日更新列表" />
     </LinearLayout>
 
-    <com.skyd.imomoe.view.widget.VpSwipeRefreshLayout
+    <com.skyd.imomoe.view.component.VpSwipeRefreshLayout
         android:id="@+id/srl_everyday_anime_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -63,12 +63,12 @@
                     app:tabTextColor="@color/foreground_main_color_2" />
             </androidx.cardview.widget.CardView>
 
-            <com.skyd.imomoe.view.widget.ViewPager2View
+            <com.skyd.imomoe.view.component.ViewPager2View
                 android:id="@+id/vp2_everyday_anime_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </LinearLayout>
-    </com.skyd.imomoe.view.widget.VpSwipeRefreshLayout>
+    </com.skyd.imomoe.view.component.VpSwipeRefreshLayout>
 
     <ViewStub
         android:id="@+id/layout_everyday_anime_fragment_load_failed"

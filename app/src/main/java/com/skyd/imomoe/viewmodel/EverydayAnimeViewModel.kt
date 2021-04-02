@@ -40,7 +40,7 @@ class EverydayAnimeViewModel : ViewModel() {
                 val document = JsoupUtil.getDocument(Api.MAIN_URL)
                 val areaChildren: Elements = document.select("[class=area]")[0].children()
                 tabList.clear()
-                everydayAnimeList.clear()
+                val everydayAnimeList: MutableList<List<AnimeCoverBean>> = ArrayList()
                 for (i in areaChildren.indices) {
                     when (areaChildren[i].className()) {
                         "side r" -> {
@@ -84,6 +84,8 @@ class EverydayAnimeViewModel : ViewModel() {
                         }
                     }
                 }
+                this@EverydayAnimeViewModel.everydayAnimeList.clear()
+                this@EverydayAnimeViewModel.everydayAnimeList.addAll(everydayAnimeList)
                 mldTabList.postValue(tabList)
                 mldEverydayAnimeList.postValue(true)
             } catch (e: Exception) {

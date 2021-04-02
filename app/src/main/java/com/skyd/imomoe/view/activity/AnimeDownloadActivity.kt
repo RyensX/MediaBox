@@ -1,12 +1,18 @@
 package com.skyd.imomoe.view.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.ViewStub
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.hjq.permissions.OnPermissionCallback
+import com.hjq.permissions.Permission
+import com.hjq.permissions.XXPermissions
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.ActivityAnimeDownloadBinding
+import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.gone
 import com.skyd.imomoe.util.visible
 import com.skyd.imomoe.view.adapter.AnimeDownloadAdapter
@@ -52,11 +58,23 @@ class AnimeDownloadActivity : BaseActivity<ActivityAnimeDownloadBinding>() {
             }
         })
 
-        if (mode == 0) viewModel.getAnimeCover()
-        else if (mode == 1) {
-            mBinding.layoutAnimeDownloadLoading.layoutCircleProgressTextTip1.visible()
-            viewModel.getAnimeCoverEpisode(directoryName)
-        }
+        XXPermissions.with(this).permission(Permission.MANAGE_EXTERNAL_STORAGE)
+            .request(object : OnPermissionCallback {
+                override fun onGranted(permissions: MutableList<String>?, all: Boolean) {
+                    if (mode == 0) viewModel.getAnimeCover()
+                    else if (mode == 1) {
+                        mBinding.layoutAnimeDownloadLoading.layoutCircleProgressTextTip1.visible()
+                        viewModel.getAnimeCoverEpisode(directoryName)
+                    }
+                }
+
+                override fun onDenied(permissions: MutableList<String>?, never: Boolean) {
+                    super.onDenied(permissions, never)
+                    "无存储权限，无法播放本地缓存视频".showToast(Toast.LENGTH_LONG)
+                    finish()
+                }
+            }
+            )
     }
 
     override fun getBinding(): ActivityAnimeDownloadBinding =

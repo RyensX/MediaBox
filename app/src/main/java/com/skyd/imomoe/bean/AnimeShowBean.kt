@@ -1,5 +1,6 @@
 package com.skyd.imomoe.bean
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
 class AnimeShowBean(

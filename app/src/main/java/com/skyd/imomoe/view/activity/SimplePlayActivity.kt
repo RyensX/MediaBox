@@ -3,6 +3,9 @@ package com.skyd.imomoe.view.activity
 import android.os.Bundle
 import android.view.View
 import com.shuyu.gsyvideoplayer.GSYVideoManager
+import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack
+import com.shuyu.gsyvideoplayer.listener.VideoAllCallBack
+import com.shuyu.gsyvideoplayer.model.VideoOptionModel
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils
 import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.databinding.ActivitySimplePlayBinding
@@ -12,6 +15,7 @@ import com.skyd.imomoe.util.gone
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import tv.danmaku.ijk.media.player.IjkMediaPlayer
 import java.io.File
 
 
@@ -49,6 +53,10 @@ class SimplePlayActivity : BaseActivity<ActivitySimplePlayBinding>() {
                 }
             }
         }
+
+        val videoOptionModel =
+            VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "enable-accurate-seek", 1)
+        GSYVideoManager.instance().optionModelList = listOf(videoOptionModel)
     }
 
     override fun getBinding(): ActivitySimplePlayBinding =
@@ -72,6 +80,12 @@ class SimplePlayActivity : BaseActivity<ActivitySimplePlayBinding>() {
             setBackFromFullScreenListener { finish() }
             //是否可以滑动调整
             setIsTouchWiget(true)
+            setVideoAllCallBack(object : GSYSampleCallBack() {
+                override fun onPrepared(url: String?, vararg objects: Any?) {
+                    super.onPrepared(url, *objects)
+                    this@run.currentPlayer.seekRatio = this@run.currentPlayer.duration / 90_000f
+                }
+            })
             setUp(url, false, title)
         }
     }

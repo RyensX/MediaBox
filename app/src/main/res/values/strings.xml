@@ -83,4 +83,20 @@
     <string name="favorite_succeed">追番成功</string>
     <string name="remove_favorite_succeed">取消追番成功</string>
     <string name="parsing_video">解析视频中…</string>
+    <string name="shortcuts_disabled">暂时无法使用</string>
+    <string name="shortcuts_favorite_long">我的追番</string>
+    <string name="shortcuts_favorite_short">追番</string>
+    <string name="shortcuts_everyday_long">每日更新动漫</string>
+    <string name="shortcuts_everyday_short">日更动漫</string>
+    <string name="shortcuts_download_long">缓存番剧</string>
+    <string name="shortcuts_download_short">缓存番剧</string>
+    <string name="attention">声明</string>
+    <string name="update_widget">正在更新小组件</string>
+    <string name="widget_everyday_anime">每日更新动漫</string>
+    <string name="play_sound_only">只播放音频</string>
+    <string name="vertical_reverse">上下镜像</string>
+    <string name="horizontal_reverse">左右镜像</string>
+    <string name="reverse">镜像</string>
+    <string name="no_reverse">正常</string>
+    <string name="bottom_progress">底部进度条</string>
 </resources>

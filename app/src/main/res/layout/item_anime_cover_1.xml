@@ -30,7 +30,7 @@
             android:background="@color/transparent" />
     </androidx.cardview.widget.CardView>
 
-    <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+    <com.skyd.imomoe.view.component.textview.TypefaceTextView
         android:id="@+id/tv_anime_cover_1_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -47,7 +47,7 @@
         app:typeface="bPRTypeface"
         tools:text="中二病也要谈恋爱！" />
 
-    <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+    <com.skyd.imomoe.view.component.textview.TypefaceTextView
         android:id="@+id/tv_anime_cover_1_episode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

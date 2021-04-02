@@ -40,12 +40,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+        <com.skyd.imomoe.view.component.textview.TypefaceTextView
             android:id="@+id/tv_home_fragment_header_search"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="7dp"
-            android:background="@drawable/shape_circle_corner_edge_white_50"
+            android:background="@drawable/shape_circle_corner_white_50"
             android:drawableStart="@drawable/ic_search_main_color_24"
             android:drawablePadding="5dp"
             android:gravity="center_vertical"
@@ -97,7 +97,7 @@
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.skyd.imomoe.view.widget.ViewPager2View
+    <com.skyd.imomoe.view.component.ViewPager2View
         android:id="@+id/vp2_home_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

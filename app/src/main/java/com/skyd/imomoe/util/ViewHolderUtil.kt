@@ -8,9 +8,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.BaseBean
-import com.skyd.imomoe.view.widget.bannerview.BannerView
-import com.skyd.imomoe.view.widget.textview.TypefaceTextView
-import com.skyd.imomoe.view.widget.FlowLayout
+import com.skyd.imomoe.view.component.bannerview.BannerView
+import com.skyd.imomoe.view.component.textview.TypefaceTextView
+import com.skyd.imomoe.view.component.FlowLayout
 import com.skyd.imomoe.config.Const.ViewHolderTypeInt
 import com.skyd.imomoe.config.Const.ViewHolderTypeString
 

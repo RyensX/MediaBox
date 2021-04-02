@@ -29,7 +29,7 @@
             android:background="@color/transparent" />
     </androidx.cardview.widget.CardView>
 
-    <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+    <com.skyd.imomoe.view.component.textview.TypefaceTextView
         android:id="@+id/tv_anime_cover_4_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

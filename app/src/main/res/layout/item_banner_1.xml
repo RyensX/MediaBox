@@ -9,7 +9,7 @@
     app:cardCornerRadius="6dp"
     app:cardElevation="3dp">
 
-    <com.skyd.imomoe.view.widget.bannerview.BannerView
+    <com.skyd.imomoe.view.component.bannerview.BannerView
         android:id="@+id/banner_1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -15,7 +15,7 @@
         android:indeterminateTint="@color/foreground_main_color_2"
         android:indeterminateTintMode="src_atop" />
 
-    <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+    <com.skyd.imomoe.view.component.textview.TypefaceTextView
         android:id="@+id/tv_circle_progress_text_tip_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

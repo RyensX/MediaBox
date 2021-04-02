@@ -40,13 +40,13 @@ class HistoryActivity : BaseActivity<ActivityHistoryBinding>() {
 
 
         viewModel.mldHistoryList.observe(this, Observer {
+            adapter.notifyDataSetChanged()
             mBinding.srlHistoryActivity.isRefreshing = false
             if (it) {
                 if (viewModel.historyList.isEmpty()) showLoadFailedTip(
                     getString(R.string.no_history),
                     null
                 )
-                adapter.notifyDataSetChanged()
             }
         })
 

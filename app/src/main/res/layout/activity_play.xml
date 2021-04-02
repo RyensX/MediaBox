@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.skyd.imomoe.view.widget.AnimeVideoPlayer
+        <com.skyd.imomoe.view.component.AnimeVideoPlayer
             android:id="@+id/avp_play_activity"
             android:layout_width="match_parent"
             android:layout_height="210dp" />
@@ -40,7 +40,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+                        <com.skyd.imomoe.view.component.textview.TypefaceTextView
                             android:id="@+id/tv_play_activity_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

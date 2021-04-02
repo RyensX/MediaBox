@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_anime_cover_10"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:selectableItemBackground">
+
+    <TextView
+        android:id="@+id/tv_anime_cover_10_title"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginVertical="10dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:textColor="@color/foreground_main_color_2"
+        android:textSize="17sp"
+        tools:text="番剧名" />
+
+    <TextView
+        android:id="@+id/tv_anime_cover_10_episode"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginVertical="10dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="16dp"
+        android:gravity="center_vertical"
+        android:textColor="@color/foreground_main_color_2"
+        android:textSize="17sp"
+        tools:text="第10集" />
+
+</LinearLayout>

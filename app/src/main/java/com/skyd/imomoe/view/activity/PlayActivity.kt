@@ -13,7 +13,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.shuyu.gsyvideoplayer.GSYBaseActivityDetail
+import com.shuyu.gsyvideoplayer.GSYVideoManager
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder
+import com.shuyu.gsyvideoplayer.model.VideoOptionModel
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
@@ -34,12 +36,13 @@ import com.skyd.imomoe.view.adapter.AnimeDetailAdapter
 import com.skyd.imomoe.view.adapter.AnimeEpisodeItemDecoration
 import com.skyd.imomoe.view.adapter.PlayAdapter
 import com.skyd.imomoe.view.fragment.ShareDialogFragment
-import com.skyd.imomoe.view.widget.AnimeVideoPlayer
+import com.skyd.imomoe.view.component.AnimeVideoPlayer
 import com.skyd.imomoe.viewmodel.PlayViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import tv.danmaku.ijk.media.player.IjkMediaPlayer
 
 
 class PlayActivity : GSYBaseActivityDetail<AnimeVideoPlayer>() {
@@ -172,6 +175,10 @@ class PlayActivity : GSYBaseActivityDetail<AnimeVideoPlayer>() {
         mBinding.srlPlayActivity.isRefreshing = true
         viewModel.getPlayData(partUrl)
         viewModel.getAnimeCover(detailPartUrl)
+
+        val videoOptionModel =
+            VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "enable-accurate-seek", 1)
+        GSYVideoManager.instance().optionModelList = listOf(videoOptionModel)
     }
 
     fun startPlay(url: String, currentEpisodeIndex: Int, title: String) {

@@ -22,8 +22,8 @@ import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.ViewHolderUtil.Companion.getItemViewType
 import com.skyd.imomoe.util.ViewHolderUtil.Companion.getViewHolder
 import com.skyd.imomoe.view.fragment.AnimeShowFragment
-import com.skyd.imomoe.view.widget.bannerview.adapter.MyCycleBannerAdapter
-import com.skyd.imomoe.view.widget.bannerview.indicator.DotIndicator
+import com.skyd.imomoe.view.component.bannerview.adapter.MyCycleBannerAdapter
+import com.skyd.imomoe.view.component.bannerview.indicator.DotIndicator
 import com.skyd.imomoe.config.Const.ViewHolderTypeString
 import com.skyd.imomoe.util.Util.getResColor
 
@@ -239,7 +239,7 @@ class AnimeShowAdapter(
                                     false
                                 ) as TextView
                             tvFlowLayout.text = it[i].title
-                            tvFlowLayout.setBackgroundResource(R.drawable.shape_fill_circle_corner_edge_main_color_2_50)
+                            tvFlowLayout.setBackgroundResource(R.drawable.shape_fill_circle_corner_main_color_2_50)
                             tvFlowLayout.setOnClickListener { _ ->
                                 //此处是”类型“，若要修改，需要注意Tab大分类是否还是”类型“
                                 process(
@@ -277,13 +277,13 @@ class AnimeShowAdapter(
                         holder.tvAnimeCover5Rank.text = (position + 1).toString()
                         if (position in 0..2) {
                             val backgrounds = intArrayOf(
-                                R.drawable.shape_fill_circle_corner_edge_golden_50,
-                                R.drawable.shape_fill_circle_corner_edge_silvery_50,
-                                R.drawable.shape_fill_circle_corner_edge_coppery_50
+                                R.drawable.shape_fill_circle_corner_golden_50,
+                                R.drawable.shape_fill_circle_corner_silvery_50,
+                                R.drawable.shape_fill_circle_corner_coppery_50
                             )
                             holder.tvAnimeCover5Rank.setBackgroundResource(backgrounds[position])
                         } else {
-                            holder.tvAnimeCover5Rank.setBackgroundResource(R.drawable.shape_fill_circle_corner_edge_main_color_2_50)
+                            holder.tvAnimeCover5Rank.setBackgroundResource(R.drawable.shape_fill_circle_corner_main_color_2_50)
                         }
                         holder.tvAnimeCover5Rank.visible()
                     } else {
@@ -296,7 +296,7 @@ class AnimeShowAdapter(
                             holder.tvAnimeCover5Date.setPadding(0, 0, 0, 0)
                         }
                     } else {
-                        holder.tvAnimeCover5Area.setBackgroundResource(R.drawable.shape_fill_circle_corner_edge_main_color_2_50)
+                        holder.tvAnimeCover5Area.setBackgroundResource(R.drawable.shape_fill_circle_corner_main_color_2_50)
                         holder.tvAnimeCover5Area.visible()
                         holder.tvAnimeCover5Date.post {
                             holder.tvAnimeCover5Date.setPadding(dp2px(12f), 0, 0, 0)

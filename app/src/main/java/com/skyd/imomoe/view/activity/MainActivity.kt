@@ -1,11 +1,20 @@
 package com.skyd.imomoe.view.activity
 
+import android.content.Intent
+import android.content.pm.ShortcutInfo
+import android.content.pm.ShortcutManager
+import android.graphics.drawable.Icon
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
+import com.skyd.imomoe.config.Const.ShortCuts.Companion.ACTION_EVERYDAY
+import com.skyd.imomoe.config.Const.ShortCuts.Companion.ID_DOWNLOAD
+import com.skyd.imomoe.config.Const.ShortCuts.Companion.ID_EVERYDAY
+import com.skyd.imomoe.config.Const.ShortCuts.Companion.ID_FAVORITE
 import com.skyd.imomoe.databinding.ActivityMainBinding
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.clickScale
@@ -25,9 +34,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     private var homeFragment: HomeFragment? = null
     private var everydayAnimeFragment: EverydayAnimeFragment? = null
     private var moreFragment: MoreFragment? = null
+    private lateinit var action: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        action = intent.action ?: ""
 
         //检查更新
         val appUpdateHelper = AppUpdateHelper.instance
@@ -55,7 +67,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             ) as MoreFragment?
             setTabSelection(savedInstanceState.getInt(SELECTED_TAB))
         } else {
-            setTabSelection(0)
+            if (action == ACTION_EVERYDAY) setTabSelection(1)
+            else setTabSelection(0)
         }
 
         mBinding.run {
@@ -73,6 +86,51 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 it.clickScale(0.8f)
                 setTabSelection(2)
             }
+        }
+
+        registerShortcuts()
+    }
+
+    /**
+     * 设置app图标快捷菜单
+     */
+    private fun registerShortcuts() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+            val mShortcutManager = getSystemService(ShortcutManager::class.java)
+            val shortcutInfoList = listOf(
+                ShortcutInfo.Builder(this, ID_FAVORITE)
+                    .setShortLabel(getString(R.string.shortcuts_favorite_short))
+                    .setLongLabel(getString(R.string.shortcuts_favorite_long))
+                    .setIcon(
+                        Icon.createWithResource(this, R.drawable.layerlist_shortcuts_favorite_24)
+                    )
+                    .setIntent(
+                        Intent(this, FavoriteActivity::class.java).setAction(Intent.ACTION_VIEW)
+                    )
+                    .build(),
+                ShortcutInfo.Builder(this, ID_EVERYDAY)
+                    .setShortLabel(getString(R.string.shortcuts_everyday_short))
+                    .setLongLabel(getString(R.string.shortcuts_everyday_long))
+                    .setIcon(
+                        Icon.createWithResource(this, R.drawable.layerlist_shortcuts_everyday_24)
+                    )
+                    .setIntent(
+                        Intent(this, MainActivity::class.java).setAction(ACTION_EVERYDAY)
+                    )
+                    .build(),
+                ShortcutInfo.Builder(this, ID_DOWNLOAD)
+                    .setShortLabel(getString(R.string.shortcuts_download_short))
+                    .setLongLabel(getString(R.string.shortcuts_download_long))
+                    .setIcon(
+                        Icon.createWithResource(this, R.drawable.layerlist_shortcuts_download_24)
+                    )
+                    .setIntent(
+                        Intent(this, AnimeDownloadActivity::class.java)
+                            .setAction(Intent.ACTION_VIEW)
+                    )
+                    .build()
+            )
+            mShortcutManager.dynamicShortcuts = shortcutInfoList
         }
     }
 

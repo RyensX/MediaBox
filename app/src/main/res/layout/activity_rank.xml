@@ -10,7 +10,7 @@
         android:id="@+id/ll_rank_activity_toolbar"
         layout="@layout/layout_toolbar_1" />
 
-    <com.skyd.imomoe.view.widget.VpSwipeRefreshLayout
+    <com.skyd.imomoe.view.component.VpSwipeRefreshLayout
         android:id="@+id/srl_rank_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -33,12 +33,12 @@
                 app:tabMode="scrollable"
                 app:tabTextColor="@color/foreground_main_color_2" />
 
-            <com.skyd.imomoe.view.widget.ViewPager2View
+            <com.skyd.imomoe.view.component.ViewPager2View
                 android:id="@+id/vp2_rank_activity"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </LinearLayout>
-    </com.skyd.imomoe.view.widget.VpSwipeRefreshLayout>
+    </com.skyd.imomoe.view.component.VpSwipeRefreshLayout>
 
     <ViewStub
         android:id="@+id/layout_rank_activity_load_failed"

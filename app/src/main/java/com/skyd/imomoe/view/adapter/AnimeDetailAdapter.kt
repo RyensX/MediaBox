@@ -23,7 +23,7 @@ import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.ViewHolderUtil.Companion.getItemViewType
 import com.skyd.imomoe.util.ViewHolderUtil.Companion.getViewHolder
 import com.skyd.imomoe.view.activity.AnimeDetailActivity
-import com.skyd.imomoe.view.widget.BottomSheetRecyclerView
+import com.skyd.imomoe.view.component.BottomSheetRecyclerView
 
 class AnimeDetailAdapter(
     val activity: AnimeDetailActivity,

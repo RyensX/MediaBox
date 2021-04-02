@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:initialLayout="@layout/widget_everyday_anime"
+    android:minWidth="200dp"
+    android:minHeight="150dp"
+    android:previewImage="@drawable/ic_everyday_anime_widget"
+    android:resizeMode="horizontal|vertical"
+    android:updatePeriodMillis="2220000"
+    android:widgetCategory="home_screen" />
+    

@@ -40,9 +40,7 @@ class App : Application() {
 
         FileDownloader.setup(this)
 
-        initSmartRefreshLayout()
-
-        //夜间模式
+        // 夜间模式
         AppCompatDelegate.setDefaultNightMode(
             if (sharedPreferences("nightMode").getBoolean("isNightMode", false))
                 AppCompatDelegate.MODE_NIGHT_YES
@@ -53,9 +51,9 @@ class App : Application() {
     companion object {
         lateinit var context: Context
 
-        // 防止内存泄漏
-        private fun initSmartRefreshLayout() {
-            //设置全局默认配置（优先级最低，会被其他设置覆盖）
+        init {
+            // 防止内存泄漏
+            // 设置全局默认配置（优先级最低，会被其他设置覆盖）
             SmartRefreshLayout.setDefaultRefreshInitializer { context, layout -> //开始设置全局的基本参数（可以被下面的DefaultRefreshHeaderCreator覆盖）
                 layout.setReboundDuration(150)
                 layout.setFooterHeight(100f)
@@ -64,7 +62,7 @@ class App : Application() {
                 layout.setPrimaryColorsId(R.color.main_color_3)
             }
 
-            //全局设置默认的 Header
+            // 全局设置默认的 Header
             SmartRefreshLayout.setDefaultRefreshHeaderCreator { context, layout -> //开始设置全局的基本参数（这里设置的属性只跟下面的MaterialHeader绑定，其他Header不会生效，能覆盖DefaultRefreshInitializer的属性和Xml设置的属性）
                 layout.setEnableHeaderTranslationContent(true)
                     .setHeaderHeight(70f)

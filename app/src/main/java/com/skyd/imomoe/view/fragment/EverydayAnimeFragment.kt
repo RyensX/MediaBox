@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.view.ViewStub
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -24,6 +23,7 @@ import com.skyd.imomoe.util.eventbus.EventBusSubscriber
 import com.skyd.imomoe.util.eventbus.MessageEvent
 import com.skyd.imomoe.util.eventbus.RefreshEvent
 import com.skyd.imomoe.view.adapter.AnimeShowAdapter
+import com.skyd.imomoe.view.component.WrapLinearLayoutManager
 import com.skyd.imomoe.viewmodel.EverydayAnimeViewModel
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -183,7 +183,7 @@ class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), Even
                 is GridRecyclerView1ViewHolder -> {
                     val rvLayoutParams = holder.rvGridRecyclerView1.layoutParams
                     rvLayoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
-                    holder.rvGridRecyclerView1.layoutManager = LinearLayoutManager(activity)
+                    holder.rvGridRecyclerView1.layoutManager = WrapLinearLayoutManager(activity)
                     holder.rvGridRecyclerView1.layoutParams = rvLayoutParams
                     holder.rvGridRecyclerView1.isNestedScrollingEnabled = true
                     val adapter = AnimeShowAdapter.GridRecyclerView1Adapter(activity, item)

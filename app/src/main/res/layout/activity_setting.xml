@@ -37,7 +37,7 @@
                     android:src="@drawable/ic_arrow_circle_down_white_24"
                     app:tint="@color/foreground_main_color_2" />
 
-                <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+                <com.skyd.imomoe.view.component.textview.TypefaceTextView
                     android:id="@+id/tv_setting_activity_download_path"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -48,7 +48,7 @@
                     android:textSize="15sp"
                     app:typeface="bPRTypeface" />
 
-                <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+                <com.skyd.imomoe.view.component.textview.TypefaceTextView
                     android:id="@+id/tv_setting_activity_download_path_info"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -82,7 +82,7 @@
                     android:layout_centerVertical="true"
                     android:src="@drawable/ic_delete_main_color_2_24" />
 
-                <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+                <com.skyd.imomoe.view.component.textview.TypefaceTextView
                     android:id="@+id/tv_setting_activity_delete_all_history"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -93,7 +93,7 @@
                     android:textSize="15sp"
                     app:typeface="bPRTypeface" />
 
-                <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+                <com.skyd.imomoe.view.component.textview.TypefaceTextView
                     android:id="@+id/tv_setting_activity_delete_all_history_info"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -128,7 +128,7 @@
                     android:padding="2dp"
                     android:src="@drawable/ic_sd_storage_main_color_2_24" />
 
-                <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+                <com.skyd.imomoe.view.component.textview.TypefaceTextView
                     android:id="@+id/tv_setting_activity_clear_cache"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -139,7 +139,7 @@
                     android:textSize="15sp"
                     app:typeface="bPRTypeface" />
 
-                <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+                <com.skyd.imomoe.view.component.textview.TypefaceTextView
                     android:id="@+id/tv_setting_activity_clear_cache_size"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -149,7 +149,7 @@
                     android:textSize="15sp"
                     app:typeface="bPRTypeface" />
 
-                <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+                <com.skyd.imomoe.view.component.textview.TypefaceTextView
                     android:id="@+id/tv_setting_activity_clear_cache_info"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -184,7 +184,7 @@
                     android:padding="1dp"
                     android:src="@drawable/ic_nights_stay_main_color_2_24" />
 
-                <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+                <com.skyd.imomoe.view.component.textview.TypefaceTextView
                     android:id="@+id/tv_setting_activity_night_mode"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -195,7 +195,7 @@
                     android:textSize="15sp"
                     app:typeface="bPRTypeface" />
 
-                <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+                <com.skyd.imomoe.view.component.textview.TypefaceTextView
                     android:id="@+id/tv_setting_activity_night_mode_info"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -240,7 +240,7 @@
                     android:layout_centerVertical="true"
                     android:src="@drawable/ic_update_main_color_2_24" />
 
-                <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+                <com.skyd.imomoe.view.component.textview.TypefaceTextView
                     android:id="@+id/tv_setting_activity_update"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -251,7 +251,7 @@
                     android:textSize="15sp"
                     app:typeface="bPRTypeface" />
 
-                <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+                <com.skyd.imomoe.view.component.textview.TypefaceTextView
                     android:id="@+id/tv_setting_activity_update_tip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -262,7 +262,7 @@
                     android:textSize="15sp"
                     app:typeface="bPRTypeface" />
 
-                <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+                <com.skyd.imomoe.view.component.textview.TypefaceTextView
                     android:id="@+id/tv_setting_activity_update_info"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -292,7 +292,7 @@
                     android:paddingHorizontal="1dp"
                     android:src="@drawable/ic_storage_main_color_2_24" />
 
-                <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+                <com.skyd.imomoe.view.component.textview.TypefaceTextView
                     android:id="@+id/tv_setting_activity_update_server"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -303,7 +303,7 @@
                     android:textSize="15sp"
                     app:typeface="bPRTypeface" />
 
-                <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+                <com.skyd.imomoe.view.component.textview.TypefaceTextView
                     android:id="@+id/tv_setting_activity_update_info_server"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

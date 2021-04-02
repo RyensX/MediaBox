@@ -8,7 +8,9 @@ import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
-import android.graphics.*
+import android.graphics.Color
+import android.graphics.Point
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.view.View
@@ -19,12 +21,13 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.fragment.app.Fragment
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.view.activity.*
-import com.skyd.imomoe.view.widget.AnimeToast
+import com.skyd.imomoe.view.component.AnimeToast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -54,6 +57,30 @@ object Util {
      * @param day Calendar中的日期
      */
     fun getRealDayOfWeek(day: Int) = if (day == 1) 7 else day - 1
+
+    /**
+     * 返回星期几
+     * @param day Calendar中的日期
+     */
+    fun getWeekday(day: Int): String {
+        return if (day == 1) "星期天" else when (day - 1) {
+            1 -> "星期一"
+            2 -> "星期二"
+            3 -> "星期三"
+            4 -> "星期四"
+            5 -> "星期五"
+            else -> "星期六"
+        }
+    }
+
+    /**
+     * 更改Drawable颜色
+     */
+    fun tintDrawable(drawable: Drawable, color: Int): Drawable {
+        val wrappedDrawable: Drawable = DrawableCompat.wrap(drawable)
+        DrawableCompat.setTint(wrappedDrawable, color)
+        return wrappedDrawable
+    }
 
     /**
      * 获取重定向最终的地址
@@ -128,16 +155,13 @@ object Util {
     fun isNewVersion(version: String): Boolean {
         val currentVersion = getAppVersionName()
         return try {
-            version.replace(".", "")
-                .replace("V", "", true)
-                .replace(" ", "").toInt() >
-                    currentVersion.replace(".", "").toInt()
-        } catch (e: NumberFormatException) {
+            version != currentVersion &&
+                    version.replaceFirst("v", "", true) != currentVersion
+        } catch (e: Exception) {
             e.printStackTrace()
             "检查版本号失败，建议手动到Github查看是否有更新\n当前版本：$currentVersion".showToast(Toast.LENGTH_LONG)
             false
         }
-
     }
 
     fun getAppVersionCode(): Long {

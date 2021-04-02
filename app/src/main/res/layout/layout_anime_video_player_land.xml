@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/black"
-    tools:context=".view.widget.AnimeVideoPlayer">
+    tools:context=".view.component.AnimeVideoPlayer">
 
     <FrameLayout
         android:id="@+id/surface_container"
@@ -71,7 +71,7 @@
             app:layout_constraintStart_toEndOf="@id/start"
             app:layout_constraintTop_toBottomOf="@id/progress" />
 
-        <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+        <com.skyd.imomoe.view.component.textview.TypefaceTextView
             android:id="@+id/current"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -84,7 +84,7 @@
             app:typeface="bPRTypeface"
             tools:text="00:00" />
 
-        <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+        <com.skyd.imomoe.view.component.textview.TypefaceTextView
             android:id="@+id/split"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -97,7 +97,7 @@
             app:layout_constraintStart_toEndOf="@id/current"
             app:layout_constraintTop_toBottomOf="parent" />
 
-        <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+        <com.skyd.imomoe.view.component.textview.TypefaceTextView
             android:id="@+id/total"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -109,7 +109,7 @@
             app:typeface="bPRTypeface"
             tools:text="00:00" />
 
-        <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+        <com.skyd.imomoe.view.component.textview.TypefaceTextView
             android:id="@+id/tv_episode"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
@@ -124,7 +124,7 @@
             app:layout_constraintTop_toBottomOf="@id/progress"
             app:typeface="bPRTypeface" />
 
-        <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+        <com.skyd.imomoe.view.component.textview.TypefaceTextView
             android:id="@+id/tv_speed"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
@@ -139,7 +139,7 @@
             app:layout_constraintTop_toBottomOf="@id/progress"
             app:typeface="bPRTypeface" />
 
-        <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+        <com.skyd.imomoe.view.component.textview.TypefaceTextView
             android:id="@+id/tv_more_scale"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
@@ -227,7 +227,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+        <com.skyd.imomoe.view.component.textview.TypefaceTextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -241,23 +241,23 @@
             android:textSize="18sp"
             app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/iv_setting"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toEndOf="@id/back"
             app:layout_constraintTop_toTopOf="parent"
             app:typeface="bPRTypeface" />
 
-        <!--        <ImageView-->
-        <!--            android:id="@+id/iv_cling"-->
-        <!--            android:layout_width="48dp"-->
-        <!--            android:layout_height="48dp"-->
-        <!--            android:paddingStart="0dp"-->
-        <!--            android:paddingEnd="10dp"-->
-        <!--            android:scaleType="centerInside"-->
-        <!--            android:src="@drawable/ic_live_tv_white_24"-->
-        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--            app:layout_constraintEnd_toEndOf="parent"-->
-        <!--            app:layout_constraintTop_toTopOf="parent" />-->
+        <ImageView
+            android:id="@+id/iv_setting"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:paddingStart="0dp"
+            android:paddingEnd="10dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_settings_white_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <RelativeLayout
@@ -267,7 +267,8 @@
         android:layout_alignParentEnd="true"
         android:background="@color/gray_2"
         android:clickable="true"
-        android:focusable="true">
+        android:focusable="true"
+        tools:visibility="gone">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_right"
@@ -275,4 +276,85 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true" />
     </RelativeLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/layout_setting"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:background="@color/gray_2"
+        android:clickable="true"
+        android:focusable="true">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/reverse"
+                android:textColor="@color/foreground_white" />
+
+            <RadioGroup
+                android:id="@+id/rg_reverse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/rb_no_reverse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@null"
+                    android:drawablePadding="6dp"
+                    android:gravity="center_horizontal"
+                    android:paddingHorizontal="5dp"
+                    android:paddingTop="6dp"
+                    android:text="@string/no_reverse"
+                    android:textColor="@drawable/selector_no_reverse_button"
+                    android:textSize="12sp"
+                    app:drawableTopCompat="@drawable/selector_no_reverse_button" />
+
+                <RadioButton
+                    android:id="@+id/rb_horizontal_reverse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@null"
+                    android:drawablePadding="6dp"
+                    android:gravity="center_horizontal"
+                    android:paddingHorizontal="5dp"
+                    android:paddingTop="6dp"
+                    android:text="@string/horizontal_reverse"
+                    android:textColor="@drawable/selector_horizontal_reverse_button"
+                    android:textSize="12sp"
+                    app:drawableTopCompat="@drawable/selector_horizontal_reverse_button" />
+
+                <RadioButton
+                    android:id="@+id/rb_vertical_reverse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@null"
+                    android:drawablePadding="6dp"
+                    android:gravity="center_horizontal"
+                    android:paddingHorizontal="5dp"
+                    android:paddingTop="6dp"
+                    android:text="@string/vertical_reverse"
+                    android:textColor="@drawable/selector_vertical_reverse_button"
+                    android:textSize="12sp"
+                    app:drawableTopCompat="@drawable/selector_vertical_reverse_button" />
+            </RadioGroup>
+
+            <CheckBox
+                android:id="@+id/cb_bottom_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="@string/bottom_progress"
+                android:textColor="@color/foreground_white" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 </RelativeLayout>

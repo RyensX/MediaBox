@@ -28,6 +28,15 @@ interface Const {
         }
     }
 
+    interface ShortCuts {
+        companion object {
+            const val ID_FAVORITE = "favorite"
+            const val ID_EVERYDAY = "everyday"
+            const val ID_DOWNLOAD = "download"
+            const val ACTION_EVERYDAY = "everyday"
+        }
+    }
+
     interface ViewHolderTypeInt {
         companion object {
             const val UNKNOWN = -1              //未知类型，使用EmptyViewHolder容错处理。

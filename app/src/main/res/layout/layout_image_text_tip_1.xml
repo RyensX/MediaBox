@@ -13,7 +13,7 @@
         android:layout_centerHorizontal="true"
         android:src="@drawable/ic_sentiment_very_dissatisfied_main_color_24" />
 
-    <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+    <com.skyd.imomoe.view.component.textview.TypefaceTextView
         android:id="@+id/tv_image_text_tip_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

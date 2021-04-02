@@ -6,7 +6,7 @@
     android:background="@drawable/shape_circle_corner_bottom_dialog_white_12"
     android:orientation="vertical">
 
-    <com.skyd.imomoe.view.widget.textview.TypefaceTextView
+    <com.skyd.imomoe.view.component.textview.TypefaceTextView
         android:id="@+id/tv_dialog_bottom_sheet_2_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -17,7 +17,7 @@
         android:textSize="17sp"
         app:typeface="bPRTypeface" />
 
-    <com.skyd.imomoe.view.widget.BottomSheetRecyclerView
+    <com.skyd.imomoe.view.component.BottomSheetRecyclerView
         android:id="@+id/rv_dialog_bottom_sheet_2"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

@@ -21,6 +21,16 @@ class AboutActivity : BaseActivity<ActivityAboutBinding>() {
         mBinding.run {
             llAboutActivityToolbar.ivToolbar1Back.setOnClickListener { finish() }
             llAboutActivityToolbar.tvToolbar1Title.text = getString(R.string.about)
+            llAboutActivityToolbar.ivToolbar1Button1.visible()
+            llAboutActivityToolbar.ivToolbar1Button1.setImageResource(R.drawable.ic_info_white_24)
+            llAboutActivityToolbar.ivToolbar1Button1.setOnClickListener {
+                MaterialDialog(this@AboutActivity).show {
+                    title(res = R.string.attention)
+                    message(text = "本软件免费开源，严禁商用，支持Android 5.0+！仅在Github和Gitee仓库发布！\n不介意的话可以给我的Github仓库点个Star")
+                    positiveButton(text = "去点Star") { openBrowser(Const.Common.GITHUB_URL) }
+                    negativeButton(text = "关闭") { dismiss() }
+                }
+            }
 
             val c: Calendar = Calendar.getInstance()
             val month = c.get(Calendar.MONTH)
