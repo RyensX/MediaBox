@@ -133,7 +133,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), EventBusSubscriber {
                 getString(R.string.get_home_tab_data_failed).showToast(Toast.LENGTH_LONG)
             } else {
                 hideLoadFailedTip()
-                mBinding.vp2HomeFragment.setOffscreenPageLimit(viewModel.allTabList.size)
+                viewModel.allTabList.size.let { size ->
+                    if (size > 0) mBinding.vp2HomeFragment.setOffscreenPageLimit(size)
+                }
                 for (i in viewModel.allTabList.indices) {
                     val fragment = AnimeShowFragment()
                     val bundle = Bundle()

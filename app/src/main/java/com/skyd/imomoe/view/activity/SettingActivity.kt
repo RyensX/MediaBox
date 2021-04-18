@@ -1,6 +1,7 @@
 package com.skyd.imomoe.view.activity
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -8,15 +9,16 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.afollestad.materialdialogs.MaterialDialog
-import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.databinding.ActivitySettingBinding
 import com.skyd.imomoe.util.Util.getAppVersionName
+import com.skyd.imomoe.util.Util.getNightMode
+import com.skyd.imomoe.util.Util.isNightMode
+import com.skyd.imomoe.util.Util.setNightMode
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.Util.showToastOnThread
-import com.skyd.imomoe.util.editor
-import com.skyd.imomoe.util.sharedPreferences
+import com.skyd.imomoe.util.gone
 import com.skyd.imomoe.util.update.AppUpdateHelper
 import com.skyd.imomoe.util.update.AppUpdateStatus
 import com.skyd.imomoe.viewmodel.SettingViewModel
@@ -26,7 +28,6 @@ import kotlinx.coroutines.*
 class SettingActivity : BaseActivity<ActivitySettingBinding>() {
     private val viewModel: SettingViewModel by lazy { ViewModelProvider(this).get(SettingViewModel::class.java) }
     private var selfUpdateCheck = false
-    private var changeNightMode = true
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,10 +54,10 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
         mBinding.rlSettingActivityDeleteAllHistory.setOnClickListener {
             MaterialDialog(this).show {
                 icon(R.drawable.ic_delete_main_color_2_24)
-                title(text = "警告")
+                title(res = R.string.warning)
                 message(text = "确定要删除所有历史记录？包括搜索历史和观看历史")
-                positiveButton(text = "删除") { viewModel.deleteAllHistory() }
-                negativeButton(text = "取消") { dismiss() }
+                positiveButton(res = R.string.delete) { viewModel.deleteAllHistory() }
+                negativeButton(res = R.string.cancel) { dismiss() }
             }
         }
 
@@ -79,10 +80,10 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
         mBinding.rlSettingActivityClearCache.setOnClickListener {
             MaterialDialog(this).show {
                 icon(R.drawable.ic_sd_storage_main_color_2_24)
-                title(text = "警告")
+                title(res = R.string.warning)
                 message(text = "确定清理所有缓存？不包括缓存视频")
-                positiveButton(text = "清理") { viewModel.clearAllCache() }
-                negativeButton(text = "取消") { dismiss() }
+                positiveButton(res = R.string.clean) { viewModel.clearAllCache() }
+                negativeButton(res = R.string.cancel) { dismiss() }
             }
         }
 
@@ -103,15 +104,15 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
 //                    appUpdateHelper.checkUpdate()
                     }
                     AppUpdateStatus.CHECKING -> {
-                        tvSettingActivityUpdateTip.text = "正在检查更新..."
+                        tvSettingActivityUpdateTip.text = getString(R.string.checking_update)
                     }
                     AppUpdateStatus.DATED -> {
-                        tvSettingActivityUpdateTip.text = "发现新版本"
+                        tvSettingActivityUpdateTip.text = getString(R.string.find_new_version)
                         if (selfUpdateCheck) appUpdateHelper.noticeUpdate(this@SettingActivity)
                     }
                     AppUpdateStatus.VALID -> {
-                        tvSettingActivityUpdateTip.text = "已是最新版本"
-                        if (selfUpdateCheck) "已是最新版本".showToast()
+                        tvSettingActivityUpdateTip.text = getString(R.string.is_latest_version)
+                        if (selfUpdateCheck) getString(R.string.is_latest_version).showToast()
                     }
                     AppUpdateStatus.LATER -> {
                         tvSettingActivityUpdateTip.text = "暂不更新"
@@ -170,41 +171,43 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
             builder.create().show()
         }
 
-        mBinding.switchSettingActivityNightMode.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (!changeNightMode) {
-                changeNightMode = true
-                return@setOnCheckedChangeListener
-            }
-            if (isChecked) {
-                //夜间
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                mBinding.tvSettingActivityNightModeInfo.text = "夜间"
-            } else {
-                //日间
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                mBinding.tvSettingActivityNightModeInfo.text = "白天"
-            }
-            App.context.sharedPreferences("nightMode").editor {
-                putBoolean("isNightMode", isChecked)
-            }
-        }
+        initNightMode()
+    }
 
+    private fun initNightMode() {
         mBinding.run {
-            when (AppCompatDelegate.getDefaultNightMode()) {
-                AppCompatDelegate.MODE_NIGHT_YES -> {
-                    tvSettingActivityNightModeInfo.text = "夜间"
-                    if (!switchSettingActivityNightMode.isChecked) {
-                        changeNightMode = false
-                        switchSettingActivityNightMode.isChecked = true
-                    }
+            if (isNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+                tvSettingActivityNightModeInfo.text = getString(R.string.night)
+                switchSettingActivityNightMode.isChecked = true
+            } else {
+                tvSettingActivityNightModeInfo.text = getString(R.string.daytime)
+                switchSettingActivityNightMode.isChecked = false
+            }
+            if (getNightMode() == AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM) {
+                tvSettingActivityNightModeInfo.text = getString(R.string.follow_system)
+                switchSettingActivityNightMode.isEnabled = false
+                cbSettingActivityNightModeFollowSystem.isChecked = true
+            } else {
+                cbSettingActivityNightModeFollowSystem.isChecked = false
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                cbSettingActivityNightModeFollowSystem.isEnabled = true
+                cbSettingActivityNightModeFollowSystem.setOnCheckedChangeListener { buttonView, isChecked ->
+                    switchSettingActivityNightMode.isEnabled = !isChecked
+                    tvSettingActivityNightModeInfo.text =
+                        if (isChecked) setNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+                        else setNightMode(isNightMode())
                 }
-                else -> {
-                    tvSettingActivityNightModeInfo.text = "白天"
-                    if (switchSettingActivityNightMode.isChecked) {
-                        changeNightMode = false
-                        switchSettingActivityNightMode.isChecked = false
-                    }
-                }
+            } else {
+                cbSettingActivityNightModeFollowSystem.gone()
+                cbSettingActivityNightModeFollowSystem.isEnabled = false
+            }
+
+            switchSettingActivityNightMode.setOnCheckedChangeListener { buttonView, isChecked ->
+                tvSettingActivityNightModeInfo.text =
+                    if (isChecked) setNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                    else setNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
         }
     }

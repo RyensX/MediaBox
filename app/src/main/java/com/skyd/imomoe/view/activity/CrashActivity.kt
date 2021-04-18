@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.os.Process
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.skyd.imomoe.config.Const.Common.Companion.GITHUB_NEW_ISSUE_URL
+import com.skyd.imomoe.util.Util.openBrowser
 import kotlin.system.exitProcess
 
 
@@ -31,11 +33,12 @@ class CrashActivity : AppCompatActivity() {
         val message = "CrashInfo:\n$crashInfo"
         AlertDialog.Builder(this).apply {
             setMessage(message)
-            setTitle("哦呼，樱花动漫崩溃了！快去暴打作者")
-            setPositiveButton("复制错误信息") { _: DialogInterface, i: Int ->
+            setTitle("哦呼，樱花动漫崩溃了！快去Github提Issue吧")
+            setPositiveButton("复制信息打开Github") { _: DialogInterface, i: Int ->
                 val cm =
                     this@CrashActivity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                 cm.setPrimaryClip(ClipData.newPlainText("exception trace stack", message))
+                openBrowser(GITHUB_NEW_ISSUE_URL)
                 this@CrashActivity.finish()
                 Process.killProcess(Process.myPid())
                 exitProcess(1)

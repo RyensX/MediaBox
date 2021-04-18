@@ -28,7 +28,7 @@ class AboutActivity : BaseActivity<ActivityAboutBinding>() {
                     title(res = R.string.attention)
                     message(text = "本软件免费开源，严禁商用，支持Android 5.0+！仅在Github和Gitee仓库发布！\n不介意的话可以给我的Github仓库点个Star")
                     positiveButton(text = "去点Star") { openBrowser(Const.Common.GITHUB_URL) }
-                    negativeButton(text = "关闭") { dismiss() }
+                    negativeButton(res = R.string.cancel) { dismiss() }
                 }
             }
 
@@ -61,8 +61,8 @@ class AboutActivity : BaseActivity<ActivityAboutBinding>() {
             rlAboutActivityTestDevice.setOnClickListener {
                 MaterialDialog(this@AboutActivity).show {
                     title(res = R.string.test_device)
-                    message(text = "HONOR V20 Android 9\n别骂了别骂了QAQ，太穷了，没有Android 10/11的手机")
-                    positiveButton(text = "确定") { dismiss() }
+                    message(text = "HONOR V20 Android 10")
+                    positiveButton(res = R.string.ok) { dismiss() }
                 }
             }
         }

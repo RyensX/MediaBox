@@ -99,4 +99,14 @@
     <string name="reverse">镜像</string>
     <string name="no_reverse">正常</string>
     <string name="bottom_progress">底部进度条</string>
+    <string name="night_mode_follow_system">跟随系统</string>
+    <string name="daytime">白天</string>
+    <string name="night">黑夜</string>
+    <string name="follow_system">跟随系统</string>
+    <string name="ok">确定</string>
+    <string name="no_more_info">没有更多了</string>
+    <string name="warning">警告</string>
+    <string name="delete">删除</string>
+    <string name="clean">清理</string>
+    <string name="media_codec">硬解码</string>
 </resources>

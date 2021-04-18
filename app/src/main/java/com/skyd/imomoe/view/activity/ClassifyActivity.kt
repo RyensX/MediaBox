@@ -74,7 +74,7 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
                     return@setOnLoadMoreListener
                 }
                 mBinding.srlClassifyActivity.finishLoadMore()
-                "没有更多了".showToast()
+                getString(R.string.no_more_info).showToast()
             }
 
             rvClassifyActivityTab.layoutManager =

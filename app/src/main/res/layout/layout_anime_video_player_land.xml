@@ -351,10 +351,18 @@
             <CheckBox
                 android:id="@+id/cb_bottom_progress"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="35dp"
                 android:layout_marginTop="12dp"
                 android:text="@string/bottom_progress"
                 android:textColor="@color/foreground_white" />
+
+<!--            <CheckBox-->
+<!--                android:id="@+id/cb_media_codec"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="35dp"-->
+<!--                android:layout_marginTop="12dp"-->
+<!--                android:text="@string/media_codec"-->
+<!--                android:textColor="@color/foreground_white" />-->
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </RelativeLayout>

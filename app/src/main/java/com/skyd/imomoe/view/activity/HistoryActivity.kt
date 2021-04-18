@@ -72,10 +72,10 @@ class HistoryActivity : BaseActivity<ActivityHistoryBinding>() {
                 if (viewModel.historyList.isEmpty()) return@setOnClickListener
                 MaterialDialog(this@HistoryActivity).show {
                     icon(R.drawable.ic_delete_main_color_2_24)
-                    title(text = "警告")
+                    title(res = R.string.warning)
                     message(text = "确定要删除所有观看历史记录？")
-                    positiveButton(text = "删除") { viewModel.deleteAllHistory() }
-                    negativeButton(text = "取消") { dismiss() }
+                    positiveButton(res = R.string.delete) { viewModel.deleteAllHistory() }
+                    negativeButton(res = R.string.cancel) { dismiss() }
                 }
             }
         }

@@ -68,7 +68,7 @@ object GlideUtil {
         if (referer == "http://www.yhdm.io" || referer == "http://www.yhdm.io.") amendReferer += "/"
         if (url.isEmpty()) {
             GlobalScope.launch(Dispatchers.Main) {
-                "url must not be null or empty".showToast()
+                "cover image url must not be null or empty".showToast()
             }
             return
         }

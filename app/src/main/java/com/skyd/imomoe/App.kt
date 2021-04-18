@@ -2,14 +2,13 @@ package com.skyd.imomoe
 
 import android.app.Application
 import android.content.Context
-import androidx.appcompat.app.AppCompatDelegate
 import com.liulishuo.filedownloader.FileDownloader
 import com.scwang.smart.refresh.footer.BallPulseFooter
 import com.scwang.smart.refresh.header.MaterialHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import com.skyd.imomoe.util.CrashHandler
 import com.skyd.imomoe.util.Util.getResColor
-import com.skyd.imomoe.util.sharedPreferences
+import com.skyd.imomoe.util.Util.setNightMode
 import com.tencent.bugly.crashreport.CrashReport
 import com.umeng.analytics.MobclickAgent
 import com.umeng.commonsdk.UMConfigure
@@ -41,11 +40,7 @@ class App : Application() {
         FileDownloader.setup(this)
 
         // 夜间模式
-        AppCompatDelegate.setDefaultNightMode(
-            if (sharedPreferences("nightMode").getBoolean("isNightMode", false))
-                AppCompatDelegate.MODE_NIGHT_YES
-            else AppCompatDelegate.MODE_NIGHT_NO
-        )
+        setNightMode()
     }
 
     companion object {

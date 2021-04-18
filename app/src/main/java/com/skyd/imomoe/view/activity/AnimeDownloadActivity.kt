@@ -1,6 +1,5 @@
 package com.skyd.imomoe.view.activity
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.ViewStub
 import android.widget.Toast

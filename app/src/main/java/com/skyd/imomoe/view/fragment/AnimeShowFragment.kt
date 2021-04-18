@@ -74,7 +74,7 @@ class AnimeShowFragment : BaseFragment<FragmentAnimeShowBinding>() {
                     return@setOnLoadMoreListener
                 }
                 mBinding.srlAnimeShowFragment.finishLoadMore()
-                "没有更多了".showToast()
+                getString(R.string.no_more_info).showToast()
             }
         }
 

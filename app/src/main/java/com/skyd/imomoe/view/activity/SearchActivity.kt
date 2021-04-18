@@ -46,7 +46,7 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
                     return@setOnLoadMoreListener
                 }
                 mBinding.srlSearchActivity.finishLoadMore()
-                "没有更多了".showToast()
+                getString(R.string.no_more_info).showToast()
             }
 
             rvSearchActivity.layoutManager = LinearLayoutManager(this@SearchActivity)

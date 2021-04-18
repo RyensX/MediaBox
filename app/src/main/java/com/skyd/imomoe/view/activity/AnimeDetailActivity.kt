@@ -88,7 +88,7 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
                         withContext(Dispatchers.Main) {
                             isFavorite = false
                             ivToolbar1Button2.setImageResource(R.drawable.ic_star_border_white_24)
-                            "取消收藏成功".showToast()
+                            getString(R.string.remove_favorite_succeed).showToast()
                         }
                     } else {
                         getAppDataBase().favoriteAnimeDao().insertFavoriteAnime(
@@ -103,7 +103,7 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
                         withContext(Dispatchers.Main) {
                             isFavorite = true
                             ivToolbar1Button2.setImageResource(R.drawable.ic_star_white_24)
-                            "收藏成功".showToast()
+                            getString(R.string.favorite_succeed).showToast()
                         }
                     }
                 }

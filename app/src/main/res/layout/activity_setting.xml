@@ -189,6 +189,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
+                    android:layout_toStartOf="@id/cb_setting_activity_night_mode_follow_system"
                     android:layout_toEndOf="@id/iv_setting_activity_night_mode"
                     android:text="@string/night_mode"
                     android:textColor="@color/foreground_black"
@@ -203,6 +204,7 @@
                     android:layout_marginStart="15dp"
                     android:layout_marginTop="2dp"
                     android:layout_marginEnd="16dp"
+                    android:layout_toStartOf="@id/cb_setting_activity_night_mode_follow_system"
                     android:layout_toEndOf="@id/iv_setting_activity_night_mode"
                     android:ellipsize="marquee"
                     android:focusable="true"
@@ -223,6 +225,16 @@
                     app:thumbTintMode="src_in"
                     app:trackTint="@color/main_color"
                     app:trackTintMode="src_in" />
+
+                <CheckBox
+                    android:id="@+id/cb_setting_activity_night_mode_follow_system"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="6dp"
+                    android:layout_toStartOf="@id/switch_setting_activity_night_mode"
+                    android:text="@string/night_mode_follow_system"
+                    android:textColor="@color/foreground_main_color_2" />
             </RelativeLayout>
 
             <RelativeLayout

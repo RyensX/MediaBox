@@ -1,5 +1,6 @@
 package com.skyd.imomoe.util
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -13,6 +14,7 @@ import android.graphics.Point
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
+import android.provider.Settings
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
@@ -20,6 +22,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.ColorRes
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.fragment.app.Fragment
@@ -71,6 +74,93 @@ object Util {
             5 -> "星期五"
             else -> "星期六"
         }
+    }
+
+    /**
+     * 忽略跟随系统，仅获取是黑夜还是白天
+     */
+    fun isNightMode(): Int {
+        return if (App.context.sharedPreferences("nightMode").getBoolean("isNightMode", false))
+            AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+    }
+
+    /**
+     * 获取是跟随系统还是黑夜还是白天
+     */
+    fun getNightMode(): Int {
+        return when {
+            App.context.sharedPreferences("nightMode")
+                .getBoolean("nightModeFollowSystem", false) -> {
+                AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+            }
+            App.context.sharedPreferences("nightMode").getBoolean("isNightMode", false) -> {
+                AppCompatDelegate.MODE_NIGHT_YES
+            }
+            else -> AppCompatDelegate.MODE_NIGHT_NO
+        }
+    }
+
+    /**
+     * 根据传入的值设置夜间模式
+     */
+    @SuppressLint("SwitchIntDef")
+    fun setNightMode(@AppCompatDelegate.NightMode mode: Int): String {
+        AppCompatDelegate.setDefaultNightMode(mode)
+        return App.context.run {
+            when (mode) {
+                AppCompatDelegate.MODE_NIGHT_NO -> {
+                    sharedPreferences("nightMode").editor {
+                        putBoolean("isNightMode", false)
+                        putBoolean("nightModeFollowSystem", false)
+                    }
+                    getString(R.string.daytime)
+                }
+                AppCompatDelegate.MODE_NIGHT_YES -> {
+                    sharedPreferences("nightMode").editor {
+                        putBoolean("isNightMode", true)
+                        putBoolean("nightModeFollowSystem", false)
+                    }
+                    getString(R.string.night)
+                }
+                AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM -> {
+                    sharedPreferences("nightMode").editor {
+                        putBoolean("nightModeFollowSystem", true)
+                    }
+                    getString(R.string.follow_system)
+                }
+                else -> ""
+            }
+        }
+    }
+
+    /**
+     * 根据sp存储的内容自动设置夜间模式
+     */
+    fun setNightMode(): String {
+        return if (App.context.sharedPreferences("nightMode")
+                .getBoolean("nightModeFollowSystem", false)
+        ) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+            App.context.getString(R.string.follow_system)
+        } else {
+            if (App.context.sharedPreferences("nightMode").getBoolean("isNightMode", false)) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                App.context.getString(R.string.night)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                App.context.getString(R.string.daytime)
+            }
+        }
+    }
+
+    /**
+     * 获取系统屏幕亮度
+     */
+    fun getScreenBrightness(activity: Activity): Int? = try {
+        Settings.System.getInt(activity.contentResolver, Settings.System.SCREEN_BRIGHTNESS)
+    } catch (e: Settings.SettingNotFoundException) {
+        e.printStackTrace()
+        null
     }
 
     /**
@@ -365,7 +455,8 @@ object Util {
                 .toString() + "G"
         }
         val result4 = BigDecimal(teraBytes)
-        return result4.setScale(newScale, BigDecimal.ROUND_HALF_UP).toPlainString().toString() + "T"
+        return result4.setScale(newScale, BigDecimal.ROUND_HALF_UP).toPlainString()
+            .toString() + "T"
     }
 
     fun String.isYearMonth(): Boolean {
@@ -391,7 +482,8 @@ object Util {
             decodeUrl.startsWith(Const.ActionUrl.ANIME_PLAY) -> {     //番剧每一集点击进入
                 val playCode = actionUrl.getSubString("\\/v\\/", "\\.")[0].split("-")
                 if (playCode.size >= 2) {
-                    var detailPartUrl = actionUrl.substringAfter(Const.ActionUrl.ANIME_DETAIL, "")
+                    var detailPartUrl =
+                        actionUrl.substringAfter(Const.ActionUrl.ANIME_DETAIL, "")
                     if (detailPartUrl.isBlank()) App.context.getString(R.string.error_play_episode)
                         .showToast()
                     detailPartUrl = Const.ActionUrl.ANIME_DETAIL + detailPartUrl
@@ -422,7 +514,8 @@ object Util {
                             .putExtra("classifyTabTitle", paramList[2])
                             .putExtra("classifyTitle", paramList[3])
                     )
-                } else App.context.resources.getString(R.string.action_url_format_error).showToast()
+                } else App.context.resources.getString(R.string.action_url_format_error)
+                    .showToast()
             }
             decodeUrl.startsWith(Const.ActionUrl.ANIME_BROWSER) -> {     //打开浏览器
                 openBrowser(actionUrl.replaceFirst(Const.ActionUrl.ANIME_BROWSER, ""))

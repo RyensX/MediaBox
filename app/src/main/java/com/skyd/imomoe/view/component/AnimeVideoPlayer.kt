@@ -24,6 +24,7 @@ import com.skyd.imomoe.bean.AnimeEpisodeDataBean
 import com.skyd.imomoe.bean.BaseBean
 import com.skyd.imomoe.util.Util.dp2px
 import com.skyd.imomoe.util.Util.getResColor
+import com.skyd.imomoe.util.Util.getScreenBrightness
 import com.skyd.imomoe.util.gone
 import com.skyd.imomoe.util.visible
 import com.skyd.imomoe.view.activity.DlnaActivity
@@ -93,6 +94,9 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
     //底部进度调
     private var mBottomProgress: ProgressBar? = null
 
+    // 硬解码CheckBox
+    private var mMediaCodecCheckBox: CheckBox? = null
+
     //右侧弹出栏
     private var mRightContainer: ViewGroup? = null
 
@@ -123,6 +127,7 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
         mReverseRadioGroup = findViewById(R.id.rg_reverse)
         mBottomProgressCheckBox = findViewById(R.id.cb_bottom_progress)
         mBottomProgress = super.mBottomProgressBar
+//        mMediaCodecCheckBox = findViewById(R.id.cb_media_codec)
 
         mRightContainer?.gone()
         mSettingContainer?.gone()
@@ -223,6 +228,13 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
             if (mReverseValue == null) mReverseValue = mReverseRadioGroup?.getChildAt(0)?.id
             mReverseValue?.let { id -> findViewById<RadioButton>(id).isChecked = true }
             mBottomProgressCheckBox?.isChecked = mBottomProgressCheckBoxValue
+
+//            mMediaCodecCheckBox?.isChecked = GSYVideoType.isMediaCodec()
+//            mMediaCodecCheckBox?.setOnCheckedChangeListener { buttonView, isChecked ->
+//                if (isChecked) GSYVideoType.enableMediaCodec()
+//                else GSYVideoType.disableMediaCodec()
+//                startPlayLogic()
+//            }
         }
     }
 
@@ -435,6 +447,19 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
         }
     }
 
+    override fun onBrightnessSlide(percent: Float) {
+        val activity = mContext as Activity
+        val lpa = activity.window.attributes
+        val mBrightnessData = lpa.screenBrightness
+        if (mBrightnessData <= 0.00f) {
+            getScreenBrightness(activity)?.div(255.0f)?.let {
+                lpa.screenBrightness = it
+                activity.window.attributes = lpa
+            }
+        }
+        super.onBrightnessSlide(percent)
+    }
+
     //正常
     override fun changeUiToNormal() {
         super.changeUiToNormal()
@@ -448,10 +473,6 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
         mStartButton.visibility = View.GONE
     }
 
-    override fun changeUiToPrepareingClear() {
-        super.changeUiToPrepareingClear()
-    }
-
     //播放中
     override fun changeUiToPlayingShow() {
         super.changeUiToPlayingShow()
@@ -462,42 +483,10 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
         initFirstLoad = false
     }
 
-    override fun changeUiToPlayingClear() {
-        super.changeUiToPlayingClear()
-    }
-
-    override fun changeUiToPauseShow() {
-        super.changeUiToPauseShow()
-    }
-
-    override fun changeUiToPauseClear() {
-        super.changeUiToPauseClear()
-    }
-
-    override fun changeUiToPlayingBufferingShow() {
-        super.changeUiToPlayingBufferingShow()
-    }
-
-    override fun changeUiToPlayingBufferingClear() {
-        super.changeUiToPlayingBufferingClear()
-    }
-
     //自动播放结束
     override fun changeUiToCompleteShow() {
         super.changeUiToCompleteShow()
         mBottomContainer.visibility = View.GONE
-    }
-
-    override fun changeUiToCompleteClear() {
-        super.changeUiToCompleteClear()
-    }
-
-    override fun changeUiToClear() {
-        super.changeUiToClear()
-    }
-
-    override fun changeUiToError() {
-        super.changeUiToError()
     }
 
     fun setEpisodeButtonOnClickListener(listener: OnClickListener) {

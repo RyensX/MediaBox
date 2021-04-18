@@ -50,8 +50,7 @@
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardElevation="6dp">
+                android:layout_height="wrap_content">
 
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/tl_everyday_anime_fragment"

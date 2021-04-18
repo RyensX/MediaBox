@@ -16,6 +16,7 @@ import com.shuyu.gsyvideoplayer.GSYBaseActivityDetail
 import com.shuyu.gsyvideoplayer.GSYVideoManager
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder
 import com.shuyu.gsyvideoplayer.model.VideoOptionModel
+import com.shuyu.gsyvideoplayer.utils.GSYVideoType
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
@@ -100,38 +101,40 @@ class PlayActivity : GSYBaseActivityDetail<AnimeVideoPlayer>() {
 
         GlobalScope.launch(Dispatchers.IO) {
             val favoriteAnime = getAppDataBase().favoriteAnimeDao().getFavoriteAnime(detailPartUrl)
-            isFavorite = if (favoriteAnime == null) {
-                mBinding.ivPlayActivityFavorite.setImageResource(R.drawable.ic_star_border_main_color_2_24)
-                false
-            } else {
-                mBinding.ivPlayActivityFavorite.setImageResource(R.drawable.ic_star_main_color_2_24)
-                true
-            }
-            mBinding.ivPlayActivityFavorite.setOnClickListener {
-                GlobalScope.launch(Dispatchers.IO) {
-                    if (isFavorite) {
-                        getAppDataBase().favoriteAnimeDao().deleteFavoriteAnime(detailPartUrl)
-                        withContext(Dispatchers.Main) {
-                            isFavorite = false
-                            mBinding.ivPlayActivityFavorite.setImageResource(R.drawable.ic_star_border_main_color_2_24)
-                            getString(R.string.remove_favorite_succeed).showToast()
-                        }
-                    } else {
-                        getAppDataBase().favoriteAnimeDao().insertFavoriteAnime(
-                            FavoriteAnimeBean(
-                                Const.ViewHolderTypeString.ANIME_COVER_8, "",
-                                detailPartUrl,
-                                viewModel.playBean?.title?.title ?: "",
-                                System.currentTimeMillis(),
-                                viewModel.animeCover,
-                                lastEpisodeUrl = viewModel.partUrl,
-                                lastEpisode = viewModel.animeEpisodeDataBean.title
+            withContext(Dispatchers.Main) {
+                isFavorite = if (favoriteAnime == null) {
+                    mBinding.ivPlayActivityFavorite.setImageResource(R.drawable.ic_star_border_main_color_2_24)
+                    false
+                } else {
+                    mBinding.ivPlayActivityFavorite.setImageResource(R.drawable.ic_star_main_color_2_24)
+                    true
+                }
+                mBinding.ivPlayActivityFavorite.setOnClickListener {
+                    GlobalScope.launch(Dispatchers.IO) {
+                        if (isFavorite) {
+                            getAppDataBase().favoriteAnimeDao().deleteFavoriteAnime(detailPartUrl)
+                            withContext(Dispatchers.Main) {
+                                isFavorite = false
+                                mBinding.ivPlayActivityFavorite.setImageResource(R.drawable.ic_star_border_main_color_2_24)
+                                getString(R.string.remove_favorite_succeed).showToast()
+                            }
+                        } else {
+                            getAppDataBase().favoriteAnimeDao().insertFavoriteAnime(
+                                FavoriteAnimeBean(
+                                    Const.ViewHolderTypeString.ANIME_COVER_8, "",
+                                    detailPartUrl,
+                                    viewModel.playBean?.title?.title ?: "",
+                                    System.currentTimeMillis(),
+                                    viewModel.animeCover,
+                                    lastEpisodeUrl = viewModel.partUrl,
+                                    lastEpisode = viewModel.animeEpisodeDataBean.title
+                                )
                             )
-                        )
-                        withContext(Dispatchers.Main) {
-                            isFavorite = true
-                            mBinding.ivPlayActivityFavorite.setImageResource(R.drawable.ic_star_main_color_2_24)
-                            getString(R.string.favorite_succeed).showToast()
+                            withContext(Dispatchers.Main) {
+                                isFavorite = true
+                                mBinding.ivPlayActivityFavorite.setImageResource(R.drawable.ic_star_main_color_2_24)
+                                getString(R.string.favorite_succeed).showToast()
+                            }
                         }
                     }
                 }
@@ -195,6 +198,7 @@ class PlayActivity : GSYBaseActivityDetail<AnimeVideoPlayer>() {
     }
 
     private fun GSYBaseVideoPlayer.startPlay(url: String = "", title: String = "") {
+        GSYVideoType.disableMediaCodec()        // 关闭硬解码
         //设置播放URL
         if (url.isBlank()) {
             if (!isDestroyed) {
@@ -250,11 +254,9 @@ class PlayActivity : GSYBaseActivityDetail<AnimeVideoPlayer>() {
             .setDismissControlTime(5000)
     }
 
-    override fun clickForFullScreen() {
-    }
+    override fun clickForFullScreen() {}
 
     override fun getDetailOrientationRotateAuto(): Boolean = true
-
 
     fun getSheetDialog(action: String): BottomSheetDialog {
         val bottomSheetDialog = BottomSheetDialog(this, R.style.BottomSheetDialogTheme)
