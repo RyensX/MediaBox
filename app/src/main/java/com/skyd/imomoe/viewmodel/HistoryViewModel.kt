@@ -70,6 +70,6 @@ class HistoryViewModel : ViewModel() {
     }
 
     companion object {
-        const val TAG = "FavoriteViewModel"
+        const val TAG = "HistoryViewModel"
     }
 }

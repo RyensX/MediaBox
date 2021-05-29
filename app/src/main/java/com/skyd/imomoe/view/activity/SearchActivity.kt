@@ -38,6 +38,9 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
         adapter = SearchAdapter(this, viewModel.searchResultList)
         historyAdapter = SearchHistoryAdapter(this, viewModel.searchHistoryList)
 
+        val pageNumber = intent.getStringExtra("pageNumber") ?: ""
+        viewModel.keyWord = intent.getStringExtra("keyWord") ?: ""
+
         mBinding.run {
             srlSearchActivity.setEnableRefresh(false)
             srlSearchActivity.setOnLoadMoreListener {
@@ -144,12 +147,13 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
             }
         })
 
-        viewModel.getSearchHistoryData()
+        if (viewModel.keyWord.isBlank()) viewModel.getSearchHistoryData()
+        else search(viewModel.keyWord, pageNumber)
     }
 
     override fun getBinding(): ActivitySearchBinding = ActivitySearchBinding.inflate(layoutInflater)
 
-    fun search(key: String) {
+    fun search(key: String, partUrl: String = "") {
         //setText一定要在加载布局之前，否则progressbar会被gone掉
         mBinding.run {
             etSearchActivitySearch.setText(key)
@@ -172,7 +176,7 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
                 "", System.currentTimeMillis(), key
             )
         )
-        viewModel.getSearchData(key)
+        viewModel.getSearchData(key, isRefresh = true, partUrl = partUrl)
     }
 
     fun deleteSearchHistory(position: Int) {

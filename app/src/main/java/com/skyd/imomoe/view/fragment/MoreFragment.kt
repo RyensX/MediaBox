@@ -8,6 +8,7 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.MoreBean
 import com.skyd.imomoe.config.Const.ViewHolderTypeString
 import com.skyd.imomoe.config.Const.ActionUrl.Companion.ANIME_LAUNCH_ACTIVITY
+import com.skyd.imomoe.config.Const.ActionUrl.Companion.ANIME_SKIP_BY_WEBSITE
 import com.skyd.imomoe.databinding.FragmentMoreBinding
 import com.skyd.imomoe.view.activity.AboutActivity
 import com.skyd.imomoe.view.activity.HistoryActivity
@@ -30,6 +31,14 @@ class MoreFragment : BaseFragment<FragmentMoreBinding>() {
                 "$ANIME_LAUNCH_ACTIVITY/${HistoryActivity::class.qualifiedName}",
                 getString(R.string.watch_history),
                 R.drawable.ic_history_white_24
+            )
+        )
+        list.add(
+            MoreBean(
+                ViewHolderTypeString.MORE_1,
+                ANIME_SKIP_BY_WEBSITE,
+                getString(R.string.skip_by_website),
+                R.drawable.ic_insert_link_white_24
             )
         )
         list.add(

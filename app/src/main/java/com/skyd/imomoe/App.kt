@@ -20,10 +20,10 @@ class App : Application() {
         context = this
 
         // Crash提示
-        CrashHandler.getInstance(this)
+//        CrashHandler.getInstance(this)
 
         // Bugly APP ID
-        CrashReport.initCrashReport(applicationContext, BuildConfig.BUGLY_APP_ID, true)
+//        CrashReport.initCrashReport(applicationContext, BuildConfig.BUGLY_APP_ID, true)
 
         // 友盟
         // 初始化组件化基础库, 所有友盟业务SDK都必须调用此初始化接口。

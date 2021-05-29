@@ -5,6 +5,9 @@
     <string name="currently_not_supported">目前尚未支持</string>
     <string name="unknown_view_holder">未知类型的模块！</string>
     <string name="action_url_format_error">跳转协议格式错误</string>
+    <string name="unknown_route">未知跳转：%s</string>
+    <string name="website_format_error">网址格式错误，请输入完整的网址</string>
+    <string name="website_domain_format_error">域名格式错误（正确格式如：http://www.yhdm.io/）</string>
     <string name="anime_detail_alias">别名：</string>
     <string name="anime_detail_index">索引：</string>
     <string name="anime_detail_type">类型：</string>
@@ -109,4 +112,16 @@
     <string name="delete">删除</string>
     <string name="clean">清理</string>
     <string name="media_codec">硬解码</string>
+    <string name="dlna">投屏</string>
+    <string name="open_by_external_player">外部播放器打开</string>
+    <string name="choose_video_player">请选择视频播放器</string>
+    <string name="matched_app_not_found">没有找到匹配的程序</string>
+    <string name="skip_by_website">根据网址跳转</string>
+    <string name="input_a_website">请输入网址</string>
+    <string name="input_a_website_domain">请输入域名</string>
+    <string name="advanced_setting">高级设置</string>
+    <string name="advanced">高级</string>
+    <string name="website_domain">域名</string>
+    <string name="recovery_default">恢复默认</string>
+    <string name="set_domain_to_default">设置域名为默认：%s</string>
 </resources>

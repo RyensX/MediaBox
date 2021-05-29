@@ -7,7 +7,6 @@ buildscript {
     repositories {
         google()
         maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
-        jcenter()
         maven { url 'http://4thline.org/m2' }
         // 友盟
         maven { url 'https://dl.bintray.com/umsdk/release' }
@@ -28,7 +27,6 @@ allprojects {
     repositories {
         google()
         maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
-        jcenter()
         maven { url "https://jitpack.io" }
         maven { url 'http://4thline.org/m2' }
         // 友盟

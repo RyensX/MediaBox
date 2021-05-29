@@ -1,5 +1,6 @@
 package com.skyd.imomoe.viewmodel
 
+import android.content.Intent
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.skyd.imomoe.App
@@ -8,14 +9,18 @@ import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.bean.ClassifyBean
 import com.skyd.imomoe.bean.PageNumberBean
 import com.skyd.imomoe.config.Api
+import com.skyd.imomoe.config.UnknownActionUrl
 import com.skyd.imomoe.util.JsoupUtil
 import com.skyd.imomoe.util.ParseHtmlUtil.parseLpic
 import com.skyd.imomoe.util.ParseHtmlUtil.parseNextPages
 import com.skyd.imomoe.util.ParseHtmlUtil.parseTers
 import com.skyd.imomoe.util.Util.showToastOnThread
+import com.skyd.imomoe.util.eventbus.SelectHomeTabEvent
+import com.skyd.imomoe.view.activity.ClassifyActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.greenrobot.eventbus.EventBus
 import org.jsoup.select.Elements
 import java.lang.Exception
 import java.util.*
@@ -44,6 +49,20 @@ class ClassifyViewModel : ViewModel() {
                                 classifyTabList.addAll(parseTers(areaChildren[j]))
                             }
                         }
+                    }
+                }
+                classifyTabList.forEach {
+                    it.classifyDataList.forEach { item ->
+                        UnknownActionUrl.actionMap[item.actionUrl] =
+                            object : UnknownActionUrl.Action {
+                                override fun action() {
+                                    App.context.startActivity(
+                                        Intent(App.context, ClassifyActivity::class.java)
+                                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                            .putExtra("partUrl", item.actionUrl)
+                                    )
+                                }
+                            }
                     }
                 }
                 mldClassifyTabList.postValue(true)

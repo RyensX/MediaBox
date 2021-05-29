@@ -1,4 +1,4 @@
-package com.skyd.imomoe.view.component
+package com.skyd.imomoe.view.component.player
 
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
@@ -25,6 +25,8 @@ import com.skyd.imomoe.bean.BaseBean
 import com.skyd.imomoe.util.Util.dp2px
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.getScreenBrightness
+import com.skyd.imomoe.util.Util.openVideoByExternalPlayer
+import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.gone
 import com.skyd.imomoe.util.visible
 import com.skyd.imomoe.view.activity.DlnaActivity
@@ -68,6 +70,9 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
     //分享按钮
     private var mShareImageView: ImageView? = null
 
+    //更多按钮
+    private var mMoreImageView: ImageView? = null
+
     //下一集按钮
     private var mNextImageView: ImageView? = null
 
@@ -85,7 +90,8 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
     // 镜像RadioGroup
     private var mReverseRadioGroup: RadioGroup? = null
     private var mReverseValue: Int? = null
-    private var mTextureViewTransform: Int = NO_REVERSE
+    private var mTextureViewTransform: Int =
+        NO_REVERSE
 
     // 底部进度条CheckBox
     private var mBottomProgressCheckBox: CheckBox? = null
@@ -93,6 +99,9 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
 
     //底部进度调
     private var mBottomProgress: ProgressBar? = null
+
+    // 外部播放器打开
+    private var mOpenByExternalPlayerTextView: TextView? = null
 
     // 硬解码CheckBox
     private var mMediaCodecCheckBox: CheckBox? = null
@@ -115,7 +124,7 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
         mDownloadButton = findViewById(R.id.iv_download)
         mMoreScaleTextView = findViewById(R.id.tv_more_scale)
         mSpeedTextView = findViewById(R.id.tv_speed)
-        mClingImageView = findViewById(R.id.iv_cling)
+//        mClingImageView = findViewById(R.id.iv_cling)
         mRightContainer = findViewById(R.id.layout_right)
         mSpeedRecyclerView = findViewById(R.id.rv_right)
         mEpisodeRecyclerView = findViewById(R.id.rv_right)
@@ -127,6 +136,8 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
         mReverseRadioGroup = findViewById(R.id.rg_reverse)
         mBottomProgressCheckBox = findViewById(R.id.cb_bottom_progress)
         mBottomProgress = super.mBottomProgressBar
+        mMoreImageView = findViewById(R.id.iv_more)
+        mOpenByExternalPlayerTextView = findViewById(R.id.tv_open_by_external_player)
 //        mMediaCodecCheckBox = findViewById(R.id.cb_media_codec)
 
         mRightContainer?.gone()
@@ -175,11 +186,16 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
         }
         mBottomProgressCheckBox?.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
-                mBottomProgressBar = mBottomProgress
-                mBottomProgressBar.visible()
+                mBottomProgress?.let {
+                    mBottomProgressBar = it
+                    mBottomProgressBar.visible()
+                }
             } else {
-                mBottomProgressBar.gone()
-                mBottomProgressBar = null
+                mBottomProgressBar?.let {
+                    mBottomProgress = it
+                    it.gone()
+                    mBottomProgressBar = null
+                }
             }
             mBottomProgressCheckBoxValue = isChecked
         }
@@ -210,7 +226,16 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
             )
             mOriginUrl
         }
+
+        mOpenByExternalPlayerTextView?.setOnClickListener {
+            if (!openVideoByExternalPlayer(mContext, mUrl))
+                mContext.getString(R.string.matched_app_not_found).showToast()
+        }
     }
+
+    fun getUrl(): String = mUrl
+
+    fun getTitle(): String = mTitle
 
     private fun showSettingContainer() {
         mSettingContainer?.let {
@@ -489,6 +514,19 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
         mBottomContainer.visibility = View.GONE
     }
 
+    override fun onVideoResume(seek: Boolean) {
+//        super.onVideoResume(seek)
+        mPauseBeforePrepared = false
+        if (mCurrentState == GSYVideoView.CURRENT_STATE_PAUSE) {
+            try {
+                clickStartIcon()
+
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
     fun setEpisodeButtonOnClickListener(listener: OnClickListener) {
         mEpisodeButtonOnClickListener = listener
     }
@@ -498,6 +536,8 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
     }
 
     fun getShareButton() = mShareImageView
+
+    fun getMoreButton() = mMoreImageView
 
     fun getEpisodeButton() = mEpisodeTextView
 

@@ -1,6 +1,7 @@
 package com.skyd.imomoe.view.activity
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +19,7 @@ import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.ClassifyBean
 import com.skyd.imomoe.bean.ClassifyDataBean
+import com.skyd.imomoe.config.UnknownActionUrl
 import com.skyd.imomoe.databinding.ActivityClassifyBinding
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.showToast
@@ -118,6 +120,17 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
                     classifyTabTitle = viewModel.classifyTabList[0].toString()
                     classifyTitle = firstItem.title
                     tabSelected(currentPartUrl)
+                } else {
+                    viewModel.classifyTabList.forEachIndexed { index, classifyBean ->
+                        classifyBean.classifyDataList.forEach { item ->
+                            if (item.actionUrl == currentPartUrl) {
+                                mBinding.spinnerClassifyActivity.setSelection(index, true)
+                                classifyTabTitle = classifyBean.name
+                                classifyTitle = item.title
+                                tabSelected(currentPartUrl)
+                            }
+                        }
+                    }
                 }
             } else {
                 mBinding.srlClassifyActivity.finishRefresh()

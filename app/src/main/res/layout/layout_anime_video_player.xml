@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/black"
-    tools:context=".view.component.AnimeVideoPlayer">
+    tools:context=".view.component.player.AnimeVideoPlayer">
 
     <FrameLayout
         android:id="@+id/surface_container"
@@ -198,30 +198,31 @@
             android:paddingEnd="10dp"
             android:src="@drawable/ic_share_white_24"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/iv_cling"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/iv_cling"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:paddingStart="0dp"
-            android:paddingEnd="10dp"
-            android:scaleType="centerInside"
-            android:src="@drawable/ic_live_tv_white_24"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/iv_download"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/iv_download"
-            android:layout_width="48dp"
+            android:layout_width="42dp"
             android:layout_height="match_parent"
             android:layout_gravity="end"
             android:paddingVertical="12dp"
             android:paddingStart="0dp"
-            android:paddingEnd="10dp"
+            android:paddingEnd="7dp"
             android:src="@drawable/ic_arrow_circle_down_white_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/iv_more"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_more"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:paddingVertical="10dp"
+            android:paddingStart="0dp"
+            android:paddingEnd="10dp"
+            android:src="@drawable/ic_more_vert_white_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -234,7 +235,8 @@
         android:layout_alignParentEnd="true"
         android:background="@color/gray_2"
         android:clickable="true"
-        android:focusable="true">
+        android:focusable="true"
+        tools:visibility="gone">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_right"

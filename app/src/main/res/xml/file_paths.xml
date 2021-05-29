@@ -8,5 +8,9 @@
         <root-path
             name="root"
             path="" />
+
+        <external-path
+            name="download_anime"
+            path="Imomoe/DownloadAnime" />
     </paths>
 </resources>

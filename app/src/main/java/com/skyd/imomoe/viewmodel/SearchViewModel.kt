@@ -25,6 +25,10 @@ import kotlin.collections.ArrayList
 
 
 class SearchViewModel : ViewModel() {
+
+    val beanList:MutableList<String> = ArrayList()
+    private val _beanList: MutableLiveData<MutableList<String>> = MutableLiveData(mutableListOf("a", "b"))
+
     var searchResultList: MutableList<AnimeCoverBean> = ArrayList()
     var mldSearchResultList: MutableLiveData<Int> = MutableLiveData()   // value：-1错误；0重新获取；1刷新
     var keyWord = ""

@@ -108,7 +108,9 @@ class AnimeDownloadViewModel : ViewModel() {
 
                 for (anime in animeList) {
                     val fileName =
-                        Const.DownloadAnime.animeFilePath + directoryName + "/" + anime.fileName
+                        Const.DownloadAnime.animeFilePath + directoryName.substring(
+                            1, directoryName.length
+                        ) + "/" + anime.fileName
                     animeCoverList.add(
                         AnimeCoverBean(
                             Const.ViewHolderTypeString.ANIME_COVER_7,

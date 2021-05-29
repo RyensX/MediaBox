@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/black"
-    tools:context=".view.component.AnimeVideoPlayer">
+    tools:context=".view.component.player.AnimeVideoPlayer">
 
     <FrameLayout
         android:id="@+id/surface_container"
@@ -350,19 +350,30 @@
 
             <CheckBox
                 android:id="@+id/cb_bottom_progress"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="35dp"
                 android:layout_marginTop="12dp"
                 android:text="@string/bottom_progress"
                 android:textColor="@color/foreground_white" />
 
-<!--            <CheckBox-->
-<!--                android:id="@+id/cb_media_codec"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="35dp"-->
-<!--                android:layout_marginTop="12dp"-->
-<!--                android:text="@string/media_codec"-->
-<!--                android:textColor="@color/foreground_white" />-->
+            <TextView
+                android:id="@+id/tv_open_by_external_player"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/shape_circle_corner_edge_white_ripper_5"
+                android:gravity="center"
+                android:paddingVertical="9dp"
+                android:text="@string/open_by_external_player"
+                android:textColor="@color/foreground_white" />
+
+            <!--            <CheckBox-->
+            <!--                android:id="@+id/cb_media_codec"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="35dp"-->
+            <!--                android:layout_marginTop="12dp"-->
+            <!--                android:text="@string/media_codec"-->
+            <!--                android:textColor="@color/foreground_white" />-->
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </RelativeLayout>

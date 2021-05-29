@@ -1,8 +1,10 @@
 package com.skyd.imomoe.view.activity
 
 import android.app.Dialog
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -12,7 +14,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.shuyu.gsyvideoplayer.GSYBaseActivityDetail
 import com.shuyu.gsyvideoplayer.GSYVideoManager
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder
 import com.shuyu.gsyvideoplayer.model.VideoOptionModel
@@ -24,11 +25,16 @@ import com.skyd.imomoe.bean.AnimeEpisodeDataBean
 import com.skyd.imomoe.bean.FavoriteAnimeBean
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.config.Const
+import com.skyd.imomoe.config.Const.ActionUrl.Companion.ANIME_DETAIL
+import com.skyd.imomoe.config.Const.ActionUrl.Companion.ANIME_PLAY
 import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.databinding.ActivityPlayBinding
 import com.skyd.imomoe.util.AnimeEpisode2ViewHolder
 import com.skyd.imomoe.util.Util.dp2px
+import com.skyd.imomoe.util.Util.getDetailLinkByEpisodeLink
 import com.skyd.imomoe.util.Util.getResColor
+import com.skyd.imomoe.util.Util.getWebsiteLinkSuffix
+import com.skyd.imomoe.util.Util.openVideoByExternalPlayer
 import com.skyd.imomoe.util.Util.setColorStatusBar
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.downloadanime.AnimeDownloadHelper
@@ -36,8 +42,10 @@ import com.skyd.imomoe.util.gone
 import com.skyd.imomoe.view.adapter.AnimeDetailAdapter
 import com.skyd.imomoe.view.adapter.AnimeEpisodeItemDecoration
 import com.skyd.imomoe.view.adapter.PlayAdapter
+import com.skyd.imomoe.view.component.player.AnimeVideoPlayer
+import com.skyd.imomoe.view.component.player.DetailPlayerActivity
+import com.skyd.imomoe.view.fragment.MoreDialogFragment
 import com.skyd.imomoe.view.fragment.ShareDialogFragment
-import com.skyd.imomoe.view.component.AnimeVideoPlayer
 import com.skyd.imomoe.viewmodel.PlayViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -46,7 +54,7 @@ import kotlinx.coroutines.withContext
 import tv.danmaku.ijk.media.player.IjkMediaPlayer
 
 
-class PlayActivity : GSYBaseActivityDetail<AnimeVideoPlayer>() {
+class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>() {
     private lateinit var mBinding: ActivityPlayBinding
     private var isFavorite: Boolean = false
     private var favoriteBeanDataReady: Int = 0
@@ -84,10 +92,39 @@ class PlayActivity : GSYBaseActivityDetail<AnimeVideoPlayer>() {
         partUrl = intent.getStringExtra("partUrl") ?: ""
         detailPartUrl = intent.getStringExtra("detailPartUrl") ?: ""
 
+        // 如果没有传入详情页面的网址，则通过播放页面的网址计算出详情页面的网址
+        if (detailPartUrl.isBlank() || detailPartUrl == ANIME_DETAIL)
+            detailPartUrl = getDetailLinkByEpisodeLink(partUrl)
+
         //分享按钮
         videoPlayer.getShareButton()?.setOnClickListener {
             ShareDialogFragment().setShareContent(Api.MAIN_URL + viewModel.partUrl)
                 .show(supportFragmentManager, "share_dialog")
+        }
+
+        //更多按钮
+        videoPlayer.getMoreButton()?.setOnClickListener {
+            MoreDialogFragment().run {
+                setOnClickListener(
+                    arrayOf(View.OnClickListener { dismiss() },
+                        View.OnClickListener {
+                            startActivity(
+                                Intent(this@PlayActivity, DlnaActivity::class.java)
+                                    .putExtra("url", videoPlayer.getUrl())
+                                    .putExtra("title", videoPlayer.getTitle())
+                            )
+                            dismiss()
+                        }, View.OnClickListener {
+                            if (!openVideoByExternalPlayer(
+                                    this@PlayActivity,
+                                    viewModel.animeEpisodeDataBean.videoUrl
+                                )
+                            ) getString(R.string.matched_app_not_found).showToast()
+                            dismiss()
+                        })
+                )
+                show(supportFragmentManager, "more_dialog")
+            }
         }
 
         mBinding.run {

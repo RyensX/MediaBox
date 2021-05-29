@@ -93,13 +93,13 @@ class SimplePlayActivity : BaseActivity<ActivitySimplePlayBinding>() {
     override fun onPause() {
         super.onPause()
         orientationUtils.setIsPause(true)
-        mBinding.avpSimplePlayActivity.onVideoPause()
+        mBinding.avpSimplePlayActivity.currentPlayer.onVideoPause()
     }
 
     override fun onResume() {
         super.onResume()
         orientationUtils.setIsPause(false)
-        mBinding.avpSimplePlayActivity.onVideoResume()
+        mBinding.avpSimplePlayActivity.currentPlayer.onVideoResume()
     }
 
     override fun onDestroy() {

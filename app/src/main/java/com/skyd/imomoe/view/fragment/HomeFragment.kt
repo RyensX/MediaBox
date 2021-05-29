@@ -18,14 +18,18 @@ import com.hjq.permissions.OnPermissionCallback
 import com.hjq.permissions.Permission
 import com.hjq.permissions.XXPermissions
 import com.skyd.imomoe.R
+import com.skyd.imomoe.config.Const.ActionUrl.Companion.ANIME_SEARCH
 import com.skyd.imomoe.databinding.FragmentHomeBinding
+import com.skyd.imomoe.util.Util.process
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.clickScale
 import com.skyd.imomoe.util.eventbus.EventBusSubscriber
 import com.skyd.imomoe.util.eventbus.MessageEvent
 import com.skyd.imomoe.util.eventbus.RefreshEvent
+import com.skyd.imomoe.util.eventbus.SelectHomeTabEvent
 import com.skyd.imomoe.view.activity.*
 import com.skyd.imomoe.viewmodel.HomeViewModel
+import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
@@ -78,7 +82,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), EventBusSubscriber {
 
             tvHomeFragmentHeaderSearch.setOnClickListener {
                 activity?.let {
-                    it.startActivity(Intent(it, SearchActivity::class.java))
+                    process(it, ANIME_SEARCH + "")
+//                    it.startActivity(Intent(it, SearchActivity::class.java))
                     it.overridePendingTransition(
                         R.anim.anl_push_top_in,
                         R.anim.anl_stay
@@ -152,7 +157,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), EventBusSubscriber {
         viewModel.getAllTabData()
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    // priority = 1比MainActivity的高，以便在找不到相应子页面时拦截SelectHomeTabEvent
+    // 使得不会切换到MainActivity页面
+    @Subscribe(threadMode = ThreadMode.MAIN, priority = 1)
     override fun onMessageEvent(event: MessageEvent) {
         when (event) {
             is RefreshEvent -> {
@@ -160,6 +167,22 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), EventBusSubscriber {
                 if (viewModel.mldGetAllTabList.value == true)
                     adapter.refresh(currentTab)
                 else viewModel.getAllTabData()
+            }
+            is SelectHomeTabEvent -> {
+                var tabPosition = -1
+                viewModel.allTabList.forEachIndexed { index, tabBean ->
+                    if (tabBean.actionUrl == event.actionUrl) {
+                        tabPosition = index
+                        return@forEachIndexed
+                    }
+                }
+                if (tabPosition >= 0 && tabPosition < mBinding.tlHomeFragment.tabCount)
+                    mBinding.vp2HomeFragment.getViewPager()
+                        .apply { post { currentItem = tabPosition } }
+                else {
+                    EventBus.getDefault().cancelEventDelivery(event)
+                    getString(R.string.unknown_route, event.actionUrl).showToast()
+                }
             }
         }
     }

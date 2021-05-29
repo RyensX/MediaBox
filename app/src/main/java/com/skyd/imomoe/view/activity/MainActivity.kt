@@ -18,16 +18,21 @@ import com.skyd.imomoe.config.Const.ShortCuts.Companion.ID_FAVORITE
 import com.skyd.imomoe.databinding.ActivityMainBinding
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.clickScale
+import com.skyd.imomoe.util.eventbus.EventBusSubscriber
+import com.skyd.imomoe.util.eventbus.MessageEvent
 import com.skyd.imomoe.util.eventbus.RefreshEvent
+import com.skyd.imomoe.util.eventbus.SelectHomeTabEvent
 import com.skyd.imomoe.util.update.AppUpdateHelper
 import com.skyd.imomoe.util.update.AppUpdateStatus
 import com.skyd.imomoe.view.fragment.EverydayAnimeFragment
 import com.skyd.imomoe.view.fragment.HomeFragment
 import com.skyd.imomoe.view.fragment.MoreFragment
 import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 
-class MainActivity : BaseActivity<ActivityMainBinding>() {
+class MainActivity : BaseActivity<ActivityMainBinding>(), EventBusSubscriber {
     private var selectedTab = -1
     private var backPressTime = 0L
     private val fragmentManager: FragmentManager by lazy { supportFragmentManager }
@@ -261,6 +266,15 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         }
         outState.putInt(SELECTED_TAB, selectedTab)
         super.onSaveInstanceState(outState)
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    override fun onMessageEvent(event: MessageEvent) {
+        when (event) {
+            is SelectHomeTabEvent -> {
+                setTabSelection(0)
+            }
+        }
     }
 
     companion object {

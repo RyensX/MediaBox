@@ -2,11 +2,9 @@ package com.skyd.imomoe.util
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
-import android.content.Intent
+import android.content.*
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+import android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -24,21 +22,29 @@ import android.widget.Toast
 import androidx.annotation.ColorRes
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.fragment.app.Fragment
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.input.input
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
+import com.skyd.imomoe.config.Api.Companion.MAIN_URL
 import com.skyd.imomoe.config.Const
+import com.skyd.imomoe.config.UnknownActionUrl
+import com.skyd.imomoe.util.eventbus.SelectHomeTabEvent
 import com.skyd.imomoe.view.activity.*
 import com.skyd.imomoe.view.component.AnimeToast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.greenrobot.eventbus.EventBus
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
 import java.math.BigDecimal
 import java.net.HttpURLConnection
+import java.net.MalformedURLException
 import java.net.URL
 import java.net.URLDecoder
 import java.util.*
@@ -54,6 +60,63 @@ object Util {
         intent.flags = FLAG_ACTIVITY_NEW_TASK
         App.context.startActivity(intent)
     }
+
+    /**
+     * 通过播放页面的网址获取详情页面的网址
+     *
+     * @param EpisodeUrl 播放页面的网址
+     * @return 详情页面的网址
+     */
+    fun getDetailLinkByEpisodeLink(EpisodeUrl: String): String {
+        return Const.ActionUrl.ANIME_DETAIL + EpisodeUrl
+            .replaceFirst(Const.ActionUrl.ANIME_PLAY, "")
+            .replaceFirst(Regex("-.*\\.html"), "") + getWebsiteLinkSuffix()
+    }
+
+    fun getWebsiteLinkSuffix(): String {
+        return App.context.sharedPreferences("websiteLinkSuffix").getString("suffix", ".html")
+            ?: ".html"
+    }
+
+    fun setWebsiteLinkSuffix(suffix: String) {
+        App.context.sharedPreferences("websiteLinkSuffix").editor {
+            putString("suffix", suffix)
+        }
+    }
+
+    fun openVideoByExternalPlayer(context: Context, url: String): Boolean {
+        return try {
+            val uri: Uri =
+                if (url.startsWith("file:///")) {
+                    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+                        FileProvider.getUriForFile(
+                            context,
+                            "${context.applicationInfo.packageName}.fileProvider",
+                            File(
+                                url.substring(0, url.lastIndexOf("/")).replaceFirst("file:///", ""),
+                                url.substring(url.lastIndexOf("/") + 1, url.length)
+                            )
+                        )
+                    } else {
+                        Uri.parse(url)
+                    }
+                } else Uri.parse(url)
+
+            Intent().setAction(Intent.ACTION_VIEW).addFlags(FLAG_ACTIVITY_NEW_TASK)
+                .addFlags(FLAG_GRANT_READ_URI_PERMISSION)
+                .setDataAndType(uri, "video/*").apply {
+                    context.startActivity(
+                        Intent.createChooser(
+                            this, context.getString(R.string.choose_video_player)
+                        )
+                    )
+                }
+            true
+        } catch (e: ActivityNotFoundException) {
+            false
+        }
+    }
+
 
     /**
      * 由于SUNDAY == 1...，因此需要转换成SUNDAY == 7...
@@ -473,6 +536,20 @@ object Util {
         if (actionUrl == null) return
         val decodeUrl = URLDecoder.decode(actionUrl, "UTF-8")
         when {
+            decodeUrl.startsWith(Const.ActionUrl.ANIME_TOP) -> {     // 排行榜
+                activity.startActivity(Intent(activity, RankActivity::class.java))
+            }
+            decodeUrl.startsWith(Const.ActionUrl.ANIME_SEARCH) -> {     // 进入搜索页面
+                decodeUrl.replace(Const.ActionUrl.ANIME_SEARCH, "").let {
+                    val keyWord = it.replaceFirst(Regex("/.*"), "")
+                    val pageNumber = it.replaceFirst(Regex("($keyWord/)|($keyWord)"), "")
+                    activity.startActivity(
+                        Intent(activity, SearchActivity::class.java)
+                            .putExtra("keyWord", keyWord)
+                            .putExtra("pageNumber", pageNumber)
+                    )
+                }
+            }
             decodeUrl.startsWith(Const.ActionUrl.ANIME_DETAIL) -> {     //番剧封面点击进入
                 activity.startActivity(
                     Intent(activity, AnimeDetailActivity::class.java)
@@ -484,8 +561,7 @@ object Util {
                 if (playCode.size >= 2) {
                     var detailPartUrl =
                         actionUrl.substringAfter(Const.ActionUrl.ANIME_DETAIL, "")
-                    if (detailPartUrl.isBlank()) App.context.getString(R.string.error_play_episode)
-                        .showToast()
+//                    if (detailPartUrl.isBlank()) App.context.getString(R.string.error_play_episode).showToast()
                     detailPartUrl = Const.ActionUrl.ANIME_DETAIL + detailPartUrl
                     activity.startActivity(
                         Intent(activity, PlayActivity::class.java)
@@ -551,8 +627,43 @@ object Util {
                 )
                 activity.startActivity(Intent(activity, cls))
             }
+            decodeUrl.startsWith(Const.ActionUrl.ANIME_SKIP_BY_WEBSITE) -> { // 根据网址跳转
+                var website = decodeUrl.replaceFirst(Const.ActionUrl.ANIME_SKIP_BY_WEBSITE, "")
+                if (website.isBlank() || website == "/") {
+                    MaterialDialog(activity).show {
+                        input(hintRes = R.string.input_a_website) { dialog, text ->
+                            try {
+                                var url = text.toString()
+                                if (!url.matches(Regex("^.+://.*"))) url = "http://$url"
+                                process(activity, URL(url).file)
+                            } catch (e: Exception) {
+                                App.context.resources.getString(R.string.website_format_error)
+                                    .showToast()
+                                e.printStackTrace()
+                            }
+                        }
+                        positiveButton(R.string.ok)
+                    }
+                } else {
+                    try {
+                        if (!website.matches(Regex("^.+://.*"))) website = "http://$website"
+                        process(activity, URL(website).file)
+                    } catch (e: Exception) {
+                        App.context.resources.getString(R.string.website_format_error).showToast()
+                        e.printStackTrace()
+                    }
+                }
+            }
             else -> {
-                "${toastTitle},${App.context.resources.getString(R.string.currently_not_supported)}".showToast()
+                val action = UnknownActionUrl.actionMap[decodeUrl]
+                if (action != null) {
+                    action.action()
+                } else {
+                    App.context.resources.getString(
+                        R.string.unknown_route,
+                        if (toastTitle.isBlank()) actionUrl else toastTitle
+                    ).showToast()
+                }
             }
         }
     }

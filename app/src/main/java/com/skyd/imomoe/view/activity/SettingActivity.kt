@@ -9,20 +9,26 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.input.input
+import com.skyd.imomoe.App
 import com.skyd.imomoe.R
+import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.databinding.ActivitySettingBinding
+import com.skyd.imomoe.util.Util
 import com.skyd.imomoe.util.Util.getAppVersionName
 import com.skyd.imomoe.util.Util.getNightMode
 import com.skyd.imomoe.util.Util.isNightMode
 import com.skyd.imomoe.util.Util.setNightMode
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.Util.showToastOnThread
+import com.skyd.imomoe.util.clickScale
 import com.skyd.imomoe.util.gone
 import com.skyd.imomoe.util.update.AppUpdateHelper
 import com.skyd.imomoe.util.update.AppUpdateStatus
 import com.skyd.imomoe.viewmodel.SettingViewModel
 import kotlinx.coroutines.*
+import java.net.URL
 
 
 class SettingActivity : BaseActivity<ActivitySettingBinding>() {
@@ -169,6 +175,32 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
                 dialog.dismiss()
             }
             builder.create().show()
+        }
+
+        mBinding.tvSettingActivityInfoDomain.text = Api.MAIN_URL
+        mBinding.tvSettingActivityDefaultDomain.setOnClickListener {
+            Api.MAIN_URL = Api.DEFAULT_MAIN_URL
+            mBinding.tvSettingActivityInfoDomain.text = Api.DEFAULT_MAIN_URL
+            getString(R.string.set_domain_to_default, Api.DEFAULT_MAIN_URL)
+                .showToast(Toast.LENGTH_LONG)
+        }
+
+        mBinding.rlSettingActivityDomain.setOnClickListener {
+            MaterialDialog(this).show {
+                input(hintRes = R.string.input_a_website_domain) { dialog, text ->
+                    try {
+                        URL(text.toString())
+                        val url = text.toString().replaceFirst(Regex("/$"), "")
+                        Api.MAIN_URL = url
+                        mBinding.tvSettingActivityInfoDomain.text = url
+                    } catch (e: Exception) {
+                        App.context.resources.getString(R.string.website_domain_format_error)
+                            .showToast()
+                        e.printStackTrace()
+                    }
+                }
+                positiveButton(R.string.ok)
+            }
         }
 
         initNightMode()
