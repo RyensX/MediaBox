@@ -10,6 +10,7 @@ import com.bumptech.glide.load.model.LazyHeaders
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
+import com.skyd.imomoe.config.Api.Companion.MAIN_URL
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.util.Util.showToast
 import kotlinx.coroutines.Dispatchers
@@ -21,8 +22,8 @@ import kotlin.random.Random
 
 
 object GlideUtil {
-    fun getGlideUrl(url: String, referer: String = "http://www.yhdm.io/"): GlideUrl {
-        var host = "http://www.yhdm.io/"
+    fun getGlideUrl(url: String, referer: String = MAIN_URL): GlideUrl {
+        var host = MAIN_URL // "http://www.yhdm.io/"
         try {
             host = URL(url).host
         } catch (e: MalformedURLException) {
@@ -63,16 +64,16 @@ object GlideUtil {
         @DrawableRes error: Int = R.drawable.ic_warning_main_color_3_24
     ) {
         var amendReferer = referer
-        if (amendReferer?.startsWith("http://www.yhdm.io") == false)
-            amendReferer = "http://www.yhdm.io/"
-        if (referer == "http://www.yhdm.io" || referer == "http://www.yhdm.io.") amendReferer += "/"
+        if (amendReferer?.startsWith(MAIN_URL) == false)
+            amendReferer = MAIN_URL//"http://www.yhdm.io/"
+        if (referer == MAIN_URL || referer == MAIN_URL) amendReferer += "/"
         if (url.isEmpty()) {
             GlobalScope.launch(Dispatchers.Main) {
                 "cover image url must not be null or empty".showToast()
             }
             return
         }
-        val glideUrl = getGlideUrl(url, amendReferer ?: "http://www.yhdm.io/")
+        val glideUrl = getGlideUrl(url, amendReferer ?: MAIN_URL)
         //使用了自定义的OkHttp，OkHttpGlideModule，因此是GlideApp
         GlideApp.with(context).load(glideUrl)
             .placeholder(placeholder)

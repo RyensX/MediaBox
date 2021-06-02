@@ -597,18 +597,25 @@ object Util {
                 openBrowser(actionUrl.replaceFirst(Const.ActionUrl.ANIME_BROWSER, ""))
             }
             decodeUrl.startsWith(Const.ActionUrl.ANIME_ANIME_DOWNLOAD_EPISODE) -> { //缓存的每一集列表
-                val directoryName =
-                    actionUrl.replaceFirst(Const.ActionUrl.ANIME_ANIME_DOWNLOAD_EPISODE, "")
+                var directoryName: String
+                var path: Int
+                actionUrl.replaceFirst(Const.ActionUrl.ANIME_ANIME_DOWNLOAD_EPISODE, "")
+                    .split("/").let {
+                        directoryName = it[0] + "/" + it[1]
+                        path = it.last().toInt()
+                    }
                 activity.startActivity(
                     Intent(activity, AnimeDownloadActivity::class.java)
                         .putExtra("mode", 1)
                         .putExtra("actionBarTitle", directoryName.replace("/", ""))
                         .putExtra("directoryName", directoryName)
+                        .putExtra("path", path)
                 )
             }
             decodeUrl.startsWith(Const.ActionUrl.ANIME_ANIME_DOWNLOAD_PLAY) -> { //播放缓存的每一集
                 val filePath =
                     actionUrl.replaceFirst(Const.ActionUrl.ANIME_ANIME_DOWNLOAD_PLAY + "/", "")
+                        .replace(Regex("/\\d+$"), "")
                 val fileName = filePath.split("/").last()
                 val title = fileName
                 activity.startActivity(

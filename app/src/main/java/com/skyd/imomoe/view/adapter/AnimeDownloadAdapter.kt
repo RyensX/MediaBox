@@ -12,6 +12,7 @@ import com.skyd.imomoe.util.Util.process
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.ViewHolderUtil.Companion.getItemViewType
 import com.skyd.imomoe.util.ViewHolderUtil.Companion.getViewHolder
+import com.skyd.imomoe.util.gone
 import com.skyd.imomoe.util.invisible
 import com.skyd.imomoe.util.visible
 import com.skyd.imomoe.view.activity.AnimeDownloadActivity
@@ -41,6 +42,12 @@ class AnimeDownloadAdapter(
                 holder.tvAnimeCover7Title.text = item.title
                 holder.tvAnimeCover7Size.isFocused = true
                 holder.tvAnimeCover7Size.text = item.size
+                if (item.path == 1) {
+                    holder.tvAnimeCover7OldPath.text = activity.getString(R.string.old_path)
+                    holder.tvAnimeCover7OldPath.visible()
+                } else {
+                    holder.tvAnimeCover7OldPath.gone()
+                }
                 if (item.actionUrl.startsWith(Const.ActionUrl.ANIME_ANIME_DOWNLOAD_EPISODE)) {
                     holder.tvAnimeCover7Episodes.text = item.episodeCount
                     holder.tvAnimeCover7Episodes.visible()
@@ -48,7 +55,7 @@ class AnimeDownloadAdapter(
                     holder.tvAnimeCover7Episodes.invisible()
                 }
                 holder.itemView.setOnClickListener {
-                    process(activity, item.actionUrl)
+                    process(activity, item.actionUrl + "/" + item.path)
                 }
             }
             else -> {

@@ -7,6 +7,9 @@ import androidx.lifecycle.MutableLiveData
 import com.hjq.permissions.OnPermissionCallback
 import com.hjq.permissions.Permission
 import com.hjq.permissions.XXPermissions
+import com.skyd.imomoe.App
+import com.skyd.imomoe.R
+import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.config.Const.DownloadAnime.Companion.animeFilePath
 import com.skyd.imomoe.database.entity.AnimeDownloadEntity
 import com.skyd.imomoe.util.Util.showToast
@@ -57,7 +60,10 @@ class AnimeDownloadHelper private constructor() {
             }
         }
 
-        fun save2Xml(folderName: String, entity: AnimeDownloadEntity) {
+        fun save2Xml(
+            folderName: String, entity: AnimeDownloadEntity,
+            animeFilePath: String = Const.DownloadAnime.animeFilePath
+        ) {
             try {
                 val file = File(animeFilePath + folderName, "data.xml")
                 if (!file.exists()) {
@@ -132,7 +138,10 @@ class AnimeDownloadHelper private constructor() {
             }
         }
 
-        fun getAnimeFromXml(folderName: String): MutableList<AnimeDownloadEntity> {
+        fun getAnimeFromXml(
+            folderName: String,
+            animeFilePath: String = Const.DownloadAnime.animeFilePath
+        ): MutableList<AnimeDownloadEntity> {
             val list: MutableList<AnimeDownloadEntity> = ArrayList()
             try {
                 // 1. 创建DocumentBuilderFactory对象
@@ -171,7 +180,10 @@ class AnimeDownloadHelper private constructor() {
             return list
         }
 
-        fun deleteAnimeFromXml(folderName: String, entity: AnimeDownloadEntity) {
+        fun deleteAnimeFromXml(
+            folderName: String, entity: AnimeDownloadEntity,
+            animeFilePath: String = Const.DownloadAnime.animeFilePath
+        ) {
             try {
                 // 1. 创建DocumentBuilderFactory对象
                 val builderFactory = DocumentBuilderFactory.newInstance()
@@ -221,7 +233,17 @@ class AnimeDownloadHelper private constructor() {
 
     fun getDownloadStatus(key: String): LiveData<AnimeDownloadStatus>? = downloadHashMap[key]
 
-    fun downloadAnime(activity: AppCompatActivity, url: String, key: String) {
+    fun downloadAnime(
+        activity: AppCompatActivity,
+        url: String,
+        key: String,
+        folderAndFileName: String
+    ) {
+        if (activity.isFinishing) {
+            App.context.getString(R.string.do_not_finish_the_page_when_parse_download_data)
+                .showToast()
+            return
+        }
         XXPermissions.with(activity).permission(Permission.MANAGE_EXTERNAL_STORAGE).request(
             object : OnPermissionCallback {
                 override fun onGranted(permissions: MutableList<String>?, all: Boolean) {
@@ -239,6 +261,7 @@ class AnimeDownloadHelper private constructor() {
                         Intent(activity, AnimeDownloadService::class.java)
                             .putExtra("url", url)
                             .putExtra("key", key)
+                            .putExtra("folderAndFileName", folderAndFileName)
                     )
                 }
 

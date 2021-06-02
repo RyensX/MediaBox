@@ -2,10 +2,12 @@ package com.skyd.imomoe
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
 import com.liulishuo.filedownloader.FileDownloader
 import com.scwang.smart.refresh.footer.BallPulseFooter
 import com.scwang.smart.refresh.header.MaterialHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
+import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.util.CrashHandler
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.setNightMode

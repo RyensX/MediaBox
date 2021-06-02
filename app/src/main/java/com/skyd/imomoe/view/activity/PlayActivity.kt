@@ -30,6 +30,7 @@ import com.skyd.imomoe.config.Const.ActionUrl.Companion.ANIME_PLAY
 import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.databinding.ActivityPlayBinding
 import com.skyd.imomoe.util.AnimeEpisode2ViewHolder
+import com.skyd.imomoe.util.MD5.getMD5
 import com.skyd.imomoe.util.Util.dp2px
 import com.skyd.imomoe.util.Util.getDetailLinkByEpisodeLink
 import com.skyd.imomoe.util.Util.getResColor
@@ -207,6 +208,7 @@ class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>() {
             AnimeDownloadHelper.instance.downloadAnime(
                 this,
                 url,
+                getMD5(url),
                 viewModel.playBean?.title?.title + "/" +
                         viewModel.episodesList[it].title
             )

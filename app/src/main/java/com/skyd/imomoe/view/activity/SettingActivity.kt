@@ -94,6 +94,18 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
         }
 
         mBinding.run {
+            ivSettingActivityDownloadInfo.setOnClickListener {
+                MaterialDialog(this@SettingActivity).show {
+                    title(res = R.string.attention)
+                    message(
+                        text = "由于新版Android存储机制变更，因此新缓存的动漫将存储在App的私有路径，" +
+                                "以前缓存的动漫依旧能够观看，其后面将有“旧”字样。新缓存的动漫与以前缓存的互不影响。" +
+                                "\n\n注意：新缓存的动漫将在App被卸载或数据被清除后丢失。"
+                    )
+                    positiveButton { dismiss() }
+                }
+            }
+
             tvSettingActivityUpdateInfo.text =
                 getString(R.string.current_version, getAppVersionName())
 

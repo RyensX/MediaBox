@@ -8,10 +8,16 @@
     tools:context=".view.component.player.AnimeVideoPlayer">
 
     <FrameLayout
-        android:id="@+id/surface_container"
+        android:id="@+id/bigger_surface"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center" />
+        android:layout_height="match_parent">
+
+        <com.skyd.imomoe.view.component.ZoomView
+            android:id="@+id/surface_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center" />
+    </FrameLayout>
 
     <RelativeLayout
         android:id="@+id/thumb"
@@ -166,6 +172,20 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/progress" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/tv_restore_screen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/layout_bottom"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/shape_circle_corner_white_ripper_5"
+        android:backgroundTint="@color/gray_2"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="10dp"
+        android:text="@string/restore_screen"
+        android:textColor="@color/foreground_white"
+        android:textSize="17sp" />
 
     <ProgressBar
         android:id="@+id/bottom_progressbar"

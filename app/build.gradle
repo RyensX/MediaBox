@@ -30,7 +30,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 13
-        versionName "1.1.0"
+        versionName "1.1.0_beta"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -62,7 +62,7 @@ android {
             minifyEnabled false
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-
+            applicationIdSuffix '.debug' // 一台手机debug release共存
             ndk {
                 abiFilters 'armeabi', 'x86'
             }
@@ -73,7 +73,6 @@ android {
             zipAlignEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-
             ndk {
                 abiFilters 'armeabi'
             }
@@ -94,6 +93,9 @@ android {
         exclude 'META-INF/CHANGES'
         exclude 'META-INF/LICENSE'
         exclude 'about_files/LICENSE_CDDL.txt'
+        exclude 'DebugProbesKt.bin'
+        exclude 'jetty-dir.css'
+        exclude 'plugin.properties'
     }
 
     buildFeatures {
@@ -123,7 +125,7 @@ dependencies {
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
     implementation 'io.reactivex.rxjava3:rxjava:3.0.0'
     implementation 'com.hjq:xxpermissions:10.2'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1'
     implementation 'com.afollestad.material-dialogs:core:3.3.0'
     implementation 'com.afollestad.material-dialogs:input:3.3.0'
     implementation "androidx.room:room-runtime:2.2.5"

@@ -19,6 +19,57 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+            <RelativeLayout
+                android:id="@+id/rl_setting_activity_domain"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?android:selectableItemBackground"
+                android:paddingHorizontal="15dp"
+                android:paddingVertical="15dp">
+
+                <ImageView
+                    android:id="@+id/iv_setting_activity_domain"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:padding="1dp"
+                    android:src="@drawable/ic_language_main_color_2_24" />
+
+                <com.skyd.imomoe.view.component.textview.TypefaceTextView
+                    android:id="@+id/tv_setting_activity_domain"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_toStartOf="@id/tv_setting_activity_default_domain"
+                    android:layout_toEndOf="@id/iv_setting_activity_domain"
+                    android:text="@string/website_domain"
+                    android:textColor="@color/foreground_black"
+                    android:textSize="15sp"
+                    app:typeface="bPRTypeface" />
+
+                <com.skyd.imomoe.view.component.textview.TypefaceTextView
+                    android:id="@+id/tv_setting_activity_info_domain"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_setting_activity_domain"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_toStartOf="@id/tv_setting_activity_default_domain"
+                    android:layout_toEndOf="@id/iv_setting_activity_domain"
+                    android:textColor="@color/gray_1"
+                    android:textSize="12sp"
+                    app:typeface="bPRTypeface"
+                    tools:text="http://www.yhdm.io" />
+
+                <com.skyd.imomoe.view.component.textview.TypefaceTextView
+                    android:id="@+id/tv_setting_activity_default_domain"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:text="@string/recovery_default"
+                    android:textColor="@color/foreground_main_color_2" />
+            </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/rl_setting_activity_download_path"
@@ -42,6 +93,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_toStartOf="@id/iv_setting_activity_download_info"
                     android:layout_toEndOf="@id/iv_setting_activity_download_path"
                     android:text="@string/anime_download_path"
                     android:textColor="@color/foreground_black"
@@ -56,6 +109,7 @@
                     android:layout_marginStart="15dp"
                     android:layout_marginTop="2dp"
                     android:layout_marginEnd="16dp"
+                    android:layout_toStartOf="@id/iv_setting_activity_download_info"
                     android:layout_toEndOf="@id/iv_setting_activity_download_path"
                     android:ellipsize="marquee"
                     android:focusable="true"
@@ -65,6 +119,15 @@
                     android:textSize="12sp"
                     app:typeface="bPRTypeface"
                     tools:text="0" />
+
+                <ImageView
+                    android:id="@+id/iv_setting_activity_download_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/ic_info_white_24"
+                    android:backgroundTint="@color/foreground_main_color_2" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -203,7 +266,6 @@
                     android:layout_below="@id/tv_setting_activity_night_mode"
                     android:layout_marginStart="15dp"
                     android:layout_marginTop="2dp"
-                    android:layout_marginEnd="16dp"
                     android:layout_toStartOf="@id/cb_setting_activity_night_mode_follow_system"
                     android:layout_toEndOf="@id/iv_setting_activity_night_mode"
                     android:ellipsize="marquee"
@@ -327,58 +389,6 @@
                     android:textSize="12sp"
                     app:typeface="bPRTypeface"
                     tools:text="Github" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/rl_setting_activity_domain"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?android:selectableItemBackground"
-                android:paddingHorizontal="15dp"
-                android:paddingVertical="15dp">
-
-                <ImageView
-                    android:id="@+id/iv_setting_activity_domain"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_centerVertical="true"
-                    android:padding="1dp"
-                    android:src="@drawable/ic_language_main_color_2_24" />
-
-                <com.skyd.imomoe.view.component.textview.TypefaceTextView
-                    android:id="@+id/tv_setting_activity_domain"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:layout_toStartOf="@id/tv_setting_activity_default_domain"
-                    android:layout_toEndOf="@id/iv_setting_activity_domain"
-                    android:text="@string/website_domain"
-                    android:textColor="@color/foreground_black"
-                    android:textSize="15sp"
-                    app:typeface="bPRTypeface" />
-
-                <com.skyd.imomoe.view.component.textview.TypefaceTextView
-                    android:id="@+id/tv_setting_activity_info_domain"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_setting_activity_domain"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_toStartOf="@id/tv_setting_activity_default_domain"
-                    android:layout_toEndOf="@id/iv_setting_activity_domain"
-                    android:textColor="@color/gray_1"
-                    android:textSize="12sp"
-                    app:typeface="bPRTypeface"
-                    tools:text="http://www.yhdm.io" />
-
-                <com.skyd.imomoe.view.component.textview.TypefaceTextView
-                    android:id="@+id/tv_setting_activity_default_domain"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:text="@string/recovery_default"
-                    android:textColor="@color/main_color_2" />
             </RelativeLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

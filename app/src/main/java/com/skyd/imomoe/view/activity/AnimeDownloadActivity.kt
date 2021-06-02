@@ -6,11 +6,14 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.afollestad.materialdialogs.MaterialDialog
 import com.hjq.permissions.OnPermissionCallback
 import com.hjq.permissions.Permission
 import com.hjq.permissions.XXPermissions
 import com.skyd.imomoe.R
+import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.databinding.ActivityAnimeDownloadBinding
+import com.skyd.imomoe.util.Util
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.gone
 import com.skyd.imomoe.util.visible
@@ -21,6 +24,7 @@ class AnimeDownloadActivity : BaseActivity<ActivityAnimeDownloadBinding>() {
     private var mode = 0        //0是默认的，是番剧；1是番剧每一集
     private var actionBarTitle = ""
     private var directoryName = ""
+    private var path = 0
     private lateinit var viewModel: AnimeDownloadViewModel
     private lateinit var adapter: AnimeDownloadAdapter
 
@@ -30,8 +34,8 @@ class AnimeDownloadActivity : BaseActivity<ActivityAnimeDownloadBinding>() {
         mode = intent.getIntExtra("mode", 0)
         actionBarTitle =
             intent.getStringExtra("actionBarTitle") ?: getString(R.string.download_anime)
-        directoryName =
-            intent.getStringExtra("directoryName") ?: ""
+        directoryName = intent.getStringExtra("directoryName") ?: ""
+        path = intent.getIntExtra("path", 0)
 
         viewModel = ViewModelProvider(this).get(AnimeDownloadViewModel::class.java)
         adapter = AnimeDownloadAdapter(this, viewModel.animeCoverList)
@@ -39,6 +43,19 @@ class AnimeDownloadActivity : BaseActivity<ActivityAnimeDownloadBinding>() {
         mBinding.run {
             llAnimeDownloadActivityToolbar.tvToolbar1Title.text = actionBarTitle
             llAnimeDownloadActivityToolbar.ivToolbar1Back.setOnClickListener { finish() }
+            llAnimeDownloadActivityToolbar.ivToolbar1Button1.visible()
+            llAnimeDownloadActivityToolbar.ivToolbar1Button1.setImageResource(R.drawable.ic_info_white_24)
+            llAnimeDownloadActivityToolbar.ivToolbar1Button1.setOnClickListener {
+                MaterialDialog(this@AnimeDownloadActivity).show {
+                    title(res = R.string.attention)
+                    message(
+                        text = "由于新版Android存储机制变更，因此新缓存的动漫将存储在App的私有路径，" +
+                                "以前缓存的动漫依旧能够观看，其后面将有“旧”字样。新缓存的动漫与以前缓存的互不影响。" +
+                                "\n\n注意：新缓存的动漫将在App被卸载或数据被清除后丢失。"
+                    )
+                    positiveButton { dismiss() }
+                }
+            }
 
             rvAnimeDownloadActivity.layoutManager = LinearLayoutManager(this@AnimeDownloadActivity)
             rvAnimeDownloadActivity.adapter = adapter
@@ -63,7 +80,7 @@ class AnimeDownloadActivity : BaseActivity<ActivityAnimeDownloadBinding>() {
                     if (mode == 0) viewModel.getAnimeCover()
                     else if (mode == 1) {
                         mBinding.layoutAnimeDownloadLoading.layoutCircleProgressTextTip1.visible()
-                        viewModel.getAnimeCoverEpisode(directoryName)
+                        viewModel.getAnimeCoverEpisode(directoryName, path)
                     }
                 }
 

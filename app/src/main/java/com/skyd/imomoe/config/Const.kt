@@ -1,6 +1,7 @@
 package com.skyd.imomoe.config
 
 import android.os.Environment
+import com.skyd.imomoe.App
 import java.io.File
 
 interface Const {
@@ -110,11 +111,11 @@ interface Const {
 
     interface DownloadAnime {
         companion object {
-            var new: Boolean = false
+            var new: Boolean = true
             val animeFilePath: String
                 get() {
-                    return if (new) Environment.getExternalStorageDirectory()
-                        .toString() + "/Download/Imomoe/DownloadAnime/"
+                    return if (new) App.context.getExternalFilesDir(null)
+                        .toString() + "/DownloadAnime/"
                     else Environment.getExternalStorageDirectory()
                         .toString() + "/Imomoe/DownloadAnime/"
                 }

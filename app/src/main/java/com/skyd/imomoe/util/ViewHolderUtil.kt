@@ -205,6 +205,7 @@ class AnimeCover7ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val tvAnimeCover7Title: TypefaceTextView = view.findViewById(R.id.tv_anime_cover_7_title)
     val tvAnimeCover7Size: TypefaceTextView = view.findViewById(R.id.tv_anime_cover_7_size)
     val tvAnimeCover7Episodes: TextView = view.findViewById(R.id.tv_anime_cover_7_episodes)
+    val tvAnimeCover7OldPath: TextView = view.findViewById(R.id.tv_anime_cover_7_old_path)
 }
 
 class AnimeCover8ViewHolder(view: View) : RecyclerView.ViewHolder(view) {

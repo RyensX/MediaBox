@@ -8,10 +8,16 @@
     tools:context=".view.component.player.AnimeVideoPlayer">
 
     <FrameLayout
-        android:id="@+id/surface_container"
+        android:id="@+id/bigger_surface"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center" />
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:id="@+id/surface_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center" />
+    </FrameLayout>
 
     <RelativeLayout
         android:id="@+id/thumb"

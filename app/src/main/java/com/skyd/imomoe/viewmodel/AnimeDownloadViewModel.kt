@@ -27,27 +27,36 @@ class AnimeDownloadViewModel : ViewModel() {
 
     fun getAnimeCover() {
         GlobalScope.launch(Dispatchers.IO) {
-            val files = File(Const.DownloadAnime.animeFilePath).listFiles()
-            files?.let {
-                animeCoverList.clear()
-                for (file in it) {
-                    if (file.isDirectory) {
-                        val episodeCount = file.listFiles { file, s ->
-                            //查找文件名不以.temp结尾的文件
-                            !s.endsWith(".temp") && !s.endsWith(".xml")
-                        }?.size
-                        animeCoverList.add(
-                            animeCoverList.size, AnimeCoverBean(
-                                Const.ViewHolderTypeString.ANIME_COVER_7,
-                                Const.ActionUrl.ANIME_ANIME_DOWNLOAD_EPISODE + "/" + file.name,
-                                "",
-                                file.name,
-                                null,
-                                "",
-                                size = getFormatSize(getDirectorySize(file).toDouble()),
-                                episodeCount = episodeCount.toString() + "P"
+            val files = arrayOf(File(Const.DownloadAnime.animeFilePath).listFiles(),
+                Const.DownloadAnime.run {
+                    new = false
+                    val f = File(animeFilePath).listFiles()
+                    new = true
+                    f
+                })
+            animeCoverList.clear()
+            for (i: Int in 0..1) {
+                files[i]?.let {
+                    for (file in it) {
+                        if (file.isDirectory) {
+                            val episodeCount = file.listFiles { file, s ->
+                                //查找文件名不以.temp结尾的文件
+                                !s.endsWith(".temp") && !s.endsWith(".xml")
+                            }?.size
+                            animeCoverList.add(
+                                animeCoverList.size, AnimeCoverBean(
+                                    Const.ViewHolderTypeString.ANIME_COVER_7,
+                                    Const.ActionUrl.ANIME_ANIME_DOWNLOAD_EPISODE + "/" + file.name,
+                                    "",
+                                    file.name,
+                                    null,
+                                    "",
+                                    size = getFormatSize(getDirectorySize(file).toDouble()),
+                                    episodeCount = episodeCount.toString() + "P",
+                                    path = if (i == 0) 0 else 1
+                                )
                             )
-                        )
+                        }
                     }
                 }
             }
@@ -55,21 +64,27 @@ class AnimeDownloadViewModel : ViewModel() {
         }
     }
 
-    fun getAnimeCoverEpisode(directoryName: String) {
-        val files = File(Const.DownloadAnime.animeFilePath + directoryName).listFiles()
-
+    fun getAnimeCoverEpisode(directoryName: String, path: Int = 0) {
         //不支持重命名文件
         GlobalScope.launch(Dispatchers.IO) {
+            val animeFilePath = if (path == 0) Const.DownloadAnime.animeFilePath
+            else {
+                Const.DownloadAnime.new = false
+                val p = Const.DownloadAnime.animeFilePath
+                Const.DownloadAnime.new = true
+                p
+            }
+            val files = File(animeFilePath + directoryName).listFiles()
+            animeCoverList.clear()
             files?.let {
-                animeCoverList.clear()
-                val animeList = getAnimeFromXml(directoryName)
+                val animeList = getAnimeFromXml(directoryName, animeFilePath)
 
                 // xml里的文件名
                 val animeFilesName: MutableList<String?> = ArrayList()
                 // 文件夹下的文件名
                 val filesName: MutableList<String> = ArrayList()
                 // 获取文件夹下的文件名
-                for (file in files) filesName.add(file.name)
+                for (file in it) filesName.add(file.name)
                 //数据库中的数据
                 val animeMd5InDB = getAppDataBase().animeDownloadDao().getAnimeDownloadMd5List()
                 // 先删除xml里被用户删除的视频，再获取xml里的文件名（保证xml里的文件名都是存在的文件）
@@ -77,7 +92,7 @@ class AnimeDownloadViewModel : ViewModel() {
                 while (iterator.hasNext()) {
                     val anime = iterator.next()
                     if (anime.fileName !in filesName) {
-                        deleteAnimeFromXml(directoryName, anime)
+                        deleteAnimeFromXml(directoryName, anime, animeFilePath)
                         iterator.remove()
                     } else {
                         // 如果不在数据库中，则加入数据库
@@ -100,7 +115,7 @@ class AnimeDownloadViewModel : ViewModel() {
                                 .updateFileNameByMd5(unsavedAnime.md5, file.name)
                         }
                         if (unsavedAnime != null) {
-                            save2Xml(directoryName, unsavedAnime)
+                            save2Xml(directoryName, unsavedAnime, animeFilePath)
                             animeList.add(unsavedAnime)
                         }
                     }
@@ -108,9 +123,8 @@ class AnimeDownloadViewModel : ViewModel() {
 
                 for (anime in animeList) {
                     val fileName =
-                        Const.DownloadAnime.animeFilePath + directoryName.substring(
-                            1, directoryName.length
-                        ) + "/" + anime.fileName
+                        animeFilePath + directoryName.substring(1, directoryName.length) +
+                                "/" + anime.fileName
                     animeCoverList.add(
                         AnimeCoverBean(
                             Const.ViewHolderTypeString.ANIME_COVER_7,
@@ -125,19 +139,20 @@ class AnimeDownloadViewModel : ViewModel() {
                             size = getFormatSize(
                                 getFileSize(
                                     File(
-                                        Const.DownloadAnime.animeFilePath +
+                                        animeFilePath +
                                                 directoryName + "/" + anime.fileName
                                     )
                                 ).toDouble()
-                            )
+                            ),
+                            path = path
                         )
                     )
                 }
                 animeCoverList.sortWith(Comparator { o1, o2 ->
                     o1.title.compareTo(o2.title)
                 })
-                mldAnimeCoverList.postValue(true)
             }
+            mldAnimeCoverList.postValue(true)
         }
     }
 

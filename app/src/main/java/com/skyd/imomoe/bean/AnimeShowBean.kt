@@ -27,7 +27,10 @@ class AnimeCoverBean(       //番剧卡片
     var area: AnimeAreaBean? = null,
     var date: String? = null,
     var size: String? = null,           //视频大小，如300M
-    var episodeCount: String? = null    //集数
+    var episodeCount: String? = null,    //集数
+    // 0：/storage/emulated/0/Android/data/packname/files
+    // 1：/storage/emulated/0/
+    var path: Int = 0
 ) : BaseBean
 
 class AnimeTypeBean(       //番剧类型：包括类型名和链接

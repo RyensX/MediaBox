@@ -34,6 +34,7 @@ import java.io.Serializable
 
 class AnimeDownloadService : Service() {
     private val downloadServiceHashMap: HashMap<String, AnimeDownloadServiceDataBean> = HashMap()
+    private val folderAndFileNameHashMap: HashMap<String, String> = HashMap()
 
     private var notificationManager: NotificationManager? = null
     private var totalNotificationId = 1002
@@ -47,14 +48,16 @@ class AnimeDownloadService : Service() {
         }
         val url = intent.getStringExtra("url") ?: ""
         val key = intent.getStringExtra("key") ?: ""
+        val folderAndFileName = intent.getStringExtra("folderAndFileName") ?: ""
+        folderAndFileNameHashMap[key] = folderAndFileName
         downloadServiceHashMap[key] = AnimeDownloadServiceDataBean(url, totalNotificationId++)
         if (isNetWorkAvailable()) {
             createNotification(key)
             downloadAnime(key, url, object : DownloadListener {
                 override fun complete(fileName: String) {
                     deleteNotification(key)
-                    val animeDir = key.split("/").first()
-                    val title = key.split("/").last()
+                    val animeDir = folderAndFileName.split("/").first()
+                    val title = folderAndFileName.split("/").last()
                     val file = File("$animeFilePath$animeDir/$fileName")
                     if (file.exists()) {
                         downloadHashMap[key]?.postValue(AnimeDownloadStatus.COMPLETE)
@@ -65,7 +68,7 @@ class AnimeDownloadService : Service() {
                                 save2Xml(animeDir, entity)
                             }
                         }
-                        "${key}下载完成".showToast()
+                        "${folderAndFileName}下载完成".showToast()
                     } else {
                         if (downloadHashMap[key]?.value != AnimeDownloadStatus.CANCEL) {
                             downloadHashMap[key]?.postValue(
@@ -82,7 +85,7 @@ class AnimeDownloadService : Service() {
                     downloadHashMap[key]?.postValue(AnimeDownloadStatus.ERROR)
                 }
             })
-            "开始下载${key}...".showToast()
+            "开始下载${folderAndFileName}...".showToast()
         }
         return START_NOT_STICKY
     }
@@ -115,6 +118,7 @@ class AnimeDownloadService : Service() {
     }
 
     private fun createNotification(key: String) {
+        val folderAndFileName = folderAndFileNameHashMap[key]
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val importance = NotificationManager.IMPORTANCE_LOW
             createNotificationChannel(CHANNEL_ID, CHANNEL_NAME, importance)
@@ -136,7 +140,7 @@ class AnimeDownloadService : Service() {
         clickIntent.putExtra(UPDATE_NOTIFICATION_ID, notificationId)
         downloadServiceHashMap[key]?.builder?.let {
             it.setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("正在下载$key")
+                .setContentTitle("正在下载$folderAndFileName")
                 .setContentText("0%")
                 .setProgress(100, 0, false)
                 .setDeleteIntent(
@@ -157,7 +161,7 @@ class AnimeDownloadService : Service() {
                     )
                 )
                 .setAutoCancel(false)
-                .setTicker(key)
+                .setTicker(folderAndFileName)
         }
         val notification = downloadServiceHashMap[key]?.builder?.build()
         notificationManager?.notify(notificationId, notification)
@@ -196,7 +200,7 @@ class AnimeDownloadService : Service() {
         param: String,
         listener: DownloadListener
     ) {
-        val animeDir = key.split("/").first()
+        val animeDir = folderAndFileNameHashMap[key]?.split("/")?.first()
         downloadHashMap[key]?.postValue(AnimeDownloadStatus.DOWNLOADING)
         FileDownloader.getImpl().create(param)
             .setPath(animeFilePath + animeDir, true)

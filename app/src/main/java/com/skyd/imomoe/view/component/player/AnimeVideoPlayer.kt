@@ -13,6 +13,7 @@ import android.widget.*
 import androidx.core.view.children
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.shuyu.gsyvideoplayer.utils.Debuger
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer
@@ -30,9 +31,11 @@ import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.gone
 import com.skyd.imomoe.util.visible
 import com.skyd.imomoe.view.activity.DlnaActivity
+import com.skyd.imomoe.view.component.ZoomView
 import com.skyd.imomoe.view.component.textview.TypefaceTextView
 import java.io.File
 import java.io.Serializable
+import kotlin.math.abs
 
 
 class AnimeVideoPlayer : StandardGSYVideoPlayer {
@@ -49,6 +52,9 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
         const val HORIZONTAL_REVERSE = 1
         const val VERTICAL_REVERSE = 2
     }
+
+    // 正在双指缩放移动
+    private var doublePointerZoomingMoving = false
 
     private var mDownloadButton: ImageView? = null
 
@@ -106,8 +112,20 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
     // 硬解码CheckBox
     private var mMediaCodecCheckBox: CheckBox? = null
 
-    //右侧弹出栏
+    // 右侧弹出栏
     private var mRightContainer: ViewGroup? = null
+
+    // 还原屏幕
+    private var mRestoreScreenTextView: TextView? = null
+
+    // 屏幕已经双指放大移动了
+    private var mDoublePointerZoomMoved: Boolean = false
+
+    // 屏幕已经双指放大移动了
+    private var mBiggerSurface: ViewGroup? = null
+
+    // 控件没有显示
+    private var mUiCleared: Boolean = true
 
     constructor(context: Context) : super(context)
 
@@ -118,6 +136,7 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
     override fun getLayoutId() = if (mIfCurrentIsFullscreen)
         R.layout.layout_anime_video_player_land else R.layout.layout_anime_video_player
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun init(context: Context?) {
         super.init(context)
 
@@ -139,9 +158,29 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
         mMoreImageView = findViewById(R.id.iv_more)
         mOpenByExternalPlayerTextView = findViewById(R.id.tv_open_by_external_player)
 //        mMediaCodecCheckBox = findViewById(R.id.cb_media_codec)
+        mRestoreScreenTextView = findViewById(R.id.tv_restore_screen)
+        mBiggerSurface = findViewById(R.id.bigger_surface)
 
         mRightContainer?.gone()
         mSettingContainer?.gone()
+
+        mBiggerSurface?.setOnClickListener(this)
+        mBiggerSurface?.setOnTouchListener(this)
+
+        mRestoreScreenTextView?.setOnClickListener {
+            mTextureViewContainer?.run {
+                if (this is ZoomView) restore()
+                else {
+                    translationX = 0f
+                    translationY = 0f
+                    scaleX = 1f
+                    scaleY = 1f
+                    rotation = 0f
+                }
+                mDoublePointerZoomMoved = false
+                it.gone()
+            }
+        }
         mSpeedTextView?.setOnClickListener {
             mRightContainer?.let {
                 val adapter = SpeedAdapter(
@@ -283,6 +322,7 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
         super.hideAllWidget()
         setViewShowState(mRightContainer, INVISIBLE)
         setViewShowState(mSettingContainer, INVISIBLE)
+        setViewShowState(mRestoreScreenTextView, View.GONE)
     }
 
     override fun onClickUiToggle(e: MotionEvent?) {
@@ -304,6 +344,7 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
                 return
             }
         }
+        mUiCleared = false
         super.onClickUiToggle(e)
     }
 
@@ -491,11 +532,18 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
         initFirstLoad = true
     }
 
+    override fun changeUiToClear() {
+        super.changeUiToClear()
+        mRestoreScreenTextView?.gone()
+        mUiCleared = true
+    }
+
     //准备中
     override fun changeUiToPreparingShow() {
         super.changeUiToPreparingShow()
-        mBottomContainer.visibility = View.GONE
-        mStartButton.visibility = View.GONE
+        mBottomContainer.gone()
+        mStartButton.gone()
+        mRestoreScreenTextView?.gone()
     }
 
     //播放中
@@ -505,6 +553,8 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
             mBottomContainer.visibility = View.GONE
             mStartButton.visibility = View.GONE
         }
+        if (mDoublePointerZoomMoved) mRestoreScreenTextView?.visible()
+        else mRestoreScreenTextView?.gone()
         initFirstLoad = false
     }
 
@@ -512,6 +562,7 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
     override fun changeUiToCompleteShow() {
         super.changeUiToCompleteShow()
         mBottomContainer.visibility = View.GONE
+        mRestoreScreenTextView?.gone()
     }
 
     override fun onVideoResume(seek: Boolean) {
@@ -523,6 +574,88 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
 
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
+            }
+        }
+    }
+
+    override fun onClick(v: View) {
+        super.onClick(v)
+
+        val i = v.id
+        // bigger_surface代替原有的surface_container执行点击动作
+        if (i == R.id.bigger_surface && mCurrentState == GSYVideoView.CURRENT_STATE_ERROR) {
+            if (mVideoAllCallBack != null) {
+                Debuger.printfLog("onClickStartError")
+                mVideoAllCallBack.onClickStartError(mOriginUrl, mTitle, this)
+            }
+            prepareVideo()
+        } else if (i == R.id.bigger_surface) {
+            if (mVideoAllCallBack != null && isCurrentMediaListener) {
+                if (mIfCurrentIsFullscreen) {
+                    Debuger.printfLog("onClickBlankFullscreen")
+                    mVideoAllCallBack.onClickBlankFullscreen(mOriginUrl, mTitle, this)
+                } else {
+                    Debuger.printfLog("onClickBlank")
+                    mVideoAllCallBack.onClickBlank(mOriginUrl, mTitle, this)
+                }
+            }
+            startDismissControlViewTimer()
+        }
+    }
+
+    override fun onTouch(v: View?, event: MotionEvent): Boolean {
+        // 不是全屏下，不使用双指操作
+        if (!mIfCurrentIsFullscreen) return super.onTouch(v, event)
+        if (v?.id == R.id.surface_container) {
+            if (event.pointerCount > 1) {
+                // 如果是surface_container并且触摸手指数大于1，则return false拦截
+                // 不让super的代码执行，表明正在双指放大移动旋转
+                doublePointerZoomingMoving = true
+                mDoublePointerZoomMoved = true
+                if (!mUiCleared) mRestoreScreenTextView?.visible()
+                // 下面用bigger_surface代替原有的surface_container执行手势动作
+                return false
+            }
+        }
+        // 当正在双指操作时，禁止执行super的代码
+        if (doublePointerZoomingMoving) {
+            // 如果双指松开，则标志不是在移动
+            if (event.action == MotionEvent.ACTION_UP) doublePointerZoomingMoving = false
+            return false
+        }
+        return super.onTouch(v, event).apply {
+            if (v?.id == R.id.bigger_surface) {
+                val x = event.x
+                val y = event.y
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN -> touchSurfaceDown(x, y)
+                    MotionEvent.ACTION_MOVE -> {
+                        val deltaX = x - mDownX
+                        val deltaY = y - mDownY
+                        val absDeltaX = abs(deltaX)
+                        val absDeltaY = abs(deltaY)
+                        if (mIfCurrentIsFullscreen && mIsTouchWigetFull
+                            || mIsTouchWiget && !mIfCurrentIsFullscreen
+                        ) {
+                            if (!mChangePosition && !mChangeVolume && !mBrightness) {
+                                touchSurfaceMoveFullLogic(absDeltaX, absDeltaY)
+                            }
+                        }
+                        touchSurfaceMove(deltaX, deltaY, y)
+                    }
+                    MotionEvent.ACTION_UP -> {
+                        startDismissControlViewTimer()
+                        touchSurfaceUp()
+                        Debuger.printfLog(
+                            this.hashCode()
+                                .toString() + "------------------------------ surface_container ACTION_UP"
+                        )
+                        startProgressTimer()
+                        //不要和隐藏虚拟按键后，滑出虚拟按键冲突
+                        if (mHideKey && mShowVKey) return true
+                    }
+                }
+                gestureDetector.onTouchEvent(event)
             }
         }
     }
