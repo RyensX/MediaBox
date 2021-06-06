@@ -27,7 +27,7 @@ class PlayViewModel : ViewModel() {
     var animeCover: ImageBean = ImageBean("", "", "", "")
     var mldAnimeCover: MutableLiveData<Boolean> = MutableLiveData()
     var mldPlayBean: MutableLiveData<PlayBean> = MutableLiveData()
-    var playBeanDataList: MutableList<AnimeDetailBean> = ArrayList()
+    var playBeanDataList: MutableList<IAnimeDetailBean> = ArrayList()
     val episodesList: MutableList<AnimeEpisodeDataBean> = ArrayList()
     var currentEpisodeIndex = 0
     val mldEpisodesList: MutableLiveData<Boolean> = MutableLiveData()
@@ -165,15 +165,8 @@ class PlayViewModel : ViewModel() {
                                         )
                                     }
                                     "imgs" -> {
-                                        playBeanDataList.add(
-                                            AnimeDetailBean(
-                                                ViewHolderTypeString.GRID_RECYCLER_VIEW_1,
-                                                "", "", "",
-                                                animeCoverList = ParseHtmlUtil.parseImg(
-                                                    areaChildren[j],
-                                                    url
-                                                )
-                                            )
+                                        playBeanDataList.addAll(
+                                            ParseHtmlUtil.parseImg(areaChildren[j], url)
                                         )
                                     }
                                 }

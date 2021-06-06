@@ -1,7 +1,6 @@
 package com.skyd.imomoe.view.adapter
 
 import android.view.View
-import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
@@ -9,8 +8,6 @@ import com.skyd.imomoe.bean.FavoriteAnimeBean
 import com.skyd.imomoe.util.AnimeCover8ViewHolder
 import com.skyd.imomoe.util.Util.process
 import com.skyd.imomoe.util.Util.showToast
-import com.skyd.imomoe.util.ViewHolderUtil.Companion.getItemViewType
-import com.skyd.imomoe.util.ViewHolderUtil.Companion.getViewHolder
 import com.skyd.imomoe.util.glide.GlideUtil.loadImage
 import com.skyd.imomoe.util.gone
 import com.skyd.imomoe.util.visible
@@ -19,18 +16,7 @@ import com.skyd.imomoe.view.activity.FavoriteActivity
 class FavoriteAdapter(
     val activity: FavoriteActivity,
     private val dataList: List<FavoriteAnimeBean>
-) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
-    override fun getItemViewType(position: Int): Int = getItemViewType(dataList[position])
-
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): RecyclerView.ViewHolder =
-        getViewHolder(parent, viewType)
-
-    override fun getItemCount(): Int = dataList.size
+) : BaseRvAdapter(dataList) {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = dataList[position]

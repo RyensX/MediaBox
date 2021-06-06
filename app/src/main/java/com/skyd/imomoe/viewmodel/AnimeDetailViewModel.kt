@@ -4,12 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
-import com.skyd.imomoe.bean.AnimeDetailBean
-import com.skyd.imomoe.bean.AnimeInfoBean
-import com.skyd.imomoe.bean.AnimeTypeBean
-import com.skyd.imomoe.bean.ImageBean
+import com.skyd.imomoe.bean.*
 import com.skyd.imomoe.config.Api
-import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.config.Const.ViewHolderTypeString
 import com.skyd.imomoe.util.JsoupUtil
 import com.skyd.imomoe.util.ParseHtmlUtil.parseBotit
@@ -28,7 +24,7 @@ import kotlin.collections.ArrayList
 class AnimeDetailViewModel : ViewModel() {
     var cover: ImageBean = ImageBean("", "", "", "")
     var title: String = ""
-    var animeDetailList: MutableList<AnimeDetailBean> = ArrayList()
+    var animeDetailList: MutableList<IAnimeDetailBean> = ArrayList()
     var mldAnimeDetailList: MutableLiveData<Boolean> = MutableLiveData()
 
     //www.yhdm.io
@@ -158,15 +154,8 @@ class AnimeDetailViewModel : ViewModel() {
                                             )
                                         }
                                         "img" -> {         //系列动漫推荐
-                                            animeDetailList.add(
-                                                AnimeDetailBean(
-                                                    ViewHolderTypeString.GRID_RECYCLER_VIEW_1,
-                                                    "",
-                                                    "",
-                                                    "",
-                                                    null,
-                                                    parseImg(fireLChildren[k], url)
-                                                )
+                                            animeDetailList.addAll(
+                                                parseImg(fireLChildren[k], url)
                                             )
                                         }
                                     }

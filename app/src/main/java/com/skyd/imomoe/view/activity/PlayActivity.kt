@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -26,7 +25,6 @@ import com.skyd.imomoe.bean.FavoriteAnimeBean
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.config.Const.ActionUrl.Companion.ANIME_DETAIL
-import com.skyd.imomoe.config.Const.ActionUrl.Companion.ANIME_PLAY
 import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.databinding.ActivityPlayBinding
 import com.skyd.imomoe.util.AnimeEpisode2ViewHolder
@@ -34,15 +32,16 @@ import com.skyd.imomoe.util.MD5.getMD5
 import com.skyd.imomoe.util.Util.dp2px
 import com.skyd.imomoe.util.Util.getDetailLinkByEpisodeLink
 import com.skyd.imomoe.util.Util.getResColor
-import com.skyd.imomoe.util.Util.getWebsiteLinkSuffix
 import com.skyd.imomoe.util.Util.openVideoByExternalPlayer
 import com.skyd.imomoe.util.Util.setColorStatusBar
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.downloadanime.AnimeDownloadHelper
 import com.skyd.imomoe.util.gone
 import com.skyd.imomoe.view.adapter.AnimeDetailAdapter
-import com.skyd.imomoe.view.adapter.AnimeEpisodeItemDecoration
+import com.skyd.imomoe.view.adapter.decoration.AnimeEpisodeItemDecoration
 import com.skyd.imomoe.view.adapter.PlayAdapter
+import com.skyd.imomoe.view.adapter.decoration.AnimeShowItemDecoration
+import com.skyd.imomoe.view.adapter.spansize.PlaySpanSize
 import com.skyd.imomoe.view.component.player.AnimeVideoPlayer
 import com.skyd.imomoe.view.component.player.DetailPlayerActivity
 import com.skyd.imomoe.view.fragment.MoreDialogFragment
@@ -129,7 +128,10 @@ class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>() {
         }
 
         mBinding.run {
-            rvPlayActivity.layoutManager = LinearLayoutManager(this@PlayActivity)
+            rvPlayActivity.layoutManager = GridLayoutManager(this@PlayActivity, 4)
+                .apply { spanSizeLookup = PlaySpanSize(adapter) }
+            // 复用AnimeShow的ItemDecoration
+            rvPlayActivity.addItemDecoration(AnimeShowItemDecoration())
             rvPlayActivity.setHasFixedSize(true)
             rvPlayActivity.adapter = adapter
 

@@ -17,15 +17,11 @@ import org.fourthline.cling.model.meta.Device
 class UpnpAdapter(
     val activity: DlnaActivity,
     private val dataList: List<Device<*, *, *>?>
-) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemViewType(position: Int): Int = ViewHolderTypeInt.UPNP_DEVICE_1
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): RecyclerView.ViewHolder =
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
         getViewHolder(parent, viewType)
 
     override fun getItemCount(): Int = dataList.size

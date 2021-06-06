@@ -1,4 +1,4 @@
-package com.skyd.imomoe.view.adapter
+package com.skyd.imomoe.view.adapter.decoration
 
 import android.graphics.Rect
 import android.view.View

@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.ActivityFavoriteBinding
 import com.skyd.imomoe.util.Util.getResColor
-import com.skyd.imomoe.view.adapter.AnimeEpisodeItemDecoration
+import com.skyd.imomoe.view.adapter.decoration.AnimeEpisodeItemDecoration
 import com.skyd.imomoe.view.adapter.FavoriteAdapter
 import com.skyd.imomoe.viewmodel.FavoriteViewModel
 

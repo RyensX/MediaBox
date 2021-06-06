@@ -18,12 +18,20 @@ class AnimeInfoBean(
 class AnimeDetailBean(
     override var type: String,
     override var actionUrl: String,
-    var title: String,
-    var describe: String,
-    var episodeList: List<AnimeEpisodeDataBean>? = null,
-    var animeCoverList: List<AnimeCoverBean>? = null,
-    var headerInfo: AnimeInfoBean? = null
-) : BaseBean
+    override var title: String,
+    override var describe: String?,
+    override var episodeList: List<AnimeEpisodeDataBean>? = null,
+    override var animeCoverList: List<AnimeCoverBean>? = null,
+    override var headerInfo: AnimeInfoBean? = null
+) : IAnimeDetailBean
+
+interface IAnimeDetailBean : BaseBean {
+    var title: String
+    var describe: String?
+    var episodeList: List<AnimeEpisodeDataBean>?
+    var animeCoverList: List<AnimeCoverBean>?
+    var headerInfo: AnimeInfoBean?
+}
 
 //每一集
 class AnimeEpisodeDataBean(

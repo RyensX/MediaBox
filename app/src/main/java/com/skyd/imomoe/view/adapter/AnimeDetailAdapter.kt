@@ -11,8 +11,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
-import com.skyd.imomoe.bean.AnimeDetailBean
+import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.bean.AnimeEpisodeDataBean
+import com.skyd.imomoe.bean.IAnimeDetailBean
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.util.*
 import com.skyd.imomoe.util.glide.GlideUtil.loadImage
@@ -23,37 +24,32 @@ import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.ViewHolderUtil.Companion.getItemViewType
 import com.skyd.imomoe.util.ViewHolderUtil.Companion.getViewHolder
 import com.skyd.imomoe.view.activity.AnimeDetailActivity
+import com.skyd.imomoe.view.adapter.decoration.AnimeCoverItemDecoration
+import com.skyd.imomoe.view.adapter.decoration.AnimeEpisodeItemDecoration
 import com.skyd.imomoe.view.component.BottomSheetRecyclerView
 
 class AnimeDetailAdapter(
     val activity: AnimeDetailActivity,
-    private val dataList: List<AnimeDetailBean>
-) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private val dataList: List<IAnimeDetailBean>
+) : BaseRvAdapter(dataList) {
 
     private val gridItemDecoration = AnimeCoverItemDecoration()
+
     private val animeEpisodeItemDecoration = AnimeEpisodeItemDecoration()
-
-    override fun getItemViewType(position: Int): Int = getItemViewType(dataList[position])
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
-        getViewHolder(parent, viewType)
-
-    override fun getItemCount(): Int = dataList.size
 
     @SuppressLint("ClickableViewAccessibility", "SetTextI18n")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = dataList[position]
 
-        when (holder) {
-            is Header1ViewHolder -> {
+        when {
+            holder is Header1ViewHolder -> {
                 holder.tvHeader1Title.textSize = 15f
                 holder.tvHeader1Title.text = item.title
                 holder.tvHeader1Title.setTextColor(
                     activity.getResColor(R.color.foreground_white)
                 )
             }
-            is GridRecyclerView1ViewHolder -> {
+            holder is GridRecyclerView1ViewHolder -> {
                 item.animeCoverList?.let {
                     val layoutManager = GridLayoutManager(activity, 4)
                     holder.rvGridRecyclerView1.post {
@@ -73,7 +69,7 @@ class AnimeDetailAdapter(
                         )
                 }
             }
-            is HorizontalRecyclerView1ViewHolder -> {
+            holder is HorizontalRecyclerView1ViewHolder -> {
                 item.episodeList?.let {
                     if (holder.rvHorizontalRecyclerView1.adapter == null) {
                         holder.rvHorizontalRecyclerView1.adapter =
@@ -88,14 +84,14 @@ class AnimeDetailAdapter(
                     }
                 }
             }
-            is AnimeDescribe1ViewHolder -> {
+            holder is AnimeDescribe1ViewHolder -> {
                 holder.tvAnimeDescribe1.text = item.describe
                 holder.tvAnimeDescribe1.setOnClickListener { }
                 holder.tvAnimeDescribe1.setTextColor(
                     activity.getResColor(R.color.foreground_white)
                 )
             }
-            is AnimeInfo1ViewHolder -> {
+            holder is AnimeInfo1ViewHolder -> {
                 item.headerInfo?.let {
                     holder.ivAnimeInfo1Cover.setTag(R.id.image_view_tag, it.cover.url)
                     if (holder.ivAnimeInfo1Cover.getTag(R.id.image_view_tag) == it.cover.url) {
@@ -155,6 +151,27 @@ class AnimeDetailAdapter(
                     }
                 }
             }
+            holder is AnimeCover1ViewHolder && item is AnimeCoverBean -> {
+                holder.ivAnimeCover1Cover.setTag(R.id.image_view_tag, item.cover?.url)
+                holder.tvAnimeCover1Title.setTextColor(activity.getResColor(R.color.foreground_white))
+                if (holder.ivAnimeCover1Cover.getTag(R.id.image_view_tag) == item.cover?.url) {
+                    holder.ivAnimeCover1Cover.loadImage(
+                        activity,
+                        item.cover?.url ?: "",
+                        referer = item.cover?.referer
+                    )
+                }
+                holder.tvAnimeCover1Title.text = item.title
+                if (item.episode.isBlank()) {
+                    holder.tvAnimeCover1Episode.gone()
+                } else {
+                    holder.tvAnimeCover1Episode.visible()
+                    holder.tvAnimeCover1Episode.text = item.episode
+                }
+                holder.itemView.setOnClickListener {
+                    process(activity, item.actionUrl)
+                }
+            }
             else -> {
                 holder.itemView.visibility = View.GONE
                 (App.context.resources.getString(R.string.unknown_view_holder) + position).showToast()
@@ -196,19 +213,7 @@ class AnimeDetailAdapter(
         private val dialog: Dialog? = null,
         private val showType: Int = 0,    //0是横向，1是三列
         private val detailPartUrl: String = ""
-    ) :
-        RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
-        override fun getItemViewType(position: Int): Int =
-            getItemViewType(dataList[position])
-
-        override fun onCreateViewHolder(
-            parent: ViewGroup,
-            viewType: Int
-        ): RecyclerView.ViewHolder =
-            getViewHolder(parent, viewType)
-
-        override fun getItemCount(): Int = dataList.size
+    ) : BaseRvAdapter(dataList) {
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             val item = dataList[position]

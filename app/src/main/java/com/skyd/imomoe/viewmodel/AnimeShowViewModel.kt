@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeShowBean
+import com.skyd.imomoe.bean.IAnimeShowBean
 import com.skyd.imomoe.bean.PageNumberBean
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.config.Const
@@ -28,7 +29,7 @@ import java.util.*
 class AnimeShowViewModel : ViewModel() {
     var childViewPool: SerializableRecycledViewPool? = null
     var viewPool: SerializableRecycledViewPool? = null
-    var animeShowList: MutableList<AnimeShowBean> = ArrayList()
+    var animeShowList: MutableList<IAnimeShowBean> = ArrayList()
     var mldGetAnimeShowList: MutableLiveData<Int> = MutableLiveData()   // value：-1错误；0重新获取；1刷新
     var pageNumberBean: PageNumberBean? = null
     var newPageIndex: Pair<Int, Int>? = null
@@ -56,7 +57,7 @@ class AnimeShowViewModel : ViewModel() {
                                 animeShowList.add(
                                     AnimeShowBean(
                                         Const.ViewHolderTypeString.BANNER_1, "",
-                                        "", "", "", "", "",
+                                        "", "", "", null, "",
                                         parseHeroWrap(foucsBgChildren[j], url)
                                     )
                                 )
@@ -82,7 +83,7 @@ class AnimeShowViewModel : ViewModel() {
                                             "",
                                             elements[j].select("h2").text(),
                                             "",
-                                            "",
+                                            null,
                                             ""
                                         )
                                     )
@@ -94,33 +95,21 @@ class AnimeShowViewModel : ViewModel() {
                                             Api.MAIN_URL + a.attr("href"),
                                             a.text(),
                                             elements[j].select("span").select("a").text(),
-                                            "",
+                                            null,
                                             ""
                                         )
                                     )
                                 }
                             }
                             "img", "imgs" -> {
-                                animeShowList.add(
-                                    AnimeShowBean(
-                                        Const.ViewHolderTypeString.GRID_RECYCLER_VIEW_1,
-                                        "", "", "", "", "", "",
-                                        parseImg(elements[j], url)
-                                    )
-                                )
+                                animeShowList.addAll(parseImg(elements[j], url))
                             }
                             "fire l" -> {       //右侧前半tab内容
                                 val firsLChildren = elements[j].children()
                                 for (k in firsLChildren.indices) {
                                     when (firsLChildren[k].className()) {
                                         "lpic" -> {
-                                            animeShowList.add(
-                                                AnimeShowBean(
-                                                    Const.ViewHolderTypeString.GRID_RECYCLER_VIEW_1,
-                                                    "", "", "", "", "", "",
-                                                    parseLpic(firsLChildren[k], url)
-                                                )
-                                            )
+                                            animeShowList.addAll(parseLpic(firsLChildren[k], url))
                                         }
                                         "pages" -> {
                                             pageNumberBean = parseNextPages(firsLChildren[k])
@@ -129,22 +118,10 @@ class AnimeShowViewModel : ViewModel() {
                                 }
                             }
                             "dnews" -> {       //右侧后半tab内容，cover4
-                                animeShowList.add(
-                                    AnimeShowBean(
-                                        Const.ViewHolderTypeString.GRID_RECYCLER_VIEW_1,
-                                        "", "", "", "", "", "",
-                                        parseDnews(elements[j], url)
-                                    )
-                                )
+                                animeShowList.addAll(parseDnews(elements[j], url))
                             }
                             "topli" -> {       //右侧后半tab内容，cover5
-                                animeShowList.add(
-                                    AnimeShowBean(
-                                        Const.ViewHolderTypeString.GRID_RECYCLER_VIEW_1,
-                                        "", "", "", "", "", "",
-                                        parseTopli(elements[j])
-                                    )
-                                )
+                                animeShowList.addAll(parseTopli(elements[j]))
                             }
                             "pages" -> {
                                 pageNumberBean = parseNextPages(elements[j])

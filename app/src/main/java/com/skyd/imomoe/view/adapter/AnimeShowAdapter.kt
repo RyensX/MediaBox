@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeCoverBean
-import com.skyd.imomoe.bean.AnimeShowBean
+import com.skyd.imomoe.bean.IAnimeShowBean
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.util.*
 import com.skyd.imomoe.util.glide.GlideUtil.loadImage
@@ -26,17 +26,15 @@ import com.skyd.imomoe.view.component.bannerview.adapter.MyCycleBannerAdapter
 import com.skyd.imomoe.view.component.bannerview.indicator.DotIndicator
 import com.skyd.imomoe.config.Const.ViewHolderTypeString
 import com.skyd.imomoe.util.Util.getResColor
+import com.skyd.imomoe.view.adapter.decoration.AnimeCoverItemDecoration
 
 class AnimeShowAdapter(
     val fragment: AnimeShowFragment,
-    private val dataList: List<AnimeShowBean>,
+    private val dataList: List<IAnimeShowBean>,
     private val childViewPool: RecyclerView.RecycledViewPool = RecyclerView.RecycledViewPool()
-) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+) : BaseRvAdapter(dataList) {
 
     private val gridItemDecoration = AnimeCoverItemDecoration()
-
-    override fun getItemViewType(position: Int): Int = getItemViewType(dataList[position])
 
     override fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder) {
         super.onViewDetachedFromWindow(holder)
@@ -60,7 +58,7 @@ class AnimeShowAdapter(
         parent: ViewGroup,
         viewType: Int
     ): RecyclerView.ViewHolder {
-        val holder = getViewHolder(parent, viewType)
+        val holder = super.onCreateViewHolder(parent, viewType)
         when (holder) {
             is GridRecyclerView1ViewHolder -> {
                 holder.rvGridRecyclerView1.setRecycledViewPool(childViewPool)
@@ -70,13 +68,11 @@ class AnimeShowAdapter(
         return holder
     }
 
-    override fun getItemCount(): Int = dataList.size
-
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = dataList[position]
 
-        when (holder) {
-            is GridRecyclerView1ViewHolder -> {
+        when {
+            holder is GridRecyclerView1ViewHolder -> {
                 item.animeCoverList?.let {
                     if (it.isNotEmpty()) {
                         val itemDecorationCount = holder.rvGridRecyclerView1.itemDecorationCount
@@ -127,19 +123,151 @@ class AnimeShowAdapter(
                         fragment.activity?.let { it1 -> GridRecyclerView1Adapter(it1, it) }
                 }
             }
-            is Header1ViewHolder -> {
+            holder is Header1ViewHolder -> {
                 fragment.activity?.let {
                     holder.tvHeader1Title.setTextColor(it.getResColor(R.color.foreground_main_color_2))
                 }
                 holder.tvHeader1Title.text = item.title
             }
-            is Banner1ViewHolder -> {
+            holder is Banner1ViewHolder -> {
                 fragment.activity?.let {
                     item.animeCoverList?.let { it1 ->
                         holder.banner1.setAdapter(MyCycleBannerAdapter(it, it1))
                         holder.banner1.setIndicator(DotIndicator(it))
                         holder.banner1.startPlay(5000)
                     }
+                }
+            }
+            holder is AnimeCover1ViewHolder && item is AnimeCoverBean -> {
+                holder.ivAnimeCover1Cover.setTag(R.id.image_view_tag, item.cover?.url)
+                fragment.activity?.let { activity ->
+                    if (holder.ivAnimeCover1Cover.getTag(R.id.image_view_tag) == item.cover?.url) {
+                        holder.ivAnimeCover1Cover.loadImage(
+                            activity,
+                            item.cover?.url ?: "",
+                            referer = item.cover?.referer
+                        )
+                    }
+                }
+                holder.tvAnimeCover1Title.text = item.title
+                if (item.episode.isBlank()) {
+                    holder.tvAnimeCover1Episode.gone()
+                } else {
+                    holder.tvAnimeCover1Episode.visible()
+                    holder.tvAnimeCover1Episode.text = item.episode
+                }
+                holder.itemView.setOnClickListener {
+                    process(fragment, item.actionUrl)
+                }
+            }
+            holder is AnimeCover3ViewHolder && item is AnimeCoverBean -> {
+                holder.ivAnimeCover3Cover.setTag(R.id.image_view_tag, item.cover?.url)
+                fragment.activity?.let { activity ->
+                    if (holder.ivAnimeCover3Cover.getTag(R.id.image_view_tag) == item.cover?.url) {
+                        holder.ivAnimeCover3Cover.loadImage(
+                            activity,
+                            item.cover?.url ?: "",
+                            referer = item.cover?.referer
+                        )
+                    }
+                }
+                holder.tvAnimeCover3Title.text = item.title
+                if (item.episode.isBlank()) {
+                    holder.tvAnimeCover3Episode.gone()
+                } else {
+                    holder.tvAnimeCover3Episode.visible()
+                    holder.tvAnimeCover3Episode.text = item.episode
+                }
+                item.animeType?.let {
+                    holder.flAnimeCover3Type.removeAllViews()
+                    for (i in it.indices) {
+                        val tvFlowLayout: TextView = fragment.activity?.layoutInflater
+                            ?.inflate(
+                                R.layout.item_anime_type_1,
+                                holder.flAnimeCover3Type,
+                                false
+                            ) as TextView
+                        tvFlowLayout.text = it[i].title
+                        tvFlowLayout.setBackgroundResource(R.drawable.shape_fill_circle_corner_main_color_2_50)
+                        tvFlowLayout.setOnClickListener { _ ->
+                            //此处是”类型“，若要修改，需要注意Tab大分类是否还是”类型“
+                            process(
+                                fragment,
+                                "${Const.ActionUrl.ANIME_CLASSIFY}${it[i].actionUrl}类型/${it[i].title}"
+                            )
+                        }
+                        holder.flAnimeCover3Type.addView(tvFlowLayout)
+                    }
+                }
+                holder.tvAnimeCover3Describe.text = item.describe
+                holder.itemView.setOnClickListener {
+                    process(fragment, item.actionUrl)
+                }
+            }
+            holder is AnimeCover4ViewHolder && item is AnimeCoverBean -> {
+                holder.ivAnimeCover4Cover.setTag(R.id.image_view_tag, item.cover?.url)
+                fragment.activity?.let { activity ->
+                    if (holder.ivAnimeCover4Cover.getTag(R.id.image_view_tag) == item.cover?.url) {
+                        holder.ivAnimeCover4Cover.loadImage(
+                            activity,
+                            item.cover?.url ?: "",
+                            referer = item.cover?.referer
+                        )
+                    }
+                }
+                holder.tvAnimeCover4Title.text = item.title
+                holder.itemView.setOnClickListener {
+                    process(fragment, item.actionUrl)
+                }
+            }
+            holder is AnimeCover5ViewHolder && item is AnimeCoverBean -> {
+                holder.tvAnimeCover5Rank.gone()
+                if (item.area == null || item.area?.title == "") {
+                    holder.tvAnimeCover5Area.gone()
+                    holder.tvAnimeCover5Date.post {
+                        holder.tvAnimeCover5Date.setPadding(0, 0, 0, 0)
+                    }
+                } else {
+                    holder.tvAnimeCover5Area.setBackgroundResource(R.drawable.shape_fill_circle_corner_main_color_2_50)
+                    holder.tvAnimeCover5Area.visible()
+                    holder.tvAnimeCover5Date.post {
+                        holder.tvAnimeCover5Date.setPadding(dp2px(12f), 0, 0, 0)
+                    }
+                }
+                if (item.date == null || item.date == "") {
+                    holder.tvAnimeCover5Date.gone()
+                } else {
+                    holder.tvAnimeCover5Date.visible()
+                }
+                holder.tvAnimeCover5Title.text = item.title
+                holder.tvAnimeCover5Area.text = item.area?.title
+                holder.tvAnimeCover5Date.text = item.date
+                holder.tvAnimeCover5Episode.text = item.episodeClickable?.title
+                if (holder.tvAnimeCover5Area.visibility == View.GONE &&
+                    holder.tvAnimeCover5Date.visibility == View.GONE
+                ) {
+                    holder.tvAnimeCover5Title.post {
+                        holder.tvAnimeCover5Title.setPadding(
+                            holder.tvAnimeCover5Title.paddingStart,
+                            dp2px(12f),
+                            holder.tvAnimeCover5Title.paddingEnd,
+                            dp2px(12f)
+                        )
+                    }
+                }
+                holder.itemView.setOnClickListener {
+                    if (item.episodeClickable?.actionUrl.equals(item.actionUrl))
+                        process(fragment, item.episodeClickable?.actionUrl)
+                    else process(fragment, item.episodeClickable?.actionUrl + item.actionUrl)
+                }
+                holder.tvAnimeCover5Area.setOnClickListener {
+                    process(
+                        fragment,
+                        "${Const.ActionUrl.ANIME_CLASSIFY}${item.area?.actionUrl}地区/${item.area?.title}"
+                    )
+                }
+                holder.tvAnimeCover5Title.setOnClickListener {
+                    process(fragment, item.actionUrl)
                 }
             }
             else -> {
@@ -153,24 +281,12 @@ class AnimeShowAdapter(
         private val activity: Activity,
         private val dataList: List<AnimeCoverBean>,
         private var titleColor: Int = activity.getResColor(R.color.foreground_black)
-    ) :
-        RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    ) : BaseRvAdapter(dataList) {
         //必须四个参数都不是-1才生效
         var padding = Rect(-1, -1, -1, -1)
 
         //是否显示排行榜排行，目前仅支持animeCover5
         var showRankNumber = false
-
-        override fun getItemViewType(position: Int): Int =
-            getItemViewType(dataList[position])
-
-        override fun onCreateViewHolder(
-            parent: ViewGroup,
-            viewType: Int
-        ): RecyclerView.ViewHolder =
-            getViewHolder(parent, viewType)
-
-        override fun getItemCount(): Int = dataList.size
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             val item = dataList[position]

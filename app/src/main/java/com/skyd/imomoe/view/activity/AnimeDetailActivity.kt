@@ -10,6 +10,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.SimpleTarget
@@ -27,6 +28,8 @@ import com.skyd.imomoe.util.Util.setTransparentStatusBar
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.visible
 import com.skyd.imomoe.view.adapter.AnimeDetailAdapter
+import com.skyd.imomoe.view.adapter.decoration.AnimeShowItemDecoration
+import com.skyd.imomoe.view.adapter.spansize.AnimeDetailSpanSize
 import com.skyd.imomoe.view.fragment.ShareDialogFragment
 import com.skyd.imomoe.viewmodel.AnimeDetailViewModel
 import kotlinx.coroutines.Dispatchers
@@ -111,7 +114,10 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
         }
 
         mBinding.run {
-            rvAnimeDetailActivityInfo.layoutManager = LinearLayoutManager(this@AnimeDetailActivity)
+            rvAnimeDetailActivityInfo.layoutManager = GridLayoutManager(this@AnimeDetailActivity, 4)
+                .apply { spanSizeLookup = AnimeDetailSpanSize(adapter) }
+            // 复用AnimeShow的ItemDecoration
+            rvAnimeDetailActivityInfo.addItemDecoration(AnimeShowItemDecoration())
             rvAnimeDetailActivityInfo.adapter = adapter
 
             srlAnimeDetailActivity.setOnRefreshListener { viewModel.getAnimeDetailData(partUrl) }

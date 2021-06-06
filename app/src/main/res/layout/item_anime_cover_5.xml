@@ -33,6 +33,7 @@
         android:maxLines="2"
         android:paddingTop="9dp"
         android:paddingBottom="5dp"
+        android:textColor="@color/foreground_black"
         android:textSize="15sp"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toStartOf="@id/tv_anime_cover_5_episode"

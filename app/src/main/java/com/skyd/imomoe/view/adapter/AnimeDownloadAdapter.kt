@@ -1,7 +1,6 @@
 package com.skyd.imomoe.view.adapter
 
 import android.view.View
-import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
@@ -10,8 +9,6 @@ import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.util.AnimeCover7ViewHolder
 import com.skyd.imomoe.util.Util.process
 import com.skyd.imomoe.util.Util.showToast
-import com.skyd.imomoe.util.ViewHolderUtil.Companion.getItemViewType
-import com.skyd.imomoe.util.ViewHolderUtil.Companion.getViewHolder
 import com.skyd.imomoe.util.gone
 import com.skyd.imomoe.util.invisible
 import com.skyd.imomoe.util.visible
@@ -20,18 +17,7 @@ import com.skyd.imomoe.view.activity.AnimeDownloadActivity
 class AnimeDownloadAdapter(
     val activity: AnimeDownloadActivity,
     private val dataList: List<AnimeCoverBean>
-) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
-    override fun getItemViewType(position: Int): Int = getItemViewType(dataList[position])
-
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): RecyclerView.ViewHolder =
-        getViewHolder(parent, viewType)
-
-    override fun getItemCount(): Int = dataList.size
+) : BaseRvAdapter(dataList) {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = dataList[position]

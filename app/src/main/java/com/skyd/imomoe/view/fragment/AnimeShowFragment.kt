@@ -1,6 +1,7 @@
 package com.skyd.imomoe.view.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,12 +9,16 @@ import android.view.ViewStub
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.FragmentAnimeShowBinding
+import com.skyd.imomoe.util.Util.dp2px
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.view.adapter.AnimeShowAdapter
 import com.skyd.imomoe.view.adapter.SerializableRecycledViewPool
+import com.skyd.imomoe.view.adapter.decoration.AnimeShowItemDecoration
+import com.skyd.imomoe.view.adapter.spansize.AnimeShowSpanSize
 import com.skyd.imomoe.viewmodel.AnimeShowViewModel
 
 
@@ -62,7 +67,10 @@ class AnimeShowFragment : BaseFragment<FragmentAnimeShowBinding>() {
         }
 
         mBinding.run {
-            rvAnimeShowFragment.layoutManager = LinearLayoutManager(activity)
+            rvAnimeShowFragment.layoutManager = GridLayoutManager(activity, 4)
+                .apply { spanSizeLookup = AnimeShowSpanSize(adapter)
+                }
+            rvAnimeShowFragment.addItemDecoration(AnimeShowItemDecoration())
             rvAnimeShowFragment.setHasFixedSize(true)
             rvAnimeShowFragment.adapter = adapter
             srlAnimeShowFragment.setOnRefreshListener {

@@ -25,7 +25,7 @@ import java.util.*
 class EverydayAnimeViewModel : ViewModel() {
     var header: AnimeShowBean = AnimeShowBean(
         "", "", "", "",
-        "", "", "", null
+        "", null, "", null
     )
     var selectedTabIndex = -1
     var mldHeader: MutableLiveData<AnimeShowBean> = MutableLiveData()

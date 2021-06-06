@@ -1,28 +1,36 @@
 package com.skyd.imomoe.bean
 
-import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
 class AnimeShowBean(
     override var type: String,
     override var actionUrl: String,
-    var url: String,
-    var title: String,
-    var rTitle: String,      //右侧更多等...
-    var cover: String,
-    var episode: String,
-    var animeCoverList: List<AnimeCoverBean>? = null
-) : BaseBean
+    override var url: String,
+    override var title: String,
+    override var rTitle: String,      //右侧更多等...
+    override var cover: ImageBean?,
+    override var episode: String,
+    override var animeCoverList: List<AnimeCoverBean>? = null
+) : BaseBean, IAnimeShowBean
 
-class AnimeCoverBean(       //番剧卡片
+interface IAnimeShowBean : BaseBean {
+    var url: String
+    var title: String
+    var rTitle: String      //右侧更多等...
+    var cover: ImageBean?
+    var episode: String
+    var animeCoverList: List<AnimeCoverBean>?
+}
+
+class AnimeCoverBean(
     override var type: String,
     override var actionUrl: String,
-    var url: String,
-    var title: String,
-    var cover: ImageBean?,
-    var episode: String,
+    override var url: String,
+    override var title: String,
+    override var cover: ImageBean?,
+    override var episode: String,
     var animeType: List<AnimeTypeBean>? = null,
-    var describe: String? = null,
+    override var describe: String? = null,
     var episodeClickable: AnimeEpisodeDataBean? = null,
     var area: AnimeAreaBean? = null,
     var date: String? = null,
@@ -30,8 +38,12 @@ class AnimeCoverBean(       //番剧卡片
     var episodeCount: String? = null,    //集数
     // 0：/storage/emulated/0/Android/data/packname/files
     // 1：/storage/emulated/0/
-    var path: Int = 0
-) : BaseBean
+    var path: Int = 0,
+    override var rTitle: String = "",
+    override var animeCoverList: List<AnimeCoverBean>? = null,
+    override var episodeList: List<AnimeEpisodeDataBean>? = null,
+    override var headerInfo: AnimeInfoBean? = null
+) : BaseBean, IAnimeShowBean, IAnimeDetailBean
 
 class AnimeTypeBean(       //番剧类型：包括类型名和链接
     override var type: String,

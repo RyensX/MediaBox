@@ -151,13 +151,11 @@ class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), Even
 
     override fun getLoadFailedTipView(): ViewStub? = mBinding.layoutEverydayAnimeFragmentLoadFailed
 
-    class Vp2Adapter//默认初始化全为false
-        (
+    class Vp2Adapter(
         private var activity: Activity,
         private var list: List<List<AnimeCoverBean>>,
         private var showRankNumber: BooleanArray = BooleanArray(0)
-    ) :
-        RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         //必须四个参数都不是-1才生效
         var childPadding = Rect(-1, -1, -1, -1)

@@ -23,6 +23,7 @@ import com.skyd.imomoe.config.UnknownActionUrl
 import com.skyd.imomoe.databinding.ActivityClassifyBinding
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.showToast
+import com.skyd.imomoe.view.adapter.BaseRvAdapter
 import com.skyd.imomoe.view.adapter.SearchAdapter
 import com.skyd.imomoe.viewmodel.ClassifyViewModel
 
@@ -173,12 +174,13 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
     class ClassifyTabAdapter(
         val activity: ClassifyActivity,
         private val dataList: List<ClassifyDataBean>
-    ) :
-        RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    ) : BaseRvAdapter(dataList) {
 
         class ClassifyTab1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             val textView = view.findViewById<TextView>(R.id.text_view_1)
         }
+
+        override fun getItemViewType(position: Int): Int = 0
 
         fun getItem(position: Int): ClassifyDataBean {
             return dataList[position]
@@ -193,8 +195,6 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
                     .inflate(R.layout.item_text_view_1, parent, false)
             )
         }
-
-        override fun getItemCount(): Int = dataList.size
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             val item = dataList[position]

@@ -5,7 +5,7 @@ class PlayBean(
     override var actionUrl: String,
     var title: AnimeTitleBean,
     var episode: AnimeEpisodeDataBean,
-    var data: List<AnimeDetailBean>
+    var data: List<IAnimeDetailBean>
 ) : BaseBean
 
 //番剧详情下方信息rv数据

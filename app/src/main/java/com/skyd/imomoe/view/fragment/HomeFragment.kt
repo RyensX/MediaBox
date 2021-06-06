@@ -54,6 +54,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), EventBusSubscriber {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        // 清除缓存，以免换肤后颜色错误
+        viewModel.childViewPool.clear()
+        viewModel.viewPool.clear()
+
         mBinding.run {
             vp2HomeFragment.setAdapter(adapter)
             val tabLayoutMediator = TabLayoutMediator(
@@ -68,10 +72,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), EventBusSubscriber {
                 it.clickScale(0.8f, 70)
                 activity?.let { it1 ->
                     it1.startActivity(Intent(it1, RankActivity::class.java))
-                    it1.overridePendingTransition(
-                        R.anim.anl_push_left_in,
-                        R.anim.anl_stay
-                    )
+                    it1.overridePendingTransition(R.anim.anl_push_left_in, R.anim.anl_stay)
                 }
             }
 
@@ -83,11 +84,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), EventBusSubscriber {
             tvHomeFragmentHeaderSearch.setOnClickListener {
                 activity?.let {
                     process(it, ANIME_SEARCH + "")
-//                    it.startActivity(Intent(it, SearchActivity::class.java))
-                    it.overridePendingTransition(
-                        R.anim.anl_push_top_in,
-                        R.anim.anl_stay
-                    )
+                    it.overridePendingTransition(R.anim.anl_push_top_in, R.anim.anl_stay)
                 }
             }
 

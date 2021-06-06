@@ -36,6 +36,7 @@
         android:layout_marginTop="5dp"
         android:ellipsize="end"
         android:maxLines="3"
+        android:textColor="@color/foreground_black"
         android:textSize="13sp"
         app:typeface="bPRTypeface"
         tools:text="中二病也要谈恋爱！" />
