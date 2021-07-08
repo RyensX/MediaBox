@@ -6,6 +6,7 @@ import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.database.entity.AnimeDownloadEntity
 import com.skyd.imomoe.database.getAppDataBase
+import com.skyd.imomoe.util.comparator.EpisodeTitleComparator
 import com.skyd.imomoe.util.MD5.getMD5
 import com.skyd.imomoe.util.Util.getDirectorySize
 import com.skyd.imomoe.util.Util.getFileSize
@@ -17,7 +18,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.File
-import java.util.*
 import kotlin.collections.ArrayList
 
 
@@ -148,9 +148,7 @@ class AnimeDownloadViewModel : ViewModel() {
                         )
                     )
                 }
-                animeCoverList.sortWith(Comparator { o1, o2 ->
-                    o1.title.compareTo(o2.title)
-                })
+                animeCoverList.sortWith(EpisodeTitleComparator())
             }
             mldAnimeCoverList.postValue(true)
         }

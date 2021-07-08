@@ -39,7 +39,8 @@
     <string name="imomoe">樱花动漫官网</string>
     <string name="open_source_licenses">开放源代码许可</string>
     <string name="search_history">搜索历史</string>
-    <string name="download_anime">缓存动漫</string>
+    <string name="download_anime">缓存动漫(请于24h内删除)</string>
+    <string name="please_delete_anime_in_24h">请于24h内手动删除缓存动漫</string>
     <string name="anime_download_path">视频缓存目录</string>
     <string name="no_download_video">没有缓存视频</string>
     <string name="read_download_data_file">正在读取缓存文件…</string>
@@ -127,4 +128,5 @@
     <string name="old_path">旧</string>
     <string name="do_not_finish_the_page_when_parse_download_data">缓存失败，解析缓存数据时请勿关闭页面</string>
     <string name="restore_screen">还原屏幕</string>
+    <string name="touch_down_high_speed"><![CDATA[>> %s倍播放]]></string>
 </resources>

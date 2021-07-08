@@ -280,6 +280,20 @@
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <TextView
+        android:id="@+id/tv_touch_down_high_speed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/layout_top"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/shape_circle_corner_white_ripper_5"
+        android:backgroundTint="@color/gray_2"
+        android:paddingHorizontal="17dp"
+        android:paddingVertical="6dp"
+        android:text="@string/touch_down_high_speed"
+        android:textColor="@color/foreground_white"
+        android:textSize="17sp" />
+
     <RelativeLayout
         android:id="@+id/layout_right"
         android:layout_width="150dp"

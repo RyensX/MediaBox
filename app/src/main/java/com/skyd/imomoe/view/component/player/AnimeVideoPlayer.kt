@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Matrix
 import android.util.AttributeSet
+import android.util.Log
 import android.view.*
 import android.view.View.OnClickListener
 import android.widget.*
@@ -70,6 +71,9 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
     private var mSpeedTextView: TextView? = null
     private var mSpeedRecyclerView: RecyclerView? = null
 
+    //速度
+    private var mPlaySpeed = 1f
+
     //投屏按钮
     private var mClingImageView: ImageView? = null
 
@@ -115,6 +119,10 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
     // 右侧弹出栏
     private var mRightContainer: ViewGroup? = null
 
+    // 按住高速播放的tv
+    private var mTouchDownHighSpeedTextView: TextView? = null
+    private var mLongPressing: Boolean = false
+
     // 还原屏幕
     private var mRestoreScreenTextView: TextView? = null
 
@@ -159,10 +167,12 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
         mOpenByExternalPlayerTextView = findViewById(R.id.tv_open_by_external_player)
 //        mMediaCodecCheckBox = findViewById(R.id.cb_media_codec)
         mRestoreScreenTextView = findViewById(R.id.tv_restore_screen)
+        mTouchDownHighSpeedTextView = findViewById(R.id.tv_touch_down_high_speed)
         mBiggerSurface = findViewById(R.id.bigger_surface)
 
         mRightContainer?.gone()
         mSettingContainer?.gone()
+        mTouchDownHighSpeedTextView?.gone()
 
         mBiggerSurface?.setOnClickListener(this)
         mBiggerSurface?.setOnTouchListener(this)
@@ -227,7 +237,7 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
             if (isChecked) {
                 mBottomProgress?.let {
                     mBottomProgressBar = it
-                    mBottomProgressBar.visible()
+                    it.visible()
                 }
             } else {
                 mBottomProgressBar?.let {
@@ -344,8 +354,8 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
                 return
             }
         }
-        mUiCleared = false
         super.onClickUiToggle(e)
+        setRestoreScreenTextViewVisibility()
     }
 
     /**
@@ -377,8 +387,19 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
         player.mBottomProgressCheckBoxValue = mBottomProgressCheckBoxValue
         if (player.mBottomProgressBar != null) player.mBottomProgress = player.mBottomProgressBar
         if (!player.mBottomProgressCheckBoxValue) player.mBottomProgressBar = null
+        touchSurfaceUp()
+        player.setRestoreScreenTextViewVisibility()
         player.resolveTypeUI()
         return player
+    }
+
+    private fun setRestoreScreenTextViewVisibility() {
+        if (mUiCleared) {
+            mRestoreScreenTextView?.gone()
+        } else {
+            if (mDoublePointerZoomMoved) mRestoreScreenTextView?.visible()
+            else mRestoreScreenTextView?.gone()
+        }
     }
 
     /**
@@ -407,6 +428,8 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
             mBottomProgressCheckBoxValue = player.mBottomProgressCheckBoxValue
             if (mBottomProgressBar != null) mBottomProgress = mBottomProgressBar
             if (!mBottomProgressCheckBoxValue) mBottomProgressBar = null
+            player.touchSurfaceUp()
+            setRestoreScreenTextViewVisibility()
             resolveTypeUI()
         }
     }
@@ -420,7 +443,7 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
     }
 
     /**
-     * 显示比例
+     * 全屏/退出全屏，显示比例
      * 注意，GSYVideoType.setShowType是全局静态生效，除非重启APP。
      */
     @SuppressLint("SetTextI18n")
@@ -432,6 +455,9 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
         GSYVideoType.setShowType(mScaleStrings[mScaleIndex].second)
         changeTextureViewShowType()
         if (mTextureView != null) mTextureView.requestLayout()
+        setSpeed(mPlaySpeed, true)
+        mTouchDownHighSpeedTextView?.gone()
+        mLongPressing = false
     }
 
     /**
@@ -530,39 +556,42 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
     override fun changeUiToNormal() {
         super.changeUiToNormal()
         initFirstLoad = true
+        mUiCleared = false
+    }
+
+    override fun changeUiToPauseShow() {
+        super.changeUiToPauseShow()
+        mUiCleared = false
     }
 
     override fun changeUiToClear() {
         super.changeUiToClear()
-        mRestoreScreenTextView?.gone()
         mUiCleared = true
     }
 
     //准备中
     override fun changeUiToPreparingShow() {
         super.changeUiToPreparingShow()
-        mBottomContainer.gone()
-        mStartButton.gone()
-        mRestoreScreenTextView?.gone()
+        mUiCleared = false
     }
 
     //播放中
     override fun changeUiToPlayingShow() {
         super.changeUiToPlayingShow()
-        if (initFirstLoad) {
-            mBottomContainer.visibility = View.GONE
-            mStartButton.visibility = View.GONE
-        }
-        if (mDoublePointerZoomMoved) mRestoreScreenTextView?.visible()
-        else mRestoreScreenTextView?.gone()
+//        if (initFirstLoad) {
+//            mBottomContainer.gone()
+//            mStartButton.gone()
+//        }
         initFirstLoad = false
+        mUiCleared = false
     }
 
     //自动播放结束
     override fun changeUiToCompleteShow() {
         super.changeUiToCompleteShow()
-        mBottomContainer.visibility = View.GONE
-        mRestoreScreenTextView?.gone()
+        mBottomContainer.gone()
+        mTouchDownHighSpeedTextView?.gone()
+        mUiCleared = false
     }
 
     override fun onVideoResume(seek: Boolean) {
@@ -603,7 +632,35 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
         }
     }
 
+    override fun touchLongPress(e: MotionEvent?) {
+        e ?: return
+        if (e.pointerCount == 1) {
+            // 长按加速
+            if (!mLongPressing && !doublePointerZoomingMoving) {
+                mLongPressing = true
+                // 此处不能设置mPlaySpeed
+                setSpeed(2f, true)
+                mTouchDownHighSpeedTextView?.text =
+                    mContext.getString(R.string.touch_down_high_speed, "2")
+                mTouchDownHighSpeedTextView?.visible()
+            }
+        }
+    }
+
     override fun onTouch(v: View?, event: MotionEvent): Boolean {
+        // ---长按逻辑开始
+        if (event.pointerCount == 1) {
+            if (event.action == MotionEvent.ACTION_UP) {
+                // 如果刚才在长按，则取消长按
+                if (mLongPressing) {
+                    mLongPressing = false
+                    setSpeed(mPlaySpeed, true)
+                    mTouchDownHighSpeedTextView?.gone()
+                    return false
+                }
+            }
+        }
+        // ---长按逻辑结束
         // 不是全屏下，不使用双指操作
         if (!mIfCurrentIsFullscreen) return super.onTouch(v, event)
         if (v?.id == R.id.surface_container) {
@@ -619,6 +676,7 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
         }
         // 当正在双指操作时，禁止执行super的代码
         if (doublePointerZoomingMoving) {
+            mRestoreScreenTextView?.visible()
             // 如果双指松开，则标志不是在移动
             if (event.action == MotionEvent.ACTION_UP) doublePointerZoomingMoving = false
             return false
@@ -727,7 +785,8 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
                             } else {
                                 mSpeedTextView?.text = item.title + "X"
                             }
-                            setSpeed(item.title.toFloat(), true)
+                            mPlaySpeed = item.title.toFloat()
+                            setSpeed(mPlaySpeed, true)
                             mRightContainer?.gone()
                             //因为右侧界面显示时，不在xx秒后隐藏界面，所以要恢复xx秒后隐藏控制界面
                             startDismissControlViewTimer()

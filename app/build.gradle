@@ -30,7 +30,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 13
-        versionName "1.1.0_beta"
+        versionName "1.1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -64,7 +64,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             applicationIdSuffix '.debug' // 一台手机debug release共存
             ndk {
-                abiFilters 'armeabi', 'x86'
+                abiFilters 'armeabi', 'x86', 'x86_64'
             }
         }
         release {
