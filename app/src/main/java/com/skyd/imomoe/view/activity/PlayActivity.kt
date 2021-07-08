@@ -16,6 +16,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.shuyu.gsyvideoplayer.GSYVideoManager
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder
 import com.shuyu.gsyvideoplayer.model.VideoOptionModel
+import com.shuyu.gsyvideoplayer.player.PlayerFactory
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer
 import com.skyd.imomoe.App
@@ -51,6 +52,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
 import tv.danmaku.ijk.media.player.IjkMediaPlayer
 
 
@@ -239,6 +241,7 @@ class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>() {
     }
 
     private fun GSYBaseVideoPlayer.startPlay(url: String = "", title: String = "") {
+        PlayerFactory.setPlayManager(Exo2PlayerManager().javaClass)
         GSYVideoType.disableMediaCodec()        // 关闭硬解码
         //设置播放URL
         if (url.isBlank()) {

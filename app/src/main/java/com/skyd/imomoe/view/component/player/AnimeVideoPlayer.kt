@@ -7,7 +7,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Matrix
 import android.util.AttributeSet
-import android.util.Log
 import android.view.*
 import android.view.View.OnClickListener
 import android.widget.*
@@ -385,6 +384,7 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
         player.mTextureViewTransform = mTextureViewTransform
         player.mReverseValue = mReverseValue
         player.mBottomProgressCheckBoxValue = mBottomProgressCheckBoxValue
+        player.mPlaySpeed = mPlaySpeed
         if (player.mBottomProgressBar != null) player.mBottomProgress = player.mBottomProgressBar
         if (!player.mBottomProgressCheckBoxValue) player.mBottomProgressBar = null
         touchSurfaceUp()
@@ -426,6 +426,7 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
             mTextureViewTransform = player.mTextureViewTransform
             mReverseValue = player.mReverseValue
             mBottomProgressCheckBoxValue = player.mBottomProgressCheckBoxValue
+            mPlaySpeed = player.mPlaySpeed
             if (mBottomProgressBar != null) mBottomProgress = mBottomProgressBar
             if (!mBottomProgressCheckBoxValue) mBottomProgressBar = null
             player.touchSurfaceUp()
@@ -636,7 +637,7 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
         e ?: return
         if (e.pointerCount == 1) {
             // 长按加速
-            if (!mLongPressing && !doublePointerZoomingMoving) {
+            if (!mLongPressing && e.action == MotionEvent.ACTION_DOWN && !doublePointerZoomingMoving) {
                 mLongPressing = true
                 // 此处不能设置mPlaySpeed
                 setSpeed(2f, true)
@@ -664,7 +665,7 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
         // 不是全屏下，不使用双指操作
         if (!mIfCurrentIsFullscreen) return super.onTouch(v, event)
         if (v?.id == R.id.surface_container) {
-            if (event.pointerCount > 1) {
+            if (event.pointerCount > 1 && event.actionMasked == MotionEvent.ACTION_MOVE) {
                 // 如果是surface_container并且触摸手指数大于1，则return false拦截
                 // 不让super的代码执行，表明正在双指放大移动旋转
                 doublePointerZoomingMoving = true
@@ -678,43 +679,48 @@ class AnimeVideoPlayer : StandardGSYVideoPlayer {
         if (doublePointerZoomingMoving) {
             mRestoreScreenTextView?.visible()
             // 如果双指松开，则标志不是在移动
-            if (event.action == MotionEvent.ACTION_UP) doublePointerZoomingMoving = false
+            if (event.action == MotionEvent.ACTION_UP) {
+                doublePointerZoomingMoving = false
+            }
             return false
         }
-        return super.onTouch(v, event).apply {
-            if (v?.id == R.id.bigger_surface) {
-                val x = event.x
-                val y = event.y
-                when (event.action) {
-                    MotionEvent.ACTION_DOWN -> touchSurfaceDown(x, y)
-                    MotionEvent.ACTION_MOVE -> {
-                        val deltaX = x - mDownX
-                        val deltaY = y - mDownY
-                        val absDeltaX = abs(deltaX)
-                        val absDeltaY = abs(deltaY)
-                        if (mIfCurrentIsFullscreen && mIsTouchWigetFull
-                            || mIsTouchWiget && !mIfCurrentIsFullscreen
-                        ) {
-                            if (!mChangePosition && !mChangeVolume && !mBrightness) {
-                                touchSurfaceMoveFullLogic(absDeltaX, absDeltaY)
-                            }
-                        }
-                        touchSurfaceMove(deltaX, deltaY, y)
-                    }
-                    MotionEvent.ACTION_UP -> {
-                        startDismissControlViewTimer()
-                        touchSurfaceUp()
-                        Debuger.printfLog(
-                            this.hashCode()
-                                .toString() + "------------------------------ surface_container ACTION_UP"
-                        )
-                        startProgressTimer()
-                        //不要和隐藏虚拟按键后，滑出虚拟按键冲突
-                        if (mHideKey && mShowVKey) return true
-                    }
+        return if (v?.id == R.id.bigger_surface || v?.id == R.id.surface_container) {
+            val x = event.x
+            val y = event.y
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    touchSurfaceDown(x, y)
                 }
-                gestureDetector.onTouchEvent(event)
+                MotionEvent.ACTION_MOVE -> {
+                    val deltaX = x - mDownX
+                    val deltaY = y - mDownY
+                    val absDeltaX = abs(deltaX)
+                    val absDeltaY = abs(deltaY)
+                    if (mIfCurrentIsFullscreen && mIsTouchWigetFull
+                        || mIsTouchWiget && !mIfCurrentIsFullscreen
+                    ) {
+                        if (!mChangePosition && !mChangeVolume && !mBrightness) {
+                            touchSurfaceMoveFullLogic(absDeltaX, absDeltaY)
+                        }
+                    }
+                    touchSurfaceMove(deltaX, deltaY, y)
+                }
+                MotionEvent.ACTION_UP -> {
+                    startDismissControlViewTimer()
+                    touchSurfaceUp()
+                    Debuger.printfLog(
+                        this.hashCode()
+                            .toString() + "------------------------------ surface_container ACTION_UP"
+                    )
+                    startProgressTimer()
+                    //不要和隐藏虚拟按键后，滑出虚拟按键冲突
+                    if (mHideKey && mShowVKey) return true
+                }
             }
+            gestureDetector.onTouchEvent(event)
+            return false
+        } else {
+            super.onTouch(v, event)
         }
     }
 
