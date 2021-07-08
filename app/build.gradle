@@ -10,7 +10,7 @@ apply from: secret
 
 android.defaultConfig {
     secret.buildConfigField.forEach({ k, v ->
-        buildConfigField("String", k, v)
+        buildConfigField("String", k, "\"${v}\"")
     })
 }
 
@@ -96,6 +96,7 @@ android {
         exclude 'DebugProbesKt.bin'
         exclude 'jetty-dir.css'
         exclude 'plugin.properties'
+        exclude 'eclipse.inf'
     }
 
     buildFeatures {
@@ -141,7 +142,7 @@ dependencies {
     implementation 'org.eclipse.jetty:jetty-client:8.1.22.v20160922'
     implementation 'org.nanohttpd:nanohttpd:2.3.1'
 //    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.4'
-    implementation 'com.tencent.bugly:crashreport:3.3.7'
+    implementation 'com.tencent.bugly:crashreport:3.3.9'
     implementation 'org.greenrobot:eventbus:3.2.0'
     implementation "com.umeng.umsdk:common:9.3.6"
     implementation "com.umeng.umsdk:asms:1.2.0" // asms包依赖

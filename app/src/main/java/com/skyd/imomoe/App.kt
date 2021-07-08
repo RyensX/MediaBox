@@ -2,12 +2,10 @@ package com.skyd.imomoe
 
 import android.app.Application
 import android.content.Context
-import android.util.Log
 import com.liulishuo.filedownloader.FileDownloader
 import com.scwang.smart.refresh.footer.BallPulseFooter
 import com.scwang.smart.refresh.header.MaterialHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
-import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.util.CrashHandler
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.setNightMode
@@ -22,10 +20,10 @@ class App : Application() {
         context = this
 
         // Crash提示
-//        CrashHandler.getInstance(this)
+        CrashHandler.getInstance(this)
 
         // Bugly APP ID
-//        CrashReport.initCrashReport(applicationContext, BuildConfig.BUGLY_APP_ID, true)
+        CrashReport.initCrashReport(applicationContext, BuildConfig.BUGLY_APP_ID, true)
 
         // 友盟
         // 初始化组件化基础库, 所有友盟业务SDK都必须调用此初始化接口。
