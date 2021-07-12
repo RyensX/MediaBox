@@ -50,6 +50,7 @@ import kotlin.collections.ArrayList
 
 
 object Util {
+
     fun openBrowser(url: String) {
         val uri: Uri = Uri.parse(url)
         val intent = Intent(Intent.ACTION_VIEW, uri)
@@ -375,6 +376,11 @@ object Util {
             list.add(m.group(1))
         }
         return list
+    }
+
+    fun px2dp(pxValue: Float): Float {
+        val scale = App.context.resources.displayMetrics.density
+        return pxValue / scale
     }
 
     fun dp2px(dpValue: Float): Int {

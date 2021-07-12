@@ -7,11 +7,11 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.*
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.config.Const.ViewHolderTypeString
-import com.skyd.imomoe.util.JsoupUtil
-import com.skyd.imomoe.util.ParseHtmlUtil.parseBotit
-import com.skyd.imomoe.util.ParseHtmlUtil.parseDtit
-import com.skyd.imomoe.util.ParseHtmlUtil.parseImg
-import com.skyd.imomoe.util.ParseHtmlUtil.parseMovurls
+import com.skyd.imomoe.util.html.JsoupUtil
+import com.skyd.imomoe.util.html.ParseHtmlUtil.parseBotit
+import com.skyd.imomoe.util.html.ParseHtmlUtil.parseDtit
+import com.skyd.imomoe.util.html.ParseHtmlUtil.parseImg
+import com.skyd.imomoe.util.html.ParseHtmlUtil.parseMovurls
 import com.skyd.imomoe.util.Util.showToastOnThread
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope

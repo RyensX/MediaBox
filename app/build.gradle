@@ -30,7 +30,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 14
-        versionName "1.1.1"
+        versionName "1.1.2_alpha"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -92,11 +92,12 @@ android {
         exclude 'META-INF/README.md'
         exclude 'META-INF/CHANGES'
         exclude 'META-INF/LICENSE'
+        exclude 'META-INF/eclipse.inf'
+        exclude 'META-INF/DEPENDENCIES'
         exclude 'about_files/LICENSE_CDDL.txt'
         exclude 'DebugProbesKt.bin'
         exclude 'jetty-dir.css'
         exclude 'plugin.properties'
-        exclude 'eclipse.inf'
     }
 
     buildFeatures {
@@ -149,6 +150,8 @@ dependencies {
     implementation 'com.scwang.smart:refresh-layout-kernel:2.0.3'      //核心必须依赖
     implementation 'com.scwang.smart:refresh-header-material:2.0.3'    //谷歌刷新头
     implementation 'com.scwang.smart:refresh-footer-ball:2.0.3'        //球脉冲加载
+//    implementation 'com.github.fanchen001:Sniffing:1.0.1'
+    implementation 'com.github.ctiao:DanmakuFlameMaster:0.9.25'
 }
 
 //AndResGuard资源混淆工具

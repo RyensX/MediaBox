@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.skyd.imomoe.view.component.player.AnimeVideoPlayer
+        <com.skyd.imomoe.view.component.player.DanmakuVideoPlayer
             android:id="@+id/avp_play_activity"
             android:layout_width="match_parent"
             android:layout_height="210dp" />

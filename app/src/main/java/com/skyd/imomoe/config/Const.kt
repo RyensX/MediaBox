@@ -122,17 +122,16 @@ interface Const {
         }
     }
 
+    interface AnimeDanmu {
+        companion object {
+            val animeDanmuFilePath: String =
+                App.context.getExternalFilesDir(null).toString() + "/AnimeDanmu/danmu.json"
+        }
+    }
+
     interface Request {
         companion object {
             val USER_AGENT_ARRAY = arrayOf(
-                "Mozilla/4.0(compatible;MSIE7.0;WindowsNT5.1;AvantBrowser)",
-                "Mozilla/4.0(compatible;MSIE7.0;WindowsNT5.1;360SE)",
-                "Mozilla/4.0(compatible;MSIE7.0;WindowsNT5.1;Trident/4.0;SE2.XMetaSr1.0;SE2.XMetaSr1.0;.NETCLR2.0.50727;SE2.XMetaSr1.0)",
-                "Mozilla/4.0(compatible;MSIE7.0;WindowsNT5.1;TheWorld)",
-                "Mozilla/4.0(compatible;MSIE7.0;WindowsNT5.1;TencentTraveler4.0)",
-                "Opera/9.80(Macintosh;IntelMacOSX10.6.8;U;en)Presto/2.8.131Version/11.11",
-                "Mozilla/5.0(WindowsNT6.1;rv:2.0.1)Gecko/20100101Firefox/4.0.1",
-                "Mozilla/5.0(compatible;MSIE9.0;WindowsNT6.1;Trident/5.0",
                 "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36 OPR/26.0.1656.60",
                 "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.101 Safari/537.36",
                 "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; QQDownload 732; .NET4.0C; .NET4.0E; LBBROWSER)",

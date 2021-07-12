@@ -38,7 +38,7 @@ import java.io.Serializable
 import kotlin.math.abs
 
 
-class AnimeVideoPlayer : StandardGSYVideoPlayer {
+open class AnimeVideoPlayer : StandardGSYVideoPlayer {
     companion object {
         val mScaleStrings = listOf(
             Pair("默认比例", GSYVideoType.SCREEN_TYPE_DEFAULT),

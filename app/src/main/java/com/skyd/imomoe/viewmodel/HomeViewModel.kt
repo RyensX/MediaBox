@@ -8,7 +8,7 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.TabBean
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.config.UnknownActionUrl
-import com.skyd.imomoe.util.JsoupUtil
+import com.skyd.imomoe.util.html.JsoupUtil
 import com.skyd.imomoe.util.Util.showToastOnThread
 import com.skyd.imomoe.util.eventbus.SelectHomeTabEvent
 import com.skyd.imomoe.view.adapter.SerializableRecycledViewPool

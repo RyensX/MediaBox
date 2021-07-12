@@ -10,10 +10,9 @@ import com.skyd.imomoe.bean.SearchHistoryBean
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.config.Const.ActionUrl.Companion.ANIME_SEARCH
 import com.skyd.imomoe.database.getAppDataBase
-import com.skyd.imomoe.util.JsoupUtil
-import com.skyd.imomoe.util.ParseHtmlUtil
-import com.skyd.imomoe.util.ParseHtmlUtil.parseLpic
-import com.skyd.imomoe.util.ParseHtmlUtil.parseNextPages
+import com.skyd.imomoe.util.html.JsoupUtil
+import com.skyd.imomoe.util.html.ParseHtmlUtil.parseLpic
+import com.skyd.imomoe.util.html.ParseHtmlUtil.parseNextPages
 import com.skyd.imomoe.util.Util.showToastOnThread
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope

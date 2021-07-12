@@ -1,4 +1,4 @@
-package com.skyd.imomoe.util
+package com.skyd.imomoe.util.html
 
 import com.skyd.imomoe.bean.*
 import com.skyd.imomoe.config.Api
@@ -8,6 +8,10 @@ import java.util.ArrayList
 import com.skyd.imomoe.config.Const.ViewHolderTypeString
 
 object ParseHtmlUtil {
+
+    fun parseIframeSrc(element: Element): String {
+        return element.attr("src")
+    }
 
     fun parseHeroWrap(      //banner
         element: Element,

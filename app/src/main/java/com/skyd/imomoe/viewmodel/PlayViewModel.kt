@@ -8,16 +8,16 @@ import com.skyd.imomoe.bean.*
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.config.Const.ViewHolderTypeString
 import com.skyd.imomoe.database.getAppDataBase
-import com.skyd.imomoe.util.JsoupUtil
-import com.skyd.imomoe.util.ParseHtmlUtil
-import com.skyd.imomoe.util.ParseHtmlUtil.parseBotit
-import com.skyd.imomoe.util.ParseHtmlUtil.parseMovurls
+import com.skyd.imomoe.util.html.JsoupUtil
+import com.skyd.imomoe.util.html.ParseHtmlUtil
+import com.skyd.imomoe.util.html.ParseHtmlUtil.parseBotit
+import com.skyd.imomoe.util.html.ParseHtmlUtil.parseMovurls
 import com.skyd.imomoe.util.Util.showToastOnThread
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
-import java.lang.Exception
 import java.util.*
 
 
@@ -35,7 +35,22 @@ class PlayViewModel : ViewModel() {
     val mldAnimeEpisodeDataRefreshed: MutableLiveData<Boolean> = MutableLiveData()
     val mldGetAnimeEpisodeData: MutableLiveData<Int> = MutableLiveData()
 
-    fun refreshAnimeEpisodeData(partUrl: String, currentEpisodeIndex: Int, title: String = "") {
+    private fun getVideoRawUrl(e: Element): String {
+        val div = e.select("[class=area]").select("[class=bofang]")[0].children()
+        val rawUrl = div.attr("data-vid")
+        return when {
+            rawUrl.endsWith("\$mp4", true) -> rawUrl.replace("\$mp4", "")
+            rawUrl.endsWith("\$url", true) -> rawUrl.replace("\$url", "")
+            rawUrl.endsWith("\$qzz", true) -> rawUrl
+            else -> ""
+        }
+    }
+
+    fun refreshAnimeEpisodeData(
+        partUrl: String,
+        currentEpisodeIndex: Int,
+        title: String = ""
+    ) {
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 this@PlayViewModel.partUrl = partUrl
@@ -46,13 +61,7 @@ class PlayViewModel : ViewModel() {
                         "play" -> {
                             animeEpisodeDataBean.actionUrl = partUrl
                             animeEpisodeDataBean.title = title
-                            val rawUrl = children[i].select("[class=area]")
-                                .select("[class=bofang]").select("div").attr("data-vid")
-                            animeEpisodeDataBean.videoUrl = when {
-                                rawUrl.endsWith("\$mp4", true) -> rawUrl.replace("\$mp4", "")
-                                rawUrl.endsWith("\$url", true) -> rawUrl.replace("\$url", "")
-                                else -> ""
-                            }
+                            animeEpisodeDataBean.videoUrl = getVideoRawUrl(children[i])
                             break
                         }
                     }
@@ -79,13 +88,7 @@ class PlayViewModel : ViewModel() {
                 for (i in children.indices) {
                     when (children[i].className()) {
                         "play" -> {
-                            val rawUrl = children[i].select("[class=area]")
-                                .select("[class=bofang]").select("div").attr("data-vid")
-                            episodesList[position].videoUrl = when {
-                                rawUrl.endsWith("\$mp4", true) -> rawUrl.replace("\$mp4", "")
-                                rawUrl.endsWith("\$url", true) -> rawUrl.replace("\$url", "")
-                                else -> ""
-                            }
+                            episodesList[position].videoUrl = getVideoRawUrl(children[i])
                             break
                         }
                     }
@@ -117,13 +120,7 @@ class PlayViewModel : ViewModel() {
                 for (i in children.indices) {
                     when (children[i].className()) {
                         "play" -> {
-                            val rawUrl = children[i].select("[class=area]")
-                                .select("[class=bofang]").select("div").attr("data-vid")
-                            animeEpisodeDataBean.videoUrl = when {
-                                rawUrl.endsWith("\$mp4", true) -> rawUrl.replace("\$mp4", "")
-                                rawUrl.endsWith("\$url", true) -> rawUrl.replace("\$url", "")
-                                else -> ""
-                            }
+                            animeEpisodeDataBean.videoUrl = getVideoRawUrl(children[i])
                         }
                         "area" -> {
                             val areaChildren = children[i].children()

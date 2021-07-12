@@ -6,8 +6,8 @@ import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.config.Api
-import com.skyd.imomoe.util.JsoupUtil
-import com.skyd.imomoe.util.ParseHtmlUtil.parseLpic
+import com.skyd.imomoe.util.html.JsoupUtil
+import com.skyd.imomoe.util.html.ParseHtmlUtil.parseLpic
 import com.skyd.imomoe.util.Util.showToastOnThread
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
