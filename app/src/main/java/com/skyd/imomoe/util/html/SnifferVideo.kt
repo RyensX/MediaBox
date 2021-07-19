@@ -1,24 +1,35 @@
-package com.skyd.imomoe.util
+package com.skyd.imomoe.util.html
 
 import android.app.Activity
 import android.util.Log
 import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.callbacks.onCancel
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.html.source.DefaultUICallback
-import com.skyd.imomoe.util.html.source.SniffingUICallback
-import com.skyd.imomoe.util.html.source.web.SniffingUtil
+import com.skyd.imomoe.util.html.source.GettingUICallback
+import com.skyd.imomoe.util.html.source.web.GettingUtil
 import org.jsoup.Jsoup
+import kotlin.jvm.Throws
 
 
 object SnifferVideo {
+    const val PARSE_URL_ERROR = -100
+    const val KEY = "key"
+    const val AC = "ac"
+    const val VIDEO_ID = "id"
+    const val SERVER_API = "api"
+    const val DANMU_URL = "danmuUrl"
+    const val REFEREER_URL = "referer"
     private val sniffingUrlList: MutableList<String> by lazy { ArrayList() }
     private var serverApi: String = "https://yuan.cuan.la/barrage"
     private var serverKey: String = "mao"
     private var videoId: String = ""
+    private var referer: String = "http://tup.yhdm.so/"
 
+    @Throws(IndexOutOfBoundsException::class)
     private fun getSrc(html: String, type: Int = 0): String {
         return when (type) {
             0 -> {
@@ -63,39 +74,44 @@ object SnifferVideo {
         activity: Activity,
         url: String,
         referer: String = "",
-        listener: SniffingUICallback,
+        listener: GettingUICallback,
         type: Int = 0
     ) {
+        if (type > 2) return
+        if (type == 1) this.referer = url
         activity.runOnUiThread {
-            SniffingUtil.instance.activity(activity).referer(referer)
+            GettingUtil.instance.activity(activity).referer(referer)
                 .url(url)
                 .start(object : DefaultUICallback() {
-                    override fun onSniffingSuccess(webView: View?, html: String) {
-                        val src = getSrc(html, type)
-                        Log.i("getPlayerHtmlSource $type", html)
-                        if (type == 2) {
-                            listener.onSniffingSuccess(webView, src)
+                    override fun onGettingSuccess(webView: View?, html: String) {
+                        val src = try {
+                            getSrc(html, type)
+                        } catch (e: IndexOutOfBoundsException) {
+                            // 解析地址出现错误
+                            e.printStackTrace()
+                            Log.e("getSrc IOOBException", html)
+                            onGettingError(webView, url, PARSE_URL_ERROR)
                             return
                         }
-                        getPlayerHtmlSource(
-                            activity,
-                            src,
-                            referer,
-                            listener,
-                            type + 1
-                        )
+
+                        Log.i("getPlayerHtmlSource $type", html)
+                        if (type == 2) {
+                            listener.onGettingSuccess(webView, src)
+                            return
+                        }
+                        getPlayerHtmlSource(activity, src, referer, listener, type + 1)
                     }
 
-                    override fun onSniffingStart(webView: View?, url: String?) {
-                        listener.onSniffingStart(webView, url)
+                    override fun onGettingStart(webView: View?, url: String?) {
+                        listener.onGettingStart(webView, url)
                     }
 
-                    override fun onSniffingFinish(webView: View?, url: String?) {
-                        listener.onSniffingFinish(webView, url)
+                    override fun onGettingFinish(webView: View?, url: String?) {
+                        listener.onGettingFinish(webView, url)
                     }
 
-                    override fun onSniffingError(webView: View?, url: String?, errorCode: Int) {
-                        listener.onSniffingError(webView, url, errorCode)
+                    override fun onGettingError(webView: View?, url: String?, errorCode: Int) {
+                        listener.onGettingError(webView, url, errorCode)
                     }
                 })
         }
@@ -105,16 +121,20 @@ object SnifferVideo {
         activity: Activity,
         partUrl: String,
         referer: String = "",
-        callback: (url: String, danMuUrl: String) -> Unit
+        callback: (url: String, paramMap: HashMap<String, String>) -> Unit
     ) {
         if (sniffingUrlList.contains(partUrl)) {
             activity.getString(R.string.getting_complex_video).showToast()
+        } else {
+            sniffingUrlList.add(partUrl)
         }
-        getPlayerHtmlSource(activity, Api.MAIN_URL + partUrl, Api.MAIN_URL + referer,
-            object : SniffingUICallback {
+        getPlayerHtmlSource(activity,
+            Api.MAIN_URL + partUrl,
+            Api.MAIN_URL + referer,
+            object : GettingUICallback {
                 private lateinit var waitingDialog: MaterialDialog
                 private var error = false
-                override fun onSniffingFinish(webView: View?, url: String?) {
+                override fun onGettingFinish(webView: View?, url: String?) {
                     waitingDialog.message(
                         text = activity.getString(
                             R.string.get_complex_video_finished,
@@ -123,19 +143,27 @@ object SnifferVideo {
                     )
                 }
 
-                override fun onSniffingError(webView: View?, url: String?, errorCode: Int) {
+                override fun onGettingError(webView: View?, url: String?, errorCode: Int) {
+                    activity.runOnUiThread { GettingUtil.instance.releaseWebView() }
                     if (error) return
                     error = true
-                    activity.getString(R.string.getting_complex_video_failed, errorCode.toString())
-                        .showToast()
+                    when (errorCode) {
+                        PARSE_URL_ERROR -> {
+                            activity.getString(R.string.fail_to_parse_page_url).showToast()
+                        }
+                        else -> {
+                            activity.getString(
+                                R.string.getting_complex_video_failed, errorCode.toString()
+                            ).showToast()
+                        }
+                    }
                     sniffingUrlList.remove(partUrl)
                     waitingDialog.dismiss()
                 }
 
-                override fun onSniffingStart(webView: View?, url: String?) {
+                override fun onGettingStart(webView: View?, url: String?) {
                     if (!this::waitingDialog.isInitialized) {
-                        waitingDialog = showWaitingToSniffingDialog(activity)
-                        sniffingUrlList.add(partUrl)
+                        waitingDialog = showWaitingToSniffingDialog(activity, partUrl)
                     }
                     waitingDialog.message(
                         text = activity.getString(
@@ -145,14 +173,25 @@ object SnifferVideo {
                     )
                 }
 
-                override fun onSniffingSuccess(webView: View?, html: String) {
+                override fun onGettingSuccess(webView: View?, html: String) {
                     activity.runOnUiThread {
-                        SniffingUtil.instance.releaseWebView()
+                        GettingUtil.instance.releaseWebView()
                     }
                     sniffingUrlList.remove(partUrl)
                     waitingDialog.dismiss()
                     Log.i("getQzzVideoUrl", html)
-                    callback(html, "https:$serverApi/barrage/api?ac=dm&key=$serverKey&id=$videoId")
+                    HashMap<String, String>().apply {
+                        put(KEY, serverKey)
+                        put(AC, "dm")
+                        put(VIDEO_ID, videoId)
+                        put(SERVER_API, serverApi)
+                        put(REFEREER_URL, this@SnifferVideo.referer)
+                        put(
+                            DANMU_URL,
+                            "https:$serverApi/barrage/api?ac=dm&key=$serverKey&id=$videoId"
+                        )
+                        callback(html, this)
+                    }
 //                            showChooseVideoUrlDialog(activity, html, callback)
                 }
             }
@@ -165,7 +204,7 @@ object SnifferVideo {
         message: String,
         partUrl: String,
         referer: String = "",
-        callback: (url: String, danMuUrl: String) -> Unit
+        callback: (url: String, paramMap: HashMap<String, String>) -> Unit
     ) {
         MaterialDialog(activity).show {
             title(text = title)
@@ -182,12 +221,16 @@ object SnifferVideo {
         }
     }
 
-    private fun showWaitingToSniffingDialog(activity: Activity): MaterialDialog {
+    private fun showWaitingToSniffingDialog(activity: Activity, partUrl: String): MaterialDialog {
         return MaterialDialog(activity).show {
             title(res = R.string.get_complex_videos)
-            message(text = activity.getString(R.string.getting_complex_video, ""))
+            message(text = activity.getString(R.string.getting_complex_video))
             cancelOnTouchOutside(false)
-            cancelable(false)
+            onCancel {
+                GettingUtil.instance.releaseWebView()
+                sniffingUrlList.remove(partUrl)
+                activity.getString(R.string.cancel_to_get_video_url).showToast()
+            }
         }
     }
 

@@ -9,15 +9,15 @@ import android.view.View
 import android.webkit.SslErrorHandler
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import com.skyd.imomoe.util.html.source.SniffingCallback
-import com.skyd.imomoe.util.html.source.SniffingUICallback
+import com.skyd.imomoe.util.html.source.GettingCallback
+import com.skyd.imomoe.util.html.source.GettingUICallback
 import com.skyd.imomoe.util.html.source.Util
 
-class SniffingWebViewClient(
+class GettingWebViewClient(
     private val mWebView: WebView?,
     private val mURL: String,
     private val mHeader: Map<String, String>,
-    private val mCallback: SniffingCallback?
+    private val mCallback: GettingCallback?
 ) : WebViewClient() {
     private var isCompleteLoader = true
     private val mH = Handler(Looper.getMainLooper())
@@ -50,24 +50,16 @@ class SniffingWebViewClient(
 
     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
         if (mLastEndTime - mLastStartTime <= 500 || !isCompleteLoader) { // 基本上是302 重定向才会走这段逻辑
-//            LogUtil.e("SniffingUtil", "onStart( 302 )  --> " + url);
-            mFinished?.let {
-                mH.removeCallbacks(it)
-            }
+            Log.e("GettingUtil", "onStart( 302 )  --> $url")
+            mFinished?.let { mH.removeCallbacks(it) }
             return
         }
-        if (mConnTimeout != null) {
-            mH.removeCallbacks(mConnTimeout!!)
-        }
+        mConnTimeout?.let { mH.removeCallbacks(it) }
         mH.postDelayed(
-            TimeOutRunnable(
-                view,
-                url,
-                TYPE_CONN
-            ).also { mConnTimeout = it }, mConnTimeOut
+            TimeOutRunnable(view, url, TYPE_CONN).also { mConnTimeout = it }, mConnTimeOut
         )
-        //        LogUtil.e("SniffingUtil", "onStart(onPageStarted)  --> " + url);
-        onSniffingStart(view, url)
+        Log.e("GettingWebViewClient", "onStart(onPageStarted)  --> $url")
+        onGettingStart(view, url)
     }
 
     override fun onPageFinished(view: WebView, url: String) {
@@ -78,15 +70,15 @@ class SniffingWebViewClient(
     //    @Override
     //    public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
     //        try {
-    ////            LogUtil.e("SniffingUtil", "shouldInterceptRequest(URL)  --> " + url);
+    ////            LogUtil.e("GettingUtil", "shouldInterceptRequest(URL)  --> " + url);
     //            if(url.lastIndexOf(".") < url.length() - 5){
     //                Object[] content = Util.getContent(url);
     //                String s = content[1].toString();
     //                if(s.toLowerCase().contains("video") || s.toLowerCase().contains("mpegurl")){
-    //                    mVideos.add(new SniffingVideo(url,"m3u8",(int) content[0],"m3u8"));
+    //                    mVideos.add(new GettingVideo(url,"m3u8",(int) content[0],"m3u8"));
     //                }
     //            }else if (mFilter != null) {
-    //                SniffingVideo video = mFilter.onFilter(view, url);
+    //                GettingVideo video = mFilter.onFilter(view, url);
     //                if (video != null) mVideos.add(video);
     //            }
     //        } catch (Throwable e) {
@@ -100,9 +92,9 @@ class SniffingWebViewClient(
         description: String,
         failingUrl: String
     ) {
-//            LogUtil.e("SniffingUtil", "onReceivedError(ReceivedError)  --> " + failingUrl);
-        onSniffingError(view, failingUrl, RECEIVED_ERROR)
-        onSniffingFinish(view, failingUrl)
+        Log.e("GettingWebViewClient", "onReceivedError(ReceivedError)  --> $failingUrl")
+        onGettingError(view, failingUrl, RECEIVED_ERROR)
+        onGettingFinish(view, failingUrl)
     }
 
     override fun onReceivedSslError(
@@ -113,7 +105,7 @@ class SniffingWebViewClient(
         sslErrorHandler.proceed() //證書不對的時候，繼續加載
     }
 
-    fun onSniffingStart(webView: View?, url: String?) {
+    fun onGettingStart(webView: View?, url: String?) {
         isCompleteLoader = false
         mLastStartTime = System.currentTimeMillis()
         if (mReadTimeout != null) {
@@ -126,23 +118,25 @@ class SniffingWebViewClient(
                 TYPE_READ
             ).also { mReadTimeout = it }, mReadTimeOut
         )
-        if (mCallback is SniffingUICallback) {
-            mH.post { mCallback.onSniffingStart(webView, url) }
+        if (mCallback is GettingUICallback) {
+            mH.post { mCallback.onGettingStart(webView, url) }
         }
     }
 
-    fun onSniffingError(webView: View?, url: String?, errorCode: Int) {
+    fun onGettingError(webView: View?, url: String?, errorCode: Int) {
         if (mCallback != null) {
-            mH.post { mCallback.onSniffingError(webView, url, errorCode) }
+            mH.post { mCallback.onGettingError(webView, url, errorCode) }
         }
     }
 
-    fun onSniffingFinish(webView: View?, url: String?) {
+    fun onGettingFinish(webView: View?, url: String?) {
         isCompleteLoader = true
-        mH.removeCallbacks(mReadTimeout!!)
-        mReadTimeout = null
-        if (mCallback is SniffingUICallback) {
-            mH.post { mCallback.onSniffingFinish(webView, url) }
+        mReadTimeout?.let {
+            mH.removeCallbacks(it)
+            mReadTimeout = null
+        }
+        if (mCallback is GettingUICallback) {
+            mH.post { mCallback.onGettingFinish(webView, url) }
         }
     }
 
@@ -151,23 +145,22 @@ class SniffingWebViewClient(
         override fun run() {
             Util.evalScript(view, method)
         }
-
     }
 
-    //一次网页加载结束
+    // 一次网页加载结束
     private inner class FinishedRunnable(private val view: WebView, private val url: String) :
         Runnable {
         override fun run() {
             if (mConnTimeout == null) return
             mH.removeCallbacks(mConnTimeout!!)
             mConnTimeout = null
-            Log.i("SniffingUtil", "一次网页加载结束 --> $url")
-            onSniffingFinish(view, url)
+            Log.i("GettingWebViewClient", "一次网页加载结束 --> $url")
+            onGettingFinish(view, url)
             Util.getHtmlSource(view)
         }
     }
 
-    //一次网页加载，解析超时
+    // 一次网页加载，解析超时
     private inner class TimeOutRunnable(
         private val view: WebView?,
         private val url: String?,
@@ -178,17 +171,19 @@ class SniffingWebViewClient(
             //加载网页超时了
             if (type == TYPE_CONN) {
                 Log.e(
-                    "SniffingUtil",
+                    "GettingWebViewClient",
                     "ConnTimeOutRunnable( postDelayed  【alert ，confirm】 )  --> $url"
                 )
-                if (mConnTimeout == null) return
-                mH.removeCallbacks(mConnTimeout!!)
-                mConnTimeout = null
+                mConnTimeout.let {
+                    if (it == null) return
+                    mH.removeCallbacks(it)
+                    mConnTimeout = null
+                }
                 //                mH.postDelayed(new ParserHtmlRunnable(view, "alert"), 5000);
 //                mH.postDelayed(mJSRunnable = new ParserHtmlRunnable(view, "confirm"), 8000);
             } else if (type == TYPE_READ) {
-                Log.e("SniffingUtil", "ReadTimeOutRunnable(SUCCESS)  --> $url")
-                onSniffingFinish(view, url)
+                Log.e("GettingWebViewClient", "ReadTimeOutRunnable(SUCCESS)  --> $url")
+                onGettingFinish(view, url)
             }
         }
 

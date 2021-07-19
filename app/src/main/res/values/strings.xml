@@ -132,9 +132,16 @@
     <string name="will_you_try_to_sniffer_video">是否尝试嗅探视频？</string>
     <string name="getting_complex_video_failed">获取视频链接失败，%s</string>
     <string name="start_get_complex_video">开始获取视频链接…%s</string>
-    <string name="getting_complex_video">正在获取视频链接中…%s</string>
+    <string name="getting_complex_video">正在获取视频链接中…</string>
     <string name="get_complex_video_finished">结束获取…%s</string>
     <string name="get_complex_videos">获取复杂视频链接</string>
     <string name="please_choose_a_video_link">请选择一个视频链接(共%s条)</string>
     <string name="load_danmu_failed">弹幕加载失败</string>
+    <string name="cancel_to_get_video_url">取消获取视频链接…</string>
+    <string name="fail_to_parse_page_url">解析网页地址失败</string>
+    <string name="loading_danmu">加载弹幕中…</string>
+    <string name="the_video_has_danmu">此视频含弹幕</string>
+    <string name="send_a_danmu">发个弹幕吧…</string>
+    <string name="send_danmu_failed">发送弹幕失败，%s</string>
+    <string name="please_input_danmu_text">请输入弹幕内容！</string>
 </resources>

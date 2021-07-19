@@ -1,7 +1,6 @@
 package com.skyd.imomoe.view.component.player
 
 import android.graphics.Color
-import com.skyd.imomoe.util.Util.px2dp
 import master.flame.danmaku.danmaku.model.android.Danmakus
 import master.flame.danmaku.danmaku.parser.BaseDanmakuParser
 import org.json.JSONArray
@@ -66,24 +65,26 @@ class AnimeDanmakuParser : BaseDanmakuParser() {
         return danmakus
     }
 
-    private fun getColor(s: String): Int {
-        val strColor = s.toLowerCase(Locale.ROOT)
-        try {
-            if (strColor.startsWith("#")) {
-                Color.parseColor(s)
-            } else if (strColor.startsWith("rgb")) {
-                val rgbArray = strColor.replace("rgb(", "")
-                    .replace(")", "").split(",")
-                if (rgbArray.size == 3) Color.rgb(
-                    rgbArray[0].trim().toInt(),
-                    rgbArray[1].trim().toInt(),
-                    rgbArray[2].trim().toInt()
-                )
+    companion object {
+        fun getColor(s: String): Int {
+            val strColor = s.toLowerCase(Locale.ROOT)
+            try {
+                if (strColor.startsWith("#")) {
+                    Color.parseColor(s)
+                } else if (strColor.startsWith("rgb")) {
+                    val rgbArray = strColor.replace("rgb(", "")
+                        .replace(")", "").split(",")
+                    if (rgbArray.size == 3) Color.rgb(
+                        rgbArray[0].trim().toInt(),
+                        rgbArray[1].trim().toInt(),
+                        rgbArray[2].trim().toInt()
+                    )
+                }
+            } catch (e: IllegalArgumentException) {
+                e.printStackTrace()
             }
-        } catch (e: IllegalArgumentException) {
-            e.printStackTrace()
+            return Color.WHITE
         }
-        return Color.WHITE
     }
 
     private fun getType(s: String): Int {

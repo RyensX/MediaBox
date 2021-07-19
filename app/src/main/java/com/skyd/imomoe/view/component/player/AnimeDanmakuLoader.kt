@@ -4,12 +4,22 @@ import android.net.Uri
 import master.flame.danmaku.danmaku.loader.ILoader
 import master.flame.danmaku.danmaku.loader.IllegalDataException
 import java.io.InputStream
+import java.net.URL
 import kotlin.jvm.Throws
 
 class AnimeDanmakuLoader private constructor() : ILoader {
     private var dataSource: AnimeJSONSource? = null
     override fun getDataSource(): AnimeJSONSource? {
         return dataSource
+    }
+
+    @Throws(IllegalDataException::class)
+    fun load(url: URL) {
+        dataSource = try {
+            AnimeJSONSource(url)
+        } catch (e: Exception) {
+            throw IllegalDataException(e)
+        }
     }
 
     @Throws(IllegalDataException::class)

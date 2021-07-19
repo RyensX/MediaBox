@@ -1,6 +1,7 @@
 package com.skyd.imomoe.util.html.source
 
 import android.text.TextUtils
+import android.util.Log
 import android.webkit.WebView
 import java.net.HttpURLConnection
 import java.net.URL
@@ -11,7 +12,7 @@ import javax.net.ssl.*
 import kotlin.jvm.Throws
 
 object Util {
-    const val HTMLFLAG = "<SniffingVideo>SniffingVideo</SniffingVideo>"
+    const val HTMLFLAG = "<GettingVideo>GettingVideo</GettingVideo>"
     fun getContent(url: String): Array<Any?> {
         val objects = arrayOfNulls<Any>(2)
         var urlConnection: HttpURLConnection? = null
@@ -33,10 +34,10 @@ object Util {
                 objects[0] = urlConnection.contentLength
                 objects[1] = urlConnection.contentType
             }
-            //            LogUtil.e("SniffingUtil","getContent code = " + responseCode);
+            Log.e("Util", "getContent code = $responseCode")
         } catch (e: Exception) {
             e.printStackTrace()
-//            LogUtil.e("SniffingUtil","getContent error = " + e.toString());
+            Log.e("Util", "getContent error = $e")
         } finally {
             urlConnection?.disconnect()
         }

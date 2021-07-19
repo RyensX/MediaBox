@@ -5,15 +5,15 @@ import android.content.Context
 import android.os.Build
 import android.util.AttributeSet
 import android.webkit.*
-import com.skyd.imomoe.util.html.source.SniffingCallback
+import com.skyd.imomoe.util.html.source.GettingCallback
 
 @SuppressLint("SetJavaScriptEnabled", "ObsoleteSdkInt")
-class SniffingWebView @JvmOverloads constructor(
+class GettingWebView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : WebView(context, attrs, defStyleAttr) {
-    private var sniffingCallback: SniffingCallback? = null
+    private var gettingCallback: GettingCallback? = null
 
     private fun initWebSetting(context: Context) {
         clearFocus()
@@ -55,15 +55,15 @@ class SniffingWebView @JvmOverloads constructor(
         }
     }
 
-    fun setCallBack(callback: SniffingCallback) {
-        sniffingCallback = callback
+    fun setCallBack(callback: GettingCallback) {
+        gettingCallback = callback
     }
 
     init {
         addJavascriptInterface(object : Any() {
             @JavascriptInterface
             fun htmlSource(html: String) {
-                sniffingCallback?.onSniffingSuccess(this@SniffingWebView, html)
+                gettingCallback?.onGettingSuccess(this@GettingWebView, html)
             }
         }, "anime_html_source")
         initWebSetting(context)

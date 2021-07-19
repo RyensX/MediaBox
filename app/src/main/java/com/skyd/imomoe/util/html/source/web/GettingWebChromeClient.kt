@@ -5,13 +5,8 @@ import android.webkit.WebChromeClient
 import android.webkit.WebView
 import com.skyd.imomoe.util.html.source.Util
 
-class SniffingWebChromeClient(private val mClient: SniffingWebViewClient) : WebChromeClient() {
-    override fun onJsConfirm(
-        webView: WebView,
-        s: String,
-        s1: String,
-        jsResult: JsResult
-    ): Boolean {
+class GettingWebChromeClient(private val mClient: GettingWebViewClient) : WebChromeClient() {
+    override fun onJsConfirm(webView: WebView, s: String, s1: String, jsResult: JsResult): Boolean {
         if (s1.contains(Util.HTMLFLAG)) {
 //            mClient.parserHtml(webView, s, s1);
             jsResult.cancel()

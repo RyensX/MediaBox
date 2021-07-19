@@ -22,5 +22,9 @@ interface Api {
         //gitee
         const val CHECK_UPDATE_URL_2 =
             "https://gitee.com/api/v5/repos/SkyD666/Imomoe/releases/latest"
+
+        //弹幕url
+        const val DANMU_URL = "https://yuan.cuan.la/barrage/api"
+
     }
 }

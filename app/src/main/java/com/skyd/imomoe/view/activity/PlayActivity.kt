@@ -7,14 +7,12 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.liulishuo.filedownloader.BaseDownloadTask
-import com.liulishuo.filedownloader.FileDownloadListener
 import com.liulishuo.filedownloader.FileDownloadSampleListener
 import com.liulishuo.filedownloader.FileDownloader
 import com.shuyu.gsyvideoplayer.GSYVideoManager
@@ -34,7 +32,7 @@ import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.databinding.ActivityPlayBinding
 import com.skyd.imomoe.util.AnimeEpisode2ViewHolder
 import com.skyd.imomoe.util.MD5.getMD5
-import com.skyd.imomoe.util.SnifferVideo
+import com.skyd.imomoe.util.html.SnifferVideo
 import com.skyd.imomoe.util.Util.dp2px
 import com.skyd.imomoe.util.Util.getDetailLinkByEpisodeLink
 import com.skyd.imomoe.util.Util.getResColor
@@ -42,14 +40,12 @@ import com.skyd.imomoe.util.Util.openVideoByExternalPlayer
 import com.skyd.imomoe.util.Util.setColorStatusBar
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.downloadanime.AnimeDownloadHelper
-import com.skyd.imomoe.util.downloadanime.AnimeDownloadStatus
 import com.skyd.imomoe.util.gone
 import com.skyd.imomoe.view.adapter.AnimeDetailAdapter
 import com.skyd.imomoe.view.adapter.PlayAdapter
 import com.skyd.imomoe.view.adapter.decoration.AnimeEpisodeItemDecoration
 import com.skyd.imomoe.view.adapter.decoration.AnimeShowItemDecoration
 import com.skyd.imomoe.view.adapter.spansize.PlaySpanSize
-import com.skyd.imomoe.view.component.player.AnimeDanmakuParser
 import com.skyd.imomoe.view.component.player.AnimeVideoPlayer
 import com.skyd.imomoe.view.component.player.DanmakuVideoPlayer
 import com.skyd.imomoe.view.component.player.DetailPlayerActivity
@@ -63,8 +59,6 @@ import kotlinx.coroutines.withContext
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
 import tv.danmaku.ijk.media.player.IjkMediaPlayer
 import java.io.File
-import java.io.InputStream
-import java.net.URL
 
 
 class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>() {
@@ -81,7 +75,8 @@ class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>() {
     private lateinit var viewModel: PlayViewModel
     private lateinit var adapter: PlayAdapter
     private var isFirstTime = true
-    private var danmuUrl = ""
+    private var danmuUrl: String = ""
+    private var danmuParamMap: HashMap<String, String> = HashMap()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -221,13 +216,33 @@ class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>() {
         //缓存番剧调用getAnimeEpisodeData()来获取视频url
         viewModel.mldGetAnimeEpisodeData.observe(this, Observer {
             val url = viewModel.episodesList[it].videoUrl
-            AnimeDownloadHelper.instance.downloadAnime(
-                this,
-                url,
-                getMD5(url),
-                viewModel.playBean?.title?.title + "/" +
-                        viewModel.episodesList[it].title
-            )
+            if (url.endsWith("\$qzz", true)) {
+                SnifferVideo.getQzzVideoUrl(
+                    this@PlayActivity, viewModel.episodesList[it].actionUrl, detailPartUrl
+                ) { videoUrl, paramMap ->
+//                    danmuUrl = danMuUrl
+//                    danmuParamMap.clear()
+//                    danmuParamMap.putAll(paramMap)
+                    runOnUiThread {
+                        AnimeDownloadHelper.instance.downloadAnime(
+                            this, videoUrl, getMD5(videoUrl),
+                            viewModel.playBean?.title?.title + "/" +
+                                    viewModel.episodesList[it].title
+                        )
+                    }
+                }
+                return@Observer
+            } else {
+                AnimeDownloadHelper.instance.downloadAnime(
+                    this, url, getMD5(url),
+                    viewModel.playBean?.title?.title + "/" +
+                            viewModel.episodesList[it].title
+                )
+            }
+        })
+
+        viewModel.mldAnimeEpisodeDataRefreshed.observe(this, Observer {
+            if (it) videoPlayer.currentPlayer.startPlay(partUrl = viewModel.animeEpisodeDataBean.actionUrl)
         })
 
         mBinding.srlPlayActivity.isRefreshing = true
@@ -240,19 +255,18 @@ class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>() {
     }
 
     fun startPlay(url: String, currentEpisodeIndex: Int, title: String) {
-        viewModel.mldAnimeEpisodeDataRefreshed.observe(this, Observer {
-            if (it) {
-                videoPlayer.currentPlayer.startPlay()
-            }
-        })
         viewModel.refreshAnimeEpisodeData(url, currentEpisodeIndex, title)
     }
 
-    fun startPlay2(url: String, title: String) {
-        videoPlayer.startPlay(url, title)
+    fun startPlay2(url: String, title: String, partUrl: String = this@PlayActivity.partUrl) {
+        videoPlayer.startPlay(url, title, partUrl)
     }
 
-    private fun GSYBaseVideoPlayer.startPlay(url: String = "", title: String = "") {
+    private fun GSYBaseVideoPlayer.startPlay(
+        url: String = "",
+        title: String = "",
+        partUrl: String = this@PlayActivity.partUrl
+    ) {
         PlayerFactory.setPlayManager(Exo2PlayerManager().javaClass)
         GSYVideoType.disableMediaCodec()        // 关闭硬解码
         //设置播放URL
@@ -277,8 +291,10 @@ class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>() {
                     this@PlayActivity,
                     partUrl,
                     detailPartUrl
-                ) { videoUrl, danMuUrl ->
-                    danmuUrl = danMuUrl
+                ) { videoUrl, paramMap ->
+                    danmuParamMap.clear()
+                    danmuParamMap.putAll(paramMap)
+                    danmuUrl = paramMap[SnifferVideo.DANMU_URL] ?: ""
                     runOnUiThread {
                         setUp(videoUrl, false, viewModel.animeEpisodeDataBean.title)
                         //开始播放
@@ -299,14 +315,13 @@ class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>() {
                 danmuUrl = ""
                 setUp(url, false, title)
             } else {
-                SnifferVideo.getQzzVideoUrl(
-                    this@PlayActivity,
-                    partUrl,
-                    detailPartUrl
-                ) { videoUrl, danMuUrl ->
-                    danmuUrl = danMuUrl
+                SnifferVideo.getQzzVideoUrl(this@PlayActivity, partUrl, detailPartUrl)
+                { videoUrl, paramMap ->
+                    danmuParamMap.clear()
+                    danmuParamMap.putAll(paramMap)
+                    danmuUrl = paramMap[SnifferVideo.DANMU_URL] ?: ""
                     setUp(videoUrl, false, title)
-                    //开始播放
+                    // 开始播放
                     startPlayLogic()
                 }
                 return
@@ -316,39 +331,29 @@ class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>() {
         startPlayLogic()
     }
 
-    private fun loadDanmu(player: DanmakuVideoPlayer, danmuUrl: String) {
-        FileDownloader.getImpl().create(danmuUrl)
-            .setPath(Const.AnimeDanmu.animeDanmuFilePath, false)
-            .setListener(object : FileDownloadSampleListener() {
-                override fun completed(task: BaseDownloadTask) {
-                    if (!this@PlayActivity.isDestroyed)
-                        player.setDanmaKuStream(File(Const.AnimeDanmu.animeDanmuFilePath))
-                }
-
-                override fun error(task: BaseDownloadTask, e: Throwable?) {
-                    e?.printStackTrace()
-                    getString(R.string.load_danmu_failed).showToast()
-                }
-            }).start()
-    }
-
     override fun onPlayError(url: String?, vararg objects: Any?) {
         super.onPlayError(url, *objects)
-        SnifferVideo.askSnifferDialog(
-            this, objects[0].toString() + ", " + getString(R.string.get_data_failed),
-            getString(R.string.will_you_try_to_sniffer_video),
-            partUrl, detailPartUrl
-        ) { videoUrl, danMuUrl ->
-            videoPlayer.startPlay(videoUrl, viewModel.animeEpisodeDataBean.title)
-        }
+        "${objects[0].toString()}, ${getString(R.string.get_data_failed)}".showToast()
+//        SnifferVideo.askSnifferDialog(
+//            this, objects[0].toString() + ", " + getString(R.string.get_data_failed),
+//            getString(R.string.will_you_try_to_sniffer_video),
+//            partUrl, detailPartUrl
+//        ) { videoUrl, danMuUrl ->
+//            videoPlayer.startPlay(videoUrl, viewModel.animeEpisodeDataBean.title)
+//        }
     }
 
     override fun onPrepared(url: String?, vararg objects: Any?) {
         super.onPrepared(url, *objects)
         //调整触摸滑动快进的比例
         //毫秒,刚好划一屏1分35秒
-        videoPlayer.seekRatio = videoPlayer.duration / 90_000f
-        videoPlayer.let { if (it is DanmakuVideoPlayer) loadDanmu(it, danmuUrl) }
+        videoPlayer.currentPlayer.apply {
+            seekRatio = duration / 90_000f
+            if (danmuUrl.isNotBlank() && this is DanmakuVideoPlayer && !this@PlayActivity.isDestroyed) {
+                this@PlayActivity.getString(R.string.the_video_has_danmu).showToast()
+                this.setDanmaKuUrl(danmuUrl, paramMap = danmuParamMap)
+            }
+        }
     }
 
     override fun getGSYVideoPlayer(): AnimeVideoPlayer = videoPlayer

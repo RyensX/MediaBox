@@ -1,7 +1,6 @@
 package com.skyd.imomoe.view.component.player
 
 import android.net.Uri
-import android.text.TextUtils
 import master.flame.danmaku.danmaku.parser.IDataSource
 import master.flame.danmaku.danmaku.util.IOUtils
 import org.json.JSONArray
@@ -36,7 +35,9 @@ class AnimeJSONSource : IDataSource<JSONArray> {
         init(json)
     }
 
-    constructor(url: URL) : this(url.openStream())
+    constructor(url: URL) {
+        init(url.openStream())
+    }
 
     constructor(file: File) {
         init(FileInputStream(file))
@@ -45,8 +46,9 @@ class AnimeJSONSource : IDataSource<JSONArray> {
     constructor(uri: Uri) {
         val scheme = uri.scheme
         if (IDataSource.SCHEME_HTTP_TAG.equals(scheme, ignoreCase = true)
-            || IDataSource.SCHEME_HTTPS_TAG.equals(scheme, ignoreCase = true)) {
-            init(URL(uri.path).openStream())
+            || IDataSource.SCHEME_HTTPS_TAG.equals(scheme, ignoreCase = true)
+        ) {
+            init(URL(uri.toString()).openStream())
         } else if (IDataSource.SCHEME_FILE_TAG.equals(scheme, ignoreCase = true)) {
             init(FileInputStream(uri.path))
         }
@@ -54,7 +56,7 @@ class AnimeJSONSource : IDataSource<JSONArray> {
 
     @Throws(JSONException::class)
     private fun init(json: String) {
-        if (!TextUtils.isEmpty(json)) {
+        if (json.isNotBlank()) {
             val o = JSONObject(json)
             danmuCount = o.getLong("danum")
             code = o.getInt("code")
