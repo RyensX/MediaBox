@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".view.activity.SimplePlayActivity">
 
-    <com.skyd.imomoe.view.component.player.AnimeVideoPlayer
+    <com.skyd.imomoe.view.component.player.DanmakuVideoPlayer
         android:id="@+id/avp_simple_play_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

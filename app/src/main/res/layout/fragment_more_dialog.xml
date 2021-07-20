@@ -32,7 +32,7 @@
             android:gravity="center"
             android:paddingTop="7dp"
             android:paddingBottom="7dp"
-            android:text="@string/dlna"
+            android:text="@string/play_on_tv"
             android:textColor="@color/foreground_main_color_2"
             android:textSize="12sp"
             app:drawableTopCompat="@drawable/ic_live_tv_main_color_2_24" />

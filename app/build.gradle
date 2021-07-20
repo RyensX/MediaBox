@@ -3,7 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'AndResGuard'
-    id 'bugly'
+    id 'com.efs.sdk.plugin'
 }
 
 apply from: secret
@@ -14,13 +14,6 @@ android.defaultConfig {
     })
 }
 
-// Bugly符号表
-bugly {
-    appId = secret.buildConfigField.BUGLY_APP_ID    // 注册时分配的App ID
-    appKey = secret.buildConfigField.BUGLY_APP_KEY  // 注册时分配的App Key
-    debug = false                                   // 调试模式默认关闭，true是打开
-}
-
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
@@ -29,8 +22,9 @@ android {
         applicationId "com.skyd.imomoe"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 14
-        versionName "1.1.2_beta1"
+        versionCode 15
+        versionName "1.1.2"
+        flavorDimensions "versionName"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -46,6 +40,8 @@ android {
         ndk {
             abiFilters 'armeabi'
         }
+
+        manifestPlaceholders = secret.manifestPlaceholders
     }
 
     signingConfigs {
@@ -54,6 +50,21 @@ android {
             keyPassword secret.sign.RELEASE_KEY_PASSWORD
             storeFile file('../key.jks')
             storePassword secret.sign.RELEASE_STORE_PASSWORD
+        }
+    }
+
+    productFlavors {
+        Github {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "Github"]
+        }
+        Gitee {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "Gitee"]
+        }
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "app_release_${variant.productFlavors[0].name.toLowerCase()}_v${variant.versionName}.apk"
         }
     }
 
@@ -94,10 +105,15 @@ android {
         exclude 'META-INF/LICENSE'
         exclude 'META-INF/eclipse.inf'
         exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/nanohttpd/**'
         exclude 'about_files/LICENSE_CDDL.txt'
         exclude 'DebugProbesKt.bin'
         exclude 'jetty-dir.css'
         exclude 'plugin.properties'
+        exclude 'org/seamless/**'
+        exclude 'org/eclipse/jetty/**'
+        exclude 'org/fourthline/cling/**'
+        exclude 'okhttp3/internal/**'
     }
 
     buildFeatures {
@@ -143,14 +159,44 @@ dependencies {
     implementation 'org.eclipse.jetty:jetty-client:8.1.22.v20160922'
     implementation 'org.nanohttpd:nanohttpd:2.3.1'
 //    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.4'
-    implementation 'com.tencent.bugly:crashreport:3.3.9'
     implementation 'org.greenrobot:eventbus:3.2.0'
-    implementation "com.umeng.umsdk:common:9.3.6"
-    implementation "com.umeng.umsdk:asms:1.2.0" // asms包依赖
+    implementation "com.umeng.umsdk:common:9.4.0"
+    implementation "com.umeng.umsdk:asms:1.2.3" // asms包依赖
+    implementation 'com.umeng.umsdk:apm:1.4.0'  // U-APM产品包依赖
     implementation 'com.scwang.smart:refresh-layout-kernel:2.0.3'      //核心必须依赖
     implementation 'com.scwang.smart:refresh-header-material:2.0.3'    //谷歌刷新头
     implementation 'com.scwang.smart:refresh-footer-ball:2.0.3'        //球脉冲加载
     implementation 'com.github.ctiao:DanmakuFlameMaster:0.9.25'
+}
+
+// UM U-APM性能报告
+efs {
+    //是否对启动过程进程插桩的开关，如果使用自动集成监控则必须开启
+    isAutoTrack = true
+    //您自定义Application的类名称，必填项，如没有自定义则填写系统Application
+    applicationName = "App"
+    //您自定义Activity的类名称，必填项，将您所有Activity的类名按如下格式填写
+    activityList = [
+            "AboutActivity",
+            "AnimeDetailActivity",
+            "AnimeDownloadActivity",
+            "BaseActivity",
+            "ClassifyActivity",
+            "CrashActivity",
+            "DInaActivity",
+            "DInaControlActivity",
+            "FavoriteActivity",
+            "HistoryActivity",
+            "LicenseActivity",
+            "MainActivity",
+            "MonthAnimeActivity",
+            "PlayActivity",
+            "RankActivity",
+            "SearchActivity",
+            "SettingActivity",
+            "SimplePlayActivity",
+            "DetailPlayerActivity"
+    ]
 }
 
 //AndResGuard资源混淆工具

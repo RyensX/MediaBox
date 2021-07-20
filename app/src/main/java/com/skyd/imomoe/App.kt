@@ -7,9 +7,9 @@ import com.scwang.smart.refresh.footer.BallPulseFooter
 import com.scwang.smart.refresh.header.MaterialHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import com.skyd.imomoe.util.CrashHandler
+import com.skyd.imomoe.util.Util.getManifestMetaValue
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.setNightMode
-import com.tencent.bugly.crashreport.CrashReport
 import com.umeng.analytics.MobclickAgent
 import com.umeng.commonsdk.UMConfigure
 
@@ -20,17 +20,14 @@ class App : Application() {
         context = this
 
         // Crash提示
-//        CrashHandler.getInstance(this)
-
-        // Bugly APP ID
-//        CrashReport.initCrashReport(applicationContext, BuildConfig.BUGLY_APP_ID, true)
+        CrashHandler.getInstance(this)
 
         // 友盟
         // 初始化组件化基础库, 所有友盟业务SDK都必须调用此初始化接口。
         UMConfigure.init(
             this,
-            BuildConfig.UM_APP_KEY,
-            "Github",
+            getManifestMetaValue("UMENG_APPKEY"),
+            getManifestMetaValue("UMENG_CHANNEL"),
             UMConfigure.DEVICE_TYPE_PHONE,
             null
         )

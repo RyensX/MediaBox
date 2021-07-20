@@ -19,8 +19,8 @@ class GettingUtil private constructor() {
     private lateinit var mCallback: GettingCallback
     private var mHeader: MutableMap<String, String> = HashMap()
     private var mActivity: SoftReference<Activity>? = null
-    private var mConnTimeOut = 16 * 1000.toLong()
-    private var mReadTimeOut = 20 * 1000.toLong()
+    private var mConnTimeOut = 16 * 1000L
+    private var mReadTimeOut = 20 * 1000L
     private var mFinishedTimeOut: Long = 800
     private lateinit var mClient: GettingWebViewClient
 

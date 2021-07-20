@@ -130,8 +130,7 @@ object Util {
     /**
      * 设置不验证主机
      */
-    private val DO_NOT_VERIFY =
-        HostnameVerifier { hostname, session -> true }
+    private val DO_NOT_VERIFY = HostnameVerifier { hostname, session -> true }
 
     /**
      * 信任所有
@@ -142,11 +141,7 @@ object Util {
         val oldFactory = connection!!.sslSocketFactory
         try {
             val sc = SSLContext.getInstance("TLS")
-            sc.init(
-                null,
-                trustAllCerts,
-                SecureRandom()
-            )
+            sc.init(null, trustAllCerts, SecureRandom())
             val newFactory = sc.socketFactory
             connection.sslSocketFactory = newFactory
         } catch (e: Exception) {

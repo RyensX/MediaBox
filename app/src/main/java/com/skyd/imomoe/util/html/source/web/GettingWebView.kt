@@ -39,7 +39,7 @@ class GettingWebView @JvmOverloads constructor(
             mWebSettings.allowUniversalAccessFromFileURLs = true
         }
         mWebSettings.javaScriptCanOpenWindowsAutomatically = true
-        mWebSettings.loadsImagesAutomatically = true
+        mWebSettings.loadsImagesAutomatically = false
         mWebSettings.setAppCacheEnabled(true)
         mWebSettings.setAppCachePath(context.cacheDir.absolutePath)
         mWebSettings.databaseEnabled = true
@@ -67,9 +67,5 @@ class GettingWebView @JvmOverloads constructor(
             }
         }, "anime_html_source")
         initWebSetting(context)
-    }
-
-    interface HtmlSourceListener {
-        fun onFinished(html: String)
     }
 }

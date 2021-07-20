@@ -28,8 +28,8 @@ class GettingWebViewClient(
     private var mConnTimeout: TimeOutRunnable? = null
     private var mReadTimeout: TimeOutRunnable? = null
     private val mJSRunnable: ParserHtmlRunnable? = null
-    private var mConnTimeOut = 20 * 1000.toLong()
-    private var mReadTimeOut = 45 * 1000.toLong()
+    private var mConnTimeOut = 20 * 1000L
+    private var mReadTimeOut = 45 * 1000L
     private var mFinishedTimeOut: Long = 800
     override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
         if (url.startsWith("http")) view.loadUrl(url, mHeader)

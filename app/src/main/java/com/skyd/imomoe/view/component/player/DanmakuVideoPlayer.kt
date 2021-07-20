@@ -1,11 +1,9 @@
 package com.skyd.imomoe.view.component.player
 
+import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Color
-import android.os.Handler
-import android.os.Looper
 import android.util.AttributeSet
-import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.ViewGroup
@@ -23,6 +21,7 @@ import com.skyd.imomoe.bean.SendDanmuBean
 import com.skyd.imomoe.bean.SendDanmuResultBean
 import com.skyd.imomoe.net.RetrofitManager
 import com.skyd.imomoe.net.service.DanmuService
+import com.skyd.imomoe.util.Util.hideKeyboard
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.gone
 import com.skyd.imomoe.util.html.SnifferVideo.AC
@@ -124,6 +123,18 @@ class DanmakuVideoPlayer : AnimeVideoPlayer {
             }
         })
 
+        mDanmuInputEditText?.setOnFocusChangeListener { v, hasFocus ->
+            if (mIfCurrentIsFullscreen) {
+                if (hasFocus) cancelDismissControlViewTimer()
+                else {
+                    startDismissControlViewTimer()
+                    if (v is EditText) v.hideKeyboard()
+                }
+            } else if (!hasFocus && v is EditText) {
+                v.hideKeyboard()
+            }
+        }
+
         mDanmuUrl = ""
         initDanmaku()
 
@@ -166,7 +177,7 @@ class DanmakuVideoPlayer : AnimeVideoPlayer {
         super.onSeekComplete()
         val time = mProgressBar.progress / 100.0 * duration
         // 如果已经初始化过的，直接seek到对于位置
-        Log.e("---", "$time ${mProgressBar.progress} $duration")
+//        Log.e("---", "$time ${mProgressBar.progress} $duration")
 //        Log.e("---", "$mCurrentPosition ${mProgressBar.progress} $duration")
         if (mHadPlay && danmakuView.isPrepared) {
             resolveDanmakuSeek(this, time.toLong())
@@ -385,11 +396,17 @@ class DanmakuVideoPlayer : AnimeVideoPlayer {
     private fun showBottomDanmuController() {
         mDanmuController?.let { danmuController ->
             if (danmuController.layoutParams.height == 0) {
-                danmuController.layoutParams = danmuController.layoutParams.apply {
-                    height = ViewGroup.LayoutParams.WRAP_CONTENT
-                }
+                danmuController.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                danmuController.requestLayout()
                 post {
-                    layoutParams = layoutParams.apply { height += danmuController.height }
+                    ValueAnimator.ofInt(height, height + danmuController.height).setDuration(500)
+                        .apply {
+                            addUpdateListener { animation ->
+                                layoutParams.height = animation.animatedValue as Int
+                                requestLayout()
+                            }
+                            start()
+                        }
                 }
             }
         }
@@ -401,15 +418,21 @@ class DanmakuVideoPlayer : AnimeVideoPlayer {
     private fun hideBottomDanmuController() {
         mDanmuController?.let { danmuController ->
             if (danmuController.layoutParams.height != 0) {
-                post {
-                    layoutParams = layoutParams.apply {
-                        if (danmuController.height > 0)
-                            height -= danmuController.height
+                if (danmuController.height > 0) {
+                    post {
+                        ValueAnimator.ofInt(height, height - danmuController.height)
+                            .setDuration(500)
+                            .apply {
+                                addUpdateListener { animation ->
+                                    layoutParams.height = animation.animatedValue as Int
+                                    requestLayout()
+                                }
+                                start()
+                            }
                     }
                 }
-                danmuController.layoutParams = danmuController.layoutParams.apply {
-                    height = 0
-                }
+                danmuController.layoutParams.height = 0
+                danmuController.requestLayout()
             }
         }
     }

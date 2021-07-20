@@ -1,6 +1,7 @@
 package com.skyd.imomoe.view.component
 
 import android.content.Context
+import android.os.Build
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.widget.FrameLayout
@@ -90,12 +91,18 @@ class ZoomView @JvmOverloads constructor(
 
     // 触碰两点间中心点X
     private fun getCenterX(event: MotionEvent): Float {
-        return (event.getRawX(0) + event.getRawX(1)) / 2f
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && event.pointerCount > 1)
+        // 安卓10及以上才有public float getRawX(int pointerIndex)方法
+            (event.getRawX(0) + event.getRawX(1)) / 2f
+        else event.rawX
     }
 
     // 触碰两点间中心点Y
     private fun getCenterY(event: MotionEvent): Float {
-        return (event.getRawY(0) + event.getRawY(1)) / 2f
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && event.pointerCount > 1)
+        // 安卓10及以上才有public float getRawX(int pointerIndex)方法
+            (event.getRawY(0) + event.getRawY(1)) / 2f
+        else event.rawY
     }
 
     // 触碰两点间距离

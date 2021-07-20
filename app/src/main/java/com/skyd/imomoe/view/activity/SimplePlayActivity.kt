@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import com.shuyu.gsyvideoplayer.GSYVideoManager
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack
-import com.shuyu.gsyvideoplayer.listener.VideoAllCallBack
 import com.shuyu.gsyvideoplayer.model.VideoOptionModel
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils
 import com.skyd.imomoe.database.getAppDataBase

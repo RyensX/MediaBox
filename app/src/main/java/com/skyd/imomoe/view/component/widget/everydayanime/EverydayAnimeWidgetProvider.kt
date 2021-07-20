@@ -23,22 +23,6 @@ import java.util.*
 
 class EverydayAnimeWidgetProvider : AppWidgetProvider() {
 
-    override fun onDeleted(
-        context: Context,
-        appWidgetIds: IntArray
-    ) {
-        super.onDeleted(context, appWidgetIds)
-    }
-
-    override fun onDisabled(context: Context) {
-        super.onDisabled(context)
-//        val intent = Intent().setAction(REFRESH_ACTION)
-//        val pendingIntent =
-//            PendingIntent.getBroadcast(context.applicationContext, 2006, intent, 0)
-//        val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-//        am.cancel(pendingIntent)
-    }
-
     override fun onEnabled(context: Context) {
         super.onEnabled(context)
         "桌面小组件为测试性功能，若造成系统卡顿请移除".showToast(Toast.LENGTH_LONG)

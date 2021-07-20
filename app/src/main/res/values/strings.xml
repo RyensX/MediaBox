@@ -113,7 +113,6 @@
     <string name="delete">删除</string>
     <string name="clean">清理</string>
     <string name="media_codec">硬解码</string>
-    <string name="dlna">投屏</string>
     <string name="open_by_external_player">外部播放器打开</string>
     <string name="choose_video_player">请选择视频播放器</string>
     <string name="matched_app_not_found">没有找到匹配的程序</string>

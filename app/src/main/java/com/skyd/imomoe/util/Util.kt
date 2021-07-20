@@ -358,6 +358,26 @@ object Util {
         }
     }
 
+    fun getManifestMetaValue(name: String): String {
+        var metaValue = ""
+        try {
+            val packageManager = App.context.packageManager
+            if (packageManager != null) {
+                // 注意此处为ApplicationInfo 而不是 ActivityInfo,因为友盟设置的meta-data是在application标签中，而不是某activity标签中，所以用ApplicationInfo
+                val applicationInfo = packageManager.getApplicationInfo(
+                    App.context.packageName,
+                    PackageManager.GET_META_DATA
+                )
+                if (applicationInfo.metaData != null) {
+                    metaValue = applicationInfo.metaData[name].toString()
+                }
+            }
+        } catch (e: PackageManager.NameNotFoundException) {
+            e.printStackTrace()
+        }
+        return metaValue
+    }
+
     fun EditText.showKeyboard() {
         isFocusable = true
         isFocusableInTouchMode = true
@@ -365,6 +385,12 @@ object Util {
         val inputManager =
             App.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputManager.showSoftInput(this, 0)
+    }
+
+    fun EditText.hideKeyboard() {
+        val inputManager =
+            App.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputManager.hideSoftInputFromWindow(this.windowToken, 0)
     }
 
     fun String.getSubString(s: String, e: String): List<String> {

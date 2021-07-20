@@ -100,6 +100,14 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="${UMENG_APPKEY_VALUE}" />
+
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="${UMENG_CHANNEL_VALUE}" />
     </application>
 
 </manifest>

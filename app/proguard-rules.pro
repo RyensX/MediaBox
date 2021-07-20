@@ -24,13 +24,10 @@
 -keep class * implements java.io.Serializable { *;}
 -keep class * implements android.os.Parcelable { *;}
 
-#-------------------------Bugly
--dontwarn com.tencent.bugly.**
--keep public class com.tencent.bugly.**{*;}
 #-------------------------Umeng
 -keep class com.umeng.** {*;}
-
 -keep class com.uc.** {*;}
+-keep class com.efs.** { *; }
 
 -keepclassmembers class * {
    public <init> (org.json.JSONObject);
