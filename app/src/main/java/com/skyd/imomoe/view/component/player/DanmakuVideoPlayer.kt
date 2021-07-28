@@ -11,6 +11,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import com.google.gson.Gson
 import com.shuyu.gsyvideoplayer.utils.Debuger
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer
@@ -21,6 +22,7 @@ import com.skyd.imomoe.bean.SendDanmuBean
 import com.skyd.imomoe.bean.SendDanmuResultBean
 import com.skyd.imomoe.net.RetrofitManager
 import com.skyd.imomoe.net.service.DanmuService
+import com.skyd.imomoe.util.Text.shield
 import com.skyd.imomoe.util.Util.hideKeyboard
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.gone
@@ -449,7 +451,14 @@ class DanmakuVideoPlayer : AnimeVideoPlayer {
     ) {
         val danmaku = danmakuContext?.mDanmakuFactory?.createDanmaku(BaseDanmaku.TYPE_SCROLL_RL)
         danmaku ?: return
-        danmaku.text = sendDanmuBean.text
+        sendDanmuBean.text.apply {
+            // 检测是否有被屏蔽字符，若有则不进行发送
+            if (shield()) {
+                mContext.getString(R.string.danmu_exist_shield_content).showToast(Toast.LENGTH_LONG)
+                return
+            }
+            danmaku.text = this
+        }
         danmaku.isLive = isLive
         danmaku.time = (sendDanmuBean.time * 1000).toLong()
         danmaku.textSize = 0.7f * sendDanmuBean.size.replace("px", "").toFloat() *

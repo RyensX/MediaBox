@@ -1,6 +1,8 @@
 package com.skyd.imomoe.view.component.player
 
 import android.graphics.Color
+import com.skyd.imomoe.BuildConfig
+import com.skyd.imomoe.util.Text.shield
 import master.flame.danmaku.danmaku.model.android.Danmakus
 import master.flame.danmaku.danmaku.parser.BaseDanmakuParser
 import org.json.JSONArray
@@ -37,6 +39,9 @@ class AnimeDanmakuParser : BaseDanmakuParser() {
         for (i in 0 until jsonArray.length()) {
             try {
                 val array = jsonArray.getJSONArray(i)
+                val text = array.getString(4)
+                // 如果此条弹幕应该屏蔽，则直接continue到下一条
+                if (text.shield()) continue
                 val type = getType(array.getString(1))          // 弹幕类型
                 val time = (array.getDouble(0) * 1000).toLong() // 出现时间
                 val color = getColor(array.getString(2))
@@ -53,7 +58,7 @@ class AnimeDanmakuParser : BaseDanmakuParser() {
                     item.index = i
                     item.flags = mContext.mGlobalFlagValues
                     item.timer = mTimer
-                    item.text = array.getString(4)
+                    item.text = text
                     danmakus.addItem(item)
                 }
             } catch (e: JSONException) {

@@ -12,9 +12,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.liulishuo.filedownloader.BaseDownloadTask
-import com.liulishuo.filedownloader.FileDownloadSampleListener
-import com.liulishuo.filedownloader.FileDownloader
 import com.shuyu.gsyvideoplayer.GSYVideoManager
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder
 import com.shuyu.gsyvideoplayer.model.VideoOptionModel
@@ -58,7 +55,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
 import tv.danmaku.ijk.media.player.IjkMediaPlayer
-import java.io.File
 
 
 class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>() {
@@ -247,7 +243,7 @@ class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>() {
 
         mBinding.srlPlayActivity.isRefreshing = true
         viewModel.getPlayData(partUrl)
-        viewModel.getAnimeCover(detailPartUrl)
+        viewModel.getAnimeCoverImageBean(detailPartUrl)
 
         val videoOptionModel =
             VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "enable-accurate-seek", 1)
@@ -454,7 +450,7 @@ class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>() {
                     } else if (action == "download") {
                         holder.itemView.setOnClickListener {
                             activity.getString(R.string.parsing_video).showToast()
-                            activity.viewModel.getAnimeEpisodeData(item.actionUrl, position)
+                            activity.viewModel.getAnimeEpisodeUrlData(item.actionUrl, position)
                         }
                     }
                 }

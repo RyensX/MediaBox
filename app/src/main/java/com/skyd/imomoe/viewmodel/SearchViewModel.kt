@@ -7,26 +7,23 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.bean.PageNumberBean
 import com.skyd.imomoe.bean.SearchHistoryBean
-import com.skyd.imomoe.config.Api
-import com.skyd.imomoe.config.Const.ActionUrl.Companion.ANIME_SEARCH
 import com.skyd.imomoe.database.getAppDataBase
-import com.skyd.imomoe.util.html.JsoupUtil
-import com.skyd.imomoe.util.html.ParseHtmlUtil.parseLpic
-import com.skyd.imomoe.util.html.ParseHtmlUtil.parseNextPages
+import com.skyd.imomoe.model.impls.SearchModel
+import com.skyd.imomoe.model.interfaces.ISearchModel
 import com.skyd.imomoe.util.Util.showToastOnThread
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.jsoup.select.Elements
 import java.lang.Exception
-import java.net.URLEncoder
 import kotlin.collections.ArrayList
 
 
 class SearchViewModel : ViewModel() {
+    private val searchModel: ISearchModel = SearchModel()
 
-    val beanList:MutableList<String> = ArrayList()
-    private val _beanList: MutableLiveData<MutableList<String>> = MutableLiveData(mutableListOf("a", "b"))
+    val beanList: MutableList<String> = ArrayList()
+    private val _beanList: MutableLiveData<MutableList<String>> =
+        MutableLiveData(mutableListOf("a", "b"))
 
     var searchResultList: MutableList<AnimeCoverBean> = ArrayList()
     var mldSearchResultList: MutableLiveData<Int> = MutableLiveData()   // value：-1错误；0重新获取；1刷新
@@ -38,26 +35,16 @@ class SearchViewModel : ViewModel() {
     var mldUpdateCompleted: MutableLiveData<Int> = MutableLiveData()
     var mldDeleteCompleted: MutableLiveData<Int> = MutableLiveData()
     var pageNumberBean: PageNumberBean? = null
-    var newPageIndex: Pair<Int, Int>? = null
 
     fun getSearchData(keyWord: String, isRefresh: Boolean = true, partUrl: String = "") {
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                val url = Api.MAIN_URL + ANIME_SEARCH + URLEncoder.encode(
-                    keyWord,
-                    "utf-8"
-                ) + "/" + partUrl
-                val document = JsoupUtil.getDocument(url)
-                val lpic: Elements = document.getElementsByClass("area")
-                    .select("[class=fire l]").select("[class=lpic]")
-                pageNumberBean = null
                 if (isRefresh) searchResultList.clear()
-                val positionStart = searchResultList.size
-                searchResultList.addAll(parseLpic(lpic[0], url))
-                val pages = lpic[0].select("[class=pages]")
-                if (pages.size > 0) pageNumberBean = parseNextPages(pages[0])
+                searchModel.getSearchData(keyWord, partUrl).apply {
+                    searchResultList.addAll(first)
+                    pageNumberBean = second
+                }
                 this@SearchViewModel.keyWord = keyWord
-                newPageIndex = Pair(positionStart, searchResultList.size)
                 mldSearchResultList.postValue(if (isRefresh) 0 else 1)
             } catch (e: Exception) {
                 mldFailed.postValue(true)

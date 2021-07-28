@@ -5,38 +5,27 @@ import androidx.lifecycle.ViewModel
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeCoverBean
-import com.skyd.imomoe.config.Api
-import com.skyd.imomoe.util.html.JsoupUtil
-import com.skyd.imomoe.util.html.ParseHtmlUtil.parseLpic
+import com.skyd.imomoe.model.impls.MonthAnimeModel
+import com.skyd.imomoe.model.interfaces.IMonthAnimeModel
 import com.skyd.imomoe.util.Util.showToastOnThread
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.jsoup.select.Elements
 import java.lang.Exception
 import java.util.*
 
 
 class MonthAnimeViewModel : ViewModel() {
+    val monthAnimeModel: IMonthAnimeModel = MonthAnimeModel()
     var monthAnimeList: MutableList<AnimeCoverBean> = ArrayList()
     var mldMonthAnimeList: MutableLiveData<Boolean> = MutableLiveData()
 
     fun getMonthAnimeData(partUrl: String) {
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                val url = Api.MAIN_URL + partUrl
-                val document = JsoupUtil.getDocument(url)
-                val areaElements: Elements = document.getElementsByClass("area")
-                monthAnimeList.clear()
-                for (i in areaElements.indices) {
-                    val areaChildren: Elements = areaElements[i].children()
-                    for (j in areaChildren.indices) {
-                        when (areaChildren[j].className()) {
-                            "lpic" -> {
-                                monthAnimeList.addAll(parseLpic(areaChildren[j], url))
-                            }
-                        }
-                    }
+                monthAnimeModel.getMonthAnimeData(partUrl).apply {
+                    monthAnimeList.clear()
+                    monthAnimeList.addAll(this)
                 }
                 mldMonthAnimeList.postValue(true)
             } catch (e: Exception) {

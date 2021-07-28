@@ -12,6 +12,9 @@ android.defaultConfig {
     secret.buildConfigField.forEach({ k, v ->
         buildConfigField("String", k, "\"${v}\"")
     })
+    secret.shieldTextList.forEach({ k, v ->
+        buildConfigField("String[]", k, v)
+    })
 }
 
 android {

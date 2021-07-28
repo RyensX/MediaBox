@@ -96,7 +96,10 @@ object SnifferVideo {
 
                         Log.i("getPlayerHtmlSource $type", html)
                         if (type == 2) {
-                            listener.onGettingSuccess(webView, src)
+                            if (src.startsWith("blob:"))
+                                "HTML5 blob格式资源".showToast()
+                            else
+                                listener.onGettingSuccess(webView, src)
                             return
                         }
                         getPlayerHtmlSource(activity, src, referer, listener, type + 1)

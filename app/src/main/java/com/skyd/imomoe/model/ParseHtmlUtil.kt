@@ -1,4 +1,4 @@
-package com.skyd.imomoe.util.html
+package com.skyd.imomoe.model
 
 import com.skyd.imomoe.bean.*
 import com.skyd.imomoe.config.Api

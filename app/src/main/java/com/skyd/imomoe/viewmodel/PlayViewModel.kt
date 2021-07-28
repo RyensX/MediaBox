@@ -5,23 +5,20 @@ import androidx.lifecycle.ViewModel
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.*
-import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.config.Const.ViewHolderTypeString
 import com.skyd.imomoe.database.getAppDataBase
-import com.skyd.imomoe.util.html.JsoupUtil
-import com.skyd.imomoe.util.html.ParseHtmlUtil
-import com.skyd.imomoe.util.html.ParseHtmlUtil.parseBotit
-import com.skyd.imomoe.util.html.ParseHtmlUtil.parseMovurls
+import com.skyd.imomoe.model.impls.PlayModel
+import com.skyd.imomoe.model.interfaces.IPlayModel
 import com.skyd.imomoe.util.Util.showToastOnThread
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.jsoup.nodes.Element
-import org.jsoup.select.Elements
+import java.lang.RuntimeException
 import java.util.*
 
 
 class PlayViewModel : ViewModel() {
+    private val playModel: IPlayModel = PlayModel()
     var playBean: PlayBean? = null
     var partUrl: String = ""
     var animeCover: ImageBean = ImageBean("", "", "", "")
@@ -35,38 +32,18 @@ class PlayViewModel : ViewModel() {
     val mldAnimeEpisodeDataRefreshed: MutableLiveData<Boolean> = MutableLiveData()
     val mldGetAnimeEpisodeData: MutableLiveData<Int> = MutableLiveData()
 
-    private fun getVideoRawUrl(e: Element): String {
-        val div = e.select("[class=area]").select("[class=bofang]")[0].children()
-        val rawUrl = div.attr("data-vid")
-        return when {
-            rawUrl.endsWith("\$mp4", true) -> rawUrl.replace("\$mp4", "")
-            rawUrl.endsWith("\$url", true) -> rawUrl.replace("\$url", "")
-            rawUrl.endsWith("\$qzz", true) -> rawUrl
-            else -> ""
-        }
-    }
-
-    fun refreshAnimeEpisodeData(
-        partUrl: String,
-        currentEpisodeIndex: Int,
-        title: String = ""
-    ) {
+    fun refreshAnimeEpisodeData(partUrl: String, currentEpisodeIndex: Int, title: String = "") {
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 this@PlayViewModel.partUrl = partUrl
-                val document = JsoupUtil.getDocument(Api.MAIN_URL + partUrl)
-                val children: Elements = document.select("body")[0].children()
-                for (i in children.indices) {
-                    when (children[i].className()) {
-                        "play" -> {
-                            animeEpisodeDataBean.actionUrl = partUrl
-                            animeEpisodeDataBean.title = title
-                            animeEpisodeDataBean.videoUrl = getVideoRawUrl(children[i])
-                            break
-                        }
+                playModel.refreshAnimeEpisodeData(partUrl, animeEpisodeDataBean).apply {
+                    if (this) {
+                        animeEpisodeDataBean.title = title
+                        mldAnimeEpisodeDataRefreshed.postValue(true)
+                    } else {
+                        throw RuntimeException("html play class not found")
                     }
                 }
-                mldAnimeEpisodeDataRefreshed.postValue(true)
             } catch (e: Exception) {
                 e.printStackTrace()
                 animeEpisodeDataBean.actionUrl = "animeEpisode1"
@@ -79,19 +56,13 @@ class PlayViewModel : ViewModel() {
         }
     }
 
-    fun getAnimeEpisodeData(partUrl: String, position: Int) {
+    fun getAnimeEpisodeUrlData(partUrl: String, position: Int) {
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                this@PlayViewModel.partUrl = partUrl
-                val document = JsoupUtil.getDocument(Api.MAIN_URL + partUrl)
-                val children: Elements = document.select("body")[0].children()
-                for (i in children.indices) {
-                    when (children[i].className()) {
-                        "play" -> {
-                            episodesList[position].videoUrl = getVideoRawUrl(children[i])
-                            break
-                        }
-                    }
+//                this@PlayViewModel.partUrl = partUrl
+                playModel.getAnimeEpisodeUrlData(partUrl).apply {
+                    this ?: throw RuntimeException("getAnimeEpisodeUrlData return null")
+                    episodesList[position].videoUrl = this
                 }
                 mldEpisodesList.postValue(true)
                 mldGetAnimeEpisodeData.postValue(position)
@@ -106,75 +77,13 @@ class PlayViewModel : ViewModel() {
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 this@PlayViewModel.partUrl = partUrl
-                val title = AnimeTitleBean("", "", "")
-                val episode =
-                    AnimeEpisodeDataBean(
-                        "", "",
-                        ""
-                    )
-                val url = Api.MAIN_URL + partUrl
-                val document = JsoupUtil.getDocument(url)
-                val children: Elements = document.allElements
-                playBeanDataList.clear()
-                episodesList.clear()
-                for (i in children.indices) {
-                    when (children[i].className()) {
-                        "play" -> {
-                            animeEpisodeDataBean.videoUrl = getVideoRawUrl(children[i])
-                        }
-                        "area" -> {
-                            val areaChildren = children[i].children()
-                            for (j in areaChildren.indices) {
-                                when (areaChildren[j].className()) {
-                                    "gohome l" -> {        //标题
-                                        title.title = areaChildren[j].select("h1")
-                                            .select("a").text()
-                                        title.actionUrl = areaChildren[j].select("h1")
-                                            .select("a").attr("href")
-                                        episode.title = areaChildren[j].select("h1")
-                                            .select("span").text().replace("：", "")
-                                    }
-                                    "botit" -> {
-                                        playBeanDataList.add(
-                                            AnimeDetailBean(
-                                                ViewHolderTypeString.HEADER_1,
-                                                "",
-                                                parseBotit(areaChildren[j]),
-                                                ""
-                                            )
-                                        )
-                                    }
-                                    "movurls" -> {      //集数列表
-                                        episodesList.addAll(
-                                            parseMovurls(
-                                                areaChildren[j],
-                                                animeEpisodeDataBean
-                                            )
-                                        )
-                                        playBeanDataList.add(
-                                            AnimeDetailBean(
-                                                ViewHolderTypeString.HORIZONTAL_RECYCLER_VIEW_1,
-                                                "",
-                                                "",
-                                                "",
-                                                episodesList
-                                            )
-                                        )
-                                    }
-                                    "imgs" -> {
-                                        playBeanDataList.addAll(
-                                            ParseHtmlUtil.parseImg(areaChildren[j], url)
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                    }
+                playModel.getPlayData(partUrl, animeEpisodeDataBean).apply {
+                    playBeanDataList.clear()
+                    episodesList.clear()
+                    playBeanDataList.addAll(first)
+                    episodesList.addAll(second)
+                    playBean = third
                 }
-                playBean = PlayBean(
-                    "", "", title, episode,
-                    playBeanDataList
-                )
                 mldPlayBean.postValue(playBean)
                 mldEpisodesList.postValue(true)
             } catch (e: Exception) {
@@ -208,14 +117,11 @@ class PlayViewModel : ViewModel() {
     }
 
     // 插入观看历史记录
-    fun insertHistoryData(
-        detailPartUrl: String,
-    ) {
+    fun insertHistoryData(detailPartUrl: String) {
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 val cover = if (animeCover.url.isBlank()) {
-                    getAnimeCoverImageBean(detailPartUrl)
-                        ?: return@launch
+                    playModel.getAnimeCoverImageBean(detailPartUrl) ?: return@launch
                 } else animeCover
                 getAppDataBase().historyDao().insertHistory(
                     HistoryBean(
@@ -233,10 +139,10 @@ class PlayViewModel : ViewModel() {
         }
     }
 
-    fun getAnimeCover(detailPartUrl: String) {
+    fun getAnimeCoverImageBean(detailPartUrl: String) {
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                val bean = getAnimeCoverImageBean(detailPartUrl)
+                val bean = playModel.getAnimeCoverImageBean(detailPartUrl)
                     ?: throw Exception("null object, 无法获取CoverImageBean")
                 animeCover.url = bean.url
                 animeCover.referer = bean.referer
@@ -247,37 +153,6 @@ class PlayViewModel : ViewModel() {
                 (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread()
             }
         }
-    }
-
-    fun getAnimeCoverImageBean(detailPartUrl: String): ImageBean? {
-        try {
-            val url = Api.MAIN_URL + detailPartUrl
-            val document = JsoupUtil.getDocument(url)
-            //番剧头部信息
-            val area: Elements = document.getElementsByClass("area")
-            for (i in area.indices) {
-                val areaChildren = area[i].children()
-                for (j in areaChildren.indices) {
-                    when (areaChildren[j].className()) {
-                        "fire l" -> {
-                            val fireLChildren =
-                                areaChildren[j].select("[class=fire l]")[0].children()
-                            for (k in fireLChildren.indices) {
-                                if (fireLChildren[k].className() == "thumb l") {
-                                    return ImageBean(
-                                        "", "", fireLChildren[k]
-                                            .select("img").attr("src"), url
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return null
     }
 
     companion object {

@@ -143,4 +143,5 @@
     <string name="send_a_danmu">发个弹幕吧…</string>
     <string name="send_danmu_failed">发送弹幕失败，%s</string>
     <string name="please_input_danmu_text">请输入弹幕内容！</string>
+    <string name="danmu_exist_shield_content">存在被屏蔽文字，发送失败！</string>
 </resources>

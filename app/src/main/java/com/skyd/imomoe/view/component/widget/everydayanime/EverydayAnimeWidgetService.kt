@@ -10,8 +10,8 @@ import com.google.gson.Gson
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.config.Api
-import com.skyd.imomoe.util.html.JsoupUtil
-import com.skyd.imomoe.util.html.ParseHtmlUtil
+import com.skyd.imomoe.model.JsoupUtil
+import com.skyd.imomoe.model.ParseHtmlUtil
 import com.skyd.imomoe.util.Util
 import org.jsoup.select.Elements
 import java.lang.Exception
