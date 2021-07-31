@@ -8,6 +8,7 @@ import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.bean.PageNumberBean
 import com.skyd.imomoe.bean.SearchHistoryBean
 import com.skyd.imomoe.database.getAppDataBase
+import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.SearchModel
 import com.skyd.imomoe.model.interfaces.ISearchModel
 import com.skyd.imomoe.util.Util.showToastOnThread
@@ -19,8 +20,9 @@ import kotlin.collections.ArrayList
 
 
 class SearchViewModel : ViewModel() {
-    private val searchModel: ISearchModel = SearchModel()
-
+    private val searchModel: ISearchModel by lazy {
+        DataSourceManager.create(ISearchModel::class.java) ?: SearchModel()
+    }
     val beanList: MutableList<String> = ArrayList()
     private val _beanList: MutableLiveData<MutableList<String>> =
         MutableLiveData(mutableListOf("a", "b"))

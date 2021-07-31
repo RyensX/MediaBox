@@ -7,6 +7,7 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.*
 import com.skyd.imomoe.config.Const.ViewHolderTypeString
 import com.skyd.imomoe.database.getAppDataBase
+import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.PlayModel
 import com.skyd.imomoe.model.interfaces.IPlayModel
 import com.skyd.imomoe.util.Util.showToastOnThread
@@ -18,7 +19,9 @@ import java.util.*
 
 
 class PlayViewModel : ViewModel() {
-    private val playModel: IPlayModel = PlayModel()
+    private val playModel: IPlayModel by lazy {
+        DataSourceManager.create(IPlayModel::class.java) ?: PlayModel()
+    }
     var playBean: PlayBean? = null
     var partUrl: String = ""
     var animeCover: ImageBean = ImageBean("", "", "", "")

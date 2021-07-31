@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.TabBean
+import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.HomeModel
 import com.skyd.imomoe.model.interfaces.IHomeModel
 import com.skyd.imomoe.util.Util.showToastOnThread
@@ -18,7 +19,9 @@ import java.util.*
 
 
 class HomeViewModel : ViewModel() {
-    private val homeModel: IHomeModel = HomeModel()
+    private val homeModel: IHomeModel by lazy {
+        DataSourceManager.create(IHomeModel::class.java) ?: HomeModel()
+    }
     val childViewPool = SerializableRecycledViewPool()
     val viewPool = SerializableRecycledViewPool()
     var allTabList: MutableList<TabBean> = ArrayList()

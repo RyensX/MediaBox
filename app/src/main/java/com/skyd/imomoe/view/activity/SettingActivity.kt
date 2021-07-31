@@ -15,14 +15,14 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.databinding.ActivitySettingBinding
-import com.skyd.imomoe.util.Util
+import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.util.Util.getAppVersionName
 import com.skyd.imomoe.util.Util.getNightMode
 import com.skyd.imomoe.util.Util.isNightMode
+import com.skyd.imomoe.util.Util.restartApp
 import com.skyd.imomoe.util.Util.setNightMode
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.Util.showToastOnThread
-import com.skyd.imomoe.util.clickScale
 import com.skyd.imomoe.util.gone
 import com.skyd.imomoe.util.update.AppUpdateHelper
 import com.skyd.imomoe.util.update.AppUpdateStatus
@@ -195,6 +195,25 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
             mBinding.tvSettingActivityInfoDomain.text = Api.DEFAULT_MAIN_URL
             getString(R.string.set_domain_to_default, Api.DEFAULT_MAIN_URL)
                 .showToast(Toast.LENGTH_LONG)
+        }
+
+        mBinding.switchSettingActivityCustomDataSource.isChecked =
+            DataSourceManager.useCustomDataSource
+        mBinding.switchSettingActivityCustomDataSource.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (DataSourceManager.useCustomDataSource == isChecked) return@setOnCheckedChangeListener
+            MaterialDialog(this).show {
+                icon(R.drawable.ic_category_main_color_2_24)
+                title(res = R.string.warning)
+                message(res = R.string.request_restart_app)
+                positiveButton(res = R.string.restart) {
+                    DataSourceManager.useCustomDataSource = isChecked
+                    restartApp()
+                }
+                negativeButton(res = R.string.cancel) {
+                    buttonView.isChecked = !isChecked
+                    dismiss()
+                }
+            }
         }
 
         mBinding.rlSettingActivityDomain.setOnClickListener {

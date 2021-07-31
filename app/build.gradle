@@ -276,3 +276,24 @@ andResGuard {
      **/
     // digestalg = "SHA-256"
 }
+
+//class转jar
+//删除之前打出的包，默认将包打在'build/libs/'下
+task deleteOldJar(type: Delete){
+    delete 'build/libs/CustomDataSource.jar'
+}
+//打包操作
+task makeJar(type: Jar){
+    //要打成的包的名字
+    baseName 'CustomDataSource'
+    //选取要打包的文件夹
+    from('build\\tmp\\kotlin-classes\\GiteeDebug\\com\\skyd\\imomoe\\model\\impls')
+    //需要跟实际类的包名路径一样
+    into('com/skyd/imomoe/model/impls')
+    //排除在外的文件
+    exclude('BuildConfig.class', 'R.class', 'MainActivity.class')
+    //排除以R$开头的文件
+    exclude{ it.name.startsWith('R$')}
+}
+//打包~
+makeJar.dependsOn(deleteOldJar)

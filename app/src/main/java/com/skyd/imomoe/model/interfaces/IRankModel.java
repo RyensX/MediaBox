@@ -8,5 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface IRankModel extends IBaseModel {
+    String implName = "RankModel";
+
     Pair<ArrayList<TabBean>, ArrayList<List<AnimeCoverBean>>> getRankData();
 }

@@ -51,7 +51,7 @@ class ZoomView @JvmOverloads constructor(
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
         when (event.action and MotionEvent.ACTION_MASK) {
-            MotionEvent.ACTION_POINTER_DOWN -> {
+            MotionEvent.ACTION_POINTER_DOWN -> if (event.pointerCount > 1) {
                 moveType = 1
                 val centerX = getCenterX(event)
                 val centerY = getCenterY(event)
@@ -60,7 +60,7 @@ class ZoomView @JvmOverloads constructor(
                 spacing = getSpacing(event)
                 degree = getDegree(event)
             }
-            MotionEvent.ACTION_MOVE -> if (moveType == 1) {
+            MotionEvent.ACTION_MOVE -> if (moveType == 1 && event.pointerCount > 1) {
                 val centerX = getCenterX(event)
                 val centerY = getCenterY(event)
                 mTranslationX = mTranslationX + centerX - actionX
@@ -107,6 +107,7 @@ class ZoomView @JvmOverloads constructor(
 
     // 触碰两点间距离
     private fun getSpacing(event: MotionEvent): Float {
+        if (event.pointerCount <= 1) return 0f
         //通过三角函数得到两点间的距离
         val x = event.getX(0) - event.getX(1)
         val y = event.getY(0) - event.getY(1)
@@ -115,6 +116,7 @@ class ZoomView @JvmOverloads constructor(
 
     // 取旋转角度
     private fun getDegree(event: MotionEvent): Float {
+        if (event.pointerCount <= 1) return 0f
         //得到两个手指间的旋转角度
         val deltaX = event.getX(0) - event.getX(1).toDouble()
         val deltaY = event.getY(0) - event.getY(1).toDouble()

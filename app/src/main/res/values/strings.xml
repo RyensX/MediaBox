@@ -144,4 +144,9 @@
     <string name="send_danmu_failed">发送弹幕失败，%s</string>
     <string name="please_input_danmu_text">请输入弹幕内容！</string>
     <string name="danmu_exist_shield_content">存在被屏蔽文字，发送失败！</string>
+    <string name="custom_data_source">自定义数据源</string>
+    <string name="custom_data_source_describe">高级功能，需掌握Java编程</string>
+    <string name="using_custom_data_source">注意，正在使用自定义数据源！</string>
+    <string name="restart">重启</string>
+    <string name="request_restart_app">需要重启App，是否继续？</string>
 </resources>

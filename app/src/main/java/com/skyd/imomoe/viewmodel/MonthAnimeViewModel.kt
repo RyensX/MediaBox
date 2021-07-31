@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeCoverBean
+import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.MonthAnimeModel
 import com.skyd.imomoe.model.interfaces.IMonthAnimeModel
 import com.skyd.imomoe.util.Util.showToastOnThread
@@ -16,7 +17,9 @@ import java.util.*
 
 
 class MonthAnimeViewModel : ViewModel() {
-    val monthAnimeModel: IMonthAnimeModel = MonthAnimeModel()
+    private val monthAnimeModel: IMonthAnimeModel by lazy {
+        DataSourceManager.create(IMonthAnimeModel::class.java) ?: MonthAnimeModel()
+    }
     var monthAnimeList: MutableList<AnimeCoverBean> = ArrayList()
     var mldMonthAnimeList: MutableLiveData<Boolean> = MutableLiveData()
 

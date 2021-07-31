@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.*
+import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.AnimeDetailModel
 import com.skyd.imomoe.model.interfaces.IAnimeDetailModel
 import com.skyd.imomoe.util.Util.showToastOnThread
@@ -16,7 +17,9 @@ import kotlin.collections.ArrayList
 
 
 class AnimeDetailViewModel : ViewModel() {
-    private val animeDetailModel: IAnimeDetailModel = AnimeDetailModel()
+    private val animeDetailModel: IAnimeDetailModel by lazy {
+        DataSourceManager.create(IAnimeDetailModel::class.java) ?: AnimeDetailModel()
+    }
     var cover: ImageBean = ImageBean("", "", "", "")
     var title: String = ""
     var animeDetailList: MutableList<IAnimeDetailBean> = ArrayList()

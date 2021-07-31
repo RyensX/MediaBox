@@ -18,7 +18,8 @@
 10. 支持显示**搜索历史**记录
 11. 支持改变视频**播放速度**
 12. 支持改变**视频**显示**比例**（16:9, 4:3, 全屏等）
-13. ......
+13. [**自定义**显示**数据源**](doc/customdatasource/README.md)
+14. ......
 
 ## 运行截图
 
@@ -61,18 +62,5 @@
 
 ## License
 
-```
-Copyright 2021, SkyD666.
+[**GNU General Public License v3.0**](LICENSE)
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-   http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-```

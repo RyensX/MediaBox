@@ -19,6 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
             <RelativeLayout
                 android:id="@+id/rl_setting_activity_domain"
                 android:layout_width="match_parent"
@@ -389,6 +390,64 @@
                     android:textSize="12sp"
                     app:typeface="bPRTypeface"
                     tools:text="Github" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_setting_activity_custom_data_source"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?android:selectableItemBackground"
+                android:paddingHorizontal="15dp"
+                android:paddingVertical="15dp">
+
+                <ImageView
+                    android:id="@+id/iv_setting_activity_custom_data_source"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:paddingHorizontal="1dp"
+                    android:src="@drawable/ic_category_main_color_2_24" />
+
+                <com.skyd.imomoe.view.component.textview.TypefaceTextView
+                    android:id="@+id/tv_setting_activity_custom_data_source"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_toStartOf="@id/switch_setting_activity_custom_data_source"
+                    android:layout_toEndOf="@id/iv_setting_activity_custom_data_source"
+                    android:text="@string/custom_data_source"
+                    android:textColor="@color/foreground_black"
+                    android:textSize="15sp"
+                    app:typeface="bPRTypeface" />
+
+                <com.skyd.imomoe.view.component.textview.TypefaceTextView
+                    android:id="@+id/tv_setting_activity_custom_data_source_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_setting_activity_custom_data_source"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_toStartOf="@id/switch_setting_activity_custom_data_source"
+                    android:layout_toEndOf="@id/iv_setting_activity_custom_data_source"
+                    android:ellipsize="marquee"
+                    android:focusable="true"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:singleLine="true"
+                    android:text="@string/custom_data_source_describe"
+                    android:textColor="@color/gray_1"
+                    android:textSize="12sp"
+                    app:typeface="bPRTypeface" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/switch_setting_activity_custom_data_source"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    app:thumbTint="@color/foreground_main_color_2"
+                    app:thumbTintMode="src_in"
+                    app:trackTint="@color/main_color"
+                    app:trackTintMode="src_in" />
             </RelativeLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

@@ -7,5 +7,7 @@ import com.skyd.imomoe.model.util.Triple;
 import java.util.ArrayList;
 
 public interface IAnimeDetailModel extends IBaseModel {
+    String implName = "AnimeDetailModel";
+
     Triple<ImageBean, String, ArrayList<IAnimeDetailBean>> getAnimeDetailData(String partUrl);
 }

@@ -6,10 +6,13 @@ import com.liulishuo.filedownloader.FileDownloader
 import com.scwang.smart.refresh.footer.BallPulseFooter
 import com.scwang.smart.refresh.header.MaterialHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
+import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.util.CrashHandler
+import com.skyd.imomoe.util.Util
 import com.skyd.imomoe.util.Util.getManifestMetaValue
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.setNightMode
+import com.skyd.imomoe.util.Util.showToast
 import com.umeng.analytics.MobclickAgent
 import com.umeng.commonsdk.UMConfigure
 
@@ -38,6 +41,8 @@ class App : Application() {
 
         // 夜间模式
         setNightMode()
+
+        if (DataSourceManager.useCustomDataSource) getString(R.string.using_custom_data_source).showToast()
     }
 
     companion object {

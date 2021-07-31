@@ -70,6 +70,12 @@ object Util {
             .replaceFirst(Regex("-.*\\.html"), "") + getWebsiteLinkSuffix()
     }
 
+    fun restartApp() {
+        val i = App.context.packageManager.getLaunchIntentForPackage(App.context.packageName)
+        i?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        App.context.startActivity(i)
+    }
+
     fun getWebsiteLinkSuffix(): String {
         return App.context.sharedPreferences("websiteLinkSuffix").getString("suffix", ".html")
             ?: ".html"

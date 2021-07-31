@@ -9,6 +9,8 @@ import com.skyd.imomoe.model.util.Triple;
 import java.util.ArrayList;
 
 public interface IPlayModel extends IBaseModel {
+    String implName = "PlayModel";
+
     ImageBean getAnimeCoverImageBean(String detailPartUrl);
 
     Triple<ArrayList<IAnimeDetailBean>, ArrayList<AnimeEpisodeDataBean>, PlayBean> getPlayData(

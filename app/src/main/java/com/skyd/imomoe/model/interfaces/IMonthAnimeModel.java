@@ -5,5 +5,7 @@ import com.skyd.imomoe.bean.AnimeCoverBean;
 import java.util.ArrayList;
 
 public interface IMonthAnimeModel extends IBaseModel {
+    String implName = "MonthAnimeModel";
+
     ArrayList<AnimeCoverBean> getMonthAnimeData(String partUrl);
 }

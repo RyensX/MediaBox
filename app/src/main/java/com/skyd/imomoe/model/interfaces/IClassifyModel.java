@@ -8,6 +8,8 @@ import com.skyd.imomoe.model.util.Pair;
 import java.util.ArrayList;
 
 public interface IClassifyModel extends IBaseModel {
+    String implName = "ClassifyModel";
+
     ArrayList<ClassifyBean> getClassifyTabData();
 
     Pair<ArrayList<AnimeCoverBean>, PageNumberBean> getClassifyData(String partUrl);

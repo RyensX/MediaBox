@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.bean.TabBean
+import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.RankModel
 import com.skyd.imomoe.model.interfaces.IRankModel
 import com.skyd.imomoe.util.Util.showToastOnThread
@@ -17,7 +18,9 @@ import kotlin.collections.ArrayList
 
 
 class RankViewModel : ViewModel() {
-    private val rankModel: IRankModel = RankModel()
+    private val rankModel: IRankModel by lazy {
+        DataSourceManager.create(IRankModel::class.java) ?: RankModel()
+    }
     var isRequesting = false
     var tabList: MutableList<TabBean> = Collections.synchronizedList(ArrayList())
     var rankList: MutableList<List<AnimeCoverBean>> = Collections.synchronizedList(ArrayList())

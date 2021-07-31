@@ -7,6 +7,7 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.bean.ClassifyBean
 import com.skyd.imomoe.bean.PageNumberBean
+import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.ClassifyModel
 import com.skyd.imomoe.model.interfaces.IClassifyModel
 import com.skyd.imomoe.util.Util.showToastOnThread
@@ -18,7 +19,9 @@ import java.util.*
 
 
 class ClassifyViewModel : ViewModel() {
-    private val classifyModel: IClassifyModel = ClassifyModel()
+    private val classifyModel: IClassifyModel by lazy {
+        DataSourceManager.create(IClassifyModel::class.java) ?: ClassifyModel()
+    }
     var isRequesting = false
     var classifyTabList: MutableList<ClassifyBean> = ArrayList()        //上方分类数据
     var mldClassifyTabList: MutableLiveData<Boolean> = MutableLiveData()

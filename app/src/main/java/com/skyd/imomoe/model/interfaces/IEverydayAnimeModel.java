@@ -9,5 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface IEverydayAnimeModel extends IBaseModel {
+    String implName = "EverydayAnimeModel";
+
     Triple<ArrayList<TabBean>, ArrayList<List<AnimeCoverBean>>, AnimeShowBean> getEverydayAnimeData();
 }

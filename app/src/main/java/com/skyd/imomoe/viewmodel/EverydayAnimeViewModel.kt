@@ -8,6 +8,7 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.bean.AnimeShowBean
 import com.skyd.imomoe.bean.TabBean
+import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.EverydayAnimeModel
 import com.skyd.imomoe.model.interfaces.IEverydayAnimeModel
 import com.skyd.imomoe.util.Util.getRealDayOfWeek
@@ -20,7 +21,9 @@ import java.util.*
 
 
 class EverydayAnimeViewModel : ViewModel() {
-    private val everydayAnimeModel: IEverydayAnimeModel = EverydayAnimeModel()
+    private val everydayAnimeModel: IEverydayAnimeModel by lazy {
+        DataSourceManager.create(IEverydayAnimeModel::class.java) ?: EverydayAnimeModel()
+    }
     var header: AnimeShowBean = AnimeShowBean(
         "", "", "", "",
         "", null, "", null

@@ -6,6 +6,7 @@ import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.IAnimeShowBean
 import com.skyd.imomoe.bean.PageNumberBean
+import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.AnimeShowModel
 import com.skyd.imomoe.model.interfaces.IAnimeShowModel
 import com.skyd.imomoe.util.Util.showToastOnThread
@@ -18,7 +19,9 @@ import java.util.*
 
 
 class AnimeShowViewModel : ViewModel() {
-    private val animeShowModel: IAnimeShowModel = AnimeShowModel()
+    private val animeShowModel: IAnimeShowModel by lazy {
+        DataSourceManager.create(IAnimeShowModel::class.java) ?: AnimeShowModel()
+    }
     var childViewPool: SerializableRecycledViewPool? = null
     var viewPool: SerializableRecycledViewPool? = null
     var animeShowList: MutableList<IAnimeShowBean> = ArrayList()
