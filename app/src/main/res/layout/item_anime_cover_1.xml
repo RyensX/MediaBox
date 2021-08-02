@@ -27,7 +27,7 @@
             android:id="@+id/view_anime_cover_1_night"
             android:layout_width="match_parent"
             android:layout_height="110dp"
-            android:background="@color/transparent" />
+            android:background="@color/transparent_skin" />
     </androidx.cardview.widget.CardView>
 
     <com.skyd.imomoe.view.component.textview.TypefaceTextView
@@ -37,7 +37,7 @@
         android:layout_marginTop="5dp"
         android:ellipsize="end"
         android:maxLines="3"
-        android:textColor="@color/foreground_black"
+        android:textColor="@color/foreground_black_skin"
         android:textSize="13sp"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="@id/cv_anime_cover_1_cover"
@@ -52,7 +52,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
-        android:textColor="@color/main_color"
+        android:textColor="@color/main_color_skin"
         android:textSize="12sp"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="@id/cv_anime_cover_1_cover"

@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/main_color"
+    android:background="@color/main_color_skin"
     android:orientation="horizontal"
     android:paddingHorizontal="16dp"
     android:paddingVertical="10dp">
@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="@string/license_name"
-        android:textColor="@color/foreground_white"
+        android:textColor="@color/foreground_white_skin"
         android:textSize="15sp" />
 
     <com.skyd.imomoe.view.component.textview.TypefaceTextView
@@ -22,6 +22,6 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="@string/license"
-        android:textColor="@color/foreground_white"
+        android:textColor="@color/foreground_white_skin"
         android:textSize="15sp" />
 </LinearLayout>

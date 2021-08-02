@@ -2,7 +2,7 @@
 
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/SkyD666/Imomoe) ![GitHub all releases](https://img.shields.io/github/downloads/SkyD666/Imomoe/total) ![](https://img.shields.io/badge/Android-5.0%2B-brightgreen) ![GitHub](https://img.shields.io/github/license/SkyD666/Imomoe) 
 
-**樱花动漫**第三方安卓Android客户端，**免费开源**，旨在为大家观看动漫提供方便。（仅支持Android 5及以上版本）
+**樱花动漫**第三方安卓Android客户端，**免费开源**，旨在学习Android开发和为观看动漫提供方便。（仅支持Android 5及以上版本）
 
 ## 特色功能
 
@@ -18,7 +18,7 @@
 10. 支持显示**搜索历史**记录
 11. 支持改变视频**播放速度**
 12. 支持改变**视频**显示**比例**（16:9, 4:3, 全屏等）
-13. [**自定义**显示**数据源**](doc/customdatasource/README.md)
+13. [支持**自定义**显示**数据源**](doc/customdatasource/README.md)
 14. ......
 
 ## 运行截图

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white_skin"
     tools:context=".view.activity.PlayActivity">
 
     <LinearLayout
@@ -50,7 +51,7 @@
                             android:layout_marginBottom="12dp"
                             android:ellipsize="end"
                             android:maxLines="2"
-                            android:textColor="@color/foreground_main_color_2"
+                            android:textColor="@color/foreground_main_color_2_skin"
                             android:textSize="20sp"
                             android:textStyle="bold"
                             app:layout_constrainedWidth="true"
@@ -67,7 +68,7 @@
                             android:layout_height="0dp"
                             android:paddingStart="0dp"
                             android:paddingEnd="16dp"
-                            android:src="@drawable/ic_star_border_main_color_2_24"
+                            android:src="@drawable/ic_star_border_main_color_2_24_skin"
                             app:layout_constraintBottom_toBottomOf="@id/view_play_activity_line_1"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -78,7 +79,7 @@
                             android:layout_height="1px"
                             android:layout_marginHorizontal="16dp"
                             android:layout_marginTop="12dp"
-                            android:background="@color/foreground_main_color_2"
+                            android:background="@color/foreground_main_color_2_skin"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/tv_play_activity_title" />

@@ -21,6 +21,7 @@ class SearchAdapter(
 ) : BaseRvAdapter(dataList) {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        super.onBindViewHolder(holder, position)
         val item = dataList[position]
 
         when (holder) {

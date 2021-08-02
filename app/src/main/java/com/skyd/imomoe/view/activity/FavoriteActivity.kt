@@ -27,7 +27,7 @@ class FavoriteActivity : BaseActivity<ActivityFavoriteBinding>() {
             tbFavoriteActivity.tvToolbar1Title.text = getString(R.string.my_favorite)
 
             srlFavoriteActivity.setColorSchemeColors(
-                this@FavoriteActivity.getResColor(R.color.main_color)
+                this@FavoriteActivity.getResColor(R.color.main_color_skin)
             )
             srlFavoriteActivity.setOnRefreshListener { viewModel.getFavoriteData() }
             rvFavoriteActivity.layoutManager = GridLayoutManager(this@FavoriteActivity, 3)

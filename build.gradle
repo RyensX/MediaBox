@@ -2,6 +2,7 @@
 buildscript {
     ext {
         secret = "${rootDir}/secret.gradle"
+        andresguard = "${rootDir}/andresguard.gradle"
         kotlin_version = '1.4.30'
     }
     repositories {

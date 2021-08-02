@@ -30,7 +30,7 @@ class HistoryActivity : BaseActivity<ActivityHistoryBinding>() {
             tbHistoryActivity.tvToolbar1Title.text = getString(R.string.watch_history)
 
             srlHistoryActivity.setColorSchemeColors(
-                this@HistoryActivity.getResColor(R.color.main_color)
+                this@HistoryActivity.getResColor(R.color.main_color_skin)
             )
             srlHistoryActivity.setOnRefreshListener { viewModel.getHistoryList() }
 
@@ -71,7 +71,7 @@ class HistoryActivity : BaseActivity<ActivityHistoryBinding>() {
             ivToolbar1Button1.setOnClickListener {
                 if (viewModel.historyList.isEmpty()) return@setOnClickListener
                 MaterialDialog(this@HistoryActivity).show {
-                    icon(R.drawable.ic_delete_main_color_2_24)
+                    icon(R.drawable.ic_delete_main_color_2_24_skin)
                     title(res = R.string.warning)
                     message(text = "确定要删除所有观看历史记录？")
                     positiveButton(res = R.string.delete) { viewModel.deleteAllHistory() }

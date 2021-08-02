@@ -8,9 +8,9 @@
 
         <item name="android:windowIsTranslucent">true</item>
         <!--        去除dialog最底部的灰色背景-->
-        <item name="colorBackgroundFloating">@color/foreground_transparent</item>
+        <item name="colorBackgroundFloating">@color/foreground_transparent_skin</item>
         <!--        去除dialog默认白色背景-->
-        <item name="android:background">@color/foreground_transparent</item>
+        <item name="android:background">@color/foreground_transparent_skin</item>
         <!--        是否加遮罩（对话框出现时，背景变暗。为true则充许变暗）-->
         <item name="android:backgroundDimEnabled">true</item>
     </style>

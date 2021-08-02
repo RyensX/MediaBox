@@ -97,6 +97,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), EventBusSubscriber {
     }
 
     /**
+     *
      * 设置app图标快捷菜单
      */
     private fun registerShortcuts() {

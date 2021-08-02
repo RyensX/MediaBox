@@ -4,21 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white_skin"
     tools:context=".view.activity.SearchActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_search_activity_header"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/main_color_2">
+        android:background="@color/main_color_2_skin">
 
         <EditText
             android:id="@+id/et_search_activity_search"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:background="@drawable/shape_circle_corner_white_50"
-            android:drawableStart="@drawable/ic_search_main_color_24"
+            android:background="@drawable/shape_circle_corner_white_50_skin"
+            android:drawableStart="@drawable/ic_search_main_color_24_skin"
             android:drawablePadding="5dp"
             android:gravity="center_vertical"
             android:hint="@string/home_fragment_header_search"
@@ -29,8 +30,8 @@
             android:paddingEnd="40dp"
             android:paddingBottom="5dp"
             android:singleLine="true"
-            android:textColor="@color/foreground_main_color_2"
-            android:textColorHint="@color/main_color"
+            android:textColor="@color/foreground_main_color_2_skin"
+            android:textColorHint="@color/main_color_skin"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/tv_search_activity_cancel"
@@ -44,7 +45,7 @@
             android:paddingVertical="15dp"
             android:paddingStart="7dp"
             android:paddingEnd="10dp"
-            android:src="@drawable/ic_clear_main_color_24"
+            android:src="@drawable/ic_clear_main_color_24_skin"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/et_search_activity_search"
             app:layout_constraintEnd_toEndOf="@id/et_search_activity_search"
@@ -60,7 +61,7 @@
             android:paddingStart="15dp"
             android:paddingEnd="16dp"
             android:text="@string/search_activity_cancel"
-            android:textColor="@color/foreground_white"
+            android:textColor="@color/foreground_white_skin"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -74,7 +75,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/cl_search_activity_header"
-        app:cardBackgroundColor="@color/white"
+        android:background="@color/white_skin"
+        app:cardBackgroundColor="@color/white_skin"
         app:cardElevation="6dp">
 
         <com.skyd.imomoe.view.component.textview.TypefaceTextView
@@ -87,7 +89,7 @@
             android:layout_marginBottom="9dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textColor="@color/foreground_main_color_2"
+            android:textColor="@color/foreground_main_color_2_skin"
             android:textSize="15sp"
             app:typeface="bPRTypeface"
             tools:text="@string/search_activity_tip" />
@@ -97,14 +99,15 @@
         android:id="@+id/srl_search_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/cv_search_activity_tip">
+        android:layout_below="@id/cv_search_activity_tip"
+        app:srlPrimaryColor="@color/main_color_3_skin">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_search_activity"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbarSize="4dp"
-            android:scrollbarThumbVertical="@color/foreground_main_color_3"
+            android:scrollbarThumbVertical="@color/foreground_main_color_3_skin"
             android:scrollbars="vertical"
             tools:listitem="@layout/item_anime_cover_3" />
     </com.scwang.smart.refresh.layout.SmartRefreshLayout>

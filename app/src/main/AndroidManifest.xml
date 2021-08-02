@@ -31,28 +31,63 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.樱花动漫"
         android:usesCleartextTraffic="true">
-        <activity android:name=".view.activity.CrashActivity" />
-        <activity android:name=".view.activity.HistoryActivity" />
-        <activity android:name=".view.activity.FavoriteActivity" />
-        <activity android:name=".view.activity.DlnaControlActivity" />
-        <activity android:name=".view.activity.DlnaActivity" />
+        <activity
+            android:name=".view.activity.SkinActivity"
+            android:configChanges="uiMode" />
+        <activity
+            android:name=".view.activity.CrashActivity"
+            android:configChanges="uiMode" />
+        <activity
+            android:name=".view.activity.HistoryActivity"
+            android:configChanges="uiMode" />
+        <activity
+            android:name=".view.activity.FavoriteActivity"
+            android:configChanges="uiMode" />
+        <activity
+            android:name=".view.activity.DlnaControlActivity"
+            android:configChanges="uiMode" />
+        <activity
+            android:name=".view.activity.DlnaActivity"
+            android:configChanges="uiMode" />
         <activity
             android:name=".view.activity.SimplePlayActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode" />
-        <activity android:name=".view.activity.AnimeDownloadActivity" />
-        <activity android:name=".view.activity.LicenseActivity" />
-        <activity android:name=".view.activity.AboutActivity" />
-        <activity android:name=".view.activity.SettingActivity" />
-        <activity android:name=".view.activity.MonthAnimeActivity" />
-        <activity android:name=".view.activity.ClassifyActivity" />
-        <activity android:name=".view.activity.RankActivity" />
-        <activity android:name=".view.activity.SearchActivity" />
+        <activity
+            android:name=".view.activity.AnimeDownloadActivity"
+            android:configChanges="uiMode" />
+        <activity
+            android:name=".view.activity.LicenseActivity"
+            android:configChanges="uiMode" />
+        <activity
+            android:name=".view.activity.AboutActivity"
+            android:configChanges="uiMode" />
+        <activity
+            android:name=".view.activity.SettingActivity"
+            android:configChanges="uiMode" />
+        <activity
+            android:name=".view.activity.MonthAnimeActivity"
+            android:configChanges="uiMode" />
+        <activity
+            android:name=".view.activity.ClassifyActivity"
+            android:configChanges="uiMode" />
+        <activity
+            android:name=".view.activity.RankActivity"
+            android:configChanges="uiMode" />
+        <activity
+            android:name=".view.activity.SearchActivity"
+            android:configChanges="uiMode" />
         <activity
             android:name=".view.activity.PlayActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode" />
-        <activity android:name=".view.activity.AnimeDetailActivity" />
-        <activity android:name=".view.activity.BaseActivity" />
-        <activity android:name=".view.activity.MainActivity">
+        <activity
+            android:name=".view.activity.AnimeDetailActivity"
+            android:configChanges="uiMode" />
+        <activity
+            android:name=".view.activity.BaseActivity"
+            android:configChanges="uiMode" />
+        <activity
+            android:name=".view.activity.MainActivity"
+            android:configChanges="uiMode">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -61,15 +96,17 @@
         </activity>
 
         <service
-            android:name="com.skyd.imomoe.view.component.widget.everydayanime.EverydayAnimeService"
+            android:name=".view.component.widget.everydayanime.EverydayAnimeService"
             android:exported="false"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
+
         <receiver
-            android:name="com.skyd.imomoe.view.component.widget.everydayanime.EverydayAnimeWidgetProvider"
+            android:name=".view.component.widget.everydayanime.EverydayAnimeWidgetProvider"
             android:label="@string/widget_everyday_anime">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
+
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_everyday_anime" />
@@ -104,7 +141,6 @@
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="${UMENG_APPKEY_VALUE}" />
-
         <meta-data
             android:name="UMENG_CHANNEL"
             android:value="${UMENG_CHANNEL_VALUE}" />

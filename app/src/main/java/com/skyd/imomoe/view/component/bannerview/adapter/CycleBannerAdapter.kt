@@ -2,18 +2,20 @@ package com.skyd.imomoe.view.component.bannerview.adapter
 
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.NO_ID
+import com.skyd.imomoe.view.adapter.SkinRvAdapter
 import com.skyd.imomoe.view.component.bannerview.BannerUtil.getPosition
 
 /**
  * Created by Sky_D on 2021-02-08.
  */
-abstract class CycleBannerAdapter :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+abstract class CycleBannerAdapter : SkinRvAdapter() {
     final override fun getItemViewType(position: Int): Int =
         getItemType(getPosition(position, getCount()))
 
-    final override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) =
+    final override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        super.onBindViewHolder(holder, position)
         onBind(holder, getPosition(position, getCount()))
+    }
 
     /**
      * 获取真实的页面个数（加2后的）

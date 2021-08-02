@@ -10,6 +10,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.ActivityRankBinding
+import com.skyd.imomoe.util.Util
 import com.skyd.imomoe.view.fragment.EverydayAnimeFragment
 import com.skyd.imomoe.viewmodel.RankViewModel
 
@@ -30,7 +31,7 @@ class RankActivity : BaseActivity<ActivityRankBinding>() {
             llRankActivityToolbar.ivToolbar1Back.setOnClickListener { finish() }
 
             vp2RankActivity.setOffscreenPageLimit(offscreenPageLimit)
-            srlRankActivity.setColorSchemeResources(R.color.main_color)
+            srlRankActivity.setColorSchemeResources(Util.getSkinResourceId(R.color.main_color_skin))
             srlRankActivity.setOnRefreshListener {
                 //避免刷新间隔太短
                 if (System.currentTimeMillis() - lastRefreshTime > 500) {

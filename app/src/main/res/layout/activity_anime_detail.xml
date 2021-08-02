@@ -22,7 +22,8 @@
         layout="@layout/layout_toolbar_1"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_below="@id/view_anime_detail_activity_status_bar" />
+        android:layout_below="@id/view_anime_detail_activity_status_bar"
+        android:background="@color/transparent_skin" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/srl_anime_detail_activity"

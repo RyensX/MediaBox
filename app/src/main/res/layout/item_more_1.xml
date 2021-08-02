@@ -11,7 +11,7 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/bg_circle_main_color_2_50"
+        android:background="@drawable/bg_circle_main_color_2_50_skin"
         android:padding="13dp"
         tools:src="@drawable/ic_settings_white_24" />
 
@@ -22,7 +22,7 @@
         android:layout_below="@id/iv_more_1"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:textColor="@color/foreground_main_color_2"
+        android:textColor="@color/foreground_main_color_2_skin"
         android:textSize="15sp"
         tools:text="设置" />
 

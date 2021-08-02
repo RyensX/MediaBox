@@ -18,11 +18,11 @@ import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.config.Const.ViewHolderTypeInt
 import com.skyd.imomoe.databinding.FragmentEverydayAnimeBinding
 import com.skyd.imomoe.util.GridRecyclerView1ViewHolder
-import com.skyd.imomoe.util.ViewHolderUtil.Companion.getViewHolder
 import com.skyd.imomoe.util.eventbus.EventBusSubscriber
 import com.skyd.imomoe.util.eventbus.MessageEvent
 import com.skyd.imomoe.util.eventbus.RefreshEvent
 import com.skyd.imomoe.view.adapter.AnimeShowAdapter
+import com.skyd.imomoe.view.adapter.SkinRvAdapter
 import com.skyd.imomoe.view.component.WrapLinearLayoutManager
 import com.skyd.imomoe.viewmodel.EverydayAnimeViewModel
 import org.greenrobot.eventbus.Subscribe
@@ -55,7 +55,6 @@ class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), Even
 
         mBinding.run {
             vp2EverydayAnimeFragment.setOffscreenPageLimit(offscreenPageLimit)
-            srlEverydayAnimeFragment.setColorSchemeResources(R.color.main_color)
             srlEverydayAnimeFragment.setOnRefreshListener { refresh() }
 
             tlEverydayAnimeFragment.addOnTabSelectedListener(object :
@@ -155,7 +154,7 @@ class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), Even
         private var activity: Activity,
         private var list: List<List<AnimeCoverBean>>,
         private var showRankNumber: BooleanArray = BooleanArray(0)
-    ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    ) : SkinRvAdapter() {
 
         //必须四个参数都不是-1才生效
         var childPadding = Rect(-1, -1, -1, -1)
@@ -166,7 +165,7 @@ class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), Even
             parent: ViewGroup,
             viewType: Int
         ): RecyclerView.ViewHolder {
-            val viewHolder = getViewHolder(parent, viewType)
+            val viewHolder = super.onCreateViewHolder(parent, viewType)
             //vp2的item必须是MATCH_PARENT的
             val layoutParams = viewHolder.itemView.layoutParams
             layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white_skin"
     android:orientation="vertical"
     tools:context=".view.activity.MainActivity">
 
@@ -16,7 +17,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/white"
+        app:cardBackgroundColor="@color/white_skin"
         app:cardElevation="15dp">
 
         <LinearLayout
@@ -36,7 +37,7 @@
                     android:layout_height="25dp"
                     android:layout_marginTop="7dp"
                     android:scaleType="fitXY"
-                    android:src="@drawable/selector_home_button"
+                    android:src="@drawable/selector_home_button_skin"
                     app:layout_constraintBottom_toTopOf="@id/tv_control_bar_home"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -48,7 +49,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="7dp"
                     android:text="@string/home"
-                    android:textColor="@drawable/selector_home_button"
+                    android:textColor="@drawable/selector_home_button_skin"
                     android:textSize="10sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@id/iv_control_bar_home"
@@ -68,7 +69,7 @@
                     android:layout_height="23dp"
                     android:layout_marginTop="7dp"
                     android:scaleType="fitXY"
-                    android:src="@drawable/selector_everyday_anime_button"
+                    android:src="@drawable/selector_everyday_anime_button_skin"
                     app:layout_constraintBottom_toTopOf="@id/tv_control_bar_everyday_anime"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -80,7 +81,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="7dp"
                     android:text="@string/everyday_anime"
-                    android:textColor="@drawable/selector_everyday_anime_button"
+                    android:textColor="@drawable/selector_everyday_anime_button_skin"
                     android:textSize="10sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@id/iv_control_bar_everyday_anime"
@@ -100,7 +101,7 @@
                     android:layout_height="23dp"
                     android:layout_marginTop="7dp"
                     android:scaleType="fitXY"
-                    android:src="@drawable/selector_more_button"
+                    android:src="@drawable/selector_more_button_skin"
                     app:layout_constraintBottom_toTopOf="@id/tv_control_bar_more"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -112,7 +113,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="7dp"
                     android:text="@string/more"
-                    android:textColor="@drawable/selector_more_button"
+                    android:textColor="@drawable/selector_more_button_skin"
                     android:textSize="10sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@id/iv_control_bar_more"

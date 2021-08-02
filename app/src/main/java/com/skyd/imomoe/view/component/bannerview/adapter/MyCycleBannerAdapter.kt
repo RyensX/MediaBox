@@ -46,7 +46,7 @@ class MyCycleBannerAdapter(
         when (holder) {
             is AnimeCover6ViewHolder -> {
                 if (item is AnimeCoverBean) {
-                    holder.tvAnimeCover6Night.setBackgroundColor(activity.getResColor(R.color.transparent))
+                    holder.tvAnimeCover6Night.setBackgroundColor(activity.getResColor(R.color.transparent_skin))
                     holder.ivAnimeCover6Cover.loadImage(
                         activity,
                         item.cover?.url ?: "",

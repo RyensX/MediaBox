@@ -19,10 +19,9 @@ import com.skyd.imomoe.util.*
 import com.skyd.imomoe.util.glide.GlideUtil.loadImage
 import com.skyd.imomoe.util.Util.dp2px
 import com.skyd.imomoe.util.Util.getResColor
+import com.skyd.imomoe.util.Util.getResDrawable
 import com.skyd.imomoe.util.Util.process
 import com.skyd.imomoe.util.Util.showToast
-import com.skyd.imomoe.util.ViewHolderUtil.Companion.getItemViewType
-import com.skyd.imomoe.util.ViewHolderUtil.Companion.getViewHolder
 import com.skyd.imomoe.view.activity.AnimeDetailActivity
 import com.skyd.imomoe.view.adapter.decoration.AnimeCoverItemDecoration
 import com.skyd.imomoe.view.adapter.decoration.AnimeEpisodeItemDecoration
@@ -39,6 +38,7 @@ class AnimeDetailAdapter(
 
     @SuppressLint("ClickableViewAccessibility", "SetTextI18n")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        super.onBindViewHolder(holder, position)
         val item = dataList[position]
 
         when {
@@ -46,7 +46,7 @@ class AnimeDetailAdapter(
                 holder.tvHeader1Title.textSize = 15f
                 holder.tvHeader1Title.text = item.title
                 holder.tvHeader1Title.setTextColor(
-                    activity.getResColor(R.color.foreground_white)
+                    activity.getResColor(R.color.foreground_white_skin)
                 )
             }
             holder is GridRecyclerView1ViewHolder -> {
@@ -65,19 +65,19 @@ class AnimeDetailAdapter(
                     holder.rvGridRecyclerView1.adapter =
                         AnimeShowAdapter.GridRecyclerView1Adapter(
                             activity, it,
-                            activity.getResColor(R.color.foreground_white)
+                            activity.getResColor(R.color.foreground_white_skin)
                         )
                 }
             }
             holder is HorizontalRecyclerView1ViewHolder -> {
                 item.episodeList?.let {
-                    if (holder.rvHorizontalRecyclerView1.adapter == null) {
-                        holder.rvHorizontalRecyclerView1.adapter =
-                            EpisodeRecyclerView1Adapter(
-                                activity,
-                                it,
-                                detailPartUrl = activity.getPartUrl()
-                            )
+                    holder.rvHorizontalRecyclerView1.adapter.let { adapter ->
+                        if (adapter == null) {
+                            holder.rvHorizontalRecyclerView1.adapter =
+                                EpisodeRecyclerView1Adapter(
+                                    activity, it, detailPartUrl = activity.getPartUrl()
+                                )
+                        } else adapter.notifyDataSetChanged()
                     }
                     holder.ivHorizontalRecyclerView1More.setOnClickListener { it1 ->
                         showEpisodeSheetDialog(it).show()
@@ -88,7 +88,7 @@ class AnimeDetailAdapter(
                 holder.tvAnimeDescribe1.text = item.describe
                 holder.tvAnimeDescribe1.setOnClickListener { }
                 holder.tvAnimeDescribe1.setTextColor(
-                    activity.getResColor(R.color.foreground_white)
+                    activity.getResColor(R.color.foreground_white_skin)
                 )
             }
             holder is AnimeInfo1ViewHolder -> {
@@ -153,7 +153,7 @@ class AnimeDetailAdapter(
             }
             holder is AnimeCover1ViewHolder && item is AnimeCoverBean -> {
                 holder.ivAnimeCover1Cover.setTag(R.id.image_view_tag, item.cover?.url)
-                holder.tvAnimeCover1Title.setTextColor(activity.getResColor(R.color.foreground_white))
+                holder.tvAnimeCover1Title.setTextColor(activity.getResColor(R.color.foreground_white_skin))
                 if (holder.ivAnimeCover1Cover.getTag(R.id.image_view_tag) == item.cover?.url) {
                     holder.ivAnimeCover1Cover.loadImage(
                         activity,
@@ -216,27 +216,27 @@ class AnimeDetailAdapter(
     ) : BaseRvAdapter(dataList) {
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+            super.onBindViewHolder(holder, position)
             val item = dataList[position]
 
             when (holder) {
                 is AnimeEpisode2ViewHolder -> {
                     holder.tvAnimeEpisode2.text = item.title
-                    if (showType == 0) {
-                        holder.itemView.setBackgroundResource(R.drawable.shape_circle_corner_edge_white_ripper_5)
-                        val layoutParams = holder.itemView.layoutParams
+                    val layoutParams = holder.itemView.layoutParams
+                    holder.itemView.background = if (showType == 0) {
                         layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
                         if (layoutParams is ViewGroup.MarginLayoutParams) {
                             layoutParams.setMargins(0, dp2px(5f), dp2px(10f), dp2px(5f))
                         }
                         holder.itemView.layoutParams = layoutParams
-                        holder.tvAnimeEpisode2.setTextColor(activity.getResColor(R.color.foreground_white))
+                        holder.tvAnimeEpisode2.setTextColor(activity.getResColor(R.color.foreground_white_skin))
+                        getResDrawable(R.drawable.shape_circle_corner_edge_white_ripper_5_skin)
                     } else {
-                        holder.itemView.setBackgroundResource(R.drawable.shape_circle_corner_edge_main_color_2_ripper_5)
-                        val layoutParams = holder.itemView.layoutParams
                         layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
                         holder.itemView.setPadding(0, dp2px(10f), 0, dp2px(10f))
                         holder.itemView.layoutParams = layoutParams
-                        holder.tvAnimeEpisode2.setTextColor(activity.getResColor(R.color.foreground_main_color_2))
+                        holder.tvAnimeEpisode2.setTextColor(activity.getResColor(R.color.foreground_main_color_2_skin))
+                        getResDrawable(R.drawable.shape_circle_corner_edge_main_color_2_ripper_5_skin)
                     }
                     holder.itemView.setOnClickListener {
                         process(activity, item.actionUrl + detailPartUrl, item.actionUrl)

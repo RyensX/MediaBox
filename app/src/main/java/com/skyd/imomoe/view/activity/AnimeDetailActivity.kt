@@ -1,6 +1,7 @@
 package com.skyd.imomoe.view.activity
 
 import android.animation.ObjectAnimator
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.PorterDuff
@@ -11,7 +12,6 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
@@ -22,16 +22,18 @@ import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.databinding.ActivityAnimeDetailBinding
 import com.skyd.imomoe.util.BlurUtils.blur
-import com.skyd.imomoe.util.glide.GlideUtil.getGlideUrl
+import com.skyd.imomoe.util.Util.getSkinResourceId
 import com.skyd.imomoe.util.Util.getStatusBarHeight
 import com.skyd.imomoe.util.Util.setTransparentStatusBar
 import com.skyd.imomoe.util.Util.showToast
+import com.skyd.imomoe.util.glide.GlideUtil.getGlideUrl
 import com.skyd.imomoe.util.visible
 import com.skyd.imomoe.view.adapter.AnimeDetailAdapter
 import com.skyd.imomoe.view.adapter.decoration.AnimeShowItemDecoration
 import com.skyd.imomoe.view.adapter.spansize.AnimeDetailSpanSize
 import com.skyd.imomoe.view.fragment.ShareDialogFragment
 import com.skyd.imomoe.viewmodel.AnimeDetailViewModel
+import com.skyd.skin.core.listeners.ChangeSkinListener
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -43,6 +45,7 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
     private var isFavorite: Boolean = false
     private lateinit var viewModel: AnimeDetailViewModel
     private lateinit var adapter: AnimeDetailAdapter
+    override var statusBarSkin: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -121,7 +124,7 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
             rvAnimeDetailActivityInfo.adapter = adapter
 
             srlAnimeDetailActivity.setOnRefreshListener { viewModel.getAnimeDetailData(partUrl) }
-            srlAnimeDetailActivity.setColorSchemeResources(R.color.main_color)
+            srlAnimeDetailActivity.setColorSchemeResources(getSkinResourceId(R.color.main_color_skin))
         }
 
         viewModel.mldAnimeDetailList.observe(this, Observer {
@@ -174,4 +177,16 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
         ActivityAnimeDetailBinding.inflate(layoutInflater)
 
     fun getPartUrl(): String = partUrl
+
+    override fun onChangeSkin() {
+        super.onChangeSkin()
+        mBinding.llAnimeDetailActivityToolbar.layoutToolbar1.setBackgroundColor(Color.TRANSPARENT)
+        adapter.notifyDataSetChanged()
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        mBinding.llAnimeDetailActivityToolbar.layoutToolbar1.setBackgroundColor(Color.TRANSPARENT)
+        adapter.notifyDataSetChanged()
+    }
 }

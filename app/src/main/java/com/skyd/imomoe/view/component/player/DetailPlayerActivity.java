@@ -4,6 +4,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 
+import com.skyd.skin.core.SkinBaseActivity;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.listener.VideoAllCallBack;
@@ -11,14 +12,12 @@ import com.shuyu.gsyvideoplayer.utils.OrientationOption;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import static com.shuyu.gsyvideoplayer.video.base.GSYVideoView.CURRENT_STATE_PAUSE;
 
 /**
  * 详情模式播放页面基础类
  */
-public abstract class DetailPlayerActivity<T extends GSYBaseVideoPlayer> extends AppCompatActivity implements VideoAllCallBack {
+public abstract class DetailPlayerActivity<T extends GSYBaseVideoPlayer> extends SkinBaseActivity implements VideoAllCallBack {
 
     protected boolean isPlay;
 

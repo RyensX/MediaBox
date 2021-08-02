@@ -21,7 +21,7 @@
         android:focusable="true"
         android:marqueeRepeatLimit="marquee_forever"
         android:singleLine="true"
-        android:textColor="@color/foreground_main_color_2"
+        android:textColor="@color/foreground_main_color_2_skin"
         android:textSize="17sp"
         app:typeface="bPRTypeface"
         tools:text="Endro~" />
@@ -40,7 +40,7 @@
         android:marqueeRepeatLimit="marquee_forever"
         android:minWidth="45dp"
         android:singleLine="true"
-        android:textColor="@color/main_color"
+        android:textColor="@color/main_color_skin"
         app:typeface="bPRTypeface"
         tools:text="300M" />
 
@@ -49,7 +49,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:textColor="@color/foreground_main_color_2"
+        android:textColor="@color/foreground_main_color_2_skin"
         android:textSize="15sp"
         app:typeface="bPRTypeface"
         tools:text="12P" />
@@ -62,7 +62,7 @@
         android:gravity="end"
         android:paddingStart="10dp"
         android:paddingEnd="0dp"
-        android:textColor="@color/foreground_main_color_2"
+        android:textColor="@color/foreground_main_color_2_skin"
         app:typeface="bPRTypeface"
         tools:text="旧" />
 </LinearLayout>

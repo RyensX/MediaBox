@@ -51,7 +51,7 @@ object GlideUtil {
         url: String,
         referer: String? = null,
         @DrawableRes placeholder: Int = 0,
-        @DrawableRes error: Int = R.drawable.ic_warning_main_color_3_24
+        @DrawableRes error: Int = R.drawable.ic_warning_main_color_3_24_skin
     ) {
         if (!activity.isDestroyed) loadImage(activity as Context, url, referer, placeholder, error)
     }
@@ -61,7 +61,7 @@ object GlideUtil {
         url: String,
         referer: String? = null,
         @DrawableRes placeholder: Int = 0,
-        @DrawableRes error: Int = R.drawable.ic_warning_main_color_3_24
+        @DrawableRes error: Int = R.drawable.ic_warning_main_color_3_24_skin
     ) {
         var amendReferer = referer
         if (amendReferer?.startsWith(MAIN_URL) == false)

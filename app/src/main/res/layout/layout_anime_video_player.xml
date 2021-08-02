@@ -67,7 +67,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:textColor="@color/foreground_white"
+            android:textColor="@color/foreground_white_skin"
             android:textSize="12sp"
             app:typeface="bPRTypeface"
             tools:text="00:00" />
@@ -77,7 +77,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:text="/"
-            android:textColor="@color/foreground_white"
+            android:textColor="@color/foreground_white_skin"
             android:textSize="12sp" />
 
         <com.skyd.imomoe.view.component.textview.TypefaceTextView
@@ -85,7 +85,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:textColor="@color/foreground_white"
+            android:textColor="@color/foreground_white_skin"
             android:textSize="12sp"
             app:typeface="bPRTypeface"
             tools:text="00:00" />
@@ -99,7 +99,7 @@
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
             android:text="@string/play_speed"
-            android:textColor="@color/foreground_white"
+            android:textColor="@color/foreground_white_skin"
             android:textSize="13sp"
             app:typeface="bPRTypeface" />
 
@@ -118,7 +118,7 @@
         android:id="@+id/cl_danmu_controller"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@color/white"
+        android:background="@color/white_skin"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_height="wrap_content">
 
@@ -131,15 +131,15 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="12dp"
             android:layout_weight="1"
-            android:background="@drawable/shape_circle_corner_edge_main_color_2_ripper_5"
+            android:background="@drawable/shape_circle_corner_edge_main_color_2_ripper_5_skin"
             android:gravity="center_vertical"
             android:hint="@string/send_a_danmu"
             android:imeOptions="actionSend"
             android:paddingHorizontal="10dp"
             android:paddingVertical="2dp"
             android:singleLine="true"
-            android:textColor="@color/foreground_main_color_2"
-            android:textColorHint="@color/main_color_3"
+            android:textColor="@color/foreground_main_color_2_skin"
+            android:textColorHint="@color/main_color_3_skin"
             android:textSize="13sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/iv_show_danmu"
@@ -156,7 +156,7 @@
             android:gravity="center"
             android:paddingStart="2dp"
             android:paddingEnd="13dp"
-            android:src="@drawable/selector_turn_on_off_danmu"
+            android:src="@drawable/selector_turn_on_off_danmu_skin"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -165,7 +165,7 @@
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:layout_marginHorizontal="16dp"
-            android:background="@color/foreground_main_color_2"
+            android:background="@color/foreground_main_color_2_skin"
             app:layout_constraintBottom_toBottomOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -175,7 +175,7 @@
         android:layout_width="match_parent"
         android:layout_height="1.5dp"
         android:max="100"
-        android:progressDrawable="@drawable/layerlist_video_progress_bg"
+        android:progressDrawable="@drawable/layerlist_video_progress_bg_skin"
         app:layout_constraintBottom_toTopOf="@id/cl_danmu_controller" />
 
     <ImageView
@@ -194,7 +194,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:indeterminate="true"
-        android:indeterminateTint="@color/main_color"
+        android:indeterminateTint="@color/main_color_skin"
         android:indeterminateTintMode="src_atop"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@id/cl_danmu_controller"
@@ -257,7 +257,7 @@
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
             android:singleLine="true"
-            android:textColor="@color/foreground_white"
+            android:textColor="@color/foreground_white_skin"
             android:textSize="18sp"
             app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -316,7 +316,7 @@
         android:paddingHorizontal="17dp"
         android:paddingVertical="6dp"
         android:text="@string/touch_down_high_speed"
-        android:textColor="@color/foreground_white"
+        android:textColor="@color/foreground_white_skin"
         android:textSize="17sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

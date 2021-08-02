@@ -19,13 +19,12 @@ import com.skyd.imomoe.util.glide.GlideUtil.loadImage
 import com.skyd.imomoe.util.Util.dp2px
 import com.skyd.imomoe.util.Util.process
 import com.skyd.imomoe.util.Util.showToast
-import com.skyd.imomoe.util.ViewHolderUtil.Companion.getItemViewType
-import com.skyd.imomoe.util.ViewHolderUtil.Companion.getViewHolder
 import com.skyd.imomoe.view.fragment.AnimeShowFragment
 import com.skyd.imomoe.view.component.bannerview.adapter.MyCycleBannerAdapter
 import com.skyd.imomoe.view.component.bannerview.indicator.DotIndicator
 import com.skyd.imomoe.config.Const.ViewHolderTypeString
 import com.skyd.imomoe.util.Util.getResColor
+import com.skyd.imomoe.util.Util.getResDrawable
 import com.skyd.imomoe.view.adapter.decoration.AnimeCoverItemDecoration
 
 class AnimeShowAdapter(
@@ -69,8 +68,8 @@ class AnimeShowAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        super.onBindViewHolder(holder, position)
         val item = dataList[position]
-
         when {
             holder is GridRecyclerView1ViewHolder -> {
                 item.animeCoverList?.let {
@@ -125,7 +124,7 @@ class AnimeShowAdapter(
             }
             holder is Header1ViewHolder -> {
                 fragment.activity?.let {
-                    holder.tvHeader1Title.setTextColor(it.getResColor(R.color.foreground_main_color_2))
+                    holder.tvHeader1Title.setTextColor(it.getResColor(R.color.foreground_main_color_2_skin))
                 }
                 holder.tvHeader1Title.text = item.title
             }
@@ -188,7 +187,6 @@ class AnimeShowAdapter(
                                 false
                             ) as TextView
                         tvFlowLayout.text = it[i].title
-                        tvFlowLayout.setBackgroundResource(R.drawable.shape_fill_circle_corner_main_color_2_50)
                         tvFlowLayout.setOnClickListener { _ ->
                             //此处是”类型“，若要修改，需要注意Tab大分类是否还是”类型“
                             process(
@@ -228,7 +226,8 @@ class AnimeShowAdapter(
                         holder.tvAnimeCover5Date.setPadding(0, 0, 0, 0)
                     }
                 } else {
-                    holder.tvAnimeCover5Area.setBackgroundResource(R.drawable.shape_fill_circle_corner_main_color_2_50)
+                    holder.tvAnimeCover5Area.background =
+                        getResDrawable(R.drawable.shape_fill_circle_corner_main_color_2_50_skin)
                     holder.tvAnimeCover5Area.visible()
                     holder.tvAnimeCover5Date.post {
                         holder.tvAnimeCover5Date.setPadding(dp2px(12f), 0, 0, 0)
@@ -280,7 +279,7 @@ class AnimeShowAdapter(
     class GridRecyclerView1Adapter(
         private val activity: Activity,
         private val dataList: List<AnimeCoverBean>,
-        private var titleColor: Int = activity.getResColor(R.color.foreground_black)
+        private var titleColor: Int = activity.getResColor(R.color.foreground_black_skin)
     ) : BaseRvAdapter(dataList) {
         //必须四个参数都不是-1才生效
         var padding = Rect(-1, -1, -1, -1)
@@ -304,9 +303,9 @@ class AnimeShowAdapter(
 
             when (holder) {
                 is AnimeCover1ViewHolder -> {
-                    holder.viewAnimeCover1Night.setBackgroundColor(activity.getResColor(R.color.transparent))
+                    holder.viewAnimeCover1Night.setBackgroundColor(activity.getResColor(R.color.transparent_skin))
                     holder.tvAnimeCover1Title.setTextColor(titleColor)
-                    holder.tvAnimeCover1Episode.setTextColor(activity.getResColor(R.color.main_color))
+                    holder.tvAnimeCover1Episode.setTextColor(activity.getResColor(R.color.main_color_skin))
                     holder.ivAnimeCover1Cover.setTag(R.id.image_view_tag, item.cover?.url)
                     if (holder.ivAnimeCover1Cover.getTag(R.id.image_view_tag) == item.cover?.url) {
                         holder.ivAnimeCover1Cover.loadImage(
@@ -327,9 +326,9 @@ class AnimeShowAdapter(
                     }
                 }
                 is AnimeCover3ViewHolder -> {
-                    holder.viewAnimeCover3Night.setBackgroundColor(activity.getResColor(R.color.transparent))
+                    holder.viewAnimeCover3Night.setBackgroundColor(activity.getResColor(R.color.transparent_skin))
                     holder.tvAnimeCover3Title.setTextColor(titleColor)
-                    holder.tvAnimeCover3Episode.setTextColor(activity.getResColor(R.color.main_color))
+                    holder.tvAnimeCover3Episode.setTextColor(activity.getResColor(R.color.main_color_skin))
                     holder.ivAnimeCover3Cover.setTag(R.id.image_view_tag, item.cover?.url)
                     if (holder.ivAnimeCover3Cover.getTag(R.id.image_view_tag) == item.cover?.url) {
                         holder.ivAnimeCover3Cover.loadImage(
@@ -355,7 +354,6 @@ class AnimeShowAdapter(
                                     false
                                 ) as TextView
                             tvFlowLayout.text = it[i].title
-                            tvFlowLayout.setBackgroundResource(R.drawable.shape_fill_circle_corner_main_color_2_50)
                             tvFlowLayout.setOnClickListener { _ ->
                                 //此处是”类型“，若要修改，需要注意Tab大分类是否还是”类型“
                                 process(
@@ -372,7 +370,7 @@ class AnimeShowAdapter(
                     }
                 }
                 is AnimeCover4ViewHolder -> {
-                    holder.viewAnimeCover4Night.setBackgroundColor(activity.getResColor(R.color.transparent))
+                    holder.viewAnimeCover4Night.setBackgroundColor(activity.getResColor(R.color.transparent_skin))
                     holder.tvAnimeCover4Title.setTextColor(titleColor)
                     holder.ivAnimeCover4Cover.setTag(R.id.image_view_tag, item.cover?.url)
                     if (holder.ivAnimeCover4Cover.getTag(R.id.image_view_tag) == item.cover?.url) {
@@ -391,15 +389,15 @@ class AnimeShowAdapter(
                     if (showRankNumber) {
                         holder.tvAnimeCover5Rank.setTextColor(Color.WHITE)
                         holder.tvAnimeCover5Rank.text = (position + 1).toString()
-                        if (position in 0..2) {
+                        holder.tvAnimeCover5Rank.background = if (position in 0..2) {
                             val backgrounds = intArrayOf(
                                 R.drawable.shape_fill_circle_corner_golden_50,
                                 R.drawable.shape_fill_circle_corner_silvery_50,
                                 R.drawable.shape_fill_circle_corner_coppery_50
                             )
-                            holder.tvAnimeCover5Rank.setBackgroundResource(backgrounds[position])
+                            getResDrawable(backgrounds[position])
                         } else {
-                            holder.tvAnimeCover5Rank.setBackgroundResource(R.drawable.shape_fill_circle_corner_main_color_2_50)
+                            getResDrawable(R.drawable.shape_fill_circle_corner_main_color_2_50_skin)
                         }
                         holder.tvAnimeCover5Rank.visible()
                     } else {
@@ -412,7 +410,8 @@ class AnimeShowAdapter(
                             holder.tvAnimeCover5Date.setPadding(0, 0, 0, 0)
                         }
                     } else {
-                        holder.tvAnimeCover5Area.setBackgroundResource(R.drawable.shape_fill_circle_corner_main_color_2_50)
+                        holder.tvAnimeCover5Area.background =
+                            getResDrawable(R.drawable.shape_fill_circle_corner_main_color_2_50_skin)
                         holder.tvAnimeCover5Area.visible()
                         holder.tvAnimeCover5Date.post {
                             holder.tvAnimeCover5Date.setPadding(dp2px(12f), 0, 0, 0)
@@ -421,13 +420,13 @@ class AnimeShowAdapter(
                     if (item.date == null || item.date == "") {
                         holder.tvAnimeCover5Date.gone()
                     } else {
-                        holder.tvAnimeCover5Date.setTextColor(activity.getResColor(R.color.main_color))
+                        holder.tvAnimeCover5Date.setTextColor(activity.getResColor(R.color.main_color_skin))
                         holder.tvAnimeCover5Date.visible()
                     }
                     holder.tvAnimeCover5Title.text = item.title
                     holder.tvAnimeCover5Area.text = item.area?.title
                     holder.tvAnimeCover5Date.text = item.date
-                    holder.tvAnimeCover5Episode.setTextColor(activity.getResColor(R.color.foreground_main_color_2))
+                    holder.tvAnimeCover5Episode.setTextColor(activity.getResColor(R.color.foreground_main_color_2_skin))
                     holder.tvAnimeCover5Episode.text = item.episodeClickable?.title
                     if (holder.tvAnimeCover5Area.visibility == View.GONE &&
                         holder.tvAnimeCover5Date.visibility == View.GONE

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white_skin"
     android:orientation="vertical"
     tools:context=".view.activity.AboutActivity">
 
@@ -47,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:text="@string/app_name"
-                android:textColor="@color/foreground_main_color_2"
+                android:textColor="@color/foreground_main_color_2_skin"
                 android:textSize="17sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -59,7 +60,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:textColor="@color/foreground_main_color_2"
+                android:textColor="@color/foreground_main_color_2_skin"
                 android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -86,7 +87,7 @@
                     android:layout_centerVertical="true"
                     android:layout_toStartOf="@id/iv_about_activity_imomoe"
                     android:text="@string/imomoe"
-                    android:textColor="@color/foreground_main_color_2"
+                    android:textColor="@color/foreground_main_color_2_skin"
                     android:textSize="16sp"
                     app:typeface="bPRTypeface" />
 
@@ -97,7 +98,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:scaleType="fitXY"
-                    android:src="@drawable/ic_arrow_right_main_color_2_24" />
+                    android:src="@drawable/ic_arrow_right_main_color_2_24_skin" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -118,7 +119,7 @@
                     android:layout_centerVertical="true"
                     android:layout_toStartOf="@id/iv_about_activity_github"
                     android:text="@string/github"
-                    android:textColor="@color/foreground_main_color_2"
+                    android:textColor="@color/foreground_main_color_2_skin"
                     android:textSize="16sp"
                     app:typeface="bPRTypeface" />
 
@@ -129,7 +130,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:scaleType="fitXY"
-                    android:src="@drawable/ic_arrow_right_main_color_2_24" />
+                    android:src="@drawable/ic_arrow_right_main_color_2_24_skin" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -150,7 +151,7 @@
                     android:layout_centerVertical="true"
                     android:layout_toStartOf="@id/iv_about_activity_gitee"
                     android:text="@string/gitee"
-                    android:textColor="@color/foreground_main_color_2"
+                    android:textColor="@color/foreground_main_color_2_skin"
                     android:textSize="16sp"
                     app:typeface="bPRTypeface" />
 
@@ -161,7 +162,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:scaleType="fitXY"
-                    android:src="@drawable/ic_arrow_right_main_color_2_24" />
+                    android:src="@drawable/ic_arrow_right_main_color_2_24_skin" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -182,7 +183,7 @@
                     android:layout_centerVertical="true"
                     android:layout_toStartOf="@id/iv_about_activity_license"
                     android:text="@string/open_source_licenses"
-                    android:textColor="@color/foreground_main_color_2"
+                    android:textColor="@color/foreground_main_color_2_skin"
                     android:textSize="16sp"
                     app:typeface="bPRTypeface" />
 
@@ -193,7 +194,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:scaleType="fitXY"
-                    android:src="@drawable/ic_arrow_right_main_color_2_24" />
+                    android:src="@drawable/ic_arrow_right_main_color_2_24_skin" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -214,7 +215,7 @@
                     android:layout_centerVertical="true"
                     android:layout_toStartOf="@id/iv_about_activity_test_device"
                     android:text="@string/test_device"
-                    android:textColor="@color/foreground_main_color_2"
+                    android:textColor="@color/foreground_main_color_2_skin"
                     android:textSize="16sp"
                     app:typeface="bPRTypeface" />
 
@@ -225,7 +226,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:scaleType="fitXY"
-                    android:src="@drawable/ic_arrow_right_main_color_2_24" />
+                    android:src="@drawable/ic_arrow_right_main_color_2_24_skin" />
             </RelativeLayout>
 
             <com.skyd.imomoe.view.component.textview.TypefaceTextView
@@ -234,7 +235,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
                 android:text="@string/app_icon_describe"
-                android:textColor="@color/main_color"
+                android:textColor="@color/main_color_skin"
                 app:layout_constrainedWidth="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

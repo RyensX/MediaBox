@@ -14,7 +14,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:textColor="@color/foreground_main_color_2"
+        android:textColor="@color/foreground_main_color_2_skin"
         android:textSize="15sp"
         app:typeface="bPRTypeface"
         tools:text="名称" />
@@ -24,7 +24,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:textColor="@color/foreground_main_color_2"
+        android:textColor="@color/foreground_main_color_2_skin"
         android:textSize="15sp"
         app:typeface="bPRTypeface"
         tools:text="许可证" />

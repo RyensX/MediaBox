@@ -6,14 +6,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingBottom="5dp"
-    tools:background="@color/foreground_black">
+    tools:background="@color/foreground_black_skin">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_anime_info_1_cover"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:background="@color/foreground_transparent"
+        app:cardBackgroundColor="@color/foreground_transparent_skin"
         app:cardCornerRadius="5dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/tv_anime_info_1_title">
@@ -35,7 +35,7 @@
             <View
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:background="@color/transparent"
+                android:background="@color/transparent_skin"
                 app:layout_constraintBottom_toBottomOf="@id/iv_anime_info_1_cover"
                 app:layout_constraintEnd_toEndOf="@id/iv_anime_info_1_cover"
                 app:layout_constraintStart_toStartOf="@id/iv_anime_info_1_cover"
@@ -51,7 +51,7 @@
         android:layout_marginStart="12dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="16dp"
-        android:textColor="@color/foreground_white"
+        android:textColor="@color/foreground_white_skin"
         android:textSize="17sp"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
@@ -67,7 +67,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="16dp"
-        android:textColor="@color/foreground_white"
+        android:textColor="@color/foreground_white_skin"
         android:textSize="12sp"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
@@ -82,7 +82,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:textColor="@color/foreground_white"
+        android:textColor="@color/foreground_white_skin"
         android:textSize="12sp"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
@@ -99,7 +99,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="16dp"
-        android:textColor="@color/foreground_white"
+        android:textColor="@color/foreground_white_skin"
         android:textSize="12sp"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
@@ -115,7 +115,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="16dp"
-        android:textColor="@color/foreground_white"
+        android:textColor="@color/foreground_white_skin"
         android:textSize="12sp"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
@@ -143,7 +143,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/anime_detail_type"
-            android:textColor="@color/foreground_white"
+            android:textColor="@color/foreground_white_skin"
             android:textSize="12sp"
             app:typeface="bPRTypeface" />
 
@@ -173,7 +173,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/anime_detail_tag"
-            android:textColor="@color/foreground_white"
+            android:textColor="@color/foreground_white_skin"
             android:textSize="12sp"
             app:typeface="bPRTypeface" />
 
@@ -195,7 +195,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="16dp"
-        android:textColor="@color/foreground_white"
+        android:textColor="@color/foreground_white_skin"
         android:textSize="12sp"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"

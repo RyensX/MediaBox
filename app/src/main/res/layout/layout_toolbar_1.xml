@@ -5,7 +5,7 @@
     android:id="@+id/layout_toolbar_1"
     android:layout_width="match_parent"
     android:layout_height="50dp"
-    android:background="@color/main_color_2"
+    android:background="@color/main_color_2_skin"
     android:orientation="horizontal">
 
     <ImageView
@@ -30,7 +30,7 @@
         android:focusable="true"
         android:marqueeRepeatLimit="marquee_forever"
         android:singleLine="true"
-        android:textColor="@color/foreground_white"
+        android:textColor="@color/foreground_white_skin"
         android:textSize="17sp"
         app:typeface="bPRTypeface"
         tools:text="标题" />

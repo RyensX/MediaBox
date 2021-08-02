@@ -87,7 +87,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:textColor="@color/foreground_white"
+            android:textColor="@color/foreground_white_skin"
             android:textSize="13sp"
             app:layout_constraintBottom_toBottomOf="@id/progress"
             app:layout_constraintStart_toEndOf="@id/iv_next"
@@ -102,7 +102,7 @@
             android:paddingStart="2dp"
             android:paddingEnd="2dp"
             android:text="/"
-            android:textColor="@color/foreground_white"
+            android:textColor="@color/foreground_white_skin"
             android:textSize="13sp"
             app:layout_constraintBottom_toBottomOf="@id/progress"
             app:layout_constraintStart_toEndOf="@id/current"
@@ -112,7 +112,7 @@
             android:id="@+id/total"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/foreground_white"
+            android:textColor="@color/foreground_white_skin"
             android:textSize="13sp"
             app:layout_constraintBottom_toBottomOf="@id/progress"
             app:layout_constraintStart_toEndOf="@id/split"
@@ -131,7 +131,7 @@
             android:imeOptions="actionSend"
             android:paddingHorizontal="10dp"
             android:singleLine="true"
-            android:textColor="@color/white"
+            android:textColor="@color/white_skin"
             android:textColorHint="#7AFFFFFF"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -144,8 +144,8 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginEnd="3dp"
-            android:background="@drawable/selector_turn_on_off_danmu"
-            android:backgroundTint="@color/foreground_white"
+            android:background="@drawable/selector_turn_on_off_danmu_skin"
+            android:backgroundTint="@color/foreground_white_skin"
             android:clickable="true"
             android:focusable="true"
             android:gravity="center"
@@ -162,7 +162,7 @@
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
             android:text="@string/choose_episode"
-            android:textColor="@color/foreground_white"
+            android:textColor="@color/foreground_white_skin"
             android:textSize="13sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/tv_speed"
@@ -177,7 +177,7 @@
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
             android:text="@string/play_speed"
-            android:textColor="@color/foreground_white"
+            android:textColor="@color/foreground_white_skin"
             android:textSize="13sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/tv_more_scale"
@@ -191,7 +191,7 @@
             android:gravity="center"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
-            android:textColor="@color/foreground_white"
+            android:textColor="@color/foreground_white_skin"
             android:textSize="13sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/fullscreen"
@@ -223,7 +223,7 @@
         android:paddingHorizontal="20dp"
         android:paddingVertical="10dp"
         android:text="@string/restore_screen"
-        android:textColor="@color/foreground_white"
+        android:textColor="@color/foreground_white_skin"
         android:textSize="17sp" />
 
     <ProgressBar
@@ -233,7 +233,7 @@
         android:layout_height="1.5dp"
         android:layout_alignParentBottom="true"
         android:max="100"
-        android:progressDrawable="@drawable/layerlist_video_progress_bg" />
+        android:progressDrawable="@drawable/layerlist_video_progress_bg_skin" />
 
     <ImageView
         android:id="@+id/back_tiny"
@@ -250,7 +250,7 @@
         android:layout_centerInParent="true"
         android:layout_gravity="center"
         android:indeterminate="true"
-        android:indeterminateTint="@color/main_color"
+        android:indeterminateTint="@color/main_color_skin"
         android:indeterminateTintMode="src_atop"
         android:visibility="invisible" />
 
@@ -296,7 +296,7 @@
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
             android:singleLine="true"
-            android:textColor="@color/foreground_white"
+            android:textColor="@color/foreground_white_skin"
             android:textSize="18sp"
             app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -330,7 +330,7 @@
         android:paddingHorizontal="17dp"
         android:paddingVertical="6dp"
         android:text="@string/touch_down_high_speed"
-        android:textColor="@color/foreground_white"
+        android:textColor="@color/foreground_white_skin"
         android:textSize="17sp" />
 
     <RelativeLayout
@@ -370,7 +370,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/reverse"
-                android:textColor="@color/foreground_white" />
+                android:textColor="@color/foreground_white_skin" />
 
             <RadioGroup
                 android:id="@+id/rg_reverse"
@@ -388,9 +388,9 @@
                     android:paddingHorizontal="5dp"
                     android:paddingTop="6dp"
                     android:text="@string/no_reverse"
-                    android:textColor="@drawable/selector_no_reverse_button"
+                    android:textColor="@drawable/selector_no_reverse_button_skin"
                     android:textSize="12sp"
-                    app:drawableTopCompat="@drawable/selector_no_reverse_button" />
+                    app:drawableTopCompat="@drawable/selector_no_reverse_button_skin" />
 
                 <RadioButton
                     android:id="@+id/rb_horizontal_reverse"
@@ -402,9 +402,9 @@
                     android:paddingHorizontal="5dp"
                     android:paddingTop="6dp"
                     android:text="@string/horizontal_reverse"
-                    android:textColor="@drawable/selector_horizontal_reverse_button"
+                    android:textColor="@drawable/selector_horizontal_reverse_button_skin"
                     android:textSize="12sp"
-                    app:drawableTopCompat="@drawable/selector_horizontal_reverse_button" />
+                    app:drawableTopCompat="@drawable/selector_horizontal_reverse_button_skin" />
 
                 <RadioButton
                     android:id="@+id/rb_vertical_reverse"
@@ -416,9 +416,9 @@
                     android:paddingHorizontal="5dp"
                     android:paddingTop="6dp"
                     android:text="@string/vertical_reverse"
-                    android:textColor="@drawable/selector_vertical_reverse_button"
+                    android:textColor="@drawable/selector_vertical_reverse_button_skin"
                     android:textSize="12sp"
-                    app:drawableTopCompat="@drawable/selector_vertical_reverse_button" />
+                    app:drawableTopCompat="@drawable/selector_vertical_reverse_button_skin" />
             </RadioGroup>
 
             <CheckBox
@@ -426,19 +426,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
                 android:layout_marginTop="12dp"
+                android:buttonTint="@color/foreground_main_color_2_skin"
                 android:text="@string/bottom_progress"
-                android:textColor="@color/foreground_white" />
+                android:textColor="@color/foreground_white_skin" />
 
             <TextView
                 android:id="@+id/tv_open_by_external_player"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:background="@drawable/shape_circle_corner_edge_white_ripper_5"
+                android:background="@drawable/shape_circle_corner_edge_white_ripper_5_skin"
                 android:gravity="center"
                 android:paddingVertical="9dp"
                 android:text="@string/open_by_external_player"
-                android:textColor="@color/foreground_white" />
+                android:textColor="@color/foreground_white_skin" />
 
             <!--            <CheckBox-->
             <!--                android:id="@+id/cb_media_codec"-->

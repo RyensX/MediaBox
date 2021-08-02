@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="foreground_black">#FF000000</color>
+    <color name="foreground_black_skin">#FF000000</color>
     <color name="black">#FF000000</color>
-    <color name="foreground_white">#FFFFFFFF</color>
-    <color name="white">#FFFFFF</color>
+    <color name="foreground_white_skin">#FFFFFFFF</color>
+    <color name="white_skin">#FFFFFF</color>
 
-    <color name="main_color">#FFA2C8</color>
-    <color name="main_color_2">#FC719B</color>
-    <color name="unchanged_main_color_2">#FC719B</color>
-    <color name="foreground_main_color_2">#FC719B</color>
-    <color name="foreground_main_color_3">#FFB0D1</color>
-    <color name="main_color_3">#FFB0D1</color>
+    <color name="main_color_skin">#FFA2C8</color>
+    <color name="main_color_2_skin">#FC719B</color>
+    <color name="unchanged_main_color_2_skin">#FC719B</color>
+    <color name="foreground_main_color_2_skin">#FC719B</color>
+    <color name="foreground_main_color_3_skin">#FFB0D1</color>
+    <color name="main_color_3_skin">#FFB0D1</color>
     <color name="gray_1">#878787</color>
     <color name="gray_2">#72000000</color>
     <color name="gray_3">#EAEAEA</color>
@@ -19,7 +19,7 @@
     <color name="golden_1">#E4CD00</color>
     <color name="silvery_1">#9E9E9E</color>
     <color name="coppery_1">#B87333</color>
-    <color name="foreground_transparent">#00000000</color>
-    <color name="transparent">#00000000</color>
+    <color name="foreground_transparent_skin">#00000000</color>
+    <color name="transparent_skin">#00000000</color>
 
 </resources>

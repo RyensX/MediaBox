@@ -15,7 +15,7 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:singleLine="true"
-        android:textColor="@color/foreground_main_color_2"
+        android:textColor="@color/foreground_main_color_2_skin"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -11,6 +11,7 @@ import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.bean.IAnimeDetailBean
 import com.skyd.imomoe.util.*
 import com.skyd.imomoe.util.Util.getResColor
+import com.skyd.imomoe.util.Util.getResDrawable
 import com.skyd.imomoe.util.Util.process
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.glide.GlideUtil.loadImage
@@ -25,6 +26,7 @@ class PlayAdapter(
     private val gridItemDecoration = AnimeCoverItemDecoration()
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        super.onBindViewHolder(holder, position)
         val item = dataList[position]
 
         when {
@@ -81,10 +83,10 @@ class PlayAdapter(
                             PlayActivity.EpisodeRecyclerViewAdapter(
                                 activity, it, dialog, 0, "play"
                             )
-                    }
-                    holder.ivHorizontalRecyclerView1More.setImageResource(R.drawable.ic_keyboard_arrow_down_main_color_2_24)
+                    } else holder.rvHorizontalRecyclerView1.adapter?.notifyDataSetChanged()
+                    holder.ivHorizontalRecyclerView1More.setImageDrawable(getResDrawable(R.drawable.ic_keyboard_arrow_down_main_color_2_24_skin))
                     holder.ivHorizontalRecyclerView1More.imageTintList =
-                        ColorStateList.valueOf(activity.getResColor(R.color.foreground_main_color_2))
+                        ColorStateList.valueOf(activity.getResColor(R.color.foreground_main_color_2_skin))
                     holder.ivHorizontalRecyclerView1More.setOnClickListener { dialog.show() }
                 }
             }

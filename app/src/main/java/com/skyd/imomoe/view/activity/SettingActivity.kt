@@ -5,7 +5,6 @@ import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.afollestad.materialdialogs.MaterialDialog
@@ -17,16 +16,14 @@ import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.databinding.ActivitySettingBinding
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.util.Util.getAppVersionName
-import com.skyd.imomoe.util.Util.getNightMode
-import com.skyd.imomoe.util.Util.isNightMode
 import com.skyd.imomoe.util.Util.restartApp
-import com.skyd.imomoe.util.Util.setNightMode
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.Util.showToastOnThread
 import com.skyd.imomoe.util.gone
 import com.skyd.imomoe.util.update.AppUpdateHelper
 import com.skyd.imomoe.util.update.AppUpdateStatus
 import com.skyd.imomoe.viewmodel.SettingViewModel
+import com.skyd.skin.SkinManager
 import kotlinx.coroutines.*
 import java.net.URL
 
@@ -59,7 +56,7 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
         mBinding.tvSettingActivityDeleteAllHistoryInfo.isFocused = true
         mBinding.rlSettingActivityDeleteAllHistory.setOnClickListener {
             MaterialDialog(this).show {
-                icon(R.drawable.ic_delete_main_color_2_24)
+                icon(R.drawable.ic_delete_main_color_2_24_skin)
                 title(res = R.string.warning)
                 message(text = "确定要删除所有历史记录？包括搜索历史和观看历史")
                 positiveButton(res = R.string.delete) { viewModel.deleteAllHistory() }
@@ -85,7 +82,7 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
         mBinding.tvSettingActivityClearCache.isFocused = true
         mBinding.rlSettingActivityClearCache.setOnClickListener {
             MaterialDialog(this).show {
-                icon(R.drawable.ic_sd_storage_main_color_2_24)
+                icon(R.drawable.ic_sd_storage_main_color_2_24_skin)
                 title(res = R.string.warning)
                 message(text = "确定清理所有缓存？不包括缓存视频")
                 positiveButton(res = R.string.clean) { viewModel.clearAllCache() }
@@ -176,7 +173,7 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
         mBinding.rlSettingActivityUpdateServer.setOnClickListener {
             val builder: AlertDialog.Builder = AlertDialog.Builder(this)
             builder.setTitle(R.string.check_update_server)
-            builder.setIcon(R.drawable.ic_storage_main_color_2_24)
+            builder.setIcon(R.drawable.ic_storage_main_color_2_24_skin)
             builder.setSingleChoiceItems(
                 AppUpdateHelper.serverName, appUpdateHelper.getUpdateServer().value ?: 0
             ) { dialog, which ->
@@ -202,9 +199,10 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
         mBinding.switchSettingActivityCustomDataSource.setOnCheckedChangeListener { buttonView, isChecked ->
             if (DataSourceManager.useCustomDataSource == isChecked) return@setOnCheckedChangeListener
             MaterialDialog(this).show {
-                icon(R.drawable.ic_category_main_color_2_24)
+                icon(R.drawable.ic_category_main_color_2_24_skin)
                 title(res = R.string.warning)
                 message(res = R.string.request_restart_app)
+                cancelable(false)
                 positiveButton(res = R.string.restart) {
                     DataSourceManager.useCustomDataSource = isChecked
                     restartApp()
@@ -239,28 +237,35 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
 
     private fun initNightMode() {
         mBinding.run {
-            if (isNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
-                tvSettingActivityNightModeInfo.text = getString(R.string.night)
-                switchSettingActivityNightMode.isChecked = true
-            } else {
-                tvSettingActivityNightModeInfo.text = getString(R.string.daytime)
-                switchSettingActivityNightMode.isChecked = false
+            when (SkinManager.getDarkMode()) {
+                SkinManager.DARK_MODE_YES -> {
+                    switchSettingActivityNightMode.isChecked = true
+                    cbSettingActivityNightModeFollowSystem.isChecked = false
+                    tvSettingActivityNightModeInfo.text = getString(R.string.dark)
+                }
+                SkinManager.DARK_MODE_NO -> {
+                    switchSettingActivityNightMode.isChecked = false
+                    cbSettingActivityNightModeFollowSystem.isChecked = false
+                    tvSettingActivityNightModeInfo.text = getString(R.string.light)
+                }
+                SkinManager.DARK_FOLLOW_SYSTEM -> {
+                    switchSettingActivityNightMode.isEnabled = false
+                    cbSettingActivityNightModeFollowSystem.isChecked = true
+                    tvSettingActivityNightModeInfo.text = getString(R.string.follow_system)
+                }
             }
-            if (getNightMode() == AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM) {
-                tvSettingActivityNightModeInfo.text = getString(R.string.follow_system)
-                switchSettingActivityNightMode.isEnabled = false
-                cbSettingActivityNightModeFollowSystem.isChecked = true
-            } else {
-                cbSettingActivityNightModeFollowSystem.isChecked = false
-            }
-
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 cbSettingActivityNightModeFollowSystem.isEnabled = true
                 cbSettingActivityNightModeFollowSystem.setOnCheckedChangeListener { buttonView, isChecked ->
                     switchSettingActivityNightMode.isEnabled = !isChecked
-                    tvSettingActivityNightModeInfo.text =
-                        if (isChecked) setNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-                        else setNightMode(isNightMode())
+                    if (isChecked) {
+                        switchSettingActivityNightMode.isChecked = false
+                        SkinManager.setDarkMode(SkinManager.DARK_FOLLOW_SYSTEM)
+                        tvSettingActivityNightModeInfo.text = getString(R.string.follow_system)
+                    } else {
+                        SkinManager.setDarkMode(SkinManager.DARK_MODE_NO)
+                        tvSettingActivityNightModeInfo.text = getString(R.string.light)
+                    }
                 }
             } else {
                 cbSettingActivityNightModeFollowSystem.gone()
@@ -268,9 +273,13 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
             }
 
             switchSettingActivityNightMode.setOnCheckedChangeListener { buttonView, isChecked ->
-                tvSettingActivityNightModeInfo.text =
-                    if (isChecked) setNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                    else setNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                if (isChecked) {
+                    SkinManager.setDarkMode(SkinManager.DARK_MODE_YES)
+                    tvSettingActivityNightModeInfo.text = getString(R.string.dark)
+                } else {
+                    SkinManager.setDarkMode(SkinManager.DARK_MODE_NO)
+                    tvSettingActivityNightModeInfo.text = getString(R.string.light)
+                }
             }
         }
     }

@@ -1,12 +1,12 @@
 package com.skyd.imomoe.view.activity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.ViewStub
 import android.widget.TextView
 import androidx.viewbinding.ViewBinding
+import com.skyd.skin.core.SkinBaseActivity
 import com.skyd.imomoe.R
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.setColorStatusBar
@@ -15,7 +15,7 @@ import com.skyd.imomoe.util.gone
 import com.skyd.imomoe.util.visible
 import org.greenrobot.eventbus.EventBus
 
-abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
+abstract class BaseActivity<VB : ViewBinding> : SkinBaseActivity() {
     protected lateinit var mBinding: VB
     private lateinit var loadFailedTipView: View
     private lateinit var tvImageTextTip1: TextView
@@ -24,7 +24,11 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         mBinding = getBinding()
         setContentView(mBinding.root)
-        setColorStatusBar(window, getResColor(R.color.main_color_2))
+        setColorStatusBar(window, getResColor(R.color.main_color_2_skin))
+    }
+
+    override fun onChangeStatusBarSkin() {
+        setColorStatusBar(window, getResColor(R.color.main_color_2_skin))
     }
 
     protected abstract fun getBinding(): VB

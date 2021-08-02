@@ -6,10 +6,10 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginEnd="3dp"
-    android:background="@drawable/shape_fill_circle_corner_main_color_2_50"
+    android:background="@drawable/shape_fill_circle_corner_main_color_2_50_skin"
     android:paddingHorizontal="6dp"
     android:paddingVertical="2dp"
-    android:textColor="@color/foreground_white"
+    android:textColor="@color/foreground_white_skin"
     android:textSize="11sp"
     app:typeface="bPRTypeface"
     tools:text="日本" />

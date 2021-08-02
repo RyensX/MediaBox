@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/shape_circle_corner_bottom_dialog_white_12"
+    android:background="@drawable/shape_circle_corner_bottom_dialog_white_12_skin"
     android:orientation="vertical">
 
     <com.skyd.imomoe.view.component.textview.TypefaceTextView
@@ -13,7 +13,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="@string/play_list"
-        android:textColor="@color/foreground_main_color_2"
+        android:textColor="@color/foreground_main_color_2_skin"
         android:textSize="17sp"
         app:typeface="bPRTypeface" />
 

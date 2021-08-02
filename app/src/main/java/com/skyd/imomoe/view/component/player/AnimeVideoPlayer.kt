@@ -13,6 +13,7 @@ import android.widget.*
 import androidx.core.view.children
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.skyd.skin.SkinManager
 import com.shuyu.gsyvideoplayer.utils.Debuger
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
@@ -31,6 +32,7 @@ import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.gone
 import com.skyd.imomoe.util.visible
 import com.skyd.imomoe.view.activity.DlnaActivity
+import com.skyd.imomoe.view.adapter.SkinRvAdapter
 import com.skyd.imomoe.view.component.ZoomView
 import com.skyd.imomoe.view.component.textview.TypefaceTextView
 import java.io.File
@@ -764,25 +766,25 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         var title: String
     ) : BaseBean, Serializable
 
-    inner class SpeedAdapter(val list: List<SpeedBean>) :
-        RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    inner class SpeedAdapter(val list: List<SpeedBean>) : SkinRvAdapter() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
             return RightRecyclerViewViewHolder(
                 LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_player_list_item_1, parent, false)
-            )
+            ).apply { SkinManager.setSkin(itemView) }
         }
 
         @SuppressLint("SetTextI18n")
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+            super.onBindViewHolder(holder, position)
             val item = list[position]
 
             when (holder) {
                 is RightRecyclerViewViewHolder -> {
                     if (item.type == "speed") {
                         if (item.title.toFloat() == speed) {
-                            holder.tvTitle.setTextColor(context.getResColor(R.color.unchanged_main_color_2))
+                            holder.tvTitle.setTextColor(context.getResColor(R.color.unchanged_main_color_2_skin))
                         }
                         holder.tvTitle.text = item.title
                         holder.itemView.setOnClickListener {
@@ -808,7 +810,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
     abstract class EpisodeRecyclerViewAdapter(
         private val activity: Activity,
         private val dataList: List<AnimeEpisodeDataBean>,
-    ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    ) : SkinRvAdapter() {
 
         abstract val currentIndex: Int
 
@@ -816,7 +818,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
             return RightRecyclerViewViewHolder(
                 LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_player_list_item_1, parent, false)
-            )
+            ).apply { SkinManager.setSkin(itemView) }
         }
 
         override fun getItemCount(): Int = dataList.size

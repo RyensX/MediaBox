@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white_skin"
     tools:context=".view.activity.DlnaActivity">
 
     <include
@@ -23,7 +24,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/main_color"
+                android:background="@color/main_color_skin"
                 android:orientation="horizontal">
 
                 <com.skyd.imomoe.view.component.textview.TypefaceTextView
@@ -34,7 +35,7 @@
                     android:paddingEnd="16dp"
                     android:paddingBottom="12dp"
                     android:text="@string/device_list"
-                    android:textColor="@color/foreground_white"
+                    android:textColor="@color/foreground_white_skin"
                     android:textSize="15sp"
                     app:typeface="bPRTypeface" />
 
@@ -43,7 +44,7 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_gravity="center_vertical"
-                    android:indeterminateTint="@color/foreground_white"
+                    android:indeterminateTint="@color/foreground_white_skin"
                     android:indeterminateTintMode="src_atop" />
             </LinearLayout>
 
@@ -56,12 +57,12 @@
             <com.skyd.imomoe.view.component.textview.TypefaceTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/main_color"
+                android:background="@color/main_color_skin"
                 android:paddingVertical="12dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:text="@string/dlna_step"
-                android:textColor="@color/foreground_white"
+                android:textColor="@color/foreground_white_skin"
                 android:textSize="15sp"
                 app:typeface="bPRTypeface" />
 
@@ -71,7 +72,7 @@
                 android:paddingHorizontal="16dp"
                 android:paddingVertical="12dp"
                 android:text="1. 确保电视和手机在同一WiFi下，打开支持投屏的电视。\n2. 点击上方搜索到的设备进行投屏。\n3. 注意，部分未知格式的视频可能无法投屏。"
-                android:textColor="@color/foreground_main_color_2"
+                android:textColor="@color/foreground_main_color_2_skin"
                 android:textSize="15sp"
                 app:typeface="bPRTypeface" />
         </LinearLayout>

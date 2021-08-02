@@ -10,7 +10,7 @@
         android:id="@+id/ll_everyday_anime_fragment_header"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/main_color_2"
+        android:background="@color/main_color_2_skin"
         android:orientation="horizontal">
 
         <ImageView
@@ -29,7 +29,7 @@
             android:layout_weight="1"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textColor="@color/foreground_white"
+            android:textColor="@color/foreground_white_skin"
             android:textSize="17sp"
             android:textStyle="bold"
             app:typeface="bPRTypeface"
@@ -56,10 +56,10 @@
                     android:id="@+id/tl_everyday_anime_fragment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    app:tabIndicatorColor="@color/foreground_main_color_2"
+                    android:background="@color/white_skin"
+                    app:tabIndicatorColor="@color/foreground_main_color_2_skin"
                     app:tabMode="scrollable"
-                    app:tabTextColor="@color/foreground_main_color_2" />
+                    app:tabTextColor="@color/foreground_main_color_2_skin" />
             </androidx.cardview.widget.CardView>
 
             <com.skyd.imomoe.view.component.ViewPager2View

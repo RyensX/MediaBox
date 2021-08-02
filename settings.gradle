@@ -1,2 +1,5 @@
+include ':skin_dark'
+include ':skin_blue'
+include ':skin'
 include ':app'
 rootProject.name = "樱花动漫"

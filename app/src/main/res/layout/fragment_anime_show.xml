@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,7 +10,8 @@
         android:id="@+id/srl_anime_show_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:descendantFocusability="blocksDescendants">
+        android:descendantFocusability="blocksDescendants"
+        app:srlPrimaryColor="@color/main_color_3_skin">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_anime_show_fragment"
@@ -17,7 +19,7 @@
             android:layout_height="match_parent"
             android:overScrollMode="never"
             android:scrollbarSize="4dp"
-            android:scrollbarThumbVertical="@color/foreground_main_color_3"
+            android:scrollbarThumbVertical="@color/foreground_main_color_3_skin"
             android:scrollbars="vertical" />
     </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 

@@ -8,11 +8,11 @@ import com.scwang.smart.refresh.header.MaterialHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.util.CrashHandler
-import com.skyd.imomoe.util.Util
 import com.skyd.imomoe.util.Util.getManifestMetaValue
 import com.skyd.imomoe.util.Util.getResColor
-import com.skyd.imomoe.util.Util.setNightMode
+import com.skyd.imomoe.util.Util.getSkinResourceId
 import com.skyd.imomoe.util.Util.showToast
+import com.skyd.skin.core.attrs.SrlPrimaryColorAttr
 import com.umeng.analytics.MobclickAgent
 import com.umeng.commonsdk.UMConfigure
 
@@ -39,9 +39,6 @@ class App : Application() {
 
         FileDownloader.setup(this)
 
-        // 夜间模式
-        setNightMode()
-
         if (DataSourceManager.useCustomDataSource) getString(R.string.using_custom_data_source).showToast()
     }
 
@@ -56,22 +53,26 @@ class App : Application() {
                 layout.setFooterHeight(100f)
                 layout.setHeaderTriggerRate(0.5f)
                 layout.setDisableContentWhenLoading(false)
-                layout.setPrimaryColorsId(R.color.main_color_3)
+//                layout.setPrimaryColorsId(getSkinResourceId(R.color.main_color_3_skin))
             }
 
             // 全局设置默认的 Header
             SmartRefreshLayout.setDefaultRefreshHeaderCreator { context, layout -> //开始设置全局的基本参数（这里设置的属性只跟下面的MaterialHeader绑定，其他Header不会生效，能覆盖DefaultRefreshInitializer的属性和Xml设置的属性）
+                val colorSchemeResources = R.color.main_color_skin
+                SrlPrimaryColorAttr.materialHeaderColorSchemeRes = colorSchemeResources
                 layout.setEnableHeaderTranslationContent(true)
                     .setHeaderHeight(70f)
                     .setDragRate(0.6f)
-                MaterialHeader(context).setColorSchemeResources(R.color.main_color)
+                MaterialHeader(context).setColorSchemeResources(getSkinResourceId(colorSchemeResources))
                     .setShowBezierWave(true)
             }
 
             SmartRefreshLayout.setDefaultRefreshFooterCreator { context, layout ->
+                val animatingColor = R.color.foreground_main_color_2_skin
+                SrlPrimaryColorAttr.ballPulseFooterAnimatingColorRes = animatingColor
                 layout.setEnableFooterTranslationContent(true)
                 BallPulseFooter(context).setAnimatingColor(
-                    context.getResColor(R.color.foreground_main_color_2)
+                    context.getResColor(animatingColor)
                 )
             }
         }

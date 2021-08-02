@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:indeterminateTint="@color/foreground_main_color_2"
+        android:indeterminateTint="@color/foreground_main_color_2_skin"
         android:indeterminateTintMode="src_atop" />
 
     <com.skyd.imomoe.view.component.textview.TypefaceTextView
@@ -22,7 +22,7 @@
         android:layout_below="@id/pb_circle_progress_text_tip_1"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:textColor="@color/foreground_main_color_2"
+        android:textColor="@color/foreground_main_color_2_skin"
         android:textSize="17sp"
         app:typeface="bPRTypeface"
         tools:text="@string/read_download_data_file" />

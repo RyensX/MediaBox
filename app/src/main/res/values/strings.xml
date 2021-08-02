@@ -51,7 +51,7 @@
     <string name="device_list">设备列表</string>
     <string name="play_on_tv">投屏</string>
     <string name="sending_data_please_wait">正在发送数据，请稍候…</string>
-    <string name="night_mode">夜间模式</string>
+    <string name="dark_mode">深色模式</string>
     <string name="license">许可证</string>
     <string name="license_name">名称</string>
     <string name="dlna_step">投屏步骤</string>
@@ -104,8 +104,8 @@
     <string name="no_reverse">正常</string>
     <string name="bottom_progress">底部进度条</string>
     <string name="night_mode_follow_system">跟随系统</string>
-    <string name="daytime">白天</string>
-    <string name="night">黑夜</string>
+    <string name="light">浅色</string>
+    <string name="dark">深色</string>
     <string name="follow_system">跟随系统</string>
     <string name="ok">确定</string>
     <string name="no_more_info">没有更多了</string>
@@ -149,4 +149,5 @@
     <string name="using_custom_data_source">注意，正在使用自定义数据源！</string>
     <string name="restart">重启</string>
     <string name="request_restart_app">需要重启App，是否继续？</string>
+    <string name="skin_center">皮肤中心</string>
 </resources>

@@ -9,6 +9,6 @@
     android:paddingEnd="16dp"
     android:paddingBottom="2dp"
     android:text="@string/search_history"
-    android:textColor="@color/foreground_main_color_2"
+    android:textColor="@color/foreground_main_color_2_skin"
     android:textSize="17sp"
     app:typeface="bPRTypeface" />

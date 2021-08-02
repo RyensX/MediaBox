@@ -19,7 +19,9 @@ import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
+import androidx.annotation.AnyRes
 import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -27,6 +29,7 @@ import androidx.core.graphics.drawable.DrawableCompat
 import androidx.fragment.app.Fragment
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
+import com.skyd.skin.SkinManager
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Const
@@ -143,83 +146,6 @@ object Util {
     }
 
     /**
-     * 忽略跟随系统，仅获取是黑夜还是白天
-     */
-    fun isNightMode(): Int {
-        return if (App.context.sharedPreferences("nightMode").getBoolean("isNightMode", false))
-            AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
-    }
-
-    /**
-     * 获取是跟随系统还是黑夜还是白天
-     */
-    fun getNightMode(): Int {
-        return when {
-            App.context.sharedPreferences("nightMode")
-                .getBoolean("nightModeFollowSystem", false) -> {
-                AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-            }
-            App.context.sharedPreferences("nightMode").getBoolean("isNightMode", false) -> {
-                AppCompatDelegate.MODE_NIGHT_YES
-            }
-            else -> AppCompatDelegate.MODE_NIGHT_NO
-        }
-    }
-
-    /**
-     * 根据传入的值设置夜间模式
-     */
-    @SuppressLint("SwitchIntDef")
-    fun setNightMode(@AppCompatDelegate.NightMode mode: Int): String {
-        AppCompatDelegate.setDefaultNightMode(mode)
-        return App.context.run {
-            when (mode) {
-                AppCompatDelegate.MODE_NIGHT_NO -> {
-                    sharedPreferences("nightMode").editor {
-                        putBoolean("isNightMode", false)
-                        putBoolean("nightModeFollowSystem", false)
-                    }
-                    getString(R.string.daytime)
-                }
-                AppCompatDelegate.MODE_NIGHT_YES -> {
-                    sharedPreferences("nightMode").editor {
-                        putBoolean("isNightMode", true)
-                        putBoolean("nightModeFollowSystem", false)
-                    }
-                    getString(R.string.night)
-                }
-                AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM -> {
-                    sharedPreferences("nightMode").editor {
-                        putBoolean("nightModeFollowSystem", true)
-                    }
-                    getString(R.string.follow_system)
-                }
-                else -> ""
-            }
-        }
-    }
-
-    /**
-     * 根据sp存储的内容自动设置夜间模式
-     */
-    fun setNightMode(): String {
-        return if (App.context.sharedPreferences("nightMode")
-                .getBoolean("nightModeFollowSystem", false)
-        ) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-            App.context.getString(R.string.follow_system)
-        } else {
-            if (App.context.sharedPreferences("nightMode").getBoolean("isNightMode", false)) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                App.context.getString(R.string.night)
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                App.context.getString(R.string.daytime)
-            }
-        }
-    }
-
-    /**
      * 获取系统屏幕亮度
      */
     fun getScreenBrightness(activity: Activity): Int? = try {
@@ -264,9 +190,24 @@ object Util {
     }
 
     /**
+     * 通过原始id获取当前皮肤的id
+     */
+    fun getSkinResourceId(@AnyRes id: Int) = SkinManager.getSkinResourceId(id)
+
+    /**
+     * 通过id获取drawable
+     */
+    fun getResDrawable(@DrawableRes id: Int) = SkinManager.getDrawableOrMipMap(id)
+
+    /**
      * 通过id获取颜色
      */
-    fun Context.getResColor(@ColorRes id: Int) = ContextCompat.getColor(this, id)
+    fun Context.getResColor(@ColorRes id: Int) = SkinManager.getColor(id)
+
+    /**
+     * 通过id获取颜色，不随皮肤更改，使用默认的
+     */
+    fun Context.getDefaultResColor(@ColorRes id: Int) = ContextCompat.getColor(this, id)
 
     /**
      * 计算距今时间

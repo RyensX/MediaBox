@@ -2,6 +2,7 @@ package com.skyd.imomoe.view.activity
 
 import android.app.Dialog
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
@@ -33,6 +34,7 @@ import com.skyd.imomoe.util.html.SnifferVideo
 import com.skyd.imomoe.util.Util.dp2px
 import com.skyd.imomoe.util.Util.getDetailLinkByEpisodeLink
 import com.skyd.imomoe.util.Util.getResColor
+import com.skyd.imomoe.util.Util.getResDrawable
 import com.skyd.imomoe.util.Util.openVideoByExternalPlayer
 import com.skyd.imomoe.util.Util.setColorStatusBar
 import com.skyd.imomoe.util.Util.showToast
@@ -58,6 +60,7 @@ import tv.danmaku.ijk.media.player.IjkMediaPlayer
 
 
 class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>() {
+    override var statusBarSkin: Boolean = false
     private lateinit var mBinding: ActivityPlayBinding
     private var isFavorite: Boolean = false
     private var favoriteBeanDataReady: Int = 0
@@ -141,17 +144,17 @@ class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>() {
             rvPlayActivity.adapter = adapter
 
             srlPlayActivity.setOnRefreshListener { viewModel.getPlayData(partUrl) }
-            srlPlayActivity.setColorSchemeResources(R.color.main_color)
+            srlPlayActivity.setColorSchemeResources(R.color.main_color_skin)
         }
 
         GlobalScope.launch(Dispatchers.IO) {
             val favoriteAnime = getAppDataBase().favoriteAnimeDao().getFavoriteAnime(detailPartUrl)
             withContext(Dispatchers.Main) {
                 isFavorite = if (favoriteAnime == null) {
-                    mBinding.ivPlayActivityFavorite.setImageResource(R.drawable.ic_star_border_main_color_2_24)
+                    mBinding.ivPlayActivityFavorite.setImageDrawable(getResDrawable(R.drawable.ic_star_border_main_color_2_24_skin))
                     false
                 } else {
-                    mBinding.ivPlayActivityFavorite.setImageResource(R.drawable.ic_star_main_color_2_24)
+                    mBinding.ivPlayActivityFavorite.setImageDrawable(getResDrawable(R.drawable.ic_star_main_color_2_24_skin))
                     true
                 }
                 mBinding.ivPlayActivityFavorite.setOnClickListener {
@@ -160,7 +163,7 @@ class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>() {
                             getAppDataBase().favoriteAnimeDao().deleteFavoriteAnime(detailPartUrl)
                             withContext(Dispatchers.Main) {
                                 isFavorite = false
-                                mBinding.ivPlayActivityFavorite.setImageResource(R.drawable.ic_star_border_main_color_2_24)
+                                mBinding.ivPlayActivityFavorite.setImageDrawable(getResDrawable(R.drawable.ic_star_border_main_color_2_24_skin))
                                 getString(R.string.remove_favorite_succeed).showToast()
                             }
                         } else {
@@ -177,7 +180,7 @@ class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>() {
                             )
                             withContext(Dispatchers.Main) {
                                 isFavorite = true
-                                mBinding.ivPlayActivityFavorite.setImageResource(R.drawable.ic_star_main_color_2_24)
+                                mBinding.ivPlayActivityFavorite.setImageDrawable(getResDrawable(R.drawable.ic_star_main_color_2_24_skin))
                                 getString(R.string.favorite_succeed).showToast()
                             }
                         }
@@ -413,6 +416,11 @@ class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>() {
         return bottomSheetDialog
     }
 
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        adapter.notifyDataSetChanged()
+    }
+
     class EpisodeRecyclerViewAdapter(
         private val activity: PlayActivity,
         private val dataList: List<AnimeEpisodeDataBean>,
@@ -428,7 +436,7 @@ class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>() {
                 is AnimeEpisode2ViewHolder -> {
                     holder.tvAnimeEpisode2.text = item.title
                     holder.tvAnimeEpisode2.setTextColor(
-                        activity.getResColor(R.color.foreground_main_color_2)
+                        activity.getResColor(R.color.foreground_main_color_2_skin)
                     )
                     val layoutParams = holder.itemView.layoutParams
                     if (showType == 0) {
@@ -478,8 +486,8 @@ class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>() {
                     holder.tvTitle.setTextColor(
                         activity.getResColor(
                             if (item.title == activity.viewModel.animeEpisodeDataBean.title)
-                                R.color.unchanged_main_color_2
-                            else R.color.foreground_white
+                                R.color.unchanged_main_color_2_skin
+                            else R.color.foreground_white_skin
                         )
                     )
                     holder.tvTitle.text = item.title

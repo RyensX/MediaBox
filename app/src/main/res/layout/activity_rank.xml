@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white_skin"
     tools:context=".view.activity.RankActivity">
 
     <include
@@ -26,12 +27,12 @@
                 android:id="@+id/tl_rank_activity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
+                android:background="@color/white_skin"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:tabGravity="center"
-                app:tabIndicatorColor="@color/foreground_main_color_2"
+                app:tabIndicatorColor="@color/foreground_main_color_2_skin"
                 app:tabMode="scrollable"
-                app:tabTextColor="@color/foreground_main_color_2" />
+                app:tabTextColor="@color/foreground_main_color_2_skin" />
 
             <com.skyd.imomoe.view.component.ViewPager2View
                 android:id="@+id/vp2_rank_activity"

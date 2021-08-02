@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.ActivityMonthAnimeBinding
+import com.skyd.imomoe.util.Util
 import com.skyd.imomoe.view.adapter.SearchAdapter
 import com.skyd.imomoe.viewmodel.MonthAnimeViewModel
 
@@ -38,7 +39,7 @@ class MonthAnimeActivity : BaseActivity<ActivityMonthAnimeBinding>() {
             rvMonthAnimeActivity.adapter = adapter
 
             llMonthAnimeActivityToolbar.ivToolbar1Back.setOnClickListener { finish() }
-            srlMonthAnimeActivity.setColorSchemeResources(R.color.main_color)
+            srlMonthAnimeActivity.setColorSchemeResources(Util.getSkinResourceId(R.color.main_color_skin))
             srlMonthAnimeActivity.setOnRefreshListener { //避免刷新间隔太短
                 if (System.currentTimeMillis() - lastRefreshTime > 500) {
                     lastRefreshTime = System.currentTimeMillis()

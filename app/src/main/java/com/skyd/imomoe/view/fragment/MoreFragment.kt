@@ -13,6 +13,7 @@ import com.skyd.imomoe.databinding.FragmentMoreBinding
 import com.skyd.imomoe.view.activity.AboutActivity
 import com.skyd.imomoe.view.activity.HistoryActivity
 import com.skyd.imomoe.view.activity.SettingActivity
+import com.skyd.imomoe.view.activity.SkinActivity
 import com.skyd.imomoe.view.adapter.MoreAdapter
 
 class MoreFragment : BaseFragment<FragmentMoreBinding>() {
@@ -39,6 +40,14 @@ class MoreFragment : BaseFragment<FragmentMoreBinding>() {
                 ANIME_SKIP_BY_WEBSITE,
                 getString(R.string.skip_by_website),
                 R.drawable.ic_insert_link_white_24
+            )
+        )
+        list.add(
+            MoreBean(
+                ViewHolderTypeString.MORE_1,
+                "$ANIME_LAUNCH_ACTIVITY/${SkinActivity::class.qualifiedName}",
+                getString(R.string.skin_center),
+                R.drawable.ic_skin_white_32_skin
             )
         )
         list.add(

@@ -15,7 +15,7 @@
         android:layout_marginEnd="8dp"
         android:layout_weight="1"
         android:gravity="center_vertical"
-        android:textColor="@color/foreground_main_color_2"
+        android:textColor="@color/foreground_main_color_2_skin"
         android:textSize="17sp"
         tools:text="番剧名" />
 
@@ -27,7 +27,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="16dp"
         android:gravity="center_vertical"
-        android:textColor="@color/foreground_main_color_2"
+        android:textColor="@color/foreground_main_color_2_skin"
         android:textSize="17sp"
         tools:text="第10集" />
 

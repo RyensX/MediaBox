@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import com.skyd.imomoe.R
+import com.skyd.imomoe.util.Util.getResDrawable
 
 object AnimeToast {
     fun makeText(
@@ -18,8 +19,10 @@ object AnimeToast {
                 R.layout.toast_1,
                 null
             )
-        val tv = view.findViewById<TextView>(R.id.tv_toast_1)
-        tv.text = text
+        view.findViewById<TextView>(R.id.tv_toast_1).apply {
+            background = getResDrawable(R.drawable.shape_fill_circle_corner_main_color_2_50_skin)
+            this.text = text
+        }
         toast.view = view
         toast.duration = duration
         return toast

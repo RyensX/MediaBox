@@ -66,6 +66,7 @@ interface Const {
             const val ANIME_EPISODE_2 = 31
             const val UPNP_DEVICE_1 = 32
             const val MORE_1 = 33
+            const val SKIN_COVER_1 = 34
         }
     }
 
@@ -97,6 +98,7 @@ interface Const {
             const val ANIME_EPISODE_2 = "animeEpisode2"
             const val UPNP_DEVICE_1 = "upnpDevice1"
             const val MORE_1 = "More1"
+            const val SKIN_COVER_1 = "skinCover1"
         }
     }
 

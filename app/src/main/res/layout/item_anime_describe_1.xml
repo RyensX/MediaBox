@@ -10,6 +10,6 @@
     android:paddingTop="7dp"
     android:paddingEnd="16dp"
     android:paddingBottom="7dp"
-    android:textColor="@color/main_color"
+    android:textColor="@color/main_color_skin"
     app:typeface="bPRTypeface"
     tools:text="《轻音少女 第一季》讲述春天，新生入学后开始考虑要加入哪个社团的时候田井中律被从小一起长大的玩伴秋山澪带到轻音部见习。却发现原社团成员已经全部毕业，如果新入团成员不能凑齐四人以上，轻音部将会被取消。在新成员琴吹紬加入了轻音部以后，就只剩最后的一名成员了，这个时候，把轻音部误以为是轻音乐部（口哨之类）的乐器初学者平泽唯 加入了社团，从此开始了欢乐的社团生活。" />

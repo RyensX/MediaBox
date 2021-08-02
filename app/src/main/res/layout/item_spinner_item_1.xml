@@ -11,7 +11,7 @@
     android:paddingTop="10dp"
     android:paddingEnd="17dp"
     android:paddingBottom="10dp"
-    android:textColor="@color/foreground_main_color_2"
+    android:textColor="@color/foreground_main_color_2_skin"
     android:textSize="17sp"
     app:typeface="bPRTypeface"
     tools:text="地区" />

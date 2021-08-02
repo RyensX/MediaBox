@@ -5,10 +5,10 @@
     android:id="@+id/tv_toast_1"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/shape_fill_circle_corner_main_color_2_50"
+    android:background="@drawable/shape_fill_circle_corner_main_color_2_50_skin"
     android:paddingHorizontal="15dp"
     android:paddingVertical="9dp"
-    android:textColor="@color/foreground_white"
+    android:textColor="@color/foreground_white_skin"
     android:textStyle="bold"
     app:typeface="bPRTypeface"
     tools:text="Toast" />

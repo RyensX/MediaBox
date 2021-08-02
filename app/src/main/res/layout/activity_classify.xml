@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white_skin"
     android:orientation="vertical"
     tools:context=".view.activity.ClassifyActivity">
 
@@ -14,7 +15,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/white"
+        app:cardBackgroundColor="@color/white_skin"
         app:cardElevation="6dp">
 
         <LinearLayout
@@ -27,7 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="start"
-                android:background="@drawable/selector_spinner_1" />
+                android:background="@drawable/selector_spinner_1_skin" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_classify_activity_tab"
@@ -40,7 +41,8 @@
     <com.scwang.smart.refresh.layout.SmartRefreshLayout
         android:id="@+id/srl_classify_activity"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:srlPrimaryColor="@color/main_color_3_skin">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_classify_activity"

@@ -8,6 +8,8 @@ import android.widget.RelativeLayout
 import com.skyd.imomoe.R
 import com.skyd.imomoe.util.Util.dp2px
 import com.skyd.imomoe.util.Util.getResColor
+import com.skyd.skin.SkinManager
+import com.skyd.skin.core.listeners.ChangeCustomSkinListener
 
 /**
  * Created by Sky_D on 2021-02-08.
@@ -27,8 +29,8 @@ class DotIndicator : View, Indicator {
     private val mMarginBottom = 0
 
     constructor(context: Context) : super(context) {
-        mSelectedColor = context.getResColor(R.color.main_color_2)
-        mUnSelectedColor = context.getResColor(R.color.foreground_white)
+        mSelectedColor = context.getResColor(R.color.main_color_2_skin)
+        mUnSelectedColor = context.getResColor(R.color.foreground_white_skin)
 
         val layoutParams: RelativeLayout.LayoutParams = RelativeLayout.LayoutParams(
             RelativeLayout.LayoutParams.WRAP_CONTENT,

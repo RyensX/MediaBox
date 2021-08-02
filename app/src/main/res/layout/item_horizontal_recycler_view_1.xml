@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:background="@color/foreground_black">
+    tools:background="@color/foreground_black_skin">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_horizontal_recycler_view_1"
@@ -26,10 +26,10 @@
         android:layout_height="50dp"
         android:background="?android:selectableItemBackground"
         android:padding="12dp"
-        android:src="@drawable/ic_keyboard_arrow_down_main_color_2_24"
+        android:src="@drawable/ic_keyboard_arrow_down_main_color_2_24_skin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/foreground_white" />
+        app:tint="@color/foreground_white_skin" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

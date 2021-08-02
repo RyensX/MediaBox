@@ -16,17 +16,17 @@
             android:id="@+id/tl_home_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
-            app:tabIndicatorColor="@color/foreground_main_color_2"
+            android:background="@color/white_skin"
+            app:tabIndicatorColor="@color/foreground_main_color_2_skin"
             app:tabMode="scrollable"
-            app:tabTextColor="@color/foreground_main_color_2" />
+            app:tabTextColor="@color/foreground_main_color_2_skin" />
     </androidx.cardview.widget.CardView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_home_fragment_header"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/main_color_2"
+        android:background="@color/main_color_2_skin"
         android:paddingHorizontal="7dp">
 
         <ImageView
@@ -44,8 +44,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="7dp"
-            android:background="@drawable/shape_circle_corner_white_50"
-            android:drawableStart="@drawable/ic_search_main_color_24"
+            android:background="@drawable/shape_circle_corner_white_50_skin"
+            android:drawableStart="@drawable/ic_search_main_color_24_skin"
             android:drawablePadding="5dp"
             android:gravity="center_vertical"
             android:paddingStart="15dp"
@@ -53,7 +53,7 @@
             android:paddingEnd="15dp"
             android:paddingBottom="4dp"
             android:text="@string/home_fragment_header_search"
-            android:textColor="@color/main_color"
+            android:textColor="@color/main_color_skin"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="@id/cl_home_fragment_header"
             app:layout_constraintEnd_toStartOf="@id/iv_home_fragment_classify"

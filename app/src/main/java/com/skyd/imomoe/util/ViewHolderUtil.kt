@@ -42,6 +42,7 @@ class ViewHolderUtil {
             ViewHolderTypeString.HORIZONTAL_RECYCLER_VIEW_1 -> ViewHolderTypeInt.HORIZONTAL_RECYCLER_VIEW_1
             ViewHolderTypeString.UPNP_DEVICE_1 -> ViewHolderTypeInt.UPNP_DEVICE_1
             ViewHolderTypeString.MORE_1 -> ViewHolderTypeInt.MORE_1
+            ViewHolderTypeString.SKIN_COVER_1 -> ViewHolderTypeInt.SKIN_COVER_1
             else -> ViewHolderTypeInt.UNKNOWN
         }
 
@@ -141,6 +142,10 @@ class ViewHolderUtil {
             ViewHolderTypeInt.ANIME_COVER_9 -> AnimeCover9ViewHolder(
                 LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_anime_cover_9, parent, false)
+            )
+            ViewHolderTypeInt.SKIN_COVER_1 -> SkinCover1ViewHolder(
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_skin_cover_1, parent, false)
             )
             else -> EmptyViewHolder(View(parent.context))
         }
@@ -292,4 +297,10 @@ class UpnpDevice1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 class More1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val ivMore1: ImageView = view.findViewById(R.id.iv_more_1)
     val tvMore1: TextView = view.findViewById(R.id.tv_more_1)
+}
+
+class SkinCover1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    val ivSkinCover1Cover: ImageView = view.findViewById(R.id.iv_skin_cover_1_cover)
+    val tvSkinCover1Title: TypefaceTextView = view.findViewById(R.id.tv_skin_cover_1_title)
+    val ivSkinCover1Selected: ImageView = view.findViewById(R.id.iv_skin_cover_1_selected)
 }

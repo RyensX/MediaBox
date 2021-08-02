@@ -1,7 +1,6 @@
 package com.skyd.imomoe.view.activity
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,7 +18,6 @@ import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.ClassifyBean
 import com.skyd.imomoe.bean.ClassifyDataBean
-import com.skyd.imomoe.config.UnknownActionUrl
 import com.skyd.imomoe.databinding.ActivityClassifyBinding
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.showToast
@@ -95,7 +93,7 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
                     parent: AdapterView<*>, view: View,
                     pos: Int, id: Long
                 ) {
-                    if (view is TextView) view.setTextColor(getResColor(R.color.foreground_main_color_2))
+                    if (view is TextView) view.setTextColor(getResColor(R.color.foreground_main_color_2_skin))
                     classifyTabList.clear()
                     classifyTabList.addAll(viewModel.classifyTabList[pos].classifyDataList)
                     classifyTabAdapter.notifyDataSetChanged()

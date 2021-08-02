@@ -7,6 +7,7 @@ plugins {
 }
 
 apply from: secret
+apply from: andresguard
 
 android.defaultConfig {
     secret.buildConfigField.forEach({ k, v ->
@@ -26,7 +27,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 15
-        versionName "1.1.2"
+        versionName "1.1.3_beta2"
         flavorDimensions "versionName"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -74,7 +75,7 @@ android {
     buildTypes {
         debug {
             minifyEnabled false
-            shrinkResources false
+            shrinkResources false       // 使用换肤功能则必须设置为false，否则启动崩溃
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             applicationIdSuffix '.debug' // 一台手机debug release共存
             ndk {
@@ -85,7 +86,7 @@ android {
             signingConfig signingConfigs.release    //签名
             minifyEnabled true
             zipAlignEnabled true
-            shrinkResources true
+            shrinkResources false       // 使用换肤功能则必须设置为false，否则启动崩溃
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             ndk {
                 abiFilters 'armeabi'
@@ -170,6 +171,9 @@ dependencies {
     implementation 'com.scwang.smart:refresh-header-material:2.0.3'    //谷歌刷新头
     implementation 'com.scwang.smart:refresh-footer-ball:2.0.3'        //球脉冲加载
     implementation 'com.github.ctiao:DanmakuFlameMaster:0.9.25'
+    implementation project(':skin')
+    implementation project(':skin_blue')
+    implementation project(':skin_dark')
 }
 
 // UM U-APM性能报告
@@ -186,8 +190,8 @@ efs {
             "BaseActivity",
             "ClassifyActivity",
             "CrashActivity",
-            "DInaActivity",
-            "DInaControlActivity",
+            "DlnaActivity",
+            "DlnaControlActivity",
             "FavoriteActivity",
             "HistoryActivity",
             "LicenseActivity",
@@ -204,7 +208,8 @@ efs {
 
 //AndResGuard资源混淆工具
 andResGuard {
-    // mappingFile = file("./resource_mapping.txt")
+    // 使用mappingFile，防止需要换肤的资源id被替换
+//    mappingFile = file("./resource_mapping.txt")
     mappingFile = null
     use7zip = true
     useSign = true
@@ -214,45 +219,7 @@ andResGuard {
     fixedResName = "arg"
     // 打开这个开关会合并所有哈希值相同的资源，但请不要过度依赖这个功能去除去冗余资源
     mergeDuplicatedRes = true
-    whiteList = [
-            // for your icon
-            "R.mipmap.ic_launcher",
-            "R.mipmap.ic_launcher_round",
-            // for fabric
-            "R.string.com.crashlytics.*",
-            // for google-services
-            "R.string.google_app_id",
-            "R.string.gcm_defaultSenderId",
-            "R.string.default_web_client_id",
-            "R.string.ga_trackingId",
-            "R.string.firebase_database_url",
-            "R.string.google_api_key",
-            "R.string.google_crash_reporting_api_key",
-
-            // 友盟sdk
-            "R.anim.umeng*",
-            "R.string.umeng*",
-            "R.string.UM*",
-            "R.string.tb_*",
-            "R.layout.umeng*",
-            "R.layout.socialize_*",
-            "R.layout.*messager*",
-            "R.layout.tb_*",
-            "R.color.umeng*",
-            "R.color.tb_*",
-            "R.style.*UM*",
-            "R.style.umeng*",
-            "R.drawable.umeng*",
-            "R.drawable.tb_*",
-            "R.drawable.sina*",
-            "R.drawable.qq_*",
-            "R.drawable.tb_*",
-            "R.id.umeng*",
-            "R.id.*messager*",
-            "R.id.progress_bar_parent",
-            "R.id.socialize_*",
-            "R.id.webView"
-    ]
+    whiteList = andresguard.whiteList
     compressFilePattern = [
             "*.png",
             "*.jpg",
@@ -279,11 +246,11 @@ andResGuard {
 
 //class转jar
 //删除之前打出的包，默认将包打在'build/libs/'下
-task deleteOldJar(type: Delete){
+task deleteOldJar(type: Delete) {
     delete 'build/libs/CustomDataSource.jar'
 }
 //打包操作
-task makeJar(type: Jar){
+task makeJar(type: Jar) {
     //要打成的包的名字
     baseName 'CustomDataSource'
     //选取要打包的文件夹
@@ -293,7 +260,7 @@ task makeJar(type: Jar){
     //排除在外的文件
     exclude('BuildConfig.class', 'R.class', 'MainActivity.class')
     //排除以R$开头的文件
-    exclude{ it.name.startsWith('R$')}
+    exclude { it.name.startsWith('R$') }
 }
 //打包~
 makeJar.dependsOn(deleteOldJar)
