@@ -47,15 +47,15 @@
         <SeekBar
             android:id="@+id/progress"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="17dp"
             android:background="@null"
             android:max="100"
             android:maxHeight="2dp"
             android:minHeight="2dp"
             android:paddingTop="2dp"
             android:paddingBottom="2dp"
-            android:progressDrawable="@drawable/video_seek_progress"
-            android:thumb="@drawable/video_seek_thumb"
+            android:progressDrawable="@drawable/seek_bar_progress_1_skin"
+            android:thumb="@drawable/seek_bar_thumb_1_skin"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -66,10 +66,10 @@
             android:layout_height="0dp"
             android:layout_marginStart="10dp"
             android:paddingHorizontal="5dp"
-            android:src="@drawable/ic_play_white_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/progress" />
+            app:layout_constraintTop_toBottomOf="@id/progress"
+            tools:src="@drawable/ic_play_white_24" />
 
         <ImageView
             android:id="@+id/iv_next"

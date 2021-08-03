@@ -33,7 +33,6 @@ import com.skyd.imomoe.view.adapter.decoration.AnimeShowItemDecoration
 import com.skyd.imomoe.view.adapter.spansize.AnimeDetailSpanSize
 import com.skyd.imomoe.view.fragment.ShareDialogFragment
 import com.skyd.imomoe.viewmodel.AnimeDetailViewModel
-import com.skyd.skin.core.listeners.ChangeSkinListener
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -79,7 +78,7 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
                     ivToolbar1Button2.setImageResource(R.drawable.ic_star_border_white_24)
                     false
                 } else {
-                    ivToolbar1Button2.setImageResource(R.drawable.ic_star_white_24)
+                    ivToolbar1Button2.setImageResource(R.drawable.ic_star_white_24_skin)
                     true
                 }
                 withContext(Dispatchers.Main) {
@@ -108,7 +107,7 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
                         )
                         withContext(Dispatchers.Main) {
                             isFavorite = true
-                            ivToolbar1Button2.setImageResource(R.drawable.ic_star_white_24)
+                            ivToolbar1Button2.setImageResource(R.drawable.ic_star_white_24_skin)
                             getString(R.string.favorite_succeed).showToast()
                         }
                     }

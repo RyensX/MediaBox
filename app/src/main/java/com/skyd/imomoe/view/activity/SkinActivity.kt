@@ -59,7 +59,7 @@ class SkinActivity : BaseActivity<ActivitySkinBinding>() {
                 ViewHolderTypeString.SKIN_COVER_1,
                 "",
                 getDefaultResColor(R.color.main_color_2_skin),
-                "粉色少女",
+                "粉色少女🎀",
                 usingSkin("", ""),
                 "",
                 ""
@@ -70,7 +70,7 @@ class SkinActivity : BaseActivity<ActivitySkinBinding>() {
                 ViewHolderTypeString.SKIN_COVER_1,
                 "",
                 getDefaultResColor(R.color.black),
-                "deep♂dark♂fantasy",
+                "deep♂️dark♂️fantasy",
                 usingSkin("", "_dark"),
                 "",
                 "_dark"
@@ -81,10 +81,32 @@ class SkinActivity : BaseActivity<ActivitySkinBinding>() {
                 ViewHolderTypeString.SKIN_COVER_1,
                 "",
                 getDefaultResColor(R.color.main_color_2_skin_blue),
-                "深蓝♂幻想",
+                "♂️深蓝幻想",
                 usingSkin("", "_blue"),
                 "",
                 "_blue"
+            )
+        )
+        list.add(
+            SkinBean(
+                ViewHolderTypeString.SKIN_COVER_1,
+                "",
+                getDefaultResColor(R.color.main_color_2_skin_lemon),
+                "柠檬酸🍋",
+                usingSkin("", "_lemon"),
+                "",
+                "_lemon"
+            )
+        )
+        list.add(
+            SkinBean(
+                ViewHolderTypeString.SKIN_COVER_1,
+                "",
+                getDefaultResColor(R.color.main_color_2_skin_sweat_soybean),
+                "流汗黄豆😅",
+                usingSkin("", "_sweat_soybean"),
+                "",
+                "_sweat_soybean"
             )
         )
     }

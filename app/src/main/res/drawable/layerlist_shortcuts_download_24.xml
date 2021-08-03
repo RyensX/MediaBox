@@ -7,7 +7,7 @@
     </item>
     <item
         android:bottom="7dp"
-        android:drawable="@drawable/ic_arrow_circle_down_white_24"
+        android:drawable="@drawable/ic_arrow_circle_down_white_24_skin"
         android:gravity="fill"
         android:left="7dp"
         android:right="7dp"

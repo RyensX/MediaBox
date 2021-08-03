@@ -87,7 +87,7 @@
                     android:layout_height="30dp"
                     android:layout_centerVertical="true"
                     android:padding="1dp"
-                    android:src="@drawable/ic_arrow_circle_down_white_24"
+                    android:src="@drawable/ic_arrow_circle_down_main_color_2_24_skin"
                     app:tint="@color/foreground_main_color_2_skin" />
 
                 <com.skyd.imomoe.view.component.textview.TypefaceTextView

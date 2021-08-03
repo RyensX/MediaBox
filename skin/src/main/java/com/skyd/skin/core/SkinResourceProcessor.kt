@@ -197,7 +197,7 @@ class SkinResourceProcessor private constructor(val application: Application) {
             skinResources.getIdentifier(skinResourceName, resourceType, skinPackageName)
         usingDefaultSkin = skinResourceId == 0
         if (usingDefaultSkin) {
-            Log.i(TAG, "皮肤包中资源：$skinResourceName 未不到，将使用默认资源：$resourceName")
+            Log.i(TAG, "skin res:$skinResourceName not found,use default res:$resourceName")
         }
         return if (usingDefaultSkin) resourceId else skinResourceId
     }

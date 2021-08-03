@@ -26,6 +26,7 @@ import com.skyd.imomoe.bean.AnimeEpisodeDataBean
 import com.skyd.imomoe.bean.BaseBean
 import com.skyd.imomoe.util.Util.dp2px
 import com.skyd.imomoe.util.Util.getResColor
+import com.skyd.imomoe.util.Util.getResDrawable
 import com.skyd.imomoe.util.Util.getScreenBrightness
 import com.skyd.imomoe.util.Util.openVideoByExternalPlayer
 import com.skyd.imomoe.util.Util.showToast
@@ -524,19 +525,18 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
             val imageView = mStartButton as ImageView
             when (mCurrentState) {
                 GSYVideoView.CURRENT_STATE_PLAYING -> {
-                    imageView.setImageResource(R.drawable.ic_pause_white_24)
+                    imageView.setImageDrawable(getResDrawable(R.drawable.ic_pause_white_24))
                 }
                 GSYVideoView.CURRENT_STATE_ERROR -> {
-                    imageView.setImageResource(R.drawable.ic_play_white_24)
+                    imageView.setImageDrawable(getResDrawable(R.drawable.ic_play_white_24))
                 }
                 GSYVideoView.CURRENT_STATE_AUTO_COMPLETE -> {
-                    imageView.setImageResource(R.drawable.ic_refresh_white_24)
+                    imageView.setImageDrawable(getResDrawable(R.drawable.ic_refresh_white_24))
                 }
                 else -> {
-                    imageView.setImageResource(R.drawable.ic_play_white_24)
+                    imageView.setImageDrawable(getResDrawable(R.drawable.ic_play_white_24))
                 }
             }
-
         } else {
             super.updateStartImage()
         }

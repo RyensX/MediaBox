@@ -50,7 +50,7 @@
         <SeekBar
             android:id="@+id/progress"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="17dp"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:background="@null"
@@ -59,8 +59,8 @@
             android:minHeight="2dp"
             android:paddingTop="7dp"
             android:paddingBottom="7dp"
-            android:progressDrawable="@drawable/video_seek_progress"
-            android:thumb="@drawable/video_seek_thumb" />
+            android:progressDrawable="@drawable/seek_bar_progress_1_skin"
+            android:thumb="@drawable/seek_bar_thumb_1_skin" />
 
         <com.skyd.imomoe.view.component.textview.TypefaceTextView
             android:id="@+id/current"
@@ -288,7 +288,7 @@
             android:paddingVertical="12dp"
             android:paddingStart="0dp"
             android:paddingEnd="7dp"
-            android:src="@drawable/ic_arrow_circle_down_white_24"
+            android:src="@drawable/ic_arrow_circle_down_white_24_skin"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/iv_more"
             app:layout_constraintTop_toTopOf="parent" />

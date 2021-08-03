@@ -16,10 +16,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.CompoundButton
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.widget.*
 import androidx.annotation.ColorRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
@@ -71,8 +68,10 @@ object SkinManager {
         R.attr.trackTint,
         android.R.attr.buttonTint,
         R.attr.cardBackgroundColor,
-        android.R.attr.indeterminateTint
-    )
+        android.R.attr.indeterminateTint,
+        android.R.attr.thumb,
+        android.R.attr.progressDrawable
+    ).apply { sort() }      // 需要升序排序，所以要调用sort()
 
     //todo 反射：这里使用反射创建View
     private val sConstructorMap: MutableMap<String, Constructor<out View>> = HashMap()
@@ -250,6 +249,16 @@ object SkinManager {
                     if (resId != -1) skinAttrsSet.attrsMap[IndeterminateTintAttr.TAG] =
                         IndeterminateTintAttr().apply { attrResourceRefId = resId }
                 }
+                android.R.attr.thumb -> {
+                    if (resId != -1)
+                        skinAttrsSet.attrsMap[ThumbAttr.TAG] =
+                            ThumbAttr().apply { attrResourceRefId = resId }
+                }
+                android.R.attr.progressDrawable -> {
+                    if (resId != -1)
+                        skinAttrsSet.attrsMap[ProgressDrawableAttr.TAG] =
+                            ProgressDrawableAttr().apply { attrResourceRefId = resId }
+                }
             }
         }
         typedArray.recycle()
@@ -408,6 +417,46 @@ object SkinManager {
             } else {
                 val color = skinResProcessor.getColorStateList(colorResourceId)
                 view.backgroundTintList = color
+            }
+        }
+    }
+
+    fun setThumb(view: SeekBar, backgroundResourceId: Int) {
+        if (backgroundResourceId > 0) {
+            // 是否默认皮肤
+            val skinResProcessor = SkinResourceProcessor.instance
+            if (skinResProcessor.usingDefaultSkin() && skinResProcessor.usingInnerAppSkin()) {
+                val drawable = ContextCompat.getDrawable(view.context, backgroundResourceId)
+                view.thumb = drawable
+            } else {
+                // 获取皮肤包资源
+                val skinResourceId = skinResProcessor.getBackgroundOrSrc(backgroundResourceId)
+                if (skinResourceId is Int) {
+                    view.setBackgroundColor(skinResourceId)
+                } else {
+                    val drawable = skinResourceId as Drawable
+                    view.thumb = drawable
+                }
+            }
+        }
+    }
+
+    fun setProgressDrawable(view: ProgressBar, backgroundResourceId: Int) {
+        if (backgroundResourceId > 0) {
+            // 是否默认皮肤
+            val skinResProcessor = SkinResourceProcessor.instance
+            if (skinResProcessor.usingDefaultSkin() && skinResProcessor.usingInnerAppSkin()) {
+                val drawable = ContextCompat.getDrawable(view.context, backgroundResourceId)
+                view.progressDrawable = drawable
+            } else {
+                // 获取皮肤包资源
+                val skinResourceId = skinResProcessor.getBackgroundOrSrc(backgroundResourceId)
+                if (skinResourceId is Int) {
+                    view.setBackgroundColor(skinResourceId)
+                } else {
+                    val drawable = skinResourceId as Drawable
+                    view.progressDrawable = drawable
+                }
             }
         }
     }

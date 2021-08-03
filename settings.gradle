@@ -1,3 +1,5 @@
+include ':skin_sweat_soybean'
+include ':skin_lemon'
 include ':skin_dark'
 include ':skin_blue'
 include ':skin'
