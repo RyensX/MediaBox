@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.ActivityMonthAnimeBinding
 import com.skyd.imomoe.util.Util
+import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.view.adapter.SearchAdapter
 import com.skyd.imomoe.viewmodel.MonthAnimeViewModel
 
@@ -26,12 +27,10 @@ class MonthAnimeActivity : BaseActivity<ActivityMonthAnimeBinding>() {
         viewModel = ViewModelProvider(this).get(MonthAnimeViewModel::class.java)
         adapter = SearchAdapter(this, viewModel.monthAnimeList)
 
-        val yearMonth = partUrl.replace("/", "")
         mBinding.run {
             llMonthAnimeActivityToolbar.tvToolbar1Title.text = getString(
                 R.string.year_month_anime,
-                yearMonth.substring(0, 4).toInt(),
-                yearMonth.substring(4, 6).toInt()
+                partUrl
             )
 
             rvMonthAnimeActivity.layoutManager = LinearLayoutManager(this@MonthAnimeActivity)
@@ -39,19 +38,26 @@ class MonthAnimeActivity : BaseActivity<ActivityMonthAnimeBinding>() {
             rvMonthAnimeActivity.adapter = adapter
 
             llMonthAnimeActivityToolbar.ivToolbar1Back.setOnClickListener { finish() }
-            srlMonthAnimeActivity.setColorSchemeResources(Util.getSkinResourceId(R.color.main_color_skin))
             srlMonthAnimeActivity.setOnRefreshListener { //避免刷新间隔太短
                 if (System.currentTimeMillis() - lastRefreshTime > 500) {
                     lastRefreshTime = System.currentTimeMillis()
                     viewModel.getMonthAnimeData(partUrl)
                 } else {
-                    srlMonthAnimeActivity.isRefreshing = false
+                    srlMonthAnimeActivity.closeHeaderOrFooter()
                 }
+            }
+            srlMonthAnimeActivity.setOnLoadMoreListener {
+                viewModel.pageNumberBean?.let {
+                    viewModel.getMonthAnimeData(it.actionUrl, isRefresh = false)
+                    return@setOnLoadMoreListener
+                }
+                mBinding.srlMonthAnimeActivity.finishLoadMore()
+                getString(R.string.no_more_info).showToast()
             }
         }
 
         viewModel.mldMonthAnimeList.observe(this, Observer {
-            mBinding.srlMonthAnimeActivity.isRefreshing = false
+            mBinding.srlMonthAnimeActivity.closeHeaderOrFooter()
             if (it) {
                 hideLoadFailedTip()
             } else {
@@ -65,8 +71,7 @@ class MonthAnimeActivity : BaseActivity<ActivityMonthAnimeBinding>() {
             adapter.notifyDataSetChanged()
         })
 
-        mBinding.srlMonthAnimeActivity.isRefreshing = true
-        viewModel.getMonthAnimeData(partUrl)
+        mBinding.srlMonthAnimeActivity.autoRefresh()
     }
 
     override fun getBinding(): ActivityMonthAnimeBinding =

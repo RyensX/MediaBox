@@ -3,7 +3,7 @@ package com.skyd.imomoe.model.impls
 import com.skyd.imomoe.bean.TabBean
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.config.UnknownActionUrl
-import com.skyd.imomoe.model.JsoupUtil
+import com.skyd.imomoe.model.util.JsoupUtil
 import com.skyd.imomoe.model.interfaces.IHomeModel
 import com.skyd.imomoe.util.eventbus.SelectHomeTabEvent
 import org.greenrobot.eventbus.EventBus

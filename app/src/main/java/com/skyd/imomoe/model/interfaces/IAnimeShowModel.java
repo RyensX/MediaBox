@@ -1,9 +1,8 @@
 package com.skyd.imomoe.model.interfaces;
 
-import android.util.Pair;
-
 import com.skyd.imomoe.bean.IAnimeShowBean;
 import com.skyd.imomoe.bean.PageNumberBean;
+import com.skyd.imomoe.model.util.Pair;
 
 import java.util.ArrayList;
 

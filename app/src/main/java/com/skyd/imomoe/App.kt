@@ -12,6 +12,8 @@ import com.skyd.imomoe.util.Util.getManifestMetaValue
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.getSkinResourceId
 import com.skyd.imomoe.util.Util.showToast
+import com.skyd.imomoe.util.release
+import com.skyd.skin.SkinManager
 import com.skyd.skin.core.attrs.SrlPrimaryColorAttr
 import com.umeng.analytics.MobclickAgent
 import com.umeng.commonsdk.UMConfigure
@@ -22,20 +24,22 @@ class App : Application() {
         super.onCreate()
         context = this
 
-        // Crash提示
-        CrashHandler.getInstance(this)
+        release {
+            // Crash提示
+            CrashHandler.getInstance(this)
 
-        // 友盟
-        // 初始化组件化基础库, 所有友盟业务SDK都必须调用此初始化接口。
-        UMConfigure.init(
-            this,
-            getManifestMetaValue("UMENG_APPKEY"),
-            getManifestMetaValue("UMENG_CHANNEL"),
-            UMConfigure.DEVICE_TYPE_PHONE,
-            null
-        )
-        // 选择AUTO页面采集模式，统计SDK基础指标无需手动埋点可自动采集。
-        MobclickAgent.setPageCollectionMode(MobclickAgent.PageMode.AUTO)
+            // 友盟
+            // 初始化组件化基础库, 所有友盟业务SDK都必须调用此初始化接口。
+            UMConfigure.init(
+                this,
+                getManifestMetaValue("UMENG_APPKEY"),
+                getManifestMetaValue("UMENG_CHANNEL"),
+                UMConfigure.DEVICE_TYPE_PHONE,
+                null
+            )
+            // 选择AUTO页面采集模式，统计SDK基础指标无需手动埋点可自动采集。
+            MobclickAgent.setPageCollectionMode(MobclickAgent.PageMode.AUTO)
+        }
 
         FileDownloader.setup(this)
 
@@ -63,7 +67,11 @@ class App : Application() {
                 layout.setEnableHeaderTranslationContent(true)
                     .setHeaderHeight(70f)
                     .setDragRate(0.6f)
-                MaterialHeader(context).setColorSchemeResources(getSkinResourceId(colorSchemeResources))
+                MaterialHeader(context).setColorSchemeResources(
+                    getSkinResourceId(
+                        colorSchemeResources
+                    )
+                )
                     .setShowBezierWave(true)
             }
 

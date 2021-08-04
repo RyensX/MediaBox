@@ -262,5 +262,7 @@ class SkinResourceProcessor private constructor(val application: Application) {
                 }
             }
         }
+
+        fun isInitialized(): Boolean = this::instance.isInitialized
     }
 }

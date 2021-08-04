@@ -26,34 +26,38 @@
 
 接口：
 
-- lAnimeDetailModel
-- lAnimeShowModel
+- IAnimeDetailModel
+- IAnimeShowModel
 - IClassifyModel
-- lEverydayAnimeModel
-- lHomeModel
-- lMonthAnimeModel
-- lPlayModel
-- lRankModel
-- lSearchModel
-- lBaseModel
+- IEverydayAnimeModel
+- IHomeModel
+- IMonthAnimeModel
+- IPlayModel
+- IRankModel
+- ISearchModel
+- IRankListModel
+- IEverydayAnimeWidgetModel
+- IRouterProcessor
+- IUtil
+- IConst
 
-注：其中lBaseModel为所有接口的父接口
+注：IBaseModel为所有Model接口的父接口
 
 #### 2.实现类的类名
 
-确保所有实现类的**类名**为**Custom去掉第一个字母I的接口名**，例如**lAnimeDetailModel**的实现类为**CustomAnimeDetailModel**
+确保所有实现类的**类名**为**Custom去掉第一个字母I的接口名**，例如**IAnimeDetailModel**的实现类为**CustomAnimeDetailModel**
 
-注：未实现的接口默认使用原始数据。
+注：未实现的接口默认使用原始数据。由于不同数据源相应操作差不大，不建议只实现一部分接口
 
 #### 3.实现类的包
 
-确保所有实现类的**包**为**com.skyd.imomoe.model.impls**
+确保所有实现类的**包**为**com.skyd.imomoe.model.impls.custom**
 
 #### 4.将实现类打包为普通的jar文件
 
 #### 5.生成含dex的jar文件
 
-通过普通的jar文件生成含dex的jar文件，参考指令：dx --dex --output=dest.jar source.jar
+通过普通的jar文件生成含dex的jar文件，参考指令：dx --dex --output=G:\CustomDataSource.jar E:\Android\Imomoe\app\build\libs\CustomDataSource.jar
 
 #### 6.含dex的jar的名称
 
@@ -68,3 +72,7 @@
 #### 8.打开设置界面的自定义数据开关
 
 刷新界面即可生效
+
+## 备注
+
+由于本人技术有限，不保证后续此功能的接口不发生大更改

@@ -65,6 +65,22 @@ public static final int *;
 -keep class com.skyd.imomoe.view.component.player.AnimeVideoPlayer { *; }
 -keep class com.skyd.imomoe.view.component.player.DanmakuVideoPlayer { *; }
 
+# 自定义数据源接口不应被混淆
+-keep class com.skyd.imomoe.model.interfaces.** { *; }
+# 与自定义数据源相关的类不应该被混淆
+-keep class com.skyd.imomoe.util.Util { *; }
+-keep class com.skyd.imomoe.bean.** { *; }
+-keep class com.skyd.imomoe.config.** { *; }
+-keep class com.skyd.imomoe.model.util.** { *; }
+-keep class com.skyd.imomoe.util.html.source.** { *; }
+-keep class com.skyd.imomoe.util.eventbus.** { *; }
+# 与自定义数据源相关的库不应该被混淆
+-keep class org.jsoup.** { *; }
+-keep class org.greenrobot.eventbus.** { *; }
+# kotlin
+-keep class kotlin.** { *; }
+-keep class kotlinx.** { *; }
+
 -keep public class * extends android.view.View{
     *** get*();
     void set*(***);

@@ -3,9 +3,9 @@ package com.skyd.imomoe.model.impls
 import com.skyd.imomoe.bean.*
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.config.Const
-import com.skyd.imomoe.model.JsoupUtil
-import com.skyd.imomoe.model.ParseHtmlUtil
-import com.skyd.imomoe.model.ParseHtmlUtil.parseBotit
+import com.skyd.imomoe.model.util.JsoupUtil
+import com.skyd.imomoe.model.util.ParseHtmlUtil
+import com.skyd.imomoe.model.util.ParseHtmlUtil.parseBotit
 import com.skyd.imomoe.model.interfaces.IAnimeDetailModel
 import com.skyd.imomoe.model.util.Triple
 import org.jsoup.select.Elements

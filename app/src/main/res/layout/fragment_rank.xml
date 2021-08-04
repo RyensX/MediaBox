@@ -1,33 +1,32 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white_skin"
-    tools:context=".view.activity.MonthAnimeActivity">
-
-    <include
-        android:id="@+id/ll_month_anime_activity_toolbar"
-        layout="@layout/layout_toolbar_1" />
+    tools:context="com.skyd.imomoe.view.fragment.RankFragment">
 
     <com.scwang.smart.refresh.layout.SmartRefreshLayout
-        android:id="@+id/srl_month_anime_activity"
+        android:id="@+id/srl_rank_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/ll_month_anime_activity_toolbar"
+        android:descendantFocusability="blocksDescendants"
         app:srlPrimaryColor="@color/main_color_3_skin">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_month_anime_activity"
+            android:id="@+id/rv_rank_fragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            android:scrollbarSize="4dp"
+            android:scrollbarThumbVertical="@color/foreground_main_color_3_skin"
+            android:scrollbars="vertical" />
     </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 
     <ViewStub
-        android:id="@+id/layout_month_anime_activity_load_failed"
+        android:id="@+id/layout_rank_fragment_load_failed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout="@layout/layout_image_text_tip_1" />
+
 </RelativeLayout>

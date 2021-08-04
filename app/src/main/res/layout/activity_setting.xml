@@ -27,7 +27,8 @@
                 android:layout_height="wrap_content"
                 android:background="?android:selectableItemBackground"
                 android:paddingHorizontal="15dp"
-                android:paddingVertical="15dp">
+                android:paddingVertical="15dp"
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/iv_setting_activity_domain"

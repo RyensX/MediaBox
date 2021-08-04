@@ -1,4 +1,4 @@
-package com.skyd.imomoe.model
+package com.skyd.imomoe.model.util
 
 import com.skyd.imomoe.bean.*
 import com.skyd.imomoe.config.Api
@@ -6,6 +6,7 @@ import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
 import java.util.ArrayList
 import com.skyd.imomoe.config.Const.ViewHolderTypeString
+import java.net.URL
 
 object ParseHtmlUtil {
 
@@ -177,10 +178,10 @@ object ParseHtmlUtil {
         for (i in elements.indices) {
             val url = elements[i].select("a").attr("href")
             var cover = elements[i].select("a").select("img").attr("src")
-            if (cover.startsWith("/")) {
-                //url不全的情况
-                cover = Api.MAIN_URL + cover
-            }
+            cover = getCoverUrl(
+                cover,
+                imageReferer
+            )
             val title = elements[i].select("p").select("a").text()
             animeShowList.add(
                 AnimeCoverBean(
@@ -244,14 +245,14 @@ object ParseHtmlUtil {
         val animeCover3List: MutableList<AnimeCoverBean> = ArrayList()
         val results: Elements = element.select("ul").select("li")
         for (i in results.indices) {
-            val cover = results[i].select("a")
-                .select("img").attr("src")
-            val title = results[i].select("h2")
-                .select("a").attr("title")
-            val url = results[i].select("h2")
-                .select("a").attr("href")
-            val episode = results[i].select("span")
-                .select("font").text()
+            var cover = results[i].select("a").select("img").attr("src")
+            cover = getCoverUrl(
+                cover,
+                imageReferer
+            )
+            val title = results[i].select("h2").select("a").attr("title")
+            val url = results[i].select("h2").select("a").attr("href")
+            val episode = results[i].select("span").select("font").text()
             val types = results[i].select("span")[1].select("a")
             val animeType: MutableList<AnimeTypeBean> = ArrayList()
             for (j in types.indices) {
@@ -346,10 +347,10 @@ object ParseHtmlUtil {
         for (i in elements.indices) {
             val url = elements[i].select("a").attr("href")
             var cover = elements[i].select("a").select("img").attr("src")
-            if (cover.startsWith("/")) {
-                //url不全的情况
-                cover = Api.MAIN_URL + cover
-            }
+            cover = getCoverUrl(
+                cover,
+                imageReferer
+            )
             val title = elements[i].select("[class=tname]").select("a").text()
             var episode = ""
             if (elements[i].select("p").size > 1) {
@@ -363,5 +364,23 @@ object ParseHtmlUtil {
             )
         }
         return animeShowList
+    }
+
+    fun getCoverUrl(cover: String, imageReferer: String): String {
+        return when {
+            cover.startsWith("//") -> {
+                try {
+                    "${URL(imageReferer).protocol}:$cover"
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    cover
+                }
+            }
+            cover.startsWith("/") -> {
+                //url不全的情况
+                Api.MAIN_URL + cover
+            }
+            else -> cover
+        }
     }
 }

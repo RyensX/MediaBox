@@ -13,11 +13,10 @@ import com.google.gson.Gson
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeCoverBean
-import com.skyd.imomoe.config.Const
-import com.skyd.imomoe.util.Util.getSubString
+import com.skyd.imomoe.model.DataSourceManager
+import com.skyd.imomoe.model.impls.RouterProcessor
 import com.skyd.imomoe.util.Util.getWeekday
 import com.skyd.imomoe.util.Util.showToast
-import com.skyd.imomoe.view.activity.PlayActivity
 import java.util.*
 
 
@@ -119,25 +118,7 @@ class EverydayAnimeWidgetProvider : AppWidgetProvider() {
     }
 
     private fun startPlayActivity(context: Context, actionUrl: String?) {
-        actionUrl ?: return
-        val playCode = actionUrl.getSubString("\\/v\\/", "\\.")[0].split("-")
-        if (playCode.size >= 2) {
-            var detailPartUrl = actionUrl.substringAfter(Const.ActionUrl.ANIME_DETAIL, "")
-            if (detailPartUrl.isBlank()) App.context.getString(R.string.error_play_episode)
-                .showToast()
-            detailPartUrl = Const.ActionUrl.ANIME_DETAIL + detailPartUrl
-            context.startActivity(
-                Intent(context, PlayActivity::class.java)
-                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    .putExtra(
-                        "partUrl",
-                        actionUrl.substringBefore(Const.ActionUrl.ANIME_DETAIL)
-                    )
-                    .putExtra("detailPartUrl", detailPartUrl)
-            )
-        } else {
-            App.context.getString(R.string.error_play_episode).showToast()
-        }
+        (DataSourceManager.getRouterProcessor() ?: RouterProcessor()).process(context, actionUrl)
     }
 
     companion object {

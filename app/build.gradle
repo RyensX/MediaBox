@@ -27,7 +27,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 15
-        versionName "1.1.3_beta2"
+        versionName "1.1.3_beta3"
         flavorDimensions "versionName"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -138,6 +138,7 @@ dependencies {
     implementation "androidx.viewpager2:viewpager2:1.0.0"
     implementation 'com.github.bumptech.glide:glide:4.9.0'
     implementation 'com.github.bumptech.glide:okhttp3-integration:4.9.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     kapt 'com.github.bumptech.glide:compiler:4.9.0'
     implementation "com.squareup.okhttp3:okhttp:4.9.0"
     implementation 'com.shuyu:GSYVideoPlayer:8.1.0'
@@ -189,7 +190,6 @@ efs {
             "AboutActivity",
             "AnimeDetailActivity",
             "AnimeDownloadActivity",
-            "BaseActivity",
             "ClassifyActivity",
             "CrashActivity",
             "DlnaActivity",
@@ -204,7 +204,8 @@ efs {
             "SearchActivity",
             "SettingActivity",
             "SimplePlayActivity",
-            "DetailPlayerActivity"
+            "DetailPlayerActivity",
+            "WebViewActivity"
     ]
 }
 
@@ -251,16 +252,16 @@ andResGuard {
 task deleteOldJar(type: Delete) {
     delete 'build/libs/CustomDataSource.jar'
 }
-//打包操作
+//自定义数据源打包为普通的jar包操作
 task makeJar(type: Jar) {
     //要打成的包的名字
     baseName 'CustomDataSource'
     //选取要打包的文件夹
-    from('build\\tmp\\kotlin-classes\\GiteeDebug\\com\\skyd\\imomoe\\model\\impls')
+    from('build\\tmp\\kotlin-classes\\GiteeDebug\\com\\skyd\\imomoe\\model\\impls\\custom')
     //需要跟实际类的包名路径一样
-    into('com/skyd/imomoe/model/impls')
+    into('com/skyd/imomoe/model/impls/custom')
     //排除在外的文件
-    exclude('BuildConfig.class', 'R.class', 'MainActivity.class')
+    exclude('BuildConfig.class', 'R.class', 'MainActivity.class', 'TestClass.class')
     //排除以R$开头的文件
     exclude { it.name.startsWith('R$') }
 }

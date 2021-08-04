@@ -1,20 +1,20 @@
 package com.skyd.imomoe.config
 
-import com.skyd.imomoe.App
-import com.skyd.imomoe.util.editor
-import com.skyd.imomoe.util.sharedPreferences
+import com.skyd.imomoe.model.DataSourceManager
 
 interface Api {
     companion object {
         const val DEFAULT_MAIN_URL = "http://www.yhdm.io"
-        var MAIN_URL
-            get() = App.context.sharedPreferences("url")
-                .getString("mainUrl", DEFAULT_MAIN_URL) ?: DEFAULT_MAIN_URL
-            set(value) {
+        var MAIN_URL = DEFAULT_MAIN_URL
+            get() = (DataSourceManager.getConst() ?: com.skyd.imomoe.model.impls.Const())
+                .MAIN_URL() ?: DEFAULT_MAIN_URL
+            //                return App.context.sharedPreferences("url")
+//                    .getString("mainUrl", DEFAULT_MAIN_URL) ?: DEFAULT_MAIN_URL
+            private set/*(value) {
                 App.context.sharedPreferences("url").editor {
                     putString("mainUrl", value)
                 }
-            }
+            }*/
 
         //github
         const val CHECK_UPDATE_URL = "https://api.github.com/repos/SkyD666/Imomoe/releases/latest"

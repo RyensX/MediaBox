@@ -9,12 +9,10 @@ import android.widget.RemoteViewsService.RemoteViewsFactory
 import com.google.gson.Gson
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeCoverBean
-import com.skyd.imomoe.config.Api
-import com.skyd.imomoe.model.JsoupUtil
-import com.skyd.imomoe.model.ParseHtmlUtil
+import com.skyd.imomoe.model.DataSourceManager
+import com.skyd.imomoe.model.impls.EverydayAnimeWidgetModel
+import com.skyd.imomoe.model.interfaces.IEverydayAnimeWidgetModel
 import com.skyd.imomoe.util.Util
-import org.jsoup.select.Elements
-import java.lang.Exception
 import java.util.*
 
 class EverydayAnimeService : RemoteViewsService() {
@@ -27,6 +25,8 @@ internal class EverydayAnimeRemoteViewsFactory(
     private val mContext: Context,
     intent: Intent
 ) : RemoteViewsFactory {
+    private val model = DataSourceManager.create(IEverydayAnimeWidgetModel::class.java)
+        ?: EverydayAnimeWidgetModel()
     private val mWidgetItems: MutableList<AnimeCoverBean> = ArrayList()
 
     override fun onCreate() {
@@ -89,37 +89,6 @@ internal class EverydayAnimeRemoteViewsFactory(
     }
 
     private fun getEverydayAnimeData(): MutableList<List<AnimeCoverBean>> {
-        val list: MutableList<List<AnimeCoverBean>> = ArrayList()
-        try {
-            val document = JsoupUtil.getDocument(Api.MAIN_URL)
-            val areaChildren: Elements = document.select("[class=area]")[0].children()
-            for (i in areaChildren.indices) {
-                when (areaChildren[i].className()) {
-                    "side r" -> {
-                        val sideRChildren = areaChildren[i].children()
-                        out@ for (j in sideRChildren.indices) {
-                            when (sideRChildren[j].className()) {
-                                "bg" -> {
-                                    val bgChildren = sideRChildren[j].children()
-                                    for (k in bgChildren.indices) {
-                                        when (bgChildren[k].className()) {
-                                            "tlist" -> {
-                                                list.addAll(
-                                                    ParseHtmlUtil.parseTlist(bgChildren[k])
-                                                )
-                                            }
-                                        }
-                                    }
-                                    break@out
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return list
+        return model.everydayAnimeData
     }
 }

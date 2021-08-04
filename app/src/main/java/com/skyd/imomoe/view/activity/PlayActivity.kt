@@ -25,9 +25,9 @@ import com.skyd.imomoe.bean.AnimeEpisodeDataBean
 import com.skyd.imomoe.bean.FavoriteAnimeBean
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.config.Const
-import com.skyd.imomoe.config.Const.ActionUrl.Companion.ANIME_DETAIL
 import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.databinding.ActivityPlayBinding
+import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.util.AnimeEpisode2ViewHolder
 import com.skyd.imomoe.util.MD5.getMD5
 import com.skyd.imomoe.util.html.SnifferVideo
@@ -85,6 +85,7 @@ class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>() {
         setColorStatusBar(window, Color.BLACK)
 
         viewModel = ViewModelProvider(this).get(PlayViewModel::class.java)
+        viewModel.setActivity(this)
         adapter = PlayAdapter(this, viewModel.playBeanDataList)
 
         videoPlayer = findViewById(R.id.avp_play_activity)
@@ -101,7 +102,8 @@ class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>() {
         detailPartUrl = intent.getStringExtra("detailPartUrl") ?: ""
 
         // 如果没有传入详情页面的网址，则通过播放页面的网址计算出详情页面的网址
-        if (detailPartUrl.isBlank() || detailPartUrl == ANIME_DETAIL)
+        val const = DataSourceManager.getConst() ?: com.skyd.imomoe.model.impls.Const()
+        if (detailPartUrl.isBlank() || detailPartUrl == const.actionUrl.ANIME_DETAIL())
             detailPartUrl = getDetailLinkByEpisodeLink(partUrl)
 
         //分享按钮
@@ -328,6 +330,11 @@ class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>() {
         }
         //开始播放
         startPlayLogic()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.clearActivity()
     }
 
     override fun onPlayError(url: String?, vararg objects: Any?) {

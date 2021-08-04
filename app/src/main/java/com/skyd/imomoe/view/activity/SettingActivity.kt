@@ -187,12 +187,12 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
         }
 
         mBinding.tvSettingActivityInfoDomain.text = Api.MAIN_URL
-        mBinding.tvSettingActivityDefaultDomain.setOnClickListener {
-            Api.MAIN_URL = Api.DEFAULT_MAIN_URL
-            mBinding.tvSettingActivityInfoDomain.text = Api.DEFAULT_MAIN_URL
-            getString(R.string.set_domain_to_default, Api.DEFAULT_MAIN_URL)
-                .showToast(Toast.LENGTH_LONG)
-        }
+//        mBinding.tvSettingActivityDefaultDomain.setOnClickListener {
+//            Api.MAIN_URL = Api.DEFAULT_MAIN_URL
+//            mBinding.tvSettingActivityInfoDomain.text = Api.DEFAULT_MAIN_URL
+//            getString(R.string.set_domain_to_default, Api.DEFAULT_MAIN_URL)
+//                .showToast(Toast.LENGTH_LONG)
+//        }
 
         mBinding.switchSettingActivityCustomDataSource.isChecked =
             DataSourceManager.useCustomDataSource
@@ -205,6 +205,7 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
                 cancelable(false)
                 positiveButton(res = R.string.restart) {
                     DataSourceManager.useCustomDataSource = isChecked
+                    DataSourceManager.clearCache()
                     restartApp()
                 }
                 negativeButton(res = R.string.cancel) {
@@ -214,23 +215,23 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
             }
         }
 
-        mBinding.rlSettingActivityDomain.setOnClickListener {
-            MaterialDialog(this).show {
-                input(hintRes = R.string.input_a_website_domain) { dialog, text ->
-                    try {
-                        URL(text.toString())
-                        val url = text.toString().replaceFirst(Regex("/$"), "")
-                        Api.MAIN_URL = url
-                        mBinding.tvSettingActivityInfoDomain.text = url
-                    } catch (e: Exception) {
-                        App.context.resources.getString(R.string.website_domain_format_error)
-                            .showToast()
-                        e.printStackTrace()
-                    }
-                }
-                positiveButton(R.string.ok)
-            }
-        }
+//        mBinding.rlSettingActivityDomain.setOnClickListener {
+//            MaterialDialog(this).show {
+//                input(hintRes = R.string.input_a_website_domain) { dialog, text ->
+//                    try {
+//                        URL(text.toString())
+//                        val url = text.toString().replaceFirst(Regex("/$"), "")
+//                        Api.MAIN_URL = url
+//                        mBinding.tvSettingActivityInfoDomain.text = url
+//                    } catch (e: Exception) {
+//                        App.context.resources.getString(R.string.website_domain_format_error)
+//                            .showToast()
+//                        e.printStackTrace()
+//                    }
+//                }
+//                positiveButton(R.string.ok)
+//            }
+//        }
 
         initNightMode()
     }

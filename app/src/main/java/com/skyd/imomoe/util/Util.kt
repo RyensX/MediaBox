@@ -34,6 +34,8 @@ import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.config.UnknownActionUrl
+import com.skyd.imomoe.model.DataSourceManager
+import com.skyd.imomoe.model.impls.RouterProcessor
 import com.skyd.imomoe.view.activity.*
 import com.skyd.imomoe.view.component.AnimeToast
 import kotlinx.coroutines.Dispatchers
@@ -64,13 +66,12 @@ object Util {
     /**
      * 通过播放页面的网址获取详情页面的网址
      *
-     * @param EpisodeUrl 播放页面的网址
+     * @param episodeUrl 播放页面的网址
      * @return 详情页面的网址
      */
-    fun getDetailLinkByEpisodeLink(EpisodeUrl: String): String {
-        return Const.ActionUrl.ANIME_DETAIL + EpisodeUrl
-            .replaceFirst(Const.ActionUrl.ANIME_PLAY, "")
-            .replaceFirst(Regex("-.*\\.html"), "") + getWebsiteLinkSuffix()
+    fun getDetailLinkByEpisodeLink(episodeUrl: String): String {
+        return (DataSourceManager.getUtil()
+            ?: com.skyd.imomoe.model.impls.Util()).getDetailLinkByEpisodeLink(episodeUrl)
     }
 
     fun restartApp() {
@@ -168,12 +169,13 @@ object Util {
      * 获取重定向最终的地址
      * @param path
      */
-    fun getRedirectUrl(path: String): String {
+    fun getRedirectUrl(path: String, referer: String = ""): String {
         var url = path
         return try {
             var conn: HttpURLConnection
             do {
                 conn = URL(url).openConnection() as HttpURLConnection
+                conn.setRequestProperty("Referer", referer)
                 conn.headerFields
                 conn.instanceFollowRedirects = false
                 conn.connectTimeout = 5000
@@ -510,144 +512,105 @@ object Util {
     fun process(activity: Activity, actionUrl: String?, toastTitle: String = "") {
         if (actionUrl == null) return
         val decodeUrl = URLDecoder.decode(actionUrl, "UTF-8")
-        when {
-            decodeUrl.startsWith(Const.ActionUrl.ANIME_TOP) -> {     // 排行榜
-                activity.startActivity(Intent(activity, RankActivity::class.java))
-            }
-            decodeUrl.startsWith(Const.ActionUrl.ANIME_SEARCH) -> {     // 进入搜索页面
-                decodeUrl.replace(Const.ActionUrl.ANIME_SEARCH, "").let {
-                    val keyWord = it.replaceFirst(Regex("/.*"), "")
-                    val pageNumber = it.replaceFirst(Regex("($keyWord/)|($keyWord)"), "")
-                    activity.startActivity(
-                        Intent(activity, SearchActivity::class.java)
-                            .putExtra("keyWord", keyWord)
-                            .putExtra("pageNumber", pageNumber)
-                    )
+        val routerProcessor = DataSourceManager.getRouterProcessor() ?: RouterProcessor()
+        // 没有处理跳转，则进入if体
+        if (!routerProcessor.process(activity, actionUrl)) {
+            when {
+                decodeUrl.startsWith(Const.ActionUrl.ANIME_CLASSIFY) -> {     //如进入分类页面
+                    val paramList = actionUrl.replace(Const.ActionUrl.ANIME_CLASSIFY, "").split("/")
+                    if (paramList.size == 4) {      //例如  /japan/地区/日本  分割后是4个参数：""，japan，地区，日本
+                        activity.startActivity(
+                            Intent(activity, ClassifyActivity::class.java)
+                                .putExtra("partUrl", "/" + paramList[1] + "/")
+                                .putExtra("classifyTabTitle", paramList[2])
+                                .putExtra("classifyTitle", paramList[3])
+                        )
+                    } else App.context.resources.getString(R.string.action_url_format_error)
+                        .showToast()
                 }
-            }
-            decodeUrl.startsWith(Const.ActionUrl.ANIME_DETAIL) -> {     //番剧封面点击进入
-                activity.startActivity(
-                    Intent(activity, AnimeDetailActivity::class.java)
-                        .putExtra("partUrl", actionUrl)
-                )
-            }
-            decodeUrl.startsWith(Const.ActionUrl.ANIME_PLAY) -> {     //番剧每一集点击进入
-                val playCode = actionUrl.getSubString("\\/v\\/", "\\.")[0].split("-")
-                if (playCode.size >= 2) {
-                    var detailPartUrl =
-                        actionUrl.substringAfter(Const.ActionUrl.ANIME_DETAIL, "")
-//                    if (detailPartUrl.isBlank()) App.context.getString(R.string.error_play_episode).showToast()
-                    detailPartUrl = Const.ActionUrl.ANIME_DETAIL + detailPartUrl
-                    activity.startActivity(
-                        Intent(activity, PlayActivity::class.java)
-                            .putExtra(
-                                "partUrl",
-                                actionUrl.substringBefore(Const.ActionUrl.ANIME_DETAIL)
-                            )
-                            .putExtra("detailPartUrl", detailPartUrl)
-                    )
-                } else {
-                    App.context.getString(R.string.error_play_episode).showToast()
+                decodeUrl.startsWith(Const.ActionUrl.ANIME_BROWSER) -> {     //打开浏览器
+                    openBrowser(actionUrl.replaceFirst(Const.ActionUrl.ANIME_BROWSER, ""))
                 }
-            }
-            decodeUrl.replace("/", "").isYearMonth() -> {     //如201907月新番列表
-                activity.startActivity(
-                    Intent(activity, MonthAnimeActivity::class.java)
-                        .putExtra("partUrl", actionUrl)
-                )
-            }
-            decodeUrl.startsWith(Const.ActionUrl.ANIME_CLASSIFY) -> {     //如进入分类页面
-                val paramList = actionUrl.replace(Const.ActionUrl.ANIME_CLASSIFY, "").split("/")
-                if (paramList.size == 4) {      //例如  /japan/地区/日本  分割后是4个参数：""，japan，地区，日本
-                    activity.startActivity(
-                        Intent(activity, ClassifyActivity::class.java)
-                            .putExtra("partUrl", "/" + paramList[1] + "/")
-                            .putExtra("classifyTabTitle", paramList[2])
-                            .putExtra("classifyTitle", paramList[3])
-                    )
-                } else App.context.resources.getString(R.string.action_url_format_error)
-                    .showToast()
-            }
-            decodeUrl.startsWith(Const.ActionUrl.ANIME_BROWSER) -> {     //打开浏览器
-                openBrowser(actionUrl.replaceFirst(Const.ActionUrl.ANIME_BROWSER, ""))
-            }
-            decodeUrl.startsWith(Const.ActionUrl.ANIME_ANIME_DOWNLOAD_EPISODE) -> { //缓存的每一集列表
-                var directoryName: String
-                var path: Int
-                actionUrl.replaceFirst(Const.ActionUrl.ANIME_ANIME_DOWNLOAD_EPISODE, "")
-                    .split("/").let {
-                        directoryName = it[0] + "/" + it[1]
-                        path = it.last().toInt()
-                    }
-                activity.startActivity(
-                    Intent(activity, AnimeDownloadActivity::class.java)
-                        .putExtra("mode", 1)
-                        .putExtra("actionBarTitle", directoryName.replace("/", ""))
-                        .putExtra("directoryName", directoryName)
-                        .putExtra("path", path)
-                )
-            }
-            decodeUrl.startsWith(Const.ActionUrl.ANIME_ANIME_DOWNLOAD_PLAY) -> { //播放缓存的每一集
-                val filePath =
-                    actionUrl.replaceFirst(Const.ActionUrl.ANIME_ANIME_DOWNLOAD_PLAY + "/", "")
-                        .replace(Regex("/\\d+$"), "")
-                val fileName = filePath.split("/").last()
-                val title = fileName
-                activity.startActivity(
-                    Intent(activity, SimplePlayActivity::class.java)
-                        .putExtra("url", "file://$filePath")
-                        .putExtra("title", title)
-                )
-            }
-            decodeUrl.startsWith(Const.ActionUrl.ANIME_ANIME_DOWNLOAD_M3U8) -> { //播放缓存的每一集M3U8
-                "暂不支持m3u8格式 :(".showToast(Toast.LENGTH_LONG)
-            }
-            decodeUrl.startsWith(Const.ActionUrl.ANIME_LAUNCH_ACTIVITY) -> { // 启动Activity
-                val cls = Class.forName(
-                    actionUrl.replaceFirst(Const.ActionUrl.ANIME_LAUNCH_ACTIVITY, "")
-                        .split("/").last()
-                )
-                activity.startActivity(Intent(activity, cls))
-            }
-            decodeUrl.startsWith(Const.ActionUrl.ANIME_SKIP_BY_WEBSITE) -> { // 根据网址跳转
-                var website = decodeUrl.replaceFirst(Const.ActionUrl.ANIME_SKIP_BY_WEBSITE, "")
-                if (website.isBlank() || website == "/") {
-                    MaterialDialog(activity).show {
-                        input(hintRes = R.string.input_a_website) { dialog, text ->
-                            try {
-                                var url = text.toString()
-                                if (!url.matches(Regex("^.+://.*"))) url = "http://$url"
-                                process(activity, URL(url).file)
-                            } catch (e: Exception) {
-                                App.context.resources.getString(R.string.website_format_error)
-                                    .showToast()
-                                e.printStackTrace()
-                            }
+                decodeUrl.startsWith(Const.ActionUrl.ANIME_ANIME_DOWNLOAD_EPISODE) -> { //缓存的每一集列表
+                    var directoryName: String
+                    var path: Int
+                    actionUrl.replaceFirst(Const.ActionUrl.ANIME_ANIME_DOWNLOAD_EPISODE, "")
+                        .split("/").let {
+                            directoryName = it[0] + "/" + it[1]
+                            path = it.last().toInt()
                         }
-                        positiveButton(R.string.ok)
-                    }
-                } else {
-                    try {
-                        if (!website.matches(Regex("^.+://.*"))) website = "http://$website"
-                        process(activity, URL(website).file)
-                    } catch (e: Exception) {
-                        App.context.resources.getString(R.string.website_format_error).showToast()
-                        e.printStackTrace()
+                    activity.startActivity(
+                        Intent(activity, AnimeDownloadActivity::class.java)
+                            .putExtra("mode", 1)
+                            .putExtra("actionBarTitle", directoryName.replace("/", ""))
+                            .putExtra("directoryName", directoryName)
+                            .putExtra("path", path)
+                    )
+                }
+                decodeUrl.startsWith(Const.ActionUrl.ANIME_ANIME_DOWNLOAD_PLAY) -> { //播放缓存的每一集
+                    val filePath =
+                        actionUrl.replaceFirst(Const.ActionUrl.ANIME_ANIME_DOWNLOAD_PLAY + "/", "")
+                            .replace(Regex("/\\d+$"), "")
+                    val fileName = filePath.split("/").last()
+                    val title = fileName
+                    activity.startActivity(
+                        Intent(activity, SimplePlayActivity::class.java)
+                            .putExtra("url", "file://$filePath")
+                            .putExtra("title", title)
+                    )
+                }
+                decodeUrl.startsWith(Const.ActionUrl.ANIME_ANIME_DOWNLOAD_M3U8) -> { //播放缓存的每一集M3U8
+                    "暂不支持m3u8格式 :(".showToast(Toast.LENGTH_LONG)
+                }
+                decodeUrl.startsWith(Const.ActionUrl.ANIME_LAUNCH_ACTIVITY) -> { // 启动Activity
+                    val cls = Class.forName(
+                        actionUrl.replaceFirst(Const.ActionUrl.ANIME_LAUNCH_ACTIVITY, "")
+                            .split("/").last()
+                    )
+                    activity.startActivity(Intent(activity, cls))
+                }
+                decodeUrl.startsWith(Const.ActionUrl.ANIME_SKIP_BY_WEBSITE) -> { // 根据网址跳转
+                    var website = decodeUrl.replaceFirst(Const.ActionUrl.ANIME_SKIP_BY_WEBSITE, "")
+                    if (website.isBlank() || website == "/") {
+                        MaterialDialog(activity).show {
+                            input(hintRes = R.string.input_a_website) { dialog, text ->
+                                try {
+                                    var url = text.toString()
+                                    if (!url.matches(Regex("^.+://.*"))) url = "http://$url"
+                                    process(activity, URL(url).file)
+                                } catch (e: Exception) {
+                                    App.context.resources.getString(R.string.website_format_error)
+                                        .showToast()
+                                    e.printStackTrace()
+                                }
+                            }
+                            positiveButton(R.string.ok)
+                        }
+                    } else {
+                        try {
+                            if (!website.matches(Regex("^.+://.*"))) website = "http://$website"
+                            process(activity, URL(website).file)
+                        } catch (e: Exception) {
+                            App.context.resources.getString(R.string.website_format_error)
+                                .showToast()
+                            e.printStackTrace()
+                        }
                     }
                 }
-            }
-            else -> {
-                val action = UnknownActionUrl.actionMap[decodeUrl]
-                if (action != null) {
-                    action.action()
-                } else {
-                    App.context.resources.getString(
-                        R.string.unknown_route,
-                        if (toastTitle.isBlank()) actionUrl else toastTitle
-                    ).showToast()
+                else -> {
+                    val action = UnknownActionUrl.actionMap[decodeUrl]
+                    if (action != null) {
+                        action.action()
+                    } else {
+                        // 空内容
+                        if (decodeUrl.isBlank()) return
+                        App.context.resources.getString(
+                            R.string.unknown_route,
+                            if (toastTitle.isBlank()) actionUrl else toastTitle
+                        ).showToast()
+                    }
                 }
             }
         }
     }
-
 }

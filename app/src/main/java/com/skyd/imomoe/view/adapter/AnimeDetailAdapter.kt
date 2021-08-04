@@ -15,6 +15,7 @@ import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.bean.AnimeEpisodeDataBean
 import com.skyd.imomoe.bean.IAnimeDetailBean
 import com.skyd.imomoe.config.Const
+import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.util.*
 import com.skyd.imomoe.util.glide.GlideUtil.loadImage
 import com.skyd.imomoe.util.Util.dp2px
@@ -120,6 +121,7 @@ class AnimeDetailAdapter(
                             ) as TextView
                         tvFlowLayout.text = it.animeType[i].title
                         tvFlowLayout.setOnClickListener { it1 ->
+                            if (it.animeType[i].actionUrl.isBlank()) return@setOnClickListener
                             //此处是”类型“，若要修改，需要注意Tab大分类是否还是”类型“
                             process(
                                 activity,
@@ -239,7 +241,10 @@ class AnimeDetailAdapter(
                         getResDrawable(R.drawable.shape_circle_corner_edge_main_color_2_ripper_5_skin)
                     }
                     holder.itemView.setOnClickListener {
-                        process(activity, item.actionUrl + detailPartUrl, item.actionUrl)
+                        val const = DataSourceManager.getConst()
+                        if (const != null && item.actionUrl.startsWith(const.actionUrl.ANIME_PLAY()))
+                            process(activity, item.actionUrl + detailPartUrl, item.actionUrl)
+                        else process(activity, item.actionUrl, item.actionUrl)
                         dialog?.dismiss()
                     }
                 }

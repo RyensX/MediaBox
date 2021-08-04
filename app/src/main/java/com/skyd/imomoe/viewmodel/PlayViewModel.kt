@@ -1,5 +1,6 @@
 package com.skyd.imomoe.viewmodel
 
+import android.app.Activity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.skyd.imomoe.App
@@ -10,6 +11,7 @@ import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.PlayModel
 import com.skyd.imomoe.model.interfaces.IPlayModel
+import com.skyd.imomoe.model.util.Triple
 import com.skyd.imomoe.util.Util.showToastOnThread
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -35,15 +37,42 @@ class PlayViewModel : ViewModel() {
     val mldAnimeEpisodeDataRefreshed: MutableLiveData<Boolean> = MutableLiveData()
     val mldGetAnimeEpisodeData: MutableLiveData<Int> = MutableLiveData()
 
+    fun setActivity(activity: Activity) {
+        playModel.setActivity(activity)
+    }
+
+    fun clearActivity() {
+        playModel.clearActivity()
+    }
+
     fun refreshAnimeEpisodeData(partUrl: String, currentEpisodeIndex: Int, title: String = "") {
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 this@PlayViewModel.partUrl = partUrl
-                playModel.refreshAnimeEpisodeData(partUrl, animeEpisodeDataBean).apply {
-                    if (this) {
+                playModel.refreshAnimeEpisodeData(partUrl, animeEpisodeDataBean,
+                    object : IPlayModel.OnEpisodeDataCallBack {
+                        override fun onSuccess(b: Boolean) {
+                            if (b) {
+                                animeEpisodeDataBean.title = title
+                                mldAnimeEpisodeDataRefreshed.postValue(true)
+                            } else {
+                                throw RuntimeException("html play class not found")
+                            }
+                        }
+
+                        override fun onError(e: Exception) {
+                            e.printStackTrace()
+                            animeEpisodeDataBean.actionUrl = "animeEpisode1"
+                            animeEpisodeDataBean.title = ""
+                            animeEpisodeDataBean.videoUrl = ""
+                            mldAnimeEpisodeDataRefreshed.postValue(false)
+                            (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread()
+                        }
+                    }).apply {
+                    if (this == true) {
                         animeEpisodeDataBean.title = title
                         mldAnimeEpisodeDataRefreshed.postValue(true)
-                    } else {
+                    } else if (this == false) {
                         throw RuntimeException("html play class not found")
                     }
                 }
@@ -63,12 +92,26 @@ class PlayViewModel : ViewModel() {
         GlobalScope.launch(Dispatchers.IO) {
             try {
 //                this@PlayViewModel.partUrl = partUrl
-                playModel.getAnimeEpisodeUrlData(partUrl).apply {
-                    this ?: throw RuntimeException("getAnimeEpisodeUrlData return null")
-                    episodesList[position].videoUrl = this
+                playModel.getAnimeEpisodeUrlData(partUrl,
+                    object : IPlayModel.OnEpisodeUrlDataCallBack {
+                        override fun onSuccess(url: String) {
+                            episodesList[position].videoUrl = url
+                            mldEpisodesList.postValue(true)
+                            mldGetAnimeEpisodeData.postValue(position)
+                        }
+
+                        override fun onError(e: Exception) {
+                            throw e
+                        }
+
+                    }).apply {
+//                    this ?: throw RuntimeException("getAnimeEpisodeUrlData return null")
+                    if (this != null) {
+                        episodesList[position].videoUrl = this
+                        mldEpisodesList.postValue(true)
+                        mldGetAnimeEpisodeData.postValue(position)
+                    }
                 }
-                mldEpisodesList.postValue(true)
-                mldGetAnimeEpisodeData.postValue(position)
             } catch (e: Exception) {
                 e.printStackTrace()
                 (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread()
@@ -80,15 +123,34 @@ class PlayViewModel : ViewModel() {
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 this@PlayViewModel.partUrl = partUrl
-                playModel.getPlayData(partUrl, animeEpisodeDataBean).apply {
+                playModel.getPlayData(partUrl, animeEpisodeDataBean,
+                    object : IPlayModel.OnPlayDataCallBack {
+                        override fun onSuccess(t: Triple<ArrayList<IAnimeDetailBean>, ArrayList<AnimeEpisodeDataBean>, PlayBean>) {
+                            t.apply {
+                                playBeanDataList.clear()
+                                episodesList.clear()
+                                playBeanDataList.addAll(first)
+                                episodesList.addAll(second)
+                                playBean = third
+                                mldPlayBean.postValue(playBean)
+                                mldEpisodesList.postValue(true)
+                            }
+                        }
+
+                        override fun onError(e: Exception) {
+                            throw e
+                        }
+                    }
+                ).apply {
+                    if (this == null) return@apply
                     playBeanDataList.clear()
                     episodesList.clear()
                     playBeanDataList.addAll(first)
                     episodesList.addAll(second)
                     playBean = third
+                    mldPlayBean.postValue(playBean)
+                    mldEpisodesList.postValue(true)
                 }
-                mldPlayBean.postValue(playBean)
-                mldEpisodesList.postValue(true)
             } catch (e: Exception) {
                 e.printStackTrace()
                 (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread()

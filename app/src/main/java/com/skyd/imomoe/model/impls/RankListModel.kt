@@ -1,40 +1,35 @@
 package com.skyd.imomoe.model.impls
 
-import com.skyd.imomoe.bean.TabBean
+import com.skyd.imomoe.bean.AnimeCoverBean
+import com.skyd.imomoe.bean.PageNumberBean
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.util.JsoupUtil
 import com.skyd.imomoe.model.util.ParseHtmlUtil
-import com.skyd.imomoe.model.interfaces.IRankModel
+import com.skyd.imomoe.model.interfaces.IRankListModel
+import com.skyd.imomoe.model.util.Pair
 import org.jsoup.select.Elements
 import java.util.*
 
-class RankModel : IRankModel {
+class RankListModel : IRankListModel {
     private var bgTimes = 0
-    var tabList: ArrayList<TabBean> = ArrayList()
+    var rankList: MutableList<AnimeCoverBean> = ArrayList()
 
-    override fun getRankTabData(): ArrayList<TabBean> {
-        tabList.clear()
-        getWeekRankData()
-        getAllRankData()
-        return tabList
+    override fun getRankListData(partUrl: String): Pair<List<AnimeCoverBean>, PageNumberBean?> {
+        rankList.clear()
+        if (partUrl == "/" || partUrl == "") getWeekRankData()
+        else getAllRankData(partUrl)
+        return Pair(rankList, null)
     }
 
-    private fun getAllRankData() {
+    private fun getAllRankData(partUrl: String) {
         val const = DataSourceManager.getConst() ?: Const()
         val document = JsoupUtil.getDocument(Api.MAIN_URL + const.actionUrl.ANIME_TOP())
         val areaChildren: Elements = document.select("[class=area]")[0].children()
         for (i in areaChildren.indices) {
             when (areaChildren[i].className()) {
-                "gohome" -> {
-                    tabList.add(
-                        tabList.size, TabBean(
-                            "",
-                            const.actionUrl.ANIME_TOP(),
-                            "",
-                            areaChildren[i].select("h1").select("a").text()
-                        )
-                    )
+                "topli" -> {
+                    rankList.addAll(ParseHtmlUtil.parseTopli(areaChildren[i]))
                 }
             }
         }
@@ -57,14 +52,11 @@ class RankModel : IRankModel {
                                 val bgChildren = sideRChildren[j].children()
                                 for (k in bgChildren.indices) {
                                     when (bgChildren[k].className()) {
-                                        "dtit" -> {
-                                            tabList.add(
-                                                0,
-                                                TabBean(
-                                                    "",
-                                                    "/",
-                                                    "",
-                                                    ParseHtmlUtil.parseDtit(bgChildren[k])
+                                        "pics" -> {
+                                            rankList.addAll(
+                                                ParseHtmlUtil.parsePics(
+                                                    bgChildren[k],
+                                                    url
                                                 )
                                             )
                                         }

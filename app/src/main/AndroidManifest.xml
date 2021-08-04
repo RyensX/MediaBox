@@ -32,6 +32,9 @@
         android:theme="@style/Theme.樱花动漫"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".view.activity.WebViewActivity"
+            android:configChanges="uiMode" />
+        <activity
             android:name=".view.activity.SkinActivity"
             android:configChanges="uiMode" />
         <activity

@@ -18,8 +18,8 @@ import com.hjq.permissions.OnPermissionCallback
 import com.hjq.permissions.Permission
 import com.hjq.permissions.XXPermissions
 import com.skyd.imomoe.R
-import com.skyd.imomoe.config.Const.ActionUrl.Companion.ANIME_SEARCH
 import com.skyd.imomoe.databinding.FragmentHomeBinding
+import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.util.Util.process
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.clickScale
@@ -83,7 +83,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), EventBusSubscriber {
 
             tvHomeFragmentHeaderSearch.setOnClickListener {
                 activity?.let {
-                    process(it, ANIME_SEARCH + "")
+                    val const = DataSourceManager.getConst() ?: com.skyd.imomoe.model.impls.Const()
+                    process(it, const.actionUrl.ANIME_SEARCH() + "")
                     it.overridePendingTransition(R.anim.anl_push_top_in, R.anim.anl_stay)
                 }
             }

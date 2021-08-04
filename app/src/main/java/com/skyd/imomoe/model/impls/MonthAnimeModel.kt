@@ -1,15 +1,17 @@
 package com.skyd.imomoe.model.impls
 
 import com.skyd.imomoe.bean.AnimeCoverBean
+import com.skyd.imomoe.bean.PageNumberBean
 import com.skyd.imomoe.config.Api
-import com.skyd.imomoe.model.JsoupUtil
-import com.skyd.imomoe.model.ParseHtmlUtil
+import com.skyd.imomoe.model.util.JsoupUtil
+import com.skyd.imomoe.model.util.ParseHtmlUtil
 import com.skyd.imomoe.model.interfaces.IMonthAnimeModel
+import com.skyd.imomoe.model.util.Pair
 import org.jsoup.select.Elements
 import java.util.ArrayList
 
 class MonthAnimeModel : IMonthAnimeModel {
-    override fun getMonthAnimeData(partUrl: String): ArrayList<AnimeCoverBean> {
+    override fun getMonthAnimeData(partUrl: String): Pair<ArrayList<AnimeCoverBean>, PageNumberBean?> {
         val monthAnimeList: ArrayList<AnimeCoverBean> = ArrayList()
         val url = Api.MAIN_URL + partUrl
         val document = JsoupUtil.getDocument(url)
@@ -24,6 +26,6 @@ class MonthAnimeModel : IMonthAnimeModel {
                 }
             }
         }
-        return monthAnimeList
+        return Pair(monthAnimeList, null)
     }
 }

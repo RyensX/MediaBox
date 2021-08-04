@@ -1,4 +1,4 @@
-package com.skyd.imomoe.model
+package com.skyd.imomoe.model.util
 
 import com.skyd.imomoe.config.Const
 import org.jsoup.Jsoup

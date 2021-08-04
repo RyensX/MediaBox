@@ -52,6 +52,7 @@ class SearchAdapter(
                             ) as TextView
                         tvFlowLayout.text = it[i].title
                         tvFlowLayout.setOnClickListener { _ ->
+                            if (it[i].actionUrl.isBlank()) return@setOnClickListener
                             //此处是”类型“，若要修改，需要注意Tab大分类是否还是”类型“
                             process(
                                 activity,

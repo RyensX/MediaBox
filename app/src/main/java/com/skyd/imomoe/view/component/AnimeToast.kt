@@ -7,6 +7,8 @@ import android.widget.TextView
 import android.widget.Toast
 import com.skyd.imomoe.R
 import com.skyd.imomoe.util.Util.getResDrawable
+import com.skyd.skin.SkinManager
+import com.skyd.skin.core.SkinResourceProcessor
 
 object AnimeToast {
     fun makeText(
@@ -20,7 +22,10 @@ object AnimeToast {
                 null
             )
         view.findViewById<TextView>(R.id.tv_toast_1).apply {
-            background = getResDrawable(R.drawable.shape_fill_circle_corner_main_color_2_50_skin)
+            if (SkinResourceProcessor.isInitialized()) {
+                background =
+                    getResDrawable(R.drawable.shape_fill_circle_corner_main_color_2_50_skin)
+            }
             this.text = text
         }
         toast.view = view

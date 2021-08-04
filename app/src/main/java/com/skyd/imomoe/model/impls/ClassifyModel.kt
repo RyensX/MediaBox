@@ -1,5 +1,6 @@
 package com.skyd.imomoe.model.impls
 
+import android.app.Activity
 import android.content.Intent
 import com.skyd.imomoe.App
 import com.skyd.imomoe.bean.AnimeCoverBean
@@ -7,8 +8,8 @@ import com.skyd.imomoe.bean.ClassifyBean
 import com.skyd.imomoe.bean.PageNumberBean
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.config.UnknownActionUrl
-import com.skyd.imomoe.model.JsoupUtil
-import com.skyd.imomoe.model.ParseHtmlUtil
+import com.skyd.imomoe.model.util.JsoupUtil
+import com.skyd.imomoe.model.util.ParseHtmlUtil
 import com.skyd.imomoe.model.interfaces.IClassifyModel
 import com.skyd.imomoe.model.util.Pair
 import com.skyd.imomoe.view.activity.ClassifyActivity
@@ -50,7 +51,10 @@ class ClassifyModel : IClassifyModel {
         return Pair(classifyList, pageNumberBean)
     }
 
-    override fun getClassifyTabData(): ArrayList<ClassifyBean> {
+    override fun clearActivity() {
+    }
+
+    override fun getClassifyTabData(callback: IClassifyModel.OnClassifyTabDataCallBack?): ArrayList<ClassifyBean>? {
         val classifyTabList: ArrayList<ClassifyBean> = ArrayList()
         val document = JsoupUtil.getDocument(Api.MAIN_URL + "/a/")
         val areaElements: Elements = document.getElementsByClass("area")
@@ -79,5 +83,8 @@ class ClassifyModel : IClassifyModel {
             }
         }
         return classifyTabList
+    }
+
+    override fun setActivity(activity: Activity?) {
     }
 }

@@ -3,9 +3,9 @@ package com.skyd.imomoe.model.impls
 import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.bean.PageNumberBean
 import com.skyd.imomoe.config.Api
-import com.skyd.imomoe.config.Const
-import com.skyd.imomoe.model.JsoupUtil
-import com.skyd.imomoe.model.ParseHtmlUtil
+import com.skyd.imomoe.model.DataSourceManager
+import com.skyd.imomoe.model.util.JsoupUtil
+import com.skyd.imomoe.model.util.ParseHtmlUtil
 import com.skyd.imomoe.model.interfaces.ISearchModel
 import com.skyd.imomoe.model.util.Pair
 import org.jsoup.select.Elements
@@ -17,9 +17,10 @@ class SearchModel : ISearchModel {
         keyWord: String,
         partUrl: String
     ): Pair<ArrayList<AnimeCoverBean>, PageNumberBean?> {
+        val const = DataSourceManager.getConst() ?: Const()
         var pageNumberBean: PageNumberBean? = null
         val searchResultList: ArrayList<AnimeCoverBean> = ArrayList()
-        val url = Api.MAIN_URL + Const.ActionUrl.ANIME_SEARCH + URLEncoder.encode(
+        val url = Api.MAIN_URL + const.actionUrl.ANIME_SEARCH() + URLEncoder.encode(
             keyWord,
             "utf-8"
         ) + "/" + partUrl

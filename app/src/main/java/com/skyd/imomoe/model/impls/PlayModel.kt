@@ -1,17 +1,21 @@
 package com.skyd.imomoe.model.impls
 
+import android.app.Activity
 import com.skyd.imomoe.bean.*
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.config.Const
-import com.skyd.imomoe.model.JsoupUtil
-import com.skyd.imomoe.model.ParseHtmlUtil
+import com.skyd.imomoe.model.util.JsoupUtil
+import com.skyd.imomoe.model.util.ParseHtmlUtil
 import com.skyd.imomoe.model.interfaces.IPlayModel
 import com.skyd.imomoe.model.util.Triple
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
+import java.lang.ref.SoftReference
 import java.util.ArrayList
 
 class PlayModel : IPlayModel {
+    private var mActivity: SoftReference<Activity>? = null
+
     private fun getVideoRawUrl(e: Element): String {
         val div = e.select("[class=area]").select("[class=bofang]")[0].children()
         val rawUrl = div.attr("data-vid")
@@ -25,7 +29,8 @@ class PlayModel : IPlayModel {
 
     override fun getPlayData(
         partUrl: String?,
-        animeEpisodeDataBean: AnimeEpisodeDataBean
+        animeEpisodeDataBean: AnimeEpisodeDataBean,
+        callback: IPlayModel.OnPlayDataCallBack?
     ): Triple<ArrayList<IAnimeDetailBean>, ArrayList<AnimeEpisodeDataBean>, PlayBean> {
         val playBeanDataList: ArrayList<IAnimeDetailBean> = ArrayList()
         val episodesList: ArrayList<AnimeEpisodeDataBean> = ArrayList()
@@ -54,6 +59,7 @@ class PlayModel : IPlayModel {
                                     .select("a").attr("href")
                                 episode.title = areaChildren[j].select("h1")
                                     .select("span").text().replace("：", "")
+                                animeEpisodeDataBean.title = episode.title
                             }
                             "botit" -> {
                                 playBeanDataList.add(
@@ -98,8 +104,9 @@ class PlayModel : IPlayModel {
 
     override fun refreshAnimeEpisodeData(
         partUrl: String,
-        animeEpisodeDataBean: AnimeEpisodeDataBean
-    ): Boolean {
+        animeEpisodeDataBean: AnimeEpisodeDataBean,
+        callback: IPlayModel.OnEpisodeDataCallBack?
+    ): Boolean? {
         val document = JsoupUtil.getDocument(Api.MAIN_URL + partUrl)
         val children: Elements = document.select("body")[0].children()
         for (i in children.indices) {
@@ -130,8 +137,11 @@ class PlayModel : IPlayModel {
                             for (k in fireLChildren.indices) {
                                 if (fireLChildren[k].className() == "thumb l") {
                                     return ImageBean(
-                                        "", "", fireLChildren[k]
-                                            .select("img").attr("src"), url
+                                        "", "",
+                                        ParseHtmlUtil.getCoverUrl(
+                                            fireLChildren[k].select("img").attr("src"),
+                                            url
+                                        ), url
                                     )
                                 }
                             }
@@ -145,7 +155,18 @@ class PlayModel : IPlayModel {
         return null
     }
 
-    override fun getAnimeEpisodeUrlData(partUrl: String?): String? {
+    override fun setActivity(activity: Activity) {
+        mActivity = SoftReference(activity)
+    }
+
+    override fun clearActivity() {
+        mActivity = null
+    }
+
+    override fun getAnimeEpisodeUrlData(
+        partUrl: String?,
+        callback: IPlayModel.OnEpisodeUrlDataCallBack?
+    ): String? {
         val document = JsoupUtil.getDocument(Api.MAIN_URL + partUrl)
         val children: Elements = document.select("body")[0].children()
         for (i in children.indices) {

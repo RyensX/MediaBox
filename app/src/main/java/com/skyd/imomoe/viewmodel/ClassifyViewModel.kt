@@ -1,5 +1,6 @@
 package com.skyd.imomoe.viewmodel
 
+import android.app.Activity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.skyd.imomoe.App
@@ -14,7 +15,6 @@ import com.skyd.imomoe.util.Util.showToastOnThread
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.lang.Exception
 import java.util.*
 
 
@@ -30,14 +30,35 @@ class ClassifyViewModel : ViewModel() {
     var pageNumberBean: PageNumberBean? = null
     var newPageIndex: Pair<Int, Int>? = null
 
+    fun setActivity(activity: Activity) {
+        classifyModel.setActivity(activity)
+    }
+
+    fun clearActivity() {
+        classifyModel.clearActivity()
+    }
+
     fun getClassifyTabData() {
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                classifyModel.classifyTabData.apply {
-                    classifyTabList.clear()
-                    classifyTabList.addAll(this)
+                classifyModel.getClassifyTabData(object : IClassifyModel.OnClassifyTabDataCallBack {
+                    override fun onSuccess(list: ArrayList<ClassifyBean>) {
+                        classifyTabList.clear()
+                        classifyTabList.addAll(list)
+                        mldClassifyTabList.postValue(true)
+                    }
+
+                    override fun onError(e: Exception) {
+                        throw e
+                    }
+
+                }).apply {
+                    if (this != null) {
+                        classifyTabList.clear()
+                        classifyTabList.addAll(this)
+                        mldClassifyTabList.postValue(true)
+                    }
                 }
-                mldClassifyTabList.postValue(true)
             } catch (e: Exception) {
                 classifyTabList.clear()
                 mldClassifyTabList.postValue(false)

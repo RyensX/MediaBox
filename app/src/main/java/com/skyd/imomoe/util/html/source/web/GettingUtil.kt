@@ -8,6 +8,9 @@ import androidx.annotation.UiThread
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.util.html.source.GettingCallback
 import com.skyd.imomoe.util.html.source.GettingUICallback
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.lang.ref.SoftReference
 import kotlin.collections.HashMap
 import kotlin.random.Random
@@ -33,18 +36,20 @@ class GettingUtil private constructor() {
     @UiThread
     @Synchronized
     fun releaseWebView() {
-        try {
-            mWebView?.let {
-                it.removeAllViews()
-                if (it.parent != null) {
-                    val viewGroup = it.parent as ViewGroup
-                    viewGroup.removeView(it)
+        GlobalScope.launch(Dispatchers.Main) {
+            try {
+                mWebView?.let {
+                    it.removeAllViews()
+                    if (it.parent != null) {
+                        val viewGroup = it.parent as ViewGroup
+                        viewGroup.removeView(it)
+                    }
+                    it.destroy()
                 }
-                it.destroy()
+                mWebView = null
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
-            mWebView = null
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
     }
 
@@ -71,7 +76,7 @@ class GettingUtil private constructor() {
     }
 
     @Synchronized
-    fun start(callback: GettingCallback) {
+    fun start(callback: GettingCallback, ua: String? = null) {
         try {
             mCallback = callback
 //            if (mActivity == null) {
@@ -87,6 +92,7 @@ class GettingUtil private constructor() {
                 mCallbackChange = true
                 mWebView = GettingWebView(activity)
             }
+            mWebView?.settings?.userAgentString = ua
             mWebView?.setCallBack(mCallback)
             if (mCallbackChange && mWebView != null) {
                 mCallbackChange = false
@@ -134,6 +140,7 @@ class GettingUtil private constructor() {
     }
 
     fun activity(activity: Activity): GettingUtil {
+        mWebView?.settings?.userAgentString = null
         mActivity = SoftReference(activity)
         return this
     }

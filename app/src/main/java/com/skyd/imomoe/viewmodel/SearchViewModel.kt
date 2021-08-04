@@ -73,6 +73,9 @@ class SearchViewModel : ViewModel() {
     fun insertSearchHistory(searchHistoryBean: SearchHistoryBean) {
         GlobalScope.launch(Dispatchers.IO) {
             try {
+                if (searchHistoryList.isEmpty()) searchHistoryList.addAll(
+                    getAppDataBase().searchHistoryDao().getSearchHistoryList()
+                )
                 val index = searchHistoryList.indexOf(searchHistoryBean)
                 if (index != -1) {
                     searchHistoryList.removeAt(index)

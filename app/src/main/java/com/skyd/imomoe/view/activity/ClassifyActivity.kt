@@ -28,7 +28,7 @@ import com.skyd.imomoe.viewmodel.ClassifyViewModel
 
 class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
     private lateinit var viewModel: ClassifyViewModel
-    private var lastRefreshTime: Long = System.currentTimeMillis()
+    private var lastRefreshTime: Long = System.currentTimeMillis() - 500
     private lateinit var spinnerAdapter: ArrayAdapter<ClassifyBean>
     private lateinit var classifyTabAdapter: ClassifyTabAdapter
     private val classifyTabList: MutableList<ClassifyDataBean> = ArrayList()
@@ -154,11 +154,18 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
             }
         })
 
+        viewModel.setActivity(this)
+
         viewModel.getClassifyTabData()
 
         if (currentPartUrl.isNotEmpty()) {
             tabSelected(currentPartUrl)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.clearActivity()
     }
 
     override fun getBinding(): ActivityClassifyBinding =
