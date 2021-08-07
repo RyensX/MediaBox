@@ -12,7 +12,10 @@ import org.jsoup.select.Elements
 import java.util.ArrayList
 
 class AnimeDetailModel : IAnimeDetailModel {
-    override fun getAnimeDetailData(partUrl: String?): Triple<ImageBean, String, ArrayList<IAnimeDetailBean>> {
+    override fun getAnimeDetailData(
+        partUrl: String,
+        callBack: IAnimeDetailModel.AnimeDetailDataCallBack
+    ): Triple<ImageBean, String, ArrayList<IAnimeDetailBean>>? {
         val animeDetailList: ArrayList<IAnimeDetailBean> = ArrayList()
         val cover = ImageBean("", "", "", "")
         var title = ""

@@ -13,7 +13,10 @@ import org.jsoup.select.Elements
 import java.util.ArrayList
 
 class AnimeShowModel : IAnimeShowModel {
-    override fun getAnimeShowData(partUrl: String?): com.skyd.imomoe.model.util.Pair<ArrayList<IAnimeShowBean>, PageNumberBean?> {
+    override fun getAnimeShowData(
+        partUrl: String,
+        callBack: IAnimeShowModel.AnimeShowDataCallBack
+    ): Pair<ArrayList<IAnimeShowBean>, PageNumberBean?>? {
         val url = Api.MAIN_URL + partUrl
         var pageNumberBean: PageNumberBean? = null
         val document = JsoupUtil.getDocument(url)

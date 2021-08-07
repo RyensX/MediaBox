@@ -85,11 +85,20 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
-                    android:layout_toStartOf="@id/iv_about_activity_imomoe"
-                    android:text="@string/imomoe"
+                    android:layout_toStartOf="@id/iv_about_activity_custom_data_source_about"
+                    android:text="@string/data_source_url"
                     android:textColor="@color/foreground_main_color_2_skin"
                     android:textSize="16sp"
                     app:typeface="bPRTypeface" />
+
+                <ImageView
+                    android:id="@+id/iv_about_activity_custom_data_source_about"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@id/iv_about_activity_imomoe"
+                    android:src="@drawable/ic_info_white_24"
+                    app:tint="@color/foreground_main_color_2_skin" />
 
                 <ImageView
                     android:id="@+id/iv_about_activity_imomoe"

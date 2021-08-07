@@ -29,14 +29,33 @@ class MonthAnimeViewModel : ViewModel() {
     fun getMonthAnimeData(partUrl: String, isRefresh: Boolean = true) {
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                monthAnimeModel.getMonthAnimeData(partUrl).apply {
+                monthAnimeModel.getMonthAnimeData(partUrl, object :
+                    IMonthAnimeModel.AllTabDataCallBack {
+                    override fun onSuccess(p: com.skyd.imomoe.model.util.Pair<ArrayList<AnimeCoverBean>, PageNumberBean>) {
+                        if (isRefresh) monthAnimeList.clear()
+                        val positionStart = monthAnimeList.size
+                        monthAnimeList.addAll(p.first)
+                        pageNumberBean = p.second
+                        newPageIndex = Pair(positionStart, monthAnimeList.size - positionStart)
+                        mldMonthAnimeList.postValue(true)
+                    }
+
+                    override fun onError(e: Exception) {
+                        monthAnimeList.clear()
+                        mldMonthAnimeList.postValue(false)
+                        e.printStackTrace()
+                        (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread()
+                    }
+
+                }).apply {
+                    this ?: return@apply
                     if (isRefresh) monthAnimeList.clear()
                     val positionStart = monthAnimeList.size
                     monthAnimeList.addAll(first)
                     pageNumberBean = second
                     newPageIndex = Pair(positionStart, monthAnimeList.size - positionStart)
+                    mldMonthAnimeList.postValue(true)
                 }
-                mldMonthAnimeList.postValue(true)
             } catch (e: Exception) {
                 monthAnimeList.clear()
                 mldMonthAnimeList.postValue(false)

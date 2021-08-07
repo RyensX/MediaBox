@@ -35,6 +35,7 @@ import com.skyd.imomoe.util.Util.dp2px
 import com.skyd.imomoe.util.Util.getDetailLinkByEpisodeLink
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.getResDrawable
+import com.skyd.imomoe.util.Util.getSkinResourceId
 import com.skyd.imomoe.util.Util.openVideoByExternalPlayer
 import com.skyd.imomoe.util.Util.setColorStatusBar
 import com.skyd.imomoe.util.Util.showToast
@@ -146,7 +147,7 @@ class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>() {
             rvPlayActivity.adapter = adapter
 
             srlPlayActivity.setOnRefreshListener { viewModel.getPlayData(partUrl) }
-            srlPlayActivity.setColorSchemeResources(R.color.main_color_skin)
+            srlPlayActivity.setColorSchemeResources(getSkinResourceId(R.color.main_color_skin))
         }
 
         GlobalScope.launch(Dispatchers.IO) {

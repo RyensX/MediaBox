@@ -30,12 +30,29 @@ class RankViewModel : ViewModel() {
                 if (isRequesting) return@launch
                 isRequesting = true
 
-                rankModel.rankTabData.apply {
+                rankModel.getRankTabData(object : IRankModel.RankTabDataCallBack {
+                    override fun onSuccess(list: java.util.ArrayList<TabBean>) {
+                        tabList.clear()
+                        tabList.addAll(list)
+                        mldRankData.postValue(true)
+                        isRequesting = false
+                    }
+
+                    override fun onError(e: Exception) {
+                        mldRankData.postValue(false)
+                        tabList.clear()
+                        isRequesting = false
+                        e.printStackTrace()
+                        e.message?.showToastOnThread(Toast.LENGTH_LONG)
+                    }
+
+                }).apply {
+                    this ?: return@launch
                     tabList.clear()
                     tabList.addAll(this)
+                    mldRankData.postValue(true)
+                    isRequesting = false
                 }
-                mldRankData.postValue(true)
-                isRequesting = false
             } catch (e: Exception) {
                 mldRankData.postValue(false)
                 tabList.clear()

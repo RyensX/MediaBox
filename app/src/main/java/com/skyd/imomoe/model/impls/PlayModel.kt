@@ -28,9 +28,9 @@ class PlayModel : IPlayModel {
     }
 
     override fun getPlayData(
-        partUrl: String?,
+        partUrl: String,
         animeEpisodeDataBean: AnimeEpisodeDataBean,
-        callback: IPlayModel.OnPlayDataCallBack?
+        callback: IPlayModel.PlayDataCallBack
     ): Triple<ArrayList<IAnimeDetailBean>, ArrayList<AnimeEpisodeDataBean>, PlayBean> {
         val playBeanDataList: ArrayList<IAnimeDetailBean> = ArrayList()
         val episodesList: ArrayList<AnimeEpisodeDataBean> = ArrayList()
@@ -105,7 +105,7 @@ class PlayModel : IPlayModel {
     override fun refreshAnimeEpisodeData(
         partUrl: String,
         animeEpisodeDataBean: AnimeEpisodeDataBean,
-        callback: IPlayModel.OnEpisodeDataCallBack?
+        callback: IPlayModel.AnimeEpisodeDataCallBack
     ): Boolean? {
         val document = JsoupUtil.getDocument(Api.MAIN_URL + partUrl)
         val children: Elements = document.select("body")[0].children()
@@ -121,7 +121,10 @@ class PlayModel : IPlayModel {
         return false
     }
 
-    override fun getAnimeCoverImageBean(detailPartUrl: String): ImageBean? {
+    override fun getAnimeCoverImageBean(
+        detailPartUrl: String,
+        callback: IPlayModel.AnimeCoverImageBeanCallBack
+    ): ImageBean? {
         try {
             val url = Api.MAIN_URL + detailPartUrl
             val document = JsoupUtil.getDocument(url)
@@ -164,8 +167,8 @@ class PlayModel : IPlayModel {
     }
 
     override fun getAnimeEpisodeUrlData(
-        partUrl: String?,
-        callback: IPlayModel.OnEpisodeUrlDataCallBack?
+        partUrl: String,
+        callback: IPlayModel.AnimeEpisodeUrlDataCallBack
     ): String? {
         val document = JsoupUtil.getDocument(Api.MAIN_URL + partUrl)
         val children: Elements = document.select("body")[0].children()

@@ -8,6 +8,7 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.databinding.ActivityAboutBinding
+import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.util.Util.getAppVersionName
 import com.skyd.imomoe.util.Util.openBrowser
 import com.skyd.imomoe.util.visible
@@ -44,6 +45,17 @@ class AboutActivity : BaseActivity<ActivityAboutBinding>() {
 
             rlAboutActivityImomoe.setOnClickListener {
                 openBrowser(Api.MAIN_URL)
+            }
+
+            ivAboutActivityCustomDataSourceAbout.setOnClickListener {
+                MaterialDialog(this@AboutActivity).show {
+                    title(res = R.string.data_source_info)
+                    message(
+                        text = (DataSourceManager.getConst()
+                            ?: com.skyd.imomoe.model.impls.Const()).about()
+                    )
+                    positiveButton(res = R.string.ok) { dismiss() }
+                }
             }
 
             rlAboutActivityGithub.setOnClickListener {

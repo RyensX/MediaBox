@@ -6,14 +6,14 @@ import android.content.Intent
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.model.DataSourceManager
-import com.skyd.imomoe.model.interfaces.IRouterProcessor
+import com.skyd.imomoe.model.interfaces.IRouteProcessor
 import com.skyd.imomoe.util.Util.getSubString
 import com.skyd.imomoe.util.Util.isYearMonth
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.view.activity.*
 import java.net.URLDecoder
 
-class RouterProcessor : IRouterProcessor {
+class RouteProcessor : IRouteProcessor {
     override fun process(context: Context?, actionUrl: String?): Boolean {
         context ?: return false
         actionUrl ?: return false
@@ -59,13 +59,25 @@ class RouterProcessor : IRouterProcessor {
         val const = DataSourceManager.getConst() ?: Const()
         var solved = true
         when {
+            decodeUrl.startsWith(com.skyd.imomoe.config.Const.ActionUrl.ANIME_CLASSIFY) -> {     //如进入分类页面
+                val paramList = actionUrl.replace(com.skyd.imomoe.config.Const.ActionUrl.ANIME_CLASSIFY, "").split("/")
+                if (paramList.size == 3) {      //例如  /japan/日本  分割后是3个参数：""，japan，日本
+                    activity.startActivity(
+                        Intent(activity, ClassifyActivity::class.java)
+                            .putExtra("partUrl", "/" + paramList[1] + "/")
+                            .putExtra("classifyTabTitle", "")
+                            .putExtra("classifyTitle", paramList[2])
+                    )
+                } else App.context.resources.getString(R.string.action_url_format_error)
+                    .showToast()
+            }
             decodeUrl.replace("/", "").isYearMonth() -> {     //如201907月新番列表
                 activity.startActivity(
                     Intent(activity, MonthAnimeActivity::class.java)
                         .putExtra("partUrl", actionUrl)
                 )
             }
-            decodeUrl.startsWith(const.actionUrl.ANIME_TOP()) -> {     // 排行榜
+            decodeUrl.startsWith(const.actionUrl.ANIME_RANK()) -> {     // 排行榜
                 activity.startActivity(Intent(activity, RankActivity::class.java))
             }
             decodeUrl.startsWith(const.actionUrl.ANIME_SEARCH()) -> {     // 进入搜索页面

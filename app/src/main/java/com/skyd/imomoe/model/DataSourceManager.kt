@@ -3,9 +3,8 @@ package com.skyd.imomoe.model
 import android.util.LruCache
 import com.skyd.imomoe.App
 import com.skyd.imomoe.model.interfaces.IConst
-import com.skyd.imomoe.model.interfaces.IRouterProcessor
+import com.skyd.imomoe.model.interfaces.IRouteProcessor
 import com.skyd.imomoe.model.interfaces.IUtil
-import com.skyd.imomoe.util.debug
 import com.skyd.imomoe.util.editor
 import com.skyd.imomoe.util.sharedPreferences
 import dalvik.system.DexClassLoader
@@ -21,8 +20,8 @@ object DataSourceManager {
         }
 
     // 第一个是传入的接口，第二个是实现类
-    private val cache: LruCache<Class<*>, Class<*>> = LruCache(20)
-    private val singletonCache: LruCache<Class<*>, Any> = LruCache(10)
+    private val cache: LruCache<Class<*>, Class<*>> = LruCache(10)
+    private val singletonCache: LruCache<Class<*>, Any> = LruCache(5)
 
     fun getJarPath(): String {
         return App.context.getExternalFilesDir(null)
@@ -43,12 +42,12 @@ object DataSourceManager {
         }
     }
 
-    fun getRouterProcessor(): IRouterProcessor? {
-        singletonCache[IRouterProcessor::class.java].let {
-            if (it != null && it is IRouterProcessor) return it
+    fun getRouterProcessor(): IRouteProcessor? {
+        singletonCache[IRouteProcessor::class.java].let {
+            if (it != null && it is IRouteProcessor) return it
         }
-        return create(IRouterProcessor::class.java).apply {
-            if (this != null) singletonCache.put(IRouterProcessor::class.java, this)
+        return create(IRouteProcessor::class.java).apply {
+            if (this != null) singletonCache.put(IRouteProcessor::class.java, this)
         }
     }
 

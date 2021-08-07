@@ -33,15 +33,34 @@ class RankListViewModel : ViewModel() {
                 if (isRequesting) return@launch
                 isRequesting = true
 
-                rankModel.getRankListData(partUrl).apply {
+                rankModel.getRankListData(partUrl, object : IRankListModel.RankListDataCallBack {
+                    override fun onSuccess(p: com.skyd.imomoe.model.util.Pair<MutableList<AnimeCoverBean>, PageNumberBean>) {
+                        if (isRefresh) rankList.clear()
+                        val positionStart = rankList.size
+                        rankList.addAll(p.first)
+                        pageNumberBean = p.second
+                        newPageIndex = Pair(positionStart, rankList.size - positionStart)
+                        mldRankData.postValue(if (isRefresh) 0 else 1)
+                        isRequesting = false
+                    }
+
+                    override fun onError(e: Exception) {
+                        mldRankData.postValue(-1)
+                        isRequesting = false
+                        e.printStackTrace()
+                        e.message?.showToastOnThread(Toast.LENGTH_LONG)
+                    }
+
+                }).apply {
+                    this ?: return@launch
                     if (isRefresh) rankList.clear()
                     val positionStart = rankList.size
                     rankList.addAll(first)
                     pageNumberBean = second
                     newPageIndex = Pair(positionStart, rankList.size - positionStart)
+                    mldRankData.postValue(if (isRefresh) 0 else 1)
+                    isRequesting = false
                 }
-                mldRankData.postValue(if (isRefresh) 0 else 1)
-                isRequesting = false
             } catch (e: Exception) {
                 mldRankData.postValue(-1)
                 isRequesting = false

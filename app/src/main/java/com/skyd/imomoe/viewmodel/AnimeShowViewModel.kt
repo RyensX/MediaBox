@@ -40,13 +40,32 @@ class AnimeShowViewModel : ViewModel() {
                 pageNumberBean = null
                 if (isRefresh) animeShowList.clear()
                 val positionStart = animeShowList.size
-                animeShowModel.getAnimeShowData(partUrl).apply {
+                animeShowModel.getAnimeShowData(partUrl, object :
+                    IAnimeShowModel.AnimeShowDataCallBack {
+                    override fun onSuccess(p: com.skyd.imomoe.model.util.Pair<ArrayList<IAnimeShowBean>, PageNumberBean>) {
+                        animeShowList.addAll(p.first)
+                        pageNumberBean = p.second
+                        newPageIndex = Pair(positionStart, animeShowList.size - positionStart)
+                        mldGetAnimeShowList.postValue(if (isRefresh) 0 else 1)
+                        isRequesting = false
+                    }
+
+                    override fun onError(e: Exception) {
+                        animeShowList.clear()
+                        mldGetAnimeShowList.postValue(-1)
+                        isRequesting = false
+                        e.printStackTrace()
+                        (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread()
+                    }
+
+                }).apply {
+                    this ?: return@apply
                     animeShowList.addAll(first)
                     pageNumberBean = second
+                    newPageIndex = Pair(positionStart, animeShowList.size - positionStart)
+                    mldGetAnimeShowList.postValue(if (isRefresh) 0 else 1)
+                    isRequesting = false
                 }
-                newPageIndex = Pair(positionStart, animeShowList.size - positionStart)
-                mldGetAnimeShowList.postValue(if (isRefresh) 0 else 1)
-                isRequesting = false
             } catch (e: Exception) {
                 animeShowList.clear()
                 mldGetAnimeShowList.postValue(-1)

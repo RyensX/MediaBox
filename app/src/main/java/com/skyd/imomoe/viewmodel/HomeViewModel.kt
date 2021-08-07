@@ -30,9 +30,29 @@ class HomeViewModel : ViewModel() {
     fun getAllTabData() {
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                allTabList.clear()
-                allTabList.addAll(homeModel.allTabData)
-                mldGetAllTabList.postValue(true)
+                homeModel.getAllTabData(object : IHomeModel.AllTabDataCallBack {
+                    override fun onSuccess(list: ArrayList<TabBean>) {
+                        allTabList.clear()
+                        allTabList.addAll(list)
+                        mldGetAllTabList.postValue(true)
+                    }
+
+                    override fun onError(e: Exception) {
+                        allTabList.clear()
+                        mldGetAllTabList.postValue(false)
+                        e.printStackTrace()
+                        (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread(
+                            Toast.LENGTH_LONG
+                        )
+                    }
+
+                }).apply {
+                    this ?: return@apply
+                    allTabList.clear()
+                    allTabList.addAll(this)
+                    mldGetAllTabList.postValue(true)
+                }
+
             } catch (e: Exception) {
                 allTabList.clear()
                 mldGetAllTabList.postValue(false)

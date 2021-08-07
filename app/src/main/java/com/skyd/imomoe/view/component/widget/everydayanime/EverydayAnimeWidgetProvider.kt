@@ -14,7 +14,7 @@ import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.model.DataSourceManager
-import com.skyd.imomoe.model.impls.RouterProcessor
+import com.skyd.imomoe.model.impls.RouteProcessor
 import com.skyd.imomoe.util.Util.getWeekday
 import com.skyd.imomoe.util.Util.showToast
 import java.util.*
@@ -118,7 +118,7 @@ class EverydayAnimeWidgetProvider : AppWidgetProvider() {
     }
 
     private fun startPlayActivity(context: Context, actionUrl: String?) {
-        (DataSourceManager.getRouterProcessor() ?: RouterProcessor()).process(context, actionUrl)
+        (DataSourceManager.getRouterProcessor() ?: RouteProcessor()).process(context, actionUrl)
     }
 
     companion object {

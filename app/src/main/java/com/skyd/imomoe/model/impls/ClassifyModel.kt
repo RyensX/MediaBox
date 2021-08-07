@@ -17,7 +17,10 @@ import org.jsoup.select.Elements
 import java.util.ArrayList
 
 class ClassifyModel : IClassifyModel {
-    override fun getClassifyData(partUrl: String?): Pair<ArrayList<AnimeCoverBean>, PageNumberBean?> {
+    override fun getClassifyData(
+        partUrl: String,
+        callBack: IClassifyModel.ClassifyDataCallBack
+    ): Pair<ArrayList<AnimeCoverBean>, PageNumberBean?>? {
         val classifyList: ArrayList<AnimeCoverBean> = ArrayList()
         var pageNumberBean: PageNumberBean? = null
         val url = Api.MAIN_URL + partUrl
@@ -54,7 +57,7 @@ class ClassifyModel : IClassifyModel {
     override fun clearActivity() {
     }
 
-    override fun getClassifyTabData(callback: IClassifyModel.OnClassifyTabDataCallBack?): ArrayList<ClassifyBean>? {
+    override fun getClassifyTabData(callback: IClassifyModel.ClassifyTabDataCallBack): ArrayList<ClassifyBean>? {
         val classifyTabList: ArrayList<ClassifyBean> = ArrayList()
         val document = JsoupUtil.getDocument(Api.MAIN_URL + "/a/")
         val areaElements: Elements = document.getElementsByClass("area")

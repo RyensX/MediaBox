@@ -190,9 +190,13 @@ class AnimeShowAdapter(
                         tvFlowLayout.setOnClickListener { _ ->
                             if (it[i].actionUrl.isBlank()) return@setOnClickListener
                             //此处是”类型“，若要修改，需要注意Tab大分类是否还是”类型“
+                            val actionUrl = it[i].actionUrl.run {
+                                if (endsWith("/")) "${this}${it[i].title}"
+                                else "${this}/${it[i].title}"
+                            }
                             process(
                                 fragment,
-                                "${Const.ActionUrl.ANIME_CLASSIFY}${it[i].actionUrl}类型/${it[i].title}"
+                                Const.ActionUrl.ANIME_CLASSIFY + actionUrl
                             )
                         }
                         holder.flAnimeCover3Type.addView(tvFlowLayout)
@@ -261,9 +265,13 @@ class AnimeShowAdapter(
                     else process(fragment, item.episodeClickable?.actionUrl + item.actionUrl)
                 }
                 holder.tvAnimeCover5Area.setOnClickListener {
+                    val actionUrl = item.area?.actionUrl.toString().run {
+                    if (endsWith("/")) "${this}${item.area?.title}"
+                    else "${this}/${item.area?.title}"
+                }
                     process(
                         fragment,
-                        "${Const.ActionUrl.ANIME_CLASSIFY}${item.area?.actionUrl}地区/${item.area?.title}"
+                        Const.ActionUrl.ANIME_CLASSIFY + actionUrl
                     )
                 }
                 holder.tvAnimeCover5Title.setOnClickListener {
@@ -358,9 +366,13 @@ class AnimeShowAdapter(
                             tvFlowLayout.setOnClickListener { _ ->
                                 if (it[i].actionUrl.isBlank()) return@setOnClickListener
                                 //此处是”类型“，若要修改，需要注意Tab大分类是否还是”类型“
+                                val actionUrl = it[i].actionUrl.run {
+                                    if (endsWith("/")) "${this}${it[i].title}"
+                                    else "${this}/${it[i].title}"
+                                }
                                 process(
                                     activity,
-                                    "${Const.ActionUrl.ANIME_CLASSIFY}${it[i].actionUrl}类型/${it[i].title}"
+                                    Const.ActionUrl.ANIME_CLASSIFY + actionUrl
                                 )
                             }
                             holder.flAnimeCover3Type.addView(tvFlowLayout)
@@ -448,9 +460,13 @@ class AnimeShowAdapter(
                         else process(activity, item.episodeClickable?.actionUrl + item.actionUrl)
                     }
                     holder.tvAnimeCover5Area.setOnClickListener {
+                        val actionUrl = item.area?.actionUrl.toString().run {
+                            if (endsWith("/")) "${this}${item.area?.title}"
+                            else "${this}/${item.area?.title}"
+                        }
                         process(
                             activity,
-                            "${Const.ActionUrl.ANIME_CLASSIFY}${item.area?.actionUrl}地区/${item.area?.title}"
+                            Const.ActionUrl.ANIME_CLASSIFY + actionUrl
                         )
                     }
                     holder.tvAnimeCover5Title.setOnClickListener {

@@ -123,10 +123,13 @@ class AnimeDetailAdapter(
                         tvFlowLayout.setOnClickListener { it1 ->
                             if (it.animeType[i].actionUrl.isBlank()) return@setOnClickListener
                             //此处是”类型“，若要修改，需要注意Tab大分类是否还是”类型“
+                            val actionUrl = it.animeType[i].actionUrl.run {
+                                if (endsWith("/")) "${this}${it.animeType[i].title}"
+                                else "${this}/${it.animeType[i].title}"
+                            }
                             process(
                                 activity,
-                                Const.ActionUrl.ANIME_CLASSIFY +
-                                        "${it.animeType[i].actionUrl}类型/${it.animeType[i].title}"
+                                Const.ActionUrl.ANIME_CLASSIFY + actionUrl
                             )
                         }
                         holder.flAnimeInfo1Type.addView(tvFlowLayout)
@@ -143,10 +146,13 @@ class AnimeDetailAdapter(
                         tvFlowLayout.text = it.tag[i].title
                         tvFlowLayout.setOnClickListener { _ ->
                             //此处是”标签“，由于分类没有这一大项，因此传入”“串
+                            val actionUrl = it.tag[i].actionUrl.run {
+                                if (endsWith("/")) "${this}${it.tag[i].title}"
+                                else "${this}/${it.tag[i].title}"
+                            }
                             process(
                                 activity,
-                                Const.ActionUrl.ANIME_CLASSIFY +
-                                        "${it.tag[i].actionUrl}/${it.tag[i].title}"
+                                Const.ActionUrl.ANIME_CLASSIFY + actionUrl
                             )
                         }
                         holder.flAnimeInfo1Tag.addView(tvFlowLayout)

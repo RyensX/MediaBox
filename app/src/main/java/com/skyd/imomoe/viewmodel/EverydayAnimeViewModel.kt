@@ -11,6 +11,7 @@ import com.skyd.imomoe.bean.TabBean
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.EverydayAnimeModel
 import com.skyd.imomoe.model.interfaces.IEverydayAnimeModel
+import com.skyd.imomoe.model.util.Triple
 import com.skyd.imomoe.util.Util.getRealDayOfWeek
 import com.skyd.imomoe.util.Util.showToastOnThread
 import kotlinx.coroutines.Dispatchers
@@ -38,7 +39,35 @@ class EverydayAnimeViewModel : ViewModel() {
     fun getEverydayAnimeData() {
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                everydayAnimeModel.everydayAnimeData.apply {
+                everydayAnimeModel.getEverydayAnimeData(object :
+                    IEverydayAnimeModel.EverydayAnimeCallBack {
+                    override fun onSuccess(t: Triple<ArrayList<TabBean>, ArrayList<MutableList<AnimeCoverBean>>, AnimeShowBean>) {
+                        selectedTabIndex = getRealDayOfWeek(
+                            Calendar.getInstance(Locale.getDefault())
+                                .get(Calendar.DAY_OF_WEEK)
+                        ) - 1
+                        header = t.third
+                        tabList.clear()
+                        tabList.addAll(t.first)
+                        mldTabList.postValue(tabList)
+                        everydayAnimeList.clear()
+                        everydayAnimeList.addAll(t.second)
+                        mldEverydayAnimeList.postValue(true)
+                        mldHeader.postValue(header)
+                    }
+
+                    override fun onError(e: Exception) {
+                        selectedTabIndex = -1
+                        tabList.clear()
+                        everydayAnimeList.clear()
+                        mldEverydayAnimeList.postValue(false)
+                        e.printStackTrace()
+                        "${App.context.getString(R.string.get_data_failed)}\n${e.message}"
+                            .showToastOnThread(Toast.LENGTH_LONG)
+                    }
+
+                }).apply {
+                    this ?: return@apply
                     selectedTabIndex = getRealDayOfWeek(
                         Calendar.getInstance(Locale.getDefault())
                             .get(Calendar.DAY_OF_WEEK)

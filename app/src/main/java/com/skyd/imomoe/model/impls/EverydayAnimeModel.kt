@@ -10,7 +10,8 @@ import org.jsoup.select.Elements
 import java.util.*
 
 class EverydayAnimeModel : IEverydayAnimeModel {
-    override fun getEverydayAnimeData(): Triple<ArrayList<TabBean>, ArrayList<List<AnimeCoverBean>>, AnimeShowBean> {
+    override fun getEverydayAnimeData(callBack: IEverydayAnimeModel.EverydayAnimeCallBack)
+            : Triple<ArrayList<TabBean>, ArrayList<List<AnimeCoverBean>>, AnimeShowBean?>? {
         val tabList = ArrayList<TabBean>()
         val header = AnimeShowBean(
             "", "", "", "",

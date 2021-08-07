@@ -120,6 +120,7 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
                     classifyTitle = firstItem.title
                     tabSelected(currentPartUrl)
                 } else {
+                    var found = false
                     viewModel.classifyTabList.forEachIndexed { index, classifyBean ->
                         classifyBean.classifyDataList.forEach { item ->
                             if (item.actionUrl == currentPartUrl) {
@@ -127,9 +128,12 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
                                 classifyTabTitle = classifyBean.name
                                 classifyTitle = item.title
                                 tabSelected(currentPartUrl)
+                                found = true
+                                return@forEachIndexed
                             }
                         }
                     }
+                    if (!found) tabSelected(currentPartUrl)
                 }
             } else {
                 mBinding.srlClassifyActivity.finishRefresh()
@@ -142,7 +146,10 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
             if (it == 0) {
                 mBinding.llClassifyActivityToolbar.tvToolbar1Title.text =
                     if (classifyTabTitle.isEmpty()) "${getString(R.string.anime_classify)}  $classifyTitle"
-                    else "${getString(R.string.anime_classify)}  $classifyTabTitle：$classifyTitle"
+                    else "${getString(R.string.anime_classify)}  ${if (classifyTabTitle.endsWith(":") ||
+                        classifyTabTitle.endsWith("：")
+                    ) classifyTabTitle.substring(0, classifyTabTitle.length - 1)
+                    else classifyTabTitle}：$classifyTitle"
                 classifyAdapter.notifyDataSetChanged()
             } else if (it == 1) {
                 val pair = viewModel.newPageIndex
@@ -158,9 +165,9 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
 
         viewModel.getClassifyTabData()
 
-        if (currentPartUrl.isNotEmpty()) {
-            tabSelected(currentPartUrl)
-        }
+//        if (currentPartUrl.isNotEmpty()) {
+//            tabSelected(currentPartUrl)
+//        }
     }
 
     override fun onDestroy() {

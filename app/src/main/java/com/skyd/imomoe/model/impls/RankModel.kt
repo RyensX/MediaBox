@@ -11,9 +11,9 @@ import java.util.*
 
 class RankModel : IRankModel {
     private var bgTimes = 0
-    var tabList: ArrayList<TabBean> = ArrayList()
+    private var tabList: ArrayList<TabBean> = ArrayList()
 
-    override fun getRankTabData(): ArrayList<TabBean> {
+    override fun getRankTabData(callBack: IRankModel.RankTabDataCallBack): ArrayList<TabBean>? {
         tabList.clear()
         getWeekRankData()
         getAllRankData()
@@ -22,7 +22,7 @@ class RankModel : IRankModel {
 
     private fun getAllRankData() {
         val const = DataSourceManager.getConst() ?: Const()
-        val document = JsoupUtil.getDocument(Api.MAIN_URL + const.actionUrl.ANIME_TOP())
+        val document = JsoupUtil.getDocument(Api.MAIN_URL + const.actionUrl.ANIME_RANK())
         val areaChildren: Elements = document.select("[class=area]")[0].children()
         for (i in areaChildren.indices) {
             when (areaChildren[i].className()) {
@@ -30,7 +30,7 @@ class RankModel : IRankModel {
                     tabList.add(
                         tabList.size, TabBean(
                             "",
-                            const.actionUrl.ANIME_TOP(),
+                            const.actionUrl.ANIME_RANK(),
                             "",
                             areaChildren[i].select("h1").select("a").text()
                         )

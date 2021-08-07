@@ -50,7 +50,8 @@ class PlayViewModel : ViewModel() {
             try {
                 this@PlayViewModel.partUrl = partUrl
                 playModel.refreshAnimeEpisodeData(partUrl, animeEpisodeDataBean,
-                    object : IPlayModel.OnEpisodeDataCallBack {
+                    object :
+                        IPlayModel.AnimeEpisodeDataCallBack {
                         override fun onSuccess(b: Boolean) {
                             if (b) {
                                 animeEpisodeDataBean.title = title
@@ -93,7 +94,8 @@ class PlayViewModel : ViewModel() {
             try {
 //                this@PlayViewModel.partUrl = partUrl
                 playModel.getAnimeEpisodeUrlData(partUrl,
-                    object : IPlayModel.OnEpisodeUrlDataCallBack {
+                    object :
+                        IPlayModel.AnimeEpisodeUrlDataCallBack {
                         override fun onSuccess(url: String) {
                             episodesList[position].videoUrl = url
                             mldEpisodesList.postValue(true)
@@ -124,7 +126,8 @@ class PlayViewModel : ViewModel() {
             try {
                 this@PlayViewModel.partUrl = partUrl
                 playModel.getPlayData(partUrl, animeEpisodeDataBean,
-                    object : IPlayModel.OnPlayDataCallBack {
+                    object :
+                        IPlayModel.PlayDataCallBack {
                         override fun onSuccess(t: Triple<ArrayList<IAnimeDetailBean>, ArrayList<AnimeEpisodeDataBean>, PlayBean>) {
                             t.apply {
                                 playBeanDataList.clear()
@@ -185,19 +188,51 @@ class PlayViewModel : ViewModel() {
     fun insertHistoryData(detailPartUrl: String) {
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                val cover = if (animeCover.url.isBlank()) {
-                    playModel.getAnimeCoverImageBean(detailPartUrl) ?: return@launch
-                } else animeCover
-                getAppDataBase().historyDao().insertHistory(
-                    HistoryBean(
-                        ViewHolderTypeString.ANIME_COVER_9, "", detailPartUrl,
-                        playBean?.title?.title ?: "",
-                        System.currentTimeMillis(),
-                        cover,
-                        partUrl,
-                        animeEpisodeDataBean.title
+                if (animeCover.url.isBlank()) {
+                    playModel.getAnimeCoverImageBean(detailPartUrl, object :
+                        IPlayModel.AnimeCoverImageBeanCallBack {
+                        override fun onSuccess(imageBean: ImageBean) {
+                            getAppDataBase().historyDao().insertHistory(
+                                HistoryBean(
+                                    ViewHolderTypeString.ANIME_COVER_9, "", detailPartUrl,
+                                    playBean?.title?.title ?: "",
+                                    System.currentTimeMillis(),
+                                    imageBean,
+                                    partUrl,
+                                    animeEpisodeDataBean.title
+                                )
+                            )
+                        }
+
+                        override fun onError(e: java.lang.Exception) {
+                            e.printStackTrace()
+                        }
+
+                    }).apply {
+                        this ?: return@apply
+                        getAppDataBase().historyDao().insertHistory(
+                            HistoryBean(
+                                ViewHolderTypeString.ANIME_COVER_9, "", detailPartUrl,
+                                playBean?.title?.title ?: "",
+                                System.currentTimeMillis(),
+                                this,
+                                partUrl,
+                                animeEpisodeDataBean.title
+                            )
+                        )
+                    }
+                } else {
+                    getAppDataBase().historyDao().insertHistory(
+                        HistoryBean(
+                            ViewHolderTypeString.ANIME_COVER_9, "", detailPartUrl,
+                            playBean?.title?.title ?: "",
+                            System.currentTimeMillis(),
+                            animeCover,
+                            partUrl,
+                            animeEpisodeDataBean.title
+                        )
                     )
-                )
+                }
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -207,11 +242,26 @@ class PlayViewModel : ViewModel() {
     fun getAnimeCoverImageBean(detailPartUrl: String) {
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                val bean = playModel.getAnimeCoverImageBean(detailPartUrl)
-                    ?: throw Exception("null object, 无法获取CoverImageBean")
-                animeCover.url = bean.url
-                animeCover.referer = bean.referer
-                mldAnimeCover.postValue(true)
+                playModel.getAnimeCoverImageBean(detailPartUrl, object :
+                    IPlayModel.AnimeCoverImageBeanCallBack {
+                    override fun onSuccess(imageBean: ImageBean) {
+                        animeCover.url = imageBean.url
+                        animeCover.referer = imageBean.referer
+                        mldAnimeCover.postValue(true)
+                    }
+
+                    override fun onError(e: java.lang.Exception) {
+                        mldAnimeCover.postValue(false)
+                        e.printStackTrace()
+                        ("${App.context.getString(R.string.get_data_failed)}\n${e.message}").showToastOnThread()
+                    }
+
+                }).apply {
+                    this ?: return@apply
+                    animeCover.url = url
+                    animeCover.referer = referer
+                    mldAnimeCover.postValue(true)
+                }
             } catch (e: Exception) {
                 mldAnimeCover.postValue(false)
                 e.printStackTrace()

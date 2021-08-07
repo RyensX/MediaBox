@@ -1,6 +1,5 @@
 package com.skyd.imomoe.util
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.*
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
@@ -22,7 +21,6 @@ import android.widget.Toast
 import androidx.annotation.AnyRes
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.graphics.drawable.DrawableCompat
@@ -35,7 +33,7 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.config.UnknownActionUrl
 import com.skyd.imomoe.model.DataSourceManager
-import com.skyd.imomoe.model.impls.RouterProcessor
+import com.skyd.imomoe.model.impls.RouteProcessor
 import com.skyd.imomoe.view.activity.*
 import com.skyd.imomoe.view.component.AnimeToast
 import kotlinx.coroutines.Dispatchers
@@ -512,22 +510,10 @@ object Util {
     fun process(activity: Activity, actionUrl: String?, toastTitle: String = "") {
         if (actionUrl == null) return
         val decodeUrl = URLDecoder.decode(actionUrl, "UTF-8")
-        val routerProcessor = DataSourceManager.getRouterProcessor() ?: RouterProcessor()
+        val routerProcessor = DataSourceManager.getRouterProcessor() ?: RouteProcessor()
         // 没有处理跳转，则进入if体
         if (!routerProcessor.process(activity, actionUrl)) {
             when {
-                decodeUrl.startsWith(Const.ActionUrl.ANIME_CLASSIFY) -> {     //如进入分类页面
-                    val paramList = actionUrl.replace(Const.ActionUrl.ANIME_CLASSIFY, "").split("/")
-                    if (paramList.size == 4) {      //例如  /japan/地区/日本  分割后是4个参数：""，japan，地区，日本
-                        activity.startActivity(
-                            Intent(activity, ClassifyActivity::class.java)
-                                .putExtra("partUrl", "/" + paramList[1] + "/")
-                                .putExtra("classifyTabTitle", paramList[2])
-                                .putExtra("classifyTitle", paramList[3])
-                        )
-                    } else App.context.resources.getString(R.string.action_url_format_error)
-                        .showToast()
-                }
                 decodeUrl.startsWith(Const.ActionUrl.ANIME_BROWSER) -> {     //打开浏览器
                     openBrowser(actionUrl.replaceFirst(Const.ActionUrl.ANIME_BROWSER, ""))
                 }

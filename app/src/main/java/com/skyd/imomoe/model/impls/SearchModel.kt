@@ -15,8 +15,9 @@ import java.util.ArrayList
 class SearchModel : ISearchModel {
     override fun getSearchData(
         keyWord: String,
-        partUrl: String
-    ): Pair<ArrayList<AnimeCoverBean>, PageNumberBean?> {
+        partUrl: String,
+        callBack: ISearchModel.SearchDataCallBack
+    ): Pair<ArrayList<AnimeCoverBean>, PageNumberBean?>? {
         val const = DataSourceManager.getConst() ?: Const()
         var pageNumberBean: PageNumberBean? = null
         val searchResultList: ArrayList<AnimeCoverBean> = ArrayList()

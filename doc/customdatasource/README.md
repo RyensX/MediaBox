@@ -8,19 +8,19 @@
 
 自定义数据源可更改APP的数据显示。
 
-如默认情况下首页显示**正常数据**（下方第一幅图）；自定义数据源，可以让首页**仅显示“自定义标题”五个字**（下方第二幅图）
+如默认情况下首页显示**正常数据**（下方第一幅图）；自定义数据源，可以让首页**仅显示“自定义标题”五个字**（下方第二幅图）、显示其它网站或API接口数据（下方第三幅图）
 
-![main](image/normal.jpg) ![main](image/customdatasource.jpg)
+![normal](image/normal.jpg) ![customdatasource](image/customdatasource.jpg) ![customdatasource_2](image/customdatasource_2.jpg)
 
 ## 如何使用自定义数据源？
 
 ### 前提
 
-熟悉**Java**，能够进行**Java**编程，最好能够了解Android的基础知识。
+使用他人编写的Jar包(直接跳到步骤7) 或 自己编写Jar包(熟悉**Java**，能够进行**Java**编程，最好能够了解Android的基础知识)
 
 ### 步骤
 
-#### 1.实现您想要自定义数据部分的接口
+#### 1.实现您想要自定义数据的接口
 
 包：**com.skyd.imomoe.model.interfaces**
 
@@ -37,11 +37,11 @@
 - ISearchModel
 - IRankListModel
 - IEverydayAnimeWidgetModel
-- IRouterProcessor
+- IRouteProcessor
 - IUtil
 - IConst
 
-注：IBaseModel为所有Model接口的父接口
+注：IBase为所有Model接口的父接口，具体**接口含义**以及接口方法的**参数含义和返回值含义**见**接口注释**。
 
 #### 2.实现类的类名
 
@@ -73,6 +73,28 @@
 
 刷新界面即可生效
 
+## 其他
+
+可直接使用的类及工具等：
+
+```
+com.skyd.imomoe.model.interfaces.**
+com.skyd.imomoe.model.util.**
+com.skyd.imomoe.util.html.source.**
+com.skyd.imomoe.util.eventbus.**
+com.skyd.imomoe.util.Util
+com.skyd.imomoe.bean.**
+com.skyd.imomoe.config.**
+org.jsoup.**
+org.greenrobot.eventbus.**
+kotlin.**
+kotlinx.**
+```
+
+**表示包下的类、接口等，包括子包下的内容。
+
+其它类、接口、方法等可能会被**混淆**，**不可使用**，具体混淆规则见工程文件。
+
 ## 备注
 
-由于本人技术有限，不保证后续此功能的接口不发生大更改
+由于本人技术有限，不保证后续此功能的接口不发生大更改。

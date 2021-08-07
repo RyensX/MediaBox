@@ -11,7 +11,10 @@ import org.jsoup.select.Elements
 import java.util.ArrayList
 
 class MonthAnimeModel : IMonthAnimeModel {
-    override fun getMonthAnimeData(partUrl: String): Pair<ArrayList<AnimeCoverBean>, PageNumberBean?> {
+    override fun getMonthAnimeData(
+        partUrl: String,
+        callBack: IMonthAnimeModel.AllTabDataCallBack
+    ): Pair<ArrayList<AnimeCoverBean>, PageNumberBean?>? {
         val monthAnimeList: ArrayList<AnimeCoverBean> = ArrayList()
         val url = Api.MAIN_URL + partUrl
         val document = JsoupUtil.getDocument(url)

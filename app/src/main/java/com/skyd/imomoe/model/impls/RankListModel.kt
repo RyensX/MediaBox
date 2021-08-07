@@ -15,7 +15,10 @@ class RankListModel : IRankListModel {
     private var bgTimes = 0
     var rankList: MutableList<AnimeCoverBean> = ArrayList()
 
-    override fun getRankListData(partUrl: String): Pair<List<AnimeCoverBean>, PageNumberBean?> {
+    override fun getRankListData(
+        partUrl: String,
+        callBack: IRankListModel.RankListDataCallBack
+    ): Pair<MutableList<AnimeCoverBean>, PageNumberBean?>? {
         rankList.clear()
         if (partUrl == "/" || partUrl == "") getWeekRankData()
         else getAllRankData(partUrl)
@@ -24,7 +27,7 @@ class RankListModel : IRankListModel {
 
     private fun getAllRankData(partUrl: String) {
         val const = DataSourceManager.getConst() ?: Const()
-        val document = JsoupUtil.getDocument(Api.MAIN_URL + const.actionUrl.ANIME_TOP())
+        val document = JsoupUtil.getDocument(Api.MAIN_URL + const.actionUrl.ANIME_RANK())
         val areaChildren: Elements = document.select("[class=area]")[0].children()
         for (i in areaChildren.indices) {
             when (areaChildren[i].className()) {

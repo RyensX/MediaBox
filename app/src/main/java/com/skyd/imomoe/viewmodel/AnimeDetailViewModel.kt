@@ -8,6 +8,7 @@ import com.skyd.imomoe.bean.*
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.AnimeDetailModel
 import com.skyd.imomoe.model.interfaces.IAnimeDetailModel
+import com.skyd.imomoe.model.util.Triple
 import com.skyd.imomoe.util.Util.showToastOnThread
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -29,13 +30,31 @@ class AnimeDetailViewModel : ViewModel() {
     fun getAnimeDetailData(partUrl: String) {
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                animeDetailModel.getAnimeDetailData(partUrl).apply {
+                animeDetailModel.getAnimeDetailData(partUrl, object :
+                    IAnimeDetailModel.AnimeDetailDataCallBack {
+                    override fun onSuccess(t: Triple<ImageBean, String, java.util.ArrayList<IAnimeDetailBean>>) {
+                        cover = t.first
+                        title = t.second
+                        animeDetailList.clear()
+                        animeDetailList.addAll(t.third)
+                        mldAnimeDetailList.postValue(true)
+                    }
+
+                    override fun onError(e: Exception) {
+                        animeDetailList.clear()
+                        mldAnimeDetailList.postValue(false)
+                        e.printStackTrace()
+                        (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread()
+                    }
+
+                }).apply {
+                    this ?: return@apply
                     cover = first
                     title = second
                     animeDetailList.clear()
                     animeDetailList.addAll(third)
+                    mldAnimeDetailList.postValue(true)
                 }
-                mldAnimeDetailList.postValue(true)
             } catch (e: Exception) {
                 animeDetailList.clear()
                 mldAnimeDetailList.postValue(false)

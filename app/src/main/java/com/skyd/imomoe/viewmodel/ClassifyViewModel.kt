@@ -41,7 +41,8 @@ class ClassifyViewModel : ViewModel() {
     fun getClassifyTabData() {
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                classifyModel.getClassifyTabData(object : IClassifyModel.OnClassifyTabDataCallBack {
+                classifyModel.getClassifyTabData(object :
+                    IClassifyModel.ClassifyTabDataCallBack {
                     override fun onSuccess(list: ArrayList<ClassifyBean>) {
                         classifyTabList.clear()
                         classifyTabList.addAll(list)
@@ -73,15 +74,34 @@ class ClassifyViewModel : ViewModel() {
             try {
                 if (isRequesting) return@launch
                 isRequesting = true
-                val positionStart: Int
-                classifyModel.getClassifyData(partUrl).apply {
+                classifyModel.getClassifyData(partUrl, object :
+                    IClassifyModel.ClassifyDataCallBack {
+                    override fun onSuccess(p: com.skyd.imomoe.model.util.Pair<ArrayList<AnimeCoverBean>, PageNumberBean>) {
+                        if (isRefresh) classifyList.clear()
+                        val positionStart = classifyList.size
+                        classifyList.addAll(p.first)
+                        pageNumberBean = p.second
+                        newPageIndex = Pair(positionStart, classifyList.size - positionStart)
+                        mldClassifyList.postValue(if (isRefresh) 0 else 1)
+                    }
+
+                    override fun onError(e: java.lang.Exception) {
+                        pageNumberBean = null
+                        classifyList.clear()
+                        mldClassifyList.postValue(-1)
+                        e.printStackTrace()
+                        (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread()
+                    }
+
+                }).apply {
+                    this ?: return@apply
                     if (isRefresh) classifyList.clear()
-                    positionStart = classifyList.size
+                    val positionStart = classifyList.size
                     classifyList.addAll(first)
                     pageNumberBean = second
+                    newPageIndex = Pair(positionStart, classifyList.size - positionStart)
+                    mldClassifyList.postValue(if (isRefresh) 0 else 1)
                 }
-                newPageIndex = Pair(positionStart, classifyList.size - positionStart)
-                mldClassifyList.postValue(if (isRefresh) 0 else 1)
             } catch (e: Exception) {
                 pageNumberBean = null
                 classifyList.clear()

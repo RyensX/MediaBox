@@ -11,6 +11,7 @@ import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.SearchModel
 import com.skyd.imomoe.model.interfaces.ISearchModel
+import com.skyd.imomoe.model.util.Pair
 import com.skyd.imomoe.util.Util.showToastOnThread
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -42,12 +43,29 @@ class SearchViewModel : ViewModel() {
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 if (isRefresh) searchResultList.clear()
-                searchModel.getSearchData(keyWord, partUrl).apply {
+                searchModel.getSearchData(keyWord, partUrl, object :
+                    ISearchModel.SearchDataCallBack {
+                    override fun onSuccess(p: Pair<java.util.ArrayList<AnimeCoverBean>, PageNumberBean>) {
+                        searchResultList.addAll(p.first)
+                        pageNumberBean = p.second
+                        this@SearchViewModel.keyWord = keyWord
+                        mldSearchResultList.postValue(if (isRefresh) 0 else 1)
+                    }
+
+                    override fun onError(e: Exception) {
+                        mldFailed.postValue(true)
+                        e.printStackTrace()
+                        ("${App.context.getString(R.string.get_data_failed)}\n${e.message}").showToastOnThread()
+                    }
+
+                }
+                ).apply {
+                    this ?: return@launch
                     searchResultList.addAll(first)
                     pageNumberBean = second
+                    this@SearchViewModel.keyWord = keyWord
+                    mldSearchResultList.postValue(if (isRefresh) 0 else 1)
                 }
-                this@SearchViewModel.keyWord = keyWord
-                mldSearchResultList.postValue(if (isRefresh) 0 else 1)
             } catch (e: Exception) {
                 mldFailed.postValue(true)
                 e.printStackTrace()
