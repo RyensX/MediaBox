@@ -2,6 +2,7 @@ package com.skyd.imomoe.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.bumptech.glide.load.engine.cache.InternalCacheDiskCacheFactory
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
@@ -11,7 +12,6 @@ import com.skyd.imomoe.util.Util.getFormatSize
 import com.skyd.imomoe.util.Util.showToastOnThread
 import com.skyd.imomoe.util.glide.GlideUtil
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.File
 
@@ -22,7 +22,7 @@ class SettingViewModel : ViewModel() {
     var mldCacheSize: MutableLiveData<String> = MutableLiveData()
 
     fun deleteAllHistory() {
-        GlobalScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 getAppDataBase().historyDao().deleteAllHistory()
                 getAppDataBase().searchHistoryDao().deleteAllSearchHistory()
@@ -37,7 +37,7 @@ class SettingViewModel : ViewModel() {
 
     // 获取Glide磁盘缓存大小
     fun getCacheSize() {
-        GlobalScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             mldCacheSize.postValue(
                 try {
                     getFormatSize(
@@ -54,7 +54,7 @@ class SettingViewModel : ViewModel() {
 
 
     fun clearAllCache() {
-        GlobalScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 // Glide
                 GlideUtil.clearMemoryDiskCache()

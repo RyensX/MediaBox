@@ -7,24 +7,19 @@ import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.util.JsoupUtil
 import com.skyd.imomoe.model.util.ParseHtmlUtil
 import com.skyd.imomoe.model.interfaces.ISearchModel
-import com.skyd.imomoe.model.util.Pair
+import com.skyd.imomoe.util.Util
 import org.jsoup.select.Elements
-import java.net.URLEncoder
-import java.util.ArrayList
 
 class SearchModel : ISearchModel {
-    override fun getSearchData(
+    override suspend fun getSearchData(
         keyWord: String,
-        partUrl: String,
-        callBack: ISearchModel.SearchDataCallBack
-    ): Pair<ArrayList<AnimeCoverBean>, PageNumberBean?>? {
+        partUrl: String
+    ): Pair<ArrayList<AnimeCoverBean>, PageNumberBean?> {
         val const = DataSourceManager.getConst() ?: Const()
         var pageNumberBean: PageNumberBean? = null
         val searchResultList: ArrayList<AnimeCoverBean> = ArrayList()
-        val url = Api.MAIN_URL + const.actionUrl.ANIME_SEARCH() + URLEncoder.encode(
-            keyWord,
-            "utf-8"
-        ) + "/" + partUrl
+        val url =
+            "${Api.MAIN_URL}${const.actionUrl.ANIME_SEARCH()}${Util.getEncodedUrl(keyWord)}/$partUrl"
         val document = JsoupUtil.getDocument(url)
         val lpic: Elements = document.getElementsByClass("area")
             .select("[class=fire l]").select("[class=lpic]")

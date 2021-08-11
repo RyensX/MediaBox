@@ -6,8 +6,6 @@ import com.skyd.imomoe.model.util.JsoupUtil
 import com.skyd.imomoe.model.interfaces.IEverydayAnimeWidgetModel
 import com.skyd.imomoe.model.util.ParseHtmlUtil.parseTlist
 import org.jsoup.select.Elements
-import java.lang.Exception
-import java.util.*
 
 class EverydayAnimeWidgetModel : IEverydayAnimeWidgetModel {
     override fun getEverydayAnimeData(): ArrayList<List<AnimeCoverBean>> {

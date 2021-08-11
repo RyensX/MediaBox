@@ -12,7 +12,6 @@ import com.skyd.imomoe.util.dlna.dmc.OnDeviceRegistryListener
 import com.skyd.imomoe.view.adapter.UpnpAdapter
 import com.skyd.imomoe.viewmodel.UpnpViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.fourthline.cling.model.meta.Device
 
@@ -64,7 +63,7 @@ class DlnaActivity : BaseActivity<ActivityDlnaBinding>() {
             rvDlnaActivityDevice.adapter = adapter
         }
 
-        GlobalScope.launch(Dispatchers.IO) {
+        launch(Dispatchers.IO) {
             url = getRedirectUrl(this@DlnaActivity.url)
 
             DLNACastManager.getInstance().registerDeviceListener(deviceRegistryListener)

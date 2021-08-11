@@ -8,8 +8,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.input.input
-import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.config.Const
@@ -25,7 +23,6 @@ import com.skyd.imomoe.util.update.AppUpdateStatus
 import com.skyd.imomoe.viewmodel.SettingViewModel
 import com.skyd.skin.SkinManager
 import kotlinx.coroutines.*
-import java.net.URL
 
 
 class SettingActivity : BaseActivity<ActivitySettingBinding>() {
@@ -70,7 +67,7 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
         })
         viewModel.mldClearAllCache.observe(this, Observer {
             if (it == null) return@Observer
-            GlobalScope.launch(Dispatchers.IO) {
+            launch(Dispatchers.IO) {
                 delay(1000)
                 viewModel.getCacheSize()
                 if (it) getString(R.string.clear_cache_succeed).showToastOnThread()

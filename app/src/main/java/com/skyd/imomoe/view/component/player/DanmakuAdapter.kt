@@ -16,7 +16,7 @@ import java.io.IOException
 import java.io.InputStream
 import java.net.URL
 
-class DanamakuAdapter(private val mDanmakuView: IDanmakuView?) : BaseCacheStuffer.Proxy() {
+class DanmakuAdapter(private val mDanmakuView: IDanmakuView?) : BaseCacheStuffer.Proxy() {
     private var mDrawable: Drawable? = null
     override fun prepareDrawing(danmaku: BaseDanmaku, fromWorkerThread: Boolean) {
         if (danmaku.text is Spanned) { // 根据你的条件检查是否需要需要更新弹幕

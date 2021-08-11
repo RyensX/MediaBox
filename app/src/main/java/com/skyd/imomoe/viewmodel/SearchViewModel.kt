@@ -2,6 +2,7 @@ package com.skyd.imomoe.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeCoverBean
@@ -11,22 +12,15 @@ import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.SearchModel
 import com.skyd.imomoe.model.interfaces.ISearchModel
-import com.skyd.imomoe.model.util.Pair
 import com.skyd.imomoe.util.Util.showToastOnThread
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.lang.Exception
-import kotlin.collections.ArrayList
 
 
 class SearchViewModel : ViewModel() {
     private val searchModel: ISearchModel by lazy {
         DataSourceManager.create(ISearchModel::class.java) ?: SearchModel()
     }
-    val beanList: MutableList<String> = ArrayList()
-    private val _beanList: MutableLiveData<MutableList<String>> =
-        MutableLiveData(mutableListOf("a", "b"))
 
     var searchResultList: MutableList<AnimeCoverBean> = ArrayList()
     var mldSearchResultList: MutableLiveData<Int> = MutableLiveData()   // value：-1错误；0重新获取；1刷新
@@ -40,27 +34,10 @@ class SearchViewModel : ViewModel() {
     var pageNumberBean: PageNumberBean? = null
 
     fun getSearchData(keyWord: String, isRefresh: Boolean = true, partUrl: String = "") {
-        GlobalScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 if (isRefresh) searchResultList.clear()
-                searchModel.getSearchData(keyWord, partUrl, object :
-                    ISearchModel.SearchDataCallBack {
-                    override fun onSuccess(p: Pair<java.util.ArrayList<AnimeCoverBean>, PageNumberBean>) {
-                        searchResultList.addAll(p.first)
-                        pageNumberBean = p.second
-                        this@SearchViewModel.keyWord = keyWord
-                        mldSearchResultList.postValue(if (isRefresh) 0 else 1)
-                    }
-
-                    override fun onError(e: Exception) {
-                        mldFailed.postValue(true)
-                        e.printStackTrace()
-                        ("${App.context.getString(R.string.get_data_failed)}\n${e.message}").showToastOnThread()
-                    }
-
-                }
-                ).apply {
-                    this ?: return@launch
+                searchModel.getSearchData(keyWord, partUrl).apply {
                     searchResultList.addAll(first)
                     pageNumberBean = second
                     this@SearchViewModel.keyWord = keyWord
@@ -75,7 +52,7 @@ class SearchViewModel : ViewModel() {
     }
 
     fun getSearchHistoryData() {
-        GlobalScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 searchHistoryList.clear()
                 searchHistoryList.addAll(getAppDataBase().searchHistoryDao().getSearchHistoryList())
@@ -89,7 +66,7 @@ class SearchViewModel : ViewModel() {
     }
 
     fun insertSearchHistory(searchHistoryBean: SearchHistoryBean) {
-        GlobalScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 if (searchHistoryList.isEmpty()) searchHistoryList.addAll(
                     getAppDataBase().searchHistoryDao().getSearchHistoryList()
@@ -113,7 +90,7 @@ class SearchViewModel : ViewModel() {
     }
 
     fun updateSearchHistory(searchHistoryBean: SearchHistoryBean, itemPosition: Int) {
-        GlobalScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 searchHistoryList[itemPosition] = searchHistoryBean
                 getAppDataBase().searchHistoryDao().updateSearchHistory(searchHistoryBean)
@@ -126,7 +103,7 @@ class SearchViewModel : ViewModel() {
     }
 
     fun deleteSearchHistory(itemPosition: Int) {
-        GlobalScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val searchHistoryBean = searchHistoryList.removeAt(itemPosition)
                 getAppDataBase().searchHistoryDao().deleteSearchHistory(searchHistoryBean.timeStamp)

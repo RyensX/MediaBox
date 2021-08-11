@@ -1,7 +1,7 @@
-include ':skin_sweat_soybean'
-include ':skin_lemon'
+include ':app'
+include ':skin'
 include ':skin_dark'
 include ':skin_blue'
-include ':skin'
-include ':app'
+include ':skin_lemon'
+include ':skin_sweat_soybean'
 rootProject.name = "樱花动漫"

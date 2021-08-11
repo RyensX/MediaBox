@@ -34,7 +34,6 @@ import com.skyd.imomoe.view.adapter.spansize.AnimeDetailSpanSize
 import com.skyd.imomoe.view.fragment.ShareDialogFragment
 import com.skyd.imomoe.viewmodel.AnimeDetailViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -72,7 +71,7 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
                     .show(supportFragmentManager, "share_dialog")
             }
             // 收藏
-            GlobalScope.launch(Dispatchers.IO) {
+            launch(Dispatchers.IO) {
                 val favoriteAnime = getAppDataBase().favoriteAnimeDao().getFavoriteAnime(partUrl)
                 isFavorite = if (favoriteAnime == null) {
                     ivToolbar1Button2.setImageResource(R.drawable.ic_star_border_white_24)
@@ -87,7 +86,7 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
             }
             ivToolbar1Button2.isEnabled = false
             ivToolbar1Button2.setOnClickListener {
-                GlobalScope.launch(Dispatchers.IO) {
+                launch(Dispatchers.IO) {
                     if (isFavorite) {
                         getAppDataBase().favoriteAnimeDao().deleteFavoriteAnime(partUrl)
                         withContext(Dispatchers.Main) {

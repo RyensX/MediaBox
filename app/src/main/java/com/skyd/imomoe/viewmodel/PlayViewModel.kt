@@ -3,6 +3,7 @@ package com.skyd.imomoe.viewmodel
 import android.app.Activity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.*
@@ -11,13 +12,9 @@ import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.PlayModel
 import com.skyd.imomoe.model.interfaces.IPlayModel
-import com.skyd.imomoe.model.util.Triple
 import com.skyd.imomoe.util.Util.showToastOnThread
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.lang.RuntimeException
-import java.util.*
 
 
 class PlayViewModel : ViewModel() {
@@ -46,34 +43,14 @@ class PlayViewModel : ViewModel() {
     }
 
     fun refreshAnimeEpisodeData(partUrl: String, currentEpisodeIndex: Int, title: String = "") {
-        GlobalScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 this@PlayViewModel.partUrl = partUrl
-                playModel.refreshAnimeEpisodeData(partUrl, animeEpisodeDataBean,
-                    object :
-                        IPlayModel.AnimeEpisodeDataCallBack {
-                        override fun onSuccess(b: Boolean) {
-                            if (b) {
-                                animeEpisodeDataBean.title = title
-                                mldAnimeEpisodeDataRefreshed.postValue(true)
-                            } else {
-                                throw RuntimeException("html play class not found")
-                            }
-                        }
-
-                        override fun onError(e: Exception) {
-                            e.printStackTrace()
-                            animeEpisodeDataBean.actionUrl = "animeEpisode1"
-                            animeEpisodeDataBean.title = ""
-                            animeEpisodeDataBean.videoUrl = ""
-                            mldAnimeEpisodeDataRefreshed.postValue(false)
-                            (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread()
-                        }
-                    }).apply {
-                    if (this == true) {
+                playModel.refreshAnimeEpisodeData(partUrl, animeEpisodeDataBean).apply {
+                    if (this) {
                         animeEpisodeDataBean.title = title
                         mldAnimeEpisodeDataRefreshed.postValue(true)
-                    } else if (this == false) {
+                    } else {
                         throw RuntimeException("html play class not found")
                     }
                 }
@@ -90,29 +67,14 @@ class PlayViewModel : ViewModel() {
     }
 
     fun getAnimeEpisodeUrlData(partUrl: String, position: Int) {
-        GlobalScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
 //                this@PlayViewModel.partUrl = partUrl
-                playModel.getAnimeEpisodeUrlData(partUrl,
-                    object :
-                        IPlayModel.AnimeEpisodeUrlDataCallBack {
-                        override fun onSuccess(url: String) {
-                            episodesList[position].videoUrl = url
-                            mldEpisodesList.postValue(true)
-                            mldGetAnimeEpisodeData.postValue(position)
-                        }
-
-                        override fun onError(e: Exception) {
-                            throw e
-                        }
-
-                    }).apply {
-//                    this ?: throw RuntimeException("getAnimeEpisodeUrlData return null")
-                    if (this != null) {
-                        episodesList[position].videoUrl = this
-                        mldEpisodesList.postValue(true)
-                        mldGetAnimeEpisodeData.postValue(position)
-                    }
+                playModel.getAnimeEpisodeUrlData(partUrl).apply {
+                    this ?: throw RuntimeException("getAnimeEpisodeUrlData return null")
+                    episodesList[position].videoUrl = this
+                    mldEpisodesList.postValue(true)
+                    mldGetAnimeEpisodeData.postValue(position)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -122,30 +84,10 @@ class PlayViewModel : ViewModel() {
     }
 
     fun getPlayData(partUrl: String) {
-        GlobalScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 this@PlayViewModel.partUrl = partUrl
-                playModel.getPlayData(partUrl, animeEpisodeDataBean,
-                    object :
-                        IPlayModel.PlayDataCallBack {
-                        override fun onSuccess(t: Triple<ArrayList<IAnimeDetailBean>, ArrayList<AnimeEpisodeDataBean>, PlayBean>) {
-                            t.apply {
-                                playBeanDataList.clear()
-                                episodesList.clear()
-                                playBeanDataList.addAll(first)
-                                episodesList.addAll(second)
-                                playBean = third
-                                mldPlayBean.postValue(playBean)
-                                mldEpisodesList.postValue(true)
-                            }
-                        }
-
-                        override fun onError(e: Exception) {
-                            throw e
-                        }
-                    }
-                ).apply {
-                    if (this == null) return@apply
+                playModel.getPlayData(partUrl, animeEpisodeDataBean).apply {
                     playBeanDataList.clear()
                     episodesList.clear()
                     playBeanDataList.addAll(first)
@@ -168,7 +110,7 @@ class PlayViewModel : ViewModel() {
         lastEpisode: String,
         time: Long
     ) {
-        GlobalScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val favoriteAnimeDao = getAppDataBase().favoriteAnimeDao()
                 val favoriteAnimeBean = favoriteAnimeDao.getFavoriteAnime(detailPartUrl)
@@ -186,29 +128,10 @@ class PlayViewModel : ViewModel() {
 
     // 插入观看历史记录
     fun insertHistoryData(detailPartUrl: String) {
-        GlobalScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 if (animeCover.url.isBlank()) {
-                    playModel.getAnimeCoverImageBean(detailPartUrl, object :
-                        IPlayModel.AnimeCoverImageBeanCallBack {
-                        override fun onSuccess(imageBean: ImageBean) {
-                            getAppDataBase().historyDao().insertHistory(
-                                HistoryBean(
-                                    ViewHolderTypeString.ANIME_COVER_9, "", detailPartUrl,
-                                    playBean?.title?.title ?: "",
-                                    System.currentTimeMillis(),
-                                    imageBean,
-                                    partUrl,
-                                    animeEpisodeDataBean.title
-                                )
-                            )
-                        }
-
-                        override fun onError(e: java.lang.Exception) {
-                            e.printStackTrace()
-                        }
-
-                    }).apply {
+                    playModel.getAnimeCoverImageBean(detailPartUrl).apply {
                         this ?: return@apply
                         getAppDataBase().historyDao().insertHistory(
                             HistoryBean(
@@ -240,23 +163,9 @@ class PlayViewModel : ViewModel() {
     }
 
     fun getAnimeCoverImageBean(detailPartUrl: String) {
-        GlobalScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
-                playModel.getAnimeCoverImageBean(detailPartUrl, object :
-                    IPlayModel.AnimeCoverImageBeanCallBack {
-                    override fun onSuccess(imageBean: ImageBean) {
-                        animeCover.url = imageBean.url
-                        animeCover.referer = imageBean.referer
-                        mldAnimeCover.postValue(true)
-                    }
-
-                    override fun onError(e: java.lang.Exception) {
-                        mldAnimeCover.postValue(false)
-                        e.printStackTrace()
-                        ("${App.context.getString(R.string.get_data_failed)}\n${e.message}").showToastOnThread()
-                    }
-
-                }).apply {
+                playModel.getAnimeCoverImageBean(detailPartUrl).apply {
                     this ?: return@apply
                     animeCover.url = url
                     animeCover.referer = referer

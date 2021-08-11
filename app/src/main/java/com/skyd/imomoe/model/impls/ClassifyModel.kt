@@ -11,16 +11,11 @@ import com.skyd.imomoe.config.UnknownActionUrl
 import com.skyd.imomoe.model.util.JsoupUtil
 import com.skyd.imomoe.model.util.ParseHtmlUtil
 import com.skyd.imomoe.model.interfaces.IClassifyModel
-import com.skyd.imomoe.model.util.Pair
 import com.skyd.imomoe.view.activity.ClassifyActivity
 import org.jsoup.select.Elements
-import java.util.ArrayList
 
 class ClassifyModel : IClassifyModel {
-    override fun getClassifyData(
-        partUrl: String,
-        callBack: IClassifyModel.ClassifyDataCallBack
-    ): Pair<ArrayList<AnimeCoverBean>, PageNumberBean?>? {
+    override suspend fun getClassifyData(partUrl: String): Pair<ArrayList<AnimeCoverBean>, PageNumberBean?> {
         val classifyList: ArrayList<AnimeCoverBean> = ArrayList()
         var pageNumberBean: PageNumberBean? = null
         val url = Api.MAIN_URL + partUrl
@@ -57,7 +52,7 @@ class ClassifyModel : IClassifyModel {
     override fun clearActivity() {
     }
 
-    override fun getClassifyTabData(callback: IClassifyModel.ClassifyTabDataCallBack): ArrayList<ClassifyBean>? {
+    override suspend fun getClassifyTabData(): ArrayList<ClassifyBean> {
         val classifyTabList: ArrayList<ClassifyBean> = ArrayList()
         val document = JsoupUtil.getDocument(Api.MAIN_URL + "/a/")
         val areaElements: Elements = document.getElementsByClass("area")
@@ -88,6 +83,6 @@ class ClassifyModel : IClassifyModel {
         return classifyTabList
     }
 
-    override fun setActivity(activity: Activity?) {
+    override fun setActivity(activity: Activity) {
     }
 }

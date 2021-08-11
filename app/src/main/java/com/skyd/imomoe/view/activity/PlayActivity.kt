@@ -52,15 +52,12 @@ import com.skyd.imomoe.view.component.player.DetailPlayerActivity
 import com.skyd.imomoe.view.fragment.MoreDialogFragment
 import com.skyd.imomoe.view.fragment.ShareDialogFragment
 import com.skyd.imomoe.viewmodel.PlayViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
 import tv.danmaku.ijk.media.player.IjkMediaPlayer
 
 
-class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>() {
+class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>(), CoroutineScope by MainScope() {
     override var statusBarSkin: Boolean = false
     private lateinit var mBinding: ActivityPlayBinding
     private var isFavorite: Boolean = false
@@ -150,7 +147,7 @@ class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>() {
             srlPlayActivity.setColorSchemeResources(getSkinResourceId(R.color.main_color_skin))
         }
 
-        GlobalScope.launch(Dispatchers.IO) {
+        launch(Dispatchers.IO) {
             val favoriteAnime = getAppDataBase().favoriteAnimeDao().getFavoriteAnime(detailPartUrl)
             withContext(Dispatchers.Main) {
                 isFavorite = if (favoriteAnime == null) {
@@ -161,7 +158,7 @@ class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>() {
                     true
                 }
                 mBinding.ivPlayActivityFavorite.setOnClickListener {
-                    GlobalScope.launch(Dispatchers.IO) {
+                    launch(Dispatchers.IO) {
                         if (isFavorite) {
                             getAppDataBase().favoriteAnimeDao().deleteFavoriteAnime(detailPartUrl)
                             withContext(Dispatchers.Main) {

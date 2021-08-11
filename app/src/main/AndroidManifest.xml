@@ -90,6 +90,7 @@
             android:configChanges="uiMode" />
         <activity
             android:name=".view.activity.MainActivity"
+            android:exported="true"
             android:configChanges="uiMode">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -105,6 +106,7 @@
 
         <receiver
             android:name=".view.component.widget.everydayanime.EverydayAnimeWidgetProvider"
+            android:exported="true"
             android:label="@string/widget_everyday_anime">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -115,7 +117,8 @@
                 android:resource="@xml/widget_everyday_anime" />
         </receiver>
 
-        <service android:name=".util.dlna.dmc.DLNACastService" />
+        <service android:name=".util.dlna.dmc.DLNACastService"
+            android:exported="false" />
 
         <receiver
             android:name=".util.update.UpdateNotificationReceiver"
@@ -125,10 +128,12 @@
             android:name=".util.downloadanime.AnimeDownloadService"
             android:enabled="true" />
 
-        <receiver android:name=".util.downloadanime.AnimeDownloadNotificationReceiver" />
+        <receiver android:name=".util.downloadanime.AnimeDownloadNotificationReceiver"
+            android:exported="false" />
 
         <service
             android:name=".util.update.AppUpdateDownloadService"
+            android:exported="false"
             android:enabled="true" />
 
         <provider

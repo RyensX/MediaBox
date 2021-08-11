@@ -2,6 +2,7 @@ package com.skyd.imomoe.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.database.entity.AnimeDownloadEntity
@@ -15,10 +16,8 @@ import com.skyd.imomoe.util.downloadanime.AnimeDownloadHelper.Companion.deleteAn
 import com.skyd.imomoe.util.downloadanime.AnimeDownloadHelper.Companion.getAnimeFromXml
 import com.skyd.imomoe.util.downloadanime.AnimeDownloadHelper.Companion.save2Xml
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.File
-import kotlin.collections.ArrayList
 
 
 class AnimeDownloadViewModel : ViewModel() {
@@ -26,7 +25,7 @@ class AnimeDownloadViewModel : ViewModel() {
     var mldAnimeCoverList: MutableLiveData<Boolean> = MutableLiveData()
 
     fun getAnimeCover() {
-        GlobalScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             val files = arrayOf(File(Const.DownloadAnime.animeFilePath).listFiles(),
                 Const.DownloadAnime.run {
                     new = false
@@ -66,7 +65,7 @@ class AnimeDownloadViewModel : ViewModel() {
 
     fun getAnimeCoverEpisode(directoryName: String, path: Int = 0) {
         //不支持重命名文件
-        GlobalScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             val animeFilePath = if (path == 0) Const.DownloadAnime.animeFilePath
             else {
                 Const.DownloadAnime.new = false

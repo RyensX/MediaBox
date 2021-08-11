@@ -7,13 +7,12 @@ import com.skyd.imomoe.model.util.JsoupUtil
 import com.skyd.imomoe.model.util.ParseHtmlUtil
 import com.skyd.imomoe.model.interfaces.IRankModel
 import org.jsoup.select.Elements
-import java.util.*
 
 class RankModel : IRankModel {
     private var bgTimes = 0
     private var tabList: ArrayList<TabBean> = ArrayList()
 
-    override fun getRankTabData(callBack: IRankModel.RankTabDataCallBack): ArrayList<TabBean>? {
+    override suspend fun getRankTabData(): ArrayList<TabBean> {
         tabList.clear()
         getWeekRankData()
         getAllRankData()

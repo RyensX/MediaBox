@@ -2,16 +2,14 @@ package com.skyd.imomoe.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.FavoriteAnimeBean
 import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.util.Util.showToastOnThread
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.lang.Exception
-import kotlin.collections.ArrayList
 
 
 class FavoriteViewModel : ViewModel() {
@@ -19,7 +17,7 @@ class FavoriteViewModel : ViewModel() {
     var mldFavoriteList: MutableLiveData<Boolean> = MutableLiveData()
 
     fun getFavoriteData() {
-        GlobalScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 favoriteList.clear()
                 favoriteList.addAll(getAppDataBase().favoriteAnimeDao().getFavoriteAnimeList())

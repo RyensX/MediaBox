@@ -13,9 +13,12 @@ import com.skyd.imomoe.util.Util.setColorStatusBar
 import com.skyd.imomoe.util.eventbus.EventBusSubscriber
 import com.skyd.imomoe.util.gone
 import com.skyd.imomoe.util.visible
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
 import org.greenrobot.eventbus.EventBus
 
-abstract class BaseActivity<VB : ViewBinding> : SkinBaseActivity() {
+abstract class BaseActivity<VB : ViewBinding> : SkinBaseActivity(), CoroutineScope by MainScope() {
     protected lateinit var mBinding: VB
     private lateinit var loadFailedTipView: View
     private lateinit var tvImageTextTip1: TextView
@@ -42,6 +45,11 @@ abstract class BaseActivity<VB : ViewBinding> : SkinBaseActivity() {
         super.onStop()
         if (this is EventBusSubscriber && EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().unregister(this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        cancel()
     }
 
     protected open fun getLoadFailedTipView(): ViewStub? = null

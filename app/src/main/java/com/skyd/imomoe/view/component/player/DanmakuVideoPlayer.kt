@@ -58,8 +58,8 @@ import kotlin.math.abs
  * 注意：这只是一个例子，演示如何集合弹幕，需要完善如弹出输入弹幕等的，可以自行完善。
  * 注意：b站的弹幕so只有v5 v7 x86、没有64，所以记得配置上ndk过滤。
  */
-class DanmakuVideoPlayer : AnimeVideoPlayer {
-    private lateinit var mDanmuUrl: String
+open class DanmakuVideoPlayer : AnimeVideoPlayer {
+    private lateinit var mDanmakuUrl: String
     private var mParser: BaseDanmakuParser? = null //解析器对象
     private lateinit var danmakuView: IDanmakuView          //弹幕view
     private var danmakuContext: DanmakuContext? = null
@@ -69,17 +69,17 @@ class DanmakuVideoPlayer : AnimeVideoPlayer {
     private var needCorrectSeekPosition = false
 
     // 是否在显示弹幕
-    var mDanmaKuShow = true
+    var mDanmakuShow = true
 
     // 请求弹幕相关参数
     var mDanmuParamMap = HashMap<String, String>()
         private set
 
     // 弹幕输入文本框
-    private var mDanmuInputEditText: EditText? = null
+    private var mDanmakuInputEditText: EditText? = null
 
     // 弹幕开关
-    private var mShowDanmuImageView: ImageView? = null
+    private var mShowDanmakuImageView: ImageView? = null
 
     private var mDanmuController: ViewGroup? = null
 
@@ -92,15 +92,15 @@ class DanmakuVideoPlayer : AnimeVideoPlayer {
     override fun init(context: Context?) {
         super.init(context)
         danmakuView = findViewById(R.id.danmaku_view)
-        mShowDanmuImageView = findViewById(R.id.iv_show_danmu)
-        mDanmuInputEditText = findViewById(R.id.et_input_danmu)
+        mShowDanmakuImageView = findViewById(R.id.iv_show_danmu)
+        mDanmakuInputEditText = findViewById(R.id.et_input_danmu)
         mDanmuController = findViewById(R.id.cl_danmu_controller)
-        mDanmuInputEditText?.gone()
-        mShowDanmuImageView?.gone()
+        mDanmakuInputEditText?.gone()
+        mShowDanmakuImageView?.gone()
         // 设置高度是0
         hideBottomDanmuController()
 
-        mDanmuInputEditText?.setOnEditorActionListener(object : TextView.OnEditorActionListener {
+        mDanmakuInputEditText?.setOnEditorActionListener(object : TextView.OnEditorActionListener {
             override fun onEditorAction(v: TextView, actionId: Int, event: KeyEvent?): Boolean {
                 if (actionId == EditorInfo.IME_ACTION_SEND) {
                     val text = v.text.toString()
@@ -108,7 +108,7 @@ class DanmakuVideoPlayer : AnimeVideoPlayer {
                         mContext.resources.getString(R.string.please_input_danmu_text).showToast()
                         return false
                     }
-                    mDanmuInputEditText?.setText("")
+                    mDanmakuInputEditText?.setText("")
                     SendDanmuBean(
                         "DIYgod", "rgb(255, 255, 255)",
                         mDanmuParamMap[VIDEO_ID] ?: "",
@@ -125,7 +125,7 @@ class DanmakuVideoPlayer : AnimeVideoPlayer {
             }
         })
 
-        mDanmuInputEditText?.setOnFocusChangeListener { v, hasFocus ->
+        mDanmakuInputEditText?.setOnFocusChangeListener { v, hasFocus ->
             if (mIfCurrentIsFullscreen) {
                 if (hasFocus) cancelDismissControlViewTimer()
                 else {
@@ -137,12 +137,12 @@ class DanmakuVideoPlayer : AnimeVideoPlayer {
             }
         }
 
-        mDanmuUrl = ""
+        mDanmakuUrl = ""
         initDanmaku()
 
-        mShowDanmuImageView?.setOnClickListener {
+        mShowDanmakuImageView?.setOnClickListener {
             startDismissControlViewTimer()
-            mDanmaKuShow = !mDanmaKuShow
+            mDanmakuShow = !mDanmakuShow
             resolveDanmakuShow()
         }
     }
@@ -191,7 +191,7 @@ class DanmakuVideoPlayer : AnimeVideoPlayer {
     }
 
     override fun cloneParams(from: GSYBaseVideoPlayer, to: GSYBaseVideoPlayer) {
-        (to as DanmakuVideoPlayer).mDanmuUrl = (from as DanmakuVideoPlayer).mDanmuUrl
+        (to as DanmakuVideoPlayer).mDanmakuUrl = (from as DanmakuVideoPlayer).mDanmakuUrl
         super.cloneParams(from, to)
     }
 
@@ -211,9 +211,9 @@ class DanmakuVideoPlayer : AnimeVideoPlayer {
         player.mDanmuParamMap.putAll(mDanmuParamMap)
         // 对弹幕设置偏移记录
         player.danmakuStartSeekPosition = currentPositionWhenPlaying.toLong()
-        player.mDanmaKuShow = mDanmaKuShow
-        player.mShowDanmuImageView?.visibility = mShowDanmuImageView?.visibility ?: View.GONE
-        player.mDanmuInputEditText?.visibility = mDanmuInputEditText?.visibility ?: View.GONE
+        player.mDanmakuShow = mDanmakuShow
+        player.mShowDanmakuImageView?.visibility = mShowDanmakuImageView?.visibility ?: View.GONE
+        player.mDanmakuInputEditText?.visibility = mDanmakuInputEditText?.visibility ?: View.GONE
         onPrepareDanmaku(player)
         return player
     }
@@ -233,10 +233,10 @@ class DanmakuVideoPlayer : AnimeVideoPlayer {
             // 设置弹幕信息Map
             mDanmuParamMap.clear()
             mDanmuParamMap.putAll(player.mDanmuParamMap)
-            mDanmaKuShow = player.mDanmaKuShow
-            mShowDanmuImageView?.visibility = player.mShowDanmuImageView?.visibility ?: View.GONE
-            mDanmuInputEditText?.visibility = player.mDanmuInputEditText?.visibility ?: View.GONE
-            if (player.mDanmuInputEditText?.visibility == View.VISIBLE) showBottomDanmuController()
+            mDanmakuShow = player.mDanmakuShow
+            mShowDanmakuImageView?.visibility = player.mShowDanmakuImageView?.visibility ?: View.GONE
+            mDanmakuInputEditText?.visibility = player.mDanmakuInputEditText?.visibility ?: View.GONE
+            if (player.mDanmakuInputEditText?.visibility == View.VISIBLE) showBottomDanmakuController()
             else hideBottomDanmuController()
 
             if (player.danmakuView.isPrepared) {
@@ -264,7 +264,7 @@ class DanmakuVideoPlayer : AnimeVideoPlayer {
             mDanmuParamMap.clear()
             mDanmuParamMap.putAll(paramMap)
         }
-        mDanmuUrl = url
+        mDanmakuUrl = url
         if (!danmakuView.isPrepared) {
             onPrepareDanmaku(currentPlayer as DanmakuVideoPlayer)
         }
@@ -273,16 +273,16 @@ class DanmakuVideoPlayer : AnimeVideoPlayer {
     private fun initDanmaku() {
         // 设置最大显示行数
         val maxLinesPair = HashMap<Int, Int>()
-        maxLinesPair[BaseDanmaku.TYPE_SCROLL_RL] = 5 // 滚动弹幕最大显示5行
+        maxLinesPair[BaseDanmaku.TYPE_SCROLL_RL] = 6 // 滚动弹幕最大显示6行
         // 设置是否禁止重叠
         val overlappingEnablePair = HashMap<Int, Boolean>()
         overlappingEnablePair[BaseDanmaku.TYPE_SCROLL_RL] = true
         overlappingEnablePair[BaseDanmaku.TYPE_FIX_TOP] = true
-        val danamakuAdapter = DanamakuAdapter(danmakuView)
+        val danmakuAdapter = DanmakuAdapter(danmakuView)
         danmakuContext = DanmakuContext.create()
         danmakuContext?.setDanmakuStyle(IDisplayer.DANMAKU_STYLE_STROKEN, 3f)
             ?.setDuplicateMergingEnabled(false)?.setScrollSpeedFactor(1.2f)?.setScaleTextSize(1.2f)
-            ?.setCacheStuffer(SpannedCacheStuffer(), danamakuAdapter) // 图文混排使用SpannedCacheStuffer
+            ?.setCacheStuffer(SpannedCacheStuffer(), danmakuAdapter) // 图文混排使用SpannedCacheStuffer
             ?.setMaximumLines(maxLinesPair)
             ?.preventOverlapping(overlappingEnablePair)
         //todo 这是为了demo效果，实际上需要去掉这个，外部传输文件进来
@@ -314,12 +314,12 @@ class DanmakuVideoPlayer : AnimeVideoPlayer {
      */
     private fun resolveDanmakuShow() {
         post {
-            if (mDanmaKuShow) {
+            if (mDanmakuShow) {
                 if (!danmakuView.isShown) danmakuView.show()
-                mShowDanmuImageView?.isSelected = true
+                mShowDanmakuImageView?.isSelected = true
             } else {
                 if (danmakuView.isShown) danmakuView.hide()
-                mShowDanmuImageView?.isSelected = false
+                mShowDanmakuImageView?.isSelected = false
             }
         }
     }
@@ -328,13 +328,13 @@ class DanmakuVideoPlayer : AnimeVideoPlayer {
      * 开始播放弹幕
      */
     private fun onPrepareDanmaku(gsyVideoPlayer: DanmakuVideoPlayer) {
-        if (mDanmuUrl.isBlank()) return
-        mDanmuInputEditText?.visible()
-        mShowDanmuImageView?.visible()
-        showBottomDanmuController()
+        if (mDanmakuUrl.isBlank()) return
+        mDanmakuInputEditText?.visible()
+        mShowDanmakuImageView?.visible()
+        showBottomDanmakuController()
         // 使用的弹幕url进行显示，要网络请求，因此在io线程执行（与danmakuView.prepare需要顺序执行）
         GlobalScope.launch(Dispatchers.IO) {
-            gsyVideoPlayer.mParser = createParser(gsyVideoPlayer.mDanmuUrl)
+            gsyVideoPlayer.mParser = createParser(gsyVideoPlayer.mDanmakuUrl)
             gsyVideoPlayer.danmakuView.let { danmakuView ->
                 if (!danmakuView.isPrepared && gsyVideoPlayer.mParser != null) {
                     danmakuView.prepare(gsyVideoPlayer.mParser, gsyVideoPlayer.danmakuContext)
@@ -395,7 +395,7 @@ class DanmakuVideoPlayer : AnimeVideoPlayer {
     /**
      * 显示非全屏模式下播放器下方弹幕控制部分
      */
-    private fun showBottomDanmuController() {
+    private fun showBottomDanmakuController() {
         mDanmuController?.let { danmuController ->
             if (danmuController.layoutParams.height == 0) {
                 danmuController.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT

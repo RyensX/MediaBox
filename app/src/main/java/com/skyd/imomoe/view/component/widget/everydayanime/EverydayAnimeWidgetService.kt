@@ -89,6 +89,6 @@ internal class EverydayAnimeRemoteViewsFactory(
     }
 
     private fun getEverydayAnimeData(): MutableList<List<AnimeCoverBean>> {
-        return model.everydayAnimeData
+        return model.getEverydayAnimeData()
     }
 }

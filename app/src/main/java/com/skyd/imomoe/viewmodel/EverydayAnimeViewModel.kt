@@ -3,6 +3,7 @@ package com.skyd.imomoe.viewmodel
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeCoverBean
@@ -11,13 +12,10 @@ import com.skyd.imomoe.bean.TabBean
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.EverydayAnimeModel
 import com.skyd.imomoe.model.interfaces.IEverydayAnimeModel
-import com.skyd.imomoe.model.util.Triple
 import com.skyd.imomoe.util.Util.getRealDayOfWeek
 import com.skyd.imomoe.util.Util.showToastOnThread
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.lang.Exception
 import java.util.*
 
 
@@ -37,37 +35,9 @@ class EverydayAnimeViewModel : ViewModel() {
     var mldEverydayAnimeList: MutableLiveData<Boolean> = MutableLiveData()
 
     fun getEverydayAnimeData() {
-        GlobalScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
-                everydayAnimeModel.getEverydayAnimeData(object :
-                    IEverydayAnimeModel.EverydayAnimeCallBack {
-                    override fun onSuccess(t: Triple<ArrayList<TabBean>, ArrayList<MutableList<AnimeCoverBean>>, AnimeShowBean>) {
-                        selectedTabIndex = getRealDayOfWeek(
-                            Calendar.getInstance(Locale.getDefault())
-                                .get(Calendar.DAY_OF_WEEK)
-                        ) - 1
-                        header = t.third
-                        tabList.clear()
-                        tabList.addAll(t.first)
-                        mldTabList.postValue(tabList)
-                        everydayAnimeList.clear()
-                        everydayAnimeList.addAll(t.second)
-                        mldEverydayAnimeList.postValue(true)
-                        mldHeader.postValue(header)
-                    }
-
-                    override fun onError(e: Exception) {
-                        selectedTabIndex = -1
-                        tabList.clear()
-                        everydayAnimeList.clear()
-                        mldEverydayAnimeList.postValue(false)
-                        e.printStackTrace()
-                        "${App.context.getString(R.string.get_data_failed)}\n${e.message}"
-                            .showToastOnThread(Toast.LENGTH_LONG)
-                    }
-
-                }).apply {
-                    this ?: return@apply
+                everydayAnimeModel.getEverydayAnimeData().apply {
                     selectedTabIndex = getRealDayOfWeek(
                         Calendar.getInstance(Locale.getDefault())
                             .get(Calendar.DAY_OF_WEEK)

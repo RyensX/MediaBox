@@ -12,7 +12,6 @@ import com.skyd.imomoe.util.MD5.getMD5
 import com.skyd.imomoe.util.Util.setFullScreen
 import com.skyd.imomoe.util.gone
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import tv.danmaku.ijk.media.player.IjkMediaPlayer
 import java.io.File
@@ -42,7 +41,7 @@ class SimplePlayActivity : BaseActivity<ActivitySimplePlayBinding>() {
                 statusBar = true
             )
 
-            GlobalScope.launch(Dispatchers.IO) {
+            launch(Dispatchers.IO) {
                 val title = getAppDataBase().animeDownloadDao()
                     .getAnimeDownloadTitleByMd5(getMD5(File(url.replaceFirst("file://", ""))) ?: "")
                     ?: this@SimplePlayActivity.title

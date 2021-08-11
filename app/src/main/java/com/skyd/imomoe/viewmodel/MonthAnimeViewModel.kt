@@ -2,6 +2,7 @@ package com.skyd.imomoe.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeCoverBean
@@ -11,10 +12,7 @@ import com.skyd.imomoe.model.impls.MonthAnimeModel
 import com.skyd.imomoe.model.interfaces.IMonthAnimeModel
 import com.skyd.imomoe.util.Util.showToastOnThread
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.lang.Exception
-import java.util.*
 
 
 class MonthAnimeViewModel : ViewModel() {
@@ -27,28 +25,9 @@ class MonthAnimeViewModel : ViewModel() {
     var newPageIndex: Pair<Int, Int>? = null
 
     fun getMonthAnimeData(partUrl: String, isRefresh: Boolean = true) {
-        GlobalScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
-                monthAnimeModel.getMonthAnimeData(partUrl, object :
-                    IMonthAnimeModel.AllTabDataCallBack {
-                    override fun onSuccess(p: com.skyd.imomoe.model.util.Pair<ArrayList<AnimeCoverBean>, PageNumberBean>) {
-                        if (isRefresh) monthAnimeList.clear()
-                        val positionStart = monthAnimeList.size
-                        monthAnimeList.addAll(p.first)
-                        pageNumberBean = p.second
-                        newPageIndex = Pair(positionStart, monthAnimeList.size - positionStart)
-                        mldMonthAnimeList.postValue(true)
-                    }
-
-                    override fun onError(e: Exception) {
-                        monthAnimeList.clear()
-                        mldMonthAnimeList.postValue(false)
-                        e.printStackTrace()
-                        (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread()
-                    }
-
-                }).apply {
-                    this ?: return@apply
+                monthAnimeModel.getMonthAnimeData(partUrl).apply {
                     if (isRefresh) monthAnimeList.clear()
                     val positionStart = monthAnimeList.size
                     monthAnimeList.addAll(first)

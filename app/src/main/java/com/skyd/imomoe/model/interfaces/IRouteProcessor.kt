@@ -1,16 +1,13 @@
-package com.skyd.imomoe.model.interfaces;
+package com.skyd.imomoe.model.interfaces
 
-import android.app.Activity;
-import android.content.Context;
-
-import androidx.fragment.app.Fragment;
+import android.app.Activity
+import android.content.Context
+import androidx.fragment.app.Fragment
 
 /**
  * 界面跳转处理接口
  */
-public interface IRouteProcessor {
-    String implName = "RouteProcessor";
-
+interface IRouteProcessor {
     /**
      * 处理根据actionUrl跳转
      *
@@ -18,7 +15,7 @@ public interface IRouteProcessor {
      * @param actionUrl 跳转路径
      * @return 成功处理了跳转，则返回true，没处理则返回false
      */
-    boolean process(Context context, String actionUrl);
+    fun process(context: Context, actionUrl: String): Boolean
 
     /**
      * 处理根据actionUrl跳转
@@ -27,7 +24,7 @@ public interface IRouteProcessor {
      * @param actionUrl 跳转路径
      * @return 成功处理了跳转，则返回true，没处理则返回false
      */
-    boolean process(Activity activity, String actionUrl);
+    fun process(activity: Activity, actionUrl: String): Boolean
 
     /**
      * 处理根据actionUrl跳转
@@ -36,9 +33,12 @@ public interface IRouteProcessor {
      * @param actionUrl 跳转路径
      * @return 成功处理了跳转，则返回true，没处理则返回false
      */
-    default boolean process(Fragment fragment, String actionUrl) {
-        Activity activity = fragment.getActivity();
-        if (activity != null) return process(activity, actionUrl);
-        else return false;
+    fun process(fragment: Fragment, actionUrl: String): Boolean {
+        val activity: Activity? = fragment.activity
+        return activity?.let { process(it, actionUrl) } ?: false
+    }
+
+    companion object {
+        const val implName = "RouteProcessor"
     }
 }

@@ -7,6 +7,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.widget.RemoteViews
 import android.widget.Toast
 import com.google.gson.Gson
@@ -91,7 +92,8 @@ class EverydayAnimeWidgetProvider : AppWidgetProvider() {
                     R.id.iv_widget_everyday_anime_refresh,
                     PendingIntent.getBroadcast(
                         context, 0, this,
-                        PendingIntent.FLAG_UPDATE_CURRENT
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) PendingIntent.FLAG_CANCEL_CURRENT
+                        else PendingIntent.FLAG_IMMUTABLE
                     )
                 )
             }
@@ -105,7 +107,8 @@ class EverydayAnimeWidgetProvider : AppWidgetProvider() {
             intent.data = Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME))
             val toastPendingIntent = PendingIntent.getBroadcast(
                 context, 0, viewClickIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) PendingIntent.FLAG_CANCEL_CURRENT
+                else PendingIntent.FLAG_MUTABLE
             )
             rv.setPendingIntentTemplate(R.id.lv_widget_everyday_anime, toastPendingIntent)
             appWidgetManager.updateAppWidget(appWidgetIds[i], rv)
@@ -118,6 +121,7 @@ class EverydayAnimeWidgetProvider : AppWidgetProvider() {
     }
 
     private fun startPlayActivity(context: Context, actionUrl: String?) {
+        actionUrl ?: return
         (DataSourceManager.getRouterProcessor() ?: RouteProcessor()).process(context, actionUrl)
     }
 

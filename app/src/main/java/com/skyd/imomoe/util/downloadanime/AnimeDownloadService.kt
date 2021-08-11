@@ -138,31 +138,28 @@ class AnimeDownloadService : Service() {
         clickIntent.setClass(this, MainActivity::class.java)
         clickIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         clickIntent.putExtra(UPDATE_NOTIFICATION_ID, notificationId)
-        downloadServiceHashMap[key]?.builder?.let {
-            it.setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("正在下载$folderAndFileName")
-                .setContentText("0%")
-                .setProgress(100, 0, false)
-                .setDeleteIntent(
-                    PendingIntent.getBroadcast(
-                        this,
-                        //requestCode需要不一样才能接收每次的消息
-                        notificationId,
-                        stopIntent,
-                        PendingIntent.FLAG_CANCEL_CURRENT
-                    )
+        downloadServiceHashMap[key]?.builder?.setSmallIcon(R.mipmap.ic_launcher)
+            ?.setContentTitle("正在下载$folderAndFileName")
+            ?.setContentText("0%")
+            ?.setProgress(100, 0, false)
+            ?.setDeleteIntent(
+                PendingIntent.getBroadcast(
+                    this,
+                    //requestCode需要不一样才能接收每次的消息
+                    notificationId,
+                    stopIntent,
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) PendingIntent.FLAG_CANCEL_CURRENT
+                    else PendingIntent.FLAG_IMMUTABLE
                 )
-                .setContentIntent(
-                    PendingIntent.getActivity(
-                        this,
-                        0,
-                        clickIntent,
-                        PendingIntent.FLAG_CANCEL_CURRENT
-                    )
+            )?.setContentIntent(
+                PendingIntent.getActivity(
+                    this,
+                    0,
+                    clickIntent,
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) PendingIntent.FLAG_CANCEL_CURRENT
+                    else PendingIntent.FLAG_IMMUTABLE
                 )
-                .setAutoCancel(false)
-                .setTicker(folderAndFileName)
-        }
+            )?.setAutoCancel(false)?.setTicker(folderAndFileName)
         val notification = downloadServiceHashMap[key]?.builder?.build()
         notificationManager?.notify(notificationId, notification)
     }

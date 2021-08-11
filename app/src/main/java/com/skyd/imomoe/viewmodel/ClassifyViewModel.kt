@@ -3,6 +3,7 @@ package com.skyd.imomoe.viewmodel
 import android.app.Activity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeCoverBean
@@ -13,9 +14,7 @@ import com.skyd.imomoe.model.impls.ClassifyModel
 import com.skyd.imomoe.model.interfaces.IClassifyModel
 import com.skyd.imomoe.util.Util.showToastOnThread
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.util.*
 
 
 class ClassifyViewModel : ViewModel() {
@@ -39,26 +38,12 @@ class ClassifyViewModel : ViewModel() {
     }
 
     fun getClassifyTabData() {
-        GlobalScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
-                classifyModel.getClassifyTabData(object :
-                    IClassifyModel.ClassifyTabDataCallBack {
-                    override fun onSuccess(list: ArrayList<ClassifyBean>) {
-                        classifyTabList.clear()
-                        classifyTabList.addAll(list)
-                        mldClassifyTabList.postValue(true)
-                    }
-
-                    override fun onError(e: Exception) {
-                        throw e
-                    }
-
-                }).apply {
-                    if (this != null) {
-                        classifyTabList.clear()
-                        classifyTabList.addAll(this)
-                        mldClassifyTabList.postValue(true)
-                    }
+                classifyModel.getClassifyTabData().apply {
+                    classifyTabList.clear()
+                    classifyTabList.addAll(this)
+                    mldClassifyTabList.postValue(true)
                 }
             } catch (e: Exception) {
                 classifyTabList.clear()
@@ -70,31 +55,11 @@ class ClassifyViewModel : ViewModel() {
     }
 
     fun getClassifyData(partUrl: String, isRefresh: Boolean = true) {
-        GlobalScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 if (isRequesting) return@launch
                 isRequesting = true
-                classifyModel.getClassifyData(partUrl, object :
-                    IClassifyModel.ClassifyDataCallBack {
-                    override fun onSuccess(p: com.skyd.imomoe.model.util.Pair<ArrayList<AnimeCoverBean>, PageNumberBean>) {
-                        if (isRefresh) classifyList.clear()
-                        val positionStart = classifyList.size
-                        classifyList.addAll(p.first)
-                        pageNumberBean = p.second
-                        newPageIndex = Pair(positionStart, classifyList.size - positionStart)
-                        mldClassifyList.postValue(if (isRefresh) 0 else 1)
-                    }
-
-                    override fun onError(e: java.lang.Exception) {
-                        pageNumberBean = null
-                        classifyList.clear()
-                        mldClassifyList.postValue(-1)
-                        e.printStackTrace()
-                        (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread()
-                    }
-
-                }).apply {
-                    this ?: return@apply
+                classifyModel.getClassifyData(partUrl).apply {
                     if (isRefresh) classifyList.clear()
                     val positionStart = classifyList.size
                     classifyList.addAll(first)

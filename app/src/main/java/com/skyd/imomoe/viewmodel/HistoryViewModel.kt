@@ -2,16 +2,14 @@ package com.skyd.imomoe.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.HistoryBean
 import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.util.Util.showToastOnThread
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.lang.Exception
-import kotlin.collections.ArrayList
 
 
 class HistoryViewModel : ViewModel() {
@@ -21,7 +19,7 @@ class HistoryViewModel : ViewModel() {
     var mldDeleteAllHistory: MutableLiveData<Int> = MutableLiveData()
 
     fun getHistoryList() {
-        GlobalScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 historyList.clear()
                 historyList.addAll(getAppDataBase().historyDao().getHistoryList())
@@ -40,7 +38,7 @@ class HistoryViewModel : ViewModel() {
     }
 
     fun deleteHistory(historyBean: HistoryBean) {
-        GlobalScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 getAppDataBase().historyDao().deleteHistory(historyBean.animeUrl)
                 val index = historyList.indexOf(historyBean)
@@ -55,7 +53,7 @@ class HistoryViewModel : ViewModel() {
     }
 
     fun deleteAllHistory() {
-        GlobalScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 getAppDataBase().historyDao().deleteAllHistory()
                 val itemCount: Int = historyList.size

@@ -2,19 +2,16 @@ package com.skyd.imomoe.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.*
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.AnimeDetailModel
 import com.skyd.imomoe.model.interfaces.IAnimeDetailModel
-import com.skyd.imomoe.model.util.Triple
 import com.skyd.imomoe.util.Util.showToastOnThread
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.lang.Exception
-import kotlin.collections.ArrayList
 
 
 class AnimeDetailViewModel : ViewModel() {
@@ -28,27 +25,9 @@ class AnimeDetailViewModel : ViewModel() {
 
     //www.yhdm.io
     fun getAnimeDetailData(partUrl: String) {
-        GlobalScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
-                animeDetailModel.getAnimeDetailData(partUrl, object :
-                    IAnimeDetailModel.AnimeDetailDataCallBack {
-                    override fun onSuccess(t: Triple<ImageBean, String, java.util.ArrayList<IAnimeDetailBean>>) {
-                        cover = t.first
-                        title = t.second
-                        animeDetailList.clear()
-                        animeDetailList.addAll(t.third)
-                        mldAnimeDetailList.postValue(true)
-                    }
-
-                    override fun onError(e: Exception) {
-                        animeDetailList.clear()
-                        mldAnimeDetailList.postValue(false)
-                        e.printStackTrace()
-                        (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread()
-                    }
-
-                }).apply {
-                    this ?: return@apply
+                animeDetailModel.getAnimeDetailData(partUrl).apply {
                     cover = first
                     title = second
                     animeDetailList.clear()

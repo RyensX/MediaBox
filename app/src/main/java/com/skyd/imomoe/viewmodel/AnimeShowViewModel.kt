@@ -2,6 +2,7 @@ package com.skyd.imomoe.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.IAnimeShowBean
@@ -12,10 +13,7 @@ import com.skyd.imomoe.model.interfaces.IAnimeShowModel
 import com.skyd.imomoe.util.Util.showToastOnThread
 import com.skyd.imomoe.view.adapter.SerializableRecycledViewPool
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.lang.Exception
-import java.util.*
 
 
 class AnimeShowViewModel : ViewModel() {
@@ -33,33 +31,14 @@ class AnimeShowViewModel : ViewModel() {
 
     //http://www.yhdm.io版本
     fun getAnimeShowData(partUrl: String, isRefresh: Boolean = true) {
-        GlobalScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 if (isRequesting) return@launch
                 isRequesting = true
                 pageNumberBean = null
                 if (isRefresh) animeShowList.clear()
                 val positionStart = animeShowList.size
-                animeShowModel.getAnimeShowData(partUrl, object :
-                    IAnimeShowModel.AnimeShowDataCallBack {
-                    override fun onSuccess(p: com.skyd.imomoe.model.util.Pair<ArrayList<IAnimeShowBean>, PageNumberBean>) {
-                        animeShowList.addAll(p.first)
-                        pageNumberBean = p.second
-                        newPageIndex = Pair(positionStart, animeShowList.size - positionStart)
-                        mldGetAnimeShowList.postValue(if (isRefresh) 0 else 1)
-                        isRequesting = false
-                    }
-
-                    override fun onError(e: Exception) {
-                        animeShowList.clear()
-                        mldGetAnimeShowList.postValue(-1)
-                        isRequesting = false
-                        e.printStackTrace()
-                        (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread()
-                    }
-
-                }).apply {
-                    this ?: return@apply
+                animeShowModel.getAnimeShowData(partUrl).apply {
                     animeShowList.addAll(first)
                     pageNumberBean = second
                     newPageIndex = Pair(positionStart, animeShowList.size - positionStart)

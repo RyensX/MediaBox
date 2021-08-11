@@ -117,11 +117,16 @@ class AppUpdateDownloadService : Service() {
                     this,
                     0,
                     stopIntent,
-                    PendingIntent.FLAG_CANCEL_CURRENT
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) PendingIntent.FLAG_CANCEL_CURRENT
+                    else PendingIntent.FLAG_IMMUTABLE
                 )
             )
             .setContentIntent(
-                PendingIntent.getActivity(this, 0, clickIntent, PendingIntent.FLAG_CANCEL_CURRENT)
+                PendingIntent.getActivity(
+                    this, 0, clickIntent,
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) PendingIntent.FLAG_CANCEL_CURRENT
+                    else PendingIntent.FLAG_IMMUTABLE
+                )
             )
             .setAutoCancel(false)
             .setTicker("正在下载新版" + App.context.getString(R.string.app_name) + "...")

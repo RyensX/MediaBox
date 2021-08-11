@@ -5,13 +5,10 @@ import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.model.util.JsoupUtil
 import com.skyd.imomoe.model.util.ParseHtmlUtil
 import com.skyd.imomoe.model.interfaces.IEverydayAnimeModel
-import com.skyd.imomoe.model.util.Triple
 import org.jsoup.select.Elements
-import java.util.*
 
 class EverydayAnimeModel : IEverydayAnimeModel {
-    override fun getEverydayAnimeData(callBack: IEverydayAnimeModel.EverydayAnimeCallBack)
-            : Triple<ArrayList<TabBean>, ArrayList<List<AnimeCoverBean>>, AnimeShowBean?>? {
+    override suspend fun getEverydayAnimeData(): Triple<ArrayList<TabBean>, ArrayList<List<AnimeCoverBean>>, AnimeShowBean> {
         val tabList = ArrayList<TabBean>()
         val header = AnimeShowBean(
             "", "", "", "",

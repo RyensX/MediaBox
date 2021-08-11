@@ -1,8 +1,27 @@
-# 樱花动漫
+![readme_cover](image/readme_cover.png)
 
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/SkyD666/Imomoe) ![GitHub all releases](https://img.shields.io/github/downloads/SkyD666/Imomoe/total) ![](https://img.shields.io/badge/Android-5.0%2B-brightgreen) ![GitHub](https://img.shields.io/github/license/SkyD666/Imomoe) 
+<div align="center">
+    <h1>樱花动漫</h1>
+    <p>
+        <a href="https://img.shields.io/github/v/release/SkyD666/Imomoe" style="text-decoration:none">
+            <img src="https://img.shields.io/github/v/release/SkyD666/Imomoe" alt="GitHub release (latest by date)"/>
+        </a>
+        <a href="https://img.shields.io/github/downloads/SkyD666/Imomoe/total" style="text-decoration:none" >
+            <img src="https://img.shields.io/github/downloads/SkyD666/Imomoe/total" alt="GitHub all downloads"/>
+        </a>
+        <a href="https://img.shields.io/badge/Android-5.0%2B-brightgreen" style="text-decoration:none" >
+            <img src="https://img.shields.io/badge/Android-5.0%2B-brightgreen" alt="Android version"/>
+        </a>
+        <a href="https://img.shields.io/github/license/SkyD666/Imomoe" style="text-decoration:none" >
+            <img src="https://img.shields.io/github/license/SkyD666/Imomoe" alt="GitHub license"/>
+        </a>
+	</p>
+    <p>
+        樱花动漫第三方安卓Android客户端，免费开源，目的是学习Android开发。（仅支持Android 5及以上版本）
+    </p>
+</div>
 
-**樱花动漫**第三方安卓Android客户端，**免费开源**，旨在学习Android开发和为观看动漫提供方便。（仅支持Android 5及以上版本）
+----
 
 ## 特色功能
 
@@ -11,7 +30,7 @@
 3. 支持**分类查看**动漫
 4. 支持**双指缩放**、**移动**、**旋转**视频
 5. 支持视频**投屏**到电视
-6. 支持部分视频**显示**、**发送弹幕**（需要樱花动漫网站支持弹幕）
+6. 支持部分视频**显示**、**发送弹幕**（需要数据源支持弹幕）
 7. 支持**缓存视频**到本地（暂不支持m3u8格式资源缓存）
 8. 支持**追番**（数据保存在本地）
 9. 支持显示**观看历史**记录
@@ -58,7 +77,14 @@
 
 ## 附加说明
 
-使用jsoup爬取樱花动漫网页内容，所有数据均来自http://www.yhdm.io/ 
+使用jsoup爬取樱花动漫网页内容，所有默认数据来自http://www.yhdm.io/ 
+
+## 免责声明
+
+1. 此软件**只提供数据显示**，**不提供原始数据**。
+2. 此软件显示的所有内容，其**版权**均**归原作者**所有。
+3. 此软件**仅可用作学习交流**，未经授权，**禁止用于其他用途**，请在下载**24小时内删除**。
+4. 因使用此软件产生的版权问题，软件作者概不负责。
 
 ## License
 

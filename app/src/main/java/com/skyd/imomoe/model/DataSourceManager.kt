@@ -24,6 +24,7 @@ object DataSourceManager {
     private val singletonCache: LruCache<Class<*>, Any> = LruCache(5)
 
     fun getJarPath(): String {
+//        return "${Environment.getExternalStorageDirectory()}/Download/DataSourceJar/CustomDataSource.jar"
         return App.context.getExternalFilesDir(null)
             .toString() + "/DataSourceJar/CustomDataSource.jar"
     }

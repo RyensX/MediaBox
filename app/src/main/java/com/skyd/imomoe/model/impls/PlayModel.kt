@@ -7,11 +7,9 @@ import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.model.util.JsoupUtil
 import com.skyd.imomoe.model.util.ParseHtmlUtil
 import com.skyd.imomoe.model.interfaces.IPlayModel
-import com.skyd.imomoe.model.util.Triple
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
 import java.lang.ref.SoftReference
-import java.util.ArrayList
 
 class PlayModel : IPlayModel {
     private var mActivity: SoftReference<Activity>? = null
@@ -27,10 +25,9 @@ class PlayModel : IPlayModel {
         }
     }
 
-    override fun getPlayData(
+    override suspend fun getPlayData(
         partUrl: String,
-        animeEpisodeDataBean: AnimeEpisodeDataBean,
-        callback: IPlayModel.PlayDataCallBack
+        animeEpisodeDataBean: AnimeEpisodeDataBean
     ): Triple<ArrayList<IAnimeDetailBean>, ArrayList<AnimeEpisodeDataBean>, PlayBean> {
         val playBeanDataList: ArrayList<IAnimeDetailBean> = ArrayList()
         val episodesList: ArrayList<AnimeEpisodeDataBean> = ArrayList()
@@ -102,11 +99,10 @@ class PlayModel : IPlayModel {
         return Triple(playBeanDataList, episodesList, playBean)
     }
 
-    override fun refreshAnimeEpisodeData(
+    override suspend fun refreshAnimeEpisodeData(
         partUrl: String,
-        animeEpisodeDataBean: AnimeEpisodeDataBean,
-        callback: IPlayModel.AnimeEpisodeDataCallBack
-    ): Boolean? {
+        animeEpisodeDataBean: AnimeEpisodeDataBean
+    ): Boolean {
         val document = JsoupUtil.getDocument(Api.MAIN_URL + partUrl)
         val children: Elements = document.select("body")[0].children()
         for (i in children.indices) {
@@ -121,10 +117,7 @@ class PlayModel : IPlayModel {
         return false
     }
 
-    override fun getAnimeCoverImageBean(
-        detailPartUrl: String,
-        callback: IPlayModel.AnimeCoverImageBeanCallBack
-    ): ImageBean? {
+    override suspend fun getAnimeCoverImageBean(detailPartUrl: String): ImageBean? {
         try {
             val url = Api.MAIN_URL + detailPartUrl
             val document = JsoupUtil.getDocument(url)
@@ -166,10 +159,7 @@ class PlayModel : IPlayModel {
         mActivity = null
     }
 
-    override fun getAnimeEpisodeUrlData(
-        partUrl: String,
-        callback: IPlayModel.AnimeEpisodeUrlDataCallBack
-    ): String? {
+    override suspend fun getAnimeEpisodeUrlData(partUrl: String): String? {
         val document = JsoupUtil.getDocument(Api.MAIN_URL + partUrl)
         val children: Elements = document.select("body")[0].children()
         for (i in children.indices) {

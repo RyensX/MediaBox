@@ -14,9 +14,7 @@ import com.skyd.imomoe.view.activity.*
 import java.net.URLDecoder
 
 class RouteProcessor : IRouteProcessor {
-    override fun process(context: Context?, actionUrl: String?): Boolean {
-        context ?: return false
-        actionUrl ?: return false
+    override fun process(context: Context, actionUrl: String): Boolean {
         val decodeUrl = URLDecoder.decode(actionUrl, "UTF-8")
         val const = DataSourceManager.getConst() ?: Const()
         var solved = true
@@ -52,9 +50,7 @@ class RouteProcessor : IRouteProcessor {
         return solved
     }
 
-    override fun process(activity: Activity?, actionUrl: String?): Boolean {
-        activity ?: return false
-        actionUrl ?: return false
+    override fun process(activity: Activity, actionUrl: String): Boolean {
         val decodeUrl = URLDecoder.decode(actionUrl, "UTF-8")
         val const = DataSourceManager.getConst() ?: Const()
         var solved = true

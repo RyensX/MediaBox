@@ -36,6 +36,7 @@ import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.RouteProcessor
 import com.skyd.imomoe.view.activity.*
 import com.skyd.imomoe.view.component.AnimeToast
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -59,6 +60,10 @@ object Util {
         val intent = Intent(Intent.ACTION_VIEW, uri)
         intent.flags = FLAG_ACTIVITY_NEW_TASK
         App.context.startActivity(intent)
+    }
+
+    fun getEncodedUrl(url: String): String {
+        return Uri.encode(url, ":/-![].,%?&=")
     }
 
     /**
@@ -414,6 +419,7 @@ object Util {
         AnimeToast.makeText(App.context, this, duration).show()
     }
 
+    @DelicateCoroutinesApi
     fun CharSequence.showToastOnThread(duration: Int = Toast.LENGTH_SHORT) {
         GlobalScope.launch(Dispatchers.Main) {
             this@showToastOnThread.showToast(duration)

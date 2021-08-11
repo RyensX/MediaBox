@@ -7,15 +7,12 @@ import com.skyd.imomoe.model.util.JsoupUtil
 import com.skyd.imomoe.model.util.ParseHtmlUtil
 import com.skyd.imomoe.model.util.ParseHtmlUtil.parseBotit
 import com.skyd.imomoe.model.interfaces.IAnimeDetailModel
-import com.skyd.imomoe.model.util.Triple
 import org.jsoup.select.Elements
-import java.util.ArrayList
 
 class AnimeDetailModel : IAnimeDetailModel {
-    override fun getAnimeDetailData(
-        partUrl: String,
-        callBack: IAnimeDetailModel.AnimeDetailDataCallBack
-    ): Triple<ImageBean, String, ArrayList<IAnimeDetailBean>>? {
+    override suspend fun getAnimeDetailData(
+        partUrl: String
+    ): Triple<ImageBean, String, ArrayList<IAnimeDetailBean>> {
         val animeDetailList: ArrayList<IAnimeDetailBean> = ArrayList()
         val cover = ImageBean("", "", "", "")
         var title = ""

@@ -3,17 +3,15 @@ package com.skyd.imomoe.viewmodel
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.skyd.imomoe.bean.TabBean
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.RankModel
 import com.skyd.imomoe.model.interfaces.IRankModel
 import com.skyd.imomoe.util.Util.showToastOnThread
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.lang.Exception
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class RankViewModel : ViewModel() {
@@ -25,29 +23,12 @@ class RankViewModel : ViewModel() {
     var mldRankData: MutableLiveData<Boolean> = MutableLiveData()
 
     fun getRankTabData() {
-        GlobalScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 if (isRequesting) return@launch
                 isRequesting = true
 
-                rankModel.getRankTabData(object : IRankModel.RankTabDataCallBack {
-                    override fun onSuccess(list: java.util.ArrayList<TabBean>) {
-                        tabList.clear()
-                        tabList.addAll(list)
-                        mldRankData.postValue(true)
-                        isRequesting = false
-                    }
-
-                    override fun onError(e: Exception) {
-                        mldRankData.postValue(false)
-                        tabList.clear()
-                        isRequesting = false
-                        e.printStackTrace()
-                        e.message?.showToastOnThread(Toast.LENGTH_LONG)
-                    }
-
-                }).apply {
-                    this ?: return@launch
+                rankModel.getRankTabData().apply {
                     tabList.clear()
                     tabList.addAll(this)
                     mldRankData.postValue(true)

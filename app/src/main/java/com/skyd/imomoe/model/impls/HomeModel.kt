@@ -10,7 +10,7 @@ import org.greenrobot.eventbus.EventBus
 import org.jsoup.select.Elements
 
 class HomeModel : IHomeModel {
-    override fun getAllTabData(callBack: IHomeModel.AllTabDataCallBack): java.util.ArrayList<TabBean>? {
+    override suspend fun getAllTabData(): ArrayList<TabBean> {
         return ArrayList<TabBean>().apply {
             val document = JsoupUtil.getDocument(Api.MAIN_URL)
             val menu: Elements = document.getElementsByClass("menu")

@@ -52,7 +52,15 @@ class AboutActivity : BaseActivity<ActivityAboutBinding>() {
                     title(res = R.string.data_source_info)
                     message(
                         text = (DataSourceManager.getConst()
-                            ?: com.skyd.imomoe.model.impls.Const()).about()
+                            ?: com.skyd.imomoe.model.impls.Const()).run {
+                            "${getString(
+                                R.string.data_source_jar_version_name,
+                                versionName()
+                            )}\n${getString(
+                                R.string.data_source_jar_version_code,
+                                versionCode().toString()
+                            )}\n${about()}"
+                        }
                     )
                     positiveButton(res = R.string.ok) { dismiss() }
                 }
@@ -73,7 +81,7 @@ class AboutActivity : BaseActivity<ActivityAboutBinding>() {
             rlAboutActivityTestDevice.setOnClickListener {
                 MaterialDialog(this@AboutActivity).show {
                     title(res = R.string.test_device)
-                    message(text = "HONOR V20 Android 10")
+                    message(text = "HONOR V20 Android 10\nVirtual Machine: Pixel 2 Android 12")
                     positiveButton(res = R.string.ok) { dismiss() }
                 }
             }

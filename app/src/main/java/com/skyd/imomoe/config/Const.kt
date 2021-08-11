@@ -104,8 +104,7 @@ interface Const {
 
     interface Update {
         companion object {
-            val updateFilePath =
-                Environment.getExternalStorageDirectory().toString() + "/" + "Download/"
+            val updateFilePath = App.context.getExternalFilesDir(null).toString() + "/" + "Update/"
             const val updateFileName = "com.skyd.imomoe.apk"
             val updateFile get() = File(updateFilePath + updateFileName)
         }

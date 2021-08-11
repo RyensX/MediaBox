@@ -7,18 +7,13 @@ import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.util.JsoupUtil
 import com.skyd.imomoe.model.util.ParseHtmlUtil
 import com.skyd.imomoe.model.interfaces.IRankListModel
-import com.skyd.imomoe.model.util.Pair
 import org.jsoup.select.Elements
-import java.util.*
 
 class RankListModel : IRankListModel {
     private var bgTimes = 0
     var rankList: MutableList<AnimeCoverBean> = ArrayList()
 
-    override fun getRankListData(
-        partUrl: String,
-        callBack: IRankListModel.RankListDataCallBack
-    ): Pair<MutableList<AnimeCoverBean>, PageNumberBean?>? {
+    override suspend fun getRankListData(partUrl: String): Pair<MutableList<AnimeCoverBean>, PageNumberBean?> {
         rankList.clear()
         if (partUrl == "/" || partUrl == "") getWeekRankData()
         else getAllRankData(partUrl)
