@@ -111,7 +111,7 @@
             android:adjustViewBounds="true"
             android:paddingStart="6dp"
             android:paddingEnd="12dp"
-            android:src="@drawable/ic_fullscreen_white_24" />
+            tools:src="@drawable/ic_fullscreen_white_24" />
     </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout

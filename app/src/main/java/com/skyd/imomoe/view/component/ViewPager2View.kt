@@ -6,6 +6,7 @@ import android.view.MotionEvent
 import android.view.ViewConfiguration
 import android.widget.FrameLayout
 import androidx.annotation.Nullable
+import androidx.core.view.size
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.SCROLL_STATE_DRAGGING

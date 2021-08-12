@@ -127,7 +127,16 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
 
         viewModel.mldAnimeDetailList.observe(this, Observer {
             mBinding.srlAnimeDetailActivity.isRefreshing = false
-            if (!it) return@Observer
+
+            viewModel.animeDetailList.apply {
+                val count = size
+                clear()
+                adapter.notifyItemRangeRemoved(0, count)
+                it ?: return@Observer
+                addAll(it)
+                adapter.notifyItemRangeInserted(0, it.size)
+            }
+            adapter.notifyDataSetChanged()
             mBinding.llAnimeDetailActivityToolbar.ivToolbar1Button2.isEnabled = true
 
             //先隐藏
@@ -164,7 +173,6 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
                     }
                 })
             mBinding.llAnimeDetailActivityToolbar.tvToolbar1Title.text = viewModel.title
-            adapter.notifyDataSetChanged()
         })
 
         mBinding.srlAnimeDetailActivity.isRefreshing = true

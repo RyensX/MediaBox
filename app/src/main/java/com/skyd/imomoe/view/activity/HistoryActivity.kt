@@ -9,7 +9,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.HistoryBean
 import com.skyd.imomoe.databinding.ActivityHistoryBinding
-import com.skyd.imomoe.util.Util.dp2px
+import com.skyd.imomoe.util.Util.dp
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.visible
 import com.skyd.imomoe.view.adapter.HistoryAdapter
@@ -63,9 +63,10 @@ class HistoryActivity : BaseActivity<ActivityHistoryBinding>() {
             if (it > 0) adapter.notifyItemRangeRemoved(0, it)
         })
 
-        val padding = dp2px(12f)
         mBinding.tbHistoryActivity.run {
-            ivToolbar1Button1.setPadding(padding, padding, padding, padding)
+            12.dp.let { padding ->
+                ivToolbar1Button1.setPadding(padding, padding, padding, padding)
+            }
             ivToolbar1Button1.visible()
             ivToolbar1Button1.setImageResource(R.drawable.ic_delete_white_24)
             ivToolbar1Button1.setOnClickListener {

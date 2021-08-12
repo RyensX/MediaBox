@@ -4,7 +4,7 @@ import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.skyd.imomoe.util.Util.dp2px
+import com.skyd.imomoe.util.Util.dp
 
 
 class SkinItemDecoration : RecyclerView.ItemDecoration() {
@@ -28,16 +28,16 @@ class SkinItemDecoration : RecyclerView.ItemDecoration() {
                 // x+y=14
                 // x=4 y=10
                 0 -> {
-                    outRect.left = dp2px(16f)
-                    outRect.right = dp2px(4f)   // 4
+                    outRect.left = 16.dp
+                    outRect.right = 4.dp    // 4
                 }
                 1 -> {
-                    outRect.left = dp2px(10f)   // 10
-                    outRect.right = dp2px(10f)   // 10
+                    outRect.left = 10.dp    // 10
+                    outRect.right = 10.dp   // 10
                 }
                 2 -> {
-                    outRect.left = dp2px(4f)  // 4
-                    outRect.right = dp2px(16f)
+                    outRect.left = 4.dp     // 4
+                    outRect.right = 16.dp
                 }
             }
         }

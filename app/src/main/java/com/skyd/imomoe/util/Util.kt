@@ -6,12 +6,14 @@ import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.Point
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
+import android.util.TypedValue
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
@@ -356,15 +358,33 @@ object Util {
         return list
     }
 
-    fun px2dp(pxValue: Float): Float {
-        val scale = App.context.resources.displayMetrics.density
-        return pxValue / scale
-    }
+    val Float.dp: Float
+        get() = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            this,
+            Resources.getSystem().displayMetrics
+        )
 
-    fun dp2px(dpValue: Float): Int {
-        val scale = App.context.resources.displayMetrics.density
-        return (dpValue * scale + 0.5f).toInt()
-    }
+    val Int.dp: Int
+        get() = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            this.toFloat(),
+            Resources.getSystem().displayMetrics
+        ).toInt()
+
+    val Float.sp: Float                 // [xxhdpi](360 -> 1080)
+        get() = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_SP,
+            this,
+            Resources.getSystem().displayMetrics
+        )
+
+    val Int.sp: Int
+        get() = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_SP,
+            this.toFloat(),
+            Resources.getSystem().displayMetrics
+        ).toInt()
 
     fun setTransparentStatusBar(
         window: Window,

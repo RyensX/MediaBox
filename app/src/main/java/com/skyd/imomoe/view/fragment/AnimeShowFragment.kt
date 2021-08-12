@@ -10,10 +10,8 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.FragmentAnimeShowBinding
-import com.skyd.imomoe.util.Util.dp2px
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.view.adapter.AnimeShowAdapter
 import com.skyd.imomoe.view.adapter.SerializableRecycledViewPool
@@ -68,7 +66,8 @@ class AnimeShowFragment : BaseFragment<FragmentAnimeShowBinding>() {
 
         mBinding.run {
             rvAnimeShowFragment.layoutManager = GridLayoutManager(activity, 4)
-                .apply { spanSizeLookup = AnimeShowSpanSize(adapter)
+                .apply {
+                    spanSizeLookup = AnimeShowSpanSize(adapter)
                 }
             rvAnimeShowFragment.addItemDecoration(AnimeShowItemDecoration())
             rvAnimeShowFragment.setHasFixedSize(true)
@@ -94,25 +93,46 @@ class AnimeShowFragment : BaseFragment<FragmentAnimeShowBinding>() {
         viewModel.mldGetAnimeShowList.observe(viewLifecycleOwner, Observer {
             mBinding.srlAnimeShowFragment.closeHeaderOrFooter()
 
-            when (it) {
+            when (it.second) {
                 0 -> {
-                    adapter.notifyDataSetChanged()
+                    viewModel.animeShowList.apply {
+                        val count = size
+                        clear()
+                        adapter.notifyItemRangeRemoved(0, count)
+                        addAll(it.first)
+                        adapter.notifyItemRangeInserted(0, it.first.size)
+                    }
                     hideLoadFailedTip()
                 }
                 1 -> {
                     val pair = viewModel.newPageIndex
                     if (pair != null) {
-                        adapter.notifyItemRangeInserted(pair.first, pair.second)
-                    } else adapter.notifyDataSetChanged()
+                        viewModel.animeShowList.apply {
+                            val index = size
+                            addAll(it.first)
+                            adapter.notifyItemRangeInserted(index, it.first.size)
+                        }
+                    } else {
+                        viewModel.animeShowList.apply {
+                            val count = size
+                            clear()
+                            adapter.notifyItemRangeRemoved(0, count)
+                            addAll(it.first)
+                            adapter.notifyItemRangeInserted(0, it.first.size)
+                        }
+                    }
                     hideLoadFailedTip()
                 }
                 -1 -> {
-                    adapter.notifyDataSetChanged()
-                    showLoadFailedTip(getString(R.string.load_data_failed_click_to_retry),
-                        View.OnClickListener {
-                            viewModel.getAnimeShowData(partUrl)
-                            hideLoadFailedTip()
-                        })
+                    viewModel.animeShowList.apply {
+                        val count = size
+                        clear()
+                        adapter.notifyItemRangeRemoved(0, count)
+                    }
+                    showLoadFailedTip(getString(R.string.load_data_failed_click_to_retry)) {
+                        viewModel.getAnimeShowData(partUrl)
+                        hideLoadFailedTip()
+                    }
                 }
             }
         })

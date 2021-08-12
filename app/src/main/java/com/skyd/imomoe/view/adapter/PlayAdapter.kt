@@ -10,6 +10,7 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.bean.IAnimeDetailBean
 import com.skyd.imomoe.util.*
+import com.skyd.imomoe.util.Util.dp
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.getResDrawable
 import com.skyd.imomoe.util.Util.process
@@ -34,10 +35,7 @@ class PlayAdapter(
                 item.animeCoverList?.let {
                     val layoutManager = GridLayoutManager(activity, 4)
                     holder.rvGridRecyclerView1.post {
-                        holder.rvGridRecyclerView1.setPadding(
-                            Util.dp2px(16f), 0,
-                            Util.dp2px(16f), 0
-                        )
+                        holder.rvGridRecyclerView1.setPadding(16.dp, 0, 16.dp, 0)
                     }
                     holder.rvGridRecyclerView1.removeItemDecoration(gridItemDecoration)
                     holder.rvGridRecyclerView1.addItemDecoration(gridItemDecoration)

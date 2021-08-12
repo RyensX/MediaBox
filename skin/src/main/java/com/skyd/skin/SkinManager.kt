@@ -452,7 +452,7 @@ object SkinManager {
                 // 获取皮肤包资源
                 val skinResourceId = skinResProcessor.getBackgroundOrSrc(backgroundResourceId)
                 if (skinResourceId is Int) {
-                    view.setBackgroundColor(skinResourceId)
+                    view.progressDrawable = ColorDrawable(skinResourceId)
                 } else {
                     val drawable = skinResourceId as Drawable
                     view.progressDrawable = drawable

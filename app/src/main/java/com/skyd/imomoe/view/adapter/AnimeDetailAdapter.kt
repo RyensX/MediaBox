@@ -17,8 +17,8 @@ import com.skyd.imomoe.bean.IAnimeDetailBean
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.util.*
+import com.skyd.imomoe.util.Util.dp
 import com.skyd.imomoe.util.glide.GlideUtil.loadImage
-import com.skyd.imomoe.util.Util.dp2px
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.getResDrawable
 import com.skyd.imomoe.util.Util.process
@@ -54,10 +54,7 @@ class AnimeDetailAdapter(
                 item.animeCoverList?.let {
                     val layoutManager = GridLayoutManager(activity, 4)
                     holder.rvGridRecyclerView1.post {
-                        holder.rvGridRecyclerView1.setPadding(
-                            dp2px(16f), 0,
-                            dp2px(16f), 0
-                        )
+                        holder.rvGridRecyclerView1.setPadding(16.dp, 0, 16.dp, 0)
                     }
                     if (holder.rvGridRecyclerView1.itemDecorationCount == 0) {
                         holder.rvGridRecyclerView1.addItemDecoration(gridItemDecoration)
@@ -196,10 +193,7 @@ class AnimeDetailAdapter(
             contentView.findViewById<BottomSheetRecyclerView>(R.id.rv_dialog_bottom_sheet_2)
         recyclerView.layoutManager = GridLayoutManager(activity, 3)
         recyclerView.post {
-            recyclerView.setPadding(
-                dp2px(16f), dp2px(16f),
-                dp2px(16f), dp2px(16f)
-            )
+            recyclerView.setPadding(16.dp, 16.dp, 16.dp, 16.dp)
             recyclerView.scrollToPosition(0)
         }
         if (recyclerView.itemDecorationCount == 0) {
@@ -234,14 +228,14 @@ class AnimeDetailAdapter(
                     holder.itemView.background = if (showType == 0) {
                         layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
                         if (layoutParams is ViewGroup.MarginLayoutParams) {
-                            layoutParams.setMargins(0, dp2px(5f), dp2px(10f), dp2px(5f))
+                            layoutParams.setMargins(0, 5.dp, 10.dp, 5.dp)
                         }
                         holder.itemView.layoutParams = layoutParams
                         holder.tvAnimeEpisode2.setTextColor(activity.getResColor(R.color.foreground_white_skin))
                         getResDrawable(R.drawable.shape_circle_corner_edge_white_ripper_5_skin)
                     } else {
                         layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
-                        holder.itemView.setPadding(0, dp2px(10f), 0, dp2px(10f))
+                        holder.itemView.setPadding(0, 10.dp, 0, 10.dp)
                         holder.itemView.layoutParams = layoutParams
                         holder.tvAnimeEpisode2.setTextColor(activity.getResColor(R.color.foreground_main_color_2_skin))
                         getResDrawable(R.drawable.shape_circle_corner_edge_main_color_2_ripper_5_skin)

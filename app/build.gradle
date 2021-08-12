@@ -27,7 +27,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 31
         versionCode 16
-        versionName "1.2.0_beta7"
+        versionName "1.2.0"
         flavorDimensions "versionName"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -118,7 +118,6 @@ android {
         exclude 'org/eclipse/jetty/**'
         exclude 'org/fourthline/cling/**'
         exclude 'okhttp3/internal/**'
-        exclude 'javax/servlet/**'
     }
 
     buildFeatures {

@@ -16,13 +16,13 @@ import com.skyd.imomoe.bean.IAnimeShowBean
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.util.*
 import com.skyd.imomoe.util.glide.GlideUtil.loadImage
-import com.skyd.imomoe.util.Util.dp2px
 import com.skyd.imomoe.util.Util.process
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.view.fragment.AnimeShowFragment
 import com.skyd.imomoe.view.component.bannerview.adapter.MyCycleBannerAdapter
 import com.skyd.imomoe.view.component.bannerview.indicator.DotIndicator
 import com.skyd.imomoe.config.Const.ViewHolderTypeString
+import com.skyd.imomoe.util.Util.dp
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.getResDrawable
 import com.skyd.imomoe.view.adapter.decoration.AnimeCoverItemDecoration
@@ -91,10 +91,7 @@ class AnimeShowAdapter(
                                     GridLayoutManager(fragment.activity, 4)
                                 if (itemDecorationCount == 0) {
                                     holder.rvGridRecyclerView1.post {
-                                        holder.rvGridRecyclerView1.setPadding(
-                                            dp2px(16f), 0,
-                                            dp2px(16f), 0
-                                        )
+                                        holder.rvGridRecyclerView1.setPadding(16.dp, 0, 16.dp, 0)
                                     }
                                     holder.rvGridRecyclerView1.addItemDecoration(gridItemDecoration)
                                 }
@@ -104,10 +101,7 @@ class AnimeShowAdapter(
                                     GridLayoutManager(fragment.activity, 4)
                                 if (itemDecorationCount == 0) {
                                     holder.rvGridRecyclerView1.post {
-                                        holder.rvGridRecyclerView1.setPadding(
-                                            dp2px(16f), 0,
-                                            dp2px(16f), 0
-                                        )
+                                        holder.rvGridRecyclerView1.setPadding(16.dp, 0, 16.dp, 0)
                                     }
                                     holder.rvGridRecyclerView1.addItemDecoration(gridItemDecoration)
                                 }
@@ -235,7 +229,7 @@ class AnimeShowAdapter(
                         getResDrawable(R.drawable.shape_fill_circle_corner_main_color_2_50_skin)
                     holder.tvAnimeCover5Area.visible()
                     holder.tvAnimeCover5Date.post {
-                        holder.tvAnimeCover5Date.setPadding(dp2px(12f), 0, 0, 0)
+                        holder.tvAnimeCover5Date.setPadding(12.dp, 0, 0, 0)
                     }
                 }
                 if (item.date == null || item.date == "") {
@@ -252,10 +246,8 @@ class AnimeShowAdapter(
                 ) {
                     holder.tvAnimeCover5Title.post {
                         holder.tvAnimeCover5Title.setPadding(
-                            holder.tvAnimeCover5Title.paddingStart,
-                            dp2px(12f),
-                            holder.tvAnimeCover5Title.paddingEnd,
-                            dp2px(12f)
+                            holder.tvAnimeCover5Title.paddingStart, 12.dp,
+                            holder.tvAnimeCover5Title.paddingEnd, 12.dp
                         )
                     }
                 }
@@ -266,9 +258,9 @@ class AnimeShowAdapter(
                 }
                 holder.tvAnimeCover5Area.setOnClickListener {
                     val actionUrl = item.area?.actionUrl.toString().run {
-                    if (endsWith("/")) "${this}${item.area?.title}"
-                    else "${this}/${item.area?.title}"
-                }
+                        if (endsWith("/")) "${this}${item.area?.title}"
+                        else "${this}/${item.area?.title}"
+                    }
                     process(
                         fragment,
                         Const.ActionUrl.ANIME_CLASSIFY + actionUrl
@@ -428,7 +420,7 @@ class AnimeShowAdapter(
                             getResDrawable(R.drawable.shape_fill_circle_corner_main_color_2_50_skin)
                         holder.tvAnimeCover5Area.visible()
                         holder.tvAnimeCover5Date.post {
-                            holder.tvAnimeCover5Date.setPadding(dp2px(12f), 0, 0, 0)
+                            holder.tvAnimeCover5Date.setPadding(12.dp, 0, 0, 0)
                         }
                     }
                     if (item.date == null || item.date == "") {
@@ -447,10 +439,8 @@ class AnimeShowAdapter(
                     ) {
                         holder.tvAnimeCover5Title.post {
                             holder.tvAnimeCover5Title.setPadding(
-                                holder.tvAnimeCover5Title.paddingStart,
-                                dp2px(12f),
-                                holder.tvAnimeCover5Title.paddingEnd,
-                                dp2px(12f)
+                                holder.tvAnimeCover5Title.paddingStart, 12.dp,
+                                holder.tvAnimeCover5Title.paddingEnd, 12.dp
                             )
                         }
                     }

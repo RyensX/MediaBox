@@ -4,7 +4,7 @@ import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.skyd.imomoe.util.Util.dp2px
+import com.skyd.imomoe.util.Util.dp
 
 
 class AnimeShowItemDecoration : RecyclerView.ItemDecoration() {
@@ -28,20 +28,20 @@ class AnimeShowItemDecoration : RecyclerView.ItemDecoration() {
                 // x+y=5
                 // x=-4.25 y=9.25
                 0 -> {
-                    outRect.left = dp2px(16f)
-                    outRect.right = -dp2px(4.25f)   // -4.25
+                    outRect.left = 16.dp
+                    outRect.right = -(4.25f.dp).toInt()   // -4.25
                 }
                 1 -> {
-                    outRect.left = dp2px(9.25f)   // 9.25
-                    outRect.right = dp2px(5f / 2)   // 测试机5dp==15px
+                    outRect.left = 9.25f.dp.toInt()   // 9.25
+                    outRect.right = 2.5f.dp.toInt()   // 测试机5dp==15px
                 }
                 2 -> {
-                    outRect.left = dp2px(5f / 2)
-                    outRect.right = dp2px(9.25f)  // 9.25
+                    outRect.left = 2.5f.dp.toInt()
+                    outRect.right = 9.25f.dp.toInt()  // 9.25
                 }
                 3 -> {
-                    outRect.left = -dp2px(4.25f)    // -4.25
-                    outRect.right = dp2px(16f)
+                    outRect.left = -(4.25f.dp).toInt()    // -4.25
+                    outRect.right = 16.dp
                 }
             }
         }

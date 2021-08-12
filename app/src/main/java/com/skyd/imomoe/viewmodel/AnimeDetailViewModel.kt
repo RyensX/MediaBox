@@ -21,7 +21,7 @@ class AnimeDetailViewModel : ViewModel() {
     var cover: ImageBean = ImageBean("", "", "", "")
     var title: String = ""
     var animeDetailList: MutableList<IAnimeDetailBean> = ArrayList()
-    var mldAnimeDetailList: MutableLiveData<Boolean> = MutableLiveData()
+    var mldAnimeDetailList: MutableLiveData<MutableList<IAnimeDetailBean>?> = MutableLiveData()
 
     //www.yhdm.io
     fun getAnimeDetailData(partUrl: String) {
@@ -30,13 +30,10 @@ class AnimeDetailViewModel : ViewModel() {
                 animeDetailModel.getAnimeDetailData(partUrl).apply {
                     cover = first
                     title = second
-                    animeDetailList.clear()
-                    animeDetailList.addAll(third)
-                    mldAnimeDetailList.postValue(true)
+                    mldAnimeDetailList.postValue(third)
                 }
             } catch (e: Exception) {
-                animeDetailList.clear()
-                mldAnimeDetailList.postValue(false)
+                mldAnimeDetailList.postValue(null)
                 e.printStackTrace()
                 (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread()
             }

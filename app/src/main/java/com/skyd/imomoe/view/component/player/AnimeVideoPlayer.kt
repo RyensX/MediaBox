@@ -24,7 +24,7 @@ import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeEpisodeDataBean
 import com.skyd.imomoe.bean.BaseBean
-import com.skyd.imomoe.util.Util.dp2px
+import com.skyd.imomoe.util.Util.dp
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.getResDrawable
 import com.skyd.imomoe.util.Util.getScreenBrightness
@@ -291,11 +291,10 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
     private fun showSettingContainer() {
         mSettingContainer?.let {
             hideAllWidget()
-            it.translationX = dp2px(150f).toFloat()
+            it.translationX = 150f.dp
             it.visible()
             val animator = ObjectAnimator.ofFloat(
-                it,
-                "translationX", dp2px(170f).toFloat(), 0f
+                it, "translationX", 170f.dp, 0f
             )
             animator.duration = 300
             animator.start()
@@ -317,12 +316,9 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
     private fun showRightContainer() {
         mRightContainer?.let {
             hideAllWidget()
-            it.translationX = dp2px(150f).toFloat()
+            it.translationX = 150f.dp
             it.visible()
-            val animator = ObjectAnimator.ofFloat(
-                it,
-                "translationX", dp2px(170f).toFloat(), 0f
-            )
+            val animator = ObjectAnimator.ofFloat(it, "translationX", 170f.dp, 0f)
             animator.duration = 300
             animator.start()
             //取消xx秒后隐藏控制界面

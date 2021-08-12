@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewStub
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
@@ -72,15 +71,22 @@ class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), Even
             })
         }
 
-        viewModel.mldHeader.observe(viewLifecycleOwner, Observer {
+        viewModel.mldHeader.observe(viewLifecycleOwner, {
             mBinding.tvEverydayAnimeFragmentTitle.text = it.title
         })
 
-        viewModel.mldEverydayAnimeList.observe(viewLifecycleOwner, Observer {
+        viewModel.mldEverydayAnimeList.observe(viewLifecycleOwner, {
             mBinding.srlEverydayAnimeFragment.isRefreshing = false
-            if (this::adapter.isInitialized) adapter.notifyDataSetChanged()
 
-            if (it) {
+            if (it != null) {
+                viewModel.everydayAnimeList.apply {
+                    clear()
+                    if (this@EverydayAnimeFragment::adapter.isInitialized)
+                        adapter.notifyDataSetChanged()
+                    addAll(it)
+                    if (this@EverydayAnimeFragment::adapter.isInitialized)
+                        adapter.notifyDataSetChanged()
+                }
                 val selectedTabIndex = this.selectedTabIndex
                 activity?.let { it1 ->
                     //先隐藏
@@ -91,7 +97,6 @@ class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), Even
                         adapter = Vp2Adapter(it1, viewModel.everydayAnimeList)
                         mBinding.vp2EverydayAnimeFragment.setAdapter(adapter)
                     }
-
                     val tabLayoutMediator = TabLayoutMediator(
                         mBinding.tlEverydayAnimeFragment,
                         mBinding.vp2EverydayAnimeFragment.getViewPager()
@@ -100,27 +105,36 @@ class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), Even
                     }
                     tabLayoutMediator.attach()
 
-                    val tabCount = mBinding.tlEverydayAnimeFragment.tabCount
-                    if (selectedTabIndex != -1 && selectedTabIndex < tabCount)
-                        mBinding.vp2EverydayAnimeFragment.setCurrentItem(selectedTabIndex, false)
-                    else if (selectedTabIndex == -1 && viewModel.selectedTabIndex < tabCount)
-                        mBinding.vp2EverydayAnimeFragment.setCurrentItem(
-                            viewModel.selectedTabIndex, false
-                        )
-
-                    //设置完数据后显示，避免闪烁
-                    ObjectAnimator.ofFloat(mBinding.llEverydayAnimeFragment, "alpha", 0f, 1f)
-                        .setDuration(270).start()
+                    val tabCount = adapter.itemCount
+                    mBinding.vp2EverydayAnimeFragment.post {
+                        if (selectedTabIndex != -1 && selectedTabIndex < tabCount)
+                            mBinding.vp2EverydayAnimeFragment.setCurrentItem(
+                                selectedTabIndex, false
+                            )
+                        else if (selectedTabIndex == -1 && viewModel.selectedTabIndex < tabCount
+                            && viewModel.selectedTabIndex >= 0
+                        ) {
+                            mBinding.vp2EverydayAnimeFragment.setCurrentItem(
+                                viewModel.selectedTabIndex, false
+                            )
+                        }
+                        //设置完数据后显示，避免闪烁
+                        ObjectAnimator.ofFloat(mBinding.llEverydayAnimeFragment, "alpha", 0f, 1f)
+                            .setDuration(270).start()
+                    }
                 }
-
                 hideLoadFailedTip()
             } else {
-                showLoadFailedTip(
-                    getString(R.string.load_data_failed_click_to_retry),
-                    View.OnClickListener {
-                        viewModel.getEverydayAnimeData()
-                        hideLoadFailedTip()
-                    })
+                viewModel.everydayAnimeList.apply {
+                    val count = size
+                    clear()
+                    if (this@EverydayAnimeFragment::adapter.isInitialized)
+                        adapter.notifyItemRangeRemoved(0, count)
+                }
+                showLoadFailedTip(getString(R.string.load_data_failed_click_to_retry)) {
+                    viewModel.getEverydayAnimeData()
+                    hideLoadFailedTip()
+                }
             }
         })
 
@@ -148,7 +162,7 @@ class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), Even
         }
     }
 
-    override fun getLoadFailedTipView(): ViewStub? = mBinding.layoutEverydayAnimeFragmentLoadFailed
+    override fun getLoadFailedTipView(): ViewStub = mBinding.layoutEverydayAnimeFragmentLoadFailed
 
     class Vp2Adapter(
         private var activity: Activity,

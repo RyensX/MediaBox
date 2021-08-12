@@ -32,12 +32,14 @@ class EverydayAnimeViewModel : ViewModel() {
     var tabList: MutableList<TabBean> = ArrayList()
     var mldTabList: MutableLiveData<List<TabBean>> = MutableLiveData()
     var everydayAnimeList: MutableList<List<AnimeCoverBean>> = ArrayList()
-    var mldEverydayAnimeList: MutableLiveData<Boolean> = MutableLiveData()
+    var mldEverydayAnimeList: MutableLiveData<MutableList<List<AnimeCoverBean>>?> =
+        MutableLiveData()
 
     fun getEverydayAnimeData() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 everydayAnimeModel.getEverydayAnimeData().apply {
+                    if (first.size != second.size) throw Exception("tabs count != tabList count")
                     selectedTabIndex = getRealDayOfWeek(
                         Calendar.getInstance(Locale.getDefault())
                             .get(Calendar.DAY_OF_WEEK)
@@ -46,16 +48,13 @@ class EverydayAnimeViewModel : ViewModel() {
                     tabList.clear()
                     tabList.addAll(first)
                     mldTabList.postValue(tabList)
-                    everydayAnimeList.clear()
-                    everydayAnimeList.addAll(second)
-                    mldEverydayAnimeList.postValue(true)
+                    mldEverydayAnimeList.postValue(second)
                     mldHeader.postValue(header)
                 }
             } catch (e: Exception) {
                 selectedTabIndex = -1
                 tabList.clear()
-                everydayAnimeList.clear()
-                mldEverydayAnimeList.postValue(false)
+                mldEverydayAnimeList.postValue(null)
                 e.printStackTrace()
                 "${App.context.getString(R.string.get_data_failed)}\n${e.message}"
                     .showToastOnThread(Toast.LENGTH_LONG)

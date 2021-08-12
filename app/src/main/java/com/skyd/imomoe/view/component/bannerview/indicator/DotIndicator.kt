@@ -6,32 +6,27 @@ import android.graphics.Paint
 import android.view.View
 import android.widget.RelativeLayout
 import com.skyd.imomoe.R
-import com.skyd.imomoe.util.Util.dp2px
+import com.skyd.imomoe.util.Util.dp
 import com.skyd.imomoe.util.Util.getResColor
-import com.skyd.skin.SkinManager
-import com.skyd.skin.core.listeners.ChangeCustomSkinListener
 
 /**
  * Created by Sky_D on 2021-02-08.
  */
 class DotIndicator : View, Indicator {
     private val mPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)        //抗锯齿
-    private var mRadius: Float = dp2px(3f).toFloat()
-    private var mDotsPadding = dp2px(3f)
-    private var mSelectedColor: Int
-    private var mUnSelectedColor: Int
+    private var mRadius: Float = 3f.dp
+    private var mDotsPadding = 3.dp
+    private var mSelectedColor: Int = context.getResColor(R.color.main_color_2_skin)
+    private var mUnSelectedColor: Int = context.getResColor(R.color.foreground_white_skin)
     private var mDotsCount = 0
     private var mCurrentPosition = 0
 
     private val mMarginStart = 0
-    private val mMarginEnd = dp2px(10f)
-    private val mMarginTop = dp2px(10f)
+    private val mMarginEnd = 10.dp
+    private val mMarginTop = 10.dp
     private val mMarginBottom = 0
 
     constructor(context: Context) : super(context) {
-        mSelectedColor = context.getResColor(R.color.main_color_2_skin)
-        mUnSelectedColor = context.getResColor(R.color.foreground_white_skin)
-
         val layoutParams: RelativeLayout.LayoutParams = RelativeLayout.LayoutParams(
             RelativeLayout.LayoutParams.WRAP_CONTENT,
             RelativeLayout.LayoutParams.WRAP_CONTENT

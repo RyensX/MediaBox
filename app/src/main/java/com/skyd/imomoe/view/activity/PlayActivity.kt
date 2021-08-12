@@ -30,8 +30,8 @@ import com.skyd.imomoe.databinding.ActivityPlayBinding
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.util.AnimeEpisode2ViewHolder
 import com.skyd.imomoe.util.MD5.getMD5
+import com.skyd.imomoe.util.Util.dp
 import com.skyd.imomoe.util.html.SnifferVideo
-import com.skyd.imomoe.util.Util.dp2px
 import com.skyd.imomoe.util.Util.getDetailLinkByEpisodeLink
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.getResDrawable
@@ -74,11 +74,14 @@ class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>(), CoroutineScope by
     private var isFirstTime = true
     private var danmuUrl: String = ""
     private var danmuParamMap: HashMap<String, String> = HashMap()
+    private var currentNightMode: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivityPlayBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
+
+        currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
 
         setColorStatusBar(window, Color.BLACK)
 
@@ -392,10 +395,7 @@ class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>(), CoroutineScope by
         val recyclerView = contentView.findViewById<RecyclerView>(R.id.rv_dialog_bottom_sheet_2)
         recyclerView.layoutManager = GridLayoutManager(this, 3)
         recyclerView.post {
-            recyclerView.setPadding(
-                dp2px(16f), dp2px(16f),
-                dp2px(16f), dp2px(16f)
-            )
+            recyclerView.setPadding(16.dp, 16.dp, 16.dp, 16.dp)
             recyclerView.scrollToPosition(0)
         }
         if (recyclerView.itemDecorationCount == 0) {
@@ -423,7 +423,12 @@ class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>(), CoroutineScope by
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        adapter.notifyDataSetChanged()
+        (newConfig.uiMode and Configuration.UI_MODE_NIGHT_MASK).let {
+            if (it != currentNightMode) {
+                currentNightMode = it
+                adapter.notifyDataSetChanged()
+            }
+        }
     }
 
     class EpisodeRecyclerViewAdapter(
@@ -447,12 +452,12 @@ class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>(), CoroutineScope by
                     if (showType == 0) {
                         layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
                         if (layoutParams is ViewGroup.MarginLayoutParams) {
-                            layoutParams.setMargins(0, dp2px(5f), dp2px(10f), dp2px(5f))
+                            layoutParams.setMargins(0, 5.dp, 10.dp, 5.dp)
                         }
                         holder.itemView.layoutParams = layoutParams
                     } else {
                         layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
-                        holder.itemView.setPadding(0, dp2px(10f), 0, dp2px(10f))
+                        holder.itemView.setPadding(0, 10.dp, 0, 10.dp)
                         holder.itemView.layoutParams = layoutParams
                     }
                     if (action == "play") {
