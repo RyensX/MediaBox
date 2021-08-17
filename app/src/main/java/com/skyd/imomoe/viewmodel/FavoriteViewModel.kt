@@ -7,7 +7,7 @@ import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.FavoriteAnimeBean
 import com.skyd.imomoe.database.getAppDataBase
-import com.skyd.imomoe.util.Util.showToastOnThread
+import com.skyd.imomoe.util.Util.showToastOnIOThread
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -30,7 +30,7 @@ class FavoriteViewModel : ViewModel() {
                 favoriteList.clear()
                 mldFavoriteList.postValue(false)
                 e.printStackTrace()
-                (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread()
+                (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnIOThread()
             }
         }
     }

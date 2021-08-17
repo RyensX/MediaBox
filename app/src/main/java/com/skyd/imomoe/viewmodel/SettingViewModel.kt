@@ -9,7 +9,7 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.util.Util.getDirectorySize
 import com.skyd.imomoe.util.Util.getFormatSize
-import com.skyd.imomoe.util.Util.showToastOnThread
+import com.skyd.imomoe.util.Util.showToastOnIOThread
 import com.skyd.imomoe.util.glide.GlideUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,7 +30,7 @@ class SettingViewModel : ViewModel() {
             } catch (e: Exception) {
                 mldDeleteAllHistory.postValue(false)
                 e.printStackTrace()
-                (App.context.getString(R.string.delete_failed) + "\n" + e.message).showToastOnThread()
+                (App.context.getString(R.string.delete_failed) + "\n" + e.message).showToastOnIOThread()
             }
         }
     }
@@ -62,7 +62,7 @@ class SettingViewModel : ViewModel() {
             } catch (e: Exception) {
                 mldClearAllCache.postValue(false)
                 e.printStackTrace()
-                (App.context.getString(R.string.delete_failed) + "\n" + e.message).showToastOnThread()
+                (App.context.getString(R.string.delete_failed) + "\n" + e.message).showToastOnIOThread()
             }
         }
     }

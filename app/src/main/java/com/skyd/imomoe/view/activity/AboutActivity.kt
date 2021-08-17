@@ -3,12 +3,14 @@ package com.skyd.imomoe.view.activity
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.text.Html
 import com.afollestad.materialdialogs.MaterialDialog
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.databinding.ActivityAboutBinding
 import com.skyd.imomoe.model.DataSourceManager
+import com.skyd.imomoe.util.Util
 import com.skyd.imomoe.util.Util.getAppVersionName
 import com.skyd.imomoe.util.Util.openBrowser
 import com.skyd.imomoe.util.visible
@@ -76,6 +78,17 @@ class AboutActivity : BaseActivity<ActivityAboutBinding>() {
 
             rlAboutActivityLicense.setOnClickListener {
                 startActivity(Intent(this@AboutActivity, LicenseActivity::class.java))
+            }
+
+            rlAboutActivityUserNotice.setOnClickListener {
+                MaterialDialog(this@AboutActivity).show {
+                    title(res = R.string.user_notice)
+                    message(text = Html.fromHtml(Util.getUserNoticeContent()))
+                    cancelable(false)
+                    positiveButton(res = R.string.ok) {
+                        Util.setReadUserNoticeVersion(Const.Common.USER_NOTICE_VERSION)
+                    }
+                }
             }
 
             rlAboutActivityTestDevice.setOnClickListener {

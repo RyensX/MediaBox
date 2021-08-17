@@ -10,7 +10,7 @@ import com.skyd.imomoe.bean.TabBean
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.HomeModel
 import com.skyd.imomoe.model.interfaces.IHomeModel
-import com.skyd.imomoe.util.Util.showToastOnThread
+import com.skyd.imomoe.util.Util.showToastOnIOThread
 import com.skyd.imomoe.view.adapter.SerializableRecycledViewPool
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -38,7 +38,7 @@ class HomeViewModel : ViewModel() {
                 allTabList.clear()
                 mldGetAllTabList.postValue(false)
                 e.printStackTrace()
-                (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread(
+                (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnIOThread(
                     Toast.LENGTH_LONG
                 )
             }

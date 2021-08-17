@@ -1,5 +1,6 @@
 package com.skyd.imomoe
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import com.liulishuo.filedownloader.FileDownloader
@@ -13,7 +14,6 @@ import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.getSkinResourceId
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.release
-import com.skyd.skin.SkinManager
 import com.skyd.skin.core.attrs.SrlPrimaryColorAttr
 import com.umeng.analytics.MobclickAgent
 import com.umeng.commonsdk.UMConfigure
@@ -42,11 +42,10 @@ class App : Application() {
         }
 
         FileDownloader.setup(this)
-
-        if (DataSourceManager.useCustomDataSource) getString(R.string.using_custom_data_source).showToast()
     }
 
     companion object {
+        @SuppressLint("StaticFieldLeak")
         lateinit var context: Context
 
         init {

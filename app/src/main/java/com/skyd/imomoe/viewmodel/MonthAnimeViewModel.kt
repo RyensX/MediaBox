@@ -10,7 +10,7 @@ import com.skyd.imomoe.bean.PageNumberBean
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.MonthAnimeModel
 import com.skyd.imomoe.model.interfaces.IMonthAnimeModel
-import com.skyd.imomoe.util.Util.showToastOnThread
+import com.skyd.imomoe.util.Util.showToastOnIOThread
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -39,7 +39,7 @@ class MonthAnimeViewModel : ViewModel() {
                 monthAnimeList.clear()
                 mldMonthAnimeList.postValue(false)
                 e.printStackTrace()
-                (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread()
+                (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnIOThread()
             }
         }
     }

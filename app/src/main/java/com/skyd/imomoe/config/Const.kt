@@ -10,15 +10,12 @@ interface Const {
             const val GITHUB_URL = "https://github.com/SkyD666/Imomoe"
             const val GITHUB_NEW_ISSUE_URL = "https://github.com/SkyD666/Imomoe/issues/new"
             const val GITEE_URL = "https://gitee.com/SkyD666/Imomoe"
+            const val USER_NOTICE_VERSION = 1
         }
     }
 
     interface ActionUrl {
         companion object {
-//            const val ANIME_DETAIL = "/show/"
-//            const val ANIME_PLAY = "/v/"
-//            const val ANIME_SEARCH = "/search/"
-//            const val ANIME_TOP = "/top/"
             const val ANIME_CLASSIFY = "/app/classify"      //此常量为自己定义，与服务器无关
             const val ANIME_BROWSER = "/app/browser"      //此常量为自己定义，与服务器无关
             const val ANIME_ANIME_DOWNLOAD_EPISODE =

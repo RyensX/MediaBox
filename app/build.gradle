@@ -26,8 +26,8 @@ android {
         applicationId "com.skyd.imomoe"
         minSdkVersion 21
         targetSdkVersion 31
-        versionCode 16
-        versionName "1.2.0"
+        versionCode 17
+        versionName "1.2.1"
         flavorDimensions "versionName"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

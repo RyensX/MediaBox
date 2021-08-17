@@ -1,21 +1,29 @@
 package com.skyd.imomoe.view.activity
 
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
 import android.os.Build
 import android.os.Bundle
+import android.text.Html
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
+import com.afollestad.materialdialogs.MaterialDialog
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
+import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.config.Const.ShortCuts.Companion.ACTION_EVERYDAY
 import com.skyd.imomoe.config.Const.ShortCuts.Companion.ID_DOWNLOAD
 import com.skyd.imomoe.config.Const.ShortCuts.Companion.ID_EVERYDAY
 import com.skyd.imomoe.config.Const.ShortCuts.Companion.ID_FAVORITE
 import com.skyd.imomoe.databinding.ActivityMainBinding
+import com.skyd.imomoe.util.Util
+import com.skyd.imomoe.util.Util.getUserNoticeContent
+import com.skyd.imomoe.util.Util.lastReadUserNoticeVersion
+import com.skyd.imomoe.util.Util.setReadUserNoticeVersion
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.clickScale
 import com.skyd.imomoe.util.eventbus.EventBusSubscriber
@@ -30,6 +38,10 @@ import com.skyd.imomoe.view.fragment.MoreFragment
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import java.io.BufferedReader
+import java.io.IOException
+import java.io.InputStreamReader
+import kotlin.system.exitProcess
 
 
 class MainActivity : BaseActivity<ActivityMainBinding>(), EventBusSubscriber {
@@ -46,9 +58,20 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), EventBusSubscriber {
 
         action = intent.action ?: ""
 
+        if (lastReadUserNoticeVersion() < Const.Common.USER_NOTICE_VERSION) {
+            MaterialDialog(this).show {
+                title(res = R.string.user_notice)
+                message(text = Html.fromHtml(getUserNoticeContent()))
+                cancelable(false)
+                positiveButton(res = R.string.ok) {
+                    setReadUserNoticeVersion(Const.Common.USER_NOTICE_VERSION)
+                }
+            }
+        }
+
         //检查更新
         val appUpdateHelper = AppUpdateHelper.instance
-        appUpdateHelper.getUpdateStatus().observe(this, Observer {
+        appUpdateHelper.getUpdateStatus().observe(this, {
             when (it) {
                 AppUpdateStatus.UNCHECK -> appUpdateHelper.checkUpdate()
                 AppUpdateStatus.DATED -> appUpdateHelper.noticeUpdate(this)

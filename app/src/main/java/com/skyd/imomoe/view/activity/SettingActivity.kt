@@ -16,7 +16,7 @@ import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.util.Util.getAppVersionName
 import com.skyd.imomoe.util.Util.restartApp
 import com.skyd.imomoe.util.Util.showToast
-import com.skyd.imomoe.util.Util.showToastOnThread
+import com.skyd.imomoe.util.Util.showToastOnIOThread
 import com.skyd.imomoe.util.gone
 import com.skyd.imomoe.util.update.AppUpdateHelper
 import com.skyd.imomoe.util.update.AppUpdateStatus
@@ -70,8 +70,8 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
             launch(Dispatchers.IO) {
                 delay(1000)
                 viewModel.getCacheSize()
-                if (it) getString(R.string.clear_cache_succeed).showToastOnThread()
-                else getString(R.string.clear_cache_failed).showToastOnThread()
+                if (it) getString(R.string.clear_cache_succeed).showToastOnIOThread()
+                else getString(R.string.clear_cache_failed).showToastOnIOThread()
             }
             viewModel.mldClearAllCache.postValue(null)
         })
@@ -184,12 +184,6 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
         }
 
         mBinding.tvSettingActivityInfoDomain.text = Api.MAIN_URL
-//        mBinding.tvSettingActivityDefaultDomain.setOnClickListener {
-//            Api.MAIN_URL = Api.DEFAULT_MAIN_URL
-//            mBinding.tvSettingActivityInfoDomain.text = Api.DEFAULT_MAIN_URL
-//            getString(R.string.set_domain_to_default, Api.DEFAULT_MAIN_URL)
-//                .showToast(Toast.LENGTH_LONG)
-//        }
 
         mBinding.switchSettingActivityCustomDataSource.isChecked =
             DataSourceManager.useCustomDataSource
@@ -198,7 +192,7 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
             MaterialDialog(this).show {
                 icon(R.drawable.ic_category_main_color_2_24_skin)
                 title(res = R.string.warning)
-                message(res = R.string.request_restart_app)
+                message(res = if (isChecked) R.string.custom_data_source_tip else R.string.request_restart_app)
                 cancelable(false)
                 positiveButton(res = R.string.restart) {
                     DataSourceManager.useCustomDataSource = isChecked
@@ -211,24 +205,6 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
                 }
             }
         }
-
-//        mBinding.rlSettingActivityDomain.setOnClickListener {
-//            MaterialDialog(this).show {
-//                input(hintRes = R.string.input_a_website_domain) { dialog, text ->
-//                    try {
-//                        URL(text.toString())
-//                        val url = text.toString().replaceFirst(Regex("/$"), "")
-//                        Api.MAIN_URL = url
-//                        mBinding.tvSettingActivityInfoDomain.text = url
-//                    } catch (e: Exception) {
-//                        App.context.resources.getString(R.string.website_domain_format_error)
-//                            .showToast()
-//                        e.printStackTrace()
-//                    }
-//                }
-//                positiveButton(R.string.ok)
-//            }
-//        }
 
         initNightMode()
     }

@@ -12,7 +12,7 @@ import com.skyd.imomoe.bean.PageNumberBean
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.ClassifyModel
 import com.skyd.imomoe.model.interfaces.IClassifyModel
-import com.skyd.imomoe.util.Util.showToastOnThread
+import com.skyd.imomoe.util.Util.showToastOnIOThread
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -49,7 +49,7 @@ class ClassifyViewModel : ViewModel() {
                 classifyTabList.clear()
                 mldClassifyTabList.postValue(false)
                 e.printStackTrace()
-                (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread()
+                (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnIOThread()
             }
         }
     }
@@ -72,7 +72,7 @@ class ClassifyViewModel : ViewModel() {
                 classifyList.clear()
                 mldClassifyList.postValue(-1)
                 e.printStackTrace()
-                (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread()
+                (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnIOThread()
             }
         }
     }

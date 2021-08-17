@@ -42,9 +42,7 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.io.File
-import java.io.FileInputStream
-import java.io.IOException
+import java.io.*
 import java.math.BigDecimal
 import java.net.HttpURLConnection
 import java.net.URL
@@ -85,14 +83,43 @@ object Util {
         App.context.startActivity(i)
     }
 
+    /**
+     * 上次读过的用户须知的版本号
+     */
+    fun lastReadUserNoticeVersion(): Int = App.context.sharedPreferences().getInt("userNotice", 0)
+
+    /**
+     * @param version 用户须知版本号
+     */
+    fun setReadUserNoticeVersion(version: Int) = App.context.sharedPreferences().editor {
+        putInt("userNotice", version)
+    }
+
+    /**
+     * 获取用户须知String
+     */
+    fun getUserNoticeContent(): String {
+        val sb = StringBuffer()
+        try {
+            val inputStream = App.context.resources.openRawResource(R.raw.notice)
+            val reader = BufferedReader(InputStreamReader(inputStream, "UTF-8"))
+            var out: String?
+            while (reader.readLine().also { out = it } != null) {
+                sb.append(out)
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        return sb.toString()
+    }
+
     fun getWebsiteLinkSuffix(): String {
-        return App.context.sharedPreferences("websiteLinkSuffix").getString("suffix", ".html")
-            ?: ".html"
+        return App.context.sharedPreferences().getString("websiteLinkSuffix", ".html") ?: ".html"
     }
 
     fun setWebsiteLinkSuffix(suffix: String) {
-        App.context.sharedPreferences("websiteLinkSuffix").editor {
-            putString("suffix", suffix)
+        App.context.sharedPreferences().editor {
+            putString("websiteLinkSuffix", suffix)
         }
     }
 
@@ -439,10 +466,9 @@ object Util {
         AnimeToast.makeText(App.context, this, duration).show()
     }
 
-    @DelicateCoroutinesApi
-    fun CharSequence.showToastOnThread(duration: Int = Toast.LENGTH_SHORT) {
+    fun CharSequence.showToastOnIOThread(duration: Int = Toast.LENGTH_SHORT) {
         GlobalScope.launch(Dispatchers.Main) {
-            this@showToastOnThread.showToast(duration)
+            this@showToastOnIOThread.showToast(duration)
         }
     }
 

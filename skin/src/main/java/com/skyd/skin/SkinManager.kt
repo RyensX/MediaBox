@@ -18,6 +18,7 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.*
 import androidx.annotation.ColorRes
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.cardview.widget.CardView
@@ -368,6 +369,7 @@ object SkinManager {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     fun setScrollbarThumbVertical(view: View, resourceId: Int) {
         if (resourceId > 0) {
             // 是否默认皮肤

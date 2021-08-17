@@ -2,21 +2,24 @@ package com.skyd.imomoe.model
 
 import android.util.LruCache
 import com.skyd.imomoe.App
+import com.skyd.imomoe.R
 import com.skyd.imomoe.model.interfaces.IConst
 import com.skyd.imomoe.model.interfaces.IRouteProcessor
 import com.skyd.imomoe.model.interfaces.IUtil
+import com.skyd.imomoe.util.Util.showToastOnIOThread
 import com.skyd.imomoe.util.editor
 import com.skyd.imomoe.util.sharedPreferences
 import dalvik.system.DexClassLoader
 
 
 object DataSourceManager {
+    private var needUseCustomDataSourceTip = true
     var useCustomDataSource: Boolean
         get() {
-            return App.context.sharedPreferences("App").getBoolean("customDataSource", false)
+            return App.context.sharedPreferences().getBoolean("customDataSource", false)
         }
         set(value) {
-            App.context.sharedPreferences("App").editor { putBoolean("customDataSource", value) }
+            App.context.sharedPreferences().editor { putBoolean("customDataSource", value) }
         }
 
     // 第一个是传入的接口，第二个是实现类
@@ -30,8 +33,10 @@ object DataSourceManager {
     }
 
     fun <T> getBinaryName(clazz: Class<T>): String {
-        return "com.skyd.imomoe.model.impls.custom.Custom${clazz.getDeclaredField("implName")
-            .get(null)}"
+        return "com.skyd.imomoe.model.impls.custom.Custom${
+            clazz.getDeclaredField("implName")
+                .get(null)
+        }"
     }
 
     fun getUtil(): IUtil? {
@@ -65,6 +70,7 @@ object DataSourceManager {
      * 在更换数据源后必须调用此方法
      */
     fun clearCache() {
+        needUseCustomDataSourceTip = true
         cache.evictAll()
         singletonCache.evictAll()
     }
@@ -73,6 +79,10 @@ object DataSourceManager {
     fun <T> create(clazz: Class<T>): T? {
         // 如果不使用自定义数据，直接返回null
         if (!useCustomDataSource) return null
+        if (needUseCustomDataSourceTip) {
+            App.context.resources.getString(R.string.using_custom_data_source).showToastOnIOThread()
+            needUseCustomDataSourceTip = false
+        }
         cache[clazz]?.let {
             return it.newInstance() as T
         }

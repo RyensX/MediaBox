@@ -3,6 +3,7 @@ package com.skyd.imomoe.util.update
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
+import android.text.Html
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import com.afollestad.materialdialogs.MaterialDialog
@@ -47,9 +48,9 @@ class AppUpdateHelper private constructor() {
         MaterialDialog(activity).show {
             title(text = "发现新版本")
             message(
-                text = "新版：" + updateBean.name + "  大小：" +
+                text = Html.fromHtml("新版：" + updateBean.name + "  大小：" +
                         getFormatSize(updateBean.assets[0].size.toDouble()) +
-                        "\n" + updateBean.body
+                        "\n" + updateBean.body)
             )
             positiveButton(text = "更新") {
                 XXPermissions.with(activity).permission(Permission.MANAGE_EXTERNAL_STORAGE)

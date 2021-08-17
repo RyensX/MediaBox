@@ -12,7 +12,7 @@ import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.SearchModel
 import com.skyd.imomoe.model.interfaces.ISearchModel
-import com.skyd.imomoe.util.Util.showToastOnThread
+import com.skyd.imomoe.util.Util.showToastOnIOThread
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -46,7 +46,7 @@ class SearchViewModel : ViewModel() {
             } catch (e: Exception) {
                 mldFailed.postValue(true)
                 e.printStackTrace()
-                (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread()
+                (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnIOThread()
             }
         }
     }
@@ -58,7 +58,7 @@ class SearchViewModel : ViewModel() {
                 searchHistoryList.addAll(getAppDataBase().searchHistoryDao().getSearchHistoryList())
             } catch (e: Exception) {
                 e.printStackTrace()
-                (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnThread()
+                (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnIOThread()
             } finally {
                 mldSearchHistoryList.postValue(true)
             }

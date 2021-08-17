@@ -207,7 +207,7 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/rl_about_activity_test_device"
+                android:id="@+id/rl_about_activity_user_notice"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="?android:selectableItemBackground"
@@ -216,6 +216,38 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rl_about_activity_license">
+
+                <com.skyd.imomoe.view.component.textview.TypefaceTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@id/iv_about_activity_user_notice"
+                    android:text="@string/user_notice"
+                    android:textColor="@color/foreground_main_color_2_skin"
+                    android:textSize="16sp"
+                    app:typeface="bPRTypeface" />
+
+                <ImageView
+                    android:id="@+id/iv_about_activity_user_notice"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/ic_arrow_right_main_color_2_24_skin" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_about_activity_test_device"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="?android:selectableItemBackground"
+                android:paddingStart="25dp"
+                android:paddingEnd="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rl_about_activity_user_notice">
 
                 <com.skyd.imomoe.view.component.textview.TypefaceTextView
                     android:layout_width="wrap_content"

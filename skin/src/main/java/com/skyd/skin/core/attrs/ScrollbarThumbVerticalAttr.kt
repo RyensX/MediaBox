@@ -1,5 +1,6 @@
 package com.skyd.skin.core.attrs
 
+import android.os.Build
 import android.view.View
 import com.skyd.skin.SkinManager
 
@@ -10,6 +11,8 @@ class ScrollbarThumbVerticalAttr : SkinAttr() {
     }
 
     override fun applySkin(view: View) {
-        if (attrResourceRefId != -1) SkinManager.setScrollbarThumbVertical(view, attrResourceRefId)
+        if (attrResourceRefId != -1) if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            SkinManager.setScrollbarThumbVertical(view, attrResourceRefId)
+        }
     }
 }
