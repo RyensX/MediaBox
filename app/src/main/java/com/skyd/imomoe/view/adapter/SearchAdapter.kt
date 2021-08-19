@@ -9,7 +9,7 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.util.AnimeCover3ViewHolder
-import com.skyd.imomoe.util.glide.GlideUtil.loadImage
+import com.skyd.imomoe.util.coil.CoilUtil.loadImage
 import com.skyd.imomoe.util.Util.process
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.gone
@@ -29,7 +29,6 @@ class SearchAdapter(
                 holder.ivAnimeCover3Cover.setTag(R.id.image_view_tag, item.cover?.url)
                 if (holder.ivAnimeCover3Cover.getTag(R.id.image_view_tag) == item.cover?.url) {
                     holder.ivAnimeCover3Cover.loadImage(
-                        activity,
                         item.cover?.url ?: "",
                         referer = item.cover?.referer
                     )

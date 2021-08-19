@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -57,7 +58,7 @@ import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
 import tv.danmaku.ijk.media.player.IjkMediaPlayer
 
 
-class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>(), CoroutineScope by MainScope() {
+class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>() {
     override var statusBarSkin: Boolean = false
     private lateinit var mBinding: ActivityPlayBinding
     private var isFavorite: Boolean = false
@@ -150,7 +151,7 @@ class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>(), CoroutineScope by
             srlPlayActivity.setColorSchemeResources(getSkinResourceId(R.color.main_color_skin))
         }
 
-        launch(Dispatchers.IO) {
+        lifecycleScope.launch(Dispatchers.IO) {
             val favoriteAnime = getAppDataBase().favoriteAnimeDao().getFavoriteAnime(detailPartUrl)
             withContext(Dispatchers.Main) {
                 isFavorite = if (favoriteAnime == null) {
@@ -160,46 +161,44 @@ class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>(), CoroutineScope by
                     mBinding.ivPlayActivityFavorite.setImageDrawable(getResDrawable(R.drawable.ic_star_main_color_2_24_skin))
                     true
                 }
-                mBinding.ivPlayActivityFavorite.setOnClickListener {
-                    launch(Dispatchers.IO) {
-                        if (isFavorite) {
-                            getAppDataBase().favoriteAnimeDao().deleteFavoriteAnime(detailPartUrl)
-                            withContext(Dispatchers.Main) {
-                                isFavorite = false
-                                mBinding.ivPlayActivityFavorite.setImageDrawable(getResDrawable(R.drawable.ic_star_border_main_color_2_24_skin))
-                                getString(R.string.remove_favorite_succeed).showToast()
-                            }
-                        } else {
-                            getAppDataBase().favoriteAnimeDao().insertFavoriteAnime(
-                                FavoriteAnimeBean(
-                                    Const.ViewHolderTypeString.ANIME_COVER_8, "",
-                                    detailPartUrl,
-                                    viewModel.playBean?.title?.title ?: "",
-                                    System.currentTimeMillis(),
-                                    viewModel.animeCover,
-                                    lastEpisodeUrl = viewModel.partUrl,
-                                    lastEpisode = viewModel.animeEpisodeDataBean.title
-                                )
+            }
+            mBinding.ivPlayActivityFavorite.setOnClickListener {
+                if (isFavorite) {
+                    Thread {
+                        getAppDataBase().favoriteAnimeDao().deleteFavoriteAnime(detailPartUrl)
+                    }.start()
+                    isFavorite = false
+                    mBinding.ivPlayActivityFavorite.setImageDrawable(getResDrawable(R.drawable.ic_star_border_main_color_2_24_skin))
+                    getString(R.string.remove_favorite_succeed).showToast()
+                } else {
+                    Thread {
+                        getAppDataBase().favoriteAnimeDao().insertFavoriteAnime(
+                            FavoriteAnimeBean(
+                                Const.ViewHolderTypeString.ANIME_COVER_8, "",
+                                detailPartUrl,
+                                viewModel.playBean?.title?.title ?: "",
+                                System.currentTimeMillis(),
+                                viewModel.animeCover,
+                                lastEpisodeUrl = viewModel.partUrl,
+                                lastEpisode = viewModel.animeEpisodeDataBean.title
                             )
-                            withContext(Dispatchers.Main) {
-                                isFavorite = true
-                                mBinding.ivPlayActivityFavorite.setImageDrawable(getResDrawable(R.drawable.ic_star_main_color_2_24_skin))
-                                getString(R.string.favorite_succeed).showToast()
-                            }
-                        }
-                    }
+                        )
+                    }.start()
+                    isFavorite = true
+                    mBinding.ivPlayActivityFavorite.setImageDrawable(getResDrawable(R.drawable.ic_star_main_color_2_24_skin))
+                    getString(R.string.favorite_succeed).showToast()
                 }
             }
         }
         mBinding.ivPlayActivityFavorite.isEnabled = false
 
-        viewModel.mldAnimeCover.observe(this, Observer {
+        viewModel.mldAnimeCover.observe(this, {
             if (it) {
                 favoriteBeanDataReady++
             }
         })
 
-        viewModel.mldPlayBean.observe(this, Observer {
+        viewModel.mldPlayBean.observe(this, {
             mBinding.srlPlayActivity.isRefreshing = false
 
             val title = viewModel.playBean?.title?.title

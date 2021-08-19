@@ -18,7 +18,7 @@ import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.util.*
 import com.skyd.imomoe.util.Util.dp
-import com.skyd.imomoe.util.glide.GlideUtil.loadImage
+import com.skyd.imomoe.util.coil.CoilUtil.loadImage
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.getResDrawable
 import com.skyd.imomoe.util.Util.process
@@ -94,7 +94,6 @@ class AnimeDetailAdapter(
                     holder.ivAnimeInfo1Cover.setTag(R.id.image_view_tag, it.cover.url)
                     if (holder.ivAnimeInfo1Cover.getTag(R.id.image_view_tag) == it.cover.url) {
                         holder.ivAnimeInfo1Cover.loadImage(
-                            activity,
                             it.cover.url,
                             referer = it.cover.referer,
                             placeholder = 0,
@@ -161,7 +160,6 @@ class AnimeDetailAdapter(
                 holder.tvAnimeCover1Title.setTextColor(activity.getResColor(R.color.foreground_white_skin))
                 if (holder.ivAnimeCover1Cover.getTag(R.id.image_view_tag) == item.cover?.url) {
                     holder.ivAnimeCover1Cover.loadImage(
-                        activity,
                         item.cover?.url ?: "",
                         referer = item.cover?.referer
                     )

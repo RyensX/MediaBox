@@ -2,6 +2,7 @@ package com.skyd.imomoe.view.activity
 
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.lifecycleScope
 import com.shuyu.gsyvideoplayer.GSYVideoManager
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack
 import com.shuyu.gsyvideoplayer.model.VideoOptionModel
@@ -41,7 +42,7 @@ class SimplePlayActivity : BaseActivity<ActivitySimplePlayBinding>() {
                 statusBar = true
             )
 
-            launch(Dispatchers.IO) {
+            lifecycleScope.launch(Dispatchers.IO) {
                 val title = getAppDataBase().animeDownloadDao()
                     .getAnimeDownloadTitleByMd5(getMD5(File(url.replaceFirst("file://", ""))) ?: "")
                     ?: this@SimplePlayActivity.title

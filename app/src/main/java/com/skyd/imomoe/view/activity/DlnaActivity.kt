@@ -3,6 +3,7 @@ package com.skyd.imomoe.view.activity
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.ActivityDlnaBinding
@@ -63,7 +64,7 @@ class DlnaActivity : BaseActivity<ActivityDlnaBinding>() {
             rvDlnaActivityDevice.adapter = adapter
         }
 
-        launch(Dispatchers.IO) {
+        lifecycleScope.launch(Dispatchers.IO) {
             url = getRedirectUrl(this@DlnaActivity.url)
 
             DLNACastManager.getInstance().registerDeviceListener(deviceRegistryListener)

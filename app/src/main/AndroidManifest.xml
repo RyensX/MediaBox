@@ -19,6 +19,9 @@
     <uses-permission
         android:name="android.permission.READ_LOGS"
         tools:ignore="ProtectedPermissions" />
+    <!-- U-PUSH 移除自启动能力 -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"
+        tools:node="remove" />
 
     <application
         android:name=".App"
@@ -154,6 +157,32 @@
         <meta-data
             android:name="UMENG_CHANNEL"
             android:value="${UMENG_CHANNEL_VALUE}" />
+
+        <!-- U-PUSH 移除关联启动能力 -->
+        <service
+            android:name="com.taobao.accs.ChannelService"
+            android:exported="false"
+            tools:replace="android:exported" />
+        <service
+            android:name="com.taobao.accs.data.MsgDistributeService"
+            android:exported="false"
+            tools:replace="android:exported" />
+        <receiver
+            android:name="com.taobao.accs.EventReceiver"
+            android:exported="false"
+            tools:replace="android:exported" />
+        <receiver
+            android:name="com.taobao.accs.ServiceReceiver"
+            android:exported="false"
+            tools:replace="android:exported" />
+        <service
+            android:name="com.umeng.message.XiaomiIntentService"
+            android:exported="false"
+            tools:replace="android:exported" />
+        <receiver
+            android:name="com.taobao.agoo.AgooCommondReceiver"
+            android:exported="false"
+            tools:replace="android:exported" />
     </application>
 
 </manifest>

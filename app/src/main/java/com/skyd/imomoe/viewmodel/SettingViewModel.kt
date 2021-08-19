@@ -3,17 +3,16 @@ package com.skyd.imomoe.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bumptech.glide.load.engine.cache.InternalCacheDiskCacheFactory
+import coil.util.CoilUtils
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.util.Util.getDirectorySize
 import com.skyd.imomoe.util.Util.getFormatSize
 import com.skyd.imomoe.util.Util.showToastOnIOThread
-import com.skyd.imomoe.util.glide.GlideUtil
+import com.skyd.imomoe.util.coil.CoilUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.io.File
 
 
 class SettingViewModel : ViewModel() {
@@ -41,8 +40,7 @@ class SettingViewModel : ViewModel() {
             mldCacheSize.postValue(
                 try {
                     getFormatSize(
-                        getDirectorySize(File(App.context.cacheDir.path + "/" + InternalCacheDiskCacheFactory.DEFAULT_DISK_CACHE_DIR))
-                            .toDouble()
+                        getDirectorySize(CoilUtils.createDefaultCache(App.context).directory).toDouble()
                     )
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -57,7 +55,7 @@ class SettingViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 // Glide
-                GlideUtil.clearMemoryDiskCache()
+                CoilUtil.clearMemoryDiskCache()
                 mldClearAllCache.postValue(true)
             } catch (e: Exception) {
                 mldClearAllCache.postValue(false)

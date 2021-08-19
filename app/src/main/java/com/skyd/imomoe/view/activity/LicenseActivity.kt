@@ -38,9 +38,9 @@ class LicenseActivity : BaseActivity<ActivityLicenseBinding>() {
             LicenseBean(
                 ViewHolderTypeString.LICENSE_1,
                 ActionUrl.ANIME_BROWSER,
-                "https://github.com/bumptech/glide",
-                "glide",
-                "BSD, part MIT and Apache 2.0"
+                "https://github.com/coil-kt/coil",
+                "coil",
+                "Apache-2.0 License"
             )
         )
         list.add(

@@ -8,7 +8,7 @@ import com.skyd.imomoe.bean.FavoriteAnimeBean
 import com.skyd.imomoe.util.AnimeCover8ViewHolder
 import com.skyd.imomoe.util.Util.process
 import com.skyd.imomoe.util.Util.showToast
-import com.skyd.imomoe.util.glide.GlideUtil.loadImage
+import com.skyd.imomoe.util.coil.CoilUtil.loadImage
 import com.skyd.imomoe.util.gone
 import com.skyd.imomoe.util.visible
 import com.skyd.imomoe.view.activity.FavoriteActivity
@@ -25,7 +25,6 @@ class FavoriteAdapter(
         when (holder) {
             is AnimeCover8ViewHolder -> {
                 holder.ivAnimeCover8Cover.loadImage(
-                    activity,
                     url = item.cover.url,
                     referer = item.cover.referer
                 )

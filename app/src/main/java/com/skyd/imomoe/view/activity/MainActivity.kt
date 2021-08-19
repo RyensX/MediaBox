@@ -1,6 +1,5 @@
 package com.skyd.imomoe.view.activity
 
-import android.content.Context
 import android.content.Intent
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
@@ -10,7 +9,6 @@ import android.os.Bundle
 import android.text.Html
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.Observer
 import com.afollestad.materialdialogs.MaterialDialog
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
@@ -20,7 +18,7 @@ import com.skyd.imomoe.config.Const.ShortCuts.Companion.ID_DOWNLOAD
 import com.skyd.imomoe.config.Const.ShortCuts.Companion.ID_EVERYDAY
 import com.skyd.imomoe.config.Const.ShortCuts.Companion.ID_FAVORITE
 import com.skyd.imomoe.databinding.ActivityMainBinding
-import com.skyd.imomoe.util.Util
+import com.skyd.imomoe.util.Util.dp
 import com.skyd.imomoe.util.Util.getUserNoticeContent
 import com.skyd.imomoe.util.Util.lastReadUserNoticeVersion
 import com.skyd.imomoe.util.Util.setReadUserNoticeVersion
@@ -35,13 +33,11 @@ import com.skyd.imomoe.util.update.AppUpdateStatus
 import com.skyd.imomoe.view.fragment.EverydayAnimeFragment
 import com.skyd.imomoe.view.fragment.HomeFragment
 import com.skyd.imomoe.view.fragment.MoreFragment
+import com.umeng.message.PushAgent
+import com.umeng.message.inapp.InAppMessageManager
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import java.io.BufferedReader
-import java.io.IOException
-import java.io.InputStreamReader
-import kotlin.system.exitProcess
 
 
 class MainActivity : BaseActivity<ActivityMainBinding>(), EventBusSubscriber {
@@ -57,6 +53,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), EventBusSubscriber {
         super.onCreate(savedInstanceState)
 
         action = intent.action ?: ""
+
+        PushAgent.getInstance(this).onAppStart()
 
         if (lastReadUserNoticeVersion() < Const.Common.USER_NOTICE_VERSION) {
             MaterialDialog(this).show {

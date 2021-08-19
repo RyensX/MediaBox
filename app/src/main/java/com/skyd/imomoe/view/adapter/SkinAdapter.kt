@@ -1,6 +1,5 @@
 package com.skyd.imomoe.view.adapter
 
-import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
@@ -9,8 +8,7 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.SkinBean
 import com.skyd.imomoe.util.SkinCover1ViewHolder
 import com.skyd.imomoe.util.Util.showToast
-import com.skyd.imomoe.util.clickScale
-import com.skyd.imomoe.util.glide.GlideUtil.loadImage
+import com.skyd.imomoe.util.coil.CoilUtil.loadImage
 import com.skyd.imomoe.util.gone
 import com.skyd.imomoe.util.visible
 import com.skyd.imomoe.view.activity.SkinActivity
@@ -39,7 +37,7 @@ class SkinAdapter(
                     if (cover is Int) {
                         holder.ivSkinCover1Cover.setImageDrawable(ColorDrawable(cover))
                     } else if (cover is String) {
-                        holder.ivSkinCover1Cover.loadImage(activity, cover)
+                        holder.ivSkinCover1Cover.loadImage(cover)
                     }
                 }
                 holder.itemView.setOnClickListener {

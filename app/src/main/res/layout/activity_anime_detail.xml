@@ -10,7 +10,13 @@
         android:id="@+id/iv_anime_detail_activity_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="fitXY" />
+        android:scaleType="centerCrop"
+        tools:src="@drawable/ic_launcher_background" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent_skin" />
 
     <View
         android:id="@+id/view_anime_detail_activity_status_bar"

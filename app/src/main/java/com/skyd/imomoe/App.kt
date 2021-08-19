@@ -7,16 +7,16 @@ import com.liulishuo.filedownloader.FileDownloader
 import com.scwang.smart.refresh.footer.BallPulseFooter
 import com.scwang.smart.refresh.header.MaterialHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
-import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.util.CrashHandler
+import com.skyd.imomoe.util.PushHelper
 import com.skyd.imomoe.util.Util.getManifestMetaValue
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.getSkinResourceId
-import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.release
 import com.skyd.skin.core.attrs.SrlPrimaryColorAttr
 import com.umeng.analytics.MobclickAgent
 import com.umeng.commonsdk.UMConfigure
+import com.umeng.message.PushAgent
 
 
 class App : Application() {
@@ -35,10 +35,16 @@ class App : Application() {
                 getManifestMetaValue("UMENG_APPKEY"),
                 getManifestMetaValue("UMENG_CHANNEL"),
                 UMConfigure.DEVICE_TYPE_PHONE,
-                null
+                BuildConfig.UMENG_MESSAGE_SECRET
             )
+            UMConfigure.setLogEnabled(BuildConfig.DEBUG)
+
             // 选择AUTO页面采集模式，统计SDK基础指标无需手动埋点可自动采集。
             MobclickAgent.setPageCollectionMode(MobclickAgent.PageMode.AUTO)
+
+            PushAgent.getInstance(context).resourcePackageName = BuildConfig.APPLICATION_ID
+            PushHelper.init(applicationContext)
+            Thread { PushHelper.init(applicationContext) }.start()
         }
 
         FileDownloader.setup(this)
@@ -56,7 +62,6 @@ class App : Application() {
                 layout.setFooterHeight(100f)
                 layout.setHeaderTriggerRate(0.5f)
                 layout.setDisableContentWhenLoading(false)
-//                layout.setPrimaryColorsId(getSkinResourceId(R.color.main_color_3_skin))
             }
 
             // 全局设置默认的 Header

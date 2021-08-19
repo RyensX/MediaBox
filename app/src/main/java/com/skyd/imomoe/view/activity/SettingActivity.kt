@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.afollestad.materialdialogs.MaterialDialog
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Api
@@ -62,12 +63,12 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
         }
 
         // 清理缓存文件
-        viewModel.mldCacheSize.observe(this, Observer {
+        viewModel.mldCacheSize.observe(this, {
             mBinding.tvSettingActivityClearCacheSize.text = it
         })
         viewModel.mldClearAllCache.observe(this, Observer {
             if (it == null) return@Observer
-            launch(Dispatchers.IO) {
+            lifecycleScope.launch(Dispatchers.IO) {
                 delay(1000)
                 viewModel.getCacheSize()
                 if (it) getString(R.string.clear_cache_succeed).showToastOnIOThread()
@@ -103,7 +104,7 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
             tvSettingActivityUpdateInfo.text =
                 getString(R.string.current_version, getAppVersionName())
 
-            appUpdateHelper.getUpdateServer().observe(this@SettingActivity, Observer {
+            appUpdateHelper.getUpdateServer().observe(this@SettingActivity, {
                 tvSettingActivityUpdateInfoServer.text = AppUpdateHelper.serverName[it]
             })
             tvSettingActivityUpdateInfoServer.text =

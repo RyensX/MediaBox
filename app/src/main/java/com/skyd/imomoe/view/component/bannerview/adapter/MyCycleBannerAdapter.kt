@@ -10,7 +10,7 @@ import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.bean.BaseBean
 import com.skyd.imomoe.util.AnimeCover6ViewHolder
 import com.skyd.imomoe.util.Util.getResColor
-import com.skyd.imomoe.util.glide.GlideUtil.loadImage
+import com.skyd.imomoe.util.coil.CoilUtil.loadImage
 import com.skyd.imomoe.util.Util.process
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.ViewHolderUtil
@@ -48,7 +48,6 @@ class MyCycleBannerAdapter(
                 if (item is AnimeCoverBean) {
                     holder.tvAnimeCover6Night.setBackgroundColor(activity.getResColor(R.color.transparent_skin))
                     holder.ivAnimeCover6Cover.loadImage(
-                        activity,
                         item.cover?.url ?: "",
                         referer = item.cover?.referer
                     )

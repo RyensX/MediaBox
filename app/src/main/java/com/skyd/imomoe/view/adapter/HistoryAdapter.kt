@@ -9,7 +9,7 @@ import com.skyd.imomoe.util.AnimeCover9ViewHolder
 import com.skyd.imomoe.util.Util.process
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.Util.time2Now
-import com.skyd.imomoe.util.glide.GlideUtil.loadImage
+import com.skyd.imomoe.util.coil.CoilUtil.loadImage
 import com.skyd.imomoe.view.activity.HistoryActivity
 
 class HistoryAdapter(
@@ -24,7 +24,6 @@ class HistoryAdapter(
         when (holder) {
             is AnimeCover9ViewHolder -> {
                 holder.ivAnimeCover9Cover.loadImage(
-                    activity,
                     url = item.cover.url,
                     referer = item.cover.referer
                 )

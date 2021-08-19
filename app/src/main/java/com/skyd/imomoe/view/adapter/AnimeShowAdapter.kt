@@ -15,7 +15,7 @@ import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.bean.IAnimeShowBean
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.util.*
-import com.skyd.imomoe.util.glide.GlideUtil.loadImage
+import com.skyd.imomoe.util.coil.CoilUtil.loadImage
 import com.skyd.imomoe.util.Util.process
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.view.fragment.AnimeShowFragment
@@ -136,7 +136,6 @@ class AnimeShowAdapter(
                 fragment.activity?.let { activity ->
                     if (holder.ivAnimeCover1Cover.getTag(R.id.image_view_tag) == item.cover?.url) {
                         holder.ivAnimeCover1Cover.loadImage(
-                            activity,
                             item.cover?.url ?: "",
                             referer = item.cover?.referer
                         )
@@ -158,7 +157,6 @@ class AnimeShowAdapter(
                 fragment.activity?.let { activity ->
                     if (holder.ivAnimeCover3Cover.getTag(R.id.image_view_tag) == item.cover?.url) {
                         holder.ivAnimeCover3Cover.loadImage(
-                            activity,
                             item.cover?.url ?: "",
                             referer = item.cover?.referer
                         )
@@ -206,7 +204,6 @@ class AnimeShowAdapter(
                 fragment.activity?.let { activity ->
                     if (holder.ivAnimeCover4Cover.getTag(R.id.image_view_tag) == item.cover?.url) {
                         holder.ivAnimeCover4Cover.loadImage(
-                            activity,
                             item.cover?.url ?: "",
                             referer = item.cover?.referer
                         )
@@ -310,7 +307,6 @@ class AnimeShowAdapter(
                     holder.ivAnimeCover1Cover.setTag(R.id.image_view_tag, item.cover?.url)
                     if (holder.ivAnimeCover1Cover.getTag(R.id.image_view_tag) == item.cover?.url) {
                         holder.ivAnimeCover1Cover.loadImage(
-                            activity,
                             item.cover?.url ?: "",
                             referer = item.cover?.referer
                         )
@@ -333,7 +329,6 @@ class AnimeShowAdapter(
                     holder.ivAnimeCover3Cover.setTag(R.id.image_view_tag, item.cover?.url)
                     if (holder.ivAnimeCover3Cover.getTag(R.id.image_view_tag) == item.cover?.url) {
                         holder.ivAnimeCover3Cover.loadImage(
-                            activity,
                             item.cover?.url ?: "",
                             referer = item.cover?.referer
                         )
@@ -381,7 +376,6 @@ class AnimeShowAdapter(
                     holder.ivAnimeCover4Cover.setTag(R.id.image_view_tag, item.cover?.url)
                     if (holder.ivAnimeCover4Cover.getTag(R.id.image_view_tag) == item.cover?.url) {
                         holder.ivAnimeCover4Cover.loadImage(
-                            activity,
                             item.cover?.url ?: "",
                             referer = item.cover?.referer
                         )

@@ -15,7 +15,7 @@ import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.getResDrawable
 import com.skyd.imomoe.util.Util.process
 import com.skyd.imomoe.util.Util.showToast
-import com.skyd.imomoe.util.glide.GlideUtil.loadImage
+import com.skyd.imomoe.util.coil.CoilUtil.loadImage
 import com.skyd.imomoe.view.activity.PlayActivity
 import com.skyd.imomoe.view.adapter.decoration.AnimeCoverItemDecoration
 
@@ -92,7 +92,6 @@ class PlayAdapter(
                 holder.ivAnimeCover1Cover.setTag(R.id.image_view_tag, item.cover?.url)
                 if (holder.ivAnimeCover1Cover.getTag(R.id.image_view_tag) == item.cover?.url) {
                     holder.ivAnimeCover1Cover.loadImage(
-                        activity,
                         item.cover?.url ?: "",
                         referer = item.cover?.referer
                     )

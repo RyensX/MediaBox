@@ -1,5 +1,6 @@
 package com.skyd.imomoe.model
 
+import android.util.Log
 import android.util.LruCache
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
@@ -10,6 +11,7 @@ import com.skyd.imomoe.util.Util.showToastOnIOThread
 import com.skyd.imomoe.util.editor
 import com.skyd.imomoe.util.sharedPreferences
 import dalvik.system.DexClassLoader
+import java.io.File
 
 
 object DataSourceManager {
@@ -92,9 +94,19 @@ object DataSourceManager {
          * 参数3 libraryPath：指向包含本地库(so)的文件夹路径，可以设为null
          * 参数4 parent：父级类加载器，一般可以通过Context.getClassLoader获取
          */
-        val optimizedDirectory = App.context.getExternalFilesDir(null).toString() + "/DataSourceDex"
+        val jarFile = File(getJarPath())
+        if (!jarFile.exists() || !jarFile.isFile) {
+            Log.e("DataSourceManager", "useCustomDataSource but jar doesn't exist")
+            return null
+        }
+        val optimizedDirectory =
+            File(App.context.getExternalFilesDir(null).toString() + "/DataSourceDex")
+        if (!optimizedDirectory.exists() && !optimizedDirectory.mkdirs()) {
+            Log.e("DataSourceManager", "can't create optimizedDirectory")
+            return null
+        }
         val classLoader =
-            DexClassLoader(getJarPath(), optimizedDirectory, null, App.context.classLoader)
+            DexClassLoader(jarFile.path, optimizedDirectory.path, null, App.context.classLoader)
         var o: T? = null
         var clz: Class<*>? = null
         try {
