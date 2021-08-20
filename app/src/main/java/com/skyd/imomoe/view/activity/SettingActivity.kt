@@ -130,16 +130,6 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
                     AppUpdateStatus.LATER -> {
                         tvSettingActivityUpdateTip.text = "暂不更新"
                     }
-                    AppUpdateStatus.DOWNLOADING -> {
-                        tvSettingActivityUpdateTip.text = "新版本下载中..."
-                    }
-                    AppUpdateStatus.CANCEL -> {
-                        tvSettingActivityUpdateTip.text = "下载被取消"
-                    }
-                    AppUpdateStatus.TO_BE_INSTALLED -> {
-                        tvSettingActivityUpdateTip.text = "待安装"
-                        if (selfUpdateCheck) appUpdateHelper.installUpdate(this@SettingActivity)
-                    }
                     AppUpdateStatus.ERROR -> {
                         tvSettingActivityUpdateTip.text = "更新失败"
                         if (selfUpdateCheck) "获取更新失败！".showToast()
@@ -152,17 +142,8 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
         mBinding.rlSettingActivityUpdate.setOnClickListener {
             selfUpdateCheck = true
             when (appUpdateHelper.getUpdateStatus().value) {
-                AppUpdateStatus.DOWNLOADING -> {
-                    "正在下载新版本，下拉可以查看进度".showToast()
-                }
-//                AppUpdateStatus.CANCEL -> {
-//                    appUpdateService.noticeUpdate(this)
-//                }
                 AppUpdateStatus.CHECKING -> {
                     "已在检查，请稍等...".showToast()
-                }
-                AppUpdateStatus.TO_BE_INSTALLED -> {
-                    appUpdateHelper.installUpdate(this)
                 }
                 else -> appUpdateHelper.checkUpdate()
             }
@@ -175,9 +156,7 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
             builder.setSingleChoiceItems(
                 AppUpdateHelper.serverName, appUpdateHelper.getUpdateServer().value ?: 0
             ) { dialog, which ->
-                if (which == 1)
-                    "Gitee有请求次数的限制，可能会更新失败！\n由于第三方下载库存在BUG，通过Gitee服务器会下载失败。因此，只能通过浏览器下载"
-                        .showToast(Toast.LENGTH_LONG)
+                if (which == 1) "Gitee有请求次数的限制，可能会更新失败！".showToast(Toast.LENGTH_LONG)
                 appUpdateHelper.setUpdateServer(which)
                 dialog.dismiss()
             }

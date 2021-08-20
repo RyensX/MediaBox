@@ -124,21 +124,12 @@
             android:name=".util.dlna.dmc.DLNACastService"
             android:exported="false" />
 
-        <receiver
-            android:name=".util.update.UpdateNotificationReceiver"
-            android:exported="false" />
-
         <service
             android:name=".util.downloadanime.AnimeDownloadService"
             android:enabled="true" />
 
         <receiver
             android:name=".util.downloadanime.AnimeDownloadNotificationReceiver"
-            android:exported="false" />
-
-        <service
-            android:name=".util.update.AppUpdateDownloadService"
-            android:enabled="true"
             android:exported="false" />
 
         <provider

@@ -7,6 +7,7 @@ import android.graphics.drawable.Icon
 import android.os.Build
 import android.os.Bundle
 import android.text.Html
+import android.widget.Toast
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.afollestad.materialdialogs.MaterialDialog
@@ -18,7 +19,7 @@ import com.skyd.imomoe.config.Const.ShortCuts.Companion.ID_DOWNLOAD
 import com.skyd.imomoe.config.Const.ShortCuts.Companion.ID_EVERYDAY
 import com.skyd.imomoe.config.Const.ShortCuts.Companion.ID_FAVORITE
 import com.skyd.imomoe.databinding.ActivityMainBinding
-import com.skyd.imomoe.util.Util.dp
+import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.util.Util.getUserNoticeContent
 import com.skyd.imomoe.util.Util.lastReadUserNoticeVersion
 import com.skyd.imomoe.util.Util.setReadUserNoticeVersion
@@ -34,7 +35,6 @@ import com.skyd.imomoe.view.fragment.EverydayAnimeFragment
 import com.skyd.imomoe.view.fragment.HomeFragment
 import com.skyd.imomoe.view.fragment.MoreFragment
 import com.umeng.message.PushAgent
-import com.umeng.message.inapp.InAppMessageManager
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -56,6 +56,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), EventBusSubscriber {
 
         PushAgent.getInstance(this).onAppStart()
 
+        if (DataSourceManager.useCustomDataSource)
+            getString(R.string.using_custom_data_source).showToast(Toast.LENGTH_LONG)
+
         if (lastReadUserNoticeVersion() < Const.Common.USER_NOTICE_VERSION) {
             MaterialDialog(this).show {
                 title(res = R.string.user_notice)
@@ -73,7 +76,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), EventBusSubscriber {
             when (it) {
                 AppUpdateStatus.UNCHECK -> appUpdateHelper.checkUpdate()
                 AppUpdateStatus.DATED -> appUpdateHelper.noticeUpdate(this)
-                AppUpdateStatus.TO_BE_INSTALLED -> appUpdateHelper.installUpdate(this)
                 else -> Unit
             }
         })

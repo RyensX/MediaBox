@@ -9,7 +9,6 @@
     android:gravity="center"
     android:paddingStart="12dp"
     android:paddingEnd="12dp"
-    android:textColor="@color/foreground_white_skin"
     android:textSize="15sp"
     app:typeface="bPRTypeface"
     tools:text="第01集" />

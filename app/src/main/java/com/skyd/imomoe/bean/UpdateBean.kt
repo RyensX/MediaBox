@@ -34,10 +34,16 @@ class UpdateBean(
         var size: Long,
 
         @SerializedName("download_count")
-        var downloadCount: String,
+        var downloadCount: String?,
 
         @SerializedName("browser_download_url")
-        var browserDownloadUrl: String
+        var browserDownloadUrl: String,
+
+        @SerializedName("created_at")
+        var createdAt: String?,
+
+        @SerializedName("updated_at")
+        var updatedAt: String?
     ) : BaseBean
 
 }

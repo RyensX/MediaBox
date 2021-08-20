@@ -25,7 +25,6 @@ import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.downloadanime.AnimeDownloadHelper.Companion.downloadHashMap
 import com.skyd.imomoe.util.downloadanime.AnimeDownloadHelper.Companion.save2Xml
 import com.skyd.imomoe.util.downloadanime.AnimeDownloadNotificationReceiver.Companion.DOWNLOAD_ANIME_NOTIFICATION_ID
-import com.skyd.imomoe.util.update.UpdateNotificationReceiver.Companion.UPDATE_NOTIFICATION_ID
 import com.skyd.imomoe.view.activity.MainActivity
 import kotlinx.coroutines.*
 import java.io.File
@@ -137,7 +136,7 @@ class AnimeDownloadService : Service() {
         clickIntent.addCategory(Intent.CATEGORY_LAUNCHER)
         clickIntent.setClass(this, MainActivity::class.java)
         clickIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        clickIntent.putExtra(UPDATE_NOTIFICATION_ID, notificationId)
+        clickIntent.putExtra(DOWNLOAD_ANIME_NOTIFICATION_ID, notificationId)
         downloadServiceHashMap[key]?.builder?.setSmallIcon(R.mipmap.ic_launcher)
             ?.setContentTitle("正在下载$folderAndFileName")
             ?.setContentText("0%")

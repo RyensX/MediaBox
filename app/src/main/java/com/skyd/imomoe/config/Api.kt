@@ -7,7 +7,7 @@ interface Api {
         const val DEFAULT_MAIN_URL = "http://www.yhdm.io"
         var MAIN_URL = DEFAULT_MAIN_URL
             get() = (DataSourceManager.getConst() ?: com.skyd.imomoe.model.impls.Const())
-                .MAIN_URL() ?: DEFAULT_MAIN_URL
+                .MAIN_URL()
             //                return App.context.sharedPreferences("url")
 //                    .getString("mainUrl", DEFAULT_MAIN_URL) ?: DEFAULT_MAIN_URL
             private set/*(value) {

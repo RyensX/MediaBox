@@ -15,7 +15,6 @@ import java.io.File
 
 
 object DataSourceManager {
-    private var needUseCustomDataSourceTip = true
     var useCustomDataSource: Boolean
         get() {
             return App.context.sharedPreferences().getBoolean("customDataSource", false)
@@ -72,7 +71,6 @@ object DataSourceManager {
      * 在更换数据源后必须调用此方法
      */
     fun clearCache() {
-        needUseCustomDataSourceTip = true
         cache.evictAll()
         singletonCache.evictAll()
     }
@@ -81,10 +79,6 @@ object DataSourceManager {
     fun <T> create(clazz: Class<T>): T? {
         // 如果不使用自定义数据，直接返回null
         if (!useCustomDataSource) return null
-        if (needUseCustomDataSourceTip) {
-            App.context.resources.getString(R.string.using_custom_data_source).showToastOnIOThread()
-            needUseCustomDataSourceTip = false
-        }
         cache[clazz]?.let {
             return it.newInstance() as T
         }

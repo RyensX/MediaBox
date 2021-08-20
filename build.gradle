@@ -3,14 +3,15 @@ buildscript {
     ext {
         secret = "${rootDir}/secret.gradle"
         andresguard = "${rootDir}/andresguard.gradle"
-        kotlin_version = '1.4.30'
+        kotlin_version = '1.4.32'
     }
     repositories {
         google()
         maven { url 'https://maven.aliyun.com/repository/public' }
         mavenCentral()
         maven { url 'https://jitpack.io' }
-        maven { url 'http://4thline.org/m2' }
+        maven { allowInsecureProtocol = true
+            url 'http://4thline.org/m2' }
         maven { url 'https://repo1.maven.org/maven2/' }
     }
     dependencies {
@@ -30,7 +31,8 @@ allprojects {
         maven { url 'https://maven.aliyun.com/repository/public' }
         mavenCentral()
         maven { url "https://jitpack.io" }
-        maven { url 'http://4thline.org/m2' }
+        maven { allowInsecureProtocol = true
+            url 'http://4thline.org/m2' }
         maven { url 'https://repo1.maven.org/maven2/' }
     }
 }

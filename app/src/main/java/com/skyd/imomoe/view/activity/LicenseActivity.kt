@@ -74,15 +74,6 @@ class LicenseActivity : BaseActivity<ActivityLicenseBinding>() {
             LicenseBean(
                 ViewHolderTypeString.LICENSE_1,
                 ActionUrl.ANIME_BROWSER,
-                "https://github.com/ReactiveX/RxJava",
-                "RxJava",
-                "Apache-2.0 License"
-            )
-        )
-        list.add(
-            LicenseBean(
-                ViewHolderTypeString.LICENSE_1,
-                ActionUrl.ANIME_BROWSER,
                 "https://github.com/getActivity/XXPermissions",
                 "XXPermissions",
                 "Apache-2.0 License"

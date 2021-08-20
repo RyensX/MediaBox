@@ -8,7 +8,7 @@
     tools:context=".view.fragment.MoreFragment">
 
     <LinearLayout
-        android:id="@+id/cl_more_fragment_header"
+        android:id="@+id/ll_more_fragment_header"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/main_color_2_skin"

@@ -207,11 +207,11 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_above="@id/layout_bottom"
-        android:src="@drawable/ic_play_white_24"
         app:layout_constraintBottom_toTopOf="@id/cl_danmu_controller"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/ic_play_white_24" />
 
     <ImageView
         android:id="@+id/lock_screen"

@@ -52,8 +52,8 @@
             android:max="100"
             android:maxHeight="2dp"
             android:minHeight="2dp"
-            android:paddingTop="2dp"
-            android:paddingBottom="2dp"
+            android:paddingTop="7dp"
+            android:paddingBottom="7dp"
             android:progressDrawable="@drawable/seek_bar_progress_1_skin"
             android:thumb="@drawable/seek_bar_thumb_1_skin"
             app:layout_constraintEnd_toEndOf="parent"
@@ -89,9 +89,9 @@
             android:layout_marginStart="16dp"
             android:textColor="@color/foreground_white_skin"
             android:textSize="13sp"
-            app:layout_constraintBottom_toBottomOf="@id/progress"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/iv_next"
-            app:layout_constraintTop_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/progress"
             app:typeface="bPRTypeface"
             tools:text="00:00" />
 
@@ -104,9 +104,9 @@
             android:text="/"
             android:textColor="@color/foreground_white_skin"
             android:textSize="13sp"
-            app:layout_constraintBottom_toBottomOf="@id/progress"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/current"
-            app:layout_constraintTop_toBottomOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/progress" />
 
         <com.skyd.imomoe.view.component.textview.TypefaceTextView
             android:id="@+id/total"
@@ -114,9 +114,9 @@
             android:layout_height="wrap_content"
             android:textColor="@color/foreground_white_skin"
             android:textSize="13sp"
-            app:layout_constraintBottom_toBottomOf="@id/progress"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/split"
-            app:layout_constraintTop_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/progress"
             app:typeface="bPRTypeface"
             tools:text="00:00" />
 

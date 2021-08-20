@@ -3,6 +3,7 @@ package com.skyd.imomoe.view.adapter
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
+import android.content.res.ColorStateList
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -77,6 +78,9 @@ class AnimeDetailAdapter(
                                 )
                         } else adapter.notifyDataSetChanged()
                     }
+                    holder.ivHorizontalRecyclerView1More.setImageDrawable(getResDrawable(R.drawable.ic_keyboard_arrow_down_main_color_2_24_skin))
+                    holder.ivHorizontalRecyclerView1More.imageTintList =
+                        ColorStateList.valueOf(activity.getResColor(R.color.foreground_white_skin))
                     holder.ivHorizontalRecyclerView1More.setOnClickListener { it1 ->
                         showEpisodeSheetDialog(it).show()
                     }

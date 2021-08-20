@@ -47,7 +47,6 @@ object SkinManager {
     const val DARK_MODE_NO = 2
     private val changeSkinListeners: MutableList<ChangeSkinListener> = ArrayList()
 
-    @SuppressLint("PrivateResource")
     private val attrIds = intArrayOf(
         R.attr.background,
         android.R.attr.background,
