@@ -93,7 +93,7 @@ class EverydayAnimeWidgetProvider : AppWidgetProvider() {
                     PendingIntent.getBroadcast(
                         context, 0, this,
                         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) PendingIntent.FLAG_CANCEL_CURRENT
-                        else PendingIntent.FLAG_IMMUTABLE
+                        else PendingIntent.FLAG_MUTABLE
                     )
                 )
             }

@@ -9,7 +9,6 @@ interface Const {
         companion object {
             const val GITHUB_URL = "https://github.com/SkyD666/Imomoe"
             const val GITHUB_NEW_ISSUE_URL = "https://github.com/SkyD666/Imomoe/issues/new"
-            const val GITEE_URL = "https://gitee.com/SkyD666/Imomoe"
             const val USER_NOTICE_VERSION = 1
         }
     }
@@ -24,6 +23,8 @@ interface Const {
             const val ANIME_ANIME_DOWNLOAD_M3U8 = "/app/animeDownloadM3U8"      //此常量为自己定义，m3u8格式
             const val ANIME_LAUNCH_ACTIVITY = "/app/animeLaunchActivity"      //此常量为自己定义，启动Activity
             const val ANIME_SKIP_BY_WEBSITE = "/app/skipByWebsite"      //此常量为自己定义，根据网址跳转
+            // 此常量为自己定义，显示通知。要求传入的参数需要经过URL编码！！！
+            const val ANIME_NOTICE = "/app/notice"
         }
     }
 

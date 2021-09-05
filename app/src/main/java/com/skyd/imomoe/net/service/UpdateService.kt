@@ -8,7 +8,4 @@ import retrofit2.http.GET
 interface UpdateService {
     @GET(Api.CHECK_UPDATE_URL)
     fun checkUpdate(): Call<UpdateBean>
-
-    @GET(Api.CHECK_UPDATE_URL_2)
-    fun checkUpdate2(): Call<UpdateBean>
 }

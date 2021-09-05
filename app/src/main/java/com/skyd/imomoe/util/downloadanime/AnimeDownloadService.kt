@@ -148,7 +148,7 @@ class AnimeDownloadService : Service() {
                     notificationId,
                     stopIntent,
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) PendingIntent.FLAG_CANCEL_CURRENT
-                    else PendingIntent.FLAG_IMMUTABLE
+                    else PendingIntent.FLAG_MUTABLE
                 )
             )?.setContentIntent(
                 PendingIntent.getActivity(
@@ -156,7 +156,7 @@ class AnimeDownloadService : Service() {
                     0,
                     clickIntent,
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) PendingIntent.FLAG_CANCEL_CURRENT
-                    else PendingIntent.FLAG_IMMUTABLE
+                    else PendingIntent.FLAG_MUTABLE
                 )
             )?.setAutoCancel(false)?.setTicker(folderAndFileName)
         val notification = downloadServiceHashMap[key]?.builder?.build()

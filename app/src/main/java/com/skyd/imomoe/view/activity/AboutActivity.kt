@@ -72,10 +72,6 @@ class AboutActivity : BaseActivity<ActivityAboutBinding>() {
                 openBrowser(Const.Common.GITHUB_URL)
             }
 
-            rlAboutActivityGitee.setOnClickListener {
-                openBrowser(Const.Common.GITEE_URL)
-            }
-
             rlAboutActivityLicense.setOnClickListener {
                 startActivity(Intent(this@AboutActivity, LicenseActivity::class.java))
             }
@@ -94,7 +90,11 @@ class AboutActivity : BaseActivity<ActivityAboutBinding>() {
             rlAboutActivityTestDevice.setOnClickListener {
                 MaterialDialog(this@AboutActivity).show {
                     title(res = R.string.test_device)
-                    message(text = "HONOR V20 Android 10\nVirtual Machine: Pixel 2 Android 12")
+                    message(text = "Physical Device: \nHONOR V20 Android 10\n\n" +
+                            "Virtual Machine: \nPixel Android 5\n" +
+                            "Pixel 4 Android 7\n" +
+                            "Pixel 3 Android 9\n" +
+                            "Pixel 2 Android 12")
                     positiveButton(res = R.string.ok) { dismiss() }
                 }
             }

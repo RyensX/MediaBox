@@ -51,6 +51,7 @@ import java.util.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 
 object Util {
@@ -560,7 +561,7 @@ object Util {
     }
 
     fun process(activity: Activity, actionUrl: String?, toastTitle: String = "") {
-        if (actionUrl == null) return
+        actionUrl ?: return
         val decodeUrl = URLDecoder.decode(actionUrl, "UTF-8")
         val routerProcessor = DataSourceManager.getRouterProcessor() ?: RouteProcessor()
         // 没有处理跳转，则进入if体
@@ -647,6 +648,51 @@ object Util {
                             if (toastTitle.isBlank()) actionUrl else toastTitle
                         ).showToast()
                     }
+                }
+            }
+        }
+    }
+
+    fun process(context: Context, actionUrl: String?, toastTitle: String = "") {
+        actionUrl ?: return
+        val decodeUrl = URLDecoder.decode(actionUrl, "UTF-8")
+        val routerProcessor = DataSourceManager.getRouterProcessor() ?: RouteProcessor()
+        // 没有处理跳转，则进入if体
+        if (!routerProcessor.process(context, actionUrl)) {
+            when {
+                decodeUrl.startsWith(Const.ActionUrl.ANIME_BROWSER) -> {     //打开浏览器
+                    openBrowser(actionUrl.replaceFirst(Const.ActionUrl.ANIME_BROWSER, ""))
+                }
+                decodeUrl.startsWith(Const.ActionUrl.ANIME_LAUNCH_ACTIVITY) -> { // 启动Activity
+                    val cls = Class.forName(
+                        actionUrl.replaceFirst(Const.ActionUrl.ANIME_LAUNCH_ACTIVITY, "")
+                            .split("/").last()
+                    )
+                    context.startActivity(Intent(context, cls).addFlags(FLAG_ACTIVITY_NEW_TASK))
+                }
+                decodeUrl.startsWith(Const.ActionUrl.ANIME_NOTICE) -> { // 显示通知
+                    val paramString: String =
+                        actionUrl.replaceFirst(Const.ActionUrl.ANIME_NOTICE, "")
+                            .split("?").run {
+                                if (!isEmpty()) last()
+                                else ""
+                            }
+                    if (paramString.isBlank()) {
+                        App.context.getString(R.string.notice_activity_error_param).showToast()
+                        return
+                    }
+                    context.startActivity(
+                        Intent(context, NoticeActivity::class.java)
+                            .putExtra(NoticeActivity.PARAM, paramString)
+                            .addFlags(FLAG_ACTIVITY_NEW_TASK)
+                    )
+                }
+                else -> {
+                    if (decodeUrl.isBlank()) return
+                    App.context.resources.getString(
+                        R.string.unknown_route,
+                        if (toastTitle.isBlank()) actionUrl else toastTitle
+                    ).showToast()
                 }
             }
         }

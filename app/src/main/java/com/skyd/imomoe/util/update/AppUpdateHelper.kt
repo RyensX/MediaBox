@@ -15,8 +15,7 @@ class AppUpdateHelper private constructor() {
     companion object {
         const val UPDATE_SERVER_SP_KEY = "updateServer"
         const val GITHUB = 0
-        const val GITEE = 1
-        val serverName = arrayOf("Github", "Gitee")
+        val serverName = arrayOf("Github")
 
         val instance: AppUpdateHelper by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
             AppUpdateHelper()

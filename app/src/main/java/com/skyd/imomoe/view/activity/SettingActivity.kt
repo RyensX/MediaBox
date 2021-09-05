@@ -104,12 +104,6 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
             tvSettingActivityUpdateInfo.text =
                 getString(R.string.current_version, getAppVersionName())
 
-            appUpdateHelper.getUpdateServer().observe(this@SettingActivity, {
-                tvSettingActivityUpdateInfoServer.text = AppUpdateHelper.serverName[it]
-            })
-            tvSettingActivityUpdateInfoServer.text =
-                AppUpdateHelper.serverName[appUpdateHelper.getUpdateServer().value ?: 0]
-
             appUpdateHelper.getUpdateStatus().observe(this@SettingActivity, Observer {
                 when (it) {
                     AppUpdateStatus.UNCHECK -> {
@@ -147,20 +141,6 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
                 }
                 else -> appUpdateHelper.checkUpdate()
             }
-        }
-
-        mBinding.rlSettingActivityUpdateServer.setOnClickListener {
-            val builder: AlertDialog.Builder = AlertDialog.Builder(this)
-            builder.setTitle(R.string.check_update_server)
-            builder.setIcon(R.drawable.ic_storage_main_color_2_24_skin)
-            builder.setSingleChoiceItems(
-                AppUpdateHelper.serverName, appUpdateHelper.getUpdateServer().value ?: 0
-            ) { dialog, which ->
-                if (which == 1) "Gitee有请求次数的限制，可能会更新失败！".showToast(Toast.LENGTH_LONG)
-                appUpdateHelper.setUpdateServer(which)
-                dialog.dismiss()
-            }
-            builder.create().show()
         }
 
         mBinding.tvSettingActivityInfoDomain.text = Api.MAIN_URL

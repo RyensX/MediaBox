@@ -18,9 +18,9 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission
         android:name="android.permission.READ_LOGS"
-        tools:ignore="ProtectedPermissions" />
-    <!-- U-PUSH 移除自启动能力 -->
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"
+        tools:ignore="ProtectedPermissions" /> <!-- U-PUSH 移除自启动能力 -->
+    <uses-permission
+        android:name="android.permission.RECEIVE_BOOT_COMPLETED"
         tools:node="remove" />
 
     <application
@@ -34,6 +34,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.樱花动漫"
         android:usesCleartextTraffic="true">
+        <activity android:name=".view.activity.NoticeActivity"></activity>
         <activity
             android:name=".view.activity.WebViewActivity"
             android:configChanges="uiMode" />
@@ -123,7 +124,6 @@
         <service
             android:name=".util.dlna.dmc.DLNACastService"
             android:exported="false" />
-
         <service
             android:name=".util.downloadanime.AnimeDownloadService"
             android:enabled="true" />
@@ -147,9 +147,7 @@
             android:value="${UMENG_APPKEY_VALUE}" />
         <meta-data
             android:name="UMENG_CHANNEL"
-            android:value="${UMENG_CHANNEL_VALUE}" />
-
-        <!-- U-PUSH 移除关联启动能力 -->
+            android:value="${UMENG_CHANNEL_VALUE}" /> <!-- U-PUSH 移除关联启动能力 -->
         <service
             android:name="com.taobao.accs.ChannelService"
             android:exported="false"
@@ -158,6 +156,7 @@
             android:name="com.taobao.accs.data.MsgDistributeService"
             android:exported="false"
             tools:replace="android:exported" />
+
         <receiver
             android:name="com.taobao.accs.EventReceiver"
             android:exported="false"
@@ -166,10 +165,12 @@
             android:name="com.taobao.accs.ServiceReceiver"
             android:exported="false"
             tools:replace="android:exported" />
+
         <service
             android:name="com.umeng.message.XiaomiIntentService"
             android:exported="false"
             tools:replace="android:exported" />
+
         <receiver
             android:name="com.taobao.agoo.AgooCommondReceiver"
             android:exported="false"

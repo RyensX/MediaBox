@@ -45,7 +45,6 @@
     <string name="no_download_video">没有缓存视频</string>
     <string name="read_download_data_file">正在读取缓存文件…</string>
     <string name="play_list">播放列表</string>
-    <string name="gitee">Gitee</string>
     <string name="check_update_server">检查更新服务器</string>
     <string name="play_speed">倍速</string>
     <string name="device_list">设备列表</string>
@@ -155,4 +154,5 @@
     <string name="data_source_jar_version_code">版本号：%s</string>
     <string name="user_notice">使用须知</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="notice_activity_error_param">跳转到通知界面错误，参数传递不正确！</string>
 </resources>

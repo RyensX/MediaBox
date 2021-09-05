@@ -1,5 +1,1 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.cyeasybuy.skin_lemon">
-
-    /
-</manifest>
+<manifest package="com.skyd.skin_lemon" />

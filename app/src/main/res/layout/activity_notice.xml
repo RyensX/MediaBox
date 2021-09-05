@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".view.activity.NoticeActivity">
+
+    <include
+        android:id="@+id/ll_notice_activity_toolbar"
+        layout="@layout/layout_toolbar_1" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.skyd.imomoe.view.component.textview.TypefaceTextView
+                android:id="@+id/tv_notice_activity_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="20dp"
+                android:textColor="@color/foreground_main_color_2_skin"
+                android:textSize="27sp"
+                android:textStyle="bold"
+                tools:text="题目" />
+
+            <com.skyd.imomoe.view.component.textview.TypefaceTextView
+                android:id="@+id/tv_notice_activity_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="20dp"
+                android:textColor="@color/foreground_main_color_2_skin"
+                android:textSize="16sp"
+                tools:text="题目题目题目题目\n题目题目\n题目\n题目\n题目\n题目题目题目题目题目题目题目题目题目题目题目题目" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

@@ -2,7 +2,6 @@ package com.skyd.imomoe.net
 
 import com.skyd.imomoe.config.Api
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 class RetrofitManager private constructor() {
@@ -18,7 +17,6 @@ class RetrofitManager private constructor() {
         mRetrofit = Retrofit.Builder()
             .baseUrl(Api.MAIN_URL)
             .addConverterFactory(GsonConverterFactory.create()) //设置数据解析器
-            .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
             .build()
     }
 
