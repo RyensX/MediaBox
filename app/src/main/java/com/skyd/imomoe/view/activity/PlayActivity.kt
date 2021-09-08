@@ -58,7 +58,7 @@ import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
 import tv.danmaku.ijk.media.player.IjkMediaPlayer
 
 
-class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>() {
+class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer>() {
     override var statusBarSkin: Boolean = false
     private lateinit var mBinding: ActivityPlayBinding
     private var isFavorite: Boolean = false
@@ -67,7 +67,6 @@ class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>() {
             field = value
             if (value == 2) mBinding.ivPlayActivityFavorite.isEnabled = true
         }
-    private lateinit var videoPlayer: AnimeVideoPlayer
     private var partUrl: String = ""
     private var detailPartUrl: String = ""
     private lateinit var viewModel: PlayViewModel
@@ -90,15 +89,13 @@ class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>() {
         viewModel.setActivity(this)
         adapter = PlayAdapter(this, viewModel.playBeanDataList)
 
-        videoPlayer = findViewById(R.id.avp_play_activity)
         initVideoBuilderMode()
 
-        videoPlayer.getDownloadButton()?.setOnClickListener {
-            getSheetDialog("download").show()
+        mBinding.avpPlayActivity.run {
+            getDownloadButton()?.setOnClickListener { getSheetDialog("download").show() }
+            // 设置返回按键功能
+            backButton?.setOnClickListener { onBackPressed() }
         }
-
-        //设置返回按键功能
-        videoPlayer.backButton?.setOnClickListener { onBackPressed() }
 
         partUrl = intent.getStringExtra("partUrl") ?: ""
         detailPartUrl = intent.getStringExtra("detailPartUrl") ?: ""
@@ -108,34 +105,35 @@ class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>() {
         if (detailPartUrl.isBlank() || detailPartUrl == const.actionUrl.ANIME_DETAIL())
             detailPartUrl = getDetailLinkByEpisodeLink(partUrl)
 
-        //分享按钮
-        videoPlayer.getShareButton()?.setOnClickListener {
-            ShareDialogFragment().setShareContent(Api.MAIN_URL + viewModel.partUrl)
-                .show(supportFragmentManager, "share_dialog")
-        }
-
-        //更多按钮
-        videoPlayer.getMoreButton()?.setOnClickListener {
-            MoreDialogFragment().run {
-                setOnClickListener(
-                    arrayOf(View.OnClickListener { dismiss() },
-                        View.OnClickListener {
-                            startActivity(
-                                Intent(this@PlayActivity, DlnaActivity::class.java)
-                                    .putExtra("url", videoPlayer.getUrl())
-                                    .putExtra("title", videoPlayer.getTitle())
-                            )
-                            dismiss()
-                        }, View.OnClickListener {
-                            if (!openVideoByExternalPlayer(
-                                    this@PlayActivity,
-                                    viewModel.animeEpisodeDataBean.videoUrl
+        mBinding.avpPlayActivity.let { player ->
+            // 分享按钮
+            player.getShareButton()?.setOnClickListener {
+                ShareDialogFragment().setShareContent(Api.MAIN_URL + viewModel.partUrl)
+                    .show(supportFragmentManager, "share_dialog")
+            }
+            // 更多按钮
+            player.getMoreButton()?.setOnClickListener {
+                MoreDialogFragment().run {
+                    setOnClickListener(
+                        arrayOf(View.OnClickListener { dismiss() },
+                            View.OnClickListener {
+                                startActivity(
+                                    Intent(this@PlayActivity, DlnaActivity::class.java)
+                                        .putExtra("url", player.getUrl())
+                                        .putExtra("title", player.getTitle())
                                 )
-                            ) getString(R.string.matched_app_not_found).showToast()
-                            dismiss()
-                        })
-                )
-                show(supportFragmentManager, "more_dialog")
+                                dismiss()
+                            }, View.OnClickListener {
+                                if (!openVideoByExternalPlayer(
+                                        this@PlayActivity,
+                                        viewModel.animeEpisodeDataBean.videoUrl
+                                    )
+                                ) getString(R.string.matched_app_not_found).showToast()
+                                dismiss()
+                            })
+                    )
+                    show(supportFragmentManager, "more_dialog")
+                }
             }
         }
 
@@ -153,7 +151,7 @@ class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>() {
 
         lifecycleScope.launch(Dispatchers.IO) {
             val favoriteAnime = getAppDataBase().favoriteAnimeDao().getFavoriteAnime(detailPartUrl)
-            withContext(Dispatchers.Main) {
+            runOnUiThread {
                 isFavorite = if (favoriteAnime == null) {
                     mBinding.ivPlayActivityFavorite.setImageDrawable(getResDrawable(R.drawable.ic_star_border_main_color_2_24_skin))
                     false
@@ -161,32 +159,32 @@ class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>() {
                     mBinding.ivPlayActivityFavorite.setImageDrawable(getResDrawable(R.drawable.ic_star_main_color_2_24_skin))
                     true
                 }
-            }
-            mBinding.ivPlayActivityFavorite.setOnClickListener {
-                if (isFavorite) {
-                    Thread {
-                        getAppDataBase().favoriteAnimeDao().deleteFavoriteAnime(detailPartUrl)
-                    }.start()
-                    isFavorite = false
-                    mBinding.ivPlayActivityFavorite.setImageDrawable(getResDrawable(R.drawable.ic_star_border_main_color_2_24_skin))
-                    getString(R.string.remove_favorite_succeed).showToast()
-                } else {
-                    Thread {
-                        getAppDataBase().favoriteAnimeDao().insertFavoriteAnime(
-                            FavoriteAnimeBean(
-                                Const.ViewHolderTypeString.ANIME_COVER_8, "",
-                                detailPartUrl,
-                                viewModel.playBean?.title?.title ?: "",
-                                System.currentTimeMillis(),
-                                viewModel.animeCover,
-                                lastEpisodeUrl = viewModel.partUrl,
-                                lastEpisode = viewModel.animeEpisodeDataBean.title
+                mBinding.ivPlayActivityFavorite.setOnClickListener {
+                    if (isFavorite) {
+                        Thread {
+                            getAppDataBase().favoriteAnimeDao().deleteFavoriteAnime(detailPartUrl)
+                        }.start()
+                        isFavorite = false
+                        mBinding.ivPlayActivityFavorite.setImageDrawable(getResDrawable(R.drawable.ic_star_border_main_color_2_24_skin))
+                        getString(R.string.remove_favorite_succeed).showToast()
+                    } else {
+                        Thread {
+                            getAppDataBase().favoriteAnimeDao().insertFavoriteAnime(
+                                FavoriteAnimeBean(
+                                    Const.ViewHolderTypeString.ANIME_COVER_8, "",
+                                    detailPartUrl,
+                                    viewModel.playBean?.title?.title ?: "",
+                                    System.currentTimeMillis(),
+                                    viewModel.animeCover,
+                                    lastEpisodeUrl = viewModel.partUrl,
+                                    lastEpisode = viewModel.animeEpisodeDataBean.title
+                                )
                             )
-                        )
-                    }.start()
-                    isFavorite = true
-                    mBinding.ivPlayActivityFavorite.setImageDrawable(getResDrawable(R.drawable.ic_star_main_color_2_24_skin))
-                    getString(R.string.favorite_succeed).showToast()
+                        }.start()
+                        isFavorite = true
+                        mBinding.ivPlayActivityFavorite.setImageDrawable(getResDrawable(R.drawable.ic_star_main_color_2_24_skin))
+                        getString(R.string.favorite_succeed).showToast()
+                    }
                 }
             }
         }
@@ -209,7 +207,7 @@ class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>() {
             favoriteBeanDataReady++
 
             if (isFirstTime) {
-                videoPlayer.startPlay()
+                mBinding.avpPlayActivity.startPlay()
                 isFirstTime = false
             }
         })
@@ -242,8 +240,9 @@ class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>() {
             }
         })
 
-        viewModel.mldAnimeEpisodeDataRefreshed.observe(this, Observer {
-            if (it) videoPlayer.currentPlayer.startPlay(partUrl = viewModel.animeEpisodeDataBean.actionUrl)
+        viewModel.mldAnimeEpisodeDataRefreshed.observe(this, {
+            if (it) mBinding.avpPlayActivity.currentPlayer
+                .startPlay(partUrl = viewModel.animeEpisodeDataBean.actionUrl)
         })
 
         mBinding.srlPlayActivity.isRefreshing = true
@@ -260,7 +259,7 @@ class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>() {
     }
 
     fun startPlay2(url: String, title: String, partUrl: String = this@PlayActivity.partUrl) {
-        videoPlayer.startPlay(url, title, partUrl)
+        mBinding.avpPlayActivity.startPlay(url, title, partUrl)
     }
 
     private fun GSYBaseVideoPlayer.startPlay(
@@ -353,7 +352,7 @@ class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>() {
         super.onPrepared(url, *objects)
         //调整触摸滑动快进的比例
         //毫秒,刚好划一屏1分35秒
-        videoPlayer.currentPlayer.apply {
+        mBinding.avpPlayActivity.currentPlayer.apply {
             seekRatio = duration / 90_000f
             if (danmuUrl.isNotBlank() && this is DanmakuVideoPlayer && !this@PlayActivity.isDestroyed) {
                 this@PlayActivity.getString(R.string.the_video_has_danmu).showToast()
@@ -362,7 +361,7 @@ class PlayActivity : DetailPlayerActivity<AnimeVideoPlayer>() {
         }
     }
 
-    override fun getGSYVideoPlayer(): AnimeVideoPlayer = videoPlayer
+    override fun getGSYVideoPlayer(): DanmakuVideoPlayer = mBinding.avpPlayActivity
 
     override fun getGSYVideoOptionBuilder(): GSYVideoOptionBuilder {
         return GSYVideoOptionBuilder()

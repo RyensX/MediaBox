@@ -30,7 +30,6 @@ class WebViewActivity : BaseActivity<ActivityWebViewBinding>() {
         mBinding.wvWebViewActivity.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
-                Log.e("666", url.toString())
             }
 
             override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {

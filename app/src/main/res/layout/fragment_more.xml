@@ -23,7 +23,7 @@
 
         <com.skyd.imomoe.view.component.textview.TypefaceTextView
             android:id="@+id/tv_more_fragment_title"
-            android:layout_width="0dp"
+            android:layout_width="0px"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="16dp"

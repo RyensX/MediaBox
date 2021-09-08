@@ -12,12 +12,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
+import com.skyd.imomoe.bean.GetDataEnum
 import com.skyd.imomoe.bean.SearchHistoryBean
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.databinding.ActivitySearchBinding
 import com.skyd.imomoe.util.Util.showKeyboard
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.gone
+import com.skyd.imomoe.util.smartNotifyDataSetChanged
 import com.skyd.imomoe.util.visible
 import com.skyd.imomoe.view.adapter.SearchAdapter
 import com.skyd.imomoe.view.adapter.SearchHistoryAdapter
@@ -86,26 +88,29 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
             }
         }
 
-        viewModel.mldFailed.observe(this, Observer {
-            if (this::mLayoutCircleProgressTextTip1.isInitialized) mLayoutCircleProgressTextTip1.gone()
-        })
-
-        viewModel.mldSearchResultList.observe(this, Observer {
+        viewModel.mldSearchResultList.observe(this, {
             mBinding.srlSearchActivity.closeHeaderOrFooter()
             if (this::mLayoutCircleProgressTextTip1.isInitialized) mLayoutCircleProgressTextTip1.gone()
-            //仅在搜索框不为“”时展示搜索结果
+            // 仅在搜索框不为“”时展示搜索结果
             if (mBinding.etSearchActivitySearch.text.toString().isNotEmpty()) {
                 if (mBinding.rvSearchActivity.adapter != adapter) setSearchAdapter()
-                mBinding.cvSearchActivityTip.visible()
-                mBinding.tvSearchActivityTip.text = getString(
-                    R.string.search_activity_tip, viewModel.keyWord,
-                    viewModel.searchResultList.size
-                )
-                adapter.notifyDataSetChanged()
+                adapter.smartNotifyDataSetChanged(it.first, it.second, viewModel.searchResultList)
+                when (it.first) {
+                    GetDataEnum.REFRESH, GetDataEnum.LOAD_MORE -> {
+                        mBinding.tvSearchActivityTip.text = getString(
+                            R.string.search_activity_tip, viewModel.keyWord,
+                            viewModel.searchResultList.size
+                        )
+                    }
+                    GetDataEnum.FAILED -> {
+                        mBinding.tvSearchActivityTip.text =
+                            getString(R.string.search_activity_failed)
+                    }
+                }
             }
         })
 
-        viewModel.mldSearchHistoryList.observe(this, Observer {
+        viewModel.mldSearchHistoryList.observe(this, {
             if (viewModel.searchResultList.size == 0) {
                 mBinding.tvSearchActivityTip.text = getString(R.string.search_history)
                 setHistoryAdapter()
@@ -113,7 +118,7 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
             }
         })
 
-        viewModel.mldDeleteCompleted.observe(this, Observer {
+        viewModel.mldDeleteCompleted.observe(this, {
             if (viewModel.searchResultList.size == 0) {
                 setHistoryAdapter()
                 historyAdapter.notifyItemRemoved(it)

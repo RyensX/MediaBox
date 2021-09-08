@@ -351,7 +351,7 @@
                     android:textColor="@color/gray_1"
                     android:textSize="12sp"
                     app:typeface="bPRTypeface"
-                    tools:text="V 1.0.0" />
+                    tools:text="Panda(1.2.4)" />
             </RelativeLayout>
 
             <RelativeLayout

@@ -13,10 +13,11 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.util.eventbus.EventBusSubscriber
 import com.skyd.imomoe.util.gone
 import com.skyd.imomoe.util.visible
+import com.skyd.skin.core.SkinBaseFragment
 import org.greenrobot.eventbus.EventBus
 
 
-abstract class BaseFragment<VB : ViewBinding> : Fragment() {
+abstract class BaseFragment<VB : ViewBinding> : SkinBaseFragment() {
     protected var isFirstLoadData = true
     private var binding: VB? = null
     protected val mBinding get() = binding!!

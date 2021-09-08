@@ -21,14 +21,14 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation deps.kotlin.kotlin_stdlib
-    implementation deps.kotlin.core_ktx
-    implementation deps.support.appcompat
-    implementation deps.support.material
-    implementation deps.support.swiperefreshlayout
-    implementation deps.smart.refresh_layout_kernel
-    implementation deps.smart.refresh_header_material
-    implementation deps.smart.refresh_footer_ball
-    implementation deps.material_dialogs.core
+    compileOnly fileTree(dir: "libs", include: ["*.jar"])
+    compileOnly deps.kotlin.kotlin_stdlib
+    compileOnly deps.kotlin.core_ktx
+    compileOnly deps.support.appcompat
+    compileOnly deps.support.material
+    compileOnly deps.support.swiperefreshlayout
+    compileOnly deps.smart.refresh_layout_kernel
+    compileOnly deps.smart.refresh_header_material
+    compileOnly deps.smart.refresh_footer_ball
+    compileOnly deps.material_dialogs.core
 }

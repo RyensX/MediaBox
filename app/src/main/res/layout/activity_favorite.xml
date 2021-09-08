@@ -26,7 +26,6 @@
             android:paddingTop="6dp" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-
     <ViewStub
         android:id="@+id/layout_favorite_activity_no_favorite"
         android:layout_width="wrap_content"

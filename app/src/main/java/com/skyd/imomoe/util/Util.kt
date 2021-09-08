@@ -29,7 +29,6 @@ import androidx.core.graphics.drawable.DrawableCompat
 import androidx.fragment.app.Fragment
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
-import com.skyd.skin.SkinManager
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Const
@@ -38,7 +37,7 @@ import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.RouteProcessor
 import com.skyd.imomoe.view.activity.*
 import com.skyd.imomoe.view.component.AnimeToast
-import kotlinx.coroutines.DelicateCoroutinesApi
+import com.skyd.skin.SkinManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -51,7 +50,6 @@ import java.util.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 
 object Util {
@@ -450,6 +448,10 @@ object Util {
             window.statusBarColor = statusBarColor //设置状态栏颜色
             if (darkTextColor) window.decorView.systemUiVisibility =
                 View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+            window.statusBarColor = statusBarColor
         }
     }
 

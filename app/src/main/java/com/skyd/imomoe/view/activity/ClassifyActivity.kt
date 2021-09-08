@@ -18,9 +18,11 @@ import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.ClassifyBean
 import com.skyd.imomoe.bean.ClassifyDataBean
+import com.skyd.imomoe.bean.GetDataEnum
 import com.skyd.imomoe.databinding.ActivityClassifyBinding
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.showToast
+import com.skyd.imomoe.util.smartNotifyDataSetChanged
 import com.skyd.imomoe.view.adapter.BaseRvAdapter
 import com.skyd.imomoe.view.adapter.SearchAdapter
 import com.skyd.imomoe.viewmodel.ClassifyViewModel
@@ -62,7 +64,7 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
                 //避免刷新间隔太短
                 if (System.currentTimeMillis() - lastRefreshTime > 500) {
                     lastRefreshTime = System.currentTimeMillis()
-                    if (viewModel.mldClassifyTabList.value == true)
+                    if (viewModel.mldClassifyTabList.value?.second == GetDataEnum.REFRESH)
                         viewModel.getClassifyData(currentPartUrl)
                     else viewModel.getClassifyTabData()
                 } else {
@@ -104,70 +106,75 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
             }
         }
 
-        viewModel.mldClassifyTabList.observe(this, Observer {
-            if (it) {
-                spinnerAdapter.clear()
-                spinnerAdapter.addAll(viewModel.classifyTabList)
-                spinnerAdapter.notifyDataSetChanged()
+        viewModel.mldClassifyTabList.observe(this, {
+            when (it.second) {
+                GetDataEnum.REFRESH -> {
+                    viewModel.classifyTabList.apply {
+                        clear()
+                        spinnerAdapter.clear()
+                        spinnerAdapter.notifyDataSetChanged()
+                        addAll(it.first)
+                        spinnerAdapter.addAll(it.first)
+                        spinnerAdapter.notifyDataSetChanged()
+                    }
 
-                //自动选中第一个
-                if (currentPartUrl.isEmpty() && viewModel.classifyTabList.size > 0 &&
-                    viewModel.classifyTabList[0].classifyDataList.size > 0
-                ) {
-                    val firstItem = viewModel.classifyTabList[0].classifyDataList[0]
-                    currentPartUrl = firstItem.actionUrl
-                    classifyTabTitle = viewModel.classifyTabList[0].toString()
-                    classifyTitle = firstItem.title
-                    tabSelected(currentPartUrl)
-                } else {
-                    var found = false
-                    viewModel.classifyTabList.forEachIndexed { index, classifyBean ->
-                        classifyBean.classifyDataList.forEach { item ->
-                            if (item.actionUrl == currentPartUrl) {
-                                mBinding.spinnerClassifyActivity.setSelection(index, true)
-                                classifyTabTitle = classifyBean.name
-                                classifyTitle = item.title
-                                tabSelected(currentPartUrl)
-                                found = true
-                                return@forEachIndexed
+                    //自动选中第一个
+                    if (currentPartUrl.isEmpty() && viewModel.classifyTabList.size > 0 &&
+                        viewModel.classifyTabList[0].classifyDataList.size > 0
+                    ) {
+                        val firstItem = viewModel.classifyTabList[0].classifyDataList[0]
+                        currentPartUrl = firstItem.actionUrl
+                        classifyTabTitle = viewModel.classifyTabList[0].toString()
+                        classifyTitle = firstItem.title
+                        tabSelected(currentPartUrl)
+                    } else {
+                        var found = false
+                        viewModel.classifyTabList.forEachIndexed { index, classifyBean ->
+                            classifyBean.classifyDataList.forEach { item ->
+                                if (item.actionUrl == currentPartUrl) {
+                                    mBinding.spinnerClassifyActivity.setSelection(index, true)
+                                    classifyTabTitle = classifyBean.name
+                                    classifyTitle = item.title
+                                    tabSelected(currentPartUrl)
+                                    found = true
+                                    return@forEachIndexed
+                                }
                             }
                         }
+                        if (!found) tabSelected(currentPartUrl)
                     }
-                    if (!found) tabSelected(currentPartUrl)
                 }
-            } else {
-                mBinding.srlClassifyActivity.finishRefresh()
+                GetDataEnum.FAILED -> {
+                    viewModel.classifyTabList.apply {
+                        clear()
+                        spinnerAdapter.clear()
+                        spinnerAdapter.notifyDataSetChanged()
+                    }
+                    mBinding.srlClassifyActivity.finishRefresh()
+                }
+                else -> mBinding.srlClassifyActivity.finishRefresh()
             }
         })
 
-        viewModel.mldClassifyList.observe(this, Observer {
+        viewModel.mldClassifyList.observe(this, {
             mBinding.srlClassifyActivity.closeHeaderOrFooter()
             viewModel.isRequesting = false
-            if (it == 0) {
+            classifyAdapter.smartNotifyDataSetChanged(it.first, it.second, viewModel.classifyList)
+            if (it.first == GetDataEnum.REFRESH) {
                 mBinding.llClassifyActivityToolbar.tvToolbar1Title.text =
                     if (classifyTabTitle.isEmpty()) "${getString(R.string.anime_classify)}  $classifyTitle"
-                    else "${getString(R.string.anime_classify)}  ${if (classifyTabTitle.endsWith(":") ||
-                        classifyTabTitle.endsWith("：")
-                    ) classifyTabTitle.substring(0, classifyTabTitle.length - 1)
-                    else classifyTabTitle}：$classifyTitle"
-                classifyAdapter.notifyDataSetChanged()
-            } else if (it == 1) {
-                val pair = viewModel.newPageIndex
-                if (pair != null) {
-                    classifyAdapter.notifyItemRangeInserted(pair.first, pair.second)
-                } else classifyAdapter.notifyDataSetChanged()
-            } else if (it == -1) {
-                classifyAdapter.notifyDataSetChanged()
+                    else "${getString(R.string.anime_classify)}  ${
+                        if (classifyTabTitle.endsWith(":") ||
+                            classifyTabTitle.endsWith("：")
+                        ) classifyTabTitle.substring(0, classifyTabTitle.length - 1)
+                        else classifyTabTitle
+                    }：$classifyTitle"
             }
         })
 
         viewModel.setActivity(this)
 
         viewModel.getClassifyTabData()
-
-//        if (currentPartUrl.isNotEmpty()) {
-//            tabSelected(currentPartUrl)
-//        }
     }
 
     override fun onDestroy() {

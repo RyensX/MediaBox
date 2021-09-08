@@ -65,8 +65,8 @@
                         <ImageView
                             android:id="@+id/iv_play_activity_favorite"
                             android:layout_width="50dp"
-                            android:layout_height="0dp"
-                            android:paddingStart="0dp"
+                            android:layout_height="0px"
+                            android:paddingStart="0px"
                             android:paddingEnd="16dp"
                             android:src="@drawable/ic_star_border_main_color_2_24_skin"
                             app:layout_constraintBottom_toBottomOf="@id/view_play_activity_line_1"

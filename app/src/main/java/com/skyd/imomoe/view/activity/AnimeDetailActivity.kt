@@ -19,6 +19,7 @@ import com.skyd.imomoe.util.Util.setTransparentStatusBar
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.coil.DarkBlurTransformation
 import com.skyd.imomoe.util.coil.CoilUtil.loadImage
+import com.skyd.imomoe.util.smartNotifyDataSetChanged
 import com.skyd.imomoe.util.visible
 import com.skyd.imomoe.view.adapter.AnimeDetailAdapter
 import com.skyd.imomoe.view.adapter.decoration.AnimeShowItemDecoration
@@ -121,16 +122,7 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
 
         viewModel.mldAnimeDetailList.observe(this, Observer {
             mBinding.srlAnimeDetailActivity.isRefreshing = false
-
-            viewModel.animeDetailList.apply {
-                val count = size
-                clear()
-                adapter.notifyItemRangeRemoved(0, count)
-                it ?: return@Observer
-                addAll(it)
-                adapter.notifyItemRangeInserted(0, it.size)
-            }
-            adapter.notifyDataSetChanged()
+            adapter.smartNotifyDataSetChanged(it.first, it.second, viewModel.animeDetailList)
             mBinding.llAnimeDetailActivityToolbar.ivToolbar1Button2.isEnabled = true
 
             if (viewModel.cover.url.isBlank()) return@Observer

@@ -14,6 +14,7 @@ import com.skyd.imomoe.util.Util.getManifestMetaValue
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.getSkinResourceId
 import com.skyd.imomoe.util.release
+import com.skyd.imomoe.util.skin.SkinUtil
 import com.skyd.skin.core.attrs.SrlPrimaryColorAttr
 import com.umeng.analytics.MobclickAgent
 import com.umeng.commonsdk.UMConfigure
@@ -59,6 +60,9 @@ class App : Application() {
         }
 
         FileDownloader.setup(this)
+
+        // 初始化自定义皮肤属性
+        SkinUtil.initCustomAttrIds()
     }
 
     companion object {

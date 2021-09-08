@@ -8,7 +8,6 @@ import android.os.Build
 import android.os.Bundle
 import android.text.Html
 import android.widget.Toast
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.afollestad.materialdialogs.MaterialDialog
 import com.skyd.imomoe.App
@@ -43,7 +42,6 @@ import org.greenrobot.eventbus.ThreadMode
 class MainActivity : BaseActivity<ActivityMainBinding>(), EventBusSubscriber {
     private var selectedTab = -1
     private var backPressTime = 0L
-    private val fragmentManager: FragmentManager by lazy { supportFragmentManager }
     private var homeFragment: HomeFragment? = null
     private var everydayAnimeFragment: EverydayAnimeFragment? = null
     private var moreFragment: MoreFragment? = null
@@ -172,7 +170,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), EventBusSubscriber {
             return
         }
         clearAllSelected()
-        fragmentManager.beginTransaction().apply {
+        supportFragmentManager.beginTransaction().apply {
             hideFragments(this)
             when (index) {
                 0 -> {

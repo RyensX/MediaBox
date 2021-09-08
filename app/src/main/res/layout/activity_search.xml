@@ -15,7 +15,7 @@
 
         <EditText
             android:id="@+id/et_search_activity_search"
-            android:layout_width="0dp"
+            android:layout_width="0px"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:background="@drawable/shape_circle_corner_white_50_skin"
@@ -55,7 +55,7 @@
         <com.skyd.imomoe.view.component.textview.TypefaceTextView
             android:id="@+id/tv_search_activity_cancel"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_height="0px"
             android:background="?android:selectableItemBackground"
             android:gravity="center"
             android:paddingStart="15dp"
@@ -70,36 +70,27 @@
             app:typeface="bPRTypeface" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cv_search_activity_tip"
+    <com.skyd.imomoe.view.component.textview.TypefaceTextView
+        android:id="@+id/tv_search_activity_tip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/cl_search_activity_header"
         android:background="@color/white_skin"
-        app:cardBackgroundColor="@color/white_skin"
-        app:cardElevation="6dp">
-
-        <com.skyd.imomoe.view.component.textview.TypefaceTextView
-            android:id="@+id/tv_search_activity_tip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="9dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="9dp"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:textColor="@color/foreground_main_color_2_skin"
-            android:textSize="15sp"
-            app:typeface="bPRTypeface"
-            tools:text="@string/search_activity_tip" />
-    </androidx.cardview.widget.CardView>
+        android:elevation="5dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="9dp"
+        android:textColor="@color/foreground_main_color_2_skin"
+        android:textSize="15sp"
+        app:typeface="bPRTypeface"
+        tools:text="@string/search_activity_tip" />
 
     <com.scwang.smart.refresh.layout.SmartRefreshLayout
         android:id="@+id/srl_search_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/cv_search_activity_tip"
+        android:layout_below="@id/tv_search_activity_tip"
         app:srlPrimaryColor="@color/main_color_3_skin">
 
         <androidx.recyclerview.widget.RecyclerView

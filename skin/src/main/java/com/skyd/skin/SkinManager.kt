@@ -1,6 +1,5 @@
 package com.skyd.skin
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Application
 import android.content.Context
@@ -17,6 +16,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.*
+import androidx.annotation.AttrRes
 import androidx.annotation.ColorRes
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -36,6 +36,8 @@ import com.skyd.skin.core.listeners.ChangeCustomSkinListener
 import com.skyd.skin.core.listeners.ChangeSkinListener
 import java.lang.reflect.Constructor
 import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 object SkinManager {
     var KEY_SKIN_PATH = "skin_path"
@@ -70,13 +72,18 @@ object SkinManager {
         R.attr.cardBackgroundColor,
         android.R.attr.indeterminateTint,
         android.R.attr.thumb,
-        android.R.attr.progressDrawable
+        android.R.attr.progressDrawable,
+        R.attr.menu
     ).apply { sort() }      // 需要升序排序，所以要调用sort()
+
+    // 在app中自定义
+    private var customAttrIds: HashMap<Int, CustomSetSkinTagListener> = HashMap()     // 需要升序排序
 
     //todo 反射：这里使用反射创建View
     private val sConstructorMap: MutableMap<String, Constructor<out View>> = HashMap()
     private val mConstructorArgs = arrayOfNulls<Any>(2)
     private val sConstructorSignature = arrayOf(Context::class.java, AttributeSet::class.java)
+    private val sClassPrefixList = arrayOf("android.widget.", "android.view.", "android.webkit.")
 
     fun init(application: Application) {
         SkinResourceProcessor.init(application)
@@ -124,42 +131,57 @@ object SkinManager {
             mConstructorArgs[0] = context
             mConstructorArgs[1] = attrs
             if (-1 == name.indexOf('.')) {
-                if ("View" == name) {
-                    view = LayoutInflater.from(context).createView(name, "android.view.", attrs)
-                }
-                if (view == null) {
-                    view = LayoutInflater.from(context).createView(name, "android.widget.", attrs)
-                }
-                if (view == null) {
-                    view = LayoutInflater.from(context).createView(name, "android.webkit.", attrs)
+                sClassPrefixList.forEach {
+                    view = LayoutInflater.from(context).createView(name, it, attrs)
+                    if (view != null) return@forEach
                 }
             } else {
                 view = LayoutInflater.from(context).createView(name, null, attrs)
             }
         } catch (e: Exception) {
-            mConstructorArgs[0] = null
-            mConstructorArgs[1] = null
-            view = null
+            if (BuildConfig.DEBUG && e !is ClassNotFoundException) e.printStackTrace()
+            if (-1 == name.indexOf('.')) {
+                sClassPrefixList.forEach {
+                    view = createView(context, name, it)
+                    if (view != null) return@forEach
+                }
+            } else {
+                view = createView(context, name, null)
+            }
+            if (view == null) {
+                mConstructorArgs[0] = null
+                mConstructorArgs[1] = null
+            }
         }
         return view
     }
 
     private fun createView(context: Context, name: String, prefix: String?): View? {
-        val constructor = sConstructorMap[name].let {
-            if (it == null) {
-                val clazz = context.classLoader
-                    .loadClass(if (prefix != null) prefix + name else name)
-                    .asSubclass(View::class.java)
-                val constructor = clazz.getConstructor(*sConstructorSignature)
-                sConstructorMap[name] = constructor
-                constructor
-            } else it
+        try {
+            val constructor = sConstructorMap[name].let {
+                if (it == null) {
+                    val clazz = context.classLoader
+                        .loadClass(if (prefix != null) prefix + name else name)
+                        .asSubclass(View::class.java)
+                    val constructor = clazz.getConstructor(*sConstructorSignature)
+                    sConstructorMap[name] = constructor
+                    constructor
+                } else it
+            }
+            constructor.isAccessible = true
+            return constructor.newInstance(*mConstructorArgs)
+        } catch (e: ClassNotFoundException) {
+            return null
+        } catch (e: Exception) {
+            if (BuildConfig.DEBUG) e.printStackTrace()
+            return null
         }
-        constructor.isAccessible = true
-        return constructor.newInstance(*mConstructorArgs)
     }
 
-    @SuppressLint("ResourceType", "PrivateResource")
+    fun addCustomAttrIds(@AttrRes attrId: Int, listener: CustomSetSkinTagListener) {
+        customAttrIds[attrId] = listener
+    }
+
     private fun setSkinTag(context: Context, attrs: AttributeSet, view: View) {
         val typedArray = context.obtainStyledAttributes(attrs, attrIds)
         val skinAttrsSet = SkinAttrsSet()
@@ -250,15 +272,21 @@ object SkinManager {
                         IndeterminateTintAttr().apply { attrResourceRefId = resId }
                 }
                 android.R.attr.thumb -> {
-                    if (resId != -1)
-                        skinAttrsSet.attrsMap[ThumbAttr.TAG] =
-                            ThumbAttr().apply { attrResourceRefId = resId }
+                    if (resId != -1) skinAttrsSet.attrsMap[ThumbAttr.TAG] =
+                        ThumbAttr().apply { attrResourceRefId = resId }
                 }
                 android.R.attr.progressDrawable -> {
-                    if (resId != -1)
-                        skinAttrsSet.attrsMap[ProgressDrawableAttr.TAG] =
-                            ProgressDrawableAttr().apply { attrResourceRefId = resId }
+                    if (resId != -1) skinAttrsSet.attrsMap[ProgressDrawableAttr.TAG] =
+                        ProgressDrawableAttr().apply { attrResourceRefId = resId }
                 }
+                R.attr.menu -> {
+                }
+            }
+        }
+        customAttrIds.toSortedMap().onEachIndexed { index, entry ->
+            val resId = typedArray.getResourceId(index, defValue)
+            entry.value.setSkinTag(entry.key, resId)?.apply {
+                skinAttrsSet.attrsMap[first] = second
             }
         }
         typedArray.recycle()
@@ -824,5 +852,9 @@ object SkinManager {
             if (darkTextColor)
                 window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         }
+    }
+
+    interface CustomSetSkinTagListener {
+        fun setSkinTag(attrId: Int, resId: Int): Pair<String, SkinAttr>?
     }
 }

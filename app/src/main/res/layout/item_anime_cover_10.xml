@@ -8,7 +8,7 @@
 
     <TextView
         android:id="@+id/tv_anime_cover_10_title"
-        android:layout_width="0dp"
+        android:layout_width="0px"
         android:layout_height="match_parent"
         android:layout_marginVertical="10dp"
         android:layout_marginStart="16dp"

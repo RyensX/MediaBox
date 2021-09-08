@@ -21,7 +21,7 @@
     <View
         android:id="@+id/view_anime_detail_activity_status_bar"
         android:layout_width="match_parent"
-        android:layout_height="0dp" />
+        android:layout_height="0px" />
 
     <include
         android:id="@+id/ll_anime_detail_activity_toolbar"

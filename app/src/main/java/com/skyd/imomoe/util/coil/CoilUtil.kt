@@ -14,6 +14,7 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Api.Companion.MAIN_URL
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.util.Util.showToastOnIOThread
+import com.skyd.imomoe.util.debug
 import okhttp3.OkHttpClient
 import java.net.URL
 import kotlin.random.Random
@@ -28,7 +29,7 @@ object CoilUtil {
                     .cache(CoilUtils.createDefaultCache(App.context))
                     .build()
             }
-            .logger(DebugLogger())
+            .apply { debug { logger(DebugLogger()) } }
             .build().apply {
                 Coil.setImageLoader(this)
             }

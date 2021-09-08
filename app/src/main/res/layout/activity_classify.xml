@@ -12,31 +12,26 @@
         android:id="@+id/ll_classify_activity_toolbar"
         layout="@layout/layout_toolbar_1" />
 
-    <androidx.cardview.widget.CardView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/white_skin"
-        app:cardElevation="6dp">
+        android:background="@color/white_skin"
+        android:elevation="5dp"
+        android:orientation="horizontal">
 
-        <LinearLayout
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/spinner_classify_activity"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="@drawable/selector_spinner_1_skin" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_classify_activity_tab"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <androidx.appcompat.widget.AppCompatSpinner
-                android:id="@+id/spinner_classify_activity"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="start"
-                android:background="@drawable/selector_spinner_1_skin" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_classify_activity_tab"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="end" />
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+            android:layout_gravity="end" />
+    </LinearLayout>
 
     <com.scwang.smart.refresh.layout.SmartRefreshLayout
         android:id="@+id/srl_classify_activity"

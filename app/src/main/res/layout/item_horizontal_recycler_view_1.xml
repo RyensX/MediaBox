@@ -8,12 +8,12 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_horizontal_recycler_view_1"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="0px"
+        android:layout_height="0px"
         android:orientation="horizontal"
         android:paddingVertical="3dp"
         android:paddingStart="16dp"
-        android:paddingEnd="0dp"
+        android:paddingEnd="0px"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/iv_horizontal_recycler_view_1_more"

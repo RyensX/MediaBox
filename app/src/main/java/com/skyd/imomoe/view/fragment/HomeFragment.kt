@@ -185,7 +185,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), EventBusSubscriber {
         }
     }
 
-    override fun getLoadFailedTipView(): ViewStub? = mBinding.layoutHomeFragmentLoadFailed
+    override fun getLoadFailedTipView(): ViewStub = mBinding.layoutHomeFragmentLoadFailed
 
     class VpAdapter : FragmentStateAdapter {
 

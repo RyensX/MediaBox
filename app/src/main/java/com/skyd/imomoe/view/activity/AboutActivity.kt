@@ -43,7 +43,7 @@ class AboutActivity : BaseActivity<ActivityAboutBinding>() {
                 ivAboutActivityIconEgg.setImageResource(R.drawable.ic_christmas_hat)
             }
 
-            tvAboutActivityVersion.text = "V " + getAppVersionName()
+            tvAboutActivityVersion.text = getAppVersionName()
 
             rlAboutActivityImomoe.setOnClickListener {
                 openBrowser(Api.MAIN_URL)
@@ -55,13 +55,17 @@ class AboutActivity : BaseActivity<ActivityAboutBinding>() {
                     message(
                         text = (DataSourceManager.getConst()
                             ?: com.skyd.imomoe.model.impls.Const()).run {
-                            "${getString(
-                                R.string.data_source_jar_version_name,
-                                versionName()
-                            )}\n${getString(
-                                R.string.data_source_jar_version_code,
-                                versionCode().toString()
-                            )}\n${about()}"
+                            "${
+                                getString(
+                                    R.string.data_source_jar_version_name,
+                                    versionName()
+                                )
+                            }\n${
+                                getString(
+                                    R.string.data_source_jar_version_code,
+                                    versionCode().toString()
+                                )
+                            }\n${about()}"
                         }
                     )
                     positiveButton(res = R.string.ok) { dismiss() }
@@ -90,11 +94,13 @@ class AboutActivity : BaseActivity<ActivityAboutBinding>() {
             rlAboutActivityTestDevice.setOnClickListener {
                 MaterialDialog(this@AboutActivity).show {
                     title(res = R.string.test_device)
-                    message(text = "Physical Device: \nHONOR V20 Android 10\n\n" +
-                            "Virtual Machine: \nPixel Android 5\n" +
-                            "Pixel 4 Android 7\n" +
-                            "Pixel 3 Android 9\n" +
-                            "Pixel 2 Android 12")
+                    message(
+                        text = "Physical Device: \nAndroid 10\n\n" +
+                                "Virtual Machine: \nPixel Android 5\n" +
+                                "雷电模拟器4.0.63 Android 7.1.2\n" +
+                                "Pixel 2 Android 8\n" +
+                                "Pixel 3 Android 9\n"
+                    )
                     positiveButton(res = R.string.ok) { dismiss() }
                 }
             }

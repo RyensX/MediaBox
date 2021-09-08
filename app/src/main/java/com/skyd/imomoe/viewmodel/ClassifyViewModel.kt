@@ -8,6 +8,7 @@ import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.bean.ClassifyBean
+import com.skyd.imomoe.bean.GetDataEnum
 import com.skyd.imomoe.bean.PageNumberBean
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.ClassifyModel
@@ -23,11 +24,12 @@ class ClassifyViewModel : ViewModel() {
     }
     var isRequesting = false
     var classifyTabList: MutableList<ClassifyBean> = ArrayList()        //上方分类数据
-    var mldClassifyTabList: MutableLiveData<Boolean> = MutableLiveData()
+    var mldClassifyTabList: MutableLiveData<Pair<MutableList<ClassifyBean>, GetDataEnum>> =
+        MutableLiveData()
     var classifyList: MutableList<AnimeCoverBean> = ArrayList()       //下方tv数据
-    var mldClassifyList: MutableLiveData<Int> = MutableLiveData()       // value：-1错误；0重新获取；1刷新
+    var mldClassifyList: MutableLiveData<Pair<GetDataEnum, MutableList<AnimeCoverBean>>> =
+        MutableLiveData()
     var pageNumberBean: PageNumberBean? = null
-    var newPageIndex: Pair<Int, Int>? = null
 
     fun setActivity(activity: Activity) {
         classifyModel.setActivity(activity)
@@ -40,14 +42,12 @@ class ClassifyViewModel : ViewModel() {
     fun getClassifyTabData() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                classifyModel.getClassifyTabData().apply {
-                    classifyTabList.clear()
-                    classifyTabList.addAll(this)
-                    mldClassifyTabList.postValue(true)
-                }
+                mldClassifyTabList.postValue(
+                    Pair(classifyModel.getClassifyTabData(), GetDataEnum.REFRESH)
+                )
             } catch (e: Exception) {
                 classifyTabList.clear()
-                mldClassifyTabList.postValue(false)
+                mldClassifyTabList.postValue(Pair(ArrayList(), GetDataEnum.FAILED))
                 e.printStackTrace()
                 (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnIOThread()
             }
@@ -60,17 +60,14 @@ class ClassifyViewModel : ViewModel() {
                 if (isRequesting) return@launch
                 isRequesting = true
                 classifyModel.getClassifyData(partUrl).apply {
-                    if (isRefresh) classifyList.clear()
-                    val positionStart = classifyList.size
-                    classifyList.addAll(first)
                     pageNumberBean = second
-                    newPageIndex = Pair(positionStart, classifyList.size - positionStart)
-                    mldClassifyList.postValue(if (isRefresh) 0 else 1)
+                    mldClassifyList.postValue(
+                        Pair(if (isRefresh) GetDataEnum.REFRESH else GetDataEnum.LOAD_MORE, first)
+                    )
                 }
             } catch (e: Exception) {
                 pageNumberBean = null
-                classifyList.clear()
-                mldClassifyList.postValue(-1)
+                mldClassifyList.postValue(Pair(GetDataEnum.FAILED, ArrayList()))
                 e.printStackTrace()
                 (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnIOThread()
             }

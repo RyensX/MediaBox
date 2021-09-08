@@ -9,7 +9,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.widget.RemoteViews
-import android.widget.Toast
 import com.google.gson.Gson
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
@@ -25,16 +24,6 @@ class EverydayAnimeWidgetProvider : AppWidgetProvider() {
 
     override fun onEnabled(context: Context) {
         super.onEnabled(context)
-        "桌面小组件为测试性功能，若造成系统卡顿请移除".showToast(Toast.LENGTH_LONG)
-//
-//        val firstTime: Long = SystemClock.elapsedRealtime() + 5000
-//        val receiver = Intent().setAction(REFRESH_ACTION)
-//        val pendingIntent =
-//            PendingIntent.getBroadcast(context, 2006, receiver,
-//                PendingIntent.FLAG_UPDATE_CURRENT)
-//
-//        val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-//        am.setRepeating(AlarmManager.ELAPSED_REALTIME, firstTime, 60000, pendingIntent)
     }
 
     override fun onReceive(context: Context, intent: Intent) {

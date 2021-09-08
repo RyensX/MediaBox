@@ -26,7 +26,7 @@
 
         <TextView
             android:id="@+id/tv_to_qq"
-            android:layout_width="0dp"
+            android:layout_width="0px"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
@@ -39,7 +39,7 @@
 
         <TextView
             android:id="@+id/tv_to_wechat"
-            android:layout_width="0dp"
+            android:layout_width="0px"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
@@ -52,7 +52,7 @@
 
         <TextView
             android:id="@+id/tv_to_weibo"
-            android:layout_width="0dp"
+            android:layout_width="0px"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
@@ -65,7 +65,7 @@
 
         <TextView
             android:id="@+id/tv_copy_link"
-            android:layout_width="0dp"
+            android:layout_width="0px"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"

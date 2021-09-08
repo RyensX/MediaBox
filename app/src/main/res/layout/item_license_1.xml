@@ -11,7 +11,7 @@
 
     <com.skyd.imomoe.view.component.textview.TypefaceTextView
         android:id="@+id/tv_license_1_name"
-        android:layout_width="0dp"
+        android:layout_width="0px"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:textColor="@color/foreground_main_color_2_skin"
@@ -21,7 +21,7 @@
 
     <com.skyd.imomoe.view.component.textview.TypefaceTextView
         android:id="@+id/tv_license_1_license"
-        android:layout_width="0dp"
+        android:layout_width="0px"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:textColor="@color/foreground_main_color_2_skin"

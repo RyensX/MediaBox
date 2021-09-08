@@ -66,7 +66,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_about_activity_name"
                 app:typeface="bPRTypeface"
-                tools:text="V 1.0.0" />
+                tools:text="Panda(1.2.4)" />
 
             <RelativeLayout
                 android:id="@+id/rl_about_activity_imomoe"

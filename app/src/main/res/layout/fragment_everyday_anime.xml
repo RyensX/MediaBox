@@ -21,7 +21,7 @@
 
         <com.skyd.imomoe.view.component.textview.TypefaceTextView
             android:id="@+id/tv_everyday_anime_fragment_title"
-            android:layout_width="0dp"
+            android:layout_width="0px"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="16dp"
@@ -48,19 +48,15 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tl_everyday_anime_fragment"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <com.google.android.material.tabs.TabLayout
-                    android:id="@+id/tl_everyday_anime_fragment"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/white_skin"
-                    app:tabIndicatorColor="@color/foreground_main_color_2_skin"
-                    app:tabMode="scrollable"
-                    app:tabTextColor="@color/foreground_main_color_2_skin" />
-            </androidx.cardview.widget.CardView>
+                android:layout_height="wrap_content"
+                android:background="@color/white_skin"
+                android:elevation="5dp"
+                app:tabIndicatorColor="@color/foreground_main_color_2_skin"
+                app:tabMode="scrollable"
+                app:tabTextColor="@color/foreground_main_color_2_skin" />
 
             <com.skyd.imomoe.view.component.ViewPager2View
                 android:id="@+id/vp2_everyday_anime_fragment"

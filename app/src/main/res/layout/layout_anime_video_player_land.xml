@@ -63,7 +63,7 @@
         <ImageView
             android:id="@+id/start"
             android:layout_width="48dp"
-            android:layout_height="0dp"
+            android:layout_height="0px"
             android:layout_marginStart="10dp"
             android:paddingHorizontal="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -74,7 +74,7 @@
         <ImageView
             android:id="@+id/iv_next"
             android:layout_width="40dp"
-            android:layout_height="0dp"
+            android:layout_height="0px"
             android:paddingHorizontal="5dp"
             android:src="@drawable/ic_skip_next_white_24"
             android:visibility="gone"
@@ -122,8 +122,8 @@
 
         <EditText
             android:id="@+id/et_input_danmu"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="0px"
+            android:layout_height="0px"
             android:layout_marginHorizontal="16dp"
             android:layout_marginVertical="5dp"
             android:background="@drawable/shape_fill_circle_corner_danmu_6"
@@ -157,7 +157,7 @@
         <com.skyd.imomoe.view.component.textview.TypefaceTextView
             android:id="@+id/tv_episode"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_height="0px"
             android:gravity="center"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
@@ -172,7 +172,7 @@
         <com.skyd.imomoe.view.component.textview.TypefaceTextView
             android:id="@+id/tv_speed"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_height="0px"
             android:gravity="center"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
@@ -187,7 +187,7 @@
         <com.skyd.imomoe.view.component.textview.TypefaceTextView
             android:id="@+id/tv_more_scale"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_height="0px"
             android:gravity="center"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
@@ -202,7 +202,7 @@
         <ImageView
             android:id="@+id/fullscreen"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_height="0px"
             android:layout_marginEnd="10dp"
             android:adjustViewBounds="true"
             android:padding="12dp"
@@ -279,7 +279,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:paddingStart="10dp"
-            android:paddingEnd="0dp"
+            android:paddingEnd="0px"
             android:scaleType="centerInside"
             android:src="@drawable/ic_arrow_back_ios_white_24"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -310,7 +310,7 @@
             android:id="@+id/iv_setting"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:paddingStart="0dp"
+            android:paddingStart="0px"
             android:paddingEnd="10dp"
             android:scaleType="centerInside"
             android:src="@drawable/ic_settings_white_24"

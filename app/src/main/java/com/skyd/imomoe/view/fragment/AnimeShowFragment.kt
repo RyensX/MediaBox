@@ -1,18 +1,17 @@
 package com.skyd.imomoe.view.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.view.ViewStub
 import android.widget.Toast
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.skyd.imomoe.R
+import com.skyd.imomoe.bean.GetDataEnum
 import com.skyd.imomoe.databinding.FragmentAnimeShowBinding
 import com.skyd.imomoe.util.Util.showToast
+import com.skyd.imomoe.util.smartNotifyDataSetChanged
 import com.skyd.imomoe.view.adapter.AnimeShowAdapter
 import com.skyd.imomoe.view.adapter.SerializableRecycledViewPool
 import com.skyd.imomoe.view.adapter.decoration.AnimeShowItemDecoration
@@ -90,45 +89,12 @@ class AnimeShowFragment : BaseFragment<FragmentAnimeShowBinding>() {
             mBinding.rvAnimeShowFragment.setRecycledViewPool(it)
         }
 
-        viewModel.mldGetAnimeShowList.observe(viewLifecycleOwner, Observer {
+        viewModel.mldGetAnimeShowList.observe(viewLifecycleOwner, {
             mBinding.srlAnimeShowFragment.closeHeaderOrFooter()
-
-            when (it.second) {
-                0 -> {
-                    viewModel.animeShowList.apply {
-                        val count = size
-                        clear()
-                        adapter.notifyItemRangeRemoved(0, count)
-                        addAll(it.first)
-                        adapter.notifyItemRangeInserted(0, it.first.size)
-                    }
-                    hideLoadFailedTip()
-                }
-                1 -> {
-                    val pair = viewModel.newPageIndex
-                    if (pair != null) {
-                        viewModel.animeShowList.apply {
-                            val index = size
-                            addAll(it.first)
-                            adapter.notifyItemRangeInserted(index, it.first.size)
-                        }
-                    } else {
-                        viewModel.animeShowList.apply {
-                            val count = size
-                            clear()
-                            adapter.notifyItemRangeRemoved(0, count)
-                            addAll(it.first)
-                            adapter.notifyItemRangeInserted(0, it.first.size)
-                        }
-                    }
-                    hideLoadFailedTip()
-                }
-                -1 -> {
-                    viewModel.animeShowList.apply {
-                        val count = size
-                        clear()
-                        adapter.notifyItemRangeRemoved(0, count)
-                    }
+            adapter.smartNotifyDataSetChanged(it.first, it.second, viewModel.animeShowList)
+            when (it.first) {
+                GetDataEnum.REFRESH, GetDataEnum.LOAD_MORE -> hideLoadFailedTip()
+                GetDataEnum.FAILED -> {
                     showLoadFailedTip(getString(R.string.load_data_failed_click_to_retry)) {
                         viewModel.getAnimeShowData(partUrl)
                         hideLoadFailedTip()
@@ -140,11 +106,10 @@ class AnimeShowFragment : BaseFragment<FragmentAnimeShowBinding>() {
     }
 
     fun refresh(): Boolean {
-//        Log.e("test", this.toString())
         return mBinding.srlAnimeShowFragment.autoRefresh()
     }
 
-    override fun getLoadFailedTipView(): ViewStub? = mBinding.layoutAnimeShowFragmentLoadFailed
+    override fun getLoadFailedTipView(): ViewStub = mBinding.layoutAnimeShowFragmentLoadFailed
 
     companion object {
         const val TAG = "AnimeShowFragment"

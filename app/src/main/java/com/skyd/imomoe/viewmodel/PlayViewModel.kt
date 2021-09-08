@@ -60,7 +60,7 @@ class PlayViewModel : ViewModel() {
                 animeEpisodeDataBean.title = ""
                 animeEpisodeDataBean.videoUrl = ""
                 mldAnimeEpisodeDataRefreshed.postValue(false)
-                (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnIOThread()
+                "${App.context.getString(R.string.get_data_failed)}\n${e.message}".showToastOnIOThread()
             }
             this@PlayViewModel.currentEpisodeIndex = currentEpisodeIndex
         }
@@ -78,7 +78,7 @@ class PlayViewModel : ViewModel() {
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnIOThread()
+                "${App.context.getString(R.string.get_data_failed)}\n${e.message}".showToastOnIOThread()
             }
         }
     }
@@ -174,7 +174,7 @@ class PlayViewModel : ViewModel() {
             } catch (e: Exception) {
                 mldAnimeCover.postValue(false)
                 e.printStackTrace()
-                (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnIOThread()
+                "${App.context.getString(R.string.get_data_failed)}\n${e.message}".showToastOnIOThread()
             }
         }
     }

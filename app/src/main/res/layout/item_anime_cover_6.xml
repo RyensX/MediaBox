@@ -17,8 +17,8 @@
 
     <View
         android:id="@+id/view_anime_cover_6_night"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="0px"
+        android:layout_height="0px"
         android:background="@color/transparent_skin"
         app:layout_constraintBottom_toBottomOf="@id/iv_anime_cover_6_cover"
         app:layout_constraintEnd_toEndOf="@id/iv_anime_cover_6_cover"
@@ -41,7 +41,7 @@
             android:ellipsize="end"
             android:maxLines="2"
             android:paddingStart="12dp"
-            android:paddingEnd="0dp"
+            android:paddingEnd="0px"
             android:textColor="@color/foreground_white_skin"
             android:textSize="13sp"
             app:layout_constrainedWidth="true"
@@ -61,7 +61,7 @@
             android:ellipsize="end"
             android:maxLines="2"
             android:paddingStart="12dp"
-            android:paddingEnd="0dp"
+            android:paddingEnd="0px"
             android:textColor="@color/foreground_white_skin"
             android:textSize="13sp"
             app:layout_constrainedWidth="true"

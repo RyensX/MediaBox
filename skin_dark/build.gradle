@@ -21,10 +21,10 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation deps.kotlin.kotlin_stdlib
-    implementation deps.support.appcompat
-    implementation deps.support.material
-    implementation deps.material_dialogs.core
+    compileOnly fileTree(dir: "libs", include: ["*.jar"])
+    compileOnly deps.kotlin.kotlin_stdlib
+    compileOnly deps.support.appcompat
+    compileOnly deps.support.material
+    compileOnly deps.material_dialogs.core
 
 }

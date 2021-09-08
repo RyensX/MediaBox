@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeCoverBean
+import com.skyd.imomoe.bean.GetDataEnum
 import com.skyd.imomoe.bean.PageNumberBean
 import com.skyd.imomoe.bean.SearchHistoryBean
 import com.skyd.imomoe.database.getAppDataBase
@@ -23,9 +24,9 @@ class SearchViewModel : ViewModel() {
     }
 
     var searchResultList: MutableList<AnimeCoverBean> = ArrayList()
-    var mldSearchResultList: MutableLiveData<Int> = MutableLiveData()   // value：-1错误；0重新获取；1刷新
+    var mldSearchResultList: MutableLiveData<Pair<GetDataEnum, MutableList<AnimeCoverBean>>> =
+        MutableLiveData()
     var keyWord = ""
-    var mldFailed: MutableLiveData<Boolean> = MutableLiveData()
     var searchHistoryList: MutableList<SearchHistoryBean> = ArrayList()
     var mldSearchHistoryList: MutableLiveData<Boolean> = MutableLiveData()
     var mldInsertCompleted: MutableLiveData<Boolean> = MutableLiveData()
@@ -36,15 +37,15 @@ class SearchViewModel : ViewModel() {
     fun getSearchData(keyWord: String, isRefresh: Boolean = true, partUrl: String = "") {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                if (isRefresh) searchResultList.clear()
                 searchModel.getSearchData(keyWord, partUrl).apply {
-                    searchResultList.addAll(first)
                     pageNumberBean = second
                     this@SearchViewModel.keyWord = keyWord
-                    mldSearchResultList.postValue(if (isRefresh) 0 else 1)
+                    mldSearchResultList.postValue(
+                        Pair(if (isRefresh) GetDataEnum.REFRESH else GetDataEnum.LOAD_MORE, first)
+                    )
                 }
             } catch (e: Exception) {
-                mldFailed.postValue(true)
+                mldSearchResultList.postValue(Pair(GetDataEnum.FAILED, ArrayList()))
                 e.printStackTrace()
                 (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnIOThread()
             }

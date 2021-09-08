@@ -67,17 +67,17 @@ android {
 
     applicationVariants.all { variant ->
         variant.outputs.all {
-            outputFileName = "app_release_${variant.productFlavors[0].name.toLowerCase()}_v${variant.versionName}.apk"
+            outputFileName = "app_release_${variant.productFlavors[0].name.toLowerCase()}_${variant.versionName}.apk"
         }
     }
 
     buildTypes {
         debug {
-            minifyEnabled true
+            minifyEnabled false
             zipAlignEnabled false
-            shrinkResources true       // 使用keep.xml，keep住皮肤文件
+            shrinkResources false           // 使用keep.xml，keep住皮肤文件
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            applicationIdSuffix '.debug' // 一台手机debug release共存
+            applicationIdSuffix '.debug'    // 一台手机debug release共存
             ndk {
                 abiFilters 'armeabi', 'x86', 'x86_64'
             }
