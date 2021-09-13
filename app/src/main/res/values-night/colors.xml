@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="widget_everyday_anime_header_background_color">#000000</color>
+    <color name="widget_everyday_anime_body_background_color">#000000</color>
+    <color name="widget_everyday_anime_refresh_color">#B5B5B5</color>
+    <color name="widget_everyday_anime_title_color">#B5B5B5</color>
+    <color name="widget_everyday_anime_item_text_color">#B5B5B5</color>
+
+</resources>

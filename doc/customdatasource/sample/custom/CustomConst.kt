@@ -15,9 +15,9 @@ class CustomConst : IConst {
 
     override fun MAIN_URL(): String = "https://www.yhdmp.net"
 
-    override fun versionName(): String = "1.0.0"
+    override fun versionName(): String = "1.0.1"
 
-    override fun versionCode(): Int = 1
+    override fun versionCode(): Int = 2
 
     override fun about(): String {
         return "数据来源：${MAIN_URL()}"

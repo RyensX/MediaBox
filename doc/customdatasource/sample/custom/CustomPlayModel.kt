@@ -14,6 +14,7 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import org.jsoup.Jsoup
 import org.jsoup.select.Elements
 import java.lang.ref.SoftReference
+import java.net.URLDecoder
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
@@ -61,7 +62,7 @@ class CustomPlayModel : IPlayModel {
                 GettingUtil.instance.activity(activity)
                     .url(url).start(object : GettingCallback {
                         override fun onGettingSuccess(webView: View?, html: String) {
-                        GettingUtil.instance.release()
+                            GettingUtil.instance.release()
                             val document = Jsoup.parse(html)
                             val children: Elements = document.body().children()
                             for (i in children.indices) {
@@ -70,7 +71,22 @@ class CustomPlayModel : IPlayModel {
                                         var iframeSrc = children[i]
                                             .select("[class=bofang]")
                                             .select("iframe")[0].attr("src")
-                                        if (iframeSrc.startsWith("/")) iframeSrc =
+                                        if (iframeSrc.startsWith("/yxsf/player/ckx1")) {
+                                            val videoUrl = URLDecoder.decode(
+                                                iframeSrc.substringAfter("url=")
+                                                    .substringBefore("&"), "UTF-8"
+                                            )
+                                            animeEpisodeDataBean.videoUrl = videoUrl
+                                            resultVideoUrl = true
+                                            if (resultData) cancellableContinuation.resume(
+                                                Triple(
+                                                    playBeanDataList,
+                                                    episodesList,
+                                                    playBean
+                                                )
+                                            )
+                                            continue
+                                        } else if (iframeSrc.startsWith("/")) iframeSrc =
                                             MAIN_URL + iframeSrc
                                         getVideoUrl(iframeSrc, object : GettingCallback {
                                             override fun onGettingSuccess(
@@ -230,7 +246,7 @@ class CustomPlayModel : IPlayModel {
             GettingUtil.instance.activity(activity)
                 .url(url).start(object : GettingCallback {
                     override fun onGettingSuccess(webView: View?, html: String) {
-                         GettingUtil.instance.release()
+                        GettingUtil.instance.release()
                         val document = Jsoup.parse(html)
                         val children: Elements = document.body().children()
                         for (i in children.indices) {
@@ -348,7 +364,9 @@ class CustomPlayModel : IPlayModel {
                                                 webView: View?, url: String?, errorCode: Int
                                             ) {
                                                 GettingUtil.instance.release()
-                                                cancellableContinuation.resumeWithException(Exception("onGettingError,url:$url,errorCode:$errorCode"))
+                                                cancellableContinuation.resumeWithException(
+                                                    Exception("onGettingError,url:$url,errorCode:$errorCode")
+                                                )
                                             }
 
                                         })

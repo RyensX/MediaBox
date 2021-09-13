@@ -49,6 +49,7 @@ class AppUpdateHelper private constructor() {
                     try {
                         val format =
                             SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
+                        format.timeZone = TimeZone.getTimeZone("UTC")
                         val date = format.parse(updatedAt)
                         val s: String = if (date != null) {
                             SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(date)
