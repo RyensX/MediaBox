@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:selectableItemBackground">
-
+    <!-- 此项专为widget_everyday_anime使用 -->
     <TextView
         android:id="@+id/tv_anime_cover_10_title"
         android:layout_width="0px"
@@ -15,7 +15,7 @@
         android:layout_marginEnd="8dp"
         android:layout_weight="1"
         android:gravity="center_vertical"
-        android:textColor="@color/foreground_main_color_2_skin"
+        android:textColor="@color/widget_everyday_anime_item_text_color"
         android:textSize="17sp"
         tools:text="番剧名" />
 
@@ -27,7 +27,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="16dp"
         android:gravity="center_vertical"
-        android:textColor="@color/foreground_main_color_2_skin"
+        android:textColor="@color/widget_everyday_anime_item_text_color"
         android:textSize="17sp"
         tools:text="第10集" />
 

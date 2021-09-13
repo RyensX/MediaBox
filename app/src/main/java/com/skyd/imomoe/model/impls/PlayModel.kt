@@ -20,6 +20,15 @@ class PlayModel : IPlayModel {
         return when {
             rawUrl.endsWith("\$mp4", true) -> rawUrl.replace("\$mp4", "")
             rawUrl.endsWith("\$url", true) -> rawUrl.replace("\$url", "")
+            rawUrl.endsWith("\$hp", true) -> {
+                JsoupUtil.getDocument("http://tup.yhdm.so/hp.php?url=${rawUrl.substringBefore("\$hp")}")
+                    .body().select("script")[0].toString()
+                    .substringAfter("video: {")
+                    .substringBefore("}")
+                    .split(",")[0]
+                    .substringAfter("url: \"")
+                    .substringBefore("\"")
+            }
             rawUrl.endsWith("\$qzz", true) -> rawUrl
             else -> ""
         }

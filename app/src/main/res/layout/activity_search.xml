@@ -98,7 +98,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbarSize="4dp"
-            android:scrollbarThumbVertical="@color/foreground_main_color_3_skin"
             android:scrollbars="vertical"
             tools:listitem="@layout/item_anime_cover_3" />
     </com.scwang.smart.refresh.layout.SmartRefreshLayout>

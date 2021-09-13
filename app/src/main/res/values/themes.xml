@@ -19,6 +19,7 @@
         <item name="md_color_title">@color/foreground_main_color_2_skin</item>
         <item name="md_color_content">@color/foreground_main_color_2_skin</item>
         <item name="md_color_button_text">@color/foreground_main_color_2_skin</item>
+        <item name="md_background_color">@color/white_skin</item>
         <item name="md_corner_radius">7dp</item>
     </style>
 </resources>

@@ -202,6 +202,32 @@ class SkinResourceProcessor private constructor(val application: Application) {
         return if (usingDefaultSkin) resourceId else skinResourceId
     }
 
+    fun getSkinThemeId(themeId: Int): Int {
+        val resourceName = appResources.getResourceEntryName(themeId)
+        val resourceType = appResources.getResourceTypeName(themeId)
+        val skinResourceName = resourceName +
+                if (skinSuffix.startsWith("_")) skinSuffix.replaceFirst("_", ".")
+                else skinSuffix
+        if (skinPath.isBlank()) {
+            if (skinSuffix.isNotBlank()) {
+                val skinResourceId = appResources.getIdentifier(
+                    skinResourceName,
+                    resourceType,
+                    application.packageName
+                )
+                return if (skinResourceId == 0) themeId else skinResourceId
+            }
+            return themeId
+        }
+        val skinResourceId =
+            skinResources.getIdentifier(skinResourceName, resourceType, skinPackageName)
+        usingDefaultSkin = skinResourceId == 0
+        if (usingDefaultSkin) {
+            Log.i(TAG, "skin res:$skinResourceName not found,use default res:$resourceName")
+        }
+        return if (usingDefaultSkin) themeId else skinResourceId
+    }
+
     fun getColor(resourceId: Int): Int {
         val resId = getSkinResourceId(resourceId)
         return if (usingDefaultSkin) appResources.getColor(resId) else skinResources.getColor(resId)

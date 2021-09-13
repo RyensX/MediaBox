@@ -1,5 +1,6 @@
 package com.skyd.imomoe.view.activity
 
+import android.content.res.Resources
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -13,6 +14,7 @@ import com.skyd.imomoe.util.Util.setColorStatusBar
 import com.skyd.imomoe.util.eventbus.EventBusSubscriber
 import com.skyd.imomoe.util.gone
 import com.skyd.imomoe.util.visible
+import com.skyd.skin.core.SkinResourceProcessor
 import org.greenrobot.eventbus.EventBus
 
 abstract class BaseActivity<VB : ViewBinding> : SkinBaseActivity() {
@@ -22,9 +24,15 @@ abstract class BaseActivity<VB : ViewBinding> : SkinBaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setTheme(SkinResourceProcessor.instance.getSkinThemeId(R.style.Theme_樱花动漫))
         mBinding = getBinding()
         setContentView(mBinding.root)
         setColorStatusBar(window, getResColor(R.color.main_color_2_skin))
+    }
+
+    override fun onChangeSkin() {
+        super.onChangeSkin()
+        setTheme(SkinResourceProcessor.instance.getSkinThemeId(R.style.Theme_樱花动漫))
     }
 
     override fun onChangeStatusBarSkin() {

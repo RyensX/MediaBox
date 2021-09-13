@@ -21,5 +21,10 @@
     <color name="coppery_1">#B87333</color>
     <color name="foreground_transparent_skin">#00000000</color>
     <color name="transparent_skin">#00000000</color>
+    <color name="widget_everyday_anime_header_background_color">#FC719B</color>
+    <color name="widget_everyday_anime_body_background_color">#FFFFFF</color>
+    <color name="widget_everyday_anime_refresh_color">#FFFFFF</color>
+    <color name="widget_everyday_anime_title_color">#FFFFFF</color>
+    <color name="widget_everyday_anime_item_text_color">#FC719B</color>
 
 </resources>

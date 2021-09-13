@@ -18,7 +18,6 @@
             android:layout_height="match_parent"
             android:overScrollMode="never"
             android:scrollbarSize="4dp"
-            android:scrollbarThumbVertical="@color/foreground_main_color_3_skin"
             android:scrollbars="vertical" />
     </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 
