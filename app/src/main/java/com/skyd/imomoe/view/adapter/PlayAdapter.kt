@@ -15,6 +15,7 @@ import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.getResDrawable
 import com.skyd.imomoe.util.Util.process
 import com.skyd.imomoe.util.Util.showToast
+import com.skyd.imomoe.util.Util.sp
 import com.skyd.imomoe.util.coil.CoilUtil.loadImage
 import com.skyd.imomoe.view.activity.PlayActivity
 import com.skyd.imomoe.view.adapter.decoration.AnimeCoverItemDecoration
@@ -45,7 +46,6 @@ class PlayAdapter(
                 }
             }
             holder is Header1ViewHolder -> {
-                holder.tvHeader1Title.textSize = 15f
                 holder.tvHeader1Title.text = item.title
             }
             holder is AnimeCover2ViewHolder -> {

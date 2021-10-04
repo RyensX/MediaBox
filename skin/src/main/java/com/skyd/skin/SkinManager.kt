@@ -73,7 +73,8 @@ object SkinManager {
         android.R.attr.indeterminateTint,
         android.R.attr.thumb,
         android.R.attr.progressDrawable,
-        R.attr.menu
+        R.attr.menu,
+        R.attr.contentScrim
     ).apply { sort() }      // 需要升序排序，所以要调用sort()
 
     // 在app中自定义
@@ -278,6 +279,10 @@ object SkinManager {
                 android.R.attr.progressDrawable -> {
                     if (resId != -1) skinAttrsSet.attrsMap[ProgressDrawableAttr.TAG] =
                         ProgressDrawableAttr().apply { attrResourceRefId = resId }
+                }
+                R.attr.contentScrim -> {
+                    if (resId != -1) skinAttrsSet.attrsMap[ContentScrimAttr.TAG] =
+                        ContentScrimAttr().apply { attrResourceRefId = resId }
                 }
                 R.attr.menu -> {
                 }

@@ -1,5 +1,6 @@
 package com.skyd.imomoe.view.activity
 
+import android.animation.ValueAnimator
 import android.app.Dialog
 import android.content.Intent
 import android.content.res.Configuration
@@ -7,12 +8,21 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.view.ViewCompat
+import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.shuyu.gsyvideoplayer.GSYVideoManager
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder
@@ -20,6 +30,7 @@ import com.shuyu.gsyvideoplayer.model.VideoOptionModel
 import com.shuyu.gsyvideoplayer.player.PlayerFactory
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer
+import com.shuyu.gsyvideoplayer.video.base.GSYVideoView.CURRENT_STATE_AUTO_COMPLETE
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeEpisodeDataBean
@@ -27,12 +38,10 @@ import com.skyd.imomoe.bean.FavoriteAnimeBean
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.database.getAppDataBase
-import com.skyd.imomoe.databinding.ActivityPlayBinding
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.util.AnimeEpisode2ViewHolder
 import com.skyd.imomoe.util.MD5.getMD5
 import com.skyd.imomoe.util.Util.dp
-import com.skyd.imomoe.util.html.SnifferVideo
 import com.skyd.imomoe.util.Util.getDetailLinkByEpisodeLink
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.getResDrawable
@@ -42,6 +51,8 @@ import com.skyd.imomoe.util.Util.setColorStatusBar
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.downloadanime.AnimeDownloadHelper
 import com.skyd.imomoe.util.gone
+import com.skyd.imomoe.util.html.SnifferVideo
+import com.skyd.imomoe.util.visible
 import com.skyd.imomoe.view.adapter.AnimeDetailAdapter
 import com.skyd.imomoe.view.adapter.PlayAdapter
 import com.skyd.imomoe.view.adapter.decoration.AnimeEpisodeItemDecoration
@@ -50,22 +61,23 @@ import com.skyd.imomoe.view.adapter.spansize.PlaySpanSize
 import com.skyd.imomoe.view.component.player.AnimeVideoPlayer
 import com.skyd.imomoe.view.component.player.DanmakuVideoPlayer
 import com.skyd.imomoe.view.component.player.DetailPlayerActivity
+import com.skyd.imomoe.view.component.textview.TypefaceTextView
 import com.skyd.imomoe.view.fragment.MoreDialogFragment
 import com.skyd.imomoe.view.fragment.ShareDialogFragment
 import com.skyd.imomoe.viewmodel.PlayViewModel
 import kotlinx.coroutines.*
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
 import tv.danmaku.ijk.media.player.IjkMediaPlayer
+import kotlin.math.abs
 
 
 class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer>() {
     override var statusBarSkin: Boolean = false
-    private lateinit var mBinding: ActivityPlayBinding
     private var isFavorite: Boolean = false
     private var favoriteBeanDataReady: Int = 0
         set(value) {
             field = value
-            if (value == 2) mBinding.ivPlayActivityFavorite.isEnabled = true
+            if (value == 2) ivPlayActivityFavorite.isEnabled = true
         }
     private var partUrl: String = ""
     private var detailPartUrl: String = ""
@@ -75,11 +87,71 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer>() {
     private var danmuUrl: String = ""
     private var danmuParamMap: HashMap<String, String> = HashMap()
     private var currentNightMode: Int = 0
+    private var lastCanCollapsed: Boolean? = null
+
+    private lateinit var ivPlayActivityFavorite: ImageView
+    private lateinit var avpPlayActivity: DanmakuVideoPlayer
+    private var ivPlayActivityToolbarMore: ImageView? = null
+    private lateinit var rvPlayActivity: RecyclerView
+    private lateinit var srlPlayActivity: SwipeRefreshLayout
+    private lateinit var tvPlayActivityTitle: TypefaceTextView
+    private var nsvPlayActivity: NestedScrollView? = null
+    private var tvPlayActivityToolbarTitle: TextView? = null
+    private var ablPlayActivity: AppBarLayout? = null
+
+    private fun initView() {
+        ivPlayActivityFavorite = findViewById(R.id.iv_play_activity_favorite)
+        ivPlayActivityToolbarMore = findViewById(R.id.iv_play_activity_toolbar_more)
+        rvPlayActivity = findViewById(R.id.rv_play_activity)
+        srlPlayActivity = findViewById(R.id.srl_play_activity)
+        tvPlayActivityTitle = findViewById(R.id.tv_play_activity_title)
+        nsvPlayActivity = findViewById(R.id.nsv_play_activity)
+        tvPlayActivityToolbarTitle = findViewById(R.id.tv_play_activity_toolbar_title)
+        ablPlayActivity = findViewById(R.id.abl_play_activity)
+        avpPlayActivity = findViewById(R.id.avp_play_activity)
+
+        val tbPlayActivity: Toolbar? = findViewById(R.id.tb_play_activity)
+        val ctlPlayActivity: CollapsingToolbarLayout? = findViewById(R.id.ctl_play_activity)
+        val clPlayActivityToolbarLayout: ConstraintLayout? =
+            findViewById(R.id.cl_play_activity_toolbar_layout)
+        val ivPlayActivityToolbarBack: ImageView? = findViewById(R.id.iv_play_activity_toolbar_back)
+
+        if (tbPlayActivity != null && ctlPlayActivity != null &&
+            clPlayActivityToolbarLayout != null && ivPlayActivityToolbarBack != null &&
+            tvPlayActivityToolbarTitle != null
+        ) {
+            setSupportActionBar(tbPlayActivity)
+            supportActionBar?.setDisplayShowTitleEnabled(false)
+
+            ablPlayActivity?.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
+                when {
+                    abs(verticalOffset) > ctlPlayActivity.scrimVisibleHeightTrigger -> {
+                        if (tbPlayActivity.visibility != View.VISIBLE) {
+                            clPlayActivityToolbarLayout.visible()
+                            tbPlayActivity.visible()
+                        }
+                    }
+                    else -> {
+                        if (tbPlayActivity.visibility != View.GONE) {
+                            clPlayActivityToolbarLayout.gone()
+                            tbPlayActivity.gone(true, 600)
+                        }
+                    }
+                }
+            })
+
+            ivPlayActivityToolbarBack.setOnClickListener { finish() }
+            tvPlayActivityToolbarTitle?.setOnClickListener {
+                (avpPlayActivity.currentPlayer as AnimeVideoPlayer).clickStartIcon()
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding = ActivityPlayBinding.inflate(layoutInflater)
-        setContentView(mBinding.root)
+        setContentView(R.layout.activity_play)
+
+        initView()
 
         currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
 
@@ -91,7 +163,7 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer>() {
 
         initVideoBuilderMode()
 
-        mBinding.avpPlayActivity.run {
+        avpPlayActivity.run {
             getDownloadButton()?.setOnClickListener { getSheetDialog("download").show() }
             // 设置返回按键功能
             backButton?.setOnClickListener { onBackPressed() }
@@ -105,67 +177,67 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer>() {
         if (detailPartUrl.isBlank() || detailPartUrl == const.actionUrl.ANIME_DETAIL())
             detailPartUrl = getDetailLinkByEpisodeLink(partUrl)
 
-        mBinding.avpPlayActivity.let { player ->
-            // 分享按钮
-            player.getShareButton()?.setOnClickListener {
-                ShareDialogFragment().setShareContent(Api.MAIN_URL + viewModel.partUrl)
-                    .show(supportFragmentManager, "share_dialog")
-            }
-            // 更多按钮
-            player.getMoreButton()?.setOnClickListener {
-                MoreDialogFragment().run {
-                    setOnClickListener(
-                        arrayOf(View.OnClickListener { dismiss() },
-                            View.OnClickListener {
-                                startActivity(
-                                    Intent(this@PlayActivity, DlnaActivity::class.java)
-                                        .putExtra("url", player.getUrl())
-                                        .putExtra("title", player.getTitle())
+
+        // 分享按钮
+        avpPlayActivity.getShareButton()?.setOnClickListener {
+            ShareDialogFragment().setShareContent(Api.MAIN_URL + viewModel.partUrl)
+                .show(supportFragmentManager, "share_dialog")
+        }
+        // 更多按钮
+        View.OnClickListener {
+            MoreDialogFragment().run {
+                setOnClickListener(
+                    arrayOf(View.OnClickListener { dismiss() },
+                        View.OnClickListener {
+                            startActivity(
+                                Intent(this@PlayActivity, DlnaActivity::class.java)
+                                    .putExtra("url", avpPlayActivity.getUrl())
+                                    .putExtra("title", avpPlayActivity.getTitle())
+                            )
+                            dismiss()
+                        }, View.OnClickListener {
+                            if (!openVideoByExternalPlayer(
+                                    this@PlayActivity,
+                                    viewModel.animeEpisodeDataBean.videoUrl
                                 )
-                                dismiss()
-                            }, View.OnClickListener {
-                                if (!openVideoByExternalPlayer(
-                                        this@PlayActivity,
-                                        viewModel.animeEpisodeDataBean.videoUrl
-                                    )
-                                ) getString(R.string.matched_app_not_found).showToast()
-                                dismiss()
-                            })
-                    )
-                    show(supportFragmentManager, "more_dialog")
-                }
+                            ) getString(R.string.matched_app_not_found).showToast()
+                            dismiss()
+                        })
+                )
+                show(supportFragmentManager, "more_dialog")
             }
+        }.let {
+            avpPlayActivity.getMoreButton()?.setOnClickListener(it)
+            ivPlayActivityToolbarMore?.setOnClickListener(it)
         }
 
-        mBinding.run {
-            rvPlayActivity.layoutManager = GridLayoutManager(this@PlayActivity, 4)
-                .apply { spanSizeLookup = PlaySpanSize(adapter) }
-            // 复用AnimeShow的ItemDecoration
-            rvPlayActivity.addItemDecoration(AnimeShowItemDecoration())
-            rvPlayActivity.setHasFixedSize(true)
-            rvPlayActivity.adapter = adapter
+        rvPlayActivity.layoutManager = GridLayoutManager(this@PlayActivity, 4)
+            .apply { spanSizeLookup = PlaySpanSize(adapter) }
+        // 复用AnimeShow的ItemDecoration
+        rvPlayActivity.addItemDecoration(AnimeShowItemDecoration())
+        rvPlayActivity.setHasFixedSize(true)
+        rvPlayActivity.adapter = adapter
 
-            srlPlayActivity.setOnRefreshListener { viewModel.getPlayData(partUrl) }
-            srlPlayActivity.setColorSchemeResources(getSkinResourceId(R.color.main_color_skin))
-        }
+        srlPlayActivity.setOnRefreshListener { viewModel.getPlayData(partUrl) }
+        srlPlayActivity.setColorSchemeResources(getSkinResourceId(R.color.main_color_skin))
 
         lifecycleScope.launch(Dispatchers.IO) {
             val favoriteAnime = getAppDataBase().favoriteAnimeDao().getFavoriteAnime(detailPartUrl)
             runOnUiThread {
                 isFavorite = if (favoriteAnime == null) {
-                    mBinding.ivPlayActivityFavorite.setImageDrawable(getResDrawable(R.drawable.ic_star_border_main_color_2_24_skin))
+                    ivPlayActivityFavorite.setImageDrawable(getResDrawable(R.drawable.ic_star_border_main_color_2_24_skin))
                     false
                 } else {
-                    mBinding.ivPlayActivityFavorite.setImageDrawable(getResDrawable(R.drawable.ic_star_main_color_2_24_skin))
+                    ivPlayActivityFavorite.setImageDrawable(getResDrawable(R.drawable.ic_star_main_color_2_24_skin))
                     true
                 }
-                mBinding.ivPlayActivityFavorite.setOnClickListener {
+                ivPlayActivityFavorite.setOnClickListener {
                     if (isFavorite) {
                         Thread {
                             getAppDataBase().favoriteAnimeDao().deleteFavoriteAnime(detailPartUrl)
                         }.start()
                         isFavorite = false
-                        mBinding.ivPlayActivityFavorite.setImageDrawable(getResDrawable(R.drawable.ic_star_border_main_color_2_24_skin))
+                        ivPlayActivityFavorite.setImageDrawable(getResDrawable(R.drawable.ic_star_border_main_color_2_24_skin))
                         getString(R.string.remove_favorite_succeed).showToast()
                     } else {
                         Thread {
@@ -182,13 +254,13 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer>() {
                             )
                         }.start()
                         isFavorite = true
-                        mBinding.ivPlayActivityFavorite.setImageDrawable(getResDrawable(R.drawable.ic_star_main_color_2_24_skin))
+                        ivPlayActivityFavorite.setImageDrawable(getResDrawable(R.drawable.ic_star_main_color_2_24_skin))
                         getString(R.string.favorite_succeed).showToast()
                     }
                 }
             }
         }
-        mBinding.ivPlayActivityFavorite.isEnabled = false
+        ivPlayActivityFavorite.isEnabled = false
 
         viewModel.mldAnimeCover.observe(this, {
             if (it) {
@@ -197,17 +269,17 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer>() {
         })
 
         viewModel.mldPlayBean.observe(this, {
-            mBinding.srlPlayActivity.isRefreshing = false
+            srlPlayActivity.isRefreshing = false
 
             val title = viewModel.playBean?.title?.title
-            mBinding.tvPlayActivityTitle.text = title
+            tvPlayActivityTitle.text = title
 
             adapter.notifyDataSetChanged()
 
             favoriteBeanDataReady++
 
             if (isFirstTime) {
-                mBinding.avpPlayActivity.startPlay()
+                avpPlayActivity.startPlay()
                 isFirstTime = false
             }
         })
@@ -241,11 +313,11 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer>() {
         })
 
         viewModel.mldAnimeEpisodeDataRefreshed.observe(this, {
-            if (it) mBinding.avpPlayActivity.currentPlayer
+            if (it) avpPlayActivity.currentPlayer
                 .startPlay(partUrl = viewModel.animeEpisodeDataBean.actionUrl)
         })
 
-        mBinding.srlPlayActivity.isRefreshing = true
+        srlPlayActivity.isRefreshing = true
         viewModel.getPlayData(partUrl)
         viewModel.getAnimeCoverImageBean(detailPartUrl)
 
@@ -259,7 +331,7 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer>() {
     }
 
     fun startPlay2(url: String, title: String, partUrl: String = this@PlayActivity.partUrl) {
-        mBinding.avpPlayActivity.startPlay(url, title, partUrl)
+        avpPlayActivity.startPlay(url, title, partUrl)
     }
 
     private fun GSYBaseVideoPlayer.startPlay(
@@ -336,6 +408,38 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer>() {
         viewModel.clearActivity()
     }
 
+    override fun onVideoSizeChanged() {
+        val tag = avpPlayActivity.tag
+        if (tag is String && tag == "sw600dp-land") return
+        avpPlayActivity.measure(
+            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+        )
+        val videoHeight: Int = avpPlayActivity.currentVideoHeight
+        val videoWidth: Int = avpPlayActivity.currentVideoWidth
+        val ratio = videoWidth.toDouble() / videoHeight
+        val playerWidth: Int = avpPlayActivity.width
+        if (abs(playerWidth.toDouble() / avpPlayActivity.height - ratio) < 0.001) return
+        var playerHeight = playerWidth / ratio
+        val playerParent = window.decorView as ViewGroup
+        playerParent.measure(
+            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+        )
+        val parentHeight = playerParent.height
+        if (playerHeight > parentHeight * 0.75) playerHeight = parentHeight * 0.75
+        val layoutParams: ViewGroup.LayoutParams = avpPlayActivity.layoutParams
+        ValueAnimator.ofInt(layoutParams.height, playerHeight.toInt())
+            .setDuration(200)
+            .apply {
+                addUpdateListener { animation ->
+                    layoutParams.height = animation.animatedValue as Int
+                    avpPlayActivity.requestLayout()
+                }
+                start()
+            }
+    }
+
     override fun onPlayError(url: String?, vararg objects: Any?) {
         super.onPlayError(url, *objects)
         "${objects[0].toString()}, ${getString(R.string.get_data_failed)}".showToast()
@@ -348,11 +452,16 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer>() {
 //        }
     }
 
+    override fun onQuitFullscreen(url: String?, vararg objects: Any?) {
+        super.onQuitFullscreen(url, *objects)
+        adapter.notifyDataSetChanged()
+    }
+
     override fun onPrepared(url: String?, vararg objects: Any?) {
         super.onPrepared(url, *objects)
         //调整触摸滑动快进的比例
         //毫秒,刚好划一屏1分35秒
-        mBinding.avpPlayActivity.currentPlayer.apply {
+        avpPlayActivity.currentPlayer.apply {
             seekRatio = duration / 90_000f
             if (danmuUrl.isNotBlank() && this is DanmakuVideoPlayer && !this@PlayActivity.isDestroyed) {
                 this@PlayActivity.getString(R.string.the_video_has_danmu).showToast()
@@ -361,7 +470,35 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer>() {
         }
     }
 
-    override fun getGSYVideoPlayer(): DanmakuVideoPlayer = mBinding.avpPlayActivity
+    override fun videoPlayStatusChanged(playing: Boolean) {
+        super.videoPlayStatusChanged(playing)
+        canCollapsed(!playing)
+        tvPlayActivityToolbarTitle?.text =
+            if (avpPlayActivity.currentState == CURRENT_STATE_AUTO_COMPLETE)
+                getString(R.string.replay_video)
+            else getString(R.string.play_video_now)
+    }
+
+    private fun canCollapsed(enable: Boolean) {
+        if (lastCanCollapsed == enable) return
+        lastCanCollapsed = enable
+        nsvPlayActivity?.let {
+            ViewCompat.setNestedScrollingEnabled(it, enable)
+        }
+        ablPlayActivity?.let {
+            val params = it.layoutParams as CoordinatorLayout.LayoutParams
+            if (params.behavior == null) params.behavior = AppBarLayout.Behavior()
+            val behaviour = params.behavior as AppBarLayout.Behavior
+            behaviour.setDragCallback(object : AppBarLayout.Behavior.DragCallback() {
+                override fun canDrag(appBarLayout: AppBarLayout): Boolean {
+                    return enable
+                }
+            })
+            if (!enable) it.setExpanded(true)
+        }
+    }
+
+    override fun getGSYVideoPlayer(): DanmakuVideoPlayer = avpPlayActivity
 
     override fun getGSYVideoOptionBuilder(): GSYVideoOptionBuilder {
         return GSYVideoOptionBuilder()
@@ -409,7 +546,7 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer>() {
         recyclerView.adapter = adapter
         viewModel.mldEpisodesList.observe(this, Observer {
             adapter.notifyDataSetChanged()
-            mBinding.avpPlayActivity.setEpisodeAdapter(
+            avpPlayActivity.setEpisodeAdapter(
                 PlayerEpisodeRecyclerViewAdapter(
                     this,
                     viewModel.episodesList
@@ -500,7 +637,7 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer>() {
                     )
                     holder.tvTitle.text = item.title
                     holder.itemView.setOnClickListener {
-                        activity.mBinding.avpPlayActivity.currentPlayer.run {
+                        activity.avpPlayActivity.currentPlayer.run {
                             if (this is AnimeVideoPlayer) {
                                 getRightContainer()?.gone()
                                 // 因为右侧界面显示时，不在xx秒后隐藏界面，所以要恢复xx秒后隐藏控制界面

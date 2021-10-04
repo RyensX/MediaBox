@@ -13,7 +13,8 @@ import android.widget.*
 import androidx.core.view.children
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.skyd.skin.SkinManager
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
+import com.shuyu.gsyvideoplayer.utils.CommonUtil
 import com.shuyu.gsyvideoplayer.utils.Debuger
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
@@ -36,6 +37,9 @@ import com.skyd.imomoe.view.activity.DlnaActivity
 import com.skyd.imomoe.view.adapter.SkinRvAdapter
 import com.skyd.imomoe.view.component.ZoomView
 import com.skyd.imomoe.view.component.textview.TypefaceTextView
+import com.skyd.skin.SkinManager
+import tv.danmaku.ijk.media.exo2.IjkExo2MediaPlayer
+import tv.danmaku.ijk.media.player.IjkMediaPlayer
 import java.io.File
 import java.io.Serializable
 import kotlin.math.abs
@@ -551,6 +555,13 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         super.onBrightnessSlide(percent)
     }
 
+    override fun onVideoSizeChanged() {
+        super.onVideoSizeChanged()
+        mVideoAllCallBack.let {
+            if (it is MyVideoAllCallBack) it.onVideoSizeChanged()
+        }
+    }
+
     //正常
     override fun changeUiToNormal() {
         super.changeUiToNormal()
@@ -593,17 +604,30 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         mUiCleared = false
     }
 
+    override fun onVideoPause() {
+        super.onVideoPause()
+        mVideoAllCallBack.let {
+            if (it is MyVideoAllCallBack) it.onVideoPause()
+        }
+    }
+
     override fun onVideoResume(seek: Boolean) {
 //        super.onVideoResume(seek)
         mPauseBeforePrepared = false
         if (mCurrentState == GSYVideoView.CURRENT_STATE_PAUSE) {
             try {
                 clickStartIcon()
-
+                mVideoAllCallBack.let {
+                    if (it is MyVideoAllCallBack) it.onVideoResume()
+                }
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
             }
         }
+    }
+
+    public override fun clickStartIcon() {
+        super.clickStartIcon()
     }
 
     override fun onClick(v: View) {
@@ -720,6 +744,41 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         } else {
             super.onTouch(v, event)
         }
+    }
+
+    override fun onBackFullscreen() {
+        if (!mFullAnimEnd) {
+            return
+        }
+        mIfCurrentIsFullscreen = false
+        var delay = 0
+        if (mOrientationUtils != null) {
+            val orientationUtils = mOrientationUtils
+            delay = if (orientationUtils is AnimeOrientationUtils)
+                orientationUtils.backToProtVideo2()
+            else
+                orientationUtils.backToProtVideo()
+            mOrientationUtils.isEnable = false
+            if (mOrientationUtils != null) {
+                mOrientationUtils.releaseListener()
+                mOrientationUtils = null
+            }
+        }
+
+        if (!mShowFullAnimation) {
+            delay = 0
+        }
+
+        val vp = CommonUtil.scanForActivity(context)
+            .findViewById<View>(Window.ID_ANDROID_CONTENT) as ViewGroup
+        val oldF = vp.findViewById<View>(fullId)
+        if (oldF != null) {
+            //此处fix bug#265，推出全屏的时候，虚拟按键问题
+            val gsyVideoPlayer = oldF as GSYVideoPlayer
+            gsyVideoPlayer.isIfCurrentIsFullscreen = false
+        }
+
+        mInnerHandler.postDelayed({ backToNormal() }, delay.toLong())
     }
 
     fun setEpisodeButtonOnClickListener(listener: OnClickListener) {

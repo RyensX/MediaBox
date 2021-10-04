@@ -17,8 +17,9 @@
         <ImageView
             android:id="@+id/iv_skin_cover_1_cover"
             android:layout_width="match_parent"
-            android:layout_height="76dp"
+            android:layout_height="0dp"
             android:scaleType="fitXY"
+            app:layout_constraintDimensionRatio="2:1.4"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@drawable/ic_launcher_background" />

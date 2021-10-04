@@ -156,4 +156,7 @@
     <string name="user_notice">使用须知</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="notice_activity_error_param">跳转到通知界面错误，参数传递不正确！</string>
+    <string name="continue_to_play">继续播放</string>
+    <string name="play_video_now">立即播放</string>
+    <string name="replay_video">重新播放</string>
 </resources>

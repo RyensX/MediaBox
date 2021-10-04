@@ -51,8 +51,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), EventBusSubscriber {
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentHomeBinding =
         FragmentHomeBinding.inflate(inflater, container, false)
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         // 清除缓存，以免换肤后颜色错误
         viewModel.childViewPool.clear()

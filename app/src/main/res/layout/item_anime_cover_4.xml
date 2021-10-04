@@ -1,31 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="7dp"
     android:background="?android:selectableItemBackground"
-    android:orientation="vertical"
     android:paddingBottom="3dp">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_anime_cover_4_cover"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="5dp">
+        android:layout_height="0dp"
+        app:cardCornerRadius="5dp"
+        app:layout_constraintDimensionRatio="7:5"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/iv_anime_cover_4_cover"
             android:layout_width="match_parent"
-            android:layout_height="55dp"
+            android:layout_height="match_parent"
             android:scaleType="fitXY"
             tools:src="@drawable/ic_launcher_background" />
 
         <View
             android:id="@+id/view_anime_cover_4_night"
             android:layout_width="match_parent"
-            android:layout_height="55dp"
+            android:layout_height="match_parent"
             android:background="@color/transparent_skin" />
     </androidx.cardview.widget.CardView>
 
@@ -38,7 +39,12 @@
         android:maxLines="3"
         android:textColor="@color/foreground_black_skin"
         android:textSize="13sp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cv_anime_cover_4_cover"
         app:typeface="bPRTypeface"
         tools:text="中二病也要谈恋爱！" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

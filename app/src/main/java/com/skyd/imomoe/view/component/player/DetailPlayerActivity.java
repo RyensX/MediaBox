@@ -3,28 +3,27 @@ package com.skyd.imomoe.view.component.player;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
-
 import com.skyd.skin.core.SkinBaseActivity;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
-import com.shuyu.gsyvideoplayer.listener.VideoAllCallBack;
 import com.shuyu.gsyvideoplayer.utils.OrientationOption;
-import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
+
+import org.jetbrains.annotations.NotNull;
 
 import static com.shuyu.gsyvideoplayer.video.base.GSYVideoView.CURRENT_STATE_PAUSE;
 
 /**
  * 详情模式播放页面基础类
  */
-public abstract class DetailPlayerActivity<T extends GSYBaseVideoPlayer> extends SkinBaseActivity implements VideoAllCallBack {
+public abstract class DetailPlayerActivity<T extends GSYBaseVideoPlayer> extends SkinBaseActivity implements MyVideoAllCallBack {
 
     protected boolean isPlay;
 
     // 是否是在onPause方法里自动暂停的
     protected boolean isPause;
 
-    protected OrientationUtils orientationUtils;
+    protected AnimeOrientationUtils orientationUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +35,7 @@ public abstract class DetailPlayerActivity<T extends GSYBaseVideoPlayer> extends
      */
     public void initVideo() {
         //外部辅助的旋转，帮助全屏
-        orientationUtils = new OrientationUtils(this, getGSYVideoPlayer(), getOrientationOption());
+        orientationUtils = new AnimeOrientationUtils(this, getGSYVideoPlayer(), getOrientationOption());
         //初始化不打开外部的旋转
         orientationUtils.setEnable(false);
         if (getGSYVideoPlayer().getFullscreenButton() != null) {
@@ -48,6 +47,10 @@ public abstract class DetailPlayerActivity<T extends GSYBaseVideoPlayer> extends
                 }
             });
         }
+        // 退出全屏监听，避免平板退出全屏后变成竖屏
+        getGSYVideoPlayer().setBackFromFullScreenListener(view -> {
+            onBackPressed();
+        });
     }
 
     /**
@@ -73,7 +76,7 @@ public abstract class DetailPlayerActivity<T extends GSYBaseVideoPlayer> extends
     @Override
     public void onBackPressed() {
         if (orientationUtils != null) {
-            orientationUtils.backToProtVideo();
+            orientationUtils.backToProtVideo2();
         }
         if (GSYVideoManager.backFromWindowFull(this)) {
             return;
@@ -120,7 +123,7 @@ public abstract class DetailPlayerActivity<T extends GSYBaseVideoPlayer> extends
      * orientationUtils 和  detailPlayer.onConfigurationChanged 方法是用于触发屏幕旋转的
      */
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NotNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         //如果旋转了就全屏
         if (isPlay && !isPause) {
@@ -130,7 +133,7 @@ public abstract class DetailPlayerActivity<T extends GSYBaseVideoPlayer> extends
 
     @Override
     public void onStartPrepared(String url, Object... objects) {
-
+        videoPlayStatusChanged(true);
     }
 
     @Override
@@ -143,6 +146,7 @@ public abstract class DetailPlayerActivity<T extends GSYBaseVideoPlayer> extends
         orientationUtils.setEnable(getDetailOrientationRotateAuto() && !isAutoFullWithSize());
         isPlay = true;
         isPause = false;
+        videoPlayStatusChanged(true);
     }
 
     @Override
@@ -157,22 +161,22 @@ public abstract class DetailPlayerActivity<T extends GSYBaseVideoPlayer> extends
 
     @Override
     public void onClickStop(String url, Object... objects) {
-
+        videoPlayStatusChanged(false);
     }
 
     @Override
     public void onClickStopFullscreen(String url, Object... objects) {
-
+        videoPlayStatusChanged(false);
     }
 
     @Override
     public void onClickResume(String url, Object... objects) {
-
+        videoPlayStatusChanged(true);
     }
 
     @Override
     public void onClickResumeFullscreen(String url, Object... objects) {
-
+        videoPlayStatusChanged(true);
     }
 
     @Override
@@ -187,7 +191,7 @@ public abstract class DetailPlayerActivity<T extends GSYBaseVideoPlayer> extends
 
     @Override
     public void onAutoComplete(String url, Object... objects) {
-
+        videoPlayStatusChanged(false);
     }
 
     @Override
@@ -229,7 +233,7 @@ public abstract class DetailPlayerActivity<T extends GSYBaseVideoPlayer> extends
 
     @Override
     public void onPlayError(String url, Object... objects) {
-
+        videoPlayStatusChanged(false);
     }
 
     @Override
@@ -249,7 +253,7 @@ public abstract class DetailPlayerActivity<T extends GSYBaseVideoPlayer> extends
 
     @Override
     public void onComplete(String url, Object... objects) {
-
+        videoPlayStatusChanged(false);
     }
 
     public boolean hideActionBarWhenFull() {
@@ -292,5 +296,24 @@ public abstract class DetailPlayerActivity<T extends GSYBaseVideoPlayer> extends
      */
     public boolean isAutoFullWithSize() {
         return false;
+    }
+
+    @Override
+    public void onVideoPause() {
+        videoPlayStatusChanged(false);
+    }
+
+    @Override
+    public void onVideoResume() {
+        videoPlayStatusChanged(true);
+    }
+
+    /**
+     * 视频播放状态变化
+     *
+     * @param playing false：未在播放（包括播放失败暂停等等）；true：正在播放（包括正在准备加载、缓冲等等）
+     */
+    protected void videoPlayStatusChanged(boolean playing) {
+
     }
 }
