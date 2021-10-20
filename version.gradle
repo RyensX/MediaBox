@@ -56,11 +56,11 @@ jsoup.jsoup = "org.jsoup:jsoup:1.13.1"
 deps.jsoup = jsoup
 
 def shuyu = [:]
-shuyu.GSYVideoPlayer = "com.shuyu:GSYVideoPlayer:8.1.0"
+shuyu.GSYVideoPlayer = "com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:v8.1.6-jitpack"
 deps.shuyu = shuyu
 
 def getActivity = [:]
-getActivity.XXPermissions = "com.github.getActivity:XXPermissions:11.6"
+getActivity.XXPermissions = "com.github.getActivity:XXPermissions:12.5"
 deps.getActivity = getActivity
 
 def filedownloader = [:]

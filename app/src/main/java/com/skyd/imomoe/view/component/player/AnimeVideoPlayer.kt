@@ -13,7 +13,6 @@ import android.widget.*
 import androidx.core.view.children
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.shuyu.gsyvideoplayer.utils.CommonUtil
 import com.shuyu.gsyvideoplayer.utils.Debuger
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType
@@ -141,6 +140,9 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
     // 控件没有显示
     private var mUiCleared: Boolean = true
 
+    // 显示系统时间
+    private var mSystemTimeTextView: TextView? = null
+
     constructor(context: Context) : super(context)
 
     constructor(context: Context, fullFlag: Boolean?) : super(context, fullFlag)
@@ -175,6 +177,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         mRestoreScreenTextView = findViewById(R.id.tv_restore_screen)
         mTouchDownHighSpeedTextView = findViewById(R.id.tv_touch_down_high_speed)
         mBiggerSurface = findViewById(R.id.bigger_surface)
+        mSystemTimeTextView = findViewById(R.id.tv_system_time)
 
         mRightContainer?.gone()
         mSettingContainer?.gone()
