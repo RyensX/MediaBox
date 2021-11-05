@@ -14,6 +14,7 @@ import com.skyd.imomoe.util.Util
 import com.skyd.imomoe.util.Util.getAppVersionName
 import com.skyd.imomoe.util.Util.openBrowser
 import com.skyd.imomoe.util.visible
+import java.net.URL
 import java.util.*
 
 class AboutActivity : BaseActivity<ActivityAboutBinding>() {
@@ -46,7 +47,17 @@ class AboutActivity : BaseActivity<ActivityAboutBinding>() {
             tvAboutActivityVersion.text = getAppVersionName()
 
             rlAboutActivityImomoe.setOnClickListener {
-                openBrowser(Api.MAIN_URL)
+                var warningString: String = getString(R.string.jump_to_data_source_website_warning)
+                if (URL(Api.MAIN_URL).protocol == "http") {
+                    warningString =
+                        getString(R.string.jump_to_browser_http_warning) + "\n" + warningString
+                }
+                MaterialDialog(this@AboutActivity).show {
+                    title(res = R.string.warning)
+                    message(text = warningString)
+                    positiveButton(res = R.string.ok) { openBrowser(Api.MAIN_URL) }
+                    negativeButton { dismiss() }
+                }
             }
 
             ivAboutActivityCustomDataSourceAbout.setOnClickListener {

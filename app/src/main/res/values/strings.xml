@@ -159,4 +159,6 @@
     <string name="continue_to_play">继续播放</string>
     <string name="play_video_now">立即播放</string>
     <string name="replay_video">重新播放</string>
+    <string name="jump_to_browser_http_warning">此网址使用HTTP协议，不能保证安全性，是否要继续打开浏览器访问？</string>
+    <string name="jump_to_data_source_website_warning">若要访问，请千万不要在页面下载任何APP和Jar包等可执行文件</string>
 </resources>

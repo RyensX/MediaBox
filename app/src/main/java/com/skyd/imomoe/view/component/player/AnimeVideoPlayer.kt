@@ -31,14 +31,13 @@ import com.skyd.imomoe.util.Util.getScreenBrightness
 import com.skyd.imomoe.util.Util.openVideoByExternalPlayer
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.gone
+import com.skyd.imomoe.util.invisible
 import com.skyd.imomoe.util.visible
 import com.skyd.imomoe.view.activity.DlnaActivity
 import com.skyd.imomoe.view.adapter.SkinRvAdapter
 import com.skyd.imomoe.view.component.ZoomView
 import com.skyd.imomoe.view.component.textview.TypefaceTextView
 import com.skyd.skin.SkinManager
-import tv.danmaku.ijk.media.exo2.IjkExo2MediaPlayer
-import tv.danmaku.ijk.media.player.IjkMediaPlayer
 import java.io.File
 import java.io.Serializable
 import kotlin.math.abs
@@ -143,6 +142,9 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
     // 显示系统时间
     private var mSystemTimeTextView: TextView? = null
 
+    // top阴影
+    private var mViewTopContainerShadow: View? = null
+
     constructor(context: Context) : super(context)
 
     constructor(context: Context, fullFlag: Boolean?) : super(context, fullFlag)
@@ -156,14 +158,14 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
     override fun init(context: Context?) {
         super.init(context)
 
-        mDownloadButton = findViewById(R.id.iv_download)
+        mDownloadButton = findViewById(R.id.iv_play_activity_toolbar_download)
         mMoreScaleTextView = findViewById(R.id.tv_more_scale)
         mSpeedTextView = findViewById(R.id.tv_speed)
 //        mClingImageView = findViewById(R.id.iv_cling)
         mRightContainer = findViewById(R.id.layout_right)
         mSpeedRecyclerView = findViewById(R.id.rv_right)
         mEpisodeRecyclerView = findViewById(R.id.rv_right)
-        mShareImageView = findViewById(R.id.iv_share)
+        mShareImageView = findViewById(R.id.iv_play_activity_toolbar_share)
         mNextImageView = findViewById(R.id.iv_next)
         mEpisodeTextView = findViewById(R.id.tv_episode)
         mSettingImageView = findViewById(R.id.iv_setting)
@@ -171,13 +173,14 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         mReverseRadioGroup = findViewById(R.id.rg_reverse)
         mBottomProgressCheckBox = findViewById(R.id.cb_bottom_progress)
         mBottomProgress = super.mBottomProgressBar
-        mMoreImageView = findViewById(R.id.iv_more)
+        mMoreImageView = findViewById(R.id.iv_play_activity_toolbar_more)
         mOpenByExternalPlayerTextView = findViewById(R.id.tv_open_by_external_player)
 //        mMediaCodecCheckBox = findViewById(R.id.cb_media_codec)
         mRestoreScreenTextView = findViewById(R.id.tv_restore_screen)
         mTouchDownHighSpeedTextView = findViewById(R.id.tv_touch_down_high_speed)
         mBiggerSurface = findViewById(R.id.bigger_surface)
         mSystemTimeTextView = findViewById(R.id.tv_system_time)
+        mViewTopContainerShadow = findViewById(R.id.view_top_container_shadow)
 
         mRightContainer?.gone()
         mSettingContainer?.gone()
@@ -320,6 +323,17 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         }
     }
 
+    fun setTopContainer(top: ViewGroup?) {
+        mTopContainer = top
+        mViewTopContainerShadow = if (top == null) {
+            mViewTopContainerShadow?.visible()
+            null
+        } else {
+            findViewById(R.id.view_top_container_shadow)
+        }
+        restartTimerTask()
+    }
+
     private fun showRightContainer() {
         mRightContainer?.let {
             hideAllWidget()
@@ -338,6 +352,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         setViewShowState(mRightContainer, INVISIBLE)
         setViewShowState(mSettingContainer, INVISIBLE)
         setViewShowState(mRestoreScreenTextView, View.GONE)
+        setViewShowState(mViewTopContainerShadow, View.INVISIBLE)
     }
 
     override fun onClickUiToggle(e: MotionEvent?) {
@@ -568,29 +583,34 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
     //正常
     override fun changeUiToNormal() {
         super.changeUiToNormal()
+        mViewTopContainerShadow?.visible()
         initFirstLoad = true
         mUiCleared = false
     }
 
     override fun changeUiToPauseShow() {
         super.changeUiToPauseShow()
+        mViewTopContainerShadow?.visible()
         mUiCleared = false
     }
 
     override fun changeUiToClear() {
         super.changeUiToClear()
+        mViewTopContainerShadow?.invisible()
         mUiCleared = true
     }
 
     //准备中
     override fun changeUiToPreparingShow() {
         super.changeUiToPreparingShow()
+        mViewTopContainerShadow?.visible()
         mUiCleared = false
     }
 
     //播放中
     override fun changeUiToPlayingShow() {
         super.changeUiToPlayingShow()
+        mViewTopContainerShadow?.visible()
 //        if (initFirstLoad) {
 //            mBottomContainer.gone()
 //            mStartButton.gone()
@@ -602,9 +622,35 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
     //自动播放结束
     override fun changeUiToCompleteShow() {
         super.changeUiToCompleteShow()
+        mViewTopContainerShadow?.visible()
         mBottomContainer.gone()
         mTouchDownHighSpeedTextView?.gone()
         mUiCleared = false
+    }
+
+    override fun changeUiToError() {
+        super.changeUiToError()
+        mViewTopContainerShadow?.invisible()
+    }
+
+    override fun changeUiToPrepareingClear() {
+        super.changeUiToPrepareingClear()
+        mViewTopContainerShadow?.invisible()
+    }
+
+    override fun changeUiToPlayingBufferingClear() {
+        super.changeUiToPlayingBufferingClear()
+        mViewTopContainerShadow?.invisible()
+    }
+
+    override fun changeUiToCompleteClear() {
+        super.changeUiToCompleteClear()
+        mViewTopContainerShadow?.invisible()
+    }
+
+    override fun changeUiToPlayingBufferingShow() {
+        super.changeUiToPlayingBufferingShow()
+        mViewTopContainerShadow?.visible()
     }
 
     override fun onVideoPause() {

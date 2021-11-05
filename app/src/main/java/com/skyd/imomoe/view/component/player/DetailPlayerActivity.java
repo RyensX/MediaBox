@@ -3,6 +3,10 @@ package com.skyd.imomoe.view.component.player;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
+
+import androidx.viewbinding.ViewBinding;
+
+import com.skyd.imomoe.view.activity.BaseActivity;
 import com.skyd.skin.core.SkinBaseActivity;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
@@ -16,7 +20,7 @@ import static com.shuyu.gsyvideoplayer.video.base.GSYVideoView.CURRENT_STATE_PAU
 /**
  * 详情模式播放页面基础类
  */
-public abstract class DetailPlayerActivity<T extends GSYBaseVideoPlayer> extends SkinBaseActivity implements MyVideoAllCallBack {
+public abstract class DetailPlayerActivity<T extends GSYBaseVideoPlayer, VB extends ViewBinding> extends BaseActivity<VB> implements MyVideoAllCallBack {
 
     protected boolean isPlay;
 
@@ -134,6 +138,7 @@ public abstract class DetailPlayerActivity<T extends GSYBaseVideoPlayer> extends
     @Override
     public void onStartPrepared(String url, Object... objects) {
         videoPlayStatusChanged(true);
+        needShowToolbar(true);
     }
 
     @Override
@@ -192,6 +197,7 @@ public abstract class DetailPlayerActivity<T extends GSYBaseVideoPlayer> extends
     @Override
     public void onAutoComplete(String url, Object... objects) {
         videoPlayStatusChanged(false);
+        needShowToolbar(true);
     }
 
     @Override
@@ -234,6 +240,7 @@ public abstract class DetailPlayerActivity<T extends GSYBaseVideoPlayer> extends
     @Override
     public void onPlayError(String url, Object... objects) {
         videoPlayStatusChanged(false);
+        needShowToolbar(true);
     }
 
     @Override
@@ -254,6 +261,7 @@ public abstract class DetailPlayerActivity<T extends GSYBaseVideoPlayer> extends
     @Override
     public void onComplete(String url, Object... objects) {
         videoPlayStatusChanged(false);
+        needShowToolbar(true);
     }
 
     public boolean hideActionBarWhenFull() {
@@ -301,11 +309,13 @@ public abstract class DetailPlayerActivity<T extends GSYBaseVideoPlayer> extends
     @Override
     public void onVideoPause() {
         videoPlayStatusChanged(false);
+        needShowToolbar(true);
     }
 
     @Override
     public void onVideoResume() {
         videoPlayStatusChanged(true);
+        needShowToolbar(false);
     }
 
     /**
@@ -314,6 +324,15 @@ public abstract class DetailPlayerActivity<T extends GSYBaseVideoPlayer> extends
      * @param playing false：未在播放（包括播放失败暂停等等）；true：正在播放（包括正在准备加载、缓冲等等）
      */
     protected void videoPlayStatusChanged(boolean playing) {
+
+    }
+
+    /**
+     * 是否需要必须显示工具栏
+     *
+     * @param show false：不需要显示；true：需要显示
+     */
+    protected void needShowToolbar(boolean show) {
 
     }
 }

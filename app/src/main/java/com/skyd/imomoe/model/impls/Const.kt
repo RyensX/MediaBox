@@ -12,11 +12,11 @@ class Const : IConst {
         override fun ANIME_SEARCH(): String = "/search/"
     }
 
-    override fun MAIN_URL(): String = "http://www.yhdm.so"
+    override fun MAIN_URL(): String = "http://www.yinghuacd.com"
 
-    override fun versionName(): String = "1.0.0"
+    override fun versionName(): String = "1.0.1"
 
-    override fun versionCode(): Int = 1
+    override fun versionCode(): Int = 2
 
     override fun about(): String {
         return "默认数据源\n数据来源：${MAIN_URL()}"
