@@ -4,6 +4,7 @@ def whiteList = [
         // skin
         "R.drawable.*_skin*",
         "R.color.*_skin*",
+        "R.style.*.skin*",
         // for your icon
         "R.mipmap.ic_launcher",
         "R.mipmap.ic_launcher_round",

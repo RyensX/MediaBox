@@ -5,11 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import android.widget.TextView
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,13 +15,14 @@ import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.ClassifyBean
 import com.skyd.imomoe.bean.ClassifyDataBean
-import com.skyd.imomoe.bean.GetDataEnum
+import com.skyd.imomoe.bean.ResponseDataType
 import com.skyd.imomoe.databinding.ActivityClassifyBinding
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.smartNotifyDataSetChanged
 import com.skyd.imomoe.view.adapter.BaseRvAdapter
 import com.skyd.imomoe.view.adapter.SearchAdapter
+import com.skyd.imomoe.view.listener.dsl.setOnItemSelectedListener
 import com.skyd.imomoe.viewmodel.ClassifyViewModel
 
 
@@ -64,7 +62,7 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
                 //避免刷新间隔太短
                 if (System.currentTimeMillis() - lastRefreshTime > 500) {
                     lastRefreshTime = System.currentTimeMillis()
-                    if (viewModel.mldClassifyTabList.value?.second == GetDataEnum.REFRESH)
+                    if (viewModel.mldClassifyTabList.value?.second == ResponseDataType.REFRESH)
                         viewModel.getClassifyData(currentPartUrl)
                     else viewModel.getClassifyTabData()
                 } else {
@@ -90,25 +88,25 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
             rvClassifyActivity.adapter = classifyAdapter
 
             spinnerClassifyActivity.adapter = spinnerAdapter
-            spinnerClassifyActivity.onItemSelectedListener = object : OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>, view: View,
-                    pos: Int, id: Long
-                ) {
+            spinnerClassifyActivity.setOnItemSelectedListener {
+                onItemSelected { parent, view, position, id ->
                     if (view is TextView) view.setTextColor(getResColor(R.color.foreground_main_color_2_skin))
+                    // 为什么下面注释的代码不能替代以下三行呢？？
+//                    classifyTabAdapter.smartNotifyDataSetChanged(
+//                        ResponseDataType.REFRESH,
+//                        viewModel.classifyTabList[position].classifyDataList,
+//                        classifyTabList
+//                    )
                     classifyTabList.clear()
-                    classifyTabList.addAll(viewModel.classifyTabList[pos].classifyDataList)
+                    classifyTabList.addAll(viewModel.classifyTabList[position].classifyDataList)
                     classifyTabAdapter.notifyDataSetChanged()
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>) {
                 }
             }
         }
 
         viewModel.mldClassifyTabList.observe(this, {
             when (it.second) {
-                GetDataEnum.REFRESH -> {
+                ResponseDataType.REFRESH -> {
                     viewModel.classifyTabList.apply {
                         clear()
                         spinnerAdapter.clear()
@@ -144,7 +142,7 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
                         if (!found) tabSelected(currentPartUrl)
                     }
                 }
-                GetDataEnum.FAILED -> {
+                ResponseDataType.FAILED -> {
                     viewModel.classifyTabList.apply {
                         clear()
                         spinnerAdapter.clear()
@@ -160,7 +158,7 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
             mBinding.srlClassifyActivity.closeHeaderOrFooter()
             viewModel.isRequesting = false
             classifyAdapter.smartNotifyDataSetChanged(it.first, it.second, viewModel.classifyList)
-            if (it.first == GetDataEnum.REFRESH) {
+            if (it.first == ResponseDataType.REFRESH) {
                 mBinding.llClassifyActivityToolbar.tvToolbar1Title.text =
                     if (classifyTabTitle.isEmpty()) "${getString(R.string.anime_classify)}  $classifyTitle"
                     else "${getString(R.string.anime_classify)}  ${

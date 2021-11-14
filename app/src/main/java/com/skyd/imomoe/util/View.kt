@@ -3,6 +3,15 @@ package com.skyd.imomoe.util
 import android.view.View
 import android.view.animation.AlphaAnimation
 
+fun View.enable() {
+    if (isEnabled) return
+    isEnabled = true
+}
+
+fun View.disable() {
+    if (!isEnabled) return
+    isEnabled = false
+}
 
 fun View.gone(animate: Boolean = false, dur: Long = 500L) {
     if (visibility == View.GONE) return

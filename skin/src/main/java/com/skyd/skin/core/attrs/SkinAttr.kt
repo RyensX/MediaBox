@@ -9,4 +9,5 @@ abstract class SkinAttr : Cloneable {
 
     abstract fun applySkin(view: View)
 
+    abstract fun tag(): String
 }

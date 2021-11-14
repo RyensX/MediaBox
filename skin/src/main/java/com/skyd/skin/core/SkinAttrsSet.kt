@@ -8,7 +8,5 @@ import com.skyd.skin.core.attrs.SkinAttr
 class SkinAttrsSet {
     var attrsMap: HashMap<String, SkinAttr> = HashMap()
 
-    override fun toString(): String {
-        return attrsMap.toString()
-    }
+    override fun toString() = attrsMap.toString()
 }

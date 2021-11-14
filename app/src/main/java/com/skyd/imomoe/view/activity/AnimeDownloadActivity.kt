@@ -14,6 +14,7 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.databinding.ActivityAnimeDownloadBinding
 import com.skyd.imomoe.util.Util
+import com.skyd.imomoe.util.Util.getResDrawable
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.gone
 import com.skyd.imomoe.util.visible
@@ -44,7 +45,7 @@ class AnimeDownloadActivity : BaseActivity<ActivityAnimeDownloadBinding>() {
             llAnimeDownloadActivityToolbar.tvToolbar1Title.text = actionBarTitle
             llAnimeDownloadActivityToolbar.ivToolbar1Back.setOnClickListener { finish() }
             llAnimeDownloadActivityToolbar.ivToolbar1Button1.visible()
-            llAnimeDownloadActivityToolbar.ivToolbar1Button1.setImageResource(R.drawable.ic_info_white_24)
+            llAnimeDownloadActivityToolbar.ivToolbar1Button1.setImageDrawable(getResDrawable(R.drawable.ic_info_white_24))
             llAnimeDownloadActivityToolbar.ivToolbar1Button1.setOnClickListener {
                 MaterialDialog(this@AnimeDownloadActivity).show {
                     title(res = R.string.attention)

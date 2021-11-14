@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.樱花动漫.blue" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="Theme.Anime.skin.blue" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/main_color_skin_blue</item>
         <item name="colorPrimaryVariant">@color/foreground_main_color_2_skin_blue</item>

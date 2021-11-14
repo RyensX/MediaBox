@@ -7,7 +7,7 @@ import coil.util.CoilUtils
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.database.getAppDataBase
-import com.skyd.imomoe.util.Util.getDirectorySize
+import com.skyd.imomoe.util.Util.directorySize
 import com.skyd.imomoe.util.Util.getFormatSize
 import com.skyd.imomoe.util.Util.showToastOnIOThread
 import com.skyd.imomoe.util.coil.CoilUtil
@@ -40,7 +40,8 @@ class SettingViewModel : ViewModel() {
             mldCacheSize.postValue(
                 try {
                     getFormatSize(
-                        getDirectorySize(CoilUtils.createDefaultCache(App.context).directory).toDouble()
+                        CoilUtils.createDefaultCache(App.context).directory.directorySize()
+                            .toDouble()
                     )
                 } catch (e: Exception) {
                     e.printStackTrace()

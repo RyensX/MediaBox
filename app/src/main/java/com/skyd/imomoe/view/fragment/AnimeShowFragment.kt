@@ -8,7 +8,7 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.skyd.imomoe.R
-import com.skyd.imomoe.bean.GetDataEnum
+import com.skyd.imomoe.bean.ResponseDataType
 import com.skyd.imomoe.databinding.FragmentAnimeShowBinding
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.smartNotifyDataSetChanged
@@ -93,8 +93,8 @@ class AnimeShowFragment : BaseFragment<FragmentAnimeShowBinding>() {
             mBinding.srlAnimeShowFragment.closeHeaderOrFooter()
             adapter.smartNotifyDataSetChanged(it.first, it.second, viewModel.animeShowList)
             when (it.first) {
-                GetDataEnum.REFRESH, GetDataEnum.LOAD_MORE -> hideLoadFailedTip()
-                GetDataEnum.FAILED -> {
+                ResponseDataType.REFRESH, ResponseDataType.LOAD_MORE -> hideLoadFailedTip()
+                ResponseDataType.FAILED -> {
                     showLoadFailedTip(getString(R.string.load_data_failed_click_to_retry)) {
                         viewModel.getAnimeShowData(partUrl)
                         hideLoadFailedTip()

@@ -41,8 +41,8 @@
         android:layout_height="50dp"
         android:background="?android:selectableItemBackground"
         android:padding="14dp"
-        android:src="@drawable/ic_share_white_24"
         android:visibility="gone"
+        tools:src="@drawable/ic_share_white_24"
         tools:visibility="visible" />
 
     <ImageView
@@ -51,7 +51,7 @@
         android:layout_height="50dp"
         android:background="?android:selectableItemBackground"
         android:padding="11dp"
-        android:src="@drawable/ic_star_border_white_24"
         android:visibility="gone"
+        tools:src="@drawable/ic_star_border_white_24"
         tools:visibility="visible" />
 </LinearLayout>

@@ -75,12 +75,10 @@ class RankActivity : BaseActivity<ActivityRankBinding>() {
                     adapter.addFragment(fragment)
                 }
             } else {
-                showLoadFailedTip(getString(R.string.load_data_failed_click_to_retry),
-                    View.OnClickListener {
-                        viewModel.getRankTabData()
-                        hideLoadFailedTip()
-                    }
-                )
+                showLoadFailedTip(getString(R.string.load_data_failed_click_to_retry)) {
+                    viewModel.getRankTabData()
+                    hideLoadFailedTip()
+                }
             }
             adapter.notifyDataSetChanged()
             viewModel.isRequesting = false

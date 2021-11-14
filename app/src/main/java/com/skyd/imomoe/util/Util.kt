@@ -272,11 +272,11 @@ object Util {
         return result
     }
 
-    fun copyText2Clipboard(context: Context, text: String) {
+    fun String.copy2Clipboard(context: Context) {
         try {
             val systemService: ClipboardManager =
                 context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            systemService.setPrimaryClip(ClipData.newPlainText("text", text))
+            systemService.setPrimaryClip(ClipData.newPlainText("text", this))
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -495,24 +495,24 @@ object Util {
         return outPoint.x
     }
 
-    fun getFileSize(f: File): Long {
+    fun File.fileSize(): Long {
         var s: Long = 0
-        if (f.exists() && f.isFile) {
-            val fis = FileInputStream(f)
+        if (this.exists() && this.isFile) {
+            val fis = FileInputStream(this)
             s = fis.available().toLong()
         }
         return s
     }
 
-    fun getDirectorySize(f: File): Long {
+    fun File.directorySize(): Long {
         var size: Long = 0
-        val fList = f.listFiles()
+        val fList = listFiles()
         fList?.let {
             for (i in it.indices) {
                 size += if (it[i].isDirectory) {
-                    getDirectorySize(it[i])
+                    it[i].directorySize()
                 } else {
-                    getFileSize(it[i])
+                    it[i].fileSize()
                 }
             }
         }
@@ -613,20 +613,17 @@ object Util {
                 decodeUrl.startsWith(Const.ActionUrl.ANIME_SKIP_BY_WEBSITE) -> { // 根据网址跳转
                     var website = decodeUrl.replaceFirst(Const.ActionUrl.ANIME_SKIP_BY_WEBSITE, "")
                     if (website.isBlank() || website == "/") {
-                        MaterialDialog(activity).show {
-                            input(hintRes = R.string.input_a_website) { dialog, text ->
-                                try {
-                                    var url = text.toString()
-                                    if (!url.matches(Regex("^.+://.*"))) url = "http://$url"
-                                    process(activity, URL(url).file)
-                                } catch (e: Exception) {
-                                    App.context.resources.getString(R.string.website_format_error)
-                                        .showToast()
-                                    e.printStackTrace()
-                                }
+                        MaterialDialog(activity).input(hintRes = R.string.input_a_website) { dialog, text ->
+                            try {
+                                var url = text.toString()
+                                if (!url.matches(Regex("^.+://.*"))) url = "http://$url"
+                                process(activity, URL(url).file)
+                            } catch (e: Exception) {
+                                App.context.resources.getString(R.string.website_format_error)
+                                    .showToast()
+                                e.printStackTrace()
                             }
-                            positiveButton(R.string.ok)
-                        }
+                        }.positiveButton(R.string.ok).show()
                     } else {
                         try {
                             if (!website.matches(Regex("^.+://.*"))) website = "http://$website"

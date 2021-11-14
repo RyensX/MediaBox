@@ -113,6 +113,7 @@ public static final int *;
     *** get*();
     void set*(***);
     public <init>(android.content.Context);
+    public <init>(android.content.Context, java.lang.Boolean);
     public <init>(android.content.Context, android.util.AttributeSet);
     public <init>(android.content.Context, android.util.AttributeSet, int);
 }
@@ -161,6 +162,19 @@ public static final int *;
 #for media render state machine
 #-keep class org.seamless.statemachine.** {;}
 #-keepclassmembers class * implements org.fourthline.cling.support.avtransport.impl.state.AbstractState {;}
+
+#-------------------------AkDanmaku v1.0.3
+-dontwarn com.badlogic.gdx.backends.android.AndroidFragmentApplication
+-dontwarn com.badlogic.gdx.utils.GdxBuild
+-dontwarn com.badlogic.gdx.jnigen.BuildTarget*
+-dontwarn com.badlogic.gdx.graphics.g2d.freetype.FreetypeBuild
+-keep class com.kuaishou.akdanmaku.ecs.system.ActionSystem { *; }
+-keep class com.kuaishou.akdanmaku.ecs.system.DanmakuSystem { *; }
+-keep class com.kuaishou.akdanmaku.ecs.system.DataSystem { *; }
+-keep class com.kuaishou.akdanmaku.ecs.system.RenderSystem { *; }
+-keep class com.kuaishou.akdanmaku.ecs.system.layout.LayoutSystem { *; }
+# Required if using Gdx-Controllers extension
+-keep class com.badlogic.gdx.controllers.android.AndroidControllers
 
 #-------------------------
 -keep public class * extends android.app.Activity

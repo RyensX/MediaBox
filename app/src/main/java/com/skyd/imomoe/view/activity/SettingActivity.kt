@@ -15,6 +15,7 @@ import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.databinding.ActivitySettingBinding
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.util.Util.getAppVersionName
+import com.skyd.imomoe.util.Util.getResDrawable
 import com.skyd.imomoe.util.Util.restartApp
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.Util.showToastOnIOThread
@@ -54,7 +55,7 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
         mBinding.tvSettingActivityDeleteAllHistoryInfo.isFocused = true
         mBinding.rlSettingActivityDeleteAllHistory.setOnClickListener {
             MaterialDialog(this).show {
-                icon(R.drawable.ic_delete_main_color_2_24_skin)
+                icon(drawable = getResDrawable(R.drawable.ic_delete_main_color_2_24_skin))
                 title(res = R.string.warning)
                 message(text = "确定要删除所有历史记录？包括搜索历史和观看历史")
                 positiveButton(res = R.string.delete) { viewModel.deleteAllHistory() }
@@ -80,7 +81,7 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
         mBinding.tvSettingActivityClearCache.isFocused = true
         mBinding.rlSettingActivityClearCache.setOnClickListener {
             MaterialDialog(this).show {
-                icon(R.drawable.ic_sd_storage_main_color_2_24_skin)
+                icon(drawable = getResDrawable(R.drawable.ic_sd_storage_main_color_2_24_skin))
                 title(res = R.string.warning)
                 message(text = "确定清理所有缓存？不包括缓存视频")
                 positiveButton(res = R.string.clean) { viewModel.clearAllCache() }
@@ -150,7 +151,7 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
         mBinding.switchSettingActivityCustomDataSource.setOnCheckedChangeListener { buttonView, isChecked ->
             if (DataSourceManager.useCustomDataSource == isChecked) return@setOnCheckedChangeListener
             MaterialDialog(this).show {
-                icon(R.drawable.ic_category_main_color_2_24_skin)
+                icon(drawable = getResDrawable(R.drawable.ic_category_main_color_2_24_skin))
                 title(res = R.string.warning)
                 message(res = if (isChecked) R.string.custom_data_source_tip else R.string.request_restart_app)
                 cancelable(false)

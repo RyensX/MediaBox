@@ -8,7 +8,7 @@ import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.bean.ClassifyBean
-import com.skyd.imomoe.bean.GetDataEnum
+import com.skyd.imomoe.bean.ResponseDataType
 import com.skyd.imomoe.bean.PageNumberBean
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.ClassifyModel
@@ -24,10 +24,10 @@ class ClassifyViewModel : ViewModel() {
     }
     var isRequesting = false
     var classifyTabList: MutableList<ClassifyBean> = ArrayList()        //上方分类数据
-    var mldClassifyTabList: MutableLiveData<Pair<MutableList<ClassifyBean>, GetDataEnum>> =
+    var mldClassifyTabList: MutableLiveData<Pair<MutableList<ClassifyBean>, ResponseDataType>> =
         MutableLiveData()
     var classifyList: MutableList<AnimeCoverBean> = ArrayList()       //下方tv数据
-    var mldClassifyList: MutableLiveData<Pair<GetDataEnum, MutableList<AnimeCoverBean>>> =
+    var mldClassifyList: MutableLiveData<Pair<ResponseDataType, MutableList<AnimeCoverBean>>> =
         MutableLiveData()
     var pageNumberBean: PageNumberBean? = null
 
@@ -43,11 +43,11 @@ class ClassifyViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 mldClassifyTabList.postValue(
-                    Pair(classifyModel.getClassifyTabData(), GetDataEnum.REFRESH)
+                    Pair(classifyModel.getClassifyTabData(), ResponseDataType.REFRESH)
                 )
             } catch (e: Exception) {
                 classifyTabList.clear()
-                mldClassifyTabList.postValue(Pair(ArrayList(), GetDataEnum.FAILED))
+                mldClassifyTabList.postValue(Pair(ArrayList(), ResponseDataType.FAILED))
                 e.printStackTrace()
                 (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnIOThread()
             }
@@ -62,12 +62,12 @@ class ClassifyViewModel : ViewModel() {
                 classifyModel.getClassifyData(partUrl).apply {
                     pageNumberBean = second
                     mldClassifyList.postValue(
-                        Pair(if (isRefresh) GetDataEnum.REFRESH else GetDataEnum.LOAD_MORE, first)
+                        Pair(if (isRefresh) ResponseDataType.REFRESH else ResponseDataType.LOAD_MORE, first)
                     )
                 }
             } catch (e: Exception) {
                 pageNumberBean = null
-                mldClassifyList.postValue(Pair(GetDataEnum.FAILED, ArrayList()))
+                mldClassifyList.postValue(Pair(ResponseDataType.FAILED, ArrayList()))
                 e.printStackTrace()
                 (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnIOThread()
             }

@@ -20,11 +20,11 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Const.DownloadAnime.Companion.animeFilePath
 import com.skyd.imomoe.database.entity.AnimeDownloadEntity
 import com.skyd.imomoe.database.getAppDataBase
-import com.skyd.imomoe.util.MD5.getMD5
 import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.downloadanime.AnimeDownloadHelper.Companion.downloadHashMap
 import com.skyd.imomoe.util.downloadanime.AnimeDownloadHelper.Companion.save2Xml
 import com.skyd.imomoe.util.downloadanime.AnimeDownloadNotificationReceiver.Companion.DOWNLOAD_ANIME_NOTIFICATION_ID
+import com.skyd.imomoe.util.toMD5
 import com.skyd.imomoe.view.activity.MainActivity
 import kotlinx.coroutines.*
 import java.io.File
@@ -61,7 +61,7 @@ class AnimeDownloadService : Service() {
                     if (file.exists()) {
                         downloadHashMap[key]?.postValue(AnimeDownloadStatus.COMPLETE)
                         GlobalScope.launch(Dispatchers.IO) {
-                            getMD5(file)?.let {
+                            file.toMD5()?.let {
                                 val entity = AnimeDownloadEntity(it, title, fileName)
                                 getAppDataBase().animeDownloadDao().insertAnimeDownload(entity)
                                 save2Xml(animeDir, entity)

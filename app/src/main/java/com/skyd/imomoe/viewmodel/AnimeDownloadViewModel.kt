@@ -7,14 +7,14 @@ import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.database.entity.AnimeDownloadEntity
 import com.skyd.imomoe.database.getAppDataBase
+import com.skyd.imomoe.util.Util.directorySize
+import com.skyd.imomoe.util.Util.fileSize
 import com.skyd.imomoe.util.comparator.EpisodeTitleComparator
-import com.skyd.imomoe.util.MD5.getMD5
-import com.skyd.imomoe.util.Util.getDirectorySize
-import com.skyd.imomoe.util.Util.getFileSize
 import com.skyd.imomoe.util.Util.getFormatSize
 import com.skyd.imomoe.util.downloadanime.AnimeDownloadHelper.Companion.deleteAnimeFromXml
 import com.skyd.imomoe.util.downloadanime.AnimeDownloadHelper.Companion.getAnimeFromXml
 import com.skyd.imomoe.util.downloadanime.AnimeDownloadHelper.Companion.save2Xml
+import com.skyd.imomoe.util.toMD5
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
@@ -50,7 +50,7 @@ class AnimeDownloadViewModel : ViewModel() {
                                     file.name,
                                     null,
                                     "",
-                                    size = getFormatSize(getDirectorySize(file).toDouble()),
+                                    size = getFormatSize(file.directorySize().toDouble()),
                                     episodeCount = episodeCount.toString() + "P",
                                     path = if (i == 0) 0 else 1
                                 )
@@ -107,7 +107,7 @@ class AnimeDownloadViewModel : ViewModel() {
                         // 试图从数据库中取出不在xml里的视频的数据，如果没找到则是null
                         val unsavedAnime: AnimeDownloadEntity? =
                             getAppDataBase().animeDownloadDao()
-                                .getAnimeDownload(getMD5(file) ?: "")
+                                .getAnimeDownload(file.toMD5() ?: "")
                         if (unsavedAnime != null && unsavedAnime.fileName == null) {
                             unsavedAnime.fileName = file.name
                             getAppDataBase().animeDownloadDao()
@@ -136,12 +136,8 @@ class AnimeDownloadViewModel : ViewModel() {
                             null,
                             "",
                             size = getFormatSize(
-                                getFileSize(
-                                    File(
-                                        animeFilePath +
-                                                directoryName + "/" + anime.fileName
-                                    )
-                                ).toDouble()
+                                File(animeFilePath + directoryName + "/" + anime.fileName)
+                                    .fileSize().toDouble()
                             ),
                             path = path
                         )

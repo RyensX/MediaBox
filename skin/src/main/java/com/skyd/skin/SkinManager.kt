@@ -183,109 +183,98 @@ object SkinManager {
         customAttrIds[attrId] = listener
     }
 
+    /**
+     * 多用于动态new的View（手动创建的View）的换肤
+     */
+    fun setViewTag(view: View) {
+        val attrsSet = view.getTag(R.id.change_skin_tag)
+        val tag: SkinAttrsSet = if (attrsSet is SkinAttrsSet) attrsSet
+        else SkinAttrsSet()
+        view.setTag(R.id.change_skin_tag, tag)
+        if (view is ChangeCustomSkinListener) {
+            view.setCustomTag()
+        }
+    }
+
+    /**
+     * 设置自定义View的自定义属性（没在xml里应用的）
+     */
+    fun setCustomViewAttrs(view: View, vararg skinAttr: SkinAttr) {
+        val temp = view.getTag(R.id.change_skin_tag)
+        val tag: SkinAttrsSet = if (temp is SkinAttrsSet) temp
+        else SkinAttrsSet()
+        skinAttr.forEach {
+            tag.attrsMap[it.tag()] = it
+        }
+        view.setTag(R.id.change_skin_tag, tag)
+    }
+
+    /**
+     * 设置自定义View的自定义属性（没在xml里应用的）
+     */
+    fun setCustomViewAttrs(view: View, skinAttrsSet: SkinAttrsSet) {
+        val temp = view.getTag(R.id.change_skin_tag)
+        val tag: SkinAttrsSet = if (temp is SkinAttrsSet) temp
+        else SkinAttrsSet()
+        tag.attrsMap.putAll(skinAttrsSet.attrsMap)
+    }
+
+    /**
+     * 获取自定义View的自定义属性（没在xml里应用的）
+     */
+    fun getCustomViewAttrs(view: View): SkinAttrsSet? {
+        val attrsSet = view.getTag(R.id.change_skin_tag)
+        if (attrsSet is SkinAttrsSet) {
+            return attrsSet
+        }
+        return null
+    }
+
     private fun setSkinTag(context: Context, attrs: AttributeSet, view: View) {
         val typedArray = context.obtainStyledAttributes(attrs, attrIds)
         val skinAttrsSet = SkinAttrsSet()
         val defValue = -1
         attrIds.forEachIndexed { index, i ->
             var resId = typedArray.getResourceId(index, defValue)
-            when (i) {
-                R.attr.background, android.R.attr.background -> {
-                    if (resId != -1) skinAttrsSet.attrsMap[BackgroundAttr.TAG] =
-                        BackgroundAttr().apply { attrResourceRefId = resId }
-                }
-                android.R.attr.src -> {
-                    if (resId != -1) skinAttrsSet.attrsMap[SrcAttr.TAG] =
-                        SrcAttr().apply { attrResourceRefId = resId }
-                }
+            val attr = when (i) {
+                R.attr.background, android.R.attr.background -> BackgroundAttr()
+                android.R.attr.src -> SrcAttr()
                 android.R.attr.textColor -> {
                     if (resId == -1 && view is TextView) {
                         resId = getTextColorResId(attrs)
                     }
-                    if (resId != -1) skinAttrsSet.attrsMap[TextColorAttr.TAG] =
-                        TextColorAttr().apply { attrResourceRefId = resId }
+                    TextColorAttr()
                 }
-                android.R.attr.drawableStart -> {
-                    if (resId != -1) skinAttrsSet.attrsMap[DrawableStartAttr.TAG] =
-                        DrawableStartAttr().apply { attrResourceRefId = resId }
-                }
-                android.R.attr.drawableEnd -> {
-                    if (resId != -1) skinAttrsSet.attrsMap[DrawableEndAttr.TAG] =
-                        DrawableEndAttr().apply { attrResourceRefId = resId }
-                }
-                R.attr.tabIndicatorColor -> {
-                    if (resId != -1) skinAttrsSet.attrsMap[TabIndicatorColorAttr.TAG] =
-                        TabIndicatorColorAttr().apply { attrResourceRefId = resId }
-                }
+                android.R.attr.drawableStart -> DrawableStartAttr()
+                android.R.attr.drawableEnd -> DrawableEndAttr()
+                R.attr.tabIndicatorColor -> TabIndicatorColorAttr()
                 R.attr.tabTextColor -> {
                     if (resId == -1 && view is TabLayout) {
                         resId = getTextColorResId(attrs)
                     }
-                    if (resId != -1) skinAttrsSet.attrsMap[TabTextColorAttr.TAG] =
-                        TabTextColorAttr().apply { attrResourceRefId = resId }
+                    TabTextColorAttr()
                 }
-                android.R.attr.scrollbarThumbVertical -> {
-                    if (resId != -1) skinAttrsSet.attrsMap[ScrollbarThumbVerticalAttr.TAG] =
-                        ScrollbarThumbVerticalAttr().apply { attrResourceRefId = resId }
-                }
-                R.attr.tint -> {
-                    if (resId != -1) skinAttrsSet.attrsMap[ImageViewTintAttr.TAG] =
-                        ImageViewTintAttr().apply { attrResourceRefId = resId }
-                }
-                android.R.attr.backgroundTint -> {
-                    if (resId != -1) skinAttrsSet.attrsMap[BackgroundTintAttr.TAG] =
-                        BackgroundTintAttr().apply { attrResourceRefId = resId }
-                }
-                android.R.attr.textColorHint -> {
-                    if (resId != -1) skinAttrsSet.attrsMap[TextColorHintAttr.TAG] =
-                        TextColorHintAttr().apply { attrResourceRefId = resId }
-                }
-                R.attr.drawableTopCompat -> {
-                    if (resId != -1) skinAttrsSet.attrsMap[DrawableTopCompatAttr.TAG] =
-                        DrawableTopCompatAttr().apply { attrResourceRefId = resId }
-                }
-                R.attr.colorPrimary -> {
-                    if (resId != -1) skinAttrsSet.attrsMap[ColorPrimaryAttr.TAG] =
-                        ColorPrimaryAttr().apply { attrResourceRefId = resId }
-                }
-                R.attr.srlPrimaryColor -> {
-                    if (resId != -1) skinAttrsSet.attrsMap[SrlPrimaryColorAttr.TAG] =
-                        SrlPrimaryColorAttr().apply { attrResourceRefId = resId }
-                }
-                R.attr.thumbTint -> {
-                    if (resId != -1) skinAttrsSet.attrsMap[ThumbTintAttr.TAG] =
-                        ThumbTintAttr().apply { attrResourceRefId = resId }
-                }
-                R.attr.trackTint -> {
-                    if (resId != -1) skinAttrsSet.attrsMap[TrackTintAttr.TAG] =
-                        TrackTintAttr().apply { attrResourceRefId = resId }
-                }
-                android.R.attr.buttonTint -> {
-                    if (resId != -1) skinAttrsSet.attrsMap[ButtonTintAttr.TAG] =
-                        ButtonTintAttr().apply { attrResourceRefId = resId }
-                }
-                R.attr.cardBackgroundColor -> {
-                    if (resId != -1) skinAttrsSet.attrsMap[CardBackgroundColorAttr.TAG] =
-                        CardBackgroundColorAttr().apply { attrResourceRefId = resId }
-                }
-                android.R.attr.indeterminateTint -> {
-                    if (resId != -1) skinAttrsSet.attrsMap[IndeterminateTintAttr.TAG] =
-                        IndeterminateTintAttr().apply { attrResourceRefId = resId }
-                }
-                android.R.attr.thumb -> {
-                    if (resId != -1) skinAttrsSet.attrsMap[ThumbAttr.TAG] =
-                        ThumbAttr().apply { attrResourceRefId = resId }
-                }
-                android.R.attr.progressDrawable -> {
-                    if (resId != -1) skinAttrsSet.attrsMap[ProgressDrawableAttr.TAG] =
-                        ProgressDrawableAttr().apply { attrResourceRefId = resId }
-                }
-                R.attr.contentScrim -> {
-                    if (resId != -1) skinAttrsSet.attrsMap[ContentScrimAttr.TAG] =
-                        ContentScrimAttr().apply { attrResourceRefId = resId }
-                }
-                R.attr.menu -> {
-                }
+                android.R.attr.scrollbarThumbVertical -> ScrollbarThumbVerticalAttr()
+                R.attr.tint -> ImageViewTintAttr()
+                android.R.attr.backgroundTint -> BackgroundTintAttr()
+                android.R.attr.textColorHint -> TextColorHintAttr()
+                R.attr.drawableTopCompat -> DrawableTopCompatAttr()
+                R.attr.colorPrimary -> ColorPrimaryAttr()
+                R.attr.srlPrimaryColor -> SrlPrimaryColorAttr()
+                R.attr.thumbTint -> ThumbTintAttr()
+                R.attr.trackTint -> TrackTintAttr()
+                android.R.attr.buttonTint -> ButtonTintAttr()
+                R.attr.cardBackgroundColor -> CardBackgroundColorAttr()
+                android.R.attr.indeterminateTint -> IndeterminateTintAttr()
+                android.R.attr.thumb -> ThumbAttr()
+                android.R.attr.progressDrawable -> ProgressDrawableAttr()
+                R.attr.contentScrim -> ContentScrimAttr()
+                R.attr.menu -> null
+                else -> null
+            }
+            if (attr != null && resId != -1) {
+                attr.attrResourceRefId = resId
+                skinAttrsSet.attrsMap[attr.tag()] = attr
             }
         }
         customAttrIds.toSortedMap().onEachIndexed { index, entry ->
@@ -362,286 +351,6 @@ object SkinManager {
         SkinResourceProcessor.instance.autoLoadSkinResources()
     }
 
-    fun setViewBackground(view: View?, background: Int) {
-        view ?: return
-        val tag = view.getTag(R.id.change_skin_tag)
-        if (tag is SkinAttrsSet) {
-            tag.attrsMap[BackgroundAttr.TAG].let {
-                if (it == null) tag.attrsMap[BackgroundAttr.TAG] = BackgroundAttr().apply {
-                    attrResourceRefId = background
-                } else it.attrResourceRefId = background
-            }
-            view.tag = tag
-        }
-    }
-
-    fun setViewSrc(imageView: ImageView?, src: Int) {
-        imageView ?: return
-        val tag = imageView.getTag(R.id.change_skin_tag)
-        if (tag is SkinAttrsSet) {
-            tag.attrsMap[SrcAttr.TAG].let {
-                if (it == null) tag.attrsMap[SrcAttr.TAG] = SrcAttr().apply {
-                    attrResourceRefId = src
-                } else it.attrResourceRefId = src
-            }
-            imageView.tag = tag
-        }
-    }
-
-    fun setViewTextColor(textView: TextView?, textColor: Int) {
-        textView ?: return
-        val tag = textView.getTag(R.id.change_skin_tag)
-        if (tag is SkinAttrsSet) {
-            tag.attrsMap[TextColorAttr.TAG].let {
-                if (it == null) tag.attrsMap[TextColorAttr.TAG] = TextColorAttr().apply {
-                    attrResourceRefId = textColor
-                } else it.attrResourceRefId = textColor
-            }
-            textView.tag = tag
-        }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.Q)
-    fun setScrollbarThumbVertical(view: View, resourceId: Int) {
-        if (resourceId > 0) {
-            // 是否默认皮肤
-            val skinResProcessor = SkinResourceProcessor.instance
-            if (skinResProcessor.usingDefaultSkin() && skinResProcessor.usingInnerAppSkin()) {
-                val drawable = ContextCompat.getDrawable(view.context, resourceId)
-                view.verticalScrollbarThumbDrawable = drawable
-            } else {
-                // 获取皮肤包资源
-                val skinResourceId = skinResProcessor.getBackgroundOrSrc(resourceId)
-                if (skinResourceId is Int) {
-                    view.verticalScrollbarThumbDrawable = ColorDrawable(skinResourceId)
-                } else {
-                    val drawable = skinResourceId as Drawable
-                    view.verticalScrollbarThumbDrawable = drawable
-                }
-            }
-        }
-    }
-
-    fun setBackground(view: View, backgroundResourceId: Int) {
-        if (backgroundResourceId > 0) {
-            // 是否默认皮肤
-            val skinResProcessor = SkinResourceProcessor.instance
-            if (skinResProcessor.usingDefaultSkin() && skinResProcessor.usingInnerAppSkin()) {
-                val drawable = ContextCompat.getDrawable(view.context, backgroundResourceId)
-                view.background = drawable
-            } else {
-                // 获取皮肤包资源
-                val skinResourceId = skinResProcessor.getBackgroundOrSrc(backgroundResourceId)
-                if (skinResourceId is Int) {
-                    view.setBackgroundColor(skinResourceId)
-                } else {
-                    val drawable = skinResourceId as Drawable
-                    view.background = drawable
-                }
-            }
-        }
-    }
-
-    fun setBackgroundTint(view: View, colorResourceId: Int) {
-        if (colorResourceId > 0) {
-            val skinResProcessor = SkinResourceProcessor.instance
-            if (skinResProcessor.usingDefaultSkin() && skinResProcessor.usingInnerAppSkin()) {
-                val color = ContextCompat.getColorStateList(view.context, colorResourceId)
-                view.backgroundTintList = color
-            } else {
-                val color = skinResProcessor.getColorStateList(colorResourceId)
-                view.backgroundTintList = color
-            }
-        }
-    }
-
-    fun setThumb(view: SeekBar, backgroundResourceId: Int) {
-        if (backgroundResourceId > 0) {
-            // 是否默认皮肤
-            val skinResProcessor = SkinResourceProcessor.instance
-            if (skinResProcessor.usingDefaultSkin() && skinResProcessor.usingInnerAppSkin()) {
-                val drawable = ContextCompat.getDrawable(view.context, backgroundResourceId)
-                view.thumb = drawable
-            } else {
-                // 获取皮肤包资源
-                val skinResourceId = skinResProcessor.getBackgroundOrSrc(backgroundResourceId)
-                if (skinResourceId is Int) {
-                    view.setBackgroundColor(skinResourceId)
-                } else {
-                    val drawable = skinResourceId as Drawable
-                    view.thumb = drawable
-                }
-            }
-        }
-    }
-
-    fun setProgressDrawable(view: ProgressBar, backgroundResourceId: Int) {
-        if (backgroundResourceId > 0) {
-            // 是否默认皮肤
-            val skinResProcessor = SkinResourceProcessor.instance
-            if (skinResProcessor.usingDefaultSkin() && skinResProcessor.usingInnerAppSkin()) {
-                val drawable = ContextCompat.getDrawable(view.context, backgroundResourceId)
-                view.progressDrawable = drawable
-            } else {
-                // 获取皮肤包资源
-                val skinResourceId = skinResProcessor.getBackgroundOrSrc(backgroundResourceId)
-                if (skinResourceId is Int) {
-                    view.progressDrawable = ColorDrawable(skinResourceId)
-                } else {
-                    val drawable = skinResourceId as Drawable
-                    view.progressDrawable = drawable
-                }
-            }
-        }
-    }
-
-    fun setSrc(view: ImageView, srcResourceId: Int) {
-        if (srcResourceId > 0) {
-            // 是否默认皮肤
-            val skinResProcessor = SkinResourceProcessor.instance
-            if (skinResProcessor.usingDefaultSkin() && skinResProcessor.usingInnerAppSkin()) {
-                // 兼容包转换
-                view.setImageResource(srcResourceId)
-                val drawable = ContextCompat.getDrawable(view.context, srcResourceId)
-                view.setImageDrawable(drawable)
-            } else {
-                // 获取皮肤包资源
-                val skinResourceId = skinResProcessor.getBackgroundOrSrc(srcResourceId)
-                // 兼容包转换
-                if (skinResourceId is Int) {
-                    view.setImageResource(skinResourceId)
-                    // setImageBitmap(); // Bitmap未添加
-                } else {
-                    val drawable = skinResourceId as Drawable
-                    view.setImageDrawable(drawable)
-                }
-            }
-        }
-    }
-
-    fun setDrawableTopCompat(view: TextView, srcResourceId: Int) {
-        if (srcResourceId > 0) {
-            // 是否默认皮肤
-            val skinResProcessor = SkinResourceProcessor.instance
-            if (skinResProcessor.usingDefaultSkin() && skinResProcessor.usingInnerAppSkin()) {
-                view.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                    null,
-                    ContextCompat.getDrawable(view.context, srcResourceId),
-                    null,
-                    null
-                )
-            } else {
-                // 获取皮肤包资源
-                val skinResourceId = skinResProcessor.getBackgroundOrSrc(srcResourceId)
-                // 兼容包转换
-                if (skinResourceId is Int) {
-                    view.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                        null,
-                        ContextCompat.getDrawable(view.context, srcResourceId),
-                        null,
-                        null
-                    )
-                } else {
-                    val drawable = skinResourceId as Drawable
-                    view.setCompoundDrawablesRelativeWithIntrinsicBounds(null, drawable, null, null)
-                }
-            }
-        }
-    }
-
-    fun setDrawableStart(view: TextView, srcResourceId: Int) {
-        if (srcResourceId > 0) {
-            // 是否默认皮肤
-            val skinResProcessor = SkinResourceProcessor.instance
-            if (skinResProcessor.usingDefaultSkin() && skinResProcessor.usingInnerAppSkin()) {
-                view.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                    ContextCompat.getDrawable(view.context, srcResourceId),
-                    null, null, null
-                )
-            } else {
-                // 获取皮肤包资源
-                val skinResourceId = skinResProcessor.getBackgroundOrSrc(srcResourceId)
-                // 兼容包转换
-                if (skinResourceId is Int) {
-                    view.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                        ContextCompat.getDrawable(view.context, srcResourceId),
-                        null, null, null
-                    )
-                    // setImageBitmap(); // Bitmap未添加
-                } else {
-                    val drawable = skinResourceId as Drawable
-                    view.setCompoundDrawablesRelativeWithIntrinsicBounds(drawable, null, null, null)
-                }
-            }
-        }
-    }
-
-    fun setDrawableEnd(view: TextView, srcResourceId: Int) {
-        if (srcResourceId > 0) {
-            // 是否默认皮肤
-            val skinResProcessor = SkinResourceProcessor.instance
-            if (skinResProcessor.usingDefaultSkin() && skinResProcessor.usingInnerAppSkin()) {
-                view.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                    null,
-                    null, ContextCompat.getDrawable(view.context, srcResourceId), null
-                )
-            } else {
-                // 获取皮肤包资源
-                val skinResourceId = skinResProcessor.getBackgroundOrSrc(srcResourceId)
-                // 兼容包转换
-                if (skinResourceId is Int) {
-                    view.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                        null,
-                        null, ContextCompat.getDrawable(view.context, srcResourceId), null
-                    )
-                    // setImageBitmap(); // Bitmap未添加
-                } else {
-                    val drawable = skinResourceId as Drawable
-                    view.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, drawable, null)
-                }
-            }
-        }
-    }
-
-    fun setTabTextColor(view: TabLayout, textColorResourceId: Int) {
-        if (textColorResourceId > 0) {
-            val skinResProcessor = SkinResourceProcessor.instance
-            if (skinResProcessor.usingDefaultSkin() && skinResProcessor.usingInnerAppSkin()) {
-                val color = ContextCompat.getColorStateList(view.context, textColorResourceId)
-                view.tabTextColors = color
-            } else {
-                val color = skinResProcessor.getColorStateList(textColorResourceId)
-                view.tabTextColors = color
-            }
-        }
-    }
-
-    fun setTabIndicatorColor(view: TabLayout, textColorResourceId: Int) {
-        if (textColorResourceId > 0) {
-            val skinResProcessor = SkinResourceProcessor.instance
-            if (skinResProcessor.usingDefaultSkin() && skinResProcessor.usingInnerAppSkin()) {
-                val color = ContextCompat.getColor(view.context, textColorResourceId)
-                view.setSelectedTabIndicatorColor(color)
-            } else {
-                val color = skinResProcessor.getColor(textColorResourceId)
-                view.setSelectedTabIndicatorColor(color)
-            }
-        }
-    }
-
-    fun setColorSchemeColors(view: SwipeRefreshLayout, colorResourceId: Int) {
-        if (colorResourceId > 0) {
-            val skinResProcessor = SkinResourceProcessor.instance
-            if (skinResProcessor.usingDefaultSkin() && skinResProcessor.usingInnerAppSkin()) {
-                val color = ContextCompat.getColor(view.context, colorResourceId)
-                view.setColorSchemeColors(color)
-            } else {
-                val color = skinResProcessor.getColor(colorResourceId)
-                view.setColorSchemeColors(color)
-            }
-        }
-    }
-
     fun setSrlPrimaryColorAttr(view: SmartRefreshLayout, colorResourceId: Int) {
         if (colorResourceId > 0) {
             val skinResProcessor = SkinResourceProcessor.instance
@@ -651,136 +360,6 @@ object SkinManager {
             } else {
                 val color = skinResProcessor.getColor(colorResourceId)
                 view.setPrimaryColors(color)
-            }
-        }
-    }
-
-    fun setImageViewTint(view: ImageView, colorResourceId: Int) {
-        if (colorResourceId > 0) {
-            val skinResProcessor = SkinResourceProcessor.instance
-            if (skinResProcessor.usingDefaultSkin() && skinResProcessor.usingInnerAppSkin()) {
-                val color = ContextCompat.getColorStateList(view.context, colorResourceId)
-                view.imageTintList = color
-            } else {
-                val color = skinResProcessor.getColorStateList(colorResourceId)
-                view.imageTintList = color
-            }
-        }
-    }
-
-    fun setColorSchemeColors(view: MaterialHeader, colorResourceId: Int) {
-        if (colorResourceId > 0) {
-            val skinResProcessor = SkinResourceProcessor.instance
-            if (skinResProcessor.usingDefaultSkin() && skinResProcessor.usingInnerAppSkin()) {
-                val color = ContextCompat.getColor(view.context, colorResourceId)
-                view.setColorSchemeColors(color)
-            } else {
-                val color = skinResProcessor.getColor(colorResourceId)
-                view.setColorSchemeColors(color)
-            }
-        }
-    }
-
-    fun setAnimatingColor(view: BallPulseFooter, colorResourceId: Int) {
-        if (colorResourceId > 0) {
-            val skinResProcessor = SkinResourceProcessor.instance
-            if (skinResProcessor.usingDefaultSkin() && skinResProcessor.usingInnerAppSkin()) {
-                val color = ContextCompat.getColor(view.context, colorResourceId)
-                view.setAnimatingColor(color)
-            } else {
-                val color = skinResProcessor.getColor(colorResourceId)
-                view.setAnimatingColor(color)
-            }
-        }
-    }
-
-    fun setTextColor(view: TextView, textColorResourceId: Int) {
-        if (textColorResourceId > 0) {
-            val skinResProcessor = SkinResourceProcessor.instance
-            if (skinResProcessor.usingDefaultSkin() && skinResProcessor.usingInnerAppSkin()) {
-                val color = ContextCompat.getColorStateList(view.context, textColorResourceId)
-                view.setTextColor(color)
-            } else {
-                val color = skinResProcessor.getColorStateList(textColorResourceId)
-                view.setTextColor(color)
-            }
-        }
-    }
-
-    fun setTextColorHint(view: TextView, colorResourceId: Int) {
-        if (colorResourceId > 0) {
-            val skinResProcessor = SkinResourceProcessor.instance
-            if (skinResProcessor.usingDefaultSkin() && skinResProcessor.usingInnerAppSkin()) {
-                val color = ContextCompat.getColorStateList(view.context, colorResourceId)
-                view.setHintTextColor(color)
-            } else {
-                val color = skinResProcessor.getColorStateList(colorResourceId)
-                view.setHintTextColor(color)
-            }
-        }
-    }
-
-    fun setThumbTint(view: SwitchCompat, colorResourceId: Int) {
-        if (colorResourceId > 0) {
-            val skinResProcessor = SkinResourceProcessor.instance
-            if (skinResProcessor.usingDefaultSkin() && skinResProcessor.usingInnerAppSkin()) {
-                val color = ContextCompat.getColorStateList(view.context, colorResourceId)
-                view.thumbTintList = color
-            } else {
-                val color = skinResProcessor.getColorStateList(colorResourceId)
-                view.thumbTintList = color
-            }
-        }
-    }
-
-    fun setButtonTint(view: CompoundButton, colorResourceId: Int) {
-        if (colorResourceId > 0) {
-            val skinResProcessor = SkinResourceProcessor.instance
-            if (skinResProcessor.usingDefaultSkin() && skinResProcessor.usingInnerAppSkin()) {
-                val color = ContextCompat.getColorStateList(view.context, colorResourceId)
-                view.buttonTintList = color
-            } else {
-                val color = skinResProcessor.getColorStateList(colorResourceId)
-                view.buttonTintList = color
-            }
-        }
-    }
-
-    fun setTrackTint(view: SwitchCompat, colorResourceId: Int) {
-        if (colorResourceId > 0) {
-            val skinResProcessor = SkinResourceProcessor.instance
-            if (skinResProcessor.usingDefaultSkin() && skinResProcessor.usingInnerAppSkin()) {
-                val color = ContextCompat.getColorStateList(view.context, colorResourceId)
-                view.trackTintList = color
-            } else {
-                val color = skinResProcessor.getColorStateList(colorResourceId)
-                view.trackTintList = color
-            }
-        }
-    }
-
-    fun setIndeterminateTint(view: ProgressBar, colorResourceId: Int) {
-        if (colorResourceId > 0) {
-            val skinResProcessor = SkinResourceProcessor.instance
-            if (skinResProcessor.usingDefaultSkin() && skinResProcessor.usingInnerAppSkin()) {
-                val color = ContextCompat.getColorStateList(view.context, colorResourceId)
-                view.indeterminateTintList = color
-            } else {
-                val color = skinResProcessor.getColorStateList(colorResourceId)
-                view.indeterminateTintList = color
-            }
-        }
-    }
-
-    fun setCardBackgroundColor(view: CardView, colorResourceId: Int) {
-        if (colorResourceId > 0) {
-            val skinResProcessor = SkinResourceProcessor.instance
-            if (skinResProcessor.usingDefaultSkin() && skinResProcessor.usingInnerAppSkin()) {
-                val color = ContextCompat.getColorStateList(view.context, colorResourceId)
-                view.setCardBackgroundColor(color)
-            } else {
-                val color = skinResProcessor.getColorStateList(colorResourceId)
-                view.setCardBackgroundColor(color)
             }
         }
     }

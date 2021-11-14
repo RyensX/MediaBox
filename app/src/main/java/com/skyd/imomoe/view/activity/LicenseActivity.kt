@@ -17,13 +17,6 @@ class LicenseActivity : BaseActivity<ActivityLicenseBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mBinding.run {
-            llLicenseActivityToolbar.tvToolbar1Title.text = getString(R.string.open_source_licenses)
-            llLicenseActivityToolbar.ivToolbar1Back.setOnClickListener { finish() }
-            rvLicenseActivity.layoutManager = LinearLayoutManager(this@LicenseActivity)
-            rvLicenseActivity.adapter = adapter
-        }
-
         list.add(LicenseBean(ViewHolderTypeString.LICENSE_HEADER_1, "", "", "", ""))
         list.add(
             LicenseBean(
@@ -155,12 +148,18 @@ class LicenseActivity : BaseActivity<ActivityLicenseBinding>() {
             LicenseBean(
                 ViewHolderTypeString.LICENSE_1,
                 ActionUrl.ANIME_BROWSER,
-                "https://github.com/bilibili/DanmakuFlameMaster",
-                "DanmakuFlameMaster",
-                "Apache-2.0 License"
+                "https://github.com/KwaiAppTeam/AkDanmaku",
+                "AkDanmaku",
+                "MIT License"
             )
         )
-        adapter.notifyDataSetChanged()
+
+        mBinding.run {
+            llLicenseActivityToolbar.tvToolbar1Title.text = getString(R.string.open_source_licenses)
+            llLicenseActivityToolbar.ivToolbar1Back.setOnClickListener { finish() }
+            rvLicenseActivity.layoutManager = LinearLayoutManager(this@LicenseActivity)
+            rvLicenseActivity.adapter = adapter
+        }
     }
 
     override fun getBinding(): ActivityLicenseBinding =

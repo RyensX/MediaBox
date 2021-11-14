@@ -9,6 +9,7 @@ import com.skyd.imomoe.bean.PageNumberBean
  * 获取分类界面数据的接口
  */
 interface IClassifyModel : IBase {
+    @Deprecated("This method will cause a memory leak!!!")
     fun setActivity(activity: Activity)
 
     fun clearActivity()

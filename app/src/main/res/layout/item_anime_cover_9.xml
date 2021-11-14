@@ -8,8 +8,8 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_anime_cover_9_cover"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="120dp"
+        android:layout_height="90dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
@@ -19,31 +19,26 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="120dp"
-            android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/iv_anime_cover_9_cover"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_launcher_background" />
 
-            <ImageView
-                android:id="@+id/iv_anime_cover_9_cover"
-                android:layout_width="120dp"
-                android:layout_height="90dp"
-                android:scaleType="centerCrop"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:src="@drawable/ic_launcher_background" />
-
-            <View
-                android:id="@+id/view_anime_cover_9_night"
-                android:layout_width="120dp"
-                android:layout_height="0px"
-                android:background="@color/transparent_skin"
-                app:layout_constraintBottom_toBottomOf="@id/iv_anime_cover_9_cover"
-                app:layout_constraintEnd_toEndOf="@id/iv_anime_cover_9_cover"
-                app:layout_constraintStart_toStartOf="@id/iv_anime_cover_9_cover"
-                app:layout_constraintTop_toTopOf="@id/iv_anime_cover_9_cover" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        <View
+            android:id="@+id/view_anime_cover_9_night"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/transparent_skin"
+            app:layout_constraintBottom_toBottomOf="@id/iv_anime_cover_9_cover"
+            app:layout_constraintEnd_toEndOf="@id/iv_anime_cover_9_cover"
+            app:layout_constraintStart_toStartOf="@id/iv_anime_cover_9_cover"
+            app:layout_constraintTop_toTopOf="@id/iv_anime_cover_9_cover" />
     </androidx.cardview.widget.CardView>
 
     <com.skyd.imomoe.view.component.textview.TypefaceTextView

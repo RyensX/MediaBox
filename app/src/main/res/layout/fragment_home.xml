@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/main_color_2_skin"
+        android:elevation="5dp"
         android:paddingHorizontal="7dp">
 
         <ImageView
@@ -83,10 +84,10 @@
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tl_home_fragment"
         android:layout_width="match_parent"
-        android:elevation="5dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/cl_home_fragment_header"
         android:background="@color/white_skin"
+        android:elevation="5dp"
         app:tabIndicatorColor="@color/foreground_main_color_2_skin"
         app:tabMode="scrollable"
         app:tabTextColor="@color/foreground_main_color_2_skin" />

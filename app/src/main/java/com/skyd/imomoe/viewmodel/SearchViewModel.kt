@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeCoverBean
-import com.skyd.imomoe.bean.GetDataEnum
+import com.skyd.imomoe.bean.ResponseDataType
 import com.skyd.imomoe.bean.PageNumberBean
 import com.skyd.imomoe.bean.SearchHistoryBean
 import com.skyd.imomoe.database.getAppDataBase
@@ -24,7 +24,7 @@ class SearchViewModel : ViewModel() {
     }
 
     var searchResultList: MutableList<AnimeCoverBean> = ArrayList()
-    var mldSearchResultList: MutableLiveData<Pair<GetDataEnum, MutableList<AnimeCoverBean>>> =
+    var mldSearchResultList: MutableLiveData<Pair<ResponseDataType, MutableList<AnimeCoverBean>>> =
         MutableLiveData()
     var keyWord = ""
     var searchHistoryList: MutableList<SearchHistoryBean> = ArrayList()
@@ -41,11 +41,11 @@ class SearchViewModel : ViewModel() {
                     pageNumberBean = second
                     this@SearchViewModel.keyWord = keyWord
                     mldSearchResultList.postValue(
-                        Pair(if (isRefresh) GetDataEnum.REFRESH else GetDataEnum.LOAD_MORE, first)
+                        Pair(if (isRefresh) ResponseDataType.REFRESH else ResponseDataType.LOAD_MORE, first)
                     )
                 }
             } catch (e: Exception) {
-                mldSearchResultList.postValue(Pair(GetDataEnum.FAILED, ArrayList()))
+                mldSearchResultList.postValue(Pair(ResponseDataType.FAILED, ArrayList()))
                 e.printStackTrace()
                 (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnIOThread()
             }

@@ -202,7 +202,6 @@ class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), Even
                     if (showRankNumber.isNotEmpty() && showRankNumber[position])
                         adapter.showRankNumber = true
                     holder.rvGridRecyclerView1.adapter = adapter
-                    adapter.notifyDataSetChanged()
                 }
             }
         }

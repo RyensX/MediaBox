@@ -1,17 +1,29 @@
 package com.skyd.skin.core.attrs
 
-import android.util.Log
+import android.graphics.drawable.Drawable
 import android.view.View
-import androidx.constraintlayout.widget.ConstraintLayout
-import com.skyd.skin.SkinManager
+import androidx.core.content.ContextCompat
+import com.skyd.skin.core.SkinResourceProcessor
 
 
 class BackgroundAttr : SkinAttr() {
-    companion object {
-        const val TAG = "background"
+    override fun applySkin(view: View) {
+        if (attrResourceRefId != -1) {
+            // 是否默认皮肤
+            val skinResProcessor = SkinResourceProcessor.instance
+            if (skinResProcessor.usingDefaultSkin() && skinResProcessor.usingInnerAppSkin()) {
+                view.background = ContextCompat.getDrawable(view.context, attrResourceRefId)
+            } else {
+                // 获取皮肤包资源
+                val skinResourceId = skinResProcessor.getBackgroundOrSrc(attrResourceRefId)
+                if (skinResourceId is Int) {
+                    view.setBackgroundColor(skinResourceId)
+                } else {
+                    view.background = skinResourceId as Drawable
+                }
+            }
+        }
     }
 
-    override fun applySkin(view: View) {
-        if (attrResourceRefId != -1) SkinManager.setBackground(view, attrResourceRefId)
-    }
+    override fun tag(): String = "background"
 }

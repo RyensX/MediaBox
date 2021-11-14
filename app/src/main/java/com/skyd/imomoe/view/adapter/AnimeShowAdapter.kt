@@ -26,6 +26,7 @@ import com.skyd.imomoe.util.Util.dp
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.getResDrawable
 import com.skyd.imomoe.view.adapter.decoration.AnimeCoverItemDecoration
+import com.skyd.skin.SkinManager
 
 class AnimeShowAdapter(
     val fragment: AnimeShowFragment,
@@ -126,7 +127,9 @@ class AnimeShowAdapter(
                 fragment.activity?.let {
                     item.animeCoverList?.let { it1 ->
                         holder.banner1.setAdapter(MyCycleBannerAdapter(it, it1))
-                        holder.banner1.setIndicator(DotIndicator(it))
+                        holder.banner1.setIndicator(DotIndicator(it).apply {
+                            SkinManager.setViewTag(this)
+                        })
                         holder.banner1.startPlay(5000)
                     }
                 }

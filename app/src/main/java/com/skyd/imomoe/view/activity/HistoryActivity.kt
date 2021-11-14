@@ -11,6 +11,7 @@ import com.skyd.imomoe.bean.HistoryBean
 import com.skyd.imomoe.databinding.ActivityHistoryBinding
 import com.skyd.imomoe.util.Util.dp
 import com.skyd.imomoe.util.Util.getResColor
+import com.skyd.imomoe.util.Util.getResDrawable
 import com.skyd.imomoe.util.visible
 import com.skyd.imomoe.view.adapter.HistoryAdapter
 import com.skyd.imomoe.viewmodel.HistoryViewModel
@@ -72,7 +73,7 @@ class HistoryActivity : BaseActivity<ActivityHistoryBinding>() {
             ivToolbar1Button1.setOnClickListener {
                 if (viewModel.historyList.isEmpty()) return@setOnClickListener
                 MaterialDialog(this@HistoryActivity).show {
-                    icon(R.drawable.ic_delete_main_color_2_24_skin)
+                    icon(drawable = getResDrawable(R.drawable.ic_delete_main_color_2_24_skin))
                     title(res = R.string.warning)
                     message(text = "确定要删除所有观看历史记录？")
                     positiveButton(res = R.string.delete) { viewModel.deleteAllHistory() }

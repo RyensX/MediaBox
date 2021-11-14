@@ -27,6 +27,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="16dp"
         android:gravity="center_vertical"
+        android:maxWidth="110dp"
         android:textColor="@color/widget_everyday_anime_item_text_color"
         android:textSize="17sp"
         tools:text="第10集" />

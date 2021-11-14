@@ -34,7 +34,7 @@ object SnifferVideo {
         return when (type) {
             0 -> {
                 Jsoup.parse(html).select("body")[0].select("[class=player]")[0]
-                    .getElementById("playbox").select("iframe")[0]
+                    .getElementById("playbox")!!.select("iframe")[0]
                     .attr("src")
             }
             1 -> {
@@ -63,7 +63,7 @@ object SnifferVideo {
                     }
                 }
                 Jsoup.parse(html)
-                    .select("body")[0].getElementById("player")
+                    .select("body")[0].getElementById("player")!!
                     .select("[class=leleplayer-video-wrap]")
                     .select("video").attr("src")
             }
@@ -191,7 +191,10 @@ object SnifferVideo {
                         put(REFEREER_URL, this@SnifferVideo.referer)
                         put(
                             DANMU_URL,
-                            "https:$serverApi/barrage/api?ac=dm&key=$serverKey&id=$videoId"
+                            "$serverApi/barrage/api?ac=dm&key=$serverKey&id=$videoId".run {
+                                if (this.startsWith("http")) this
+                                else "https:" + this
+                            }
                         )
                         callback(html, this)
                     }

@@ -6,7 +6,7 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
-import com.skyd.imomoe.util.Util.copyText2Clipboard
+import com.skyd.imomoe.util.Util.copy2Clipboard
 import com.skyd.imomoe.util.Util.showToast
 
 object Share {
@@ -65,7 +65,7 @@ object Share {
                 )
             }
             SHARE_LINK -> {
-                copyText2Clipboard(activity, shareContent)
+                shareContent.copy2Clipboard(activity)
                 activity.resources.getString(R.string.already_copy_to_clipboard).showToast()
             }
         }

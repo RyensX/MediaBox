@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.skyd.imomoe.bean.AnimeCoverBean
-import com.skyd.imomoe.bean.GetDataEnum
+import com.skyd.imomoe.bean.ResponseDataType
 import com.skyd.imomoe.bean.PageNumberBean
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.RankListModel
@@ -24,7 +24,7 @@ class RankListViewModel : ViewModel() {
     var isRequesting = false
     var rankList: MutableList<AnimeCoverBean> = Collections.synchronizedList(ArrayList())
     var pageNumberBean: PageNumberBean? = null
-    var mldRankData: MutableLiveData<Pair<GetDataEnum, MutableList<AnimeCoverBean>>> =
+    var mldRankData: MutableLiveData<Pair<ResponseDataType, MutableList<AnimeCoverBean>>> =
         MutableLiveData()
 
     fun getRankListData(partUrl: String, isRefresh: Boolean = true) {
@@ -37,14 +37,14 @@ class RankListViewModel : ViewModel() {
                     pageNumberBean = second
                     mldRankData.postValue(
                         Pair(
-                            if (isRefresh) GetDataEnum.REFRESH else GetDataEnum.LOAD_MORE,
+                            if (isRefresh) ResponseDataType.REFRESH else ResponseDataType.LOAD_MORE,
                             first.toMutableList()
                         )
                     )
                     isRequesting = false
                 }
             } catch (e: Exception) {
-                mldRankData.postValue(Pair(GetDataEnum.FAILED, ArrayList()))
+                mldRankData.postValue(Pair(ResponseDataType.FAILED, ArrayList()))
                 isRequesting = false
                 e.printStackTrace()
                 e.message?.showToastOnIOThread(Toast.LENGTH_LONG)

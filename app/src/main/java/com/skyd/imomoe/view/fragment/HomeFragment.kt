@@ -28,6 +28,7 @@ import com.skyd.imomoe.util.eventbus.MessageEvent
 import com.skyd.imomoe.util.eventbus.RefreshEvent
 import com.skyd.imomoe.util.eventbus.SelectHomeTabEvent
 import com.skyd.imomoe.view.activity.*
+import com.skyd.imomoe.view.listener.dsl.addOnTabSelectedListener
 import com.skyd.imomoe.viewmodel.HomeViewModel
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -110,29 +111,19 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), EventBusSubscriber {
                 startActivity(Intent(activity, FavoriteActivity::class.java))
             }
 
-            tlHomeFragment.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-                override fun onTabSelected(tab: TabLayout.Tab) {
-                    currentTab = tab.position
-                }
-
-                override fun onTabUnselected(tab: TabLayout.Tab) {
-                    //当选项卡变成未选中状态时调用
-                }
-
-                override fun onTabReselected(tab: TabLayout.Tab) {
-                    adapter.refresh(currentTab)
-                }
-            })
+            tlHomeFragment.addOnTabSelectedListener {
+                onTabSelected { currentTab = it!!.position }
+                onTabReselected { adapter.refresh(currentTab) }
+            }
         }
 
-        viewModel.mldGetAllTabList.observe(viewLifecycleOwner, Observer {
+        viewModel.mldGetAllTabList.observe(viewLifecycleOwner, {
             adapter.clearAllFragment()
             if (!it) {
-                showLoadFailedTip(getString(R.string.load_data_failed_click_to_retry),
-                    View.OnClickListener {
-                        viewModel.getAllTabData()
-                        hideLoadFailedTip()
-                    })
+                showLoadFailedTip(getString(R.string.load_data_failed_click_to_retry)) {
+                    viewModel.getAllTabData()
+                    hideLoadFailedTip()
+                }
                 getString(R.string.get_home_tab_data_failed).showToast(Toast.LENGTH_LONG)
             } else {
                 hideLoadFailedTip()

@@ -7,12 +7,11 @@ import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import android.widget.RelativeLayout
 import android.widget.TextView
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
-import com.skyd.imomoe.bean.GetDataEnum
+import com.skyd.imomoe.bean.ResponseDataType
 import com.skyd.imomoe.bean.SearchHistoryBean
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.databinding.ActivitySearchBinding
@@ -96,13 +95,13 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
                 if (mBinding.rvSearchActivity.adapter != adapter) setSearchAdapter()
                 adapter.smartNotifyDataSetChanged(it.first, it.second, viewModel.searchResultList)
                 when (it.first) {
-                    GetDataEnum.REFRESH, GetDataEnum.LOAD_MORE -> {
+                    ResponseDataType.REFRESH, ResponseDataType.LOAD_MORE -> {
                         mBinding.tvSearchActivityTip.text = getString(
                             R.string.search_activity_tip, viewModel.keyWord,
                             viewModel.searchResultList.size
                         )
                     }
-                    GetDataEnum.FAILED -> {
+                    ResponseDataType.FAILED -> {
                         mBinding.tvSearchActivityTip.text =
                             getString(R.string.search_activity_failed)
                     }

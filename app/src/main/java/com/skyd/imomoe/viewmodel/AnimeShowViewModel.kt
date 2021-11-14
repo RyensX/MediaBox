@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
-import com.skyd.imomoe.bean.GetDataEnum
+import com.skyd.imomoe.bean.ResponseDataType
 import com.skyd.imomoe.bean.IAnimeShowBean
 import com.skyd.imomoe.bean.PageNumberBean
 import com.skyd.imomoe.model.DataSourceManager
@@ -24,7 +24,7 @@ class AnimeShowViewModel : ViewModel() {
     var childViewPool: SerializableRecycledViewPool? = null
     var viewPool: SerializableRecycledViewPool? = null
     var animeShowList: MutableList<IAnimeShowBean> = ArrayList()
-    var mldGetAnimeShowList: MutableLiveData<Pair<GetDataEnum, MutableList<IAnimeShowBean>>> =
+    var mldGetAnimeShowList: MutableLiveData<Pair<ResponseDataType, MutableList<IAnimeShowBean>>> =
         MutableLiveData()   // value：-1错误；0重新获取；1刷新
     var pageNumberBean: PageNumberBean? = null
 
@@ -41,13 +41,13 @@ class AnimeShowViewModel : ViewModel() {
                     pageNumberBean = second
                     mldGetAnimeShowList.postValue(
                         Pair(
-                            if (isRefresh) GetDataEnum.REFRESH else GetDataEnum.LOAD_MORE, first
+                            if (isRefresh) ResponseDataType.REFRESH else ResponseDataType.LOAD_MORE, first
                         )
                     )
                     isRequesting = false
                 }
             } catch (e: Exception) {
-                mldGetAnimeShowList.postValue(Pair(GetDataEnum.FAILED, ArrayList()))
+                mldGetAnimeShowList.postValue(Pair(ResponseDataType.FAILED, ArrayList()))
                 isRequesting = false
                 e.printStackTrace()
                 (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnIOThread()

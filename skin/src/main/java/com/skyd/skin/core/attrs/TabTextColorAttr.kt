@@ -1,18 +1,23 @@
 package com.skyd.skin.core.attrs
 
 import android.view.View
-import com.skyd.skin.SkinManager
+import androidx.core.content.ContextCompat
 import com.google.android.material.tabs.TabLayout
+import com.skyd.skin.core.SkinResourceProcessor
 
 
 class TabTextColorAttr : SkinAttr() {
-    companion object {
-        const val TAG = "tabTextColor"
-    }
-
     override fun applySkin(view: View) {
         if (view is TabLayout && attrResourceRefId != -1) {
-            SkinManager.setTabTextColor(view, attrResourceRefId)
+            val skinResProcessor = SkinResourceProcessor.instance
+            if (skinResProcessor.usingDefaultSkin() && skinResProcessor.usingInnerAppSkin()) {
+                view.tabTextColors =
+                    ContextCompat.getColorStateList(view.context, attrResourceRefId)
+            } else {
+                view.tabTextColors = skinResProcessor.getColorStateList(attrResourceRefId)
+            }
         }
     }
+
+    override fun tag(): String = "tabTextColor"
 }

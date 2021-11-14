@@ -37,6 +37,7 @@ import com.skyd.imomoe.view.activity.DlnaActivity
 import com.skyd.imomoe.view.adapter.SkinRvAdapter
 import com.skyd.imomoe.view.component.ZoomView
 import com.skyd.imomoe.view.component.textview.TypefaceTextView
+import com.skyd.imomoe.view.listener.dsl.setOnSeekBarChangeListener
 import com.skyd.skin.SkinManager
 import java.io.File
 import java.io.Serializable
@@ -56,12 +57,15 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         const val NO_REVERSE = 0
         const val HORIZONTAL_REVERSE = 1
         const val VERTICAL_REVERSE = 2
+
+        // 夜间屏幕最大Alpha
+        const val NIGHT_SCREEN_MAX_ALPHA: Int = 0xAA
     }
 
     // 正在双指缩放移动
     private var doublePointerZoomingMoving = false
 
-    private var mDownloadButton: ImageView? = null
+    private var ivDownloadButton: ImageView? = null
 
     private var initFirstLoad = true
 
@@ -69,81 +73,90 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
     private var mScaleIndex = 0
 
     //4:3  16:9等
-    private var mMoreScaleTextView: TextView? = null
+    private var tvMoreScale: TextView? = null
 
     //倍速按钮
-    private var mSpeedTextView: TextView? = null
-    private var mSpeedRecyclerView: RecyclerView? = null
+    private var tvSpeed: TextView? = null
+    private var rvSpeed: RecyclerView? = null
 
     //速度
     private var mPlaySpeed = 1f
 
     //投屏按钮
-    private var mClingImageView: ImageView? = null
+    private var ivCling: ImageView? = null
 
     //分享按钮
-    private var mShareImageView: ImageView? = null
+    private var ivShare: ImageView? = null
 
     //更多按钮
-    private var mMoreImageView: ImageView? = null
+    private var ivMore: ImageView? = null
 
     //下一集按钮
-    private var mNextImageView: ImageView? = null
+    private var ivNextEpisode: ImageView? = null
 
     //选集
-    private var mEpisodeTextView: TextView? = null
+    private var tvEpisode: TextView? = null
     private var mEpisodeTextViewVisibility: Int = View.VISIBLE
     private var mEpisodeButtonOnClickListener: OnClickListener? = null
-    private var mEpisodeRecyclerView: RecyclerView? = null
+    private var rvEpisode: RecyclerView? = null
     private var mEpisodeAdapter: EpisodeRecyclerViewAdapter? = null
 
     // 设置
-    private var mSettingContainer: ViewGroup? = null
-    private var mSettingImageView: ImageView? = null
+    protected var vgSettingContainer: ViewGroup? = null
+    private var ivSetting: ImageView? = null
 
     // 镜像RadioGroup
-    private var mReverseRadioGroup: RadioGroup? = null
+    private var rgReverse: RadioGroup? = null
     private var mReverseValue: Int? = null
     private var mTextureViewTransform: Int =
         NO_REVERSE
 
     // 底部进度条CheckBox
-    private var mBottomProgressCheckBox: CheckBox? = null
+    private var cbBottomProgress: CheckBox? = null
     private var mBottomProgressCheckBoxValue: Boolean = true
 
     //底部进度调
-    private var mBottomProgress: ProgressBar? = null
+    private var pbBottomProgress: ProgressBar? = null
 
     // 外部播放器打开
-    private var mOpenByExternalPlayerTextView: TextView? = null
+    private var tvOpenByExternalPlayer: TextView? = null
 
     // 硬解码CheckBox
-    private var mMediaCodecCheckBox: CheckBox? = null
+    private var cbMediaCodec: CheckBox? = null
 
     // 右侧弹出栏
-    private var mRightContainer: ViewGroup? = null
+    protected var vgRightContainer: ViewGroup? = null
 
     // 按住高速播放的tv
-    private var mTouchDownHighSpeedTextView: TextView? = null
+    private var tvTouchDownHighSpeed: TextView? = null
     private var mLongPressing: Boolean = false
 
     // 还原屏幕
-    private var mRestoreScreenTextView: TextView? = null
+    private var tvRestoreScreen: TextView? = null
 
     // 屏幕已经双指放大移动了
     private var mDoublePointerZoomMoved: Boolean = false
 
     // 屏幕已经双指放大移动了
-    private var mBiggerSurface: ViewGroup? = null
+    private var vgBiggerSurface: ViewGroup? = null
 
     // 控件没有显示
     private var mUiCleared: Boolean = true
 
     // 显示系统时间
-    private var mSystemTimeTextView: TextView? = null
+    private var tcSystemTime: TextClock? = null
 
     // top阴影
-    private var mViewTopContainerShadow: View? = null
+    private var viewTopContainerShadow: View? = null
+
+    // 夜间屏幕View
+    private var viewNightScreen: View? = null
+
+    // 夜间屏幕seekbar
+    private var sbNightScreen: SeekBar? = null
+
+    // 夜间屏幕SeekBar值
+    private var mNightScreenSeekBarProgress: Int = 0
 
     constructor(context: Context) : super(context)
 
@@ -158,38 +171,40 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
     override fun init(context: Context?) {
         super.init(context)
 
-        mDownloadButton = findViewById(R.id.iv_play_activity_toolbar_download)
-        mMoreScaleTextView = findViewById(R.id.tv_more_scale)
-        mSpeedTextView = findViewById(R.id.tv_speed)
+        ivDownloadButton = findViewById(R.id.iv_play_activity_toolbar_download)
+        tvMoreScale = findViewById(R.id.tv_more_scale)
+        tvSpeed = findViewById(R.id.tv_speed)
 //        mClingImageView = findViewById(R.id.iv_cling)
-        mRightContainer = findViewById(R.id.layout_right)
-        mSpeedRecyclerView = findViewById(R.id.rv_right)
-        mEpisodeRecyclerView = findViewById(R.id.rv_right)
-        mShareImageView = findViewById(R.id.iv_play_activity_toolbar_share)
-        mNextImageView = findViewById(R.id.iv_next)
-        mEpisodeTextView = findViewById(R.id.tv_episode)
-        mSettingImageView = findViewById(R.id.iv_setting)
-        mSettingContainer = findViewById(R.id.layout_setting)
-        mReverseRadioGroup = findViewById(R.id.rg_reverse)
-        mBottomProgressCheckBox = findViewById(R.id.cb_bottom_progress)
-        mBottomProgress = super.mBottomProgressBar
-        mMoreImageView = findViewById(R.id.iv_play_activity_toolbar_more)
-        mOpenByExternalPlayerTextView = findViewById(R.id.tv_open_by_external_player)
+        vgRightContainer = findViewById(R.id.layout_right)
+        rvSpeed = findViewById(R.id.rv_right)
+        rvEpisode = findViewById(R.id.rv_right)
+        ivShare = findViewById(R.id.iv_play_activity_toolbar_share)
+        ivNextEpisode = findViewById(R.id.iv_next)
+        tvEpisode = findViewById(R.id.tv_episode)
+        ivSetting = findViewById(R.id.iv_setting)
+        vgSettingContainer = findViewById(R.id.layout_setting)
+        rgReverse = findViewById(R.id.rg_reverse)
+        cbBottomProgress = findViewById(R.id.cb_bottom_progress)
+        pbBottomProgress = super.mBottomProgressBar
+        ivMore = findViewById(R.id.iv_play_activity_toolbar_more)
+        tvOpenByExternalPlayer = findViewById(R.id.tv_open_by_external_player)
 //        mMediaCodecCheckBox = findViewById(R.id.cb_media_codec)
-        mRestoreScreenTextView = findViewById(R.id.tv_restore_screen)
-        mTouchDownHighSpeedTextView = findViewById(R.id.tv_touch_down_high_speed)
-        mBiggerSurface = findViewById(R.id.bigger_surface)
-        mSystemTimeTextView = findViewById(R.id.tv_system_time)
-        mViewTopContainerShadow = findViewById(R.id.view_top_container_shadow)
+        tvRestoreScreen = findViewById(R.id.tv_restore_screen)
+        tvTouchDownHighSpeed = findViewById(R.id.tv_touch_down_high_speed)
+        vgBiggerSurface = findViewById(R.id.bigger_surface)
+        tcSystemTime = findViewById(R.id.tc_system_time)
+        viewTopContainerShadow = findViewById(R.id.view_top_container_shadow)
+        viewNightScreen = findViewById(R.id.view_player_night_screen)
+        sbNightScreen = findViewById(R.id.sb_player_night_screen)
 
-        mRightContainer?.gone()
-        mSettingContainer?.gone()
-        mTouchDownHighSpeedTextView?.gone()
+        vgRightContainer?.gone()
+        vgSettingContainer?.gone()
+        tvTouchDownHighSpeed?.gone()
 
-        mBiggerSurface?.setOnClickListener(this)
-        mBiggerSurface?.setOnTouchListener(this)
+        vgBiggerSurface?.setOnClickListener(this)
+        vgBiggerSurface?.setOnTouchListener(this)
 
-        mRestoreScreenTextView?.setOnClickListener {
+        tvRestoreScreen?.setOnClickListener {
             mTextureViewContainer?.run {
                 if (this is ZoomView) restore()
                 else {
@@ -203,8 +218,8 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
                 it.gone()
             }
         }
-        mSpeedTextView?.setOnClickListener {
-            mRightContainer?.let {
+        tvSpeed?.setOnClickListener {
+            vgRightContainer?.let {
                 val adapter = SpeedAdapter(
                     listOf(
                         SpeedBean("speed", "", "0.5"),
@@ -215,24 +230,23 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
                         SpeedBean("speed", "", "2")
                     )
                 )
-                mSpeedRecyclerView?.layoutManager = LinearLayoutManager(context)
-                mSpeedRecyclerView?.adapter = adapter
-                adapter.notifyDataSetChanged()
+                rvSpeed?.layoutManager = LinearLayoutManager(context)
+                rvSpeed?.adapter = adapter
             }
             showRightContainer()
         }
-        mEpisodeTextView?.setOnClickListener {
-            mRightContainer?.let {
-                mEpisodeRecyclerView?.layoutManager = LinearLayoutManager(context)
-                mEpisodeRecyclerView?.adapter = mEpisodeAdapter
+        tvEpisode?.setOnClickListener {
+            vgRightContainer?.let {
+                rvEpisode?.layoutManager = LinearLayoutManager(context)
+                rvEpisode?.adapter = mEpisodeAdapter
                 mEpisodeAdapter?.notifyDataSetChanged()
-                mEpisodeRecyclerView?.scrollToPosition(mEpisodeAdapter?.currentIndex ?: 0)
+                rvEpisode?.scrollToPosition(mEpisodeAdapter?.currentIndex ?: 0)
             }
             showRightContainer()
         }
-        mSettingImageView?.setOnClickListener { showSettingContainer() }
-        mReverseValue = mReverseRadioGroup?.getChildAt(0)?.id
-        mReverseRadioGroup?.children?.forEach {
+        ivSetting?.setOnClickListener { showSettingContainer() }
+        mReverseValue = rgReverse?.getChildAt(0)?.id
+        rgReverse?.children?.forEach {
             (it as RadioButton).apply {
                 setOnCheckedChangeListener { buttonView, isChecked ->
                     if (!isChecked) return@setOnCheckedChangeListener
@@ -245,32 +259,32 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
                 }
             }
         }
-        mBottomProgressCheckBox?.setOnCheckedChangeListener { buttonView, isChecked ->
+        cbBottomProgress?.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
-                mBottomProgress?.let {
+                pbBottomProgress?.let {
                     mBottomProgressBar = it
                     it.visible()
                 }
             } else {
                 mBottomProgressBar?.let {
-                    mBottomProgress = it
+                    pbBottomProgress = it
                     it.gone()
                     mBottomProgressBar = null
                 }
             }
             mBottomProgressCheckBoxValue = isChecked
         }
-        mBottomProgressCheckBox?.isChecked = mBottomProgressBar != null
+        cbBottomProgress?.isChecked = mBottomProgressBar != null
 
         //重置视频比例
         GSYVideoType.setShowType(mScaleStrings[mScaleIndex].second)
         changeTextureViewShowType()
         if (mTextureView != null) mTextureView.requestLayout()
 
-        mMoreScaleTextView?.text = mScaleStrings[mScaleIndex].first
+        tvMoreScale?.text = mScaleStrings[mScaleIndex].first
 
         //切换视频比例
-        mMoreScaleTextView?.setOnClickListener(OnClickListener {
+        tvMoreScale?.setOnClickListener(OnClickListener {
             startDismissControlViewTimer()      //重新开始ui消失时间计时
             if (!mHadPlay) {
                 return@OnClickListener
@@ -279,7 +293,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
             resolveTypeUI()
         })
 
-        mClingImageView?.setOnClickListener {
+        ivCling?.setOnClickListener {
             mContext.startActivity(
                 Intent(mContext, DlnaActivity::class.java)
                     .putExtra("url", mUrl)
@@ -288,9 +302,17 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
             mOriginUrl
         }
 
-        mOpenByExternalPlayerTextView?.setOnClickListener {
+        tvOpenByExternalPlayer?.setOnClickListener {
             if (!openVideoByExternalPlayer(mContext, mUrl))
                 mContext.getString(R.string.matched_app_not_found).showToast()
+        }
+
+        sbNightScreen?.setOnSeekBarChangeListener {
+            onProgressChanged { seekBar, progress, _ ->
+                seekBar ?: return@onProgressChanged
+                mNightScreenSeekBarProgress = progress
+                viewNightScreen?.setBackgroundColor((NIGHT_SCREEN_MAX_ALPHA * progress / seekBar.max) shl 24)
+            }
         }
     }
 
@@ -299,7 +321,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
     fun getTitle(): String = mTitle
 
     private fun showSettingContainer() {
-        mSettingContainer?.let {
+        vgSettingContainer?.let {
             hideAllWidget()
             it.translationX = 150f.dp
             it.visible()
@@ -310,9 +332,9 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
             animator.start()
             //取消xx秒后隐藏控制界面
             cancelDismissControlViewTimer()
-            if (mReverseValue == null) mReverseValue = mReverseRadioGroup?.getChildAt(0)?.id
+            if (mReverseValue == null) mReverseValue = rgReverse?.getChildAt(0)?.id
             mReverseValue?.let { id -> findViewById<RadioButton>(id).isChecked = true }
-            mBottomProgressCheckBox?.isChecked = mBottomProgressCheckBoxValue
+            cbBottomProgress?.isChecked = mBottomProgressCheckBoxValue
 
 //            mMediaCodecCheckBox?.isChecked = GSYVideoType.isMediaCodec()
 //            mMediaCodecCheckBox?.setOnCheckedChangeListener { buttonView, isChecked ->
@@ -325,8 +347,8 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
 
     fun setTopContainer(top: ViewGroup?) {
         mTopContainer = top
-        mViewTopContainerShadow = if (top == null) {
-            mViewTopContainerShadow?.visible()
+        viewTopContainerShadow = if (top == null) {
+            viewTopContainerShadow?.visible()
             null
         } else {
             findViewById(R.id.view_top_container_shadow)
@@ -335,7 +357,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
     }
 
     private fun showRightContainer() {
-        mRightContainer?.let {
+        vgRightContainer?.let {
             hideAllWidget()
             it.translationX = 150f.dp
             it.visible()
@@ -349,14 +371,14 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
 
     override fun hideAllWidget() {
         super.hideAllWidget()
-        setViewShowState(mRightContainer, INVISIBLE)
-        setViewShowState(mSettingContainer, INVISIBLE)
-        setViewShowState(mRestoreScreenTextView, View.GONE)
-        setViewShowState(mViewTopContainerShadow, View.INVISIBLE)
+        setViewShowState(vgRightContainer, INVISIBLE)
+        setViewShowState(vgSettingContainer, INVISIBLE)
+        setViewShowState(tvRestoreScreen, View.GONE)
+        setViewShowState(viewTopContainerShadow, View.INVISIBLE)
     }
 
     override fun onClickUiToggle(e: MotionEvent?) {
-        mRightContainer?.let {
+        vgRightContainer?.let {
             //如果右侧栏显示，则隐藏
             if (it.visibility == View.VISIBLE) {
                 it.gone()
@@ -365,7 +387,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
                 return
             }
         }
-        mSettingContainer?.let {
+        vgSettingContainer?.let {
             // 如果显示，则隐藏
             if (it.visibility == View.VISIBLE) {
                 it.gone()
@@ -397,16 +419,17 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
             statusBar
         ) as AnimeVideoPlayer
         player.mScaleIndex = mScaleIndex
-        player.mSpeedTextView?.text = mSpeedTextView?.text
+        player.tvSpeed?.text = tvSpeed?.text
         player.mFullscreenButton.visibility = mFullscreenButton.visibility
         player.mEpisodeTextViewVisibility = mEpisodeTextViewVisibility
-        player.mEpisodeTextView?.visibility = mEpisodeTextViewVisibility
+        player.tvEpisode?.visibility = mEpisodeTextViewVisibility
         player.mEpisodeAdapter = mEpisodeAdapter
         player.mTextureViewTransform = mTextureViewTransform
         player.mReverseValue = mReverseValue
         player.mBottomProgressCheckBoxValue = mBottomProgressCheckBoxValue
         player.mPlaySpeed = mPlaySpeed
-        if (player.mBottomProgressBar != null) player.mBottomProgress = player.mBottomProgressBar
+        player.sbNightScreen?.progress = mNightScreenSeekBarProgress
+        if (player.mBottomProgressBar != null) player.pbBottomProgress = player.mBottomProgressBar
         if (!player.mBottomProgressCheckBoxValue) player.mBottomProgressBar = null
         touchSurfaceUp()
         player.setRestoreScreenTextViewVisibility()
@@ -416,10 +439,10 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
 
     private fun setRestoreScreenTextViewVisibility() {
         if (mUiCleared) {
-            mRestoreScreenTextView?.gone()
+            tvRestoreScreen?.gone()
         } else {
-            if (mDoublePointerZoomMoved) mRestoreScreenTextView?.visible()
-            else mRestoreScreenTextView?.gone()
+            if (mDoublePointerZoomMoved) tvRestoreScreen?.visible()
+            else tvRestoreScreen?.gone()
         }
     }
 
@@ -440,15 +463,16 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
             val player = gsyVideoPlayer as AnimeVideoPlayer
             mScaleIndex = player.mScaleIndex
             mFullscreenButton.visibility = player.mFullscreenButton.visibility
-            mSpeedTextView?.text = player.mSpeedTextView?.text
+            tvSpeed?.text = player.tvSpeed?.text
             mEpisodeTextViewVisibility = player.mEpisodeTextViewVisibility
-            mEpisodeTextView?.visibility = mEpisodeTextViewVisibility
+            tvEpisode?.visibility = mEpisodeTextViewVisibility
             mEpisodeAdapter = player.mEpisodeAdapter
             mTextureViewTransform = player.mTextureViewTransform
             mReverseValue = player.mReverseValue
             mBottomProgressCheckBoxValue = player.mBottomProgressCheckBoxValue
             mPlaySpeed = player.mPlaySpeed
-            if (mBottomProgressBar != null) mBottomProgress = mBottomProgressBar
+            mNightScreenSeekBarProgress = player.sbNightScreen?.progress ?: 0
+            if (mBottomProgressBar != null) pbBottomProgress = mBottomProgressBar
             if (!mBottomProgressCheckBoxValue) mBottomProgressBar = null
             player.touchSurfaceUp()
             setRestoreScreenTextViewVisibility()
@@ -473,13 +497,25 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         if (!mHadPlay) {
             return
         }
-        mMoreScaleTextView?.text = mScaleStrings[mScaleIndex].first
+        tvMoreScale?.text = mScaleStrings[mScaleIndex].first
         GSYVideoType.setShowType(mScaleStrings[mScaleIndex].second)
         changeTextureViewShowType()
         if (mTextureView != null) mTextureView.requestLayout()
         setSpeed(mPlaySpeed, true)
-        mTouchDownHighSpeedTextView?.gone()
+        tvTouchDownHighSpeed?.gone()
         mLongPressing = false
+    }
+
+    override fun setSpeed(speed: Float, soundTouch: Boolean) {
+        super.setSpeed(speed, soundTouch)
+        onSpeedChanged(speed)
+    }
+
+    /**
+     * 视频播放速度改变后回调
+     */
+    protected open fun onSpeedChanged(speed: Float) {
+
     }
 
     /**
@@ -583,34 +619,34 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
     //正常
     override fun changeUiToNormal() {
         super.changeUiToNormal()
-        mViewTopContainerShadow?.visible()
+        viewTopContainerShadow?.visible()
         initFirstLoad = true
         mUiCleared = false
     }
 
     override fun changeUiToPauseShow() {
         super.changeUiToPauseShow()
-        mViewTopContainerShadow?.visible()
+        viewTopContainerShadow?.visible()
         mUiCleared = false
     }
 
     override fun changeUiToClear() {
         super.changeUiToClear()
-        mViewTopContainerShadow?.invisible()
+        viewTopContainerShadow?.invisible()
         mUiCleared = true
     }
 
     //准备中
     override fun changeUiToPreparingShow() {
         super.changeUiToPreparingShow()
-        mViewTopContainerShadow?.visible()
+        viewTopContainerShadow?.visible()
         mUiCleared = false
     }
 
     //播放中
     override fun changeUiToPlayingShow() {
         super.changeUiToPlayingShow()
-        mViewTopContainerShadow?.visible()
+        viewTopContainerShadow?.visible()
 //        if (initFirstLoad) {
 //            mBottomContainer.gone()
 //            mStartButton.gone()
@@ -622,35 +658,35 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
     //自动播放结束
     override fun changeUiToCompleteShow() {
         super.changeUiToCompleteShow()
-        mViewTopContainerShadow?.visible()
+        viewTopContainerShadow?.visible()
         mBottomContainer.gone()
-        mTouchDownHighSpeedTextView?.gone()
+        tvTouchDownHighSpeed?.gone()
         mUiCleared = false
     }
 
     override fun changeUiToError() {
         super.changeUiToError()
-        mViewTopContainerShadow?.invisible()
+        viewTopContainerShadow?.invisible()
     }
 
     override fun changeUiToPrepareingClear() {
         super.changeUiToPrepareingClear()
-        mViewTopContainerShadow?.invisible()
+        viewTopContainerShadow?.invisible()
     }
 
     override fun changeUiToPlayingBufferingClear() {
         super.changeUiToPlayingBufferingClear()
-        mViewTopContainerShadow?.invisible()
+        viewTopContainerShadow?.invisible()
     }
 
     override fun changeUiToCompleteClear() {
         super.changeUiToCompleteClear()
-        mViewTopContainerShadow?.invisible()
+        viewTopContainerShadow?.invisible()
     }
 
     override fun changeUiToPlayingBufferingShow() {
         super.changeUiToPlayingBufferingShow()
-        mViewTopContainerShadow?.visible()
+        viewTopContainerShadow?.visible()
     }
 
     override fun onVideoPause() {
@@ -677,6 +713,11 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
 
     public override fun clickStartIcon() {
         super.clickStartIcon()
+
+        // 下面是处理完点击后的逻辑
+        if (mCurrentState == CURRENT_STATE_PLAYING) {
+            onVideoResume()
+        }
     }
 
     override fun onClick(v: View) {
@@ -712,9 +753,9 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
                 mLongPressing = true
                 // 此处不能设置mPlaySpeed
                 setSpeed(2f, true)
-                mTouchDownHighSpeedTextView?.text =
+                tvTouchDownHighSpeed?.text =
                     mContext.getString(R.string.touch_down_high_speed, "2")
-                mTouchDownHighSpeedTextView?.visible()
+                tvTouchDownHighSpeed?.visible()
             }
         }
     }
@@ -727,7 +768,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
                 if (mLongPressing) {
                     mLongPressing = false
                     setSpeed(mPlaySpeed, true)
-                    mTouchDownHighSpeedTextView?.gone()
+                    tvTouchDownHighSpeed?.gone()
                     return false
                 }
             }
@@ -741,14 +782,14 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
                 // 不让super的代码执行，表明正在双指放大移动旋转
                 doublePointerZoomingMoving = true
                 mDoublePointerZoomMoved = true
-                if (!mUiCleared) mRestoreScreenTextView?.visible()
+                if (!mUiCleared) tvRestoreScreen?.visible()
                 // 下面用bigger_surface代替原有的surface_container执行手势动作
                 return false
             }
         }
         // 当正在双指操作时，禁止执行super的代码
         if (doublePointerZoomingMoving) {
-            mRestoreScreenTextView?.visible()
+            tvRestoreScreen?.visible()
             // 如果双指松开，则标志不是在移动
             if (event.action == MotionEvent.ACTION_UP) {
                 doublePointerZoomingMoving = false
@@ -838,24 +879,24 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         mEpisodeAdapter = adapter
     }
 
-    fun getShareButton() = mShareImageView
+    fun getShareButton() = ivShare
 
-    fun getMoreButton() = mMoreImageView
+    fun getMoreButton() = ivMore
 
-    fun getEpisodeButton() = mEpisodeTextView
+    fun getEpisodeButton() = tvEpisode
 
-    fun getDownloadButton() = mDownloadButton
+    fun getDownloadButton() = ivDownloadButton
 
     fun getBottomContainer() = mBottomContainer
 
-    fun getClingButton() = mClingImageView
+    fun getClingButton() = ivCling
 
-    fun getNextButton() = mNextImageView
+    fun getNextButton() = ivNextEpisode
 
-    fun getRightContainer() = mRightContainer
+    fun getRightContainer() = vgRightContainer
 
     fun setEpisodeButtonVisibility(visibility: Int) {
-        mEpisodeTextView?.visibility = visibility
+        tvEpisode?.visibility = visibility
         mEpisodeTextViewVisibility = visibility
     }
 
@@ -893,13 +934,13 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
                         holder.tvTitle.text = item.title
                         holder.itemView.setOnClickListener {
                             if (item.title == "1") {
-                                mSpeedTextView?.text = App.context.getString(R.string.play_speed)
+                                tvSpeed?.text = App.context.getString(R.string.play_speed)
                             } else {
-                                mSpeedTextView?.text = item.title + "X"
+                                tvSpeed?.text = item.title + "X"
                             }
                             mPlaySpeed = item.title.toFloat()
                             setSpeed(mPlaySpeed, true)
-                            mRightContainer?.gone()
+                            vgRightContainer?.gone()
                             //因为右侧界面显示时，不在xx秒后隐藏界面，所以要恢复xx秒后隐藏控制界面
                             startDismissControlViewTimer()
                         }

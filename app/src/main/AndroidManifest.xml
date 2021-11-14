@@ -31,7 +31,7 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.樱花动漫"
+        android:theme="@style/Theme.Anime.skin"
         android:usesCleartextTraffic="true">
         <activity android:name=".view.activity.NoticeActivity" />
         <activity

@@ -13,6 +13,7 @@ import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.databinding.ActivityAnimeDetailBinding
+import com.skyd.imomoe.util.Util.getResDrawable
 import com.skyd.imomoe.util.Util.getSkinResourceId
 import com.skyd.imomoe.util.Util.getStatusBarHeight
 import com.skyd.imomoe.util.Util.setTransparentStatusBar
@@ -60,6 +61,7 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
             tvToolbar1Title.isFocused = true
             ivToolbar1Back.setOnClickListener { finish() }
             // 分享
+            ivToolbar1Button1.setImageDrawable(getResDrawable(R.drawable.ic_share_white_24))
             ivToolbar1Button1.visible()
             ivToolbar1Button1.setOnClickListener {
                 ShareDialogFragment().setShareContent(Api.MAIN_URL + partUrl)
@@ -68,14 +70,12 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
             // 收藏
             lifecycleScope.launch(Dispatchers.IO) {
                 val favoriteAnime = getAppDataBase().favoriteAnimeDao().getFavoriteAnime(partUrl)
-                isFavorite = if (favoriteAnime == null) {
-                    ivToolbar1Button2.setImageResource(R.drawable.ic_star_border_white_24)
-                    false
-                } else {
-                    ivToolbar1Button2.setImageResource(R.drawable.ic_star_white_24_skin)
-                    true
-                }
+                isFavorite = favoriteAnime != null
                 withContext(Dispatchers.Main) {
+                    ivToolbar1Button2.setImageResource(
+                        if (isFavorite) R.drawable.ic_star_white_24_skin else
+                            R.drawable.ic_star_border_white_24
+                    )
                     ivToolbar1Button2.visible()
                 }
             }

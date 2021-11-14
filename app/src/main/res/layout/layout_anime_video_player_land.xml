@@ -19,7 +19,7 @@
             android:gravity="center" />
     </FrameLayout>
 
-    <master.flame.danmaku.ui.widget.DanmakuView
+    <com.kuaishou.akdanmaku.ui.DanmakuView
         android:id="@+id/danmaku_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
@@ -33,6 +33,12 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:scaleType="fitCenter" />
+
+    <!--  要在这个位置，若往上，则深色会遮不住某些view，若往下，深色会遮住控制view  -->
+    <View
+        android:id="@+id/view_player_night_screen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <!--高度都加了20dp，让阴影往下延伸一点-->
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -127,7 +133,7 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginVertical="5dp"
             android:background="@drawable/shape_fill_circle_corner_danmu_6"
-            android:hint="@string/send_a_danmu"
+            android:hint="@string/send_a_danmaku"
             android:imeOptions="actionSend"
             android:paddingHorizontal="10dp"
             android:singleLine="true"
@@ -318,17 +324,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.skyd.imomoe.view.component.textview.TypefaceTextView
-            android:id="@+id/tv_system_time"
+        <TextClock
+            android:id="@+id/tc_system_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
+            android:layout_marginEnd="16dp"
+            android:format24Hour="HH:mm"
             android:textColor="@color/foreground_white_skin"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/iv_setting"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="17:00" />
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
@@ -369,8 +375,7 @@
         android:layout_alignParentEnd="true"
         android:background="@color/gray_2"
         android:clickable="true"
-        android:focusable="true"
-        tools:visibility="gone">
+        android:focusable="true">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -434,26 +439,131 @@
                     app:drawableTopCompat="@drawable/selector_vertical_reverse_button_skin" />
             </RadioGroup>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/gray_1" />
+
             <CheckBox
                 android:id="@+id/cb_bottom_progress"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="4dp"
                 android:buttonTint="@color/foreground_main_color_2_skin"
                 android:text="@string/bottom_progress"
                 android:textColor="@color/foreground_white_skin" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="4dp"
+                android:background="@color/gray_1" />
 
             <TextView
                 android:id="@+id/tv_open_by_external_player"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/shape_circle_corner_edge_white_ripper_5_skin"
                 android:gravity="center"
                 android:paddingVertical="9dp"
                 android:text="@string/open_by_external_player"
                 android:textColor="@color/foreground_white_skin" />
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/gray_1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/danmaku"
+                android:textColor="@color/foreground_white_skin" />
+
+            <TextView
+                android:id="@+id/tv_input_custom_danmaku_url"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/shape_circle_corner_edge_white_ripper_5_skin"
+                android:gravity="center"
+                android:paddingVertical="9dp"
+                android:text="@string/input_custom_danmaku_url"
+                android:textColor="@color/foreground_white_skin" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_player_rewind_danmaku_progress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp"
+                    android:text="@string/rewind_danmaku_progress"
+                    android:textColor="@color/foreground_white_skin"
+                    android:visibility="gone"
+                    app:drawableTopCompat="@drawable/ic_fast_rewind_white_24"
+                    tools:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/tv_player_reset_danmaku_progress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp"
+                    android:text="@string/reset_danmaku_progress"
+                    android:textColor="@color/foreground_white_skin"
+                    android:visibility="gone"
+                    app:drawableTopCompat="@drawable/ic_restore_white_24"
+                    tools:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/tv_player_forward_danmaku_progress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp"
+                    android:text="@string/forward_danmaku_progress"
+                    android:textColor="@color/foreground_white_skin"
+                    android:visibility="gone"
+                    app:drawableTopCompat="@drawable/ic_fast_forward_white_24"
+                    tools:visibility="visible" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/gray_1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/player_night_screen"
+                android:textColor="@color/foreground_white_skin" />
+
+            <SeekBar
+                android:id="@+id/sb_player_night_screen"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="100"
+                android:paddingVertical="10dp"
+                android:progress="0" />
             <!--            <CheckBox-->
             <!--                android:id="@+id/cb_media_codec"-->
             <!--                android:layout_width="wrap_content"-->

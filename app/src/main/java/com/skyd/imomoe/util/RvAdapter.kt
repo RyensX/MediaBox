@@ -1,7 +1,7 @@
 package com.skyd.imomoe.util
 
 import androidx.recyclerview.widget.RecyclerView
-import com.skyd.imomoe.bean.GetDataEnum
+import com.skyd.imomoe.bean.ResponseDataType
 
 /**
  * 根据GetDataEnum状态自动更新
@@ -9,25 +9,25 @@ import com.skyd.imomoe.bean.GetDataEnum
  * @param deltaDataSet 新数据集
  * @param dataSet 构造adapter时传入的list
  */
-fun <T> RecyclerView.Adapter<RecyclerView.ViewHolder>.smartNotifyDataSetChanged(
-    type: GetDataEnum,
+fun <T, VH : RecyclerView.ViewHolder> RecyclerView.Adapter<VH>.smartNotifyDataSetChanged(
+    type: ResponseDataType,
     deltaDataSet: MutableList<T>,
     dataSet: MutableList<T>
 ) {
     when (type) {
-        GetDataEnum.REFRESH -> {
+        ResponseDataType.REFRESH -> {
             val count = dataSet.size
             dataSet.clear()
             notifyItemRangeRemoved(0, count)
             dataSet.addAll(deltaDataSet)
             notifyItemRangeInserted(0, deltaDataSet.size)
         }
-        GetDataEnum.LOAD_MORE -> {
+        ResponseDataType.LOAD_MORE -> {
             val index = dataSet.size
             dataSet.addAll(deltaDataSet)
             notifyItemRangeInserted(index, deltaDataSet.size)
         }
-        GetDataEnum.FAILED -> {
+        ResponseDataType.FAILED -> {
             val count = dataSet.size
             dataSet.clear()
             notifyItemRangeRemoved(0, count)

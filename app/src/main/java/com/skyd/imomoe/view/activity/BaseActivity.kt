@@ -23,7 +23,7 @@ abstract class BaseActivity<VB : ViewBinding> : SkinBaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setTheme(SkinResourceProcessor.instance.getSkinThemeId(R.style.Theme_樱花动漫))
+        setTheme(SkinResourceProcessor.instance.getSkinThemeId(R.style.Theme_Anime_skin))
         mBinding = getBinding()
         setContentView(mBinding.root)
         setColorStatusBar(window, getResColor(R.color.main_color_2_skin))
@@ -31,7 +31,7 @@ abstract class BaseActivity<VB : ViewBinding> : SkinBaseActivity() {
 
     override fun onChangeSkin() {
         super.onChangeSkin()
-        setTheme(SkinResourceProcessor.instance.getSkinThemeId(R.style.Theme_樱花动漫))
+        setTheme(SkinResourceProcessor.instance.getSkinThemeId(R.style.Theme_Anime_skin))
     }
 
     override fun onChangeStatusBarSkin() {

@@ -118,6 +118,7 @@ android {
         exclude 'org/eclipse/jetty/**'
         exclude 'org/fourthline/cling/**'
         exclude 'okhttp3/internal/**'
+        exclude 'com/badlogic/**'
     }
 
     buildFeatures {
@@ -166,8 +167,8 @@ dependencies {
     implementation deps.smart.refresh_layout_kernel
     implementation deps.smart.refresh_header_material
     implementation deps.smart.refresh_footer_ball
-    implementation deps.ctiao.DanmakuFlameMaster
     implementation deps.coil_kt.coil
+    implementation deps.kuaishou.akdanmaku
     implementation project(':skin')
     implementation project(':skin_blue')
     implementation project(':skin_dark')

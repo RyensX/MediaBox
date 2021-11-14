@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/main_color_2_skin"
+        android:elevation="5dp"
         android:orientation="horizontal">
 
         <ImageView

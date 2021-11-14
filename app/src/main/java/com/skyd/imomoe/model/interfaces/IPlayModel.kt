@@ -10,6 +10,7 @@ import com.skyd.imomoe.bean.PlayBean
  * 获取播放界面数据的接口
  */
 interface IPlayModel : IBase {
+    @Deprecated("This function will cause a memory leak!!!")
     fun setActivity(activity: Activity)
 
     fun clearActivity()
