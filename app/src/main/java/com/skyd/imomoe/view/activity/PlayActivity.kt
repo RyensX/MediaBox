@@ -554,6 +554,13 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
             if (it != currentNightMode) {
                 currentNightMode = it
                 adapter.notifyDataSetChanged()
+                mBinding.ivPlayActivityFavorite.setImageDrawable(
+                    if (isFavorite) {
+                        getResDrawable(R.drawable.ic_star_main_color_2_24_skin)
+                    } else {
+                        getResDrawable(R.drawable.ic_star_border_main_color_2_24_skin)
+                    }
+                )
             }
         }
     }

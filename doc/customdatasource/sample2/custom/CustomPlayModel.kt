@@ -10,7 +10,9 @@ import com.skyd.imomoe.model.util.JsoupUtil
 import com.skyd.imomoe.model.interfaces.IPlayModel
 import com.skyd.imomoe.util.html.source.GettingCallback
 import com.skyd.imomoe.util.html.source.web.GettingUtil
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withContext
 import org.jsoup.Jsoup
 import org.jsoup.select.Elements
 import java.lang.ref.SoftReference
@@ -42,20 +44,21 @@ class CustomPlayModel : IPlayModel {
     override suspend fun getPlayData(
         partUrl: String,
         animeEpisodeDataBean: AnimeEpisodeDataBean
-    ): Triple<ArrayList<IAnimeDetailBean>, ArrayList<AnimeEpisodeDataBean>, PlayBean> =
-        suspendCancellableCoroutine { cancellableContinuation ->
-            var resultVideoUrl = false
-            var resultData = false
-            val playBeanDataList: ArrayList<IAnimeDetailBean> = ArrayList()
-            val episodesList: ArrayList<AnimeEpisodeDataBean> = ArrayList()
-            val title = AnimeTitleBean("", "", "")
-            val episode =
-                AnimeEpisodeDataBean(
-                    "", "",
-                    ""
-                )
-            val playBean = PlayBean("", "", title, episode, playBeanDataList)
-            val url = Api.MAIN_URL + partUrl
+    ): Triple<ArrayList<IAnimeDetailBean>, ArrayList<AnimeEpisodeDataBean>, PlayBean> {
+        var resultVideoUrl = false
+        var resultData = false
+        val playBeanDataList: ArrayList<IAnimeDetailBean> = ArrayList()
+        val episodesList: ArrayList<AnimeEpisodeDataBean> = ArrayList()
+        val title = AnimeTitleBean("", "", "")
+        val episode =
+            AnimeEpisodeDataBean(
+                "", "",
+                ""
+            )
+        val playBean = PlayBean("", "", title, episode, playBeanDataList)
+        val url = MAIN_URL + partUrl
+        val document = JsoupUtil.getDocument(url)
+        return suspendCancellableCoroutine{ cancellableContinuation ->
             val activity = mActivity?.get()
             if (activity == null || activity.isDestroyed) throw Exception("activity不存在或状态错误")
             activity.runOnUiThread {
@@ -94,8 +97,9 @@ class CustomPlayModel : IPlayModel {
                                             ) {
                                                 GettingUtil.instance.release()
                                                 val iframe = Jsoup.parse(html)
-                                                val videoUrl = iframe.body().getElementById("video")
-                                                    .select("video").attr("src")
+                                                val videoUrl =
+                                                    iframe.body().getElementById("video")!!
+                                                        .select("video").attr("src")
                                                 animeEpisodeDataBean.videoUrl = videoUrl
                                                 resultVideoUrl = true
                                                 if (resultData) cancellableContinuation.resume(
@@ -130,7 +134,6 @@ class CustomPlayModel : IPlayModel {
 
                     })
             }
-            val document = JsoupUtil.getDocument(url)
             val children: Elements = document.allElements
             for (i in children.indices) {
                 when (children[i].className()) {
@@ -229,6 +232,7 @@ class CustomPlayModel : IPlayModel {
                 Triple(playBeanDataList, episodesList, playBean)
             )
         }
+    }
 
     override fun clearActivity() {
         GettingUtil.instance.releaseAll()
@@ -239,7 +243,7 @@ class CustomPlayModel : IPlayModel {
         partUrl: String,
         animeEpisodeDataBean: AnimeEpisodeDataBean
     ): Boolean = suspendCancellableCoroutine { cancellableContinuation ->
-        val url = Api.MAIN_URL + partUrl
+        val url = MAIN_URL + partUrl
         val activity = mActivity?.get()
         if (activity == null || activity.isDestroyed) throw Exception("activity不存在或状态错误")
         activity.runOnUiThread {
@@ -261,7 +265,7 @@ class CustomPlayModel : IPlayModel {
                                         ) {
                                             GettingUtil.instance.release()
                                             val iframe = Jsoup.parse(html)
-                                            val videoUrl = iframe.body().getElementById("video")
+                                            val videoUrl = iframe.body().getElementById("video")!!
                                                 .select("video").attr("src")
                                             animeEpisodeDataBean.videoUrl = videoUrl
                                             cancellableContinuation.resume(true)
@@ -292,7 +296,7 @@ class CustomPlayModel : IPlayModel {
 
     override suspend fun getAnimeCoverImageBean(detailPartUrl: String): ImageBean? {
         try {
-            val url = Api.MAIN_URL + detailPartUrl
+            val url = MAIN_URL + detailPartUrl
             val document = JsoupUtil.getDocument(url)
             //番剧头部信息
             val area: Elements = document.getElementsByClass("area")
@@ -331,7 +335,7 @@ class CustomPlayModel : IPlayModel {
 
     override suspend fun getAnimeEpisodeUrlData(partUrl: String): String? =
         suspendCancellableCoroutine { cancellableContinuation ->
-            val url = Api.MAIN_URL + partUrl
+            val url = MAIN_URL + partUrl
             val activity = mActivity?.get()
             if (activity == null || activity.isDestroyed) throw Exception("activity不存在或状态错误")
             activity.runOnUiThread {
@@ -355,8 +359,9 @@ class CustomPlayModel : IPlayModel {
                                             ) {
                                                 GettingUtil.instance.release()
                                                 val iframe = Jsoup.parse(html)
-                                                val videoUrl = iframe.body().getElementById("video")
-                                                    .select("video").attr("src")
+                                                val videoUrl =
+                                                    iframe.body().getElementById("video")!!
+                                                        .select("video").attr("src")
                                                 cancellableContinuation.resume(videoUrl)
                                             }
 

@@ -27,6 +27,8 @@
 
 ----
 
+## [>>自定义数据源<<](doc/customdatasource/README.md)
+
 ## [>>必看安全说明<<](#安全说明)
 
 ## [>>关于http网站或数据源的安全问题<<](doc/about_http_security.md)

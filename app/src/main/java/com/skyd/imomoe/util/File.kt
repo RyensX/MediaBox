@@ -12,3 +12,5 @@ val File.uri: Uri
     } else {
         Uri.fromFile(this)
     }
+
+fun String.toFile() = File(this)

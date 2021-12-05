@@ -1,5 +1,6 @@
 package com.skyd.imomoe.model.impls.custom
 
+import com.skyd.imomoe.BuildConfig
 import com.skyd.imomoe.model.interfaces.IConst
 
 class CustomConst : IConst {
@@ -13,11 +14,11 @@ class CustomConst : IConst {
         fun ANIME_LINK(): String = "/link/"
     }
 
-    override fun MAIN_URL(): String = "https://www.yhdmp.net"
+    override fun MAIN_URL(): String = BuildConfig.CUSTOM_DATA_MAIN_URL
 
-    override fun versionName(): String = "1.0.1"
+    override fun versionName(): String = "1.0.2"
 
-    override fun versionCode(): Int = 2
+    override fun versionCode(): Int = 3
 
     override fun about(): String {
         return "数据来源：${MAIN_URL()}"

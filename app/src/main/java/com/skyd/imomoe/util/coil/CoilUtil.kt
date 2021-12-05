@@ -13,6 +13,7 @@ import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Api.Companion.MAIN_URL
 import com.skyd.imomoe.config.Const
+import com.skyd.imomoe.net.DoH
 import com.skyd.imomoe.util.Util.showToastOnIOThread
 import com.skyd.imomoe.util.debug
 import okhttp3.OkHttpClient
@@ -27,6 +28,7 @@ object CoilUtil {
             .okHttpClient {
                 OkHttpClient.Builder()
                     .cache(CoilUtils.createDefaultCache(App.context))
+                    .addInterceptor(DoH.doHInterceptor)
                     .build()
             }
             .apply { debug { logger(DebugLogger()) } }

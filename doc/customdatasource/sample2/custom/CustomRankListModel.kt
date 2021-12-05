@@ -21,7 +21,7 @@ class CustomRankListModel : IRankListModel {
         return Pair(rankList, pageNumberBean)
     }
 
-    private fun getAllRankData(partUrl: String) {
+    private suspend fun getAllRankData(partUrl: String) {
         val const = CustomConst()
         val document = JsoupUtil.getDocument(Api.MAIN_URL + partUrl)
         val areaChildren: Elements = document.select("[class=area]")[0].children()
@@ -50,7 +50,7 @@ class CustomRankListModel : IRankListModel {
         }
     }
 
-    private fun getWeekRankData() {
+    private suspend fun getWeekRankData() {
         bgTimes = 0
         val url = Api.MAIN_URL
         val document = JsoupUtil.getDocument(url)

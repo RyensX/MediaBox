@@ -47,11 +47,11 @@ import kotlin.math.abs
 open class AnimeVideoPlayer : StandardGSYVideoPlayer {
     companion object {
         val mScaleStrings = listOf(
-            Pair("默认比例", GSYVideoType.SCREEN_TYPE_DEFAULT),
-            Pair("16:9", GSYVideoType.SCREEN_TYPE_16_9),
-            Pair("4:3", GSYVideoType.SCREEN_TYPE_4_3),
-            Pair("全屏", GSYVideoType.SCREEN_TYPE_FULL),
-            Pair("拉伸全屏", GSYVideoType.SCREEN_MATCH_FULL)
+            "默认比例" to GSYVideoType.SCREEN_TYPE_DEFAULT,
+            "16:9" to GSYVideoType.SCREEN_TYPE_16_9,
+            "4:3" to GSYVideoType.SCREEN_TYPE_4_3,
+            "全屏" to GSYVideoType.SCREEN_TYPE_FULL,
+            "拉伸全屏" to GSYVideoType.SCREEN_MATCH_FULL
         )
 
         const val NO_REVERSE = 0
@@ -157,6 +157,9 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
 
     // 夜间屏幕SeekBar值
     private var mNightScreenSeekBarProgress: Int = 0
+
+    // 全屏手动滑动下拉状态栏的起始偏移位置
+    protected open var mStatusBarOffset: Int = 50.dp
 
     constructor(context: Context) : super(context)
 
@@ -758,6 +761,15 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
                 tvTouchDownHighSpeed?.visible()
             }
         }
+    }
+
+    override fun touchSurfaceMoveFullLogic(absDeltaX: Float, absDeltaY: Float) {
+        // 全屏下拉任务栏
+        if (absDeltaY > mThreshold && mDownY <= mStatusBarOffset) {
+            cancelProgressTimer()
+            return
+        }
+        super.touchSurfaceMoveFullLogic(absDeltaX, absDeltaY)
     }
 
     override fun onTouch(v: View?, event: MotionEvent): Boolean {

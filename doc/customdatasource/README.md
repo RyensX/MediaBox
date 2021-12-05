@@ -1,6 +1,6 @@
 # 自定义数据源💡
 
-自带的代码爬取**数据不正确？**想爬取**更多内容？**想用已有的**API接口**的数据？想**自定义**显示**数据**？
+想显示**更多内容？**想用已有的**API接口**的数据？想**自定义**显示**数据**？
 
 使用自定义数据源功能即可满足您。
 
@@ -18,7 +18,7 @@
 
 ### 前提
 
-使用他人编写的Jar包(直接跳到步骤7) 或 自己编写Jar包(熟悉**Kotlin**，最好能够了解Android的基础知识)
+使用他人编写的Jar包(直接跳到步骤6) 或 自己编写Jar包(熟悉**Kotlin**，最好能够了解Android的基础知识)
 
 ### 步骤
 
@@ -65,17 +65,13 @@
 
 通过普通的jar文件生成含dex的jar文件，参考指令：dx --dex --output=G:\CustomDataSource.jar E:\Android\Imomoe\app\build\libs\CustomDataSource.jar
 
-#### 6.含dex的jar的名称
-
-更改含dex的jar文件名为**CustomDataSource.jar**
-
-#### 7.放入手机指定文件夹
+#### 6.放入手机指定文件夹
 
 将**CustomDataSource.jar**放入/storage/emulated/0/Android/data/com.skyd.imomoe/files/DataSourceJar文件夹。
 
 即，jar文件位置：/storage/emulated/0/Android/data/com.skyd.imomoe/files/DataSourceJar/CustomDataSource.jar
 
-#### 8.打开设置界面的自定义数据源开关
+#### 7.在设置界面选择自定义数据源Jar包
 
 重启APP即可生效
 
@@ -103,11 +99,9 @@ kotlinx.**
 
 ## 例子
 
-数据源：https://www.yhdmp.net
+详细代码和**Jar包**见下方链接内容。注：此Jar包可直接放入手机相应文件夹（步骤7）供APP使用。**请自行在此仓库检查Jar包更新**。
 
-详细代码和Jar包见下方链接内容。注：此Jar包可直接放入手机相应文件夹（步骤7）供APP使用。**请自行在此仓库检查Jar包更新**。
-
-[自定义数据源示例代码和Jar包](sample/custom)
+**[示例1](sample1/custom)  [示例2](sample1/custom)**
 
 ## 备注⚠
 

@@ -16,6 +16,9 @@ android.defaultConfig {
     secret.shieldTextList.forEach({ k, v ->
         buildConfigField("String[]", k, v)
     })
+    secret.dataSource.forEach({ k, v ->
+        buildConfigField("String", k, "\"${v}\"")
+    })
 }
 
 android {
@@ -147,6 +150,7 @@ dependencies {
     implementation deps.kotlinx.kotlinx_coroutines_android
     implementation deps.material_dialogs.core
     implementation deps.material_dialogs.input
+    implementation deps.material_dialogs.files
     implementation deps.room.room_runtime
     implementation deps.room.room_ktx
     kapt deps.room.room_compiler

@@ -10,6 +10,7 @@ interface Const {
             const val GITHUB_URL = "https://github.com/SkyD666/Imomoe"
             const val GITHUB_NEW_ISSUE_URL = "https://github.com/SkyD666/Imomoe/issues/new"
             const val USER_NOTICE_VERSION = 1
+            const val DNS_OVER_HTTPS = "https://1.0.0.1/dns-query"
         }
     }
 

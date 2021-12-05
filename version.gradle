@@ -1,5 +1,5 @@
-ext.version_code = 17
-ext.version_name = "Panda(1.2.4)"
+ext.version_code = 18
+ext.version_name = "1.2.5_Akarin"
 
 def build_versions = [:]
 build_versions.compile_sdk = 31
@@ -70,6 +70,7 @@ deps.filedownloader = filedownloader
 def material_dialogs = [:]
 material_dialogs.core = "com.afollestad.material-dialogs:core:3.3.0"
 material_dialogs.input = "com.afollestad.material-dialogs:input:3.3.0"
+material_dialogs.files = "com.afollestad.material-dialogs:files:3.3.0"
 deps.material_dialogs = material_dialogs
 
 // cling 2.1.2版本无法搜索到设备，不要升级
@@ -102,7 +103,7 @@ def umsdk = [:]
 umsdk.common = "com.umeng.umsdk:common:9.4.2"
 umsdk.asms = "com.umeng.umsdk:asms:1.4.1"   // asms包依赖
 umsdk.push = "com.umeng.umsdk:push:6.4.0"
-umsdk.apm = "com.umeng.umsdk:apm:1.4.1"     // U-APM产品包依赖
+umsdk.apm = "com.umeng.umsdk:apm:1.5.2"     // U-APM产品包依赖
 deps.umsdk = umsdk
 
 def kuaishou = [:]

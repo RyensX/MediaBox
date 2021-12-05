@@ -28,7 +28,7 @@ object CustomParseHtmlUtil {
                     "a" -> {
                         url = liChildren[j].attr("href")
                         cover = liChildren[j].select("img").attr("src")
-                        title = liChildren[j].select("p").first().ownText()
+                        title = liChildren[j].select("p").first()!!.ownText()
                         describe = liChildren[j].select("p").select("span").text()
                     }
                     "em" -> {

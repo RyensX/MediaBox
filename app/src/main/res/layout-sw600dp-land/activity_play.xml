@@ -166,10 +166,10 @@
                     android:layout_height="0px"
                     android:paddingStart="0px"
                     android:paddingEnd="16dp"
-                    android:src="@drawable/ic_star_border_main_color_2_24_skin"
                     app:layout_constraintBottom_toBottomOf="@id/view_play_activity_line_1"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@drawable/ic_star_border_main_color_2_24_skin" />
 
                 <View
                     android:id="@+id/view_play_activity_line_1"

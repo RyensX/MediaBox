@@ -4,10 +4,11 @@ import com.skyd.imomoe.bean.*
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.model.util.JsoupUtil
 import com.skyd.imomoe.model.interfaces.IEverydayAnimeWidgetModel
+import com.skyd.imomoe.model.impls.custom.ParseHtmlUtil.parseTlist
 import org.jsoup.select.Elements
 
 class CustomEverydayAnimeWidgetModel : IEverydayAnimeWidgetModel {
-    override fun getEverydayAnimeData(): ArrayList<List<AnimeCoverBean>> {
+    override suspend fun getEverydayAnimeData(): ArrayList<List<AnimeCoverBean>> {
         val list: ArrayList<List<AnimeCoverBean>> = ArrayList()
         try {
             val document = JsoupUtil.getDocument(Api.MAIN_URL)
@@ -24,7 +25,7 @@ class CustomEverydayAnimeWidgetModel : IEverydayAnimeWidgetModel {
                                         when (bgChildren[k].className()) {
                                             "tlist" -> {
                                                 list.addAll(
-                                                    CustomParseHtmlUtil.parseTlist(bgChildren[k])
+                                                    parseTlist(bgChildren[k])
                                                 )
                                             }
                                         }

@@ -1,43 +1,37 @@
 package com.skyd.imomoe.model.impls.custom
 
-import com.skyd.imomoe.bean.TabBean
+import com.skyd.imomoe.bean.AnimeCoverBean
+import com.skyd.imomoe.bean.PageNumberBean
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.model.util.JsoupUtil
-import com.skyd.imomoe.model.interfaces.IRankModel
+import com.skyd.imomoe.model.interfaces.IRankListModel
 import org.jsoup.select.Elements
 
-class CustomRankModel : IRankModel {
+class CustomRankListModel : IRankListModel {
     private var bgTimes = 0
-    private var tabList: ArrayList<TabBean> = ArrayList()
+    var rankList: MutableList<AnimeCoverBean> = ArrayList()
 
-    override suspend fun getRankTabData(): java.util.ArrayList<TabBean> {
-        tabList.clear()
-        getWeekRankData()
-        getAllRankData()
-        return tabList
+    override suspend fun getRankListData(partUrl: String): Pair<MutableList<AnimeCoverBean>, PageNumberBean?> {
+        rankList.clear()
+        if (partUrl == "/" || partUrl == "") getWeekRankData()
+        else getAllRankData(partUrl)
+        return Pair(rankList, null)
     }
 
-    private fun getAllRankData() {
+    private suspend fun getAllRankData(partUrl: String) {
         val const = CustomConst()
         val document = JsoupUtil.getDocument(Api.MAIN_URL + const.actionUrl.ANIME_RANK())
         val areaChildren: Elements = document.select("[class=area]")[0].children()
         for (i in areaChildren.indices) {
             when (areaChildren[i].className()) {
-                "gohome" -> {
-                    tabList.add(
-                        tabList.size, TabBean(
-                            "",
-                            const.actionUrl.ANIME_RANK(),
-                            "",
-                            areaChildren[i].select("h1").text()
-                        )
-                    )
+                "topli" -> {
+                    rankList.addAll(ParseHtmlUtil.parseTopli(areaChildren[i]))
                 }
             }
         }
     }
 
-    private fun getWeekRankData() {
+    private suspend fun getWeekRankData() {
         bgTimes = 0
         val url = Api.MAIN_URL
         val document = JsoupUtil.getDocument(url)
@@ -50,17 +44,15 @@ class CustomRankModel : IRankModel {
                         when (sideRChildren[j].className()) {
                             "bg" -> {
                                 if (bgTimes++ == 0) continue
+
                                 val bgChildren = sideRChildren[j].children()
                                 for (k in bgChildren.indices) {
                                     when (bgChildren[k].className()) {
-                                        "dtit" -> {
-                                            tabList.add(
-                                                0,
-                                                TabBean(
-                                                    "",
-                                                    "/",
-                                                    "",
-                                                    CustomParseHtmlUtil.parseDtit(bgChildren[k])
+                                        "pics" -> {
+                                            rankList.addAll(
+                                                ParseHtmlUtil.parsePics(
+                                                    bgChildren[k],
+                                                    url
                                                 )
                                             )
                                         }

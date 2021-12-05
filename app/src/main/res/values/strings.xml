@@ -145,11 +145,12 @@
     <string name="send_danmaku_failed">发送弹幕失败，%s</string>
     <string name="please_input_danmaku_text">请输入弹幕内容！</string>
     <string name="danmaku_exist_shield_content">存在被屏蔽文字，发送失败！</string>
-    <string name="custom_data_source">自定义数据源(beta)</string>
-    <string name="custom_data_source_describe">高级功能，具体使用方法请访问Github仓库</string>
+    <string name="custom_data_source">自定义数据源：%s</string>
+    <string name="custom_data_source_describe">具体使用方法请访问Github仓库</string>
     <string name="using_custom_data_source">注意，自定义数据源功能已启用，请确保Jar包无恶意代码！</string>
     <string name="restart">重启</string>
     <string name="custom_data_source_tip">请务必确保Jar包无恶意代码\n需要重启App，是否继续？</string>
+    <string name="default_data_source">默认数据源</string>
     <string name="request_restart_app">需要重启App，是否继续？</string>
     <string name="skin_center">皮肤中心</string>
     <string name="data_source_jar_version_name">版本名：%s</string>
@@ -173,4 +174,6 @@
     <string name="cannot_rewind_over_10s">后退不能超过10秒！</string>
     <string name="cannot_forward_over_10s">前进不能超过10秒！</string>
     <string name="player_night_screen">夜间屏幕</string>
+    <string name="dns_over_https">DNS over HTTPS</string>
+    <string name="doh_describe">DoH，更安全的网络访问</string>
 </resources>

@@ -5,7 +5,7 @@ import com.skyd.imomoe.BuildConfig
 /**
  * 只有debug包才会执行表达式
  */
-fun debug(lambda: () -> Unit) {
+inline fun debug(lambda: () -> Unit) {
     if (BuildConfig.DEBUG) {
         lambda.invoke()
     }
@@ -14,7 +14,7 @@ fun debug(lambda: () -> Unit) {
 /**
  * 只有release包才会执行表达式
  */
-fun release(lambda: () -> Unit) {
+inline fun release(lambda: () -> Unit) {
     if (!BuildConfig.DEBUG) {
         lambda.invoke()
     }

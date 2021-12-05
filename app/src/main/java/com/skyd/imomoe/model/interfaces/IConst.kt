@@ -4,6 +4,10 @@ package com.skyd.imomoe.model.interfaces
  * 获取MAIN_URL、页面跳转信息、自定义数据jar包的关于信息等
  */
 interface IConst : IBase {
+    companion object {
+        const val implName = "Const"
+    }
+
     /**
      * @return MAIN_URL
      */
@@ -55,9 +59,5 @@ interface IConst : IBase {
          * @return 排行榜界面跳转URL
          */
         fun ANIME_RANK(): String
-    }
-
-    companion object {
-        const val implName = "Const"
     }
 }

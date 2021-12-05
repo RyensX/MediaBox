@@ -7,6 +7,7 @@ import com.skyd.imomoe.BuildConfig
 import com.skyd.imomoe.model.interfaces.IConst
 import com.skyd.imomoe.model.interfaces.IRouteProcessor
 import com.skyd.imomoe.model.interfaces.IUtil
+import com.skyd.imomoe.util.Util.showToast
 import com.skyd.imomoe.util.editor
 import com.skyd.imomoe.util.sharedPreferences
 import dalvik.system.DexClassLoader
@@ -14,22 +15,38 @@ import java.io.File
 
 
 object DataSourceManager {
-    var useCustomDataSource: Boolean
+//    var useCustomDataSource: Boolean
+//        get() {
+//            return App.context.sharedPreferences().getBoolean("useCustomDataSource", false)
+//        }
+//        set(value) {
+//            App.context.sharedPreferences().editor { putBoolean("useCustomDataSource", value) }
+//        }
+
+    const val DEFAULT_DATA_SOURCE = ""
+
+    var dataSourceName: String =
+        App.context.sharedPreferences().getString("dataSourceName", DEFAULT_DATA_SOURCE)
+            ?: DEFAULT_DATA_SOURCE
         get() {
-            return App.context.sharedPreferences().getBoolean("customDataSource", false)
+            return if (field.isBlank() && App.context.sharedPreferences()
+                    .getBoolean("customDataSource", false)
+            ) "CustomDataSource.jar" else field
         }
         set(value) {
-            App.context.sharedPreferences().editor { putBoolean("customDataSource", value) }
+            field = value
+            App.context.sharedPreferences().editor { putString("dataSourceName", value) }
         }
 
     // 第一个是传入的接口，第二个是实现类
     private val cache: LruCache<Class<*>, Class<*>> = LruCache(10)
     private val singletonCache: LruCache<Class<*>, Any> = LruCache(5)
 
-    fun getJarPath(): String {
-//        return "${Environment.getExternalStorageDirectory()}/Download/DataSourceJar/CustomDataSource.jar"
-        return App.context.getExternalFilesDir(null)
-            .toString() + "/DataSourceJar/CustomDataSource.jar"
+    fun getJarPath(): String =
+        "${getJarDirectory()}/${dataSourceName}"
+
+    fun getJarDirectory(): String {
+        return "${App.context.getExternalFilesDir(null).toString()}/DataSourceJar"
     }
 
     fun <T> getBinaryName(clazz: Class<T>): String {
@@ -77,7 +94,7 @@ object DataSourceManager {
     @Suppress("UNCHECKED_CAST")
     fun <T> create(clazz: Class<T>): T? {
         // 如果不使用自定义数据，直接返回null
-        if (!useCustomDataSource) return null
+        if (dataSourceName == DEFAULT_DATA_SOURCE) return null
         cache[clazz]?.let {
             return it.newInstance() as T
         }
