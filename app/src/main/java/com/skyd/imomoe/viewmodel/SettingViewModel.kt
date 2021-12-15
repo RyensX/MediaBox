@@ -7,10 +7,9 @@ import coil.util.CoilUtils
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.database.getAppDataBase
-import com.skyd.imomoe.util.Util.directorySize
-import com.skyd.imomoe.util.Util.getFormatSize
-import com.skyd.imomoe.util.Util.showToastOnIOThread
+import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.coil.CoilUtil
+import com.skyd.imomoe.util.formatSize
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -29,7 +28,7 @@ class SettingViewModel : ViewModel() {
             } catch (e: Exception) {
                 mldDeleteAllHistory.postValue(false)
                 e.printStackTrace()
-                (App.context.getString(R.string.delete_failed) + "\n" + e.message).showToastOnIOThread()
+                (App.context.getString(R.string.delete_failed) + "\n" + e.message).showToast()
             }
         }
     }
@@ -39,10 +38,7 @@ class SettingViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             mldCacheSize.postValue(
                 try {
-                    getFormatSize(
-                        CoilUtils.createDefaultCache(App.context).directory.directorySize()
-                            .toDouble()
-                    )
+                    CoilUtils.createDefaultCache(App.context).directory.formatSize()
                 } catch (e: Exception) {
                     e.printStackTrace()
                     "获取缓存大小失败"
@@ -61,7 +57,7 @@ class SettingViewModel : ViewModel() {
             } catch (e: Exception) {
                 mldClearAllCache.postValue(false)
                 e.printStackTrace()
-                (App.context.getString(R.string.delete_failed) + "\n" + e.message).showToastOnIOThread()
+                (App.context.getString(R.string.delete_failed) + "\n" + e.message).showToast()
             }
         }
     }

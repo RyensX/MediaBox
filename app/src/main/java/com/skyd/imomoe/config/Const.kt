@@ -2,14 +2,14 @@ package com.skyd.imomoe.config
 
 import android.os.Environment
 import com.skyd.imomoe.App
-import java.io.File
+import com.skyd.imomoe.R
 
 interface Const {
     interface Common {
         companion object {
             const val GITHUB_URL = "https://github.com/SkyD666/Imomoe"
             const val GITHUB_NEW_ISSUE_URL = "https://github.com/SkyD666/Imomoe/issues/new"
-            const val USER_NOTICE_VERSION = 1
+            const val USER_NOTICE_VERSION = 2
             const val DNS_OVER_HTTPS = "https://1.0.0.1/dns-query"
         }
     }
@@ -41,31 +41,32 @@ interface Const {
     interface ViewHolderTypeInt {
         companion object {
             const val UNKNOWN = -1              //未知类型，使用EmptyViewHolder容错处理。
-            const val HEADER_1 = 0
-            const val ANIME_COVER_1 = 1
-            const val ANIME_COVER_2 = 2
-            const val ANIME_COVER_3 = 3
-            const val ANIME_COVER_4 = 4
-            const val ANIME_COVER_5 = 5
-            const val ANIME_COVER_6 = 6
-            const val ANIME_COVER_7 = 7
-            const val ANIME_COVER_8 = 8
-            const val ANIME_COVER_9 = 9
-            const val GRID_RECYCLER_VIEW_1 = 20
-            const val BANNER_1 = 21
-            const val LICENSE_HEADER_1 = 22
-            const val LICENSE_1 = 23
-            const val SEARCH_HISTORY_HEADER_1 = 24
-            const val SEARCH_HISTORY_1 = 25
-            const val ANIME_EPISODE_FLOW_LAYOUT_1 = 26
-            const val ANIME_EPISODE_FLOW_LAYOUT_2 = 27
-            const val ANIME_DESCRIBE_1 = 28
-            const val ANIME_INFO_1 = 29
-            const val HORIZONTAL_RECYCLER_VIEW_1 = 30
-            const val ANIME_EPISODE_2 = 31
-            const val UPNP_DEVICE_1 = 32
-            const val MORE_1 = 33
-            const val SKIN_COVER_1 = 34
+            const val HEADER_1 = R.layout.item_header_1
+            const val ANIME_COVER_1 = R.layout.item_anime_cover_1
+            const val ANIME_COVER_2 = R.layout.item_anime_cover_2
+            const val ANIME_COVER_3 = R.layout.item_anime_cover_3
+            const val ANIME_COVER_4 = R.layout.item_anime_cover_4
+            const val ANIME_COVER_5 = R.layout.item_anime_cover_5
+            const val ANIME_COVER_6 = R.layout.item_anime_cover_6
+            const val ANIME_COVER_7 = R.layout.item_anime_cover_7
+            const val ANIME_COVER_8 = R.layout.item_anime_cover_8
+            const val ANIME_COVER_9 = R.layout.item_anime_cover_9
+            const val GRID_RECYCLER_VIEW_1 = R.layout.item_grid_recycler_view_1
+            const val BANNER_1 = R.layout.item_banner_1
+            const val LICENSE_HEADER_1 = R.layout.item_license_header_1
+            const val LICENSE_1 = R.layout.item_license_1
+            const val SEARCH_HISTORY_HEADER_1 = R.layout.item_search_history_header_1
+            const val SEARCH_HISTORY_1 = R.layout.item_search_history_1
+            const val ANIME_EPISODE_FLOW_LAYOUT_1 = R.layout.item_anime_episode_flow_layout_1
+            const val ANIME_EPISODE_FLOW_LAYOUT_2 = R.layout.item_anime_episode_flow_layout_2
+            const val ANIME_DESCRIBE_1 = R.layout.item_anime_describe_1
+            const val ANIME_INFO_1 = R.layout.item_anime_info_1
+            const val HORIZONTAL_RECYCLER_VIEW_1 = R.layout.item_horizontal_recycler_view_1
+            const val ANIME_EPISODE_2 = R.layout.item_anime_episode_2
+            const val UPNP_DEVICE_1 = R.layout.item_dlna_device_1
+            const val MORE_1 = R.layout.item_more_1
+            const val SKIN_COVER_1 = R.layout.item_skin_cover_1
+            const val DATA_SOURCE_1 = R.layout.item_data_source_1
         }
     }
 
@@ -98,6 +99,7 @@ interface Const {
             const val UPNP_DEVICE_1 = "upnpDevice1"
             const val MORE_1 = "More1"
             const val SKIN_COVER_1 = "skinCover1"
+            const val DATA_SOURCE_1 = "dataSource1"
         }
     }
 
@@ -111,13 +113,6 @@ interface Const {
                     else Environment.getExternalStorageDirectory()
                         .toString() + "/Imomoe/DownloadAnime/"
                 }
-        }
-    }
-
-    interface AnimeDanmu {
-        companion object {
-            val animeDanmuFilePath: String =
-                App.context.getExternalFilesDir(null).toString() + "/AnimeDanmu/danmu.json"
         }
     }
 

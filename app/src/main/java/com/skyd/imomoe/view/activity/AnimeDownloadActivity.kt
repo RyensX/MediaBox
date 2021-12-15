@@ -11,11 +11,8 @@ import com.hjq.permissions.OnPermissionCallback
 import com.hjq.permissions.Permission
 import com.hjq.permissions.XXPermissions
 import com.skyd.imomoe.R
-import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.databinding.ActivityAnimeDownloadBinding
-import com.skyd.imomoe.util.Util
-import com.skyd.imomoe.util.Util.getResDrawable
-import com.skyd.imomoe.util.Util.showToast
+import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.gone
 import com.skyd.imomoe.util.visible
 import com.skyd.imomoe.view.adapter.AnimeDownloadAdapter
@@ -42,11 +39,9 @@ class AnimeDownloadActivity : BaseActivity<ActivityAnimeDownloadBinding>() {
         adapter = AnimeDownloadAdapter(this, viewModel.animeCoverList)
 
         mBinding.run {
-            llAnimeDownloadActivityToolbar.tvToolbar1Title.text = actionBarTitle
-            llAnimeDownloadActivityToolbar.ivToolbar1Back.setOnClickListener { finish() }
-            llAnimeDownloadActivityToolbar.ivToolbar1Button1.visible()
-            llAnimeDownloadActivityToolbar.ivToolbar1Button1.setImageDrawable(getResDrawable(R.drawable.ic_info_white_24))
-            llAnimeDownloadActivityToolbar.ivToolbar1Button1.setOnClickListener {
+            atbAnimeDownloadActivityToolbar.titleText = actionBarTitle
+            atbAnimeDownloadActivityToolbar.setBackButtonClickListener { finish() }
+            atbAnimeDownloadActivityToolbar.setButtonClickListener(0) {
                 MaterialDialog(this@AnimeDownloadActivity).show {
                     title(res = R.string.attention)
                     message(

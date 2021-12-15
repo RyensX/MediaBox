@@ -7,15 +7,19 @@
     android:background="@color/white_skin"
     tools:context=".view.activity.RankActivity">
 
-    <include
-        android:id="@+id/ll_rank_activity_toolbar"
-        layout="@layout/layout_toolbar_1" />
+    <com.skyd.imomoe.view.component.AnimeToolbar
+        android:id="@+id/atb_rank_activity_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:title="@string/rank_list"
+        app:titleColor="@color/foreground_white_skin"
+        app:toolBarBackground="@color/main_color_2_skin" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tl_rank_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ll_rank_activity_toolbar"
+        android:layout_below="@+id/atb_rank_activity_toolbar"
         android:background="@color/white_skin"
         app:layout_constraintEnd_toEndOf="parent"
         app:tabGravity="center"

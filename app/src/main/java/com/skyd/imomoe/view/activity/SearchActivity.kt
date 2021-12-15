@@ -16,7 +16,7 @@ import com.skyd.imomoe.bean.SearchHistoryBean
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.databinding.ActivitySearchBinding
 import com.skyd.imomoe.util.Util.showKeyboard
-import com.skyd.imomoe.util.Util.showToast
+import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.gone
 import com.skyd.imomoe.util.smartNotifyDataSetChanged
 import com.skyd.imomoe.util.visible

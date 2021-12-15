@@ -13,7 +13,7 @@ import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.EverydayAnimeModel
 import com.skyd.imomoe.model.interfaces.IEverydayAnimeModel
 import com.skyd.imomoe.util.Util.getRealDayOfWeek
-import com.skyd.imomoe.util.Util.showToastOnIOThread
+import com.skyd.imomoe.util.showToast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
@@ -57,7 +57,7 @@ class EverydayAnimeViewModel : ViewModel() {
                 mldEverydayAnimeList.postValue(null)
                 e.printStackTrace()
                 "${App.context.getString(R.string.get_data_failed)}\n${e.message}"
-                    .showToastOnIOThread(Toast.LENGTH_LONG)
+                    .showToast(Toast.LENGTH_LONG)
             }
         }
     }

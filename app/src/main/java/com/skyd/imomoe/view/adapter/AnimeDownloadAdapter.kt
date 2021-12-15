@@ -8,7 +8,7 @@ import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.util.AnimeCover7ViewHolder
 import com.skyd.imomoe.util.Util.process
-import com.skyd.imomoe.util.Util.showToast
+import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.gone
 import com.skyd.imomoe.util.invisible
 import com.skyd.imomoe.util.visible

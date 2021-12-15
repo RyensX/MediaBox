@@ -17,7 +17,7 @@ import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.util.*
 import com.skyd.imomoe.util.coil.CoilUtil.loadImage
 import com.skyd.imomoe.util.Util.process
-import com.skyd.imomoe.util.Util.showToast
+import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.view.fragment.AnimeShowFragment
 import com.skyd.imomoe.view.component.bannerview.adapter.MyCycleBannerAdapter
 import com.skyd.imomoe.view.component.bannerview.indicator.DotIndicator
@@ -136,7 +136,7 @@ class AnimeShowAdapter(
             }
             holder is AnimeCover1ViewHolder && item is AnimeCoverBean -> {
                 holder.ivAnimeCover1Cover.setTag(R.id.image_view_tag, item.cover?.url)
-                fragment.activity?.let { activity ->
+                fragment.activity?.let {
                     if (holder.ivAnimeCover1Cover.getTag(R.id.image_view_tag) == item.cover?.url) {
                         holder.ivAnimeCover1Cover.loadImage(
                             item.cover?.url ?: "",

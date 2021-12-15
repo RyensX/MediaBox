@@ -80,6 +80,9 @@ public static final int *;
     <init>(java.lang.Throwable);
 }
 
+#-------------------------okhttp
+-keep class okhttp3.internal.publicsuffix.PublicSuffixDatabase
+
 #-------------------------gsyvideoplayer播放器
 -keep class com.shuyu.gsyvideoplayer.video.** { *; }
 -dontwarn com.shuyu.gsyvideoplayer.video.**

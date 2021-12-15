@@ -8,7 +8,7 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.model.interfaces.IRouteProcessor
 import com.skyd.imomoe.util.Util.getSubString
 import com.skyd.imomoe.util.Util.isYearMonth
-import com.skyd.imomoe.util.Util.showToast
+import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.view.activity.*
 import java.net.URLDecoder
 
@@ -41,7 +41,7 @@ class CustomRouteProcessor : IRouteProcessor {
                             .putExtra("detailPartUrl", detailPartUrl)
                     )
                 } else {
-                    App.context.getString(R.string.error_play_episode).showToast()
+                    "播放集数解析错误！".showToast()
                 }
             }
             else -> solved = false
@@ -63,8 +63,7 @@ class CustomRouteProcessor : IRouteProcessor {
                             .putExtra("classifyTabTitle", "")
                             .putExtra("classifyTitle", paramList[2])
                     )
-                } else App.context.resources.getString(R.string.action_url_format_error)
-                    .showToast()
+                } else "跳转协议格式错误".showToast()
             }
             decodeUrl.replace("/", "").isYearMonth() -> {     //如201907月新番列表
                 activity.startActivity(
@@ -108,7 +107,7 @@ class CustomRouteProcessor : IRouteProcessor {
                             .putExtra("detailPartUrl", detailPartUrl)
                     )
                 } else {
-                    App.context.getString(R.string.error_play_episode).showToast()
+                    "播放集数解析错误！".showToast()
                 }
             }
             else -> solved = false

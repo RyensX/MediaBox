@@ -1,7 +1,6 @@
 package com.skyd.imomoe.view.activity
 
 import android.content.res.Configuration
-import android.graphics.Color
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -13,15 +12,13 @@ import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.databinding.ActivityAnimeDetailBinding
-import com.skyd.imomoe.util.Util.getResDrawable
 import com.skyd.imomoe.util.Util.getSkinResourceId
 import com.skyd.imomoe.util.Util.getStatusBarHeight
 import com.skyd.imomoe.util.Util.setTransparentStatusBar
-import com.skyd.imomoe.util.Util.showToast
+import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.coil.DarkBlurTransformation
 import com.skyd.imomoe.util.coil.CoilUtil.loadImage
 import com.skyd.imomoe.util.smartNotifyDataSetChanged
-import com.skyd.imomoe.util.visible
 import com.skyd.imomoe.view.adapter.AnimeDetailAdapter
 import com.skyd.imomoe.view.adapter.decoration.AnimeShowItemDecoration
 import com.skyd.imomoe.view.adapter.spansize.AnimeDetailSpanSize
@@ -56,37 +53,33 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
 
         partUrl = intent.getStringExtra("partUrl") ?: ""
 
-        mBinding.llAnimeDetailActivityToolbar.run {
-            layoutToolbar1.setBackgroundColor(Color.TRANSPARENT)
-            tvToolbar1Title.isFocused = true
-            ivToolbar1Back.setOnClickListener { finish() }
+        mBinding.atbAnimeDetailActivityToolbar.run {
+            setBackButtonClickListener { finish() }
             // 分享
-            ivToolbar1Button1.setImageDrawable(getResDrawable(R.drawable.ic_share_white_24))
-            ivToolbar1Button1.visible()
-            ivToolbar1Button1.setOnClickListener {
+            setButtonClickListener(0) {
                 ShareDialogFragment().setShareContent(Api.MAIN_URL + partUrl)
                     .show(supportFragmentManager, "share_dialog")
             }
+            addButton(null)
             // 收藏
             lifecycleScope.launch(Dispatchers.IO) {
                 val favoriteAnime = getAppDataBase().favoriteAnimeDao().getFavoriteAnime(partUrl)
                 isFavorite = favoriteAnime != null
                 withContext(Dispatchers.Main) {
-                    ivToolbar1Button2.setImageResource(
-                        if (isFavorite) R.drawable.ic_star_white_24_skin else
+                    setButtonDrawable(
+                        1, if (isFavorite) R.drawable.ic_star_white_24_skin else
                             R.drawable.ic_star_border_white_24
                     )
-                    ivToolbar1Button2.visible()
                 }
             }
-            ivToolbar1Button2.isEnabled = false
-            ivToolbar1Button2.setOnClickListener {
+            setButtonEnable(1, false)
+            setButtonClickListener(1) {
                 lifecycleScope.launch(Dispatchers.IO) {
                     if (isFavorite) {
                         getAppDataBase().favoriteAnimeDao().deleteFavoriteAnime(partUrl)
                         withContext(Dispatchers.Main) {
                             isFavorite = false
-                            ivToolbar1Button2.setImageResource(R.drawable.ic_star_border_white_24)
+                            setButtonDrawable(1, R.drawable.ic_star_border_white_24)
                             getString(R.string.remove_favorite_succeed).showToast()
                         }
                     } else {
@@ -101,7 +94,7 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
                         )
                         withContext(Dispatchers.Main) {
                             isFavorite = true
-                            ivToolbar1Button2.setImageResource(R.drawable.ic_star_white_24_skin)
+                            setButtonDrawable(1, R.drawable.ic_star_white_24_skin)
                             getString(R.string.favorite_succeed).showToast()
                         }
                     }
@@ -123,7 +116,7 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
         viewModel.mldAnimeDetailList.observe(this, Observer {
             mBinding.srlAnimeDetailActivity.isRefreshing = false
             adapter.smartNotifyDataSetChanged(it.first, it.second, viewModel.animeDetailList)
-            mBinding.llAnimeDetailActivityToolbar.ivToolbar1Button2.isEnabled = true
+            mBinding.atbAnimeDetailActivityToolbar.setButtonEnable(1, true)
 
             if (viewModel.cover.url.isBlank()) return@Observer
             mBinding.ivAnimeDetailActivityBackground.loadImage(viewModel.cover.url) {
@@ -138,7 +131,7 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
                     Const.Request.USER_AGENT_ARRAY[Random.nextInt(Const.Request.USER_AGENT_ARRAY.size)]
                 )
             }
-            mBinding.llAnimeDetailActivityToolbar.tvToolbar1Title.text = viewModel.title
+            mBinding.atbAnimeDetailActivityToolbar.titleText = viewModel.title
         })
 
         mBinding.srlAnimeDetailActivity.isRefreshing = true
@@ -152,13 +145,11 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
 
     override fun onChangeSkin() {
         super.onChangeSkin()
-        mBinding.llAnimeDetailActivityToolbar.layoutToolbar1.setBackgroundColor(Color.TRANSPARENT)
         adapter.notifyDataSetChanged()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        mBinding.llAnimeDetailActivityToolbar.layoutToolbar1.setBackgroundColor(Color.TRANSPARENT)
         adapter.notifyDataSetChanged()
     }
 }

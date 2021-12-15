@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <attr name="typeface" format="integer">
+        <enum name="bPRTypeface" value="1" />
+    </attr>
+
     <declare-styleable name="TypefaceTextView">
-        <attr name="typeface" format="integer">
-            <enum name="bPRTypeface" value="1" />
-        </attr>
+        <attr name="typeface" />
+        <attr name="focused" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="BannerView">
@@ -19,5 +22,20 @@
         <attr name="rowSpacing" format="dimension" />
         <!--每列之间的间距-->
         <attr name="childSpacing" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="AnimeToolbar">
+        <attr name="title" format="string" />
+        <attr name="titleSize" format="dimension" />
+        <attr name="titleColor" format="reference|color" />
+        <attr name="buttonDrawable1" format="reference" />
+        <attr name="buttonDrawable2" format="reference" />
+        <attr name="buttonDrawable3" format="reference" />
+        <attr name="backDrawable" format="reference|color" />
+        <attr name="toolBarBackground" format="reference|color" />
+        <attr name="showBackButton" format="boolean" />
+        <attr name="backDrawableTitlePadding" format="dimension" />
+        <attr name="backTint" format="color" />
+        <attr name="typeface" />
     </declare-styleable>
 </resources>

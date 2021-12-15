@@ -155,8 +155,7 @@ class LicenseActivity : BaseActivity<ActivityLicenseBinding>() {
         )
 
         mBinding.run {
-            llLicenseActivityToolbar.tvToolbar1Title.text = getString(R.string.open_source_licenses)
-            llLicenseActivityToolbar.ivToolbar1Back.setOnClickListener { finish() }
+            atbLicenseActivity.setBackButtonClickListener { finish() }
             rvLicenseActivity.layoutManager = LinearLayoutManager(this@LicenseActivity)
             rvLicenseActivity.adapter = adapter
         }

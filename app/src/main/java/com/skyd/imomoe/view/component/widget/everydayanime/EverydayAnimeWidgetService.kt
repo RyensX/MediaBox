@@ -13,11 +13,10 @@ import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.EverydayAnimeWidgetModel
 import com.skyd.imomoe.model.interfaces.IEverydayAnimeWidgetModel
 import com.skyd.imomoe.util.Util
-import com.skyd.imomoe.util.Util.showToast
-import com.skyd.imomoe.util.Util.showToastOnIOThread
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.*
 
 class EverydayAnimeService : RemoteViewsService() {
@@ -83,20 +82,17 @@ internal class EverydayAnimeRemoteViewsFactory(
         // from the network, etc., it is ok to do it here, synchronously. The widget will remain
         // in its current state while work is being done here, so you don't need to worry about
         // locking up the widget.
-        GlobalScope.launch(Dispatchers.IO) {
-            val list = getEverydayAnimeData()
-            if (list.size != 7) return@launch
-            mWidgetItems.clear()
-            mWidgetItems.addAll(
-                list[Util.getRealDayOfWeek(
-                    Calendar.getInstance(Locale.getDefault()).get(Calendar.DAY_OF_WEEK)
-                ) - 1].toMutableList()
-            )
-        }
-
+        val list = getEverydayAnimeData()
+        if (list.size != 7) return
+        mWidgetItems.clear()
+        mWidgetItems.addAll(
+            list[Util.getRealDayOfWeek(
+                Calendar.getInstance(Locale.getDefault()).get(Calendar.DAY_OF_WEEK)
+            ) - 1].toMutableList()
+        )
     }
 
-    private suspend fun getEverydayAnimeData(): MutableList<List<AnimeCoverBean>> {
+    private fun getEverydayAnimeData(): MutableList<List<AnimeCoverBean>> {
         return model.getEverydayAnimeData()
     }
 }

@@ -32,12 +32,9 @@ class NoticeActivity : BaseActivity<ActivityNoticeBinding>() {
         }
 
         mBinding.run {
-            llNoticeActivityToolbar.run {
-                ivToolbar1Back.setOnClickListener { finish() }
-                tvToolbar1Title.apply {
-                    isFocused = true
-                    text = paramMap[TOOLBAR_TITLE] ?: "通知"
-                }
+            atbNoticeActivityToolbar.run {
+                setBackButtonClickListener { finish() }
+                titleText = paramMap[TOOLBAR_TITLE] ?: "通知"
             }
             tvNoticeActivityTitle.text = paramMap[TITLE] ?: ""
             tvNoticeActivityContent.text = Html.fromHtml(paramMap[CONTENT] ?: "")

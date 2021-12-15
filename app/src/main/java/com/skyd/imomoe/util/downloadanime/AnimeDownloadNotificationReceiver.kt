@@ -6,7 +6,7 @@ import android.content.Context
 import android.content.Intent
 import com.skyd.imomoe.App
 import com.skyd.imomoe.model.AppUpdateModel
-import com.skyd.imomoe.util.Util.showToast
+import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.downloadanime.AnimeDownloadHelper.Companion.downloadHashMap
 
 

@@ -7,7 +7,7 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.SearchHistoryBean
 import com.skyd.imomoe.util.SearchHistory1ViewHolder
 import com.skyd.imomoe.util.SearchHistoryHeader1ViewHolder
-import com.skyd.imomoe.util.Util.showToast
+import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.view.activity.SearchActivity
 
 class SearchHistoryAdapter(

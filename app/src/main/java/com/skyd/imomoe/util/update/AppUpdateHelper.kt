@@ -5,8 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import com.afollestad.materialdialogs.MaterialDialog
 import com.skyd.imomoe.model.AppUpdateModel
-import com.skyd.imomoe.util.Util.getFormatSize
 import com.skyd.imomoe.util.Util.openBrowser
+import com.skyd.imomoe.util.formatSize
 import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
@@ -42,7 +42,7 @@ class AppUpdateHelper private constructor() {
             StringBuffer().apply {
                 val size = updateBean.assets[0].size
                 if (size > 0) {
-                    append("<p>大小：${getFormatSize(size.toDouble())}<br/>")
+                    append("<p>大小：${size.toDouble().formatSize()}<br/>")
                 }
                 val updatedAt = updateBean.assets[0].updatedAt
                 if (!updatedAt.isNullOrBlank()) {

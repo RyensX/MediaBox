@@ -1,20 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white_skin"
     tools:context=".view.activity.AnimeDownloadActivity">
 
-    <include
-        android:id="@+id/ll_anime_download_activity_toolbar"
-        layout="@layout/layout_toolbar_1" />
+    <com.skyd.imomoe.view.component.AnimeToolbar
+        android:id="@+id/atb_anime_download_activity_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:buttonDrawable1="@drawable/ic_info_white_24"
+        app:titleColor="@color/foreground_white_skin"
+        app:toolBarBackground="@color/main_color_2_skin" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_anime_download_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/ll_anime_download_activity_toolbar" />
+        android:layout_below="@id/atb_anime_download_activity_toolbar" />
 
     <include
         android:id="@+id/layout_anime_download_loading"

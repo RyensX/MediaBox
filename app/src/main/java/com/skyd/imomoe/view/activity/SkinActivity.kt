@@ -1,7 +1,6 @@
 package com.skyd.imomoe.view.activity
 
 import android.content.res.Configuration
-import android.graphics.Color
 import android.os.Bundle
 import androidx.recyclerview.widget.GridLayoutManager
 import com.skyd.imomoe.R
@@ -23,8 +22,7 @@ class SkinActivity : BaseActivity<ActivitySkinBinding>() {
 
         initSkinData()
         mBinding.run {
-            llSkinActivityToolbar.ivToolbar1Back.setOnClickListener { finish() }
-            llSkinActivityToolbar.tvToolbar1Title.text = getString(R.string.skin_center)
+            atbSkinActivityToolbar.setBackButtonClickListener { finish() }
 
             rvSkinActivity.layoutManager = GridLayoutManager(this@SkinActivity, 3)
                 .apply { spanSizeLookup = SkinSpanSize(adapter) }

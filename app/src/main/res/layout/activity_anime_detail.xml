@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -23,19 +24,20 @@
         android:layout_width="match_parent"
         android:layout_height="0px" />
 
-    <include
-        android:id="@+id/ll_anime_detail_activity_toolbar"
-        layout="@layout/layout_toolbar_1"
+    <com.skyd.imomoe.view.component.AnimeToolbar
+        android:id="@+id/atb_anime_detail_activity_toolbar"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_below="@id/view_anime_detail_activity_status_bar"
-        android:background="@color/transparent_skin" />
+        app:buttonDrawable1="@drawable/ic_share_white_24"
+        app:titleColor="@color/foreground_white_skin"
+        app:toolBarBackground="@color/foreground_transparent_skin" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/srl_anime_detail_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/ll_anime_detail_activity_toolbar"
+        android:layout_below="@id/atb_anime_detail_activity_toolbar"
         android:focusable="true"
         android:focusableInTouchMode="true">
 

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:selectableItemBackground"
+    android:orientation="horizontal"
+    android:paddingStart="16dp"
+    android:paddingTop="9dp"
+    android:paddingEnd="16dp"
+    android:paddingBottom="9dp">
+
+    <ImageView
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:src="@drawable/ic_insert_drive_file_main_color_2_24_skin" />
+
+    <com.skyd.imomoe.view.component.textview.TypefaceTextView
+        android:id="@+id/tv_data_source_1_name"
+        android:layout_width="0px"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="10dp"
+        android:layout_weight="1"
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:singleLine="true"
+        android:textColor="@color/foreground_main_color_2_skin"
+        android:textSize="17sp"
+        app:typeface="bPRTypeface"
+        tools:text="CustomDataSource.jar" />
+
+    <ImageView
+        android:id="@+id/iv_data_source_1_selected"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginStart="6dp"
+        android:src="@drawable/ic_check_circle_main_color_2_24_skin" />
+
+    <com.skyd.imomoe.view.component.textview.TypefaceTextView
+        android:id="@+id/tv_data_source_1_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="7dp"
+        android:adjustViewBounds="true"
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:gravity="end"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:minWidth="45dp"
+        android:singleLine="true"
+        android:textColor="@color/main_color_skin"
+        app:typeface="bPRTypeface"
+        tools:text="300M" />
+</LinearLayout>

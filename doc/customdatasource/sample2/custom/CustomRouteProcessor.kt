@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.Intent
 import com.skyd.imomoe.model.interfaces.IRouteProcessor
 import com.skyd.imomoe.util.Util.getSubString
-import com.skyd.imomoe.util.Util.showToast
+import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.view.activity.*
 import java.net.MalformedURLException
 import java.net.URL

@@ -1,5 +1,6 @@
 package com.skyd.imomoe.util.coil
 
+import android.util.Log
 import android.widget.ImageView
 import androidx.annotation.DrawableRes
 import coil.Coil
@@ -13,8 +14,7 @@ import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Api.Companion.MAIN_URL
 import com.skyd.imomoe.config.Const
-import com.skyd.imomoe.net.DoH
-import com.skyd.imomoe.util.Util.showToastOnIOThread
+import com.skyd.imomoe.net.okhttpClient
 import com.skyd.imomoe.util.debug
 import okhttp3.OkHttpClient
 import java.net.URL
@@ -22,19 +22,18 @@ import kotlin.random.Random
 
 
 object CoilUtil {
+    private val imageLoaderBuilder = ImageLoader.Builder(App.context)
+        .crossfade(400)
+        .apply { debug { logger(DebugLogger()) } }
+
     init {
-        ImageLoader.Builder(App.context)
-            .crossfade(400)
-            .okHttpClient {
-                OkHttpClient.Builder()
-                    .cache(CoilUtils.createDefaultCache(App.context))
-                    .addInterceptor(DoH.doHInterceptor)
-                    .build()
-            }
-            .apply { debug { logger(DebugLogger()) } }
-            .build().apply {
-                Coil.setImageLoader(this)
-            }
+        setOkHttpClient(okhttpClient)
+    }
+
+    fun setOkHttpClient(okHttpClient: OkHttpClient) {
+        imageLoaderBuilder.okHttpClient(
+            okHttpClient.newBuilder().cache(CoilUtils.createDefaultCache(App.context)).build()
+        ).build().apply { Coil.setImageLoader(this) }
     }
 
     fun ImageView.loadImage(
@@ -42,7 +41,7 @@ object CoilUtil {
         builder: ImageRequest.Builder.() -> Unit = {},
     ) {
         if (url.isEmpty()) {
-            "cover image url must not be null or empty".showToastOnIOThread()
+            Log.e("loadImage", "cover image url must not be null or empty")
             return
         }
 
@@ -55,6 +54,16 @@ object CoilUtil {
         @DrawableRes placeholder: Int = 0,
         @DrawableRes error: Int = R.drawable.ic_warning_main_color_3_24_skin
     ) {
+        // 是本地drawable
+        url.toIntOrNull()?.let { drawableResId ->
+            load(drawableResId) {
+                placeholder(placeholder)
+                error(error)
+            }
+            return
+        }
+
+        // 是网络图片
         var amendReferer = referer
         if (amendReferer?.startsWith(MAIN_URL) == false)
             amendReferer = MAIN_URL//"http://www.yhdm.io/"

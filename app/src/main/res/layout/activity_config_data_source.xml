@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white_skin"
+    android:orientation="vertical"
+    tools:context=".view.activity.ConfigDataSourceActivity">
+
+    <com.skyd.imomoe.view.component.AnimeToolbar
+        android:id="@+id/atb_data_source_config_activity"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:backDrawable="@drawable/ic_arrow_back_white_24"
+        app:buttonDrawable1="@drawable/ic_refresh_white_24"
+        app:title="@string/config_custom_data_source"
+        app:titleColor="@color/foreground_white_skin"
+        app:toolBarBackground="@color/main_color_2_skin"
+        app:typeface="bPRTypeface" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_data_source_config_activity"
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:layout_weight="1" />
+
+    <com.skyd.imomoe.view.component.textview.TypefaceTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="6dp"
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:singleLine="true"
+        android:text="@string/config_data_source_tip"
+        android:textColor="@color/foreground_main_color_2_skin"
+        app:focused="true" />
+</LinearLayout>

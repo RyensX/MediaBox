@@ -7,9 +7,12 @@
     android:orientation="vertical"
     tools:context=".view.activity.NoticeActivity">
 
-    <include
-        android:id="@+id/ll_notice_activity_toolbar"
-        layout="@layout/layout_toolbar_1" />
+    <com.skyd.imomoe.view.component.AnimeToolbar
+        android:id="@+id/atb_notice_activity_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:titleColor="@color/foreground_white_skin"
+        app:toolBarBackground="@color/main_color_2_skin" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"

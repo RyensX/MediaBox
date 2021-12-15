@@ -7,13 +7,11 @@ import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.database.entity.AnimeDownloadEntity
 import com.skyd.imomoe.database.getAppDataBase
-import com.skyd.imomoe.util.Util.directorySize
-import com.skyd.imomoe.util.Util.fileSize
 import com.skyd.imomoe.util.comparator.EpisodeTitleComparator
-import com.skyd.imomoe.util.Util.getFormatSize
 import com.skyd.imomoe.util.downloadanime.AnimeDownloadHelper.Companion.deleteAnimeFromXml
 import com.skyd.imomoe.util.downloadanime.AnimeDownloadHelper.Companion.getAnimeFromXml
 import com.skyd.imomoe.util.downloadanime.AnimeDownloadHelper.Companion.save2Xml
+import com.skyd.imomoe.util.formatSize
 import com.skyd.imomoe.util.toMD5
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -50,7 +48,7 @@ class AnimeDownloadViewModel : ViewModel() {
                                     file.name,
                                     null,
                                     "",
-                                    size = getFormatSize(file.directorySize().toDouble()),
+                                    size = file.formatSize(),
                                     episodeCount = episodeCount.toString() + "P",
                                     path = if (i == 0) 0 else 1
                                 )
@@ -135,10 +133,7 @@ class AnimeDownloadViewModel : ViewModel() {
                             anime.title,
                             null,
                             "",
-                            size = getFormatSize(
-                                File(animeFilePath + directoryName + "/" + anime.fileName)
-                                    .fileSize().toDouble()
-                            ),
+                            size = File(animeFilePath + directoryName + "/" + anime.fileName).formatSize(),
                             path = path
                         )
                     )

@@ -1,7 +1,6 @@
 package com.skyd.imomoe.view.activity
 
 import android.os.Bundle
-import android.view.View
 import android.view.ViewStub
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -12,7 +11,6 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.ActivityRankBinding
-import com.skyd.imomoe.view.fragment.AnimeShowFragment
 import com.skyd.imomoe.view.fragment.RankFragment
 import com.skyd.imomoe.viewmodel.RankViewModel
 
@@ -21,7 +19,6 @@ class RankActivity : BaseActivity<ActivityRankBinding>() {
     private lateinit var adapter: VpAdapter
     private var offscreenPageLimit = 1
     private var selectedTabIndex = -1
-    private var lastRefreshTime: Long = System.currentTimeMillis()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,8 +27,7 @@ class RankActivity : BaseActivity<ActivityRankBinding>() {
 
         adapter = VpAdapter(this)
         mBinding.run {
-            llRankActivityToolbar.tvToolbar1Title.text = getString(R.string.rank_list)
-            llRankActivityToolbar.ivToolbar1Back.setOnClickListener { finish() }
+            atbRankActivityToolbar.setBackButtonClickListener { finish() }
 
             vp2RankActivity.setOffscreenPageLimit(offscreenPageLimit)
 

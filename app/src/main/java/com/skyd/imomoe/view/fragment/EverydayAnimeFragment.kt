@@ -72,7 +72,7 @@ class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), Even
         }
 
         viewModel.mldHeader.observe(viewLifecycleOwner, {
-            mBinding.tvEverydayAnimeFragmentTitle.text = it.title
+            mBinding.atbEverydayAnimeFragment.titleText = it.title
         })
 
         viewModel.mldEverydayAnimeList.observe(viewLifecycleOwner, {

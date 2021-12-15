@@ -7,7 +7,7 @@ import android.content.pm.PackageManager
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.util.Util.copy2Clipboard
-import com.skyd.imomoe.util.Util.showToast
+import com.skyd.imomoe.util.showToast
 
 object Share {
     const val SHARE_QQ = 1

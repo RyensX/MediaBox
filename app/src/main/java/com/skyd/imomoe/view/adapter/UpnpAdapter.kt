@@ -7,7 +7,7 @@ import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Const.ViewHolderTypeInt
 import com.skyd.imomoe.util.UpnpDevice1ViewHolder
-import com.skyd.imomoe.util.Util.showToast
+import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.view.activity.DlnaActivity
 import com.skyd.imomoe.view.activity.DlnaControlActivity
 import org.fourthline.cling.model.meta.Device

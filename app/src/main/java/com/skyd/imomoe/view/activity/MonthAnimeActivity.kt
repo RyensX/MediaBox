@@ -8,8 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.ActivityMonthAnimeBinding
-import com.skyd.imomoe.util.Util
-import com.skyd.imomoe.util.Util.showToast
+import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.view.adapter.SearchAdapter
 import com.skyd.imomoe.viewmodel.MonthAnimeViewModel
 
@@ -28,16 +27,13 @@ class MonthAnimeActivity : BaseActivity<ActivityMonthAnimeBinding>() {
         adapter = SearchAdapter(this, viewModel.monthAnimeList)
 
         mBinding.run {
-            llMonthAnimeActivityToolbar.tvToolbar1Title.text = getString(
-                R.string.year_month_anime,
-                partUrl
-            )
+            atbMonthAnimeActivity.titleText = getString(R.string.year_month_anime, partUrl)
 
             rvMonthAnimeActivity.layoutManager = LinearLayoutManager(this@MonthAnimeActivity)
             rvMonthAnimeActivity.setHasFixedSize(true)
             rvMonthAnimeActivity.adapter = adapter
 
-            llMonthAnimeActivityToolbar.ivToolbar1Back.setOnClickListener { finish() }
+            atbMonthAnimeActivity.setBackButtonClickListener { finish() }
             srlMonthAnimeActivity.setOnRefreshListener { //避免刷新间隔太短
                 if (System.currentTimeMillis() - lastRefreshTime > 500) {
                     lastRefreshTime = System.currentTimeMillis()

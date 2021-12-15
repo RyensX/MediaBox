@@ -7,7 +7,7 @@ import com.skyd.imomoe.BuildConfig
 import com.skyd.imomoe.model.interfaces.IConst
 import com.skyd.imomoe.model.interfaces.IRouteProcessor
 import com.skyd.imomoe.model.interfaces.IUtil
-import com.skyd.imomoe.util.Util.showToast
+import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.editor
 import com.skyd.imomoe.util.sharedPreferences
 import dalvik.system.DexClassLoader
@@ -31,7 +31,10 @@ object DataSourceManager {
         get() {
             return if (field.isBlank() && App.context.sharedPreferences()
                     .getBoolean("customDataSource", false)
-            ) "CustomDataSource.jar" else field
+            ) {
+                App.context.sharedPreferences().editor { putBoolean("customDataSource", false) }
+                "CustomDataSource.jar"
+            } else field
         }
         set(value) {
             field = value

@@ -7,7 +7,7 @@ import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.SkinBean
 import com.skyd.imomoe.util.SkinCover1ViewHolder
-import com.skyd.imomoe.util.Util.showToast
+import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.coil.CoilUtil.loadImage
 import com.skyd.imomoe.util.gone
 import com.skyd.imomoe.util.visible

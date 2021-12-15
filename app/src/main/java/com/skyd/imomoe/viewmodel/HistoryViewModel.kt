@@ -7,7 +7,7 @@ import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.HistoryBean
 import com.skyd.imomoe.database.getAppDataBase
-import com.skyd.imomoe.util.Util.showToastOnIOThread
+import com.skyd.imomoe.util.showToast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -32,7 +32,7 @@ class HistoryViewModel : ViewModel() {
                 historyList.clear()
                 mldHistoryList.postValue(false)
                 e.printStackTrace()
-                (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnIOThread()
+                (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToast()
             }
         }
     }
@@ -47,7 +47,7 @@ class HistoryViewModel : ViewModel() {
             } catch (e: Exception) {
                 mldDeleteHistory.postValue(-1)
                 e.printStackTrace()
-                (App.context.getString(R.string.delete_failed) + "\n" + e.message).showToastOnIOThread()
+                (App.context.getString(R.string.delete_failed) + "\n" + e.message).showToast()
             }
         }
     }
@@ -62,7 +62,7 @@ class HistoryViewModel : ViewModel() {
             } catch (e: Exception) {
                 mldDeleteAllHistory.postValue(0)
                 e.printStackTrace()
-                (App.context.getString(R.string.delete_failed) + "\n" + e.message).showToastOnIOThread()
+                (App.context.getString(R.string.delete_failed) + "\n" + e.message).showToast()
             }
         }
     }

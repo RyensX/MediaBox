@@ -23,8 +23,7 @@ class FavoriteActivity : BaseActivity<ActivityFavoriteBinding>() {
         adapter = FavoriteAdapter(this, viewModel.favoriteList)
 
         mBinding.run {
-            tbFavoriteActivity.ivToolbar1Back.setOnClickListener { finish() }
-            tbFavoriteActivity.tvToolbar1Title.text = getString(R.string.my_favorite)
+            atbFavoriteActivity.setBackButtonClickListener { finish() }
 
             srlFavoriteActivity.setColorSchemeColors(
                 this@FavoriteActivity.getResColor(R.color.main_color_skin)

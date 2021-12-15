@@ -18,7 +18,7 @@ import com.skyd.imomoe.bean.ClassifyDataBean
 import com.skyd.imomoe.bean.ResponseDataType
 import com.skyd.imomoe.databinding.ActivityClassifyBinding
 import com.skyd.imomoe.util.Util.getResColor
-import com.skyd.imomoe.util.Util.showToast
+import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.smartNotifyDataSetChanged
 import com.skyd.imomoe.view.adapter.BaseRvAdapter
 import com.skyd.imomoe.view.adapter.SearchAdapter
@@ -47,11 +47,7 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
         classifyTabTitle = intent.getStringExtra("classifyTabTitle") ?: ""
         classifyTitle = intent.getStringExtra("classifyTitle") ?: ""
 
-        mBinding.llClassifyActivityToolbar.run {
-            ivToolbar1Back.setOnClickListener { finish() }
-            tvToolbar1Title.text = getString(R.string.anime_classify)
-            tvToolbar1Title.isFocused = true
-        }
+        mBinding.atbClassifyActivityToolbar.setBackButtonClickListener { finish() }
 
         spinnerAdapter = ArrayAdapter(this, R.layout.item_spinner_item_1)
         classifyTabAdapter = ClassifyTabAdapter(this, classifyTabList)
@@ -159,7 +155,7 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
             viewModel.isRequesting = false
             classifyAdapter.smartNotifyDataSetChanged(it.first, it.second, viewModel.classifyList)
             if (it.first == ResponseDataType.REFRESH) {
-                mBinding.llClassifyActivityToolbar.tvToolbar1Title.text =
+                mBinding.atbClassifyActivityToolbar.titleText =
                     if (classifyTabTitle.isEmpty()) "${getString(R.string.anime_classify)}  $classifyTitle"
                     else "${getString(R.string.anime_classify)}  ${
                         if (classifyTabTitle.endsWith(":") ||

@@ -26,7 +26,7 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.danmaku.AnimeSendDanmakuBean
 import com.skyd.imomoe.util.*
 import com.skyd.imomoe.util.Util.hideKeyboard
-import com.skyd.imomoe.util.Util.showToast
+import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.html.SnifferVideo.AC
 import com.skyd.imomoe.util.html.SnifferVideo.KEY
 import com.skyd.imomoe.util.html.SnifferVideo.REFEREER_URL

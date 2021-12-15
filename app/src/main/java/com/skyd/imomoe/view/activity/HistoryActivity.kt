@@ -12,7 +12,6 @@ import com.skyd.imomoe.databinding.ActivityHistoryBinding
 import com.skyd.imomoe.util.Util.dp
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.getResDrawable
-import com.skyd.imomoe.util.visible
 import com.skyd.imomoe.view.adapter.HistoryAdapter
 import com.skyd.imomoe.viewmodel.HistoryViewModel
 
@@ -27,8 +26,7 @@ class HistoryActivity : BaseActivity<ActivityHistoryBinding>() {
         adapter = HistoryAdapter(this, viewModel.historyList)
 
         mBinding.run {
-            tbHistoryActivity.ivToolbar1Back.setOnClickListener { finish() }
-            tbHistoryActivity.tvToolbar1Title.text = getString(R.string.watch_history)
+            atbHistoryActivity.setBackButtonClickListener { finish() }
 
             srlHistoryActivity.setColorSchemeColors(
                 this@HistoryActivity.getResColor(R.color.main_color_skin)
@@ -64,14 +62,9 @@ class HistoryActivity : BaseActivity<ActivityHistoryBinding>() {
             if (it > 0) adapter.notifyItemRangeRemoved(0, it)
         })
 
-        mBinding.tbHistoryActivity.run {
-            12.dp.let { padding ->
-                ivToolbar1Button1.setPadding(padding, padding, padding, padding)
-            }
-            ivToolbar1Button1.visible()
-            ivToolbar1Button1.setImageResource(R.drawable.ic_delete_white_24)
-            ivToolbar1Button1.setOnClickListener {
-                if (viewModel.historyList.isEmpty()) return@setOnClickListener
+        mBinding.atbHistoryActivity.run {
+            setButtonClickListener(0) {
+                if (viewModel.historyList.isEmpty()) return@setButtonClickListener
                 MaterialDialog(this@HistoryActivity).show {
                     icon(drawable = getResDrawable(R.drawable.ic_delete_main_color_2_24_skin))
                     title(res = R.string.warning)

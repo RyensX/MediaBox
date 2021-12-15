@@ -3,19 +3,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white_skin"
     android:orientation="vertical"
     tools:context=".view.activity.FavoriteActivity">
 
-    <include
-        android:id="@+id/tb_favorite_activity"
-        layout="@layout/layout_toolbar_1" />
+    <com.skyd.imomoe.view.component.AnimeToolbar
+        android:id="@+id/atb_favorite_activity"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:title="@string/my_favorite"
+        app:titleColor="@color/foreground_white_skin"
+        app:toolBarBackground="@color/main_color_2_skin" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/srl_favorite_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/tb_favorite_activity">
+        android:layout_below="@id/atb_favorite_activity">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_favorite_activity"

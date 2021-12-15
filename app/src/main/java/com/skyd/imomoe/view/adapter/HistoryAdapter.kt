@@ -7,7 +7,7 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.HistoryBean
 import com.skyd.imomoe.util.AnimeCover9ViewHolder
 import com.skyd.imomoe.util.Util.process
-import com.skyd.imomoe.util.Util.showToast
+import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.Util.time2Now
 import com.skyd.imomoe.util.coil.CoilUtil.loadImage
 import com.skyd.imomoe.view.activity.HistoryActivity

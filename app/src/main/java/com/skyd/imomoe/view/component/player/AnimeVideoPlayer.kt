@@ -29,7 +29,7 @@ import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.getResDrawable
 import com.skyd.imomoe.util.Util.getScreenBrightness
 import com.skyd.imomoe.util.Util.openVideoByExternalPlayer
-import com.skyd.imomoe.util.Util.showToast
+import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.gone
 import com.skyd.imomoe.util.invisible
 import com.skyd.imomoe.util.visible
@@ -571,7 +571,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         val result = super.setUp(url, cacheWithPlay, cachePath, title)
         mTitleTextView?.let {
             if (it is TypefaceTextView) {
-                it.setIsFocused(true)
+                it.isFocused = true
             }
         }
         return result

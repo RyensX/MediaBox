@@ -11,7 +11,7 @@ import com.skyd.imomoe.bean.PageNumberBean
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.AnimeShowModel
 import com.skyd.imomoe.model.interfaces.IAnimeShowModel
-import com.skyd.imomoe.util.Util.showToastOnIOThread
+import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.view.adapter.SerializableRecycledViewPool
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -50,7 +50,7 @@ class AnimeShowViewModel : ViewModel() {
                 mldGetAnimeShowList.postValue(Pair(ResponseDataType.FAILED, ArrayList()))
                 isRequesting = false
                 e.printStackTrace()
-                (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnIOThread()
+                (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToast()
             }
         }
     }

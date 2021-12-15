@@ -7,7 +7,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onCancel
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Api
-import com.skyd.imomoe.util.Util.showToast
+import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.html.source.DefaultUICallback
 import com.skyd.imomoe.util.html.source.GettingUICallback
 import com.skyd.imomoe.util.html.source.web.GettingUtil

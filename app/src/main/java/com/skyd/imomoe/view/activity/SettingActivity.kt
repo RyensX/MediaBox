@@ -4,33 +4,21 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.files.fileChooser
-import com.hjq.permissions.OnPermissionCallback
-import com.hjq.permissions.Permission
-import com.hjq.permissions.XXPermissions
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.databinding.ActivitySettingBinding
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.net.DoH
+import com.skyd.imomoe.net.DoH.selectDnsServer
 import com.skyd.imomoe.util.Util.getAppVersionName
 import com.skyd.imomoe.util.Util.getResDrawable
-import com.skyd.imomoe.util.Util.restartApp
-import com.skyd.imomoe.util.Util.showToast
-import com.skyd.imomoe.util.Util.showToastOnIOThread
-import com.skyd.imomoe.util.downloadanime.AnimeDownloadHelper
-import com.skyd.imomoe.util.downloadanime.AnimeDownloadService
-import com.skyd.imomoe.util.downloadanime.AnimeDownloadStatus
+import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.gone
-import com.skyd.imomoe.util.toFile
 import com.skyd.imomoe.util.update.AppUpdateHelper
 import com.skyd.imomoe.util.update.AppUpdateStatus
 import com.skyd.imomoe.viewmodel.SettingViewModel
@@ -49,8 +37,7 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
         val appUpdateHelper = AppUpdateHelper.instance
 
         mBinding.run {
-            llSettingActivityToolbar.tvToolbar1Title.text = getString(R.string.setting)
-            llSettingActivityToolbar.ivToolbar1Back.setOnClickListener { finish() }
+            atbSettingActivityToolbar.setBackButtonClickListener { finish() }
 
             tvSettingActivityDownloadPathInfo.isFocused = true
             tvSettingActivityDownloadPathInfo.text = Const.DownloadAnime.animeFilePath
@@ -83,8 +70,8 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
             lifecycleScope.launch(Dispatchers.IO) {
                 delay(1000)
                 viewModel.getCacheSize()
-                if (it) getString(R.string.clear_cache_succeed).showToastOnIOThread()
-                else getString(R.string.clear_cache_failed).showToastOnIOThread()
+                if (it) getString(R.string.clear_cache_succeed).showToast()
+                else getString(R.string.clear_cache_failed).showToast()
             }
             viewModel.mldClearAllCache.postValue(null)
         })
@@ -165,63 +152,10 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
             })
 
         mBinding.rlSettingActivityCustomDataSource.setOnClickListener {
-            XXPermissions.with(this)
-                .permission(Permission.MANAGE_EXTERNAL_STORAGE)
-                .request(object : OnPermissionCallback {
-                    override fun onGranted(permissions: MutableList<String>?, all: Boolean) {
-                        MaterialDialog(this@SettingActivity).show {
-                            fileChooser(
-                                context = this@SettingActivity,
-                                initialDirectory = DataSourceManager.getJarDirectory().toFile(),
-                                filter = { it.isFile || it.extension.equals("jar", true) }
-                            ) { dialog, file ->
-                                MaterialDialog(this@SettingActivity).show {
-                                    icon(drawable = getResDrawable(R.drawable.ic_category_main_color_2_24_skin))
-                                    title(res = R.string.warning)
-                                    message(res = R.string.custom_data_source_tip)
-                                    cancelable(false)
-                                    positiveButton(res = R.string.restart) {
-                                        DataSourceManager.dataSourceName = file.name
-                                        DataSourceManager.clearCache()
-                                        restartApp()
-                                    }
-                                    negativeButton(res = R.string.cancel) {
-                                        dismiss()
-                                    }
-                                }
-                            }
-                            negativeButton(res = R.string.default_data_source) {
-                                MaterialDialog(this@SettingActivity).show {
-                                    icon(drawable = getResDrawable(R.drawable.ic_category_main_color_2_24_skin))
-                                    title(res = R.string.warning)
-                                    message(res = R.string.request_restart_app)
-                                    cancelable(false)
-                                    positiveButton(res = R.string.restart) {
-                                        DataSourceManager.dataSourceName =
-                                            DataSourceManager.DEFAULT_DATA_SOURCE
-                                        DataSourceManager.clearCache()
-                                        restartApp()
-                                    }
-                                    negativeButton(res = R.string.cancel) {
-                                        dismiss()
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    override fun onDenied(permissions: MutableList<String>?, never: Boolean) {
-                        super.onDenied(permissions, never)
-                        "未获取存储权限，无法选择Jar包".showToast()
-                    }
-                }
-                )
+            startActivity(Intent(this, ConfigDataSourceActivity::class.java))
         }
 
-        mBinding.switchSettingActivityDoh.isChecked = DoH.useDoh()
-        mBinding.switchSettingActivityDoh.setOnCheckedChangeListener { buttonView, isChecked ->
-            DoH.useDoh(isChecked)
-        }
+        mBinding.rlSettingActivityDoh.setOnClickListener { selectDnsServer() }
 
         initNightMode()
     }

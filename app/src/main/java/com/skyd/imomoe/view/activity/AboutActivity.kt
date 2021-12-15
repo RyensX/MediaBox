@@ -23,11 +23,8 @@ class AboutActivity : BaseActivity<ActivityAboutBinding>() {
         super.onCreate(savedInstanceState)
 
         mBinding.run {
-            llAboutActivityToolbar.ivToolbar1Back.setOnClickListener { finish() }
-            llAboutActivityToolbar.tvToolbar1Title.text = getString(R.string.about)
-            llAboutActivityToolbar.ivToolbar1Button1.visible()
-            llAboutActivityToolbar.ivToolbar1Button1.setImageResource(R.drawable.ic_info_white_24)
-            llAboutActivityToolbar.ivToolbar1Button1.setOnClickListener {
+            atbAboutActivity.setBackButtonClickListener { finish() }
+            atbAboutActivity.setButtonClickListener(0) {
                 MaterialDialog(this@AboutActivity).show {
                     title(res = R.string.attention)
                     message(text = "本软件免费开源，严禁商用，支持Android 5.0+！仅在Github仓库长期发布！\n不介意的话可以给我的Github仓库点个Star")
@@ -39,7 +36,7 @@ class AboutActivity : BaseActivity<ActivityAboutBinding>() {
             val c: Calendar = Calendar.getInstance()
             val month = c.get(Calendar.MONTH)
             val day = c.get(Calendar.DAY_OF_MONTH)
-            if (month == Calendar.DECEMBER && day == 25) {     // 圣诞节彩蛋
+            if (month == Calendar.DECEMBER && (day > 21 || day < 29)) {     // 圣诞节彩蛋
                 ivAboutActivityIconEgg.visible()
                 ivAboutActivityIconEgg.setImageResource(R.drawable.ic_christmas_hat)
             }

@@ -8,9 +8,13 @@
     android:orientation="vertical"
     tools:context="com.skyd.imomoe.view.activity.SkinActivity">
 
-    <include
-        android:id="@+id/ll_skin_activity_toolbar"
-        layout="@layout/layout_toolbar_1" />
+    <com.skyd.imomoe.view.component.AnimeToolbar
+        android:id="@+id/atb_skin_activity_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:title="@string/skin_center"
+        app:titleColor="@color/foreground_white_skin"
+        app:toolBarBackground="@color/main_color_2_skin" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_skin_activity"

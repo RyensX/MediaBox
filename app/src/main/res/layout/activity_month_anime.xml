@@ -7,15 +7,18 @@
     android:background="@color/white_skin"
     tools:context=".view.activity.MonthAnimeActivity">
 
-    <include
-        android:id="@+id/ll_month_anime_activity_toolbar"
-        layout="@layout/layout_toolbar_1" />
+    <com.skyd.imomoe.view.component.AnimeToolbar
+        android:id="@+id/atb_month_anime_activity"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:titleColor="@color/foreground_white_skin"
+        app:toolBarBackground="@color/main_color_2_skin" />
 
     <com.scwang.smart.refresh.layout.SmartRefreshLayout
         android:id="@+id/srl_month_anime_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/ll_month_anime_activity_toolbar"
+        android:layout_below="@id/atb_month_anime_activity"
         app:srlPrimaryColor="@color/main_color_3_skin">
 
         <androidx.recyclerview.widget.RecyclerView

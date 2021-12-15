@@ -43,116 +43,56 @@ class ViewHolderUtil {
             ViewHolderTypeString.UPNP_DEVICE_1 -> ViewHolderTypeInt.UPNP_DEVICE_1
             ViewHolderTypeString.MORE_1 -> ViewHolderTypeInt.MORE_1
             ViewHolderTypeString.SKIN_COVER_1 -> ViewHolderTypeInt.SKIN_COVER_1
+            ViewHolderTypeString.DATA_SOURCE_1 -> ViewHolderTypeInt.DATA_SOURCE_1
             else -> ViewHolderTypeInt.UNKNOWN
         }
 
-        fun getViewHolder(parent: ViewGroup, viewType: Int) = when (viewType) {
-            ViewHolderTypeInt.HEADER_1 -> Header1ViewHolder(
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_header_1, parent, false)
-            )
-            ViewHolderTypeInt.ANIME_COVER_1 -> AnimeCover1ViewHolder(
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_anime_cover_1, parent, false)
-            )
-            ViewHolderTypeInt.ANIME_COVER_2 -> AnimeCover2ViewHolder(
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_anime_cover_2, parent, false)
-            )
-            ViewHolderTypeInt.ANIME_COVER_3 -> AnimeCover3ViewHolder(
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_anime_cover_3, parent, false)
-            )
-            ViewHolderTypeInt.ANIME_COVER_4 -> AnimeCover4ViewHolder(
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_anime_cover_4, parent, false)
-            )
-            ViewHolderTypeInt.ANIME_COVER_5 -> AnimeCover5ViewHolder(
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_anime_cover_5, parent, false)
-            )
-            ViewHolderTypeInt.ANIME_COVER_6 -> AnimeCover6ViewHolder(
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_anime_cover_6, parent, false)
-            )
-            ViewHolderTypeInt.ANIME_COVER_7 -> AnimeCover7ViewHolder(
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_anime_cover_7, parent, false)
-            )
-            ViewHolderTypeInt.ANIME_EPISODE_FLOW_LAYOUT_1 -> AnimeEpisodeFlowLayout1ViewHolder(
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_anime_episode_flow_layout_1, parent, false)
-            )
-            ViewHolderTypeInt.ANIME_EPISODE_FLOW_LAYOUT_2 -> AnimeEpisodeFlowLayout2ViewHolder(
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_anime_episode_flow_layout_2, parent, false)
-            )
-            ViewHolderTypeInt.ANIME_DESCRIBE_1 -> AnimeDescribe1ViewHolder(
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_anime_describe_1, parent, false)
-            )
-            ViewHolderTypeInt.GRID_RECYCLER_VIEW_1 -> GridRecyclerView1ViewHolder(
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_grid_recycler_view_1, parent, false)
-            )
-            ViewHolderTypeInt.BANNER_1 -> Banner1ViewHolder(
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_banner_1, parent, false)
-            )
-            ViewHolderTypeInt.LICENSE_HEADER_1 -> LicenseHeader1ViewHolder(
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_license_header_1, parent, false)
-            )
-            ViewHolderTypeInt.LICENSE_1 -> License1ViewHolder(
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_license_1, parent, false)
-            )
-            ViewHolderTypeInt.SEARCH_HISTORY_HEADER_1 -> SearchHistoryHeader1ViewHolder(
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_search_history_header_1, parent, false)
-            )
-            ViewHolderTypeInt.SEARCH_HISTORY_1 -> SearchHistory1ViewHolder(
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_search_history_1, parent, false)
-            )
-            ViewHolderTypeInt.ANIME_INFO_1 -> AnimeInfo1ViewHolder(
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_anime_info_1, parent, false)
-            )
-            ViewHolderTypeInt.HORIZONTAL_RECYCLER_VIEW_1 -> HorizontalRecyclerView1ViewHolder(
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_horizontal_recycler_view_1, parent, false)
-            )
-            ViewHolderTypeInt.ANIME_EPISODE_2 -> AnimeEpisode2ViewHolder(
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_anime_episode_2, parent, false)
-            )
-            ViewHolderTypeInt.UPNP_DEVICE_1 -> UpnpDevice1ViewHolder(
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_dlna_device_1, parent, false)
-            )
-            ViewHolderTypeInt.MORE_1 -> More1ViewHolder(
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_more_1, parent, false)
-            )
-            ViewHolderTypeInt.ANIME_COVER_8 -> AnimeCover8ViewHolder(
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_anime_cover_8, parent, false)
-            )
-            ViewHolderTypeInt.ANIME_COVER_9 -> AnimeCover9ViewHolder(
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_anime_cover_9, parent, false)
-            )
-            ViewHolderTypeInt.SKIN_COVER_1 -> SkinCover1ViewHolder(
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_skin_cover_1, parent, false)
-            )
-            else -> EmptyViewHolder(View(parent.context))
+        fun getViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+            val view = if (viewType == ViewHolderTypeInt.UNKNOWN) View(parent.context)
+            else LayoutInflater.from(parent.context).inflate(viewType, parent, false)
+            return when (viewType) {
+                ViewHolderTypeInt.HEADER_1 -> Header1ViewHolder(view)
+                ViewHolderTypeInt.ANIME_COVER_1 -> AnimeCover1ViewHolder(view)
+                ViewHolderTypeInt.ANIME_COVER_2 -> AnimeCover2ViewHolder(view)
+                ViewHolderTypeInt.ANIME_COVER_3 -> AnimeCover3ViewHolder(view)
+                ViewHolderTypeInt.ANIME_COVER_4 -> AnimeCover4ViewHolder(view)
+                ViewHolderTypeInt.ANIME_COVER_5 -> AnimeCover5ViewHolder(view)
+                ViewHolderTypeInt.ANIME_COVER_6 -> AnimeCover6ViewHolder(view)
+                ViewHolderTypeInt.ANIME_COVER_7 -> AnimeCover7ViewHolder(view)
+                ViewHolderTypeInt.ANIME_EPISODE_FLOW_LAYOUT_1 ->
+                    AnimeEpisodeFlowLayout1ViewHolder(view)
+                ViewHolderTypeInt.ANIME_EPISODE_FLOW_LAYOUT_2 ->
+                    AnimeEpisodeFlowLayout2ViewHolder(view)
+                ViewHolderTypeInt.ANIME_DESCRIBE_1 -> AnimeDescribe1ViewHolder(view)
+                ViewHolderTypeInt.GRID_RECYCLER_VIEW_1 -> GridRecyclerView1ViewHolder(view)
+                ViewHolderTypeInt.BANNER_1 -> Banner1ViewHolder(view)
+                ViewHolderTypeInt.LICENSE_HEADER_1 -> LicenseHeader1ViewHolder(view)
+                ViewHolderTypeInt.LICENSE_1 -> License1ViewHolder(view)
+                ViewHolderTypeInt.SEARCH_HISTORY_HEADER_1 -> SearchHistoryHeader1ViewHolder(view)
+                ViewHolderTypeInt.SEARCH_HISTORY_1 -> SearchHistory1ViewHolder(view)
+                ViewHolderTypeInt.ANIME_INFO_1 -> AnimeInfo1ViewHolder(view)
+                ViewHolderTypeInt.HORIZONTAL_RECYCLER_VIEW_1 ->
+                    HorizontalRecyclerView1ViewHolder(view)
+                ViewHolderTypeInt.ANIME_EPISODE_2 -> AnimeEpisode2ViewHolder(view)
+                ViewHolderTypeInt.UPNP_DEVICE_1 -> UpnpDevice1ViewHolder(view)
+                ViewHolderTypeInt.MORE_1 -> More1ViewHolder(view)
+                ViewHolderTypeInt.ANIME_COVER_8 -> AnimeCover8ViewHolder(view)
+                ViewHolderTypeInt.ANIME_COVER_9 -> AnimeCover9ViewHolder(view)
+                ViewHolderTypeInt.SKIN_COVER_1 -> SkinCover1ViewHolder(view)
+                ViewHolderTypeInt.DATA_SOURCE_1 -> DataSource1ViewHolder(view)
+                else -> EmptyViewHolder(view)
+            }
         }
     }
 }
 
 class EmptyViewHolder(view: View) : RecyclerView.ViewHolder(view)
+
+class DataSource1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    val tvDataSource1Name: TextView = view.findViewById(R.id.tv_data_source_1_name)
+    val tvDataSource1Size: TextView = view.findViewById(R.id.tv_data_source_1_size)
+    val ivDataSource1Selected: ImageView = view.findViewById(R.id.iv_data_source_1_selected)
+}
 
 class GridRecyclerView1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val rvGridRecyclerView1: RecyclerView = view.findViewById(R.id.rv_grid_recycler_view_1)

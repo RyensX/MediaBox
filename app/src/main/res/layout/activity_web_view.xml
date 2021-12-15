@@ -7,11 +7,12 @@
     android:orientation="vertical"
     tools:context="com.skyd.imomoe.view.activity.WebViewActivity">
 
-    <include
-        android:id="@+id/ll_web_view_activity_toolbar"
-        layout="@layout/layout_toolbar_1"
+    <com.skyd.imomoe.view.component.AnimeToolbar
+        android:id="@+id/atb_web_view_activity_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="50dp" />
+        android:layout_height="50dp"
+        app:titleColor="@color/foreground_white_skin"
+        app:toolBarBackground="@color/main_color_2_skin" />
 
     <WebView
         android:id="@+id/wv_web_view_activity"

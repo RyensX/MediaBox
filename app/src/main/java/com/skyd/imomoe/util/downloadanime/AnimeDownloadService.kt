@@ -20,7 +20,7 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Const.DownloadAnime.Companion.animeFilePath
 import com.skyd.imomoe.database.entity.AnimeDownloadEntity
 import com.skyd.imomoe.database.getAppDataBase
-import com.skyd.imomoe.util.Util.showToast
+import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.downloadanime.AnimeDownloadHelper.Companion.downloadHashMap
 import com.skyd.imomoe.util.downloadanime.AnimeDownloadHelper.Companion.save2Xml
 import com.skyd.imomoe.util.downloadanime.AnimeDownloadNotificationReceiver.Companion.DOWNLOAD_ANIME_NOTIFICATION_ID

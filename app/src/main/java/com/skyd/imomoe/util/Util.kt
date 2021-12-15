@@ -36,13 +36,8 @@ import com.skyd.imomoe.config.UnknownActionUrl
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.RouteProcessor
 import com.skyd.imomoe.view.activity.*
-import com.skyd.imomoe.view.component.AnimeToast
 import com.skyd.skin.SkinManager
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import java.io.*
-import java.math.BigDecimal
 import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLDecoder
@@ -50,6 +45,7 @@ import java.util.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 import kotlin.collections.ArrayList
+import android.os.Looper
 
 
 object Util {
@@ -64,6 +60,8 @@ object Util {
     fun getEncodedUrl(url: String): String {
         return Uri.encode(url, ":/-![].,%?&=")
     }
+
+    val isMainThread: Boolean = Thread.currentThread() === Looper.getMainLooper().thread
 
     /**
      * 通过播放页面的网址获取详情页面的网址
@@ -231,6 +229,16 @@ object Util {
      * 通过id获取drawable
      */
     fun getResDrawable(@DrawableRes id: Int) = SkinManager.getDrawableOrMipMap(id)
+
+    /**
+     * 通过id获取颜色
+     */
+    fun getColorStateList(@ColorRes id: Int) = SkinManager.getColorStateList(id)
+
+    /**
+     * 通过id获取颜色
+     */
+    fun getResColor(@ColorRes id: Int) = SkinManager.getColor(id)
 
     /**
      * 通过id获取颜色
@@ -465,16 +473,6 @@ object Util {
         return 0
     }
 
-    fun CharSequence.showToast(duration: Int = Toast.LENGTH_SHORT) {
-        AnimeToast.makeText(App.context, this, duration).show()
-    }
-
-    fun CharSequence.showToastOnIOThread(duration: Int = Toast.LENGTH_SHORT) {
-        GlobalScope.launch(Dispatchers.Main) {
-            this@showToastOnIOThread.showToast(duration)
-        }
-    }
-
     fun getScreenHeight(includeVirtualKey: Boolean): Int {
         val display =
             (App.context.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay
@@ -493,63 +491,6 @@ object Util {
         if (includeVirtualKey) display.getRealSize(outPoint)
         else display.getSize(outPoint)
         return outPoint.x
-    }
-
-    fun File.fileSize(): Long {
-        var s: Long = 0
-        if (this.exists() && this.isFile) {
-            val fis = FileInputStream(this)
-            s = fis.available().toLong()
-        }
-        return s
-    }
-
-    fun File.directorySize(): Long {
-        var size: Long = 0
-        val fList = listFiles()
-        fList?.let {
-            for (i in it.indices) {
-                size += if (it[i].isDirectory) {
-                    it[i].directorySize()
-                } else {
-                    it[i].fileSize()
-                }
-            }
-        }
-        return size
-    }
-
-    /**
-     * 获取规整的文件大小
-     * @param size 文件大小
-     * @param newScale 精确到小数点几位
-     */
-    fun getFormatSize(size: Double, newScale: Int = 2): String {
-        val kiloByte = size / 1024
-        if (kiloByte < 1) {
-            return size.toString() + "B"
-        }
-        val megaByte = kiloByte / 1024
-        if (megaByte < 1) {
-            val result1 = BigDecimal(kiloByte.toString())
-            return result1.setScale(newScale, BigDecimal.ROUND_HALF_UP).toPlainString()
-                .toString() + "K"
-        }
-        val gigaByte = megaByte / 1024
-        if (gigaByte < 1) {
-            val result2 = BigDecimal(megaByte.toString())
-            return result2.setScale(newScale, BigDecimal.ROUND_HALF_UP).toPlainString()
-                .toString() + "M"
-        }
-        val teraBytes = gigaByte / 1024
-        if (teraBytes < 1) {
-            val result3 = BigDecimal(gigaByte.toString())
-            return result3.setScale(newScale, BigDecimal.ROUND_HALF_UP).toPlainString()
-                .toString() + "G"
-        }
-        val result4 = BigDecimal(teraBytes)
-        return result4.setScale(newScale, BigDecimal.ROUND_HALF_UP).toPlainString()
-            .toString() + "T"
     }
 
     fun String.isYearMonth(): Boolean {

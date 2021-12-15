@@ -10,7 +10,7 @@ import com.skyd.imomoe.bean.PageNumberBean
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.RankListModel
 import com.skyd.imomoe.model.interfaces.IRankListModel
-import com.skyd.imomoe.util.Util.showToastOnIOThread
+import com.skyd.imomoe.util.showToast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
@@ -47,7 +47,7 @@ class RankListViewModel : ViewModel() {
                 mldRankData.postValue(Pair(ResponseDataType.FAILED, ArrayList()))
                 isRequesting = false
                 e.printStackTrace()
-                e.message?.showToastOnIOThread(Toast.LENGTH_LONG)
+                e.message?.showToast(Toast.LENGTH_LONG)
             }
         }
     }

@@ -8,7 +8,7 @@ import com.skyd.imomoe.bean.LicenseBean
 import com.skyd.imomoe.util.License1ViewHolder
 import com.skyd.imomoe.util.LicenseHeader1ViewHolder
 import com.skyd.imomoe.util.Util.process
-import com.skyd.imomoe.util.Util.showToast
+import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.view.activity.LicenseActivity
 
 class LicenseAdapter(

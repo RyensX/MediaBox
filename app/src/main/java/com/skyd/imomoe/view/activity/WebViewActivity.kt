@@ -6,7 +6,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.webkit.*
 import com.skyd.imomoe.databinding.ActivityWebViewBinding
 
@@ -26,7 +25,7 @@ class WebViewActivity : BaseActivity<ActivityWebViewBinding>() {
                 it as HashMap<String, String>
             }
         }
-        mBinding.llWebViewActivityToolbar.ivToolbar1Back.setOnClickListener { finish() }
+        mBinding.atbWebViewActivityToolbar.setBackButtonClickListener { finish() }
         mBinding.wvWebViewActivity.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)

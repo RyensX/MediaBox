@@ -8,7 +8,7 @@ import com.skyd.imomoe.bean.TabBean
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.RankModel
 import com.skyd.imomoe.model.interfaces.IRankModel
-import com.skyd.imomoe.util.Util.showToastOnIOThread
+import com.skyd.imomoe.util.showToast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
@@ -39,7 +39,7 @@ class RankViewModel : ViewModel() {
                 tabList.clear()
                 isRequesting = false
                 e.printStackTrace()
-                e.message?.showToastOnIOThread(Toast.LENGTH_LONG)
+                e.message?.showToast(Toast.LENGTH_LONG)
             }
         }
     }

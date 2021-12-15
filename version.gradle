@@ -38,7 +38,8 @@ lifecycle.lifecycle_runtime_ktx = "androidx.lifecycle:lifecycle-runtime-ktx:2.3.
 deps.lifecycle = lifecycle
 
 def okhttp3 = [:]
-okhttp3.okhttp = "com.squareup.okhttp3:okhttp:4.9.0"
+okhttp3.okhttp = "com.squareup.okhttp3:okhttp:4.9.3"
+okhttp3.okhttp_dnsoverhttps = "com.squareup.okhttp3:okhttp-dnsoverhttps:4.9.0"
 deps.okhttp3 = okhttp3
 
 def room = [:]
@@ -70,7 +71,6 @@ deps.filedownloader = filedownloader
 def material_dialogs = [:]
 material_dialogs.core = "com.afollestad.material-dialogs:core:3.3.0"
 material_dialogs.input = "com.afollestad.material-dialogs:input:3.3.0"
-material_dialogs.files = "com.afollestad.material-dialogs:files:3.3.0"
 deps.material_dialogs = material_dialogs
 
 // cling 2.1.2版本无法搜索到设备，不要升级

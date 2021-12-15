@@ -7,10 +7,10 @@ import com.skyd.imomoe.model.interfaces.IEverydayAnimeWidgetModel
 import org.jsoup.select.Elements
 
 class CustomEverydayAnimeWidgetModel : IEverydayAnimeWidgetModel {
-    override suspend fun getEverydayAnimeData(): ArrayList<List<AnimeCoverBean>> {
+    override fun getEverydayAnimeData(): ArrayList<List<AnimeCoverBean>> {
         val list: ArrayList<List<AnimeCoverBean>> = ArrayList()
         try {
-            val document = JsoupUtil.getDocument(Api.MAIN_URL)
+            val document = JsoupUtil.getDocumentSynchronously(Api.MAIN_URL)
             val areaChildren: Elements = document.select("[class=area]")[0].children()
             for (i in areaChildren.indices) {
                 when (areaChildren[i].className()) {

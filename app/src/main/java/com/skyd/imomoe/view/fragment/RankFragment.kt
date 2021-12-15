@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.ResponseDataType
 import com.skyd.imomoe.databinding.FragmentRankBinding
-import com.skyd.imomoe.util.Util.showToast
+import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.smartNotifyDataSetChanged
 import com.skyd.imomoe.view.adapter.AnimeShowAdapter
 import com.skyd.imomoe.view.adapter.decoration.AnimeShowItemDecoration

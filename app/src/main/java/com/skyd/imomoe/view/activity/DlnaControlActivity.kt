@@ -11,7 +11,7 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.ActivityDlnaControlBinding
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.setColorStatusBar
-import com.skyd.imomoe.util.Util.showToast
+import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.dlna.CastObject
 import com.skyd.imomoe.util.dlna.Utils
 import com.skyd.imomoe.util.dlna.dmc.DLNACastManager

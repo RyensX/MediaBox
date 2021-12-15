@@ -12,7 +12,7 @@ import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.PlayModel
 import com.skyd.imomoe.model.interfaces.IPlayModel
-import com.skyd.imomoe.util.Util.showToastOnIOThread
+import com.skyd.imomoe.util.showToast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -60,7 +60,7 @@ class PlayViewModel : ViewModel() {
                 animeEpisodeDataBean.title = ""
                 animeEpisodeDataBean.videoUrl = ""
                 mldAnimeEpisodeDataRefreshed.postValue(false)
-                "${App.context.getString(R.string.get_data_failed)}\n${e.message}".showToastOnIOThread()
+                "${App.context.getString(R.string.get_data_failed)}\n${e.message}".showToast()
             }
             this@PlayViewModel.currentEpisodeIndex = currentEpisodeIndex
         }
@@ -78,7 +78,7 @@ class PlayViewModel : ViewModel() {
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                "${App.context.getString(R.string.get_data_failed)}\n${e.message}".showToastOnIOThread()
+                "${App.context.getString(R.string.get_data_failed)}\n${e.message}".showToast()
             }
         }
     }
@@ -98,7 +98,7 @@ class PlayViewModel : ViewModel() {
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToastOnIOThread()
+                (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToast()
             }
         }
     }
@@ -174,7 +174,7 @@ class PlayViewModel : ViewModel() {
             } catch (e: Exception) {
                 mldAnimeCover.postValue(false)
                 e.printStackTrace()
-                "${App.context.getString(R.string.get_data_failed)}\n${e.message}".showToastOnIOThread()
+                "${App.context.getString(R.string.get_data_failed)}\n${e.message}".showToast()
             }
         }
     }

@@ -11,7 +11,7 @@ import com.skyd.imomoe.bean.danmaku.AnimeSendDanmakuResultBean
 import com.skyd.imomoe.net.RetrofitManager
 import com.skyd.imomoe.net.service.DanmakuService
 import com.skyd.imomoe.util.Text.shield
-import com.skyd.imomoe.util.Util.showToast
+import com.skyd.imomoe.util.showToast
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call

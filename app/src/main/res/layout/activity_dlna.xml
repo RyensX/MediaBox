@@ -7,14 +7,18 @@
     android:background="@color/white_skin"
     tools:context=".view.activity.DlnaActivity">
 
-    <include
-        android:id="@+id/tb_dlna_activity"
-        layout="@layout/layout_toolbar_1" />
+    <com.skyd.imomoe.view.component.AnimeToolbar
+        android:id="@+id/atb_dlna_activity"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:title="@string/play_on_tv"
+        app:titleColor="@color/foreground_white_skin"
+        app:toolBarBackground="@color/main_color_2_skin" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/tb_dlna_activity">
+        android:layout_below="@id/atb_dlna_activity">
 
         <LinearLayout
             android:layout_width="match_parent"

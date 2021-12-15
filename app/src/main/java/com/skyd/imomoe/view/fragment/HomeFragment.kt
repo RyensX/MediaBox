@@ -21,7 +21,7 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.FragmentHomeBinding
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.util.Util.process
-import com.skyd.imomoe.util.Util.showToast
+import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.clickScale
 import com.skyd.imomoe.util.eventbus.EventBusSubscriber
 import com.skyd.imomoe.util.eventbus.MessageEvent

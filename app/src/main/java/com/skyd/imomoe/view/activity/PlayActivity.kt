@@ -42,7 +42,7 @@ import com.skyd.imomoe.util.Util.getResDrawable
 import com.skyd.imomoe.util.Util.getSkinResourceId
 import com.skyd.imomoe.util.Util.openVideoByExternalPlayer
 import com.skyd.imomoe.util.Util.setColorStatusBar
-import com.skyd.imomoe.util.Util.showToast
+import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.downloadanime.AnimeDownloadHelper
 import com.skyd.imomoe.util.html.SnifferVideo
 import com.skyd.imomoe.view.adapter.AnimeDetailAdapter

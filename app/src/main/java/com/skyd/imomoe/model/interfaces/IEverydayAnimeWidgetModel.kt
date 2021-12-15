@@ -11,7 +11,7 @@ interface IEverydayAnimeWidgetModel : IBase {
      *
      * @return ArrayList，不可为null。每天更新番剧的ArrayList，其中共有七条
      */
-    suspend fun getEverydayAnimeData(): ArrayList<List<AnimeCoverBean>>
+    fun getEverydayAnimeData(): ArrayList<List<AnimeCoverBean>>
 
     companion object {
         const val implName = "EverydayAnimeWidgetModel"

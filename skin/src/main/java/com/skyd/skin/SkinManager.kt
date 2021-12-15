@@ -179,7 +179,7 @@ object SkinManager {
         }
     }
 
-    fun addCustomAttrIds(@AttrRes attrId: Int, listener: CustomSetSkinTagListener) {
+    fun addCustomAttrId(@AttrRes attrId: Int, listener: CustomSetSkinTagListener) {
         customAttrIds[attrId] = listener
     }
 
@@ -277,11 +277,17 @@ object SkinManager {
                 skinAttrsSet.attrsMap[attr.tag()] = attr
             }
         }
-        customAttrIds.toSortedMap().onEachIndexed { index, entry ->
-            val resId = typedArray.getResourceId(index, defValue)
-            entry.value.setSkinTag(entry.key, resId)?.apply {
-                skinAttrsSet.attrsMap[first] = second
+        customAttrIds.toSortedMap().also {
+            val customAttrIdsArray = IntArray(it.size)
+            it.onEachIndexed { index, entry -> customAttrIdsArray[index] = entry.key }
+            val customTypedArray = context.obtainStyledAttributes(attrs, customAttrIdsArray)
+            it.onEachIndexed { index, entry ->
+                val resId = customTypedArray.getResourceId(index, defValue)
+                entry.value.setSkinTag(entry.key, resId)?.apply {
+                    skinAttrsSet.attrsMap[first] = second
+                }
             }
+            customTypedArray.recycle()
         }
         typedArray.recycle()
         view.setTag(R.id.change_skin_tag, skinAttrsSet)

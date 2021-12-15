@@ -20,4 +20,13 @@ object JsoupUtil {
             ).byteStream().string()
         )
     }
+
+    fun getDocumentSynchronously(url: String): Document {
+        return Jsoup.parse(
+            RetrofitManager.instance.create(HtmlService::class.java).getHtmlSynchronously(
+                url,
+                Const.Request.USER_AGENT_ARRAY[Random.nextInt(Const.Request.USER_AGENT_ARRAY.size)]
+            ).execute().body()?.byteStream()?.string() ?: ""
+        )
+    }
 }

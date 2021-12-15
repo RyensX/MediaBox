@@ -57,8 +57,7 @@ class DlnaActivity : BaseActivity<ActivityDlnaBinding>() {
         adapter = UpnpAdapter(this, viewModel.deviceList)
 
         mBinding.run {
-            tbDlnaActivity.tvToolbar1Title.text = getString(R.string.play_on_tv)
-            tbDlnaActivity.ivToolbar1Back.setOnClickListener { finish() }
+            atbDlnaActivity.setBackButtonClickListener { finish() }
 
             rvDlnaActivityDevice.layoutManager = LinearLayoutManager(this@DlnaActivity)
             rvDlnaActivityDevice.adapter = adapter

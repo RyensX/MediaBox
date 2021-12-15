@@ -16,7 +16,7 @@ import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.RouteProcessor
 import com.skyd.imomoe.util.Util.getWeekday
-import com.skyd.imomoe.util.Util.showToast
+import com.skyd.imomoe.util.showToast
 import java.util.*
 
 

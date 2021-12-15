@@ -6,42 +6,23 @@
     android:layout_height="match_parent"
     tools:context=".view.fragment.EverydayAnimeFragment">
 
-    <LinearLayout
-        android:id="@+id/ll_everyday_anime_fragment_header"
+    <com.skyd.imomoe.view.component.AnimeToolbar
+        android:id="@+id/atb_everyday_anime_fragment"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/main_color_2_skin"
         android:elevation="5dp"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginStart="16dp"
-            android:src="@drawable/ic_sunny_white_24" />
-
-        <com.skyd.imomoe.view.component.textview.TypefaceTextView
-            android:id="@+id/tv_everyday_anime_fragment_title"
-            android:layout_width="0px"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_weight="1"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:textColor="@color/foreground_white_skin"
-            android:textSize="17sp"
-            android:textStyle="bold"
-            app:typeface="bPRTypeface"
-            tools:text="每日更新列表" />
-    </LinearLayout>
+        android:paddingHorizontal="6dp"
+        app:backDrawable="@drawable/ic_sunny_white_24"
+        app:backDrawableTitlePadding="0px"
+        app:title="@string/everyday_anime_list"
+        app:titleColor="@color/foreground_white_skin"
+        app:toolBarBackground="@color/main_color_2_skin" />
 
     <com.skyd.imomoe.view.component.VpSwipeRefreshLayout
         android:id="@+id/srl_everyday_anime_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/ll_everyday_anime_fragment_header">
+        android:layout_below="@id/atb_everyday_anime_fragment">
 
         <LinearLayout
             android:id="@+id/ll_everyday_anime_fragment"
