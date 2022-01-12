@@ -163,14 +163,15 @@
     <string name="skin_center">皮肤中心</string>
     <string name="data_source_jar_version_name">版本名：%s</string>
     <string name="data_source_jar_version_code">版本号：%s</string>
-    <string name="user_notice">使用须知更新！</string>
+    <string name="user_notice_update">使用须知更新！</string>
+    <string name="user_notice">使用须知</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="notice_activity_error_param">跳转到通知界面错误，参数传递不正确！</string>
     <string name="continue_to_play">继续播放</string>
     <string name="play_video_now">立即播放</string>
     <string name="replay_video">重新播放</string>
     <string name="jump_to_browser_http_warning">此网址使用HTTP协议，不能保证安全性，是否要继续打开浏览器访问？</string>
-    <string name="jump_to_data_source_website_warning">若要访问，请千万不要在页面下载任何APP和Jar包等可执行文件</string>
+    <string name="jump_to_data_source_website_warning">若要访问，请谨慎下载来历不明的文件</string>
     <string name="input_custom_danmaku_url">输入自定义弹幕链接</string>
     <string name="input_danmaku_url">请输入弹幕链接</string>
     <string name="danmaku_loaded">弹幕已加载</string>

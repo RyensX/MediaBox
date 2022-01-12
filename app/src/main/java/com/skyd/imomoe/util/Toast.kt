@@ -10,28 +10,25 @@ import android.widget.Toast
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.util.Util.getResDrawable
-import com.skyd.imomoe.util.Util.isMainThread
 import com.skyd.skin.core.SkinResourceProcessor
 
 private var uiThreadHandler: Handler = Handler(Looper.getMainLooper())
 
 fun CharSequence.showToast(duration: Int = Toast.LENGTH_SHORT) {
-    if (isMainThread) showToastOnMainThread(duration)
-    else uiThreadHandler.post { showToastOnMainThread(duration) }
-}
-
-fun CharSequence.showToastOnMainThread(duration: Int = Toast.LENGTH_SHORT) {
-    val toast = Toast(App.context)
-    val view: View =
-        (App.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
-            .inflate(R.layout.toast_1, null)
-    view.findViewById<TextView>(R.id.tv_toast_1).apply {
-        if (SkinResourceProcessor.isInitialized()) {
-            background = getResDrawable(R.drawable.shape_fill_circle_corner_main_color_2_50_skin)
+    uiThreadHandler.post {
+        val toast = Toast(App.context)
+        val view: View =
+            (App.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
+                .inflate(R.layout.toast_1, null)
+        view.findViewById<TextView>(R.id.tv_toast_1).apply {
+            if (SkinResourceProcessor.isInitialized()) {
+                background =
+                    getResDrawable(R.drawable.shape_fill_circle_corner_main_color_2_50_skin)
+            }
+            this.text = this@showToast
         }
-        this.text = this@showToastOnMainThread
+        toast.view = view
+        toast.duration = duration
+        toast.show()
     }
-    toast.view = view
-    toast.duration = duration
-    toast.show()
 }

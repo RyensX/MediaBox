@@ -7,6 +7,7 @@ import com.skyd.imomoe.bean.DataSourceFileBean
 import com.skyd.imomoe.bean.ResponseDataType
 import com.skyd.imomoe.config.Const.ViewHolderTypeString.Companion.DATA_SOURCE_1
 import com.skyd.imomoe.model.DataSourceManager
+import com.skyd.imomoe.net.RetrofitManager
 import com.skyd.imomoe.util.Util
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -23,6 +24,7 @@ class ConfigDataSourceViewModel : ViewModel() {
     fun setDataSource(name: String) {
         DataSourceManager.dataSourceName = name
         DataSourceManager.clearCache()
+        RetrofitManager.setInstanceNull()
         Util.restartApp()
     }
 

@@ -1,6 +1,5 @@
 package com.skyd.imomoe.model.impls
 
-import com.skyd.imomoe.BuildConfig
 import com.skyd.imomoe.model.interfaces.IConst
 
 class Const : IConst {
@@ -13,7 +12,11 @@ class Const : IConst {
         override fun ANIME_SEARCH(): String = ""
     }
 
-    override fun MAIN_URL(): String = BuildConfig.MAIN_URL
+    override fun MAIN_URL(): String {
+        val url = com.skyd.imomoe.config.Const.Common.GITHUB_URL
+        return if (url.endsWith("/")) url
+        else "$url/"
+    }
 
     override fun versionName(): String = "1.0.2"
 

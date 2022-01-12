@@ -30,6 +30,6 @@ fun changeDnsServer(server: String) {
             .build()
     }
     okhttpClient = bootstrapClient.newBuilder().apply { dns?.let { dns(it) } }.build()
-    RetrofitManager.instance.client(okhttpClient)
+    RetrofitManager.get().client(okhttpClient)
     CoilUtil.setOkHttpClient(okhttpClient)
 }

@@ -61,8 +61,6 @@ object Util {
         return Uri.encode(url, ":/-![].,%?&=")
     }
 
-    val isMainThread: Boolean = Thread.currentThread() === Looper.getMainLooper().thread
-
     /**
      * 通过播放页面的网址获取详情页面的网址
      *

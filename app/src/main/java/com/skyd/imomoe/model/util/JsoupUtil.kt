@@ -14,7 +14,7 @@ object JsoupUtil {
      */
     suspend fun getDocument(url: String): Document {
         return Jsoup.parse(
-            RetrofitManager.instance.create(HtmlService::class.java).getHtml(
+            RetrofitManager.get().create(HtmlService::class.java).getHtml(
                 url,
                 Const.Request.USER_AGENT_ARRAY[Random.nextInt(Const.Request.USER_AGENT_ARRAY.size)]
             ).byteStream().string()
@@ -23,7 +23,7 @@ object JsoupUtil {
 
     fun getDocumentSynchronously(url: String): Document {
         return Jsoup.parse(
-            RetrofitManager.instance.create(HtmlService::class.java).getHtmlSynchronously(
+            RetrofitManager.get().create(HtmlService::class.java).getHtmlSynchronously(
                 url,
                 Const.Request.USER_AGENT_ARRAY[Random.nextInt(Const.Request.USER_AGENT_ARRAY.size)]
             ).execute().body()?.byteStream()?.string() ?: ""

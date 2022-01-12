@@ -148,7 +148,8 @@ class ConfigDataSourceActivity : BaseActivity<ActivityConfigDataSourceBinding>()
             cancelable(false)
             positiveButton(res = R.string.ok) {
                 try {
-                    val sourceFileName = uri.path!!.substringAfterLast("/")
+                    val sourceFileName = uri.getPathFromURI(this@ConfigDataSourceActivity)!!
+                        .substringAfterLast("/")
                     val directory = File(DataSourceManager.getJarDirectory())
                     if (!directory.exists()) directory.mkdirs()
                     val target = File(

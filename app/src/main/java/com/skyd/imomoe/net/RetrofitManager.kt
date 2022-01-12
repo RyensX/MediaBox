@@ -7,10 +7,29 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class RetrofitManager private constructor() {
     companion object {
-        val instance: RetrofitManager by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
-            RetrofitManager()
+        fun setInstanceNull() {
+            instance = null
+        }
+
+        @Volatile
+        private var instance: RetrofitManager? = null
+            get() {
+                if (field == null) {
+                    synchronized(RetrofitManager::class) {
+                        if (field == null) field = RetrofitManager()
+                    }
+                }
+                return field
+            }
+
+        @Synchronized
+        fun get(): RetrofitManager{
+            return instance!!
         }
     }
+//        val instance: RetrofitManager by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+//            RetrofitManager()
+//        }
 
     private val builder = Retrofit.Builder()
         .baseUrl(Api.MAIN_URL)

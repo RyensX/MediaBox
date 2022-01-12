@@ -47,7 +47,7 @@ object AppUpdateModel {
             return
         }
         status.value = AppUpdateStatus.CHECKING
-        val request = RetrofitManager.instance.create(UpdateService::class.java)
+        val request = RetrofitManager.get().create(UpdateService::class.java)
         val check = request?.checkUpdate()
         check?.enqueue(object : Callback<UpdateBean> {
             override fun onFailure(call: Call<UpdateBean>, t: Throwable) {

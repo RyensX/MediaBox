@@ -59,7 +59,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), EventBusSubscriber {
 
         if (lastReadUserNoticeVersion() < Const.Common.USER_NOTICE_VERSION) {
             MaterialDialog(this).show {
-                title(res = R.string.user_notice)
+                title(res = R.string.user_notice_update)
                 message(text = Html.fromHtml(getUserNoticeContent()))
                 cancelable(false)
                 positiveButton(res = R.string.ok) {

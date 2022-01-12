@@ -105,9 +105,8 @@ class AboutActivity : BaseActivity<ActivityAboutBinding>() {
                     message(
                         text = "Physical Device: \nAndroid 10\n\n" +
                                 "Virtual Machine: \nPixel Android 5\n" +
-                                "雷电模拟器4.0.63 Android 7.1.2\n" +
-                                "Pixel 2 Android 8\n" +
-                                "Pixel 3 Android 9\n"
+                                "Pixel 4 Android 7\n" +
+                                "Pixel 2 Android 12\n"
                     )
                     positiveButton(res = R.string.ok) { dismiss() }
                 }

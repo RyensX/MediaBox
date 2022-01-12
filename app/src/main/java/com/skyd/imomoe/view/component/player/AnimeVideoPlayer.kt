@@ -765,7 +765,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
 
     override fun touchSurfaceMoveFullLogic(absDeltaX: Float, absDeltaY: Float) {
         // 全屏下拉任务栏
-        if (absDeltaY > mThreshold && mDownY <= mStatusBarOffset) {
+        if (absDeltaY > mThreshold && absDeltaY > absDeltaX && mDownY <= mStatusBarOffset) {
             cancelProgressTimer()
             return
         }

@@ -6,10 +6,8 @@ import androidx.core.content.FileProvider
 import com.skyd.imomoe.App
 import java.io.File
 import java.io.FileInputStream
-import java.io.FileOutputStream
-import java.io.InputStream
-import java.lang.Exception
 import java.math.BigDecimal
+
 
 val File.uri: Uri
     get() = if (Build.VERSION.SDK_INT >= 24) {
@@ -17,11 +15,6 @@ val File.uri: Uri
     } else {
         Uri.fromFile(this)
     }
-
-fun Uri.copyTo(target: File): File {
-    App.context.contentResolver.openInputStream(this)!!.copyTo(FileOutputStream(target))
-    return target
-}
 
 fun String.toFile() = File(this)
 
