@@ -1,4 +1,4 @@
-ext.version_code = 18
+ext.version_code = 19
 ext.version_name = "1.2.5_Akarin"
 
 def build_versions = [:]

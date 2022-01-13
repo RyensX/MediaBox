@@ -7,7 +7,7 @@
             <img src="https://codebeat.co/badges/63fb5d12-bece-4d8f-913e-5bcde2f01242" alt="codebeat badge"  />
         </a>
         <a href="https://github.com/SkyD666/Imomoe/releases/latest" style="text-decoration:none">
-            <img src="https://img.shields.io/github/v/release/SkyD666/Imomoe" alt="GitHub release (latest by date)"/>
+            <img src="https://img.shields.io/github/v/release/SkyD666/Imomoe?display_name=release" alt="GitHub release (latest by date)"/>
         </a>
         <a href="https://github.com/SkyD666/Imomoe/releases/latest" style="text-decoration:none" >
             <img src="https://img.shields.io/github/downloads/SkyD666/Imomoe/total" alt="GitHub all downloads"/>
@@ -23,6 +23,7 @@
         樱花动漫第三方安卓Android客户端，免费开源，目的是学习Android开发。（仅支持Android 5及以上版本）
     </p>
 </div>
+
 
 
 ----

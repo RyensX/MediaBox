@@ -288,6 +288,17 @@ object Util {
         }
     }
 
+    fun isNewVersionByVersionCode(version: String): Boolean {
+        val currentVersion = getAppVersionCode().toString()
+        return try {
+            version != currentVersion
+        } catch (e: Exception) {
+            e.printStackTrace()
+            "检查版本号失败，建议手动到Github查看是否有更新\n当前版本代码：$currentVersion".showToast(Toast.LENGTH_LONG)
+            false
+        }
+    }
+
     fun isNewVersion(version: String): Boolean {
         val currentVersion = getAppVersionName()
         return try {

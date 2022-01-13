@@ -6,7 +6,7 @@ import com.skyd.imomoe.App
 import com.skyd.imomoe.bean.UpdateBean
 import com.skyd.imomoe.net.RetrofitManager
 import com.skyd.imomoe.net.service.UpdateService
-import com.skyd.imomoe.util.Util.isNewVersion
+import com.skyd.imomoe.util.Util.isNewVersionByVersionCode
 import com.skyd.imomoe.util.editor
 import com.skyd.imomoe.util.sharedPreferences
 import com.skyd.imomoe.util.update.AppUpdateHelper
@@ -59,7 +59,8 @@ object AppUpdateModel {
                 updateBean = response.body()
                 updateBean?.let {
                     status.postValue(
-                        if (isNewVersion(updateBean?.tagName ?: "0")) AppUpdateStatus.DATED
+                        if (isNewVersionByVersionCode(updateBean?.tagName ?: "0"))
+                            AppUpdateStatus.DATED
                         else AppUpdateStatus.VALID
                     )
                     return

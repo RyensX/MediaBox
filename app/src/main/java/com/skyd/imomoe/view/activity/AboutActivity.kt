@@ -11,6 +11,7 @@ import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.databinding.ActivityAboutBinding
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.util.Util
+import com.skyd.imomoe.util.Util.getAppVersionCode
 import com.skyd.imomoe.util.Util.getAppVersionName
 import com.skyd.imomoe.util.Util.openBrowser
 import com.skyd.imomoe.util.visible
@@ -41,7 +42,7 @@ class AboutActivity : BaseActivity<ActivityAboutBinding>() {
                 ivAboutActivityIconEgg.setImageResource(R.drawable.ic_christmas_hat)
             }
 
-            tvAboutActivityVersion.text = getAppVersionName()
+            tvAboutActivityVersion.text = "版本名：${getAppVersionName()}\n版本代号：${getAppVersionCode()}"
 
             rlAboutActivityImomoe.setOnClickListener {
                 var warningString: String = getString(R.string.jump_to_data_source_website_warning)
