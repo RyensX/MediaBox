@@ -147,7 +147,7 @@
     <string name="custom_data_source">自定义数据源：%s</string>
     <string name="config_custom_data_source">配置自定义数据源</string>
     <string name="custom_data_source_describe">具体使用方法请访问Github仓库</string>
-    <string name="using_custom_data_source">注意，自定义数据源功能已启用，请确保Jar包无恶意代码！</string>
+    <string name="using_custom_data_source">注意，自定义数据源功能已启用，请确保ads包无恶意代码！</string>
     <string name="restart">重启</string>
     <string name="custom_data_source_tip">请务必确保ads包无恶意代码\n需要重启App，是否继续？</string>
     <string name="ask_overwrite_file">存在同名文件，是否覆盖？</string>
@@ -187,6 +187,7 @@
     <string name="dns_server_describe">通过安全连接访问网站</string>
     <string name="select_dns_server">选择DNS提供商</string>
     <string name="custom_dns_server">自定义DNS提供商</string>
+    <string name="custom_dns_server_describe">自定义DNS提供商。例如：https://1.0.0.1/dns-query</string>
     <string name="config_data_source_tip">点击数据源条目可使用数据源，点击右上角按钮可恢复默认数据源，长按数据源条目可删除数据源</string>
     <string name="invalid_data_source_suffix">无效数据源文件后缀：%s</string>
     <string name="the_data_source_is_using_now">正在使用此数据源！</string>

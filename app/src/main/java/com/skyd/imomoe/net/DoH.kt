@@ -8,6 +8,9 @@ import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.util.editor
 import com.skyd.imomoe.util.sharedPreferences
+import com.skyd.imomoe.util.showToast
+import okhttp3.HttpUrl.Companion.toHttpUrl
+import java.lang.Exception
 
 object DoH {
     val defaultDnsServer = hashMapOf(
@@ -56,8 +59,16 @@ object DoH {
     }
 
     fun AppCompatActivity.customDnsServer() {
-        MaterialDialog(this).input(hintRes = R.string.custom_dns_server) { _, text ->
-            dnsServer = text.toString()
+        MaterialDialog(this).input(hintRes = R.string.custom_dns_server_describe) { _, text ->
+            val url = text.toString()
+            try {
+                // 测试url合法性
+                url.toHttpUrl()
+                dnsServer = url
+            } catch (e: Exception) {
+                e.printStackTrace()
+                e.message?.showToast()
+            }
         }.show()
     }
 }
