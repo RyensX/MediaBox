@@ -92,9 +92,11 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
                 ablPlayActivity.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
                     when {
                         abs(verticalOffset) > ctlPlayActivity.scrimVisibleHeightTrigger -> {
-                            tvPlayActivityToolbarTitle?.visible()
+                            tvPlayActivityToolbarVideoTitle.gone()
+                            tvPlayActivityToolbarTitle?.visible(animate = true, dur = 200L)
                         }
                         else -> {
+                            tvPlayActivityToolbarVideoTitle.visible(animate = true, dur = 200L)
                             tvPlayActivityToolbarTitle?.gone()
                         }
                     }
@@ -285,19 +287,16 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
         viewModel.refreshAnimeEpisodeData(url, currentEpisodeIndex, title)
     }
 
-    fun startPlay2(url: String, title: String, partUrl: String = this@PlayActivity.partUrl) {
-        mBinding.avpPlayActivity.startPlay(url, title, partUrl)
-    }
-
     private fun GSYBaseVideoPlayer.startPlay(
-        url: String = "",
-        title: String = "",
+        episodeDataBean: AnimeEpisodeDataBean? = null,
         partUrl: String = this@PlayActivity.partUrl
     ) {
+        mBinding.tvPlayActivityToolbarVideoTitle.text =
+            episodeDataBean?.title ?: viewModel.animeEpisodeDataBean.title
         PlayerFactory.setPlayManager(Exo2PlayerManager().javaClass)
         GSYVideoType.disableMediaCodec()        // 关闭硬解码
         //设置播放URL
-        if (url.isBlank()) {
+        if (episodeDataBean == null) {
             if (!isDestroyed) {
                 viewModel.updateFavoriteData(
                     detailPartUrl,
@@ -333,21 +332,21 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
         } else {
             if (!isDestroyed) {
                 viewModel.updateFavoriteData(
-                    detailPartUrl, viewModel.partUrl, title,
+                    detailPartUrl, viewModel.partUrl, episodeDataBean.title,
                     System.currentTimeMillis()
                 )
                 viewModel.insertHistoryData(detailPartUrl)
             }
-            if (!url.endsWith("\$qzz", true)) {
+            if (!episodeDataBean.videoUrl.endsWith("\$qzz", true)) {
                 danmakuUrl = ""
-                setUp(url, false, title)
+                setUp(episodeDataBean.videoUrl, false, episodeDataBean.title)
             } else {
                 SnifferVideo.getQzzVideoUrl(this@PlayActivity, partUrl, detailPartUrl)
                 { videoUrl, paramMap ->
                     danmakuParamMap.clear()
                     danmakuParamMap.putAll(paramMap)
                     danmakuUrl = paramMap[SnifferVideo.DANMU_URL] ?: ""
-                    setUp(videoUrl, false, title)
+                    setUp(videoUrl, false, episodeDataBean.title)
                     // 开始播放
                     startPlayLogic()
                 }
@@ -409,13 +408,6 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
     override fun onPlayError(url: String?, vararg objects: Any?) {
         super.onPlayError(url, *objects)
         "${objects[0].toString()}, ${getString(R.string.get_data_failed)}".showToast()
-//        SnifferVideo.askSnifferDialog(
-//            this, objects[0].toString() + ", " + getString(R.string.get_data_failed),
-//            getString(R.string.will_you_try_to_sniffer_video),
-//            partUrl, detailPartUrl
-//        ) { videoUrl, danMuUrl ->
-//            videoPlayer.startPlay(videoUrl, viewModel.animeEpisodeDataBean.title)
-//        }
     }
 
     override fun onQuitFullscreen(url: String?, vararg objects: Any?) {
@@ -448,8 +440,12 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
         }
     }
 
-    override fun needShowToolbar(show: Boolean) {
-        super.needShowToolbar(show)
+    /**
+     * 是否需要必须显示工具栏
+     *
+     * @param show false：不需要显示；true：需要显示
+     */
+    private fun needShowToolbar(show: Boolean) {
         mBinding.apply {
             if (show) {
                 avpPlayActivity.setTopContainer(null)
@@ -462,19 +458,9 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
 
     private fun canCollapsed(enable: Boolean) {
         if (lastCanCollapsed == enable) return
+        needShowToolbar(enable)
         lastCanCollapsed = enable
-//        mBinding.nsvPlayActivity?.let {
-//            ViewCompat.setNestedScrollingEnabled(it, enable)
-//        }
         mBinding.ablPlayActivity?.let {
-//            val params = it.layoutParams as CoordinatorLayout.LayoutParams
-//            if (params.behavior == null) params.behavior = AppBarLayout.Behavior()
-//            val behaviour = params.behavior as AppBarLayout.Behavior
-//            behaviour.setDragCallback(object : AppBarLayout.Behavior.DragCallback() {
-//                override fun canDrag(appBarLayout: AppBarLayout): Boolean {
-//                    return enable
-//                }
-//            })
             val mAppBarChildAt: View = it.getChildAt(0)
             val mAppBarParams = mAppBarChildAt.layoutParams as AppBarLayout.LayoutParams
             mAppBarParams.scrollFlags = if (enable) {
@@ -492,21 +478,20 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
 
     override fun getGSYVideoPlayer(): DanmakuVideoPlayer = mBinding.avpPlayActivity
 
-    override fun getGSYVideoOptionBuilder(): GSYVideoOptionBuilder {
-        return GSYVideoOptionBuilder()
-            .setReleaseWhenLossAudio(false)         //音频焦点冲突时是否释放
-            .setPlayTag(this.javaClass.simpleName)  //防止错位设置
-            .setIsTouchWiget(true)
-            .setRotateViewAuto(false)
-            .setLockLand(false)
-            .setShowFullAnimation(false)            //打开动画
-            .setNeedLockFull(true)
-            .setDismissControlTime(5000)
+    override val gsyVideoOptionBuilder = GSYVideoOptionBuilder().apply {
+        setReleaseWhenLossAudio(false)         // 音频焦点冲突时是否释放
+        setPlayTag(this.javaClass.simpleName)  // 防止错位设置
+        setIsTouchWiget(true)
+        setRotateViewAuto(false)
+        setLockLand(false)
+        setShowFullAnimation(false)            // 打开动画
+        setNeedLockFull(true)
+        setDismissControlTime(5000)
     }
 
     override fun clickForFullScreen() {}
 
-    override fun getDetailOrientationRotateAuto(): Boolean = true
+    override val detailOrientationRotateAuto = true
 
     fun getSheetDialog(action: String): BottomSheetDialog {
         val bottomSheetDialog = BottomSheetDialog(this, R.style.BottomSheetDialogTheme)

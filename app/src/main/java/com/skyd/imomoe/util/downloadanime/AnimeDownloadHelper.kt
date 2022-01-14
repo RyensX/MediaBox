@@ -4,14 +4,12 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.hjq.permissions.OnPermissionCallback
-import com.hjq.permissions.Permission
-import com.hjq.permissions.XXPermissions
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.config.Const.DownloadAnime.Companion.animeFilePath
 import com.skyd.imomoe.database.entity.AnimeDownloadEntity
+import com.skyd.imomoe.util.requestManageExternalStorage
 import com.skyd.imomoe.util.showToast
 import org.w3c.dom.Element
 import org.w3c.dom.Node
@@ -244,32 +242,23 @@ class AnimeDownloadHelper private constructor() {
                 .showToast()
             return
         }
-        XXPermissions.with(activity).permission(Permission.MANAGE_EXTERNAL_STORAGE).request(
-            object : OnPermissionCallback {
-                override fun onGranted(permissions: MutableList<String>?, all: Boolean) {
-                    if (downloadHashMap[key]?.value == AnimeDownloadStatus.DOWNLOADING) {
-                        "已经在下载啦...".showToast()
-                        return
-                    } /*else if (downloadHashMap[key]?.value == AnimeDownloadStatus.COMPLETE) {
-                        "已经下载好啦...".showToast()
-                        return
-                    }*/
-                    val status = MutableLiveData<AnimeDownloadStatus>()
-                    status.value = AnimeDownloadStatus.DOWNLOADING
-                    downloadHashMap[key] = status
-                    activity.startService(
-                        Intent(activity, AnimeDownloadService::class.java)
-                            .putExtra("url", url)
-                            .putExtra("key", key)
-                            .putExtra("folderAndFileName", folderAndFileName)
-                    )
+        activity.requestManageExternalStorage {
+            onGranted {
+                if (downloadHashMap[key]?.value == AnimeDownloadStatus.DOWNLOADING) {
+                    "已经在下载啦...".showToast()
+                    return@onGranted
                 }
-
-                override fun onDenied(permissions: MutableList<String>?, never: Boolean) {
-                    super.onDenied(permissions, never)
-                    "未获取存储权限，无法下载".showToast()
-                }
+                val status = MutableLiveData<AnimeDownloadStatus>()
+                status.value = AnimeDownloadStatus.DOWNLOADING
+                downloadHashMap[key] = status
+                activity.startService(
+                    Intent(activity, AnimeDownloadService::class.java)
+                        .putExtra("url", url)
+                        .putExtra("key", key)
+                        .putExtra("folderAndFileName", folderAndFileName)
+                )
             }
-        )
+            onDenied { "未获取存储权限，无法下载".showToast() }
+        }
     }
 }

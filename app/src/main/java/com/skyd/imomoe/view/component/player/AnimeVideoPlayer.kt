@@ -374,8 +374,8 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
 
     override fun hideAllWidget() {
         super.hideAllWidget()
-        setViewShowState(vgRightContainer, INVISIBLE)
-        setViewShowState(vgSettingContainer, INVISIBLE)
+//        setViewShowState(vgRightContainer, INVISIBLE)
+//        setViewShowState(vgSettingContainer, INVISIBLE)
         setViewShowState(tvRestoreScreen, View.GONE)
         setViewShowState(viewTopContainerShadow, View.INVISIBLE)
     }
@@ -726,25 +726,58 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
     override fun onClick(v: View) {
         super.onClick(v)
 
-        val i = v.id
-        // bigger_surface代替原有的surface_container执行点击动作
-        if (i == R.id.bigger_surface && mCurrentState == GSYVideoView.CURRENT_STATE_ERROR) {
-            if (mVideoAllCallBack != null) {
-                Debuger.printfLog("onClickStartError")
-                mVideoAllCallBack.onClickStartError(mOriginUrl, mTitle, this)
-            }
-            prepareVideo()
-        } else if (i == R.id.bigger_surface) {
-            if (mVideoAllCallBack != null && isCurrentMediaListener) {
-                if (mIfCurrentIsFullscreen) {
-                    Debuger.printfLog("onClickBlankFullscreen")
-                    mVideoAllCallBack.onClickBlankFullscreen(mOriginUrl, mTitle, this)
+        when (v.id) {
+            // bigger_surface代替原有的surface_container执行点击动作
+            R.id.bigger_surface -> {
+                vgSettingContainer?.gone()
+                vgRightContainer?.gone()
+                if (mCurrentState == GSYVideoView.CURRENT_STATE_ERROR) {
+                    if (mVideoAllCallBack != null) {
+                        Debuger.printfLog("onClickStartError")
+                        mVideoAllCallBack.onClickStartError(mOriginUrl, mTitle, this)
+                    }
+                    prepareVideo()
                 } else {
-                    Debuger.printfLog("onClickBlank")
-                    mVideoAllCallBack.onClickBlank(mOriginUrl, mTitle, this)
+                    if (mVideoAllCallBack != null && isCurrentMediaListener) {
+                        if (mIfCurrentIsFullscreen) {
+                            Debuger.printfLog("onClickBlankFullscreen")
+                            mVideoAllCallBack.onClickBlankFullscreen(mOriginUrl, mTitle, this)
+                        } else {
+                            Debuger.printfLog("onClickBlank")
+                            mVideoAllCallBack.onClickBlank(mOriginUrl, mTitle, this)
+                        }
+                    }
+                    startDismissControlViewTimer()
                 }
             }
-            startDismissControlViewTimer()
+            R.id.thumb -> {
+                vgSettingContainer?.gone()
+                vgRightContainer?.gone()
+            }
+        }
+    }
+
+    /**
+     * 双击的时候调用此方法
+     */
+    override fun touchDoubleUp(e: MotionEvent?) {
+        // 处理双击前的逻辑
+        val oldUiVisibilityState = mBottomContainer?.visibility ?: VISIBLE
+
+        // 处理双击
+        super.touchDoubleUp(e)
+
+        // 下面是处理完双击后的逻辑
+        if (mCurrentState == CURRENT_STATE_PLAYING) {       // 若双击后是播放状态
+            //双击前Ui是什么可见性状态，则双击后Ui还是什么可见性状态，避免双击后Ui突然显示出来
+            if (oldUiVisibilityState == VISIBLE) changeUiToPlayingShow()
+            else changeUiToPlayingClear()
+//            cancelDismissControlViewTimer()
+        } else if (mCurrentState == CURRENT_STATE_PAUSE) {  // 若双击后是暂停状态
+            //双击前Ui是什么可见性状态，则双击后Ui还是什么可见性状态，避免双击后Ui突然显示出来
+            if (oldUiVisibilityState == VISIBLE) changeUiToPauseShow()
+            else changeUiToPauseClear()
+//            cancelDismissControlViewTimer()
         }
     }
 

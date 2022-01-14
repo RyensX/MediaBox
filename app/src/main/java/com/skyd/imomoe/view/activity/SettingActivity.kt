@@ -13,8 +13,7 @@ import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.databinding.ActivitySettingBinding
 import com.skyd.imomoe.model.DataSourceManager
-import com.skyd.imomoe.net.DoH
-import com.skyd.imomoe.net.DoH.selectDnsServer
+import com.skyd.imomoe.net.DnsServer.selectDnsServer
 import com.skyd.imomoe.util.Util.getAppVersionName
 import com.skyd.imomoe.util.Util.getResDrawable
 import com.skyd.imomoe.util.showToast

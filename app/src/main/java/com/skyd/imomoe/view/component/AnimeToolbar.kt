@@ -2,9 +2,7 @@ package com.skyd.imomoe.view.component
 
 import android.content.Context
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.text.TextUtils
 import android.widget.TextView
 import com.skyd.imomoe.R
@@ -26,6 +24,11 @@ import com.skyd.imomoe.view.component.textview.TypefaceTextView
 
 
 class AnimeToolbar : LinearLayout {
+    companion object {
+        // 按钮最小高度，以dp为单位
+        const val BUTTON_MIN_HEIGHT = 50
+    }
+
     var titleText: CharSequence? = null
         set(value) {
             titleTextView.text = value
@@ -35,7 +38,7 @@ class AnimeToolbar : LinearLayout {
     private var buttons: MutableList<ImageView> = ArrayList()
     private val buttonLayoutParams = LayoutParams(
         ViewGroup.LayoutParams.WRAP_CONTENT,
-        ViewGroup.LayoutParams.MATCH_PARENT
+        ViewGroup.LayoutParams.WRAP_CONTENT
     )
     private lateinit var titleTextView: TextView
     private lateinit var backButton: ImageView
@@ -85,6 +88,7 @@ class AnimeToolbar : LinearLayout {
         backButton = ImageView(context, attrs).apply {
             this.layoutParams = buttonLayoutParams
             adjustViewBounds = true
+            minimumHeight = BUTTON_MIN_HEIGHT.dp
             context.obtainStyledAttributes(intArrayOf(android.R.attr.selectableItemBackground))
                 .also {
                     background = it.getDrawable(0)
@@ -152,6 +156,7 @@ class AnimeToolbar : LinearLayout {
         addView(ImageView(context).apply {
             layoutParams = params
             adjustViewBounds = true
+            minimumHeight = BUTTON_MIN_HEIGHT.dp
             context.obtainStyledAttributes(intArrayOf(android.R.attr.selectableItemBackground))
                 .also { background = it.getDrawable(0) }.recycle()
             setPadding(12.dp, 12.dp, 12.dp, 12.dp)

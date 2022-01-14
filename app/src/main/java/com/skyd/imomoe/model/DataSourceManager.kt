@@ -7,7 +7,6 @@ import com.skyd.imomoe.BuildConfig
 import com.skyd.imomoe.model.interfaces.IConst
 import com.skyd.imomoe.model.interfaces.IRouteProcessor
 import com.skyd.imomoe.model.interfaces.IUtil
-import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.editor
 import com.skyd.imomoe.util.sharedPreferences
 import dalvik.system.DexClassLoader
@@ -15,13 +14,6 @@ import java.io.File
 
 
 object DataSourceManager {
-//    var useCustomDataSource: Boolean
-//        get() {
-//            return App.context.sharedPreferences().getBoolean("useCustomDataSource", false)
-//        }
-//        set(value) {
-//            App.context.sharedPreferences().editor { putBoolean("useCustomDataSource", value) }
-//        }
 
     const val DEFAULT_DATA_SOURCE = ""
 
@@ -97,7 +89,7 @@ object DataSourceManager {
     @Suppress("UNCHECKED_CAST")
     fun <T> create(clazz: Class<T>): T? {
         // 如果不使用自定义数据，直接返回null
-        if (dataSourceName == DEFAULT_DATA_SOURCE) return null
+        if (dataSourceName == DEFAULT_DATA_SOURCE && !BuildConfig.DEBUG) return null
         cache[clazz]?.let {
             return it.newInstance() as T
         }

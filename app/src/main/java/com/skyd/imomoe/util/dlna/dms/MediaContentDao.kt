@@ -1,5 +1,6 @@
 package com.skyd.imomoe.util.dlna.dms
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.provider.MediaStore.*
 import org.fourthline.cling.support.model.PersonWithRole
@@ -12,6 +13,7 @@ import java.io.File
 import java.util.*
 
 internal class MediaContentDao(private val mBaseUrl: String) : IMediaContentDao {
+    @SuppressLint("Range")
     override fun getImageItems(context: Context): List<Item> {
         val items: MutableList<Item> = ArrayList()
         context.contentResolver.query(
@@ -39,6 +41,7 @@ internal class MediaContentDao(private val mBaseUrl: String) : IMediaContentDao 
         return items
     }
 
+    @SuppressLint("Range")
     override fun getAudioItems(context: Context): List<Item> {
         val items: MutableList<Item> = ArrayList()
         context.contentResolver.query(
@@ -75,6 +78,7 @@ internal class MediaContentDao(private val mBaseUrl: String) : IMediaContentDao 
         return items
     }
 
+    @SuppressLint("Range")
     override fun getVideoItems(context: Context): List<Item> {
         val items: MutableList<Item> = ArrayList()
         context.contentResolver.query(

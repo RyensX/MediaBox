@@ -7,13 +7,11 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afollestad.materialdialogs.MaterialDialog
-import com.hjq.permissions.OnPermissionCallback
-import com.hjq.permissions.Permission
-import com.hjq.permissions.XXPermissions
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.ActivityAnimeDownloadBinding
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.gone
+import com.skyd.imomoe.util.requestManageExternalStorage
 import com.skyd.imomoe.util.visible
 import com.skyd.imomoe.view.adapter.AnimeDownloadAdapter
 import com.skyd.imomoe.viewmodel.AnimeDownloadViewModel
@@ -70,23 +68,19 @@ class AnimeDownloadActivity : BaseActivity<ActivityAnimeDownloadBinding>() {
             }
         })
 
-        XXPermissions.with(this).permission(Permission.MANAGE_EXTERNAL_STORAGE)
-            .request(object : OnPermissionCallback {
-                override fun onGranted(permissions: MutableList<String>?, all: Boolean) {
-                    if (mode == 0) viewModel.getAnimeCover()
-                    else if (mode == 1) {
-                        mBinding.layoutAnimeDownloadLoading.layoutCircleProgressTextTip1.visible()
-                        viewModel.getAnimeCoverEpisode(directoryName, path)
-                    }
-                }
-
-                override fun onDenied(permissions: MutableList<String>?, never: Boolean) {
-                    super.onDenied(permissions, never)
-                    "无存储权限，无法播放本地缓存视频".showToast(Toast.LENGTH_LONG)
-                    finish()
+        requestManageExternalStorage {
+            onGranted {
+                if (mode == 0) viewModel.getAnimeCover()
+                else if (mode == 1) {
+                    mBinding.layoutAnimeDownloadLoading.layoutCircleProgressTextTip1.visible()
+                    viewModel.getAnimeCoverEpisode(directoryName, path)
                 }
             }
-            )
+            onDenied {
+                "无存储权限，无法播放本地缓存视频".showToast(Toast.LENGTH_LONG)
+                finish()
+            }
+        }
     }
 
     override fun getBinding(): ActivityAnimeDownloadBinding =

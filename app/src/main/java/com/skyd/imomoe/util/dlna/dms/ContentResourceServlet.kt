@@ -13,34 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.skyd.imomoe.util.dlna.dms;
+package com.skyd.imomoe.util.dlna.dms
 
-import org.eclipse.jetty.servlet.DefaultServlet;
-import org.eclipse.jetty.util.resource.FileResource;
-import org.eclipse.jetty.util.resource.Resource;
+import org.eclipse.jetty.servlet.DefaultServlet
+import org.eclipse.jetty.util.resource.FileResource
+import org.eclipse.jetty.util.resource.Resource
+import java.io.File
+import java.lang.Exception
 
-import java.io.File;
-
-public class ContentResourceServlet extends DefaultServlet {
-
-    @Override
-    public Resource getResource(String pathInContext) {
+open class ContentResourceServlet : DefaultServlet() {
+    override fun getResource(pathInContext: String?): Resource? {
         // String id = Utils.parseResourceId(pathInContext);
         // content://media/external/video/media/1611127029319529
         // Uri uri = ContentUris.withAppendedId(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, Long.parseLong(id));
 //        Logger.i("ContentResourceServlet, path: %s", pathInContext);
         try {
-            File file = new File(pathInContext);
-            if (file.exists()) return FileResource.newResource(file);
-        } catch (Exception e) {
-            e.printStackTrace();
+            val file = File(pathInContext!!)
+            if (file.exists()) return FileResource.newResource(file)
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
-        return null;
+        return null
     }
 
-    public static class VideoResourceServlet extends ContentResourceServlet {
-    }
-
-    public static class AudioResourceServlet extends ContentResourceServlet {
-    }
+    class VideoResourceServlet : ContentResourceServlet()
+    class AudioResourceServlet : ContentResourceServlet()
 }

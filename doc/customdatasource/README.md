@@ -6,15 +6,15 @@
 
 ## **快捷导航：大部分普通用户可以只看①-④**
 
-## [①使用已有的自定义数据源](#一.使用已有的自定义数据源)
+## [①使用已有的自定义数据源](#一-使用已有的自定义数据源)
 
 ## [②示例代码和ads包](#例子)
 
-## [③删除数据源](#二.删除数据源)
+## [③删除数据源](#二-删除数据源)
 
-## [④恢复默认数据源](#三.恢复默认数据源)
+## [④恢复默认数据源](#三-恢复默认数据源)
 
-## [⑤自制数据源(高级)](#四.自制数据源)
+## [⑤自制数据源(高级)](#四-自制数据源)
 
 ## 什么是自定义数据源？
 
@@ -26,7 +26,7 @@
 
 ## 如何使用自定义数据源功能？
 
-### 一.使用已有的自定义数据源
+### 一 使用已有的自定义数据源
 
 ### **>>已有的ads包可从[此处](#例子)找到<<**
 
@@ -48,7 +48,7 @@
 
 <img src="E:\Android\Imomoe\doc\customdatasource\image\use_data_source_step_set.jpg" alt="use_data_source_step_set" style="zoom:37%;" />
 
-### 二.删除数据源
+### 二 删除数据源
 
 #### 1.进入配置自定义数据源页面，长按列表中的数据源
 
@@ -58,7 +58,7 @@
 
 <img src="E:\Android\Imomoe\doc\customdatasource\image\use_data_source_step_delete.jpg" alt="use_data_source_step_delete" style="zoom:37%;" />
 
-### 三.恢复默认数据源
+### 三 恢复默认数据源
 
 #### 1.进入配置自定义数据源页面，点击右上角恢复按钮
 
@@ -68,7 +68,7 @@
 
 <img src="E:\Android\Imomoe\doc\customdatasource\image\use_data_source_step_reset_dialog.jpg" alt="use_data_source_step_reset_dialog" style="zoom:37%;" />
 
-### 四.自制数据源
+### 四 自制数据源
 
 自己编写ads包(熟悉**Kotlin**，最好能够了解Android的基础知识)
 
@@ -135,6 +135,7 @@ com.skyd.imomoe.model.util.**
 com.skyd.imomoe.util.html.source.**
 com.skyd.imomoe.util.eventbus.**
 com.skyd.imomoe.util.Util
+com.skyd.imomoe.util.ToastKt
 com.skyd.imomoe.bean.**
 com.skyd.imomoe.config.**
 org.jsoup.**

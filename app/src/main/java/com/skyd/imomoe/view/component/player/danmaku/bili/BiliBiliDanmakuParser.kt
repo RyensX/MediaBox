@@ -10,6 +10,7 @@ import org.xml.sax.helpers.DefaultHandler
 import org.xml.sax.helpers.XMLReaderFactory
 import java.io.IOException
 import java.io.InputStream
+import java.lang.NumberFormatException
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -80,14 +81,18 @@ class BiliBiliDanmakuParser {
                 val values = pValue.split(",").toTypedArray()
 
                 if (values.isNotEmpty()) {
-                    item = DanmakuItemData(
-                        content = "",
-                        danmakuId = values[7].toLong(),
-                        textSize = (values[2].toFloat() * 2f).dp.toInt(),
-                        textColor = values[3].toInt(),
-                        position = (values[0].toFloat() * 1000).toLong(),
-                        mode = getType(values[1].toInt())
-                    )
+                    try {
+                        item = DanmakuItemData(
+                            content = "",
+                            danmakuId = values[7].toLong(),
+                            textSize = getTextSize(values[2].toInt()).toInt(),
+                            textColor = values[3].toInt(),
+                            position = (values[0].toFloat() * 1000).toLong(),
+                            mode = getType(values[1].toInt())
+                        )
+                    } catch (e: NumberFormatException) {
+                        e.printStackTrace()
+                    }
                 }
             }
         }
@@ -133,6 +138,25 @@ class BiliBiliDanmakuParser {
         }
 
         companion object {
+            /**
+             * 获取真实的字体大小px
+             * 弹幕库限制字体最小12f最大25f
+             * @param n 12非常小,16特小,18小,25中,36大,45很大,64特别大
+             * @return 以px为单位的字体大小
+             */
+            private fun getTextSize(n: Int): Float {
+                return when (n) {
+                    12 -> 12f
+                    16 -> 14f
+                    18 -> 17f
+                    25 -> 19f
+                    36 -> 21f
+                    45 -> 23f
+                    64 -> 25f
+                    else -> 19f
+                }
+            }
+
             private fun getType(s: Int): Int {
                 // 类型(1从右至左滚动弹幕|6从左至右滚动弹幕|5顶端固定弹幕|4底端固定弹幕|7高级弹幕|8脚本弹幕)
                 return when (s) {

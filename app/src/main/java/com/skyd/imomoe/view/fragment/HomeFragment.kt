@@ -9,14 +9,9 @@ import android.view.ViewStub
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.hjq.permissions.OnPermissionCallback
-import com.hjq.permissions.Permission
-import com.hjq.permissions.XXPermissions
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.FragmentHomeBinding
 import com.skyd.imomoe.model.DataSourceManager
@@ -27,6 +22,7 @@ import com.skyd.imomoe.util.eventbus.EventBusSubscriber
 import com.skyd.imomoe.util.eventbus.MessageEvent
 import com.skyd.imomoe.util.eventbus.RefreshEvent
 import com.skyd.imomoe.util.eventbus.SelectHomeTabEvent
+import com.skyd.imomoe.util.requestManageExternalStorage
 import com.skyd.imomoe.view.activity.*
 import com.skyd.imomoe.view.listener.dsl.addOnTabSelectedListener
 import com.skyd.imomoe.viewmodel.HomeViewModel
@@ -92,18 +88,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), EventBusSubscriber {
 
             ivHomeFragmentAnimeDownload.setOnClickListener {
                 it.clickScale(0.8f, 70)
-                XXPermissions.with(this@HomeFragment).permission(Permission.MANAGE_EXTERNAL_STORAGE)
-                    .request(object : OnPermissionCallback {
-                        override fun onGranted(permissions: MutableList<String>?, all: Boolean) {
-                            startActivity(Intent(activity, AnimeDownloadActivity::class.java))
-                        }
-
-                        override fun onDenied(permissions: MutableList<String>?, never: Boolean) {
-                            super.onDenied(permissions, never)
-                            "无存储权限，无法播放本地缓存视频".showToast(Toast.LENGTH_LONG)
-                        }
-                    }
-                    )
+                requestManageExternalStorage {
+                    onGranted { startActivity(Intent(activity, AnimeDownloadActivity::class.java)) }
+                    onDenied { "无存储权限，无法播放本地缓存视频".showToast(Toast.LENGTH_LONG) }
+                }
             }
 
             ivHomeFragmentFavorite.setOnClickListener {

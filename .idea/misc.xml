@@ -13,13 +13,14 @@
         <entry key="..\:/Android/Imomoe/app/src/main/res/drawable/ic_fast_forward_white_24.xml" value="0.3764102564102564" />
         <entry key="..\:/Android/Imomoe/app/src/main/res/drawable/ic_fast_rewind_white_24.xml" value="0.3764102564102564" />
         <entry key="..\:/Android/Imomoe/app/src/main/res/drawable/ic_insert_drive_file_main_color_2_24_skin.xml" value="0.3764102564102564" />
+        <entry key="..\:/Android/Imomoe/app/src/main/res/drawable/ic_launcher_background.xml" value="0.3764102564102564" />
         <entry key="..\:/Android/Imomoe/app/src/main/res/drawable/ic_restore_white_24.xml" value="0.3764102564102564" />
         <entry key="..\:/Android/Imomoe/app/src/main/res/drawable/ic_round_arrow_circle_down_24.xml" value="0.3764102564102564" />
         <entry key="..\:/Android/Imomoe/app/src/main/res/drawable/ic_sunny_main_color_24_skin.xml" value="0.3764102564102564" />
         <entry key="..\:/Android/Imomoe/app/src/main/res/drawable/ic_sunny_main_color_2_24_skin.xml" value="0.3764102564102564" />
         <entry key="..\:/Android/Imomoe/app/src/main/res/drawable/selector_horizontal_reverse_button_skin.xml" value="0.3764102564102564" />
-        <entry key="..\:/Android/Imomoe/app/src/main/res/layout-sw600dp-land/activity_play.xml" value="0.14609375" />
-        <entry key="..\:/Android/Imomoe/app/src/main/res/layout-sw600dp-port/activity_play.xml" value="0.12773224043715847" />
+        <entry key="..\:/Android/Imomoe/app/src/main/res/layout-sw600dp-land/activity_play.xml" value="0.25" />
+        <entry key="..\:/Android/Imomoe/app/src/main/res/layout-sw600dp-port/activity_play.xml" value="0.75" />
         <entry key="..\:/Android/Imomoe/app/src/main/res/layout/activity_about.xml" value="0.5" />
         <entry key="..\:/Android/Imomoe/app/src/main/res/layout/activity_anime_detail.xml" value="0.36614583333333334" />
         <entry key="..\:/Android/Imomoe/app/src/main/res/layout/activity_anime_download.xml" value="0.29791666666666666" />
@@ -44,7 +45,7 @@
         <entry key="..\:/Android/Imomoe/app/src/main/res/layout/dialog_bottom_sheet_2.xml" value="0.36614583333333334" />
         <entry key="..\:/Android/Imomoe/app/src/main/res/layout/fragment_anime_show.xml" value="0.36614583333333334" />
         <entry key="..\:/Android/Imomoe/app/src/main/res/layout/fragment_everyday_anime.xml" value="0.25" />
-        <entry key="..\:/Android/Imomoe/app/src/main/res/layout/fragment_home.xml" value="0.67" />
+        <entry key="..\:/Android/Imomoe/app/src/main/res/layout/fragment_home.xml" value="0.25" />
         <entry key="..\:/Android/Imomoe/app/src/main/res/layout/fragment_more.xml" value="0.36614583333333334" />
         <entry key="..\:/Android/Imomoe/app/src/main/res/layout/fragment_more_dialog.xml" value="0.36614583333333334" />
         <entry key="..\:/Android/Imomoe/app/src/main/res/layout/fragment_rank.xml" value="0.36614583333333334" />

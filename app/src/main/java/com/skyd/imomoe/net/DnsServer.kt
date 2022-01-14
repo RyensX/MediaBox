@@ -12,7 +12,7 @@ import com.skyd.imomoe.util.showToast
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import java.lang.Exception
 
-object DoH {
+object DnsServer {
     val defaultDnsServer = hashMapOf(
         0 to "",
         1 to "https://223.5.5.5/dns-query",

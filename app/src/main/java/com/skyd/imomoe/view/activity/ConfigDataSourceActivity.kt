@@ -49,17 +49,29 @@ class ConfigDataSourceActivity : BaseActivity<ActivityConfigDataSourceBinding>()
     }
 
     private fun callToImport(intent: Intent) {
-        if (Intent.ACTION_VIEW == intent.action) {
-            intent.data?.let { uri ->
-                importDataSource(uri,
-                    onSuccess = {
-                        getString(R.string.import_data_source_success, uri.path).showSnackbar(this)
-                        viewModel.getDataSourceList()
-                    },
-                    onFailed = {
-                        getString(R.string.import_data_source_failed, it.message).showSnackbar(this)
-                    }
-                )
+        val uri = intent.data
+        if (Intent.ACTION_VIEW == intent.action && uri != null) {
+            requestManageExternalStorage {
+                onGranted {
+                    importDataSource(uri,
+                        onSuccess = {
+                            getString(
+                                R.string.import_data_source_success,
+                                uri.path
+                            ).showSnackbar(this@ConfigDataSourceActivity)
+                            viewModel.getDataSourceList()
+                        },
+                        onFailed = {
+                            getString(
+                                R.string.import_data_source_failed,
+                                it.message
+                            ).showSnackbar(this@ConfigDataSourceActivity)
+                        }
+                    )
+                }
+                onDenied {
+                    "无存储权限，无法导入".showSnackbar(this@ConfigDataSourceActivity, Toast.LENGTH_LONG)
+                }
             }
         }
     }

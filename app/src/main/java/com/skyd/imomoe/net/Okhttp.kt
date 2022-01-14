@@ -11,7 +11,7 @@ import java.io.File
 private val okhttpCache = Cache(File("cacheDir", "okhttpcache"), 10 * 1024 * 1024)
 private val bootstrapClient = OkHttpClient.Builder().cache(okhttpCache).build()
 
-var dns: DnsOverHttps? = DoH.dnsServer.let {
+var dns: DnsOverHttps? = DnsServer.dnsServer.let {
     if (it.isNullOrBlank()) null else {
         try {
             DnsOverHttps.Builder().client(bootstrapClient)

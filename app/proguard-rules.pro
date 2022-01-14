@@ -105,6 +105,7 @@ public static final int *;
 -keep class com.skyd.imomoe.model.util.** { *; }
 -keep class com.skyd.imomoe.util.html.source.** { *; }
 -keep class com.skyd.imomoe.util.eventbus.** { *; }
+-keep class com.skyd.imomoe.util.ToastKt { *; }
 # 与自定义数据源相关的库不应该被混淆
 -keep class org.jsoup.** { *; }
 -keep class org.greenrobot.eventbus.** { *; }

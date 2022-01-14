@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.SeekBar
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
@@ -35,6 +36,7 @@ import com.skyd.imomoe.view.component.player.danmaku.Const
 import com.skyd.imomoe.view.component.player.danmaku.anime.AnimeDanmakuParser
 import com.skyd.imomoe.view.component.player.danmaku.anime.AnimeDanmakuSender
 import com.skyd.imomoe.view.component.player.danmaku.bili.BiliBiliDanmakuParser
+import com.skyd.imomoe.view.listener.dsl.setOnSeekBarChangeListener
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.zip.Inflater
@@ -93,6 +95,21 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
     // 弹幕进度delta
     private var mDanmakuProgressDelta: Long = 0L
 
+    // 弹幕字号缩放百分比SeekBar
+    private var sbDanmakuTextScale: SeekBar? = null
+
+    // "弹幕字号"TextView
+    private var tvDanmakuTextScaleHeader: TextView? = null
+
+    // 显示弹幕字号缩放百分比TextView
+    private var tvDanmakuTextScale: TextView? = null
+
+    // 弹幕字号缩放最小百分比
+    private val mDanmakuTextScaleMinPercent: Int = 50
+
+    // 弹幕字号百分比
+    private var mDanmakuTextScalePercent: Int = mDanmakuTextScaleMinPercent + 70
+
     constructor(context: Context, fullFlag: Boolean?) : super(context, fullFlag)
 
     constructor(context: Context) : super(context)
@@ -112,6 +129,9 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
         tvRewindDanmakuProgress = findViewById(R.id.tv_player_rewind_danmaku_progress)
         tvResetDanmakuProgress = findViewById(R.id.tv_player_reset_danmaku_progress)
         tvForwardDanmakuProgress = findViewById(R.id.tv_player_forward_danmaku_progress)
+        sbDanmakuTextScale = findViewById(R.id.sb_danmaku_text_size_scale)
+        tvDanmakuTextScaleHeader = findViewById(R.id.tv_danmaku_text_size_scale_header)
+        tvDanmakuTextScale = findViewById(R.id.tv_danmaku_text_size_scale)
         etDanmakuInput?.gone()
         ivShowDanmaku?.gone()
         // 设置高度是0
@@ -203,6 +223,15 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
         tvResetDanmakuProgress?.setOnClickListener {
             mDanmakuProgressDelta = 0L
             seekDanmaku(currentPlayer.currentPositionWhenPlaying.toLong())
+        }
+
+        sbDanmakuTextScale?.setOnSeekBarChangeListener {
+            onProgressChanged { seekBar, progress, _ ->
+                seekBar ?: return@onProgressChanged
+                mDanmakuTextScalePercent = progress + mDanmakuTextScaleMinPercent
+                setTextSizeScale(mDanmakuTextScalePercent / 100f)
+                tvDanmakuTextScale?.text = mDanmakuTextScalePercent.percentage
+            }
         }
     }
 
@@ -296,6 +325,8 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
             super.startWindowFullscreen(context, actionBar, statusBar) as DanmakuVideoPlayer
         player.ivShowDanmaku?.visibility = ivShowDanmaku?.visibility ?: View.GONE
         player.etDanmakuInput?.visibility = etDanmakuInput?.visibility ?: View.GONE
+        player.sbDanmakuTextScale?.progress = mDanmakuTextScalePercent - mDanmakuTextScaleMinPercent
+        player.setTextSizeScale(mDanmakuTextScalePercent / 100f)
 
         player.mDanmakuShow = mDanmakuShow
         player.resolveDanmakuShow()
@@ -325,10 +356,11 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
             val player = it as DanmakuVideoPlayer
             if (player.etDanmakuInput?.visibility == View.VISIBLE) showBottomDanmakuController()
             else hideBottomDanmakuController()
-            ivShowDanmaku?.visibility =
-                player.ivShowDanmaku?.visibility ?: View.GONE
-            etDanmakuInput?.visibility =
-                player.etDanmakuInput?.visibility ?: View.GONE
+            ivShowDanmaku?.visibility = player.ivShowDanmaku?.visibility ?: View.GONE
+            etDanmakuInput?.visibility = player.etDanmakuInput?.visibility ?: View.GONE
+            mDanmakuTextScalePercent =
+                (player.sbDanmakuTextScale?.progress ?: 0) + mDanmakuTextScaleMinPercent
+            setTextSizeScale(player.mDanmakuTextScalePercent / 100f)
 
             mDanmakuShow = player.mDanmakuShow
             resolveDanmakuShow()
@@ -434,6 +466,9 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
         tvRewindDanmakuProgress?.visible()
         tvResetDanmakuProgress?.visible()
         tvForwardDanmakuProgress?.visible()
+        sbDanmakuTextScale?.visible()
+        tvDanmakuTextScaleHeader?.visible()
+        tvDanmakuTextScale?.visible()
         if (mDanmakuParamMap.size > 0) {
             etDanmakuInput?.enable()
             etDanmakuInput?.hint = mContext.getString(R.string.send_a_danmaku)
@@ -491,6 +526,15 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
             mCurrentState == GSYVideoView.CURRENT_STATE_NORMAL
         )
             stopDanmaku()
+    }
+
+    /**
+     * 更改弹幕字号缩放百分比
+     * @param scale 缩放倍数，例如2.7f指的是弹幕字号乘2.7
+     */
+    private fun setTextSizeScale(scale: Float) {
+        config = config.copy(textSizeScale = scale)
+        mDanmakuPlayer.updateConfig(config)
     }
 
     /**

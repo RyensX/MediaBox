@@ -13,7 +13,6 @@ import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.databinding.ActivityAnimeDetailBinding
 import com.skyd.imomoe.util.Util.getSkinResourceId
-import com.skyd.imomoe.util.Util.getStatusBarHeight
 import com.skyd.imomoe.util.Util.setTransparentStatusBar
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.coil.DarkBlurTransformation
@@ -41,12 +40,7 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setTransparentStatusBar(window, isDark = true)
-
-        val statusBarLinearParams =
-            mBinding.viewAnimeDetailActivityStatusBar.layoutParams //取控件当前的布局参数
-        statusBarLinearParams.height = getStatusBarHeight()
-        mBinding.viewAnimeDetailActivityStatusBar.layoutParams = statusBarLinearParams
+        setTransparentStatusBar(window, isDark = false)
 
         viewModel = ViewModelProvider(this).get(AnimeDetailViewModel::class.java)
         adapter = AnimeDetailAdapter(this, viewModel.animeDetailList)
