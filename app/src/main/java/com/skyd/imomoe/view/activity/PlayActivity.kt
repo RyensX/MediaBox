@@ -124,9 +124,14 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
                     setOnClickListener(
                         arrayOf(View.OnClickListener { dismiss() },
                             View.OnClickListener {
+                                val url = avpPlayActivity.getUrl()
+                                if (url == null) {
+                                    getString(R.string.please_wait_video_loaded).showToast()
+                                    return@OnClickListener
+                                }
                                 startActivity(
                                     Intent(this@PlayActivity, DlnaActivity::class.java)
-                                        .putExtra("url", avpPlayActivity.getUrl())
+                                        .putExtra("url", url)
                                         .putExtra("title", avpPlayActivity.getTitle())
                                 )
                                 dismiss()

@@ -89,7 +89,7 @@ object DataSourceManager {
     @Suppress("UNCHECKED_CAST")
     fun <T> create(clazz: Class<T>): T? {
         // 如果不使用自定义数据，直接返回null
-        if (dataSourceName == DEFAULT_DATA_SOURCE && !BuildConfig.DEBUG) return null
+        if (dataSourceName == DEFAULT_DATA_SOURCE/* && !BuildConfig.DEBUG*/) return null
         cache[clazz]?.let {
             return it.newInstance() as T
         }

@@ -393,16 +393,43 @@
                 android:textColor="@color/foreground_white_skin"
                 android:textSize="12sp" />
 
-            <TextView
-                android:id="@+id/tv_open_by_external_player"
-                android:layout_width="match_parent"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/shape_circle_corner_edge_white_ripper_5_skin"
-                android:gravity="center"
-                android:paddingVertical="7dp"
-                android:text="@string/open_by_external_player"
-                android:textColor="@color/foreground_white_skin" />
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/tv_open_by_external_player"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:paddingHorizontal="16dp"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp"
+                    android:text="@string/open_by_external_player"
+                    android:textColor="@color/foreground_white_skin"
+                    android:textSize="12sp"
+                    app:drawableTopCompat="@drawable/ic_player_white_24_skin"
+                    app:layout_constraintEnd_toStartOf="@id/tv_dlna"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_dlna"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:paddingHorizontal="16dp"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp"
+                    android:text="@string/play_on_tv"
+                    android:textColor="@color/foreground_white_skin"
+                    android:textSize="12sp"
+                    app:drawableTopCompat="@drawable/ic_live_tv_white_24_skin"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tv_open_by_external_player" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -441,7 +468,7 @@
                     android:textColor="@color/foreground_white_skin"
                     android:textSize="12sp"
                     android:visibility="gone"
-                    app:drawableTopCompat="@drawable/ic_fast_rewind_white_24"
+                    app:drawableTopCompat="@drawable/ic_fast_rewind_white_24_skin_dark"
                     app:layout_constraintEnd_toStartOf="@id/tv_player_reset_danmaku_progress"
                     app:layout_constraintStart_toStartOf="parent"
                     tools:visibility="visible" />
@@ -459,7 +486,7 @@
                     android:textColor="@color/foreground_white_skin"
                     android:textSize="12sp"
                     android:visibility="gone"
-                    app:drawableTopCompat="@drawable/ic_restore_white_24"
+                    app:drawableTopCompat="@drawable/ic_restore_white_24_skin_dark"
                     app:layout_constraintEnd_toStartOf="@id/tv_player_forward_danmaku_progress"
                     app:layout_constraintStart_toEndOf="@id/tv_player_rewind_danmaku_progress"
                     tools:visibility="visible" />
@@ -477,7 +504,7 @@
                     android:textColor="@color/foreground_white_skin"
                     android:textSize="12sp"
                     android:visibility="gone"
-                    app:drawableTopCompat="@drawable/ic_fast_forward_white_24"
+                    app:drawableTopCompat="@drawable/ic_fast_forward_white_24_skin"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/tv_player_reset_danmaku_progress"
                     tools:visibility="visible" />

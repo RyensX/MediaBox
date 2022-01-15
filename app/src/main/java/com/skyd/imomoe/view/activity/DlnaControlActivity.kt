@@ -3,10 +3,10 @@ package com.skyd.imomoe.view.activity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.os.Message
 import android.util.Log
 import android.view.View
 import android.widget.RelativeLayout
-import android.widget.SeekBar
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.ActivityDlnaControlBinding
 import com.skyd.imomoe.util.Util.getResColor
@@ -14,23 +14,32 @@ import com.skyd.imomoe.util.Util.setColorStatusBar
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.dlna.CastObject
 import com.skyd.imomoe.util.dlna.Utils
+import com.skyd.imomoe.util.dlna.Utils.isLocalMediaAddress
+import com.skyd.imomoe.util.dlna.Utils.toLocalHttpServerAddress
 import com.skyd.imomoe.util.dlna.dmc.DLNACastManager
 import com.skyd.imomoe.util.dlna.dmc.control.ICastInterface
+import com.skyd.imomoe.util.dlna.dmc.control.newGetInfoListener
+import com.skyd.imomoe.util.dlna.dms.MediaServer
 import com.skyd.imomoe.util.gone
 import com.skyd.imomoe.util.visible
+import com.skyd.imomoe.view.listener.dsl.setOnSeekBarChangeListener
 import org.fourthline.cling.model.meta.Device
 import kotlin.collections.HashMap
 
 class DlnaControlActivity : BaseActivity<ActivityDlnaControlBinding>() {
     private lateinit var layoutDlnaControlActivityLoading: RelativeLayout
+    private var mediaServer: MediaServer? = null
     private lateinit var deviceKey: String
     private lateinit var url: String
     private lateinit var title: String
     private var isPlaying = false
 
+    // 此界面不换肤
+    override fun isChangeSkin(): Boolean = false
+
     companion object {
         const val TAG = "DlnaControlActivity"
-        val deviceHashMap = HashMap<String, Device<*, *, *>?>()
+        val deviceHashMap = HashMap<String, Device<*, *, *>>()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,7 +55,7 @@ class DlnaControlActivity : BaseActivity<ActivityDlnaControlBinding>() {
         deviceKey = intent.getStringExtra("deviceKey") ?: ""
 
         if (deviceKey.isEmpty()) {
-            "数据接收错误！".showToast()
+            getString(R.string.dlna_init_data_error).showToast()
             finish()
         }
 
@@ -68,109 +77,121 @@ class DlnaControlActivity : BaseActivity<ActivityDlnaControlBinding>() {
             ivDlnaControlActivityStop.setOnClickListener { finish() }
         }
 
-
-        DLNACastManager.getInstance().registerActionCallbacks(
+        DLNACastManager.instance.registerActionCallbacks(
             object : ICastInterface.CastEventListener {
                 override fun onSuccess(result: String) {
-                    DLNACastManager.getInstance().getMediaInfo(
-                        deviceHashMap[deviceKey]
-                    ) { t, errMsg ->
-                        Log.i(TAG, t?.currentURI.toString())
+                    deviceHashMap[deviceKey]?.let {
+                        DLNACastManager.instance.getMediaInfo(
+                            it, newGetInfoListener { t, _ -> Log.i(TAG, t?.currentURI.toString()) }
+                        )
                     }
                     if (!isPlaying) play()
                 }
 
-                override fun onFailed(errMsg: String?) {
-                    ("投屏失败了\n$errMsg").showToast()
+                override fun onFailed(errMsg: String) {
+                    getString(R.string.dlna_cast_failed, errMsg).showToast()
                 }
             },
             object : ICastInterface.PlayEventListener {
                 override fun onSuccess(result: Void?) {
-                    "开始播放".showToast()
+                    getString(R.string.dlna_play).showToast()
                     isPlaying = true
                     mBinding.ivDlnaControlActivityPlay.setImageResource(R.drawable.ic_pause_circle_white_24)
 
-                    handler.postDelayed(positionRunnable, refreshPositionTime)
+                    positionHandler.start(refreshPositionTime)
+                    volumeHandler.start(refreshVolumeTime)
 
                     layoutDlnaControlActivityLoading.gone()
                 }
 
-                override fun onFailed(errMsg: String?) {
-                    ("投屏失败了\n$errMsg").showToast()
+                override fun onFailed(errMsg: String) {
+                    getString(R.string.dlna_play_failed, errMsg).showToast()
                 }
             },
             object : ICastInterface.PauseEventListener {
                 override fun onSuccess(result: Void?) {
-                    "暂停播放".showToast()
+                    getString(R.string.dlna_pause).showToast()
                     isPlaying = false
                     mBinding.ivDlnaControlActivityPlay.setImageResource(R.drawable.ic_play_circle_white_24)
-
-                    handler.post(positionRunnable)
-                    handler.removeCallbacks(positionRunnable)
 
                     layoutDlnaControlActivityLoading.gone()
                 }
 
-                override fun onFailed(errMsg: String?) {
-                    ("暂停失败了\n$errMsg").showToast()
+                override fun onFailed(errMsg: String) {
+                    getString(R.string.dlna_pause_failed, errMsg).showToast()
                 }
             },
             object : ICastInterface.StopEventListener {
                 override fun onSuccess(result: Void?) {
-                    "停止投屏".showToast()
+                    getString(R.string.dlna_stop).showToast()
                     isPlaying = false
                     mBinding.ivDlnaControlActivityPlay.setImageResource(R.drawable.ic_play_circle_white_24)
-//                    mPositionMsgHandler.stop()
-//                    mVolumeMsgHandler.stop()
-                    handler.post(positionRunnable)
-                    handler.removeCallbacks(positionRunnable)
+                    positionHandler.stop()
+                    volumeHandler.stop()
 
                     layoutDlnaControlActivityLoading.gone()
                 }
 
-                override fun onFailed(errMsg: String?) {
-                    ("停止失败了\n$errMsg").showToast()
+                override fun onFailed(errMsg: String) {
+                    getString(R.string.dlna_stop_failed, errMsg).showToast()
                 }
             },
             object : ICastInterface.SeekToEventListener {
-                override fun onSuccess(result: Long?) {
-                    "快进到${Utils.getStringTime(result ?: 0)}".showToast()
+                override fun onSuccess(result: Long) {
+                    getString(R.string.dlna_seek_to, Utils.getStringTime(result)).showToast()
                     play()
                     layoutDlnaControlActivityLoading.gone()
                 }
 
-                override fun onFailed(errMsg: String?) {
-                    ("快进失败了\n$errMsg").showToast()
+                override fun onFailed(errMsg: String) {
+                    getString(R.string.dlna_seen_to_failed, errMsg).showToast()
                 }
             }
         )
 
-        mBinding.sbDlnaControlActivity.setOnSeekBarChangeListener(object :
-            SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+        mBinding.sbDlnaControlActivity.setOnSeekBarChangeListener {
+            onStopTrackingTouch { seekBar ->
                 if (durationMillSeconds > 0 && seekBar != null) {
                     val position =
                         (seekBar.progress * 1f / seekBar.max * durationMillSeconds).toInt()
                     layoutDlnaControlActivityLoading.visible()
-                    DLNACastManager.getInstance().seekTo(position.toLong())
+                    DLNACastManager.instance.seekTo(position.toLong())
                 }
             }
-        })
+        }
+
+        mBinding.sbDlnaControlActivityVolume.setOnSeekBarChangeListener {
+            onStopTrackingTouch { seekBar ->
+                seekBar ?: return@onStopTrackingTouch
+                val volume = (seekBar.progress * 100f / seekBar.max).toInt()
+                DLNACastManager.instance.setVolume(volume)
+                // 同时取消静音
+                DLNACastManager.instance.setMute(false)
+                layoutDlnaControlActivityLoading.visible()
+            }
+
+            onProgressChanged { seekBar, progress, _ ->
+                seekBar ?: return@onProgressChanged
+                val volume = (progress * 100f / seekBar.max).toInt()
+                mBinding.tvDlnaControlActivityVolume.text = getString(
+                    R.string.dlna_volume, volume.toString()
+                )
+            }
+        }
+
+        // 若是本地视频，则转换为本地服务器地址
+        if (url.isLocalMediaAddress()) {
+            mediaServer = MediaServer(this).apply {
+                start()
+                DLNACastManager.instance.addMediaServer(this)
+            }
+            url = url.toLocalHttpServerAddress()
+        }
 
         deviceHashMap[deviceKey]?.let {
-            DLNACastManager.getInstance().cast(
+            DLNACastManager.instance.cast(
                 it,
-                CastObject.CastVideo.newInstance(
-                    url,
-                    System.currentTimeMillis().toString(),
-                    title
-                )
+                CastObject.CastVideo.newInstance(url, System.currentTimeMillis().toString(), title)
             )
         }
     }
@@ -180,54 +201,95 @@ class DlnaControlActivity : BaseActivity<ActivityDlnaControlBinding>() {
 
     private fun play() {
         layoutDlnaControlActivityLoading.visible()
-        DLNACastManager.getInstance().play()
+        DLNACastManager.instance.play()
     }
 
     private fun pause() {
         layoutDlnaControlActivityLoading.visible()
-        DLNACastManager.getInstance().pause()
+        DLNACastManager.instance.pause()
     }
 
     private fun stop() {
         layoutDlnaControlActivityLoading.visible()
-        DLNACastManager.getInstance().stop()
+        DLNACastManager.instance.stop()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         stop()
-        DLNACastManager.getInstance().unregisterActionCallbacks()
+        DLNACastManager.instance.unregisterActionCallbacks()
         deviceHashMap.remove(deviceKey)
     }
 
     private var durationMillSeconds: Long = 0
     private val refreshPositionTime: Long = 500
+    private val refreshVolumeTime: Long = 500
 
     private val positionRunnable: Runnable = object : Runnable {
         override fun run() {
-            if (deviceHashMap[deviceKey] == null) return
-            DLNACastManager.getInstance()
-                .getPositionInfo(deviceHashMap[deviceKey]) { positionInfo, errMsg ->
-                    if (positionInfo != null) {
-                        if (layoutDlnaControlActivityLoading.visibility != View.GONE)
-                            layoutDlnaControlActivityLoading.gone()
-                        mBinding.tvDlnaControlActivityTime.text = java.lang.String.format(
-                            "%s / %s", positionInfo.relTime, positionInfo.trackDuration
-                        )
-                        if (positionInfo.trackDurationSeconds != 0L) {
-                            durationMillSeconds = positionInfo.trackDurationSeconds * 1000
-                            mBinding.sbDlnaControlActivity.progress =
-                                (positionInfo.trackElapsedSeconds * 100 / positionInfo.trackDurationSeconds).toInt()
-                        } else {
-                            mBinding.sbDlnaControlActivity.progress = 0
-                        }
+            val device = deviceHashMap[deviceKey] ?: return
+            DLNACastManager.instance.getPositionInfo(device, newGetInfoListener { t, errMsg ->
+                if (t != null) {
+                    if (layoutDlnaControlActivityLoading.visibility != View.GONE)
+                        layoutDlnaControlActivityLoading.gone()
+                    mBinding.tvDlnaControlActivityTime.text =
+                        String.format("%s / %s", t.relTime, t.trackDuration)
+                    if (t.trackDurationSeconds != 0L) {
+                        durationMillSeconds = t.trackDurationSeconds * 1000
+                        mBinding.sbDlnaControlActivity.progress =
+                            (t.trackElapsedSeconds * 100 / t.trackDurationSeconds).toInt()
                     } else {
-                        Log.e(TAG, errMsg.toString())
+                        mBinding.sbDlnaControlActivity.progress = 0
                     }
-                    handler.postDelayed(this, refreshPositionTime)
+                } else {
+                    Log.e(TAG, errMsg.toString())
                 }
+            })
         }
     }
 
-    private val handler = Handler(Looper.getMainLooper())
+    private val volumeRunnable: Runnable = object : Runnable {
+        override fun run() {
+            val device = deviceHashMap[deviceKey] ?: return
+            // update volume
+            DLNACastManager.instance.getVolumeInfo(device, newGetInfoListener { t, errMsg ->
+                if (t != null) {
+                    if (layoutDlnaControlActivityLoading.visibility != View.GONE)
+                        layoutDlnaControlActivityLoading.gone()
+                    if (t <= mBinding.sbDlnaControlActivityVolume.max) {
+                        mBinding.sbDlnaControlActivityVolume.progress = t
+                    }
+                    mBinding.tvDlnaControlActivityVolume.text = getString(
+                        R.string.dlna_volume, t.toString()
+                    )
+                } else {
+                    Log.e(TAG, errMsg.toString())
+                }
+            })
+        }
+    }
+
+    private val positionHandler = CircleMessageHandler(refreshPositionTime, positionRunnable)
+    private val volumeHandler = CircleMessageHandler(refreshVolumeTime, volumeRunnable)
+
+    private class CircleMessageHandler(private val duration: Long, private val runnable: Runnable) :
+        Handler(Looper.getMainLooper()) {
+        override fun handleMessage(msg: Message) {
+            runnable.run()
+            sendEmptyMessageDelayed(MSG, duration)
+        }
+
+        fun start(delay: Long) {
+            stop()
+            sendEmptyMessageDelayed(MSG, delay)
+        }
+
+        fun stop() {
+            removeMessages(MSG)
+        }
+
+        companion object {
+            private const val MSG = 101
+        }
+    }
 }

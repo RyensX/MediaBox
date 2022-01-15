@@ -1,6 +1,6 @@
 package com.skyd.imomoe.util.dlna.dms
 
-internal interface IResourceServer {
+interface IResourceServer {
     fun startServer()
     fun stopServer()
 }

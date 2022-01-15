@@ -1,6 +1,5 @@
 package com.skyd.imomoe.util.dlna.dmc
 
-import android.text.TextUtils
 import android.util.Log
 import com.skyd.imomoe.BuildConfig
 
@@ -10,12 +9,14 @@ interface ILogger {
     fun i(msg: String?)
     fun w(msg: String?)
     fun e(msg: String?)
+
     class DefaultLoggerImpl @JvmOverloads constructor(
         `object`: Any,
         debug: Boolean = BuildConfig.DEBUG
     ) : ILogger {
         private val TAG: String
         private val DEBUG: Boolean
+
         override fun v(msg: String?) {
             if (DEBUG) Log.v(TAG, msg.toString())
         }
@@ -38,7 +39,7 @@ interface ILogger {
 
         init {
             var className = `object`.javaClass.simpleName
-            if (TextUtils.isEmpty(className)) {
+            if (className.isNullOrEmpty()) {
                 className = if (`object`.javaClass.superclass != null) {
                     `object`.javaClass.superclass.simpleName
                 } else {

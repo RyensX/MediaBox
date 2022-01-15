@@ -112,7 +112,7 @@
     <string name="delete">删除</string>
     <string name="clean">清理</string>
     <string name="media_codec">硬解码</string>
-    <string name="open_by_external_player">外部播放器打开</string>
+    <string name="open_by_external_player">外部播放器</string>
     <string name="choose_video_player">请选择视频播放器</string>
     <string name="matched_app_not_found">没有找到匹配的程序</string>
     <string name="skip_by_website">根据网址跳转</string>
@@ -193,4 +193,16 @@
     <string name="the_data_source_is_using_now">正在使用此数据源！</string>
     <string name="close">关闭</string>
     <string name="danmaku_text_size_scale">弹幕字号</string>
+    <string name="please_wait_video_loaded">请等待视频加载完毕…</string>
+    <string name="dlna_volume">音量：%s</string>
+    <string name="dlna_stop">停止投屏</string>
+    <string name="dlna_pause">暂停播放</string>
+    <string name="dlna_play">开始播放</string>
+    <string name="dlna_seek_to">快进到%s</string>
+    <string name="dlna_cast_failed">投屏失败了: %s</string>
+    <string name="dlna_play_failed">投屏失败了: %s</string>
+    <string name="dlna_pause_failed">暂停失败了: %s</string>
+    <string name="dlna_stop_failed">停止失败了: %s</string>
+    <string name="dlna_seen_to_failed">快进失败了: %s</string>
+    <string name="dlna_init_data_error">数据接收错误！</string>
 </resources>

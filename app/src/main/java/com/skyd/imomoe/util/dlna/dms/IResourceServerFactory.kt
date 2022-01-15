@@ -1,7 +1,7 @@
 package com.skyd.imomoe.util.dlna.dms
 
 
-internal interface IResourceServerFactory {
+interface IResourceServerFactory {
     val port: Int
     val instance: IResourceServer
 

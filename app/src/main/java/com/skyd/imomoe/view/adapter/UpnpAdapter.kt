@@ -14,7 +14,7 @@ import org.fourthline.cling.model.meta.Device
 
 class UpnpAdapter(
     val activity: DlnaActivity,
-    private val dataList: List<Device<*, *, *>?>
+    private val dataList: List<Device<*, *, *>>
 ) : SkinRvAdapter() {
 
     override fun getItemViewType(position: Int): Int = ViewHolderTypeInt.UPNP_DEVICE_1
@@ -27,7 +27,7 @@ class UpnpAdapter(
 
         when (holder) {
             is UpnpDevice1ViewHolder -> {
-                holder.tvUpnpDevice1Title.text = item?.details?.friendlyName
+                holder.tvUpnpDevice1Title.text = item.details?.friendlyName
                 holder.itemView.setOnClickListener {
                     val key = System.currentTimeMillis().toString()
                     DlnaControlActivity.deviceHashMap[key] = item

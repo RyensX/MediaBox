@@ -30,16 +30,16 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="70dp"
+                android:layout_marginTop="60dp"
                 android:background="?android:selectableItemBackground"
                 android:src="@drawable/ic_power_white_24" />
 
             <SeekBar
                 android:id="@+id/sb_dlna_control_activity"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="17dp"
                 android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="70dp"
+                android:layout_marginTop="60dp"
                 android:background="@null"
                 android:maxHeight="2dp"
                 android:minHeight="2dp"
@@ -51,12 +51,37 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="70dp"
-                android:layout_marginBottom="70dp"
+                android:layout_marginTop="17dp"
                 android:textColor="@color/foreground_white_skin"
                 android:textSize="20sp"
                 app:typeface="bPRTypeface"
                 tools:text="00:00 / 12:12" />
+
+            <SeekBar
+                android:id="@+id/sb_dlna_control_activity_volume"
+                android:layout_width="match_parent"
+                android:layout_height="17dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="50dp"
+                android:background="@null"
+                android:max="100"
+                android:maxHeight="2dp"
+                android:minHeight="2dp"
+                android:progressDrawable="@drawable/video_seek_progress"
+                android:thumb="@drawable/video_seek_thumb" />
+
+            <com.skyd.imomoe.view.component.textview.TypefaceTextView
+                android:id="@+id/tv_dlna_control_activity_volume"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="17dp"
+                android:layout_marginBottom="70dp"
+                android:textColor="@color/foreground_white_skin"
+                android:textSize="20sp"
+                app:typeface="bPRTypeface"
+                tools:text="@string/dlna_volume" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

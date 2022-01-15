@@ -5,40 +5,39 @@ import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.ActivityDlnaBinding
 import com.skyd.imomoe.util.Util.getRedirectUrl
+import com.skyd.imomoe.util.dlna.Utils.isLocalMediaAddress
 import com.skyd.imomoe.util.dlna.dmc.DLNACastManager
-import com.skyd.imomoe.util.dlna.dmc.OnDeviceRegistryListener
+import com.skyd.imomoe.util.dlna.dmc.OnDeviceRegistryListenerDsl
+import com.skyd.imomoe.util.dlna.dmc.registerDeviceListener
+import com.skyd.imomoe.util.dlna.dmc.unregisterListener
 import com.skyd.imomoe.view.adapter.UpnpAdapter
 import com.skyd.imomoe.viewmodel.UpnpViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.fourthline.cling.model.meta.Device
 
 class DlnaActivity : BaseActivity<ActivityDlnaBinding>() {
     private lateinit var viewModel: UpnpViewModel
     private lateinit var adapter: UpnpAdapter
     lateinit var title: String
     lateinit var url: String
-    private val deviceRegistryListener = object : OnDeviceRegistryListener {
-        override fun onDeviceRemoved(device: Device<*, *, *>?) {
-            if (viewModel.deviceList.contains(device)) {
-                viewModel.deviceList.remove(device)
-                adapter.notifyDataSetChanged()
+    private val deviceRegistryListener: OnDeviceRegistryListenerDsl.() -> Unit = {
+        onDeviceRemoved { device ->
+            val index = viewModel.deviceList.indexOf(device)
+            if (index != -1) {
+                viewModel.deviceList.removeAt(index)
+                adapter.notifyItemRemoved(index)
             }
         }
 
-        override fun onDeviceAdded(device: Device<*, *, *>?) {
-            if (!viewModel.deviceList.contains(device)) {
+        onDeviceAdded { device ->
+            val index = viewModel.deviceList.indexOf(device)
+            if (index == -1) {
                 viewModel.deviceList.add(device)
-                adapter.notifyDataSetChanged()
+                adapter.notifyItemInserted(viewModel.deviceList.size - 1)
             }
         }
-
-        override fun onDeviceUpdated(device: Device<*, *, *>?) {
-        }
-
     }
 
     companion object {
@@ -64,25 +63,28 @@ class DlnaActivity : BaseActivity<ActivityDlnaBinding>() {
         }
 
         lifecycleScope.launch(Dispatchers.IO) {
-            url = getRedirectUrl(this@DlnaActivity.url)
+            // 视频不是本地文件
+            if (!url.isLocalMediaAddress()) {
+                url = getRedirectUrl(this@DlnaActivity.url)
+            }
 
-            DLNACastManager.getInstance().registerDeviceListener(deviceRegistryListener)
-            DLNACastManager.getInstance().search(DLNACastManager.DEVICE_TYPE_DMR)
+            DLNACastManager.instance.registerDeviceListener(deviceRegistryListener)
+            DLNACastManager.instance.search(DLNACastManager.DEVICE_TYPE_DMR)
         }
     }
 
     override fun onStart() {
         super.onStart()
-        DLNACastManager.getInstance().bindCastService(this)
+        DLNACastManager.instance.bindCastService(this)
     }
 
     override fun onStop() {
-        DLNACastManager.getInstance().bindCastService(this)
+        DLNACastManager.instance.bindCastService(this)
         super.onStop()
     }
 
     override fun onDestroy() {
-        DLNACastManager.getInstance().unregisterListener(deviceRegistryListener)
+        DLNACastManager.instance.unregisterListener(deviceRegistryListener)
         super.onDestroy()
     }
 

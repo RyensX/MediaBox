@@ -10,6 +10,7 @@ import android.util.AttributeSet
 import android.view.*
 import android.view.View.OnClickListener
 import android.widget.*
+import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.children
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -134,6 +135,9 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
     // 还原屏幕
     private var tvRestoreScreen: TextView? = null
 
+    // 投屏
+    private var tvDlna: TextView? = null
+
     // 屏幕已经双指放大移动了
     private var mDoublePointerZoomMoved: Boolean = false
 
@@ -199,6 +203,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         viewTopContainerShadow = findViewById(R.id.view_top_container_shadow)
         viewNightScreen = findViewById(R.id.view_player_night_screen)
         sbNightScreen = findViewById(R.id.sb_player_night_screen)
+        tvDlna = findViewById(R.id.tv_dlna)
 
         vgRightContainer?.gone()
         vgSettingContainer?.gone()
@@ -317,9 +322,22 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
                 viewNightScreen?.setBackgroundColor((NIGHT_SCREEN_MAX_ALPHA * progress / seekBar.max) shl 24)
             }
         }
+
+        tvDlna?.setOnClickListener {
+            val url = getUrl()
+            if (url == null) {
+                mContext.getString(R.string.please_wait_video_loaded).showToast()
+                return@setOnClickListener
+            }
+            startActivity(
+                mContext, Intent(mContext, DlnaActivity::class.java)
+                    .putExtra("url", url)
+                    .putExtra("title", getTitle()), null
+            )
+        }
     }
 
-    fun getUrl(): String = mUrl
+    fun getUrl(): String? = mUrl
 
     fun getTitle(): String = mTitle
 

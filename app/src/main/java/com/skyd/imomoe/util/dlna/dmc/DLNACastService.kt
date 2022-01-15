@@ -8,9 +8,7 @@ import org.fourthline.cling.UpnpServiceConfiguration
 import org.fourthline.cling.android.AndroidUpnpServiceConfiguration
 import org.seamless.util.logging.LoggingUtil
 
-/**
- *
- */
+
 class DLNACastService : AndroidUpnpServiceImpl() {
     private val mLogger: ILogger = DefaultLoggerImpl(this)
     override fun onCreate() {
