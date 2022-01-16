@@ -522,6 +522,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/danmaku_text_size_scale"
                     android:textColor="@color/foreground_white_skin"
+                    android:textSize="12sp"
                     android:visibility="gone"
                     tools:visibility="visible" />
 
@@ -551,7 +552,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="@string/player_night_screen"
-                android:textColor="@color/foreground_white_skin" />
+                android:textColor="@color/foreground_white_skin"
+                android:textSize="12sp" />
 
             <SeekBar
                 android:id="@+id/sb_player_night_screen"

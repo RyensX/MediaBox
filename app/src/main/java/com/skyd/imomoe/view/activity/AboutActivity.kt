@@ -42,7 +42,9 @@ class AboutActivity : BaseActivity<ActivityAboutBinding>() {
                 ivAboutActivityIconEgg.setImageResource(R.drawable.ic_christmas_hat)
             }
 
-            tvAboutActivityVersion.text = "版本名：${getAppVersionName()}\n版本代号：${getAppVersionCode()}"
+            tvAboutActivityVersion.text =
+                getString(R.string.app_version_name, getAppVersionName()) +
+                        "\n" + getString(R.string.app_version_code, getAppVersionCode())
 
             rlAboutActivityImomoe.setOnClickListener {
                 var warningString: String = getString(R.string.jump_to_data_source_website_warning)
@@ -104,7 +106,8 @@ class AboutActivity : BaseActivity<ActivityAboutBinding>() {
                 MaterialDialog(this@AboutActivity).show {
                     title(res = R.string.test_device)
                     message(
-                        text = "Physical Device: \nAndroid 10\n\n" +
+                        text = "Physical Device: \nAndroid 10\n" +
+                                "OPPO A57 Android 6.0.1\n\n" +
                                 "Virtual Machine: \nPixel Android 5\n" +
                                 "Pixel 4 Android 7\n" +
                                 "Pixel 2 Android 12\n"

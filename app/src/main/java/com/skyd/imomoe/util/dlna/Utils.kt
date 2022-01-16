@@ -2,7 +2,6 @@ package com.skyd.imomoe.util.dlna
 
 import android.content.Context
 import android.net.wifi.WifiManager
-import android.os.Environment
 import com.skyd.imomoe.util.dlna.dmc.DLNACastManager
 import java.io.UnsupportedEncodingException
 import java.net.URLEncoder
@@ -30,9 +29,7 @@ object Utils {
     fun String.toLocalHttpServerAddress(): String {
         if (isBlank() || !isLocalMediaAddress()) return this
         val mediaServer = DLNACastManager.instance.mediaServer ?: return this
-        val prefix =
-            if (startsWith("file:///")) "file:///${Environment.getExternalStorageDirectory().absolutePath}"
-            else Environment.getExternalStorageDirectory().absolutePath
+        val prefix = if (startsWith("file://")) "file://" else ""
         var newSourceUrl: String = mediaServer.baseUrl + replace(prefix, "")
         try {
             val urlSplits = newSourceUrl.split("/").toTypedArray()

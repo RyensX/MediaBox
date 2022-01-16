@@ -106,6 +106,7 @@ class DlnaControlActivity : BaseActivity<ActivityDlnaControlBinding>() {
 
                 override fun onFailed(errMsg: String) {
                     getString(R.string.dlna_play_failed, errMsg).showToast()
+                    layoutDlnaControlActivityLoading.gone()
                 }
             },
             object : ICastInterface.PauseEventListener {
@@ -119,6 +120,7 @@ class DlnaControlActivity : BaseActivity<ActivityDlnaControlBinding>() {
 
                 override fun onFailed(errMsg: String) {
                     getString(R.string.dlna_pause_failed, errMsg).showToast()
+                    layoutDlnaControlActivityLoading.gone()
                 }
             },
             object : ICastInterface.StopEventListener {
@@ -134,6 +136,7 @@ class DlnaControlActivity : BaseActivity<ActivityDlnaControlBinding>() {
 
                 override fun onFailed(errMsg: String) {
                     getString(R.string.dlna_stop_failed, errMsg).showToast()
+                    layoutDlnaControlActivityLoading.gone()
                 }
             },
             object : ICastInterface.SeekToEventListener {
@@ -145,6 +148,7 @@ class DlnaControlActivity : BaseActivity<ActivityDlnaControlBinding>() {
 
                 override fun onFailed(errMsg: String) {
                     getString(R.string.dlna_seen_to_failed, errMsg).showToast()
+                    layoutDlnaControlActivityLoading.gone()
                 }
             }
         )
@@ -229,9 +233,8 @@ class DlnaControlActivity : BaseActivity<ActivityDlnaControlBinding>() {
         override fun run() {
             val device = deviceHashMap[deviceKey] ?: return
             DLNACastManager.instance.getPositionInfo(device, newGetInfoListener { t, errMsg ->
+                layoutDlnaControlActivityLoading.gone()
                 if (t != null) {
-                    if (layoutDlnaControlActivityLoading.visibility != View.GONE)
-                        layoutDlnaControlActivityLoading.gone()
                     mBinding.tvDlnaControlActivityTime.text =
                         String.format("%s / %s", t.relTime, t.trackDuration)
                     if (t.trackDurationSeconds != 0L) {
@@ -253,9 +256,8 @@ class DlnaControlActivity : BaseActivity<ActivityDlnaControlBinding>() {
             val device = deviceHashMap[deviceKey] ?: return
             // update volume
             DLNACastManager.instance.getVolumeInfo(device, newGetInfoListener { t, errMsg ->
+                layoutDlnaControlActivityLoading.gone()
                 if (t != null) {
-                    if (layoutDlnaControlActivityLoading.visibility != View.GONE)
-                        layoutDlnaControlActivityLoading.gone()
                     if (t <= mBinding.sbDlnaControlActivityVolume.max) {
                         mBinding.sbDlnaControlActivityVolume.progress = t
                     }
