@@ -173,6 +173,7 @@ dependencies {
     implementation deps.coil_kt.coil
     implementation deps.kuaishou.akdanmaku
     implementation deps.okhttp3.okhttp_dnsoverhttps
+    implementation deps.jakewharton.disklrucache
     implementation project(':skin')
     implementation project(':skin_blue')
     implementation project(':skin_dark')

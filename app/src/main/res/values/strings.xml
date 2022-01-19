@@ -207,4 +207,6 @@
     <string name="dlna_stop_failed">停止失败了: %s</string>
     <string name="dlna_seen_to_failed">快进失败了: %s</string>
     <string name="dlna_init_data_error">数据接收错误！</string>
+    <string name="danmaku_data_is_null_or_blank">弹幕数据为null或空！</string>
+    <string name="danmaku_input_stream_is_null">弹幕输入流为null！</string>
 </resources>

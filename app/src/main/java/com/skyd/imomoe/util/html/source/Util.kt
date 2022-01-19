@@ -3,6 +3,7 @@ package com.skyd.imomoe.util.html.source
 import android.text.TextUtils
 import android.util.Log
 import android.webkit.WebView
+import com.skyd.imomoe.util.logE
 import java.net.HttpURLConnection
 import java.net.URL
 import java.security.SecureRandom
@@ -34,10 +35,10 @@ object Util {
                 objects[0] = urlConnection.contentLength
                 objects[1] = urlConnection.contentType
             }
-            Log.e("Util", "getContent code = $responseCode")
+            logE("Util", "getContent code = $responseCode")
         } catch (e: Exception) {
             e.printStackTrace()
-            Log.e("Util", "getContent error = $e")
+            logE("Util", "getContent error = $e")
         } finally {
             urlConnection?.disconnect()
         }

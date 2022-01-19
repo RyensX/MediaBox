@@ -12,6 +12,7 @@ import androidx.viewbinding.ViewBinding
 import com.skyd.imomoe.R
 import com.skyd.imomoe.util.eventbus.EventBusSubscriber
 import com.skyd.imomoe.util.gone
+import com.skyd.imomoe.util.logE
 import com.skyd.imomoe.util.visible
 import com.skyd.skin.core.SkinBaseFragment
 import org.greenrobot.eventbus.EventBus
@@ -65,7 +66,7 @@ abstract class BaseFragment<VB : ViewBinding> : SkinBaseFragment() {
             if (this::loadFailedTipView.isInitialized) {
                 loadFailedTipView.visible()
             } else {
-                Log.e("showLoadFailedTip", "layout_image_text_tip_1 isn't initialized")
+                logE("showLoadFailedTip", "layout_image_text_tip_1 isn't initialized")
             }
         }
     }
@@ -76,7 +77,7 @@ abstract class BaseFragment<VB : ViewBinding> : SkinBaseFragment() {
             if (this::loadFailedTipView.isInitialized) {
                 loadFailedTipView.gone()
             } else {
-                Log.e("showLoadFailedTip", "layout_image_text_tip_1 isn't initialized")
+                logE("showLoadFailedTip", "layout_image_text_tip_1 isn't initialized")
             }
         }
     }

@@ -1,6 +1,5 @@
 package com.skyd.imomoe.model
 
-import android.util.Log
 import android.util.LruCache
 import com.skyd.imomoe.App
 import com.skyd.imomoe.BuildConfig
@@ -8,6 +7,7 @@ import com.skyd.imomoe.model.interfaces.IConst
 import com.skyd.imomoe.model.interfaces.IRouteProcessor
 import com.skyd.imomoe.model.interfaces.IUtil
 import com.skyd.imomoe.util.editor
+import com.skyd.imomoe.util.logE
 import com.skyd.imomoe.util.sharedPreferences
 import dalvik.system.DexClassLoader
 import java.io.File
@@ -101,13 +101,13 @@ object DataSourceManager {
          */
         val jarFile = File(getJarPath())
         if (!jarFile.exists() || !jarFile.isFile) {
-            Log.e("DataSourceManager", "useCustomDataSource but jar doesn't exist")
+            logE("DataSourceManager", "useCustomDataSource but jar doesn't exist")
             if (!BuildConfig.DEBUG) return null
         }
         val optimizedDirectory =
             File(App.context.getExternalFilesDir(null).toString() + "/DataSourceDex")
         if (!optimizedDirectory.exists() && !optimizedDirectory.mkdirs()) {
-            Log.e("DataSourceManager", "can't create optimizedDirectory")
+            logE("DataSourceManager", "can't create optimizedDirectory")
             return null
         }
         val classLoader =

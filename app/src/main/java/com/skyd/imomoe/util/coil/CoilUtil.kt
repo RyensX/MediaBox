@@ -15,7 +15,9 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Api.Companion.MAIN_URL
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.net.okhttpClient
+import com.skyd.imomoe.util.Util.toEncodedUrl
 import com.skyd.imomoe.util.debug
+import com.skyd.imomoe.util.logE
 import okhttp3.OkHttpClient
 import java.net.URL
 import kotlin.random.Random
@@ -41,7 +43,7 @@ object CoilUtil {
         builder: ImageRequest.Builder.() -> Unit = {},
     ) {
         if (url.isEmpty()) {
-            Log.e("loadImage", "cover image url must not be null or empty")
+            logE("loadImage", "cover image url must not be null or empty")
             return
         }
 
@@ -64,15 +66,15 @@ object CoilUtil {
         }
 
         // 是网络图片
-        var amendReferer = referer
-        if (amendReferer?.startsWith(MAIN_URL) == false)
+        var amendReferer = referer ?: MAIN_URL
+        if (!amendReferer.startsWith(MAIN_URL))
             amendReferer = MAIN_URL//"http://www.yhdm.io/"
         if (referer == MAIN_URL || referer == MAIN_URL) amendReferer += "/"
 
         loadImage(url) {
             placeholder(placeholder)
             error(error)
-            addHeader("Referer", amendReferer ?: MAIN_URL)
+            addHeader("Referer", amendReferer.toEncodedUrl())
             addHeader("Host", URL(url).host)
             addHeader("Accept", "*/*")
             addHeader("Accept-Encoding", "gzip, deflate")

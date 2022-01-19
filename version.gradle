@@ -110,4 +110,8 @@ def kuaishou = [:]
 kuaishou.akdanmaku = "com.kuaishou:akdanmaku:1.0.3"
 deps.kuaishou = kuaishou
 
+def jakewharton = [:]
+jakewharton.disklrucache = "com.jakewharton:disklrucache:2.0.2"
+deps.jakewharton = jakewharton
+
 ext.deps = deps

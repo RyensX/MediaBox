@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Recycler
-import tv.danmaku.ijk.media.player.pragma.DebugLog
+import com.skyd.imomoe.util.logD
 
 
 class WrapLinearLayoutManager(context: Context) : LinearLayoutManager(context) {
@@ -13,7 +13,7 @@ class WrapLinearLayoutManager(context: Context) : LinearLayoutManager(context) {
             super.onLayoutChildren(recycler, state)
         } catch (e: IndexOutOfBoundsException) {
             e.printStackTrace()
-            DebugLog.d("WrapLinearLayoutManager", "捕获异常：" + e.message)
+            logD("WrapLinearLayoutManager", "捕获异常：" + e.message)
         }
     }
 }

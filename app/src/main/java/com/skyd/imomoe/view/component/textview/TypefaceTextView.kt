@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.res.getBooleanOrThrow
 import com.skyd.imomoe.R
+import com.skyd.imomoe.util.logD
 
 class TypefaceTextView : AppCompatTextView {
     var isFocused: Boolean? = null
@@ -22,7 +23,7 @@ class TypefaceTextView : AppCompatTextView {
                 val focused = typedArray.getBooleanOrThrow(R.styleable.TypefaceTextView_focused)
                 isFocused = focused
             } catch (e: IllegalArgumentException) {
-                Log.d("TypefaceTextView", "has no focused attribute")
+                logD("TypefaceTextView", "has no focused attribute")
             }
             typedArray.recycle()
         }
@@ -41,7 +42,7 @@ class TypefaceTextView : AppCompatTextView {
                 val focused = typedArray.getBooleanOrThrow(R.styleable.TypefaceTextView_focused)
                 isFocused = focused
             } catch (e: IllegalArgumentException) {
-                Log.d("TypefaceTextView", "has no focused attribute")
+                logD("TypefaceTextView", "has no focused attribute")
             }
             typedArray.recycle()
         }

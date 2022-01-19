@@ -41,7 +41,7 @@ object AnimeDanmakuSender {
             DanmakuItemData.DANMAKU_STYLE_ICON_UP
         )
         val item = danmakuPlayer.obtainItem(danmaku)
-        val request = RetrofitManager.get().create(DanmakuService::class.java) ?: return
+        val request = RetrofitManager.get().create(DanmakuService::class.java)
         val json = Gson().toJson(animeSendDanmakuBean)
             .toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())
         request.sendDanmaku(ac, key, json).enqueue(object : Callback<AnimeSendDanmakuResultBean> {

@@ -1,13 +1,18 @@
 package com.skyd.imomoe.util
 
+import java.io.ByteArrayOutputStream
 import java.io.InputStream
+import java.nio.charset.Charset
 
-fun InputStream.string(): String {
-    val out = StringBuffer()
-    val b = ByteArray(4096)
-    var n: Int
-    while (this.read(b).also { n = it } != -1) {
-        out.append(String(b, 0, n))
+
+fun InputStream.string(charset: Charset = Charsets.UTF_8): String {
+    val outputStream = ByteArrayOutputStream()
+    var len: Int
+    val buffer = ByteArray(1024)
+    while (read(buffer).also { len = it } != -1) {
+        outputStream.write(buffer, 0, len)
     }
-    return out.toString()
+    close()
+    outputStream.close()
+    return String(outputStream.toByteArray(), charset)
 }

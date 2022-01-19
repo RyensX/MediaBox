@@ -12,6 +12,8 @@ import android.webkit.WebViewClient
 import com.skyd.imomoe.util.html.source.GettingCallback
 import com.skyd.imomoe.util.html.source.GettingUICallback
 import com.skyd.imomoe.util.html.source.Util
+import com.skyd.imomoe.util.logE
+import com.skyd.imomoe.util.logI
 
 class GettingWebViewClient(
     private val mWebView: WebView?,
@@ -50,7 +52,7 @@ class GettingWebViewClient(
 
     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
         if (mLastEndTime - mLastStartTime <= 500 || !isCompleteLoader) { // 基本上是302 重定向才会走这段逻辑
-            Log.e("GettingUtil", "onStart( 302 )  --> $url")
+            logE("GettingUtil", "onStart( 302 )  --> $url")
             mFinished?.let { mH.removeCallbacks(it) }
             return
         }
@@ -58,7 +60,7 @@ class GettingWebViewClient(
         mH.postDelayed(
             TimeOutRunnable(view, url, TYPE_CONN).also { mConnTimeout = it }, mConnTimeOut
         )
-        Log.e("GettingWebViewClient", "onStart(onPageStarted)  --> $url")
+        logE("GettingWebViewClient", "onStart(onPageStarted)  --> $url")
         onGettingStart(view, url)
     }
 
@@ -92,7 +94,7 @@ class GettingWebViewClient(
         description: String,
         failingUrl: String
     ) {
-        Log.e("GettingWebViewClient", "onReceivedError(ReceivedError)  --> $failingUrl")
+        logE("GettingWebViewClient", "onReceivedError(ReceivedError)  --> $failingUrl")
         onGettingError(view, failingUrl, RECEIVED_ERROR)
         onGettingFinish(view, failingUrl)
     }
@@ -154,7 +156,7 @@ class GettingWebViewClient(
             if (mConnTimeout == null) return
             mH.removeCallbacks(mConnTimeout!!)
             mConnTimeout = null
-            Log.i("GettingWebViewClient", "一次网页加载结束 --> $url")
+            logI("GettingWebViewClient", "一次网页加载结束 --> $url")
             onGettingFinish(view, url)
             Util.getHtmlSource(view)
         }
@@ -170,7 +172,7 @@ class GettingWebViewClient(
         override fun run() {
             //加载网页超时了
             if (type == TYPE_CONN) {
-                Log.e(
+                logE(
                     "GettingWebViewClient",
                     "ConnTimeOutRunnable( postDelayed  【alert ，confirm】 )  --> $url"
                 )
@@ -182,7 +184,7 @@ class GettingWebViewClient(
                 //                mH.postDelayed(new ParserHtmlRunnable(view, "alert"), 5000);
 //                mH.postDelayed(mJSRunnable = new ParserHtmlRunnable(view, "confirm"), 8000);
             } else if (type == TYPE_READ) {
-                Log.e("GettingWebViewClient", "ReadTimeOutRunnable(SUCCESS)  --> $url")
+                logE("GettingWebViewClient", "ReadTimeOutRunnable(SUCCESS)  --> $url")
                 onGettingFinish(view, url)
             }
         }

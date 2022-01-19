@@ -12,6 +12,7 @@ import com.skyd.imomoe.util.dlna.dmc.DLNACastManager
 import com.skyd.imomoe.util.dlna.dmc.OnDeviceRegistryListenerDsl
 import com.skyd.imomoe.util.dlna.dmc.registerDeviceListener
 import com.skyd.imomoe.util.dlna.dmc.unregisterListener
+import com.skyd.imomoe.util.logI
 import com.skyd.imomoe.view.adapter.UpnpAdapter
 import com.skyd.imomoe.viewmodel.UpnpViewModel
 import kotlinx.coroutines.Dispatchers
@@ -50,7 +51,7 @@ class DlnaActivity : BaseActivity<ActivityDlnaBinding>() {
         url = intent.getStringExtra("url") ?: ""
         title = intent.getStringExtra("title") ?: ""
 
-        Log.i(TAG, url)
+        logI(TAG, url)
 
         viewModel = ViewModelProvider(this).get(UpnpViewModel::class.java)
         adapter = UpnpAdapter(this, viewModel.deviceList)

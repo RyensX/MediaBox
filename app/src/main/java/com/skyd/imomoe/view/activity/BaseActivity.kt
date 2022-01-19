@@ -12,6 +12,7 @@ import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.setColorStatusBar
 import com.skyd.imomoe.util.eventbus.EventBusSubscriber
 import com.skyd.imomoe.util.gone
+import com.skyd.imomoe.util.logE
 import com.skyd.imomoe.util.visible
 import com.skyd.skin.core.SkinResourceProcessor
 import org.greenrobot.eventbus.EventBus
@@ -64,7 +65,7 @@ abstract class BaseActivity<VB : ViewBinding> : SkinBaseActivity() {
             if (this::loadFailedTipView.isInitialized) {
                 loadFailedTipView.visible()
             } else {
-                Log.e("showLoadFailedTip", "layout_image_text_tip_1 isn't initialized")
+                logE("showLoadFailedTip", "layout_image_text_tip_1 isn't initialized")
             }
         }
     }
@@ -75,7 +76,7 @@ abstract class BaseActivity<VB : ViewBinding> : SkinBaseActivity() {
             if (this::loadFailedTipView.isInitialized) {
                 loadFailedTipView.gone()
             } else {
-                Log.e("showLoadFailedTip", "layout_image_text_tip_1 isn't initialized")
+                logE("showLoadFailedTip", "layout_image_text_tip_1 isn't initialized")
             }
         }
     }

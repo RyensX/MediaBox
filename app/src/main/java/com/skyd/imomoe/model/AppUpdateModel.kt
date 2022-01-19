@@ -8,6 +8,7 @@ import com.skyd.imomoe.net.RetrofitManager
 import com.skyd.imomoe.net.service.UpdateService
 import com.skyd.imomoe.util.Util.isNewVersionByVersionCode
 import com.skyd.imomoe.util.editor
+import com.skyd.imomoe.util.logD
 import com.skyd.imomoe.util.sharedPreferences
 import com.skyd.imomoe.util.update.AppUpdateHelper
 import com.skyd.imomoe.util.update.AppUpdateStatus
@@ -51,7 +52,7 @@ object AppUpdateModel {
         val check = request?.checkUpdate()
         check?.enqueue(object : Callback<UpdateBean> {
             override fun onFailure(call: Call<UpdateBean>, t: Throwable) {
-                Log.d("checkUpdate", t.message ?: "")
+                logD("checkUpdate", t.message ?: "")
                 status.postValue(AppUpdateStatus.ERROR)
             }
 

@@ -11,6 +11,8 @@ import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.html.source.DefaultUICallback
 import com.skyd.imomoe.util.html.source.GettingUICallback
 import com.skyd.imomoe.util.html.source.web.GettingUtil
+import com.skyd.imomoe.util.logE
+import com.skyd.imomoe.util.logI
 import org.jsoup.Jsoup
 import kotlin.jvm.Throws
 
@@ -89,12 +91,12 @@ object SnifferVideo {
                         } catch (e: IndexOutOfBoundsException) {
                             // 解析地址出现错误
                             e.printStackTrace()
-                            Log.e("getSrc IOOBException", html)
+                            logE("getSrc IOOBException", html)
                             onGettingError(webView, url, PARSE_URL_ERROR)
                             return
                         }
 
-                        Log.i("getPlayerHtmlSource $type", html)
+                        logI("getPlayerHtmlSource $type", html)
                         if (type == 2) {
                             if (src.startsWith("blob:"))
                                 "HTML5 blob格式资源".showToast()
@@ -182,7 +184,7 @@ object SnifferVideo {
                     }
                     sniffingUrlList.remove(partUrl)
                     waitingDialog.dismiss()
-                    Log.i("getQzzVideoUrl", html)
+                    logI("getQzzVideoUrl", html)
                     HashMap<String, String>().apply {
                         put(KEY, serverKey)
                         put(AC, "dm")

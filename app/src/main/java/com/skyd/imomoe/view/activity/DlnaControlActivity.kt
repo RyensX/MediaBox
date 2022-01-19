@@ -9,9 +9,9 @@ import android.view.View
 import android.widget.RelativeLayout
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.ActivityDlnaControlBinding
+import com.skyd.imomoe.util.*
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.setColorStatusBar
-import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.dlna.CastObject
 import com.skyd.imomoe.util.dlna.Utils
 import com.skyd.imomoe.util.dlna.Utils.isLocalMediaAddress
@@ -20,8 +20,6 @@ import com.skyd.imomoe.util.dlna.dmc.DLNACastManager
 import com.skyd.imomoe.util.dlna.dmc.control.ICastInterface
 import com.skyd.imomoe.util.dlna.dmc.control.newGetInfoListener
 import com.skyd.imomoe.util.dlna.dms.MediaServer
-import com.skyd.imomoe.util.gone
-import com.skyd.imomoe.util.visible
 import com.skyd.imomoe.view.listener.dsl.setOnSeekBarChangeListener
 import org.fourthline.cling.model.meta.Device
 import kotlin.collections.HashMap
@@ -82,7 +80,7 @@ class DlnaControlActivity : BaseActivity<ActivityDlnaControlBinding>() {
                 override fun onSuccess(result: String) {
                     deviceHashMap[deviceKey]?.let {
                         DLNACastManager.instance.getMediaInfo(
-                            it, newGetInfoListener { t, _ -> Log.i(TAG, t?.currentURI.toString()) }
+                            it, newGetInfoListener { t, _ -> logI(TAG, t?.currentURI.toString()) }
                         )
                     }
                     if (!isPlaying) play()
@@ -245,7 +243,7 @@ class DlnaControlActivity : BaseActivity<ActivityDlnaControlBinding>() {
                         mBinding.sbDlnaControlActivity.progress = 0
                     }
                 } else {
-                    Log.e(TAG, errMsg.toString())
+                    logE(TAG, errMsg.toString())
                 }
             })
         }
@@ -265,7 +263,7 @@ class DlnaControlActivity : BaseActivity<ActivityDlnaControlBinding>() {
                         R.string.dlna_volume, t.toString()
                     )
                 } else {
-                    Log.e(TAG, errMsg.toString())
+                    logE(TAG, errMsg.toString())
                 }
             })
         }

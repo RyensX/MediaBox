@@ -2,6 +2,7 @@ package com.skyd.imomoe.util.dlna.dmc
 
 import android.util.Log
 import com.skyd.imomoe.BuildConfig
+import com.skyd.imomoe.util.*
 
 interface ILogger {
     fun v(msg: String?)
@@ -18,23 +19,23 @@ interface ILogger {
         private val DEBUG: Boolean
 
         override fun v(msg: String?) {
-            if (DEBUG) Log.v(TAG, msg.toString())
+            if (DEBUG) logV(TAG, msg.toString())
         }
 
         override fun d(msg: String?) {
-            if (DEBUG) Log.d(TAG, msg.toString())
+            if (DEBUG) logD(TAG, msg.toString())
         }
 
         override fun i(msg: String?) {
-            if (DEBUG) Log.i(TAG, msg.toString())
+            if (DEBUG) logI(TAG, msg.toString())
         }
 
         override fun w(msg: String?) {
-            if (DEBUG) Log.w(TAG, msg.toString())
+            if (DEBUG) logW(TAG, msg.toString())
         }
 
         override fun e(msg: String?) {
-            if (DEBUG) Log.e(TAG, msg.toString())
+            if (DEBUG) logE(TAG, msg.toString())
         }
 
         init {

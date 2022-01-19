@@ -27,7 +27,7 @@ class CrashHandler private constructor(val context: Context) : Thread.UncaughtEx
             }
             printWriter.close()
             val unCaughtException = stringWriter.toString()  //详细错误日志
-            Log.e("crash info", unCaughtException)
+            logE("crash info", unCaughtException)
             CrashActivity.start(context, unCaughtException)
             exitProcess(0)
         } catch (e: Exception) {

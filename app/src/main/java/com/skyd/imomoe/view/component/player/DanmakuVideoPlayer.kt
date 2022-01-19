@@ -25,8 +25,11 @@ import com.shuyu.gsyvideoplayer.video.base.GSYVideoView
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.danmaku.AnimeSendDanmakuBean
+import com.skyd.imomoe.net.RetrofitManager
+import com.skyd.imomoe.net.service.DanmakuService
 import com.skyd.imomoe.util.*
 import com.skyd.imomoe.util.Util.hideKeyboard
+import com.skyd.imomoe.util.Util.toEncodedUrl
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.html.SnifferVideo.AC
 import com.skyd.imomoe.util.html.SnifferVideo.KEY
@@ -37,7 +40,6 @@ import com.skyd.imomoe.view.component.player.danmaku.anime.AnimeDanmakuParser
 import com.skyd.imomoe.view.component.player.danmaku.anime.AnimeDanmakuSender
 import com.skyd.imomoe.view.component.player.danmaku.bili.BiliBiliDanmakuParser
 import com.skyd.imomoe.view.listener.dsl.setOnSeekBarChangeListener
-import java.net.HttpURLConnection
 import java.net.URL
 import java.util.zip.Inflater
 import java.util.zip.InflaterInputStream
@@ -105,10 +107,10 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
     private var tvDanmakuTextScale: TextView? = null
 
     // 弹幕字号缩放最小百分比
-    private val mDanmakuTextScaleMinPercent: Int = 50
+    private val mDanmakuTextScaleMinPercent: Int = 70
 
     // 弹幕字号百分比
-    private var mDanmakuTextScalePercent: Int = mDanmakuTextScaleMinPercent + 70
+    private var mDanmakuTextScalePercent: Int = mDanmakuTextScaleMinPercent + 60
 
     constructor(context: Context, fullFlag: Boolean?) : super(context, fullFlag)
 
@@ -401,24 +403,35 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
         Thread {
             when (danmakuSourceType) {
                 Const.TAG_ANIME -> {
-                    Log.d(DanmakuEngine.TAG, "[ANIME] 开始加载数据")
-                    val dataList = AnimeDanmakuParser(
-                        URL(url).openConnection().getInputStream().string()
-                    ).parse()
+                    logD(DanmakuEngine.TAG, "[ANIME] 开始加载数据")
+                    val danmakuString = RetrofitManager.get().create(DanmakuService::class.java)
+                        .getDanmaku(url.toEncodedUrl()).execute().body()?.string()
+                    if (danmakuString.isNullOrBlank()) {
+                        logE(DanmakuEngine.TAG, "danmaku data is null or blank!")
+                        mContext.getString(R.string.danmaku_data_is_null_or_blank).showToast()
+                        return@Thread
+                    }
+                    val dataList = AnimeDanmakuParser(danmakuString).parse()
                     mDanmakuPlayer.updateData(dataList)
                     mDanmakuView.post {
                         if (autoPlayIfVideoIsPlaying && mCurrentState == GSYVideoView.CURRENT_STATE_PLAYING) {
                             seekDanmaku(currentPlayer.currentPositionWhenPlaying.toLong())
                             playDanmaku()
                         }
-                        Log.d(DanmakuEngine.TAG, "[ANIME] 数据已加载(count = ${dataList.size})")
+                        logD(DanmakuEngine.TAG, "[ANIME] 数据已加载(count = ${dataList.size})")
                     }
                 }
                 Const.TAG_BILIBILI -> {
-                    Log.d(DanmakuEngine.TAG, "[BILIBILI] 开始加载数据")
-                    val conn = URL(url).openConnection() as HttpURLConnection
-                    conn.connect()
-                    val inputStream = InflaterInputStream(conn.inputStream, Inflater(true))
+                    logD(DanmakuEngine.TAG, "[BILIBILI] 开始加载数据")
+                    val originalInputStream =
+                        RetrofitManager.get().create(DanmakuService::class.java)
+                            .getDanmaku(url.toEncodedUrl()).execute().body()?.byteStream()
+                    if (originalInputStream == null) {
+                        logE(DanmakuEngine.TAG, "original input stream is null!")
+                        mContext.getString(R.string.danmaku_input_stream_is_null).showToast()
+                        return@Thread
+                    }
+                    val inputStream = InflaterInputStream(originalInputStream, Inflater(true))
                     val dataList = BiliBiliDanmakuParser(inputStream.string()).parse()
                     mDanmakuPlayer.updateData(dataList)
                     mDanmakuView.post {
@@ -426,11 +439,11 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
                             seekDanmaku(currentPlayer.currentPositionWhenPlaying.toLong())
                             playDanmaku()
                         }
-                        Log.d(DanmakuEngine.TAG, "[BILIBILI] 数据已加载(count = ${dataList.size})")
+                        logD(DanmakuEngine.TAG, "[BILIBILI] 数据已加载(count = ${dataList.size})")
                     }
                 }
                 else -> {
-                    Log.d(DanmakuEngine.TAG, "找不到合适的弹幕解析器！")
+                    logD(DanmakuEngine.TAG, "找不到合适的弹幕解析器！")
                 }
             }
 
@@ -514,7 +527,6 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
         if (time + mDanmakuProgressDelta < 0L) {
             mDanmakuProgressDelta = 0L - time
         }
-//        Log.e("---", (time + mDanmakuProgressDelta).toString() + " " + mDanmakuProgressDelta.toString())
         mDanmakuPlayer.seekTo(time + mDanmakuProgressDelta)
         // 由于上面一条语句会导致弹幕开始播放，因此要判断是否暂停
         if (pauseDanmaku || mCurrentState == GSYVideoView.CURRENT_STATE_PAUSE ||

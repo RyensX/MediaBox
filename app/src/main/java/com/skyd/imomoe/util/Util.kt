@@ -57,9 +57,15 @@ object Util {
         App.context.startActivity(intent)
     }
 
-    fun getEncodedUrl(url: String): String {
-        return Uri.encode(url, ":/-![].,%?&=")
+    fun String.toEncodedUrl(): String {
+        return Uri.encode(this, ":/-![].,%?&=")
     }
+
+    @Deprecated(
+        "use String.toEncodedUrl()",
+        ReplaceWith("url.toEncodedUrl()", "com.skyd.imomoe.util.Util.toEncodedUrl")
+    )
+    fun getEncodedUrl(url: String): String = url.toEncodedUrl()
 
     /**
      * 通过播放页面的网址获取详情页面的网址

@@ -13,11 +13,11 @@ object PushHelper {
         pushAgent.register(object : UPushRegisterCallback {
             override fun onSuccess(deviceToken: String) {
                 //注册成功会返回deviceToken deviceToken是推送消息的唯一标志
-                Log.i("PushHelper", "注册成功：deviceToken：--> $deviceToken")
+                logI("PushHelper", "注册成功：deviceToken：--> $deviceToken")
             }
 
             override fun onFailure(errCode: String, errDesc: String) {
-                Log.e("PushHelper", "注册失败：--> code:$errCode, desc:$errDesc")
+                logE("PushHelper", "注册失败：--> code:$errCode, desc:$errDesc")
             }
         })
     }

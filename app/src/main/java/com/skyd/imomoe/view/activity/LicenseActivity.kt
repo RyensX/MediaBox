@@ -153,6 +153,15 @@ class LicenseActivity : BaseActivity<ActivityLicenseBinding>() {
                 "MIT License"
             )
         )
+        list.add(
+            LicenseBean(
+                ViewHolderTypeString.LICENSE_1,
+                ActionUrl.ANIME_BROWSER,
+                "https://github.com/JakeWharton/DiskLruCache",
+                "DiskLruCache",
+                "Apache-2.0 License"
+            )
+        )
 
         mBinding.run {
             atbLicenseActivity.setBackButtonClickListener { finish() }
