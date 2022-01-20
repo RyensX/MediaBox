@@ -10,8 +10,10 @@ import android.util.AttributeSet
 import android.view.*
 import android.view.View.OnClickListener
 import android.widget.*
+import androidx.annotation.WorkerThread
 import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.children
+import androidx.core.view.isGone
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.shuyu.gsyvideoplayer.utils.CommonUtil
@@ -40,6 +42,7 @@ import com.skyd.imomoe.view.component.ZoomView
 import com.skyd.imomoe.view.component.textview.TypefaceTextView
 import com.skyd.imomoe.view.listener.dsl.setOnSeekBarChangeListener
 import com.skyd.skin.SkinManager
+import kotlinx.coroutines.*
 import java.io.File
 import java.io.Serializable
 import kotlin.math.abs
@@ -61,7 +64,23 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
 
         // 夜间屏幕最大Alpha
         const val NIGHT_SCREEN_MAX_ALPHA: Int = 0xAA
+
+        val playPositionMemoryStoreCoroutineScope by lazy(LazyThreadSafetyMode.NONE) {
+            CoroutineScope(Dispatchers.Default)
+        }
+
     }
+
+    /**
+     * 进度记忆最小时间，默认5秒后的进度才记忆
+     */
+    var playPositionMemoryTimeLimit = 5000L
+
+    var playPositionMemoryStore: PlayPositionMemoryDataStore? = null
+    private var playPositionViewJob: Job? = null
+
+    //预跳转进度
+    private var preSeekPlayPosition: Long? = null
 
     // 正在双指缩放移动
     private var doublePointerZoomingMoving = false
@@ -94,6 +113,12 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
 
     //下一集按钮
     private var ivNextEpisode: ImageView? = null
+
+    //进度记忆组
+    private var playPositionView: LinearLayout? = null
+
+    //进度文字
+    private var playPosition: TextView? = null
 
     //选集
     private var tvEpisode: TextView? = null
@@ -204,13 +229,21 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         viewNightScreen = findViewById(R.id.view_player_night_screen)
         sbNightScreen = findViewById(R.id.sb_player_night_screen)
         tvDlna = findViewById(R.id.tv_dlna)
+        playPositionView = findViewById(R.id.play_position_view)
+        playPosition = findViewById(R.id.play_position)
 
         vgRightContainer?.gone()
         vgSettingContainer?.gone()
         tvTouchDownHighSpeed?.gone()
+        playPositionView?.gone()
 
         vgBiggerSurface?.setOnClickListener(this)
         vgBiggerSurface?.setOnTouchListener(this)
+
+        playPosition?.setOnClickListener {
+            preSeekPlayPosition?.also { seekTo(it) }
+            playPositionView?.gone()
+        }
 
         tvRestoreScreen?.setOnClickListener {
             mTextureViewContainer?.run {
@@ -934,6 +967,72 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         mInnerHandler.postDelayed({ backToNormal() }, delay.toLong())
     }
 
+    /**
+     * 准备好视频，开始查找进度
+     */
+    override fun onPrepared() {
+        super.onPrepared()
+        playPositionViewJob?.cancel()
+        playPositionMemoryStore?.apply {
+            playPositionMemoryStoreCoroutineScope.launch {
+                getPlayPosition(mOriginUrl)?.also {
+                    preSeekPlayPosition = it
+                    playPositionViewJob = launch(Dispatchers.Main) {
+                        playPosition?.text = positionFormat(it)
+                        playPositionView?.isGone = false
+                        //展示5秒
+                        delay(5000)
+                        playPositionView?.isGone = true
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 1.退出界面时记忆进度
+     */
+    override fun onDetachedFromWindow() {
+        storePlayPosition()
+        super.onDetachedFromWindow()
+    }
+
+    /**
+     * 2.切换选集时记忆进度
+     */
+    override fun setUp(
+        url: String?,
+        cacheWithPlay: Boolean,
+        cachePath: File?,
+        title: String?,
+        changeState: Boolean
+    ): Boolean {
+        if (url != mOriginUrl) {
+            playPositionView?.gone()
+            storePlayPosition()
+        }
+
+        return super.setUp(url, cacheWithPlay, cachePath, title, changeState)
+    }
+
+    /**
+     * 1.退出界面时记忆进度
+     * 2.切换选集时记忆进度
+     *
+     * 注意：记忆单位是每个视频而不是一部番剧
+     */
+    private fun storePlayPosition() {
+        val url = mOriginUrl
+        val pos = gsyVideoManager.currentPosition
+        if (pos > playPositionMemoryTimeLimit) {
+            playPositionMemoryStore?.apply {
+                playPositionMemoryStoreCoroutineScope.launch {
+                    putPlayPosition(url, pos)
+                }
+            }
+        }
+    }
+
     fun setEpisodeButtonOnClickListener(listener: OnClickListener) {
         mEpisodeButtonOnClickListener = listener
     }
@@ -1034,5 +1133,18 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
 
     class RightRecyclerViewViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val tvTitle = view as TextView
+    }
+
+    interface PlayPositionMemoryDataStore {
+
+        suspend fun getPlayPosition(url: String): Long?
+
+        /**
+         * @param position 播放进度毫秒，可用GSYVideoViewBridge::currentPosition获取
+         */
+        @WorkerThread
+        suspend fun putPlayPosition(url: String, position: Long)
+
+        fun positionFormat(position: Long): String
     }
 }
