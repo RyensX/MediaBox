@@ -1,5 +1,6 @@
 package com.skyd.imomoe.util
 
+import com.shuyu.gsyvideoplayer.utils.CommonUtil
 import com.skyd.imomoe.database.entity.PlayRecordEntity
 import com.skyd.imomoe.database.getOfflineDatabase
 import com.skyd.imomoe.view.component.player.AnimeVideoPlayer
@@ -16,5 +17,6 @@ object AnimeVideoPositionMemoryStore : AnimeVideoPlayer.PlayPositionMemoryDataSt
         dao.insert(PlayRecordEntity(url, position))
     }
 
-    override fun positionFormat(position: Long): String = position.toString()
+    override fun positionFormat(position: Long): String =
+        CommonUtil.stringForTime(position.toInt())
 }
