@@ -126,7 +126,7 @@
     <string name="old_path">旧</string>
     <string name="do_not_finish_the_page_when_parse_download_data">缓存失败，解析缓存数据时请勿关闭页面</string>
     <string name="restore_screen">还原屏幕</string>
-    <string name="touch_down_high_speed"><![CDATA[>> %s倍播放]]></string>、
+    <string name="touch_down_high_speed"><![CDATA[>> %s倍播放]]></string>
     <string name="play_position_hit">上次看到:</string>
     <string name="will_you_try_to_sniffer_video">是否尝试嗅探视频？</string>
     <string name="getting_complex_video_failed">获取视频链接失败，%s</string>
