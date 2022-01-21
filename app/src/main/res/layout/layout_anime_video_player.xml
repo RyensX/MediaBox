@@ -37,6 +37,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <LinearLayout
+        android:id="@+id/play_position_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/gray_2"
+        android:padding="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/play_position_hit"
+            android:textColor="@color/foreground_white_skin" />
+
+        <TextView
+            android:id="@+id/play_position"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/foreground_main_color_2_skin"
+            tools:text="19:35" />
+    </LinearLayout>
+
     <!--高度都加了20dp，让阴影往下延伸一点-->
     <LinearLayout
         android:id="@+id/layout_bottom"
