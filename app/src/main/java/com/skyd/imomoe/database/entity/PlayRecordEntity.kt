@@ -1,13 +1,16 @@
 package com.skyd.imomoe.database.entity
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.skyd.imomoe.config.Constant
+import com.skyd.imomoe.config.Const
 
-@Entity(tableName = Constant.Database.OfflineData.PLAY_RECORD_TABLE_NAME)
+@Entity(tableName = Const.Database.AppDataBase.PLAY_RECORD_TABLE_NAME)
 data class PlayRecordEntity(
     @PrimaryKey
+    @ColumnInfo(name = "url")
     var url: String,
-    //播放进度，单位ms
+    // 播放进度，单位ms
+    @ColumnInfo(name = "position")
     var position: Long
 )

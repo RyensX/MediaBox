@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="foreground_black_skin_dark">#B5B5B5</color>
-    <color name="foreground_white_skin_dark">#B5B5B5</color>
+    <color name="foreground_white_skin_dark">#BDBDBD</color>
     <color name="white_skin_dark">#000000</color>
 
     <color name="main_color_skin_dark">#676767</color>
     <color name="main_color_2_skin_dark">#000000</color>
-    <color name="foreground_main_color_2_skin_dark">#A8A8A8</color>
+    <color name="foreground_main_color_2_skin_dark">#BDBDBD</color>
     <color name="foreground_main_color_3_skin_dark">#9A9A9A</color>
     <color name="main_color_3_skin_dark">#222222</color>
     <color name="foreground_transparent_skin_dark">#00000000</color>

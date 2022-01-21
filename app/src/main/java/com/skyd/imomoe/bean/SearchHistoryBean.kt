@@ -3,8 +3,9 @@ package com.skyd.imomoe.bean
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.skyd.imomoe.config.Const
 
-@Entity(tableName = "searchHistoryList")
+@Entity(tableName = Const.Database.AppDataBase.SEARCH_HISTORY_TABLE_NAME)
 class SearchHistoryBean(
     @ColumnInfo(name = "type")
     override var type: String,

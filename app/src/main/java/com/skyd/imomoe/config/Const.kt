@@ -23,6 +23,7 @@ interface Const {
             const val ANIME_ANIME_DOWNLOAD_M3U8 = "/app/animeDownloadM3U8"      //此常量为自己定义，m3u8格式
             const val ANIME_LAUNCH_ACTIVITY = "/app/animeLaunchActivity"      //此常量为自己定义，启动Activity
             const val ANIME_SKIP_BY_WEBSITE = "/app/skipByWebsite"      //此常量为自己定义，根据网址跳转
+
             // 此常量为自己定义，显示通知。要求传入的参数需要经过URL编码！！！
             const val ANIME_NOTICE = "/app/notice"
         }
@@ -34,6 +35,17 @@ interface Const {
             const val ID_EVERYDAY = "everyday"
             const val ID_DOWNLOAD = "download"
             const val ACTION_EVERYDAY = "everyday"
+        }
+    }
+
+    interface Database {
+        object AppDataBase {
+            const val APP_DATA_BASE_FILE_NAME = "app.db"
+            const val PLAY_RECORD_TABLE_NAME = "playRecord"
+            const val ANIME_DOWNLOAD_TABLE_NAME = "animeDownloadList"
+            const val FAVORITE_ANIME_TABLE_NAME = "favoriteAnimeList"
+            const val HISTORY_TABLE_NAME = "historyList"
+            const val SEARCH_HISTORY_TABLE_NAME = "searchHistoryList"
         }
     }
 

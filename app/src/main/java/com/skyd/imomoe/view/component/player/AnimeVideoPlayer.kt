@@ -13,7 +13,6 @@ import android.widget.*
 import androidx.annotation.WorkerThread
 import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.children
-import androidx.core.view.isGone
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.shuyu.gsyvideoplayer.utils.CommonUtil
@@ -79,7 +78,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
     var playPositionMemoryStore: PlayPositionMemoryDataStore? = null
     private var playPositionViewJob: Job? = null
 
-    //预跳转进度
+    // 预跳转进度
     private var preSeekPlayPosition: Long? = null
 
     // 正在双指缩放移动
@@ -114,11 +113,14 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
     //下一集按钮
     private var ivNextEpisode: ImageView? = null
 
-    //进度记忆组
-    private var playPositionView: LinearLayout? = null
+    // 进度记忆组
+    private var vgPlayPosition: ViewGroup? = null
 
-    //进度文字
-    private var playPosition: TextView? = null
+    // 进度文字
+    private var tvPlayPosition: TextView? = null
+
+    // 关闭进度提示ImageView
+    private var ivClosePlayPositionTip: ImageView? = null
 
     //选集
     private var tvEpisode: TextView? = null
@@ -229,20 +231,22 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         viewNightScreen = findViewById(R.id.view_player_night_screen)
         sbNightScreen = findViewById(R.id.sb_player_night_screen)
         tvDlna = findViewById(R.id.tv_dlna)
-        playPositionView = findViewById(R.id.play_position_view)
-        playPosition = findViewById(R.id.play_position)
+        vgPlayPosition = findViewById(R.id.ll_play_position_view)
+        tvPlayPosition = findViewById(R.id.tv_play_position_time)
+        ivClosePlayPositionTip = findViewById(R.id.iv_close_play_position_tip)
 
         vgRightContainer?.gone()
         vgSettingContainer?.gone()
         tvTouchDownHighSpeed?.gone()
-        playPositionView?.gone()
+        vgPlayPosition?.gone()
 
         vgBiggerSurface?.setOnClickListener(this)
         vgBiggerSurface?.setOnTouchListener(this)
 
-        playPosition?.setOnClickListener {
+        ivClosePlayPositionTip?.setOnClickListener { vgPlayPosition?.gone() }
+        vgPlayPosition?.setOnClickListener {
             preSeekPlayPosition?.also { seekTo(it) }
-            playPositionView?.gone()
+            vgPlayPosition?.gone()
         }
 
         tvRestoreScreen?.setOnClickListener {
@@ -978,11 +982,11 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
                 getPlayPosition(mOriginUrl)?.also {
                     preSeekPlayPosition = it
                     playPositionViewJob = launch(Dispatchers.Main) {
-                        playPosition?.text = positionFormat(it)
-                        playPositionView?.isGone = false
+                        tvPlayPosition?.text = positionFormat(it)
+                        vgPlayPosition?.visible()
                         //展示5秒
                         delay(5000)
-                        playPositionView?.isGone = true
+                        vgPlayPosition?.gone()
                     }
                 }
             }
@@ -1008,7 +1012,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         changeState: Boolean
     ): Boolean {
         if (url != mOriginUrl) {
-            playPositionView?.gone()
+            vgPlayPosition?.gone()
             storePlayPosition()
         }
 

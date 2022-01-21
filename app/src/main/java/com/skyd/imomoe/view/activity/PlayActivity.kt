@@ -51,6 +51,7 @@ import com.skyd.imomoe.view.adapter.decoration.AnimeEpisodeItemDecoration
 import com.skyd.imomoe.view.adapter.decoration.AnimeShowItemDecoration
 import com.skyd.imomoe.view.adapter.spansize.PlaySpanSize
 import com.skyd.imomoe.view.component.player.AnimeVideoPlayer
+import com.skyd.imomoe.view.component.player.AnimeVideoPositionMemoryStore
 import com.skyd.imomoe.view.component.player.DanmakuVideoPlayer
 import com.skyd.imomoe.view.component.player.DetailPlayerActivity
 import com.skyd.imomoe.view.fragment.MoreDialogFragment

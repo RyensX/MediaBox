@@ -3,11 +3,10 @@ package com.skyd.imomoe.bean
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.skyd.imomoe.bean.BaseBean
-import com.skyd.imomoe.bean.ImageBean
+import com.skyd.imomoe.config.Const
 import java.io.Serializable
 
-@Entity(tableName = "favoriteAnimeList")
+@Entity(tableName = Const.Database.AppDataBase.FAVORITE_ANIME_TABLE_NAME)
 class FavoriteAnimeBean(      //下面的url都是partUrl
     @ColumnInfo(name = "type")
     override var type: String,

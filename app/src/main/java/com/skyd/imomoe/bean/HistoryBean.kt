@@ -3,9 +3,10 @@ package com.skyd.imomoe.bean
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.skyd.imomoe.config.Const
 import java.io.Serializable
 
-@Entity(tableName = "historyList")
+@Entity(tableName = Const.Database.AppDataBase.HISTORY_TABLE_NAME)
 class HistoryBean(      //下面的url都是partUrl
     @ColumnInfo(name = "type")
     override var type: String,

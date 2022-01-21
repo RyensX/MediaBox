@@ -1,15 +1,12 @@
-package com.skyd.imomoe.util
+package com.skyd.imomoe.view.component.player
 
 import com.shuyu.gsyvideoplayer.utils.CommonUtil
 import com.skyd.imomoe.database.entity.PlayRecordEntity
-import com.skyd.imomoe.database.getOfflineDatabase
-import com.skyd.imomoe.view.component.player.AnimeVideoPlayer
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import com.skyd.imomoe.database.getAppDataBase
 
 object AnimeVideoPositionMemoryStore : AnimeVideoPlayer.PlayPositionMemoryDataStore {
 
-    private val dao = getOfflineDatabase().playPlayRecordDao()
+    private val dao = getAppDataBase().playRecordDao()
 
     override suspend fun getPlayPosition(url: String): Long? = dao.query(url)?.position
 
@@ -17,6 +14,5 @@ object AnimeVideoPositionMemoryStore : AnimeVideoPlayer.PlayPositionMemoryDataSt
         dao.insert(PlayRecordEntity(url, position))
     }
 
-    override fun positionFormat(position: Long): String =
-        CommonUtil.stringForTime(position.toInt())
+    override fun positionFormat(position: Long): String = CommonUtil.stringForTime(position.toInt())
 }

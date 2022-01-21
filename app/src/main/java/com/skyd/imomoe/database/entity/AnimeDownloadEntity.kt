@@ -3,9 +3,10 @@ package com.skyd.imomoe.database.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.skyd.imomoe.config.Const
 import java.io.Serializable
 
-@Entity(tableName = "animeDownloadList")
+@Entity(tableName = Const.Database.AppDataBase.ANIME_DOWNLOAD_TABLE_NAME)
 class AnimeDownloadEntity(
     @PrimaryKey
     @ColumnInfo(name = "md5")

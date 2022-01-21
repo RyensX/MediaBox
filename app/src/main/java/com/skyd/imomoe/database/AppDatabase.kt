@@ -11,19 +11,23 @@ import com.skyd.imomoe.App
 import com.skyd.imomoe.bean.SearchHistoryBean
 import com.skyd.imomoe.database.converter.AnimeDownloadStatusConverter
 import com.skyd.imomoe.database.converter.ImageBeanConverter
-import com.skyd.imomoe.database.dao.AnimeDownloadDao
-import com.skyd.imomoe.database.dao.FavoriteAnimeDao
-import com.skyd.imomoe.database.dao.SearchHistoryDao
 import com.skyd.imomoe.database.entity.AnimeDownloadEntity
 import com.skyd.imomoe.bean.FavoriteAnimeBean
 import com.skyd.imomoe.bean.HistoryBean
-import com.skyd.imomoe.database.dao.HistoryDao
+import com.skyd.imomoe.config.Const.Database.AppDataBase.ANIME_DOWNLOAD_TABLE_NAME
+import com.skyd.imomoe.config.Const.Database.AppDataBase.APP_DATA_BASE_FILE_NAME
+import com.skyd.imomoe.config.Const.Database.AppDataBase.FAVORITE_ANIME_TABLE_NAME
+import com.skyd.imomoe.config.Const.Database.AppDataBase.HISTORY_TABLE_NAME
+import com.skyd.imomoe.config.Const.Database.AppDataBase.PLAY_RECORD_TABLE_NAME
+import com.skyd.imomoe.database.dao.*
+import com.skyd.imomoe.database.entity.PlayRecordEntity
 
 @Database(
     entities = [SearchHistoryBean::class,
         AnimeDownloadEntity::class,
         FavoriteAnimeBean::class,
-        HistoryBean::class], version = 3
+        HistoryBean::class,
+        PlayRecordEntity::class], version = 4
 )
 @TypeConverters(
     value = [AnimeDownloadStatusConverter::class,
@@ -35,20 +39,27 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun animeDownloadDao(): AnimeDownloadDao
     abstract fun favoriteAnimeDao(): FavoriteAnimeDao
     abstract fun historyDao(): HistoryDao
+    abstract fun playRecordDao(): PlayRecordDao
 
     companion object {
         private var instance: AppDatabase? = null
 
         private val migration1To2 = object : Migration(1, 2) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("ALTER TABLE animeDownloadList ADD fileName TEXT")
+                database.execSQL("ALTER TABLE $ANIME_DOWNLOAD_TABLE_NAME ADD fileName TEXT")
             }
         }
 
         private val migration2To3 = object : Migration(2, 3) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("CREATE TABLE favoriteAnimeList(type TEXT NOT NULL, actionUrl TEXT NOT NULL, animeUrl TEXT PRIMARY KEY NOT NULL, animeTitle TEXT NOT NULL, time INTEGER NOT NULL, cover TEXT NOT NULL, lastEpisodeUrl TEXT, lastEpisode TEXT)")
-                database.execSQL("CREATE TABLE historyList(type TEXT NOT NULL, actionUrl TEXT NOT NULL, animeUrl TEXT PRIMARY KEY NOT NULL, animeTitle TEXT NOT NULL, time INTEGER NOT NULL, cover TEXT NOT NULL, lastEpisodeUrl TEXT, lastEpisode TEXT)")
+                database.execSQL("CREATE TABLE $FAVORITE_ANIME_TABLE_NAME(type TEXT NOT NULL, actionUrl TEXT NOT NULL, animeUrl TEXT PRIMARY KEY NOT NULL, animeTitle TEXT NOT NULL, time INTEGER NOT NULL, cover TEXT NOT NULL, lastEpisodeUrl TEXT, lastEpisode TEXT)")
+                database.execSQL("CREATE TABLE $HISTORY_TABLE_NAME(type TEXT NOT NULL, actionUrl TEXT NOT NULL, animeUrl TEXT PRIMARY KEY NOT NULL, animeTitle TEXT NOT NULL, time INTEGER NOT NULL, cover TEXT NOT NULL, lastEpisodeUrl TEXT, lastEpisode TEXT)")
+            }
+        }
+
+        private val migration3To4 = object : Migration(3, 4) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("CREATE TABLE IF NOT EXISTS $PLAY_RECORD_TABLE_NAME(url TEXT PRIMARY KEY NOT NULL, position INTEGER NOT NULL)")
             }
         }
 
@@ -59,9 +70,9 @@ abstract class AppDatabase : RoomDatabase() {
                     Room.databaseBuilder(
                         context.applicationContext,
                         AppDatabase::class.java,
-                        "app.db"
+                        APP_DATA_BASE_FILE_NAME
                     )
-                        .addMigrations(migration1To2, migration2To3)
+                        .addMigrations(migration1To2, migration2To3, migration3To4)
                         .build()
                 }
             } else {
