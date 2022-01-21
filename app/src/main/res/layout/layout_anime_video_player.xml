@@ -41,26 +41,17 @@
         android:id="@+id/ll_play_position_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:background="@drawable/shape_circle_corner_white_ripper_5"
-        android:backgroundTint="@color/gray_2"
+        android:background="@color/gray_2"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@id/layout_bottom"
         app:layout_constraintStart_toStartOf="parent">
 
-        <ImageView
-            android:id="@+id/iv_close_play_position_tip"
-            android:layout_width="35dp"
-            android:layout_height="match_parent"
-            android:paddingStart="10dp"
-            android:paddingEnd="5dp"
-            android:src="@drawable/ic_close_white_24" />
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="10dp"
+            android:layout_marginVertical="8dp"
+            android:layout_marginLeft="10dp"
             android:text="@string/play_position_tip"
             android:textColor="@color/foreground_white_skin" />
 
@@ -68,10 +59,18 @@
             android:id="@+id/tv_play_position_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="10dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginVertical="8dp"
             android:textColor="@color/foreground_main_color_2_skin"
             tools:text="19:35" />
+
+        <!--margin缩小点击范围-->
+        <ImageView
+            android:id="@+id/iv_close_play_position_tip"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_margin="8dp"
+            android:src="@drawable/ic_close_white_24" />
+
     </LinearLayout>
 
     <!--高度都加了20dp，让阴影往下延伸一点-->

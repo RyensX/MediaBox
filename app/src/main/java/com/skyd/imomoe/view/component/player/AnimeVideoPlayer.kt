@@ -243,7 +243,10 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         vgBiggerSurface?.setOnClickListener(this)
         vgBiggerSurface?.setOnTouchListener(this)
 
-        ivClosePlayPositionTip?.setOnClickListener { vgPlayPosition?.gone(true, 200L) }
+        ivClosePlayPositionTip?.setOnClickListener {
+            playPositionViewJob?.cancel()
+            vgPlayPosition?.gone(true, 200L)
+        }
         vgPlayPosition?.setOnClickListener {
             preSeekPlayPosition?.also { seekTo(it) }
             vgPlayPosition?.gone(true, 200L)
