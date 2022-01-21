@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.skyd.imomoe.config.Const
 
-@Entity(tableName = Const.Database.AppDataBase.PLAY_RECORD_TABLE_NAME)
+@Entity(tableName = Const.Database.OfflineDataBase.PLAY_RECORD_TABLE_NAME)
 data class PlayRecordEntity(
     @PrimaryKey
     @ColumnInfo(name = "url")

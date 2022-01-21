@@ -2,7 +2,6 @@ package com.skyd.imomoe.view.component.player
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.ViewGroup
@@ -45,10 +44,6 @@ import java.util.zip.Inflater
 import java.util.zip.InflaterInputStream
 
 
-/**
- * 注意：这只是一个例子，演示如何集合弹幕，需要完善如弹出输入弹幕等的，可以自行完善。
- * 注意：b站的弹幕so只有v5 v7 x86、没有64，所以记得配置上ndk过滤。
- */
 open class DanmakuVideoPlayer : AnimeVideoPlayer {
     private var mDanmakuUrl: String = ""
     private lateinit var mDanmakuView: DanmakuView          //弹幕view

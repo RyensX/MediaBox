@@ -243,10 +243,10 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         vgBiggerSurface?.setOnClickListener(this)
         vgBiggerSurface?.setOnTouchListener(this)
 
-        ivClosePlayPositionTip?.setOnClickListener { vgPlayPosition?.gone() }
+        ivClosePlayPositionTip?.setOnClickListener { vgPlayPosition?.gone(true, 200L) }
         vgPlayPosition?.setOnClickListener {
             preSeekPlayPosition?.also { seekTo(it) }
-            vgPlayPosition?.gone()
+            vgPlayPosition?.gone(true, 200L)
         }
 
         tvRestoreScreen?.setOnClickListener {
@@ -986,7 +986,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
                         vgPlayPosition?.visible()
                         //展示5秒
                         delay(5000)
-                        vgPlayPosition?.gone()
+                        vgPlayPosition?.gone(true, 200L)
                     }
                 }
             }

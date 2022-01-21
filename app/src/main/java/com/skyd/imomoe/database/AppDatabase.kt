@@ -18,16 +18,13 @@ import com.skyd.imomoe.config.Const.Database.AppDataBase.ANIME_DOWNLOAD_TABLE_NA
 import com.skyd.imomoe.config.Const.Database.AppDataBase.APP_DATA_BASE_FILE_NAME
 import com.skyd.imomoe.config.Const.Database.AppDataBase.FAVORITE_ANIME_TABLE_NAME
 import com.skyd.imomoe.config.Const.Database.AppDataBase.HISTORY_TABLE_NAME
-import com.skyd.imomoe.config.Const.Database.AppDataBase.PLAY_RECORD_TABLE_NAME
 import com.skyd.imomoe.database.dao.*
-import com.skyd.imomoe.database.entity.PlayRecordEntity
 
 @Database(
     entities = [SearchHistoryBean::class,
         AnimeDownloadEntity::class,
         FavoriteAnimeBean::class,
-        HistoryBean::class,
-        PlayRecordEntity::class], version = 4
+        HistoryBean::class], version = 3
 )
 @TypeConverters(
     value = [AnimeDownloadStatusConverter::class,
@@ -39,7 +36,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun animeDownloadDao(): AnimeDownloadDao
     abstract fun favoriteAnimeDao(): FavoriteAnimeDao
     abstract fun historyDao(): HistoryDao
-    abstract fun playRecordDao(): PlayRecordDao
 
     companion object {
         private var instance: AppDatabase? = null
@@ -57,12 +53,6 @@ abstract class AppDatabase : RoomDatabase() {
             }
         }
 
-        private val migration3To4 = object : Migration(3, 4) {
-            override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("CREATE TABLE IF NOT EXISTS $PLAY_RECORD_TABLE_NAME(url TEXT PRIMARY KEY NOT NULL, position INTEGER NOT NULL)")
-            }
-        }
-
         fun getInstance(context: Context): AppDatabase {
             if (instance == null) {
                 if (instance != null) return instance as AppDatabase
@@ -72,7 +62,7 @@ abstract class AppDatabase : RoomDatabase() {
                         AppDatabase::class.java,
                         APP_DATA_BASE_FILE_NAME
                     )
-                        .addMigrations(migration1To2, migration2To3, migration3To4)
+                        .addMigrations(migration1To2, migration2To3)
                         .build()
                 }
             } else {

@@ -2,11 +2,11 @@ package com.skyd.imomoe.view.component.player
 
 import com.shuyu.gsyvideoplayer.utils.CommonUtil
 import com.skyd.imomoe.database.entity.PlayRecordEntity
-import com.skyd.imomoe.database.getAppDataBase
+import com.skyd.imomoe.database.getOfflineDatabase
 
 object AnimeVideoPositionMemoryStore : AnimeVideoPlayer.PlayPositionMemoryDataStore {
 
-    private val dao = getAppDataBase().playRecordDao()
+    private val dao = getOfflineDatabase().playRecordDao()
 
     override suspend fun getPlayPosition(url: String): Long? = dao.query(url)?.position
 

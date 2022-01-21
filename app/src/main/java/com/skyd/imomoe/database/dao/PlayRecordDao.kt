@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.skyd.imomoe.config.Const.Database.AppDataBase.PLAY_RECORD_TABLE_NAME
+import com.skyd.imomoe.config.Const.Database.OfflineDataBase.PLAY_RECORD_TABLE_NAME
 import com.skyd.imomoe.database.entity.PlayRecordEntity
 
 @Dao
