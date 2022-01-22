@@ -57,12 +57,7 @@ class FavoriteAdapter(
                     referer = item.cover.referer
                 )
                 holder.tvAnimeCover8Title.text = item.animeTitle
-                if (item.lastEpisode == null) {
-                    holder.tvAnimeCover8Episodes.gone()
-                } else {
-                    holder.tvAnimeCover8Episodes.visible()
-                    holder.tvAnimeCover8Episodes.text = item.lastEpisode
-                }
+                holder.tvAnimeCover8Episodes.text = item.lastEpisode?.let { "已看到 $it" } ?: "未看"
             }
             else -> {
                 holder.itemView.visibility = View.GONE
