@@ -16,6 +16,7 @@ import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.bean.AnimeEpisodeDataBean
 import com.skyd.imomoe.bean.IAnimeDetailBean
 import com.skyd.imomoe.config.Const
+import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.util.*
 import com.skyd.imomoe.util.Util.dp
@@ -156,6 +157,31 @@ class AnimeDetailAdapter(
                             )
                         }
                         holder.flAnimeInfo1Tag.addView(tvFlowLayout)
+                    }
+
+                    //查找番剧播放历史决定是否可续播
+                    holder.tvAnimeInfoContinuePlay.apply {
+                        gone()
+                        getAppDataBase().historyDao()
+                            .getHistoryLiveData(activity.getPartUrl())
+                            .also {
+                                setOnClickListener { v ->
+                                    val url = v.tag
+                                    if (url is String) {
+                                        process(activity, url, url)
+                                    }
+                                }
+                                visible()
+                            }
+                            //FIX_TODO 2022/1/22 14:53 0 这里没有在打开播放后更新，原因未知，所以暂时只能手动刷新
+                            .observe(activity) { hb ->
+                                if (hb != null) {
+                                    text = "续播 ${hb.lastEpisode}"
+                                    tag = hb.lastEpisodeUrl
+                                } else
+                                //小心复用，所以主要主动隐藏
+                                    gone()
+                            }
                     }
                 }
             }
