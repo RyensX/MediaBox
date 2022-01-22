@@ -1,5 +1,6 @@
 package com.skyd.imomoe.database.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.skyd.imomoe.bean.FavoriteAnimeBean
 import com.skyd.imomoe.bean.HistoryBean
@@ -15,10 +16,13 @@ interface HistoryDao {
     fun getHistoryList(): MutableList<HistoryBean>
 
     @Query(value = "SELECT * FROM $HISTORY_TABLE_NAME WHERE animeUrl = :animeUrl")
-    fun getHistory(animeUrl: String): FavoriteAnimeBean?
+    fun getHistory(animeUrl: String): HistoryBean?
+
+    @Query("SELECT * FROM $HISTORY_TABLE_NAME WHERE animeUrl = :animeUrl")
+    fun getHistoryLiveData(animeUrl: String): LiveData<HistoryBean?>
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    fun updateHistory(favoriteAnimeBean: FavoriteAnimeBean)
+    fun updateHistory(historyBean: HistoryBean)
 
     @Query(value = "UPDATE $HISTORY_TABLE_NAME SET animeTitle = :animeTitle WHERE animeUrl = :animeUrl")
     fun updateHistoryTitle(animeUrl: String, animeTitle: String)

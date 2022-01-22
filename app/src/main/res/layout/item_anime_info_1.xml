@@ -5,7 +5,7 @@
     android:id="@+id/cl_anime_detail_activity_header"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="5dp"
+    android:paddingBottom="4dp"
     tools:background="@color/foreground_black_skin">
 
     <androidx.cardview.widget.CardView
@@ -207,4 +207,24 @@
         app:layout_constraintTop_toBottomOf="@id/ll_anime_info_1_tag"
         app:typeface="bPRTypeface"
         tools:text="14集全" />
+
+    <com.skyd.imomoe.view.component.textview.TypefaceTextView
+        android:id="@+id/tv_anime_info_continue_play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/shape_circle_corner_edge_white_ripper_5_skin"
+        android:gravity="center"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="8dp"
+        android:textColor="@color/foreground_white_skin"
+        android:textSize="15sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/cv_anime_info_1_cover"
+        app:layout_constraintTop_toBottomOf="@id/cv_anime_info_1_cover"
+        app:typeface="bPRTypeface"
+        tools:text="续看第01集"
+        tools:visibility="visible" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

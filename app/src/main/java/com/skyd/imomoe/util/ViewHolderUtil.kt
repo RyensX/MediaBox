@@ -14,6 +14,7 @@ import com.skyd.imomoe.view.component.FlowLayout
 import com.skyd.imomoe.config.Const.ViewHolderTypeInt
 import com.skyd.imomoe.config.Const.ViewHolderTypeString
 
+//UP_TODO 2022/1/22 12:31 0 ViewHolder直接使用ViewBinding
 class ViewHolderUtil {
     companion object {
 
@@ -217,6 +218,7 @@ class AnimeInfo1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val tvAnimeInfo1Tag: TextView = view.findViewById(R.id.tv_anime_info_1_tag)
     val flAnimeInfo1Tag: FlowLayout = view.findViewById(R.id.fl_anime_info_1_tag)
     val tvAnimeInfo1Info: TextView = view.findViewById(R.id.tv_anime_info_1_info)
+    val tvAnimeInfoContinuePlay: TextView = view.findViewById(R.id.tv_anime_info_continue_play)
 }
 
 class HorizontalRecyclerView1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
