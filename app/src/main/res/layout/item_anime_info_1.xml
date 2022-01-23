@@ -10,25 +10,25 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_anime_info_1_cover"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         app:cardBackgroundColor="@color/foreground_transparent_skin"
         app:cardCornerRadius="5dp"
-        app:layout_constraintBottom_toBottomOf="@id/tv_anime_info_1_info"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/tv_anime_info_1_title">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <ImageView
                 android:id="@+id/iv_anime_info_1_cover"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
-                android:maxWidth="200dp"
+                android:maxHeight="200dp"
+                android:scaleType="centerCrop"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -57,8 +57,8 @@
                 android:textSize="12sp"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:typeface="bPRTypeface"
                 tools:text="第01集"
                 tools:visibility="visible" />
@@ -82,7 +82,7 @@
         app:layout_constraintStart_toEndOf="@id/cv_anime_info_1_cover"
         app:layout_constraintTop_toTopOf="parent"
         app:typeface="bPRTypeface"
-        tools:text="轻音少女" />
+        tools:text="轻音少女轻音少女轻音少女轻音少女轻音少女轻音少女轻音少女" />
 
     <com.skyd.imomoe.view.component.textview.TypefaceTextView
         android:id="@+id/tv_anime_info_1_alias"
