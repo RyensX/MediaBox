@@ -44,7 +44,6 @@
                 app:layout_constraintStart_toStartOf="@id/iv_anime_info_1_cover"
                 app:layout_constraintTop_toTopOf="@id/iv_anime_info_1_cover" />
 
-
             <com.skyd.imomoe.view.component.textview.TypefaceTextView
                 android:id="@+id/tv_anime_info_continue_play"
                 android:layout_width="0dp"
@@ -52,9 +51,9 @@
                 android:background="@color/gray_2"
                 android:gravity="center"
                 android:paddingHorizontal="10dp"
-                android:paddingVertical="8dp"
+                android:paddingVertical="7dp"
                 android:textColor="@color/foreground_white_skin"
-                android:textSize="12sp"
+                android:textSize="13sp"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -32,4 +32,8 @@ interface HistoryDao {
 
     @Query(value = "DELETE FROM $HISTORY_TABLE_NAME")
     fun deleteAllHistory()
+
+    // 获取记录条数
+    @Query(value = "SELECT COUNT(1) FROM $HISTORY_TABLE_NAME")
+    fun getHistoryCount(): Long
 }

@@ -24,4 +24,8 @@ interface SearchHistoryDao {
 
     @Query(value = "DELETE FROM $SEARCH_HISTORY_TABLE_NAME")
     fun deleteAllSearchHistory()
+
+    // 获取记录条数
+    @Query(value = "SELECT COUNT(1) FROM $SEARCH_HISTORY_TABLE_NAME")
+    fun getSearchHistoryCount(): Long
 }

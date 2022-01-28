@@ -13,6 +13,7 @@ import android.widget.*
 import androidx.annotation.WorkerThread
 import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.children
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.shuyu.gsyvideoplayer.utils.CommonUtil
@@ -248,7 +249,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
             vgPlayPosition?.gone(true, 200L)
         }
         vgPlayPosition?.setOnClickListener {
-            preSeekPlayPosition?.also { seekTo(it) }
+            preSeekPlayPosition?.also { if (it > 0L) seekTo(it) }
             vgPlayPosition?.gone(true, 200L)
         }
 
@@ -695,6 +696,8 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         super.changeUiToClear()
         viewTopContainerShadow?.invisible()
         mUiCleared = true
+
+        if (vgPlayPosition?.isVisible == true) ivClosePlayPositionTip?.callOnClick()
     }
 
     //准备中
@@ -723,11 +726,15 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         mBottomContainer.gone()
         tvTouchDownHighSpeed?.gone()
         mUiCleared = false
+
+        if (vgPlayPosition?.isVisible == true) ivClosePlayPositionTip?.callOnClick()
     }
 
     override fun changeUiToError() {
         super.changeUiToError()
         viewTopContainerShadow?.invisible()
+
+        if (vgPlayPosition?.isVisible == true) ivClosePlayPositionTip?.callOnClick()
     }
 
     override fun changeUiToPrepareingClear() {
@@ -1026,18 +1033,29 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
      * 1.退出界面时记忆进度
      * 2.切换选集时记忆进度
      *
-     * 注意：记忆单位是每个视频而不是一部番剧
+     * @param position 小于0代表播放完毕（已看完），大于等于0代表正常进度
+     *
+     * 注意：记忆单位是每个视频而不是一部番剧；一部番剧里面的每集都有记录，并非只记录最后看的那一集
      */
-    private fun storePlayPosition() {
+    private fun storePlayPosition(position: Long = gsyVideoManager.currentPosition) {
         val url = mOriginUrl
-        val pos = gsyVideoManager.currentPosition
-        if (pos > playPositionMemoryTimeLimit) {
+        val duration = gsyVideoManager.duration
+        // 进度为负（已经播放完） 或 当前进度大于最小限制且小于最大限制（播放完时不记录），则记录
+        if (position < 0 || (position > playPositionMemoryTimeLimit && duration > 0
+                    && abs(position - duration) > 2000L)
+        ) {
             playPositionMemoryStore?.apply {
                 playPositionMemoryStoreCoroutineScope.launch {
-                    putPlayPosition(url, pos)
+                    putPlayPosition(url, position)
                 }
             }
         }
+    }
+
+    override fun onAutoCompletion() {
+        super.onAutoCompletion()
+        // 播放完毕
+        storePlayPosition(-1L)
     }
 
     fun setEpisodeButtonOnClickListener(listener: OnClickListener) {
@@ -1151,6 +1169,9 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
          */
         @WorkerThread
         suspend fun putPlayPosition(url: String, position: Long)
+
+        @WorkerThread
+        suspend fun deletePlayPosition(url: String)
 
         fun positionFormat(position: Long): String
     }

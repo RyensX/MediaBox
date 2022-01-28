@@ -20,6 +20,7 @@ import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.gone
 import com.skyd.imomoe.util.update.AppUpdateHelper
 import com.skyd.imomoe.util.update.AppUpdateStatus
+import com.skyd.imomoe.util.visible
 import com.skyd.imomoe.viewmodel.SettingViewModel
 import com.skyd.skin.SkinManager
 import kotlinx.coroutines.*
@@ -42,6 +43,15 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
             tvSettingActivityDownloadPathInfo.text = Const.DownloadAnime.animeFilePath
         }
 
+        viewModel.getAllHistoryCount()
+        viewModel.mldAllHistoryCount.observe(this, {
+            if (it >= 0) {
+                mBinding.tvSettingActivityAllHistoryCount.apply {
+                    visible()
+                    text = getString(R.string.all_history_count, it)
+                }
+            } else mBinding.tvSettingActivityAllHistoryCount.gone()
+        })
         // 清理历史记录
         viewModel.mldDeleteAllHistory.observe(this, Observer {
             if (it == null) return@Observer
@@ -49,12 +59,11 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
             else getString(R.string.delete_all_history_failed).showToast()
             viewModel.mldDeleteAllHistory.postValue(null)
         })
-        mBinding.tvSettingActivityDeleteAllHistoryInfo.isFocused = true
         mBinding.rlSettingActivityDeleteAllHistory.setOnClickListener {
             MaterialDialog(this).show {
                 icon(drawable = getResDrawable(R.drawable.ic_delete_main_color_2_24_skin))
                 title(res = R.string.warning)
-                message(text = "确定要删除所有历史记录？包括搜索历史和观看历史")
+                message(res = R.string.confirm_delete_all_history)
                 positiveButton(res = R.string.delete) { viewModel.deleteAllHistory() }
                 negativeButton(res = R.string.cancel) { dismiss() }
             }

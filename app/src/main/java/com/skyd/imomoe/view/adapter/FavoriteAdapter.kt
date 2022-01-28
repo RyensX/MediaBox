@@ -10,8 +10,6 @@ import com.skyd.imomoe.util.AnimeCover8ViewHolder
 import com.skyd.imomoe.util.Util.process
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.coil.CoilUtil.loadImage
-import com.skyd.imomoe.util.gone
-import com.skyd.imomoe.util.visible
 import com.skyd.imomoe.view.activity.FavoriteActivity
 
 class FavoriteAdapter(
@@ -57,7 +55,9 @@ class FavoriteAdapter(
                     referer = item.cover.referer
                 )
                 holder.tvAnimeCover8Title.text = item.animeTitle
-                holder.tvAnimeCover8Episodes.text = item.lastEpisode?.let { "已看到 $it" } ?: "未看"
+                holder.tvAnimeCover8Episodes.text = item.lastEpisode?.let {
+                    activity.getString(R.string.already_seen_episode_x, it)
+                } ?: activity.getString(R.string.have_not_watched_this_anime)
             }
             else -> {
                 holder.itemView.visibility = View.GONE
