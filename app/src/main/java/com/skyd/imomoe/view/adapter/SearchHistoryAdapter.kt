@@ -26,7 +26,8 @@ class SearchHistoryAdapter(
             is SearchHistory1ViewHolder -> {
                 holder.tvSearchHistory1Title.text = item.title
                 holder.ivSearchHistory1Delete.setOnClickListener {
-                    activity.deleteSearchHistory(position)
+                    // 用holder.bindingAdapterPosition代替position，因为在removed后position会变
+                    activity.deleteSearchHistory(holder.bindingAdapterPosition)
                 }
                 holder.itemView.setOnClickListener {
                     activity.search(item.title)

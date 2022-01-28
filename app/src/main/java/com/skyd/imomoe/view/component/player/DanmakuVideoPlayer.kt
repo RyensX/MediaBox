@@ -267,7 +267,7 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
         super.onSeekComplete()
         // 虽然此方法叫做onSeekComplete，但是这时候多半还没有缓冲完（为GSYPlayer库设计缺陷）
         // 因此不能开始弹幕播放，要传入pauseDanmaku = true，强行暂停播放
-        seekDanmaku((mProgressBar.progress * duration / 100.0).toLong(), true)
+        seekDanmaku(gsyVideoManager.currentPosition, true)
     }
 
     override fun changeUiToPlayingShow() {

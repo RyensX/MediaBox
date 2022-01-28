@@ -12,9 +12,16 @@ interface PlayRecordDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(vararg record: PlayRecordEntity)
 
-    @Query("SELECT * FROM $PLAY_RECORD_TABLE_NAME WHERE url=:url")
+    @Query("SELECT * FROM $PLAY_RECORD_TABLE_NAME WHERE url = :url")
     suspend fun query(url: String): PlayRecordEntity?
 
     @Query("DELETE FROM $PLAY_RECORD_TABLE_NAME WHERE url = :url")
     fun delete(url: String)
+
+    @Query(value = "DELETE FROM $PLAY_RECORD_TABLE_NAME")
+    fun deleteAll()
+
+    // 获取记录条数
+    @Query(value = "SELECT COUNT(1) FROM $PLAY_RECORD_TABLE_NAME")
+    fun getPlayRecordCount(): Long
 }

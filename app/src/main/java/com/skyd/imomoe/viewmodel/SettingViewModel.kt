@@ -7,6 +7,7 @@ import coil.util.CoilUtils
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.database.getAppDataBase
+import com.skyd.imomoe.database.getOfflineDatabase
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.coil.CoilUtil
 import com.skyd.imomoe.util.formatSize
@@ -15,6 +16,7 @@ import kotlinx.coroutines.launch
 
 
 class SettingViewModel : ViewModel() {
+    var mldAllHistoryCount: MutableLiveData<Long> = MutableLiveData()
     var mldDeleteAllHistory: MutableLiveData<Boolean> = MutableLiveData()
     var mldClearAllCache: MutableLiveData<Boolean> = MutableLiveData()
     var mldCacheSize: MutableLiveData<String> = MutableLiveData()
@@ -24,7 +26,9 @@ class SettingViewModel : ViewModel() {
             try {
                 getAppDataBase().historyDao().deleteAllHistory()
                 getAppDataBase().searchHistoryDao().deleteAllSearchHistory()
+                getOfflineDatabase().playRecordDao().deleteAll()
                 mldDeleteAllHistory.postValue(true)
+                getAllHistoryCount()
             } catch (e: Exception) {
                 mldDeleteAllHistory.postValue(false)
                 e.printStackTrace()
@@ -58,6 +62,20 @@ class SettingViewModel : ViewModel() {
                 mldClearAllCache.postValue(false)
                 e.printStackTrace()
                 (App.context.getString(R.string.delete_failed) + "\n" + e.message).showToast()
+            }
+        }
+    }
+
+    fun getAllHistoryCount() {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val count = getAppDataBase().historyDao().getHistoryCount() +
+                        getAppDataBase().searchHistoryDao().getSearchHistoryCount() +
+                        getOfflineDatabase().playRecordDao().getPlayRecordCount()
+                mldAllHistoryCount.postValue(count)
+            } catch (e: Exception) {
+                mldAllHistoryCount.postValue(-1)
+                e.printStackTrace()
             }
         }
     }
