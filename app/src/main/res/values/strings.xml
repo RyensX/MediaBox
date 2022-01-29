@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">樱花动漫</string>
+    <string name="app_name">媒体盒子</string>
     <string name="home_fragment_header_search">搜索</string>
     <string name="press_again_to_exit">再按一次退出</string>
     <string name="currently_not_supported">目前尚未支持</string>
@@ -33,7 +33,7 @@
     <string name="is_latest_version">已是最新版本</string>
     <string name="start_download">开始下载，通知栏显示下载进度</string>
     <string name="download_failed">下载失败</string>
-    <string name="download_succeed">新版樱花动漫下载完成</string>
+    <string name="download_succeed">新版下载完成</string>
     <string name="github">Github</string>
     <string name="data_source_url">数据源地址</string>
     <string name="data_source_info">数据源信息</string>

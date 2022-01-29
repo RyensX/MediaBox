@@ -4,4 +4,4 @@ include ':skin_dark'
 include ':skin_blue'
 include ':skin_lemon'
 include ':skin_sweat_soybean'
-rootProject.name = "樱花动漫"
+rootProject.name = "媒体盒子"

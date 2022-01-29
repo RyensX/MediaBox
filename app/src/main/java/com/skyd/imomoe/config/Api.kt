@@ -8,7 +8,7 @@ interface Api {
             get() = (DataSourceManager.getConst() ?: com.skyd.imomoe.model.impls.Const()).MAIN_URL()
 
         // github
-        const val CHECK_UPDATE_URL = "https://api.github.com/repos/SkyD666/Imomoe/releases/latest"
+        const val CHECK_UPDATE_URL = "https://api.github.com/repos/Ryensu/MediaBox/releases/latest"
 
         // 弹幕url
         const val DANMU_URL = "https://yuan.cuan.la/barrage/api"
