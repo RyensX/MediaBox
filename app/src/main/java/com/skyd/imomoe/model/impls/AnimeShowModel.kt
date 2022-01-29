@@ -17,8 +17,8 @@ class AnimeShowModel : IAnimeShowModel {
                     arrayListOf(
                         AnimeCoverBean(
                             com.skyd.imomoe.config.Const.ViewHolderTypeString.ANIME_COVER_6,
-                            ANIME_BROWSER + "https://github.com/SkyD666/Imomoe/tree/master/doc/customdatasource/README.md",
-                            "https://github.com/SkyD666/Imomoe/tree/master/doc/customdatasource/README.md",
+                            ANIME_BROWSER + "https://github.com/Ryensu/MediaBox/tree/master/doc/customdatasource/README.md",
+                            "https://github.com/Ryensu/MediaBox/tree/master/doc/customdatasource/README.md",
                             "请在设置页面选择自定义数据源ads包,以便使用APP\n具体使用方法请点击此处",
                             null,
                             ""

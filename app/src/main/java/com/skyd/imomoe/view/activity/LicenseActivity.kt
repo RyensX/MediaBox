@@ -22,6 +22,15 @@ class LicenseActivity : BaseActivity<ActivityLicenseBinding>() {
             LicenseBean(
                 ViewHolderTypeString.LICENSE_1,
                 ActionUrl.ANIME_BROWSER,
+                "https://github.com/SkyD666/Imomoe",
+                "Imomoe",
+                "GPL-3.0 License"
+            )
+        )
+        list.add(
+            LicenseBean(
+                ViewHolderTypeString.LICENSE_1,
+                ActionUrl.ANIME_BROWSER,
                 "https://github.com/jhy/jsoup",
                 "jsoup",
                 "MIT License"

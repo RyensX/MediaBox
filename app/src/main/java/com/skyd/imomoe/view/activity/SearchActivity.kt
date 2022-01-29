@@ -188,13 +188,19 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
     }
 
     private fun setSearchAdapter() {
-        mBinding.rvSearchActivity.adapter = adapter
-        mBinding.srlSearchActivity.setEnableLoadMore(true)
+        mBinding.apply {
+            if (rvSearchActivity.adapter != adapter)
+                rvSearchActivity.adapter = adapter
+            srlSearchActivity.setEnableLoadMore(true)
+        }
     }
 
     private fun setHistoryAdapter() {
-        mBinding.rvSearchActivity.adapter = historyAdapter
-        mBinding.srlSearchActivity.setEnableLoadMore(false)
+        mBinding.apply {
+            if (rvSearchActivity.adapter != historyAdapter)
+                rvSearchActivity.adapter = historyAdapter
+            srlSearchActivity.setEnableLoadMore(false)
+        }
     }
 
     override fun finish() {
