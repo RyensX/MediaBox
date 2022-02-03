@@ -4,6 +4,8 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.skyd.imomoe.config.Const
+import com.su.mediabox.plugin.standard.been.BaseBean
+import com.su.mediabox.plugin.standard.been.ImageBean
 import java.io.Serializable
 
 @Entity(tableName = Const.Database.AppDataBase.HISTORY_TABLE_NAME)

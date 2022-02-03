@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.skyd.imomoe.config.Const
+import com.su.mediabox.plugin.standard.been.BaseBean
 
 @Entity(tableName = Const.Database.AppDataBase.SEARCH_HISTORY_TABLE_NAME)
 class SearchHistoryBean(

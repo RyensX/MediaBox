@@ -1,8 +1,8 @@
 package com.skyd.imomoe.model.impls
 
 import android.app.Activity
-import com.skyd.imomoe.bean.*
-import com.skyd.imomoe.model.interfaces.IPlayModel
+import com.su.mediabox.plugin.interfaces.IPlayModel
+import com.su.mediabox.plugin.standard.been.*
 
 class PlayModel : IPlayModel {
 

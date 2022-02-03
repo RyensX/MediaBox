@@ -1,7 +1,7 @@
 package com.skyd.imomoe.model.impls
 
-import com.skyd.imomoe.bean.TabBean
-import com.skyd.imomoe.model.interfaces.IRankModel
+import com.su.mediabox.plugin.interfaces.IRankModel
+import com.su.mediabox.plugin.standard.been.TabBean
 
 class RankModel : IRankModel {
     override suspend fun getRankTabData(): ArrayList<TabBean> {

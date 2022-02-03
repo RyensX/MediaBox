@@ -13,8 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
-import com.skyd.imomoe.bean.ClassifyBean
-import com.skyd.imomoe.bean.ClassifyDataBean
 import com.skyd.imomoe.bean.ResponseDataType
 import com.skyd.imomoe.databinding.ActivityClassifyBinding
 import com.skyd.imomoe.util.Util.getResColor
@@ -24,6 +22,8 @@ import com.skyd.imomoe.view.adapter.BaseRvAdapter
 import com.skyd.imomoe.view.adapter.SearchAdapter
 import com.skyd.imomoe.view.listener.dsl.setOnItemSelectedListener
 import com.skyd.imomoe.viewmodel.ClassifyViewModel
+import com.su.mediabox.plugin.standard.been.ClassifyBean
+import com.su.mediabox.plugin.standard.been.ClassifyDataBean
 
 
 class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {

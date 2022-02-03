@@ -1,7 +1,7 @@
 package com.skyd.imomoe.model.impls
 
-import com.skyd.imomoe.bean.TabBean
-import com.skyd.imomoe.model.interfaces.IHomeModel
+import com.su.mediabox.plugin.interfaces.IHomeModel
+import com.su.mediabox.plugin.standard.been.TabBean
 
 class HomeModel : IHomeModel {
     override suspend fun getAllTabData(): ArrayList<TabBean> {

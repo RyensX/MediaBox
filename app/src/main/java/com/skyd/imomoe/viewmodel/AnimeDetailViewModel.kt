@@ -8,8 +8,10 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.*
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.AnimeDetailModel
-import com.skyd.imomoe.model.interfaces.IAnimeDetailModel
 import com.skyd.imomoe.util.showToast
+import com.su.mediabox.plugin.interfaces.IAnimeDetailModel
+import com.su.mediabox.plugin.standard.been.IAnimeDetailBean
+import com.su.mediabox.plugin.standard.been.ImageBean
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

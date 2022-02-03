@@ -12,11 +12,11 @@ import android.widget.RemoteViews
 import com.google.gson.Gson
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
-import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.RouteProcessor
 import com.skyd.imomoe.util.Util.getWeekday
 import com.skyd.imomoe.util.showToast
+import com.su.mediabox.plugin.standard.been.AnimeCoverBean
 import java.util.*
 
 

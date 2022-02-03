@@ -1,5 +1,6 @@
 package com.skyd.imomoe.bean
 
+import com.su.mediabox.plugin.standard.been.BaseBean
 import java.io.File
 
 class DataSourceFileBean(

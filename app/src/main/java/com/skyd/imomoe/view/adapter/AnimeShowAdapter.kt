@@ -11,8 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
-import com.skyd.imomoe.bean.AnimeCoverBean
-import com.skyd.imomoe.bean.IAnimeShowBean
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.util.*
 import com.skyd.imomoe.util.coil.CoilUtil.loadImage
@@ -27,6 +25,8 @@ import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.getResDrawable
 import com.skyd.imomoe.view.adapter.decoration.AnimeCoverItemDecoration
 import com.skyd.skin.SkinManager
+import com.su.mediabox.plugin.standard.been.AnimeCoverBean
+import com.su.mediabox.plugin.standard.been.IAnimeShowBean
 
 class AnimeShowAdapter(
     val fragment: AnimeShowFragment,

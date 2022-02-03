@@ -1,6 +1,6 @@
 package com.skyd.imomoe.model.impls
 
-import com.skyd.imomoe.model.interfaces.IConst
+import com.su.mediabox.plugin.interfaces.IConst
 
 class Const : IConst {
     override val actionUrl = ActionUrl()

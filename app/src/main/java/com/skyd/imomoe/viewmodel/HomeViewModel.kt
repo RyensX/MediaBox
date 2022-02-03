@@ -6,12 +6,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
-import com.skyd.imomoe.bean.TabBean
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.HomeModel
-import com.skyd.imomoe.model.interfaces.IHomeModel
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.view.adapter.SerializableRecycledViewPool
+import com.su.mediabox.plugin.interfaces.IHomeModel
+import com.su.mediabox.plugin.standard.been.TabBean
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

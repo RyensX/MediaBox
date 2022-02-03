@@ -25,8 +25,6 @@ import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoView
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
-import com.skyd.imomoe.bean.AnimeEpisodeDataBean
-import com.skyd.imomoe.bean.BaseBean
 import com.skyd.imomoe.util.Util.dp
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.getResDrawable
@@ -42,6 +40,8 @@ import com.skyd.imomoe.view.component.ZoomView
 import com.skyd.imomoe.view.component.textview.TypefaceTextView
 import com.skyd.imomoe.view.listener.dsl.setOnSeekBarChangeListener
 import com.skyd.skin.SkinManager
+import com.su.mediabox.plugin.standard.been.BaseBean
+import com.su.mediabox.plugin.standard.been.AnimeEpisodeDataBean
 import kotlinx.coroutines.*
 import java.io.File
 import java.io.Serializable

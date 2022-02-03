@@ -4,11 +4,11 @@ import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.skyd.imomoe.bean.TabBean
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.RankModel
-import com.skyd.imomoe.model.interfaces.IRankModel
 import com.skyd.imomoe.util.showToast
+import com.su.mediabox.plugin.interfaces.IRankModel
+import com.su.mediabox.plugin.standard.been.TabBean
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*

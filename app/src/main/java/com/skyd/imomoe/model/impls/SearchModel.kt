@@ -1,8 +1,8 @@
 package com.skyd.imomoe.model.impls
 
-import com.skyd.imomoe.bean.AnimeCoverBean
-import com.skyd.imomoe.bean.PageNumberBean
-import com.skyd.imomoe.model.interfaces.ISearchModel
+import com.su.mediabox.plugin.interfaces.ISearchModel
+import com.su.mediabox.plugin.standard.been.AnimeCoverBean
+import com.su.mediabox.plugin.standard.been.PageNumberBean
 
 class SearchModel : ISearchModel {
     override suspend fun getSearchData(

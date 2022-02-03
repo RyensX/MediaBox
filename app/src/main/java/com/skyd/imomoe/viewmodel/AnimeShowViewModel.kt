@@ -6,13 +6,13 @@ import androidx.lifecycle.viewModelScope
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.ResponseDataType
-import com.skyd.imomoe.bean.IAnimeShowBean
-import com.skyd.imomoe.bean.PageNumberBean
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.AnimeShowModel
-import com.skyd.imomoe.model.interfaces.IAnimeShowModel
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.view.adapter.SerializableRecycledViewPool
+import com.su.mediabox.plugin.interfaces.IAnimeShowModel
+import com.su.mediabox.plugin.standard.been.IAnimeShowBean
+import com.su.mediabox.plugin.standard.been.PageNumberBean
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

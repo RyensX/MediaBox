@@ -4,7 +4,6 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
-import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.util.AnimeCover7ViewHolder
 import com.skyd.imomoe.util.Util.process
@@ -13,6 +12,7 @@ import com.skyd.imomoe.util.gone
 import com.skyd.imomoe.util.invisible
 import com.skyd.imomoe.util.visible
 import com.skyd.imomoe.view.activity.AnimeDownloadActivity
+import com.su.mediabox.plugin.standard.been.AnimeCoverBean
 
 class AnimeDownloadAdapter(
     val activity: AnimeDownloadActivity,

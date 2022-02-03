@@ -2,7 +2,7 @@ package com.skyd.imomoe.database.converter
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson
-import com.skyd.imomoe.bean.ImageBean
+import com.su.mediabox.plugin.standard.been.ImageBean
 
 
 class ImageBeanConverter {

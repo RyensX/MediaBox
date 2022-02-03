@@ -6,8 +6,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
-import com.skyd.imomoe.bean.AnimeCoverBean
-import com.skyd.imomoe.bean.BaseBean
 import com.skyd.imomoe.util.AnimeCover6ViewHolder
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.coil.CoilUtil.loadImage
@@ -16,6 +14,8 @@ import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.ViewHolderUtil
 import com.skyd.imomoe.util.gone
 import com.skyd.imomoe.util.visible
+import com.su.mediabox.plugin.standard.been.BaseBean
+import com.su.mediabox.plugin.standard.been.AnimeCoverBean
 
 /**
  * Created by Sky_D on 2021-02-08.

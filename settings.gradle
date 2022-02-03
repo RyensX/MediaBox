@@ -5,3 +5,4 @@ include ':skin_blue'
 include ':skin_lemon'
 include ':skin_sweat_soybean'
 rootProject.name = "媒体盒子"
+include ':plugin'

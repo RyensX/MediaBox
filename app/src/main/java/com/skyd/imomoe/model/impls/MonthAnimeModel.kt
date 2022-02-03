@@ -1,8 +1,8 @@
 package com.skyd.imomoe.model.impls
 
-import com.skyd.imomoe.bean.AnimeCoverBean
-import com.skyd.imomoe.bean.PageNumberBean
-import com.skyd.imomoe.model.interfaces.IMonthAnimeModel
+import com.su.mediabox.plugin.interfaces.IMonthAnimeModel
+import com.su.mediabox.plugin.standard.been.AnimeCoverBean
+import com.su.mediabox.plugin.standard.been.PageNumberBean
 
 class MonthAnimeModel : IMonthAnimeModel {
     override suspend fun getMonthAnimeData(partUrl: String): Pair<ArrayList<AnimeCoverBean>, PageNumberBean?> {

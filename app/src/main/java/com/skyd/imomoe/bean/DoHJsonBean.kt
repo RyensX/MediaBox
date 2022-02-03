@@ -1,6 +1,7 @@
 package com.skyd.imomoe.bean
 
 import com.google.gson.annotations.SerializedName
+import com.su.mediabox.plugin.standard.been.BaseBean
 import java.io.Serializable
 
 class DoHJsonBean(

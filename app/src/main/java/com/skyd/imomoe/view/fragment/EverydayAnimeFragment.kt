@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.skyd.imomoe.R
-import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.config.Const.ViewHolderTypeInt
 import com.skyd.imomoe.databinding.FragmentEverydayAnimeBinding
 import com.skyd.imomoe.util.GridRecyclerView1ViewHolder
@@ -24,6 +23,7 @@ import com.skyd.imomoe.view.adapter.AnimeShowAdapter
 import com.skyd.imomoe.view.adapter.SkinRvAdapter
 import com.skyd.imomoe.view.component.WrapLinearLayoutManager
 import com.skyd.imomoe.viewmodel.EverydayAnimeViewModel
+import com.su.mediabox.plugin.standard.been.AnimeCoverBean
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 

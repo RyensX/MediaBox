@@ -3,7 +3,6 @@ package com.skyd.imomoe.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.database.entity.AnimeDownloadEntity
 import com.skyd.imomoe.database.getAppDataBase
@@ -13,6 +12,7 @@ import com.skyd.imomoe.util.downloadanime.AnimeDownloadHelper.Companion.getAnime
 import com.skyd.imomoe.util.downloadanime.AnimeDownloadHelper.Companion.save2Xml
 import com.skyd.imomoe.util.formatSize
 import com.skyd.imomoe.util.toMD5
+import com.su.mediabox.plugin.standard.been.AnimeCoverBean
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File

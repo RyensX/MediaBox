@@ -2,8 +2,8 @@ package com.skyd.imomoe.database.dao
 
 import androidx.room.*
 import com.skyd.imomoe.bean.FavoriteAnimeBean
-import com.skyd.imomoe.bean.ImageBean
 import com.skyd.imomoe.config.Const.Database.AppDataBase.FAVORITE_ANIME_TABLE_NAME
+import com.su.mediabox.plugin.standard.been.ImageBean
 
 @Dao
 interface FavoriteAnimeDao {

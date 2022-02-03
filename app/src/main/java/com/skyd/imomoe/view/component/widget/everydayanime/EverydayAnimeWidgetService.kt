@@ -8,15 +8,11 @@ import android.widget.RemoteViewsService
 import android.widget.RemoteViewsService.RemoteViewsFactory
 import com.google.gson.Gson
 import com.skyd.imomoe.R
-import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.EverydayAnimeWidgetModel
-import com.skyd.imomoe.model.interfaces.IEverydayAnimeWidgetModel
 import com.skyd.imomoe.util.Util
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.su.mediabox.plugin.interfaces.IEverydayAnimeWidgetModel
+import com.su.mediabox.plugin.standard.been.AnimeCoverBean
 import java.util.*
 
 class EverydayAnimeService : RemoteViewsService() {

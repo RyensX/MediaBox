@@ -1,7 +1,7 @@
 package com.skyd.imomoe.bean.danmaku
 
 import com.google.gson.annotations.SerializedName
-import com.skyd.imomoe.bean.BaseBean
+import com.su.mediabox.plugin.standard.been.BaseBean
 
 class AnimeSendDanmakuResultBean(
     override var type: String,

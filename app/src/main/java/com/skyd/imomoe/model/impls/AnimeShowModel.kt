@@ -1,9 +1,10 @@
 package com.skyd.imomoe.model.impls
 
 import com.skyd.imomoe.R
-import com.skyd.imomoe.bean.*
+import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.config.Const.ActionUrl.Companion.ANIME_BROWSER
-import com.skyd.imomoe.model.interfaces.IAnimeShowModel
+import com.su.mediabox.plugin.interfaces.IAnimeShowModel
+import com.su.mediabox.plugin.standard.been.*
 
 class AnimeShowModel : IAnimeShowModel {
     override suspend fun getAnimeShowData(
@@ -12,11 +13,11 @@ class AnimeShowModel : IAnimeShowModel {
         return Pair(
             arrayListOf(
                 AnimeShowBean(
-                    com.skyd.imomoe.config.Const.ViewHolderTypeString.BANNER_1, "",
+                    Const.ViewHolderTypeString.BANNER_1, "",
                     "", "", "", null, "",
                     arrayListOf(
                         AnimeCoverBean(
-                            com.skyd.imomoe.config.Const.ViewHolderTypeString.ANIME_COVER_6,
+                            Const.ViewHolderTypeString.ANIME_COVER_6,
                             ANIME_BROWSER + "https://github.com/Ryensu/MediaBox/tree/master/doc/customdatasource/README.md",
                             "https://github.com/Ryensu/MediaBox/tree/master/doc/customdatasource/README.md",
                             "请在设置页面选择自定义数据源ads包,以便使用APP\n具体使用方法请点击此处",

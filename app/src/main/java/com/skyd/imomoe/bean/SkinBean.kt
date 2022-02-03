@@ -1,5 +1,7 @@
 package com.skyd.imomoe.bean
 
+import com.su.mediabox.plugin.standard.been.BaseBean
+
 class SkinBean(
     override var type: String,
     override var actionUrl: String,

@@ -12,9 +12,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
-import com.skyd.imomoe.bean.AnimeCoverBean
-import com.skyd.imomoe.bean.AnimeEpisodeDataBean
-import com.skyd.imomoe.bean.IAnimeDetailBean
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.model.DataSourceManager
@@ -29,6 +26,9 @@ import com.skyd.imomoe.view.activity.AnimeDetailActivity
 import com.skyd.imomoe.view.adapter.decoration.AnimeCoverItemDecoration
 import com.skyd.imomoe.view.adapter.decoration.AnimeEpisodeItemDecoration
 import com.skyd.imomoe.view.component.BottomSheetRecyclerView
+import com.su.mediabox.plugin.standard.been.AnimeCoverBean
+import com.su.mediabox.plugin.standard.been.AnimeEpisodeDataBean
+import com.su.mediabox.plugin.standard.been.IAnimeDetailBean
 
 class AnimeDetailAdapter(
     val activity: AnimeDetailActivity,

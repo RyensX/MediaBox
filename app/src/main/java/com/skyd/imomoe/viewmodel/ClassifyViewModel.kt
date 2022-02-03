@@ -6,14 +6,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
-import com.skyd.imomoe.bean.AnimeCoverBean
-import com.skyd.imomoe.bean.ClassifyBean
 import com.skyd.imomoe.bean.ResponseDataType
-import com.skyd.imomoe.bean.PageNumberBean
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.ClassifyModel
-import com.skyd.imomoe.model.interfaces.IClassifyModel
 import com.skyd.imomoe.util.showToast
+import com.su.mediabox.plugin.interfaces.IClassifyModel
+import com.su.mediabox.plugin.standard.been.AnimeCoverBean
+import com.su.mediabox.plugin.standard.been.ClassifyBean
+import com.su.mediabox.plugin.standard.been.PageNumberBean
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

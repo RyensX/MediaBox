@@ -1,6 +1,7 @@
 package com.skyd.imomoe.util.comparator
 
-import com.skyd.imomoe.bean.AnimeCoverBean
+import com.su.mediabox.plugin.standard.been.AnimeCoverBean
+
 
 /**
  * 比较集数名称(title)的字典序，数字按照从大到小，例如90小于100

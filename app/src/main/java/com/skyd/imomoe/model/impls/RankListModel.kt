@@ -1,8 +1,8 @@
 package com.skyd.imomoe.model.impls
 
-import com.skyd.imomoe.bean.AnimeCoverBean
-import com.skyd.imomoe.bean.PageNumberBean
-import com.skyd.imomoe.model.interfaces.IRankListModel
+import com.su.mediabox.plugin.interfaces.IRankListModel
+import com.su.mediabox.plugin.standard.been.AnimeCoverBean
+import com.su.mediabox.plugin.standard.been.PageNumberBean
 
 class RankListModel : IRankListModel {
     override suspend fun getRankListData(partUrl: String): Pair<MutableList<AnimeCoverBean>, PageNumberBean?> {

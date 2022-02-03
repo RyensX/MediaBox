@@ -7,18 +7,17 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
-import com.skyd.imomoe.bean.AnimeCoverBean
-import com.skyd.imomoe.bean.IAnimeDetailBean
 import com.skyd.imomoe.util.*
 import com.skyd.imomoe.util.Util.dp
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.getResDrawable
 import com.skyd.imomoe.util.Util.process
 import com.skyd.imomoe.util.showToast
-import com.skyd.imomoe.util.Util.sp
 import com.skyd.imomoe.util.coil.CoilUtil.loadImage
 import com.skyd.imomoe.view.activity.PlayActivity
 import com.skyd.imomoe.view.adapter.decoration.AnimeCoverItemDecoration
+import com.su.mediabox.plugin.standard.been.AnimeCoverBean
+import com.su.mediabox.plugin.standard.been.IAnimeDetailBean
 
 class PlayAdapter(
     val activity: PlayActivity,

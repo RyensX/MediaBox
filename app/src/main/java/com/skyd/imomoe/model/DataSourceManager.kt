@@ -3,12 +3,12 @@ package com.skyd.imomoe.model
 import android.util.LruCache
 import com.skyd.imomoe.App
 import com.skyd.imomoe.BuildConfig
-import com.skyd.imomoe.model.interfaces.IConst
-import com.skyd.imomoe.model.interfaces.IRouteProcessor
-import com.skyd.imomoe.model.interfaces.IUtil
 import com.skyd.imomoe.util.editor
 import com.skyd.imomoe.util.logE
 import com.skyd.imomoe.util.sharedPreferences
+import com.su.mediabox.plugin.interfaces.IConst
+import com.su.mediabox.plugin.interfaces.IRouteProcessor
+import com.su.mediabox.plugin.interfaces.IUtil
 import dalvik.system.DexClassLoader
 import java.io.File
 

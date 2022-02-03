@@ -1,10 +1,10 @@
 package com.skyd.imomoe.model.impls
 
 import android.app.Activity
-import com.skyd.imomoe.bean.AnimeCoverBean
-import com.skyd.imomoe.bean.ClassifyBean
-import com.skyd.imomoe.bean.PageNumberBean
-import com.skyd.imomoe.model.interfaces.IClassifyModel
+import com.su.mediabox.plugin.interfaces.IClassifyModel
+import com.su.mediabox.plugin.standard.been.AnimeCoverBean
+import com.su.mediabox.plugin.standard.been.ClassifyBean
+import com.su.mediabox.plugin.standard.been.PageNumberBean
 
 class ClassifyModel : IClassifyModel {
     override suspend fun getClassifyData(partUrl: String): Pair<ArrayList<AnimeCoverBean>, PageNumberBean?> {

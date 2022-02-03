@@ -152,6 +152,7 @@ dependencies {
     implementation deps.material_dialogs.input
     implementation deps.room.room_runtime
     implementation deps.room.room_ktx
+    implementation project(path: ':plugin')
     kapt deps.room.room_compiler
     implementation deps.filedownloader.library
     implementation deps.cling.cling_core

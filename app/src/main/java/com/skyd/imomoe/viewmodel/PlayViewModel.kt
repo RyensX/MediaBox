@@ -11,8 +11,12 @@ import com.skyd.imomoe.config.Const.ViewHolderTypeString
 import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.PlayModel
-import com.skyd.imomoe.model.interfaces.IPlayModel
 import com.skyd.imomoe.util.showToast
+import com.su.mediabox.plugin.interfaces.IPlayModel
+import com.su.mediabox.plugin.standard.been.AnimeEpisodeDataBean
+import com.su.mediabox.plugin.standard.been.IAnimeDetailBean
+import com.su.mediabox.plugin.standard.been.ImageBean
+import com.su.mediabox.plugin.standard.been.PlayBean
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
