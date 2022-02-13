@@ -18,12 +18,10 @@ class PluginAdapter : ListAdapter<PluginInfo, PluginAdapter.ItemPluginViewHolder
         ItemPluginViewHolder(parent).apply {
             //UP_TODO 2022/2/13 21:46 0 验证、启动
             setOnClickListener(viewBinding.root) {
-                getItem(it)?.also {
-                    viewBinding.root.context.apply {
-                        startActivity(Intent(this, MainActivity::class.java).apply {
-                            setPluginInfo(it.name, it.sourcePath)
-                        })
-                    }
+                viewBinding.root.context.apply {
+                    startActivity(Intent(this, MainActivity::class.java).apply {
+                        setPluginInfo(it)
+                    })
                 }
             }
         }

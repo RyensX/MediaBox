@@ -19,7 +19,6 @@ import java.io.File
 
 object PluginManager : IRouteProcessor {
 
-    const val PLUGIN_FOLDER_NAME = "Plugins"
     const val PLUGIN_OPTI_FOLDER_NAME = "PluginsOpti"
     const val PLUGIN_INIT_CLASS = "com.su.mediabox.plugin.ComponentFactory"
 
@@ -53,16 +52,25 @@ object PluginManager : IRouteProcessor {
         }
     }
 
-    fun Activity.getPluginName() = intent.getStringExtra(BasePluginActivity.PLUGIN_NAME)
-    fun Activity.getPluginPath() = intent.getStringExtra(BasePluginActivity.PLUGIN_PATH)
+    fun Activity.getPluginIndex() = intent.getIntExtra(BasePluginActivity.PLUGIN_INFO_INDEX, -1)
 
-    fun Intent.setPluginInfo(pluginName: String?, pluginPath: String?) {
-        pluginName?.also {
-            putExtra(BasePluginActivity.PLUGIN_NAME, it)
+    fun Activity.getPluginInfo(): PluginInfo {
+        runCatching {
+            val index = getPluginIndex()
+            if (index == -1)
+                throw RuntimeException()
+            _pluginLiveData.value?.get(index) ?: throw RuntimeException()
+        }.onSuccess {
+            return it
         }
-        pluginPath?.also {
-            putExtra(BasePluginActivity.PLUGIN_PATH, it)
-        }
+        throw RuntimeException("插件信息读取错误")
+    }
+
+    fun Activity.getPluginName() = getPluginInfo().name
+    fun Activity.getPluginPath() = getPluginInfo().sourcePath
+
+    fun Intent.setPluginInfo(pluginInfoIndex: Int) {
+        putExtra(BasePluginActivity.PLUGIN_INFO_INDEX, pluginInfoIndex)
     }
 
     fun acquireComponentFactory() =
