@@ -15,7 +15,7 @@
         app:layout_constraintDimensionRatio="7:4"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.skyd.imomoe.view.component.bannerview.BannerView
+        <com.su.mediabox.view.component.bannerview.BannerView
             android:id="@+id/banner_1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.skyd.imomoe.view.fragment.RankFragment">
+    tools:context="com.su.mediabox.view.fragment.RankFragment">
 
     <com.scwang.smart.refresh.layout.SmartRefreshLayout
         android:id="@+id/srl_rank_fragment"

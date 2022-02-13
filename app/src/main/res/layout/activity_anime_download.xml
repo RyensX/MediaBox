@@ -7,7 +7,7 @@
     android:background="@color/white_skin"
     tools:context=".view.activity.AnimeDownloadActivity">
 
-    <com.skyd.imomoe.view.component.AnimeToolbar
+    <com.su.mediabox.view.component.AnimeToolbar
         android:id="@+id/atb_anime_download_activity_toolbar"
         android:layout_width="match_parent"
         android:layout_height="50dp"

@@ -44,7 +44,7 @@
                 app:layout_constraintStart_toStartOf="@id/iv_anime_info_1_cover"
                 app:layout_constraintTop_toTopOf="@id/iv_anime_info_1_cover" />
 
-            <com.skyd.imomoe.view.component.textview.TypefaceTextView
+            <com.su.mediabox.view.component.textview.TypefaceTextView
                 android:id="@+id/tv_anime_info_continue_play"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -66,7 +66,7 @@
 
     </androidx.cardview.widget.CardView>
 
-    <com.skyd.imomoe.view.component.textview.TypefaceTextView
+    <com.su.mediabox.view.component.textview.TypefaceTextView
         android:id="@+id/tv_anime_info_1_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -83,7 +83,7 @@
         app:typeface="bPRTypeface"
         tools:text="轻音少女轻音少女轻音少女轻音少女轻音少女轻音少女轻音少女" />
 
-    <com.skyd.imomoe.view.component.textview.TypefaceTextView
+    <com.su.mediabox.view.component.textview.TypefaceTextView
         android:id="@+id/tv_anime_info_1_alias"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -99,7 +99,7 @@
         app:typeface="bPRTypeface"
         tools:text="@string/anime_detail_alias" />
 
-    <com.skyd.imomoe.view.component.textview.TypefaceTextView
+    <com.su.mediabox.view.component.textview.TypefaceTextView
         android:id="@+id/tv_anime_info_1_area"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -114,7 +114,7 @@
         app:typeface="bPRTypeface"
         tools:text="日本" />
 
-    <com.skyd.imomoe.view.component.textview.TypefaceTextView
+    <com.su.mediabox.view.component.textview.TypefaceTextView
         android:id="@+id/tv_anime_info_1_year"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -131,7 +131,7 @@
         app:typeface="bPRTypeface"
         tools:text="2009" />
 
-    <com.skyd.imomoe.view.component.textview.TypefaceTextView
+    <com.su.mediabox.view.component.textview.TypefaceTextView
         android:id="@+id/tv_anime_info_1_index"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -160,7 +160,7 @@
         app:layout_constraintStart_toStartOf="@id/tv_anime_info_1_title"
         app:layout_constraintTop_toBottomOf="@id/tv_anime_info_1_index">
 
-        <com.skyd.imomoe.view.component.textview.TypefaceTextView
+        <com.su.mediabox.view.component.textview.TypefaceTextView
             android:id="@+id/tv_anime_info_1_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -169,7 +169,7 @@
             android:textSize="12sp"
             app:typeface="bPRTypeface" />
 
-        <com.skyd.imomoe.view.component.FlowLayout
+        <com.su.mediabox.view.component.FlowLayout
             android:id="@+id/fl_anime_info_1_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -190,7 +190,7 @@
         app:layout_constraintStart_toStartOf="@id/tv_anime_info_1_title"
         app:layout_constraintTop_toBottomOf="@id/ll_anime_info_1_type">
 
-        <com.skyd.imomoe.view.component.textview.TypefaceTextView
+        <com.su.mediabox.view.component.textview.TypefaceTextView
             android:id="@+id/tv_anime_info_1_tag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -199,7 +199,7 @@
             android:textSize="12sp"
             app:typeface="bPRTypeface" />
 
-        <com.skyd.imomoe.view.component.FlowLayout
+        <com.su.mediabox.view.component.FlowLayout
             android:id="@+id/fl_anime_info_1_tag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -211,7 +211,7 @@
             app:rowSpacing="5dp" />
     </LinearLayout>
 
-    <com.skyd.imomoe.view.component.textview.TypefaceTextView
+    <com.su.mediabox.view.component.textview.TypefaceTextView
         android:id="@+id/tv_anime_info_1_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

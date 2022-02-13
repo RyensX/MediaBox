@@ -24,7 +24,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.skyd.imomoe.view.component.textview.TypefaceTextView
+        <com.su.mediabox.view.component.textview.TypefaceTextView
             android:id="@+id/tv_home_fragment_header_search"
             android:layout_width="0px"
             android:layout_height="wrap_content"
@@ -92,7 +92,7 @@
         app:tabMode="scrollable"
         app:tabTextColor="@color/foreground_main_color_2_skin" />
 
-    <com.skyd.imomoe.view.component.ViewPager2View
+    <com.su.mediabox.view.component.ViewPager2View
         android:id="@+id/vp2_home_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

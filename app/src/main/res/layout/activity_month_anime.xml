@@ -7,7 +7,7 @@
     android:background="@color/white_skin"
     tools:context=".view.activity.MonthAnimeActivity">
 
-    <com.skyd.imomoe.view.component.AnimeToolbar
+    <com.su.mediabox.view.component.AnimeToolbar
         android:id="@+id/atb_month_anime_activity"
         android:layout_width="match_parent"
         android:layout_height="50dp"

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".view.fragment.EverydayAnimeFragment">
 
-    <com.skyd.imomoe.view.component.AnimeToolbar
+    <com.su.mediabox.view.component.AnimeToolbar
         android:id="@+id/atb_everyday_anime_fragment"
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -18,7 +18,7 @@
         app:titleColor="@color/foreground_white_skin"
         app:toolBarBackground="@color/main_color_2_skin" />
 
-    <com.skyd.imomoe.view.component.VpSwipeRefreshLayout
+    <com.su.mediabox.view.component.VpSwipeRefreshLayout
         android:id="@+id/srl_everyday_anime_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -40,12 +40,12 @@
                 app:tabMode="scrollable"
                 app:tabTextColor="@color/foreground_main_color_2_skin" />
 
-            <com.skyd.imomoe.view.component.ViewPager2View
+            <com.su.mediabox.view.component.ViewPager2View
                 android:id="@+id/vp2_everyday_anime_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </LinearLayout>
-    </com.skyd.imomoe.view.component.VpSwipeRefreshLayout>
+    </com.su.mediabox.view.component.VpSwipeRefreshLayout>
 
     <ViewStub
         android:id="@+id/layout_everyday_anime_fragment_load_failed"

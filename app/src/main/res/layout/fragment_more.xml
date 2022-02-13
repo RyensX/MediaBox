@@ -7,7 +7,7 @@
     android:orientation="vertical"
     tools:context=".view.fragment.MoreFragment">
 
-    <com.skyd.imomoe.view.component.AnimeToolbar
+    <com.su.mediabox.view.component.AnimeToolbar
         android:id="@+id/atb_more_fragment_header"
         android:layout_width="match_parent"
         android:layout_height="50dp"

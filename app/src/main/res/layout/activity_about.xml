@@ -8,7 +8,7 @@
     android:orientation="vertical"
     tools:context=".view.activity.AboutActivity">
 
-    <com.skyd.imomoe.view.component.AnimeToolbar
+    <com.su.mediabox.view.component.AnimeToolbar
         android:id="@+id/atb_about_activity"
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -45,7 +45,7 @@
                 tools:src="@drawable/ic_christmas_hat"
                 tools:visibility="visible" />
 
-            <com.skyd.imomoe.view.component.textview.TypefaceTextView
+            <com.su.mediabox.view.component.textview.TypefaceTextView
                 android:id="@+id/tv_about_activity_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -58,7 +58,7 @@
                 app:layout_constraintTop_toBottomOf="@id/iv_about_activity_icon"
                 app:typeface="bPRTypeface" />
 
-            <com.skyd.imomoe.view.component.textview.TypefaceTextView
+            <com.su.mediabox.view.component.textview.TypefaceTextView
                 android:id="@+id/tv_about_activity_version"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -83,7 +83,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_about_activity_version">
 
-                <com.skyd.imomoe.view.component.textview.TypefaceTextView
+                <com.su.mediabox.view.component.textview.TypefaceTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
@@ -124,7 +124,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rl_about_activity_imomoe">
 
-                <com.skyd.imomoe.view.component.textview.TypefaceTextView
+                <com.su.mediabox.view.component.textview.TypefaceTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
@@ -156,7 +156,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rl_about_activity_github">
 
-                <com.skyd.imomoe.view.component.textview.TypefaceTextView
+                <com.su.mediabox.view.component.textview.TypefaceTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
@@ -188,7 +188,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rl_about_activity_license">
 
-                <com.skyd.imomoe.view.component.textview.TypefaceTextView
+                <com.su.mediabox.view.component.textview.TypefaceTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
@@ -220,7 +220,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rl_about_activity_user_notice">
 
-                <com.skyd.imomoe.view.component.textview.TypefaceTextView
+                <com.su.mediabox.view.component.textview.TypefaceTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
@@ -241,7 +241,7 @@
                     android:src="@drawable/ic_arrow_right_main_color_2_24_skin" />
             </RelativeLayout>
 
-            <com.skyd.imomoe.view.component.textview.TypefaceTextView
+            <com.su.mediabox.view.component.textview.TypefaceTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"

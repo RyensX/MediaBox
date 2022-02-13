@@ -7,7 +7,7 @@
     android:background="@color/white_skin"
     tools:context=".view.activity.RankActivity">
 
-    <com.skyd.imomoe.view.component.AnimeToolbar
+    <com.su.mediabox.view.component.AnimeToolbar
         android:id="@+id/atb_rank_activity_toolbar"
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -27,7 +27,7 @@
         app:tabMode="scrollable"
         app:tabTextColor="@color/foreground_main_color_2_skin" />
 
-    <com.skyd.imomoe.view.component.ViewPager2View
+    <com.su.mediabox.view.component.ViewPager2View
         android:id="@+id/vp2_rank_activity"
         android:layout_width="match_parent"
         android:layout_below="@id/tl_rank_activity"

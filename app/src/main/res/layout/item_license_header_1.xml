@@ -7,7 +7,7 @@
     android:paddingHorizontal="16dp"
     android:paddingVertical="10dp">
 
-    <com.skyd.imomoe.view.component.textview.TypefaceTextView
+    <com.su.mediabox.view.component.textview.TypefaceTextView
         android:id="@+id/tv_license_header_1_name"
         android:layout_width="0px"
         android:layout_height="wrap_content"
@@ -16,7 +16,7 @@
         android:textColor="@color/foreground_white_skin"
         android:textSize="15sp" />
 
-    <com.skyd.imomoe.view.component.textview.TypefaceTextView
+    <com.su.mediabox.view.component.textview.TypefaceTextView
         android:id="@+id/tv_license_header_1_license"
         android:layout_width="0px"
         android:layout_height="wrap_content"
