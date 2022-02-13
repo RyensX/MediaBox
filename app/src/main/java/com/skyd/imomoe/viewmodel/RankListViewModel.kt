@@ -4,9 +4,8 @@ import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.skyd.imomoe.PluginManager
 import com.skyd.imomoe.bean.ResponseDataType
-import com.skyd.imomoe.model.DataSourceManager
-import com.skyd.imomoe.model.impls.RankListModel
 import com.skyd.imomoe.util.showToast
 import com.su.mediabox.plugin.interfaces.IRankListModel
 import com.su.mediabox.plugin.standard.been.AnimeCoverBean
@@ -18,8 +17,8 @@ import kotlin.collections.ArrayList
 
 
 class RankListViewModel : ViewModel() {
-    private val rankModel: IRankListModel by lazy {
-        DataSourceManager.create(IRankListModel::class.java) ?: RankListModel()
+    private val rankModel: IRankListModel by lazy(LazyThreadSafetyMode.NONE) {
+        PluginManager.acquireComponent(IRankListModel::class.java)
     }
     var isRequesting = false
     var rankList: MutableList<AnimeCoverBean> = Collections.synchronizedList(ArrayList())

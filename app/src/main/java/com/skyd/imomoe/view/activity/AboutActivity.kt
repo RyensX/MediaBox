@@ -5,20 +5,24 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Html
 import com.afollestad.materialdialogs.MaterialDialog
+import com.skyd.imomoe.PluginManager.acquireComponent
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.databinding.ActivityAboutBinding
-import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.util.Util
 import com.skyd.imomoe.util.Util.getAppVersionCode
 import com.skyd.imomoe.util.Util.getAppVersionName
 import com.skyd.imomoe.util.Util.openBrowser
 import com.skyd.imomoe.util.visible
+import com.su.mediabox.plugin.interfaces.IConst
 import java.net.URL
 import java.util.*
 
-class AboutActivity : BaseActivity<ActivityAboutBinding>() {
+class AboutActivity : BasePluginActivity<ActivityAboutBinding>() {
+
+    private val pluginConfig by lazy(LazyThreadSafetyMode.NONE) { acquireComponent(IConst::class.java)!! }
+
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,8 +68,7 @@ class AboutActivity : BaseActivity<ActivityAboutBinding>() {
                 MaterialDialog(this@AboutActivity).show {
                     title(res = R.string.data_source_info)
                     message(
-                        text = (DataSourceManager.getConst()
-                            ?: com.skyd.imomoe.model.impls.Const()).run {
+                        text = pluginConfig.run {
                             "${
                                 getString(
                                     R.string.data_source_jar_version_name,

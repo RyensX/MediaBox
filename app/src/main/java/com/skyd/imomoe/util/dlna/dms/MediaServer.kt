@@ -21,10 +21,10 @@ import java.util.*
 open class MediaServer @JvmOverloads constructor(
     context: Context, factory: IResourceServerFactory = DefaultResourceServerFactoryImpl(PORT)
 ) {
-    private val address by lazy { getWiFiIPAddress(context) }
+    private val address by lazy(LazyThreadSafetyMode.NONE) { getWiFiIPAddress(context) }
 
     //TODO:remove local device field?
-    val device: LocalDevice by lazy { createLocalDevice(context, address) }
+    val device: LocalDevice by lazy(LazyThreadSafetyMode.NONE) { createLocalDevice(context, address) }
     private var resourceServer: IResourceServer = factory.instance
     val inetAddress: String = String.format("%s:%s", address, factory.port)
     val baseUrl: String = String.format("http://%s:%s", address, factory.port)

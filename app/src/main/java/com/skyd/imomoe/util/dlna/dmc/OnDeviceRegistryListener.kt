@@ -13,7 +13,7 @@ interface OnDeviceRegistryListener {
 
 // use kotlin dsl to replace OnDeviceRegistryListener interface
 private val listeners: HashMap<OnDeviceRegistryListenerDsl.() -> Unit, OnDeviceRegistryListenerDsl>
-        by lazy { HashMap() }
+        by lazy(LazyThreadSafetyMode.NONE) { HashMap() }
 
 fun DLNACastManager.registerDeviceListener(init: OnDeviceRegistryListenerDsl.() -> Unit) {
     val listener = OnDeviceRegistryListenerDsl()

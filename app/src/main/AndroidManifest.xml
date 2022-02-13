@@ -34,12 +34,22 @@
         android:theme="@style/Theme.Anime.skin"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".view.activity.StartActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".view.activity.ConfigDataSourceActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize"
             android:exported="true"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:scheme="file" />
@@ -110,11 +120,7 @@
             android:name=".view.activity.MainActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <service

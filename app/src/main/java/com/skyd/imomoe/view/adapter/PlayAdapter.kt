@@ -6,12 +6,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.skyd.imomoe.App
+import com.skyd.imomoe.PluginManager.process
 import com.skyd.imomoe.R
 import com.skyd.imomoe.util.*
 import com.skyd.imomoe.util.Util.dp
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.getResDrawable
-import com.skyd.imomoe.util.Util.process
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.coil.CoilUtil.loadImage
 import com.skyd.imomoe.view.activity.PlayActivity
@@ -51,7 +51,7 @@ class PlayAdapter(
                 holder.tvAnimeCover1Title.text = item.title
                 holder.tvAnimeCover1Episode.gone()
                 holder.itemView.setOnClickListener {
-                    process(activity, item.actionUrl)
+                    process(item.actionUrl)
                 }
             }
             holder is AnimeEpisodeFlowLayout1ViewHolder -> {
@@ -103,7 +103,7 @@ class PlayAdapter(
                     holder.tvAnimeCover1Episode.text = item.episode
                 }
                 holder.itemView.setOnClickListener {
-                    process(activity, item.actionUrl)
+                    process(item.actionUrl)
                 }
             }
             else -> {

@@ -1,11 +1,14 @@
 package com.skyd.imomoe.config
 
-import com.skyd.imomoe.model.DataSourceManager
+import com.skyd.imomoe.PluginManager
+import com.su.mediabox.plugin.interfaces.IConst
 
 interface Api {
     companion object {
-        val MAIN_URL
-            get() = (DataSourceManager.getConst() ?: com.skyd.imomoe.model.impls.Const()).MAIN_URL()
+
+        //这里不能写死
+        val MAIN_URL: String
+            get() = PluginManager.acquireComponent(IConst::class.java).MAIN_URL()
 
         // github
         const val CHECK_UPDATE_URL = "https://api.github.com/repos/Ryensu/MediaBox/releases/latest"

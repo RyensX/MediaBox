@@ -1,5 +1,5 @@
-ext.version_code = 19
-ext.version_name = "1.2.5_Akarin"
+ext.version_code = 25
+ext.version_name = "1.0"
 
 def build_versions = [:]
 build_versions.compile_sdk = 31
@@ -43,9 +43,9 @@ okhttp3.okhttp_dnsoverhttps = "com.squareup.okhttp3:okhttp-dnsoverhttps:4.9.0"
 deps.okhttp3 = okhttp3
 
 def room = [:]
-room.room_runtime = "androidx.room:room-runtime:2.3.0"
-room.room_ktx = "androidx.room:room-ktx:2.3.0"
-room.room_compiler = "androidx.room:room-compiler:2.3.0"
+room.room_runtime = "androidx.room:room-runtime:2.4.0"
+room.room_ktx = "androidx.room:room-ktx:2.4.0"
+room.room_compiler = "androidx.room:room-compiler:2.4.0"
 deps.room = room
 
 def greenrobot = [:]
@@ -100,8 +100,8 @@ smart.refresh_footer_ball = "com.scwang.smart:refresh-footer-ball:2.0.3"        
 deps.smart = smart
 
 def umsdk = [:]
-umsdk.common = "com.umeng.umsdk:common:9.4.2"
-umsdk.asms = "com.umeng.umsdk:asms:1.4.1"   // asms包依赖
+umsdk.common = "com.umeng.umsdk:common:9.4.7"
+umsdk.asms = "com.umeng.umsdk:asms:1.5.0"   // asms包依赖
 umsdk.push = "com.umeng.umsdk:push:6.4.0"
 umsdk.apm = "com.umeng.umsdk:apm:1.5.2"     // U-APM产品包依赖
 deps.umsdk = umsdk

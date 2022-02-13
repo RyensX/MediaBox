@@ -39,7 +39,7 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
 
-class MainActivity : BaseActivity<ActivityMainBinding>(), EventBusSubscriber {
+class MainActivity : BasePluginActivity<ActivityMainBinding>(), EventBusSubscriber {
     private var selectedTab = -1
     private var backPressTime = 0L
     private var homeFragment: HomeFragment? = null
@@ -70,13 +70,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), EventBusSubscriber {
 
         //检查更新
         val appUpdateHelper = AppUpdateHelper.instance
-        appUpdateHelper.getUpdateStatus().observe(this, {
+        appUpdateHelper.getUpdateStatus().observe(this) {
             when (it) {
                 AppUpdateStatus.UNCHECK -> appUpdateHelper.checkUpdate()
                 AppUpdateStatus.DATED -> appUpdateHelper.noticeUpdate(this)
                 else -> Unit
             }
-        })
+        }
 
         if (savedInstanceState != null) {
             homeFragment = supportFragmentManager.getFragment(

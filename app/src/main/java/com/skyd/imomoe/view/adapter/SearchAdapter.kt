@@ -5,11 +5,11 @@ import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.skyd.imomoe.App
+import com.skyd.imomoe.PluginManager.process
 import com.skyd.imomoe.R
-import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.util.AnimeCover3ViewHolder
 import com.skyd.imomoe.util.coil.CoilUtil.loadImage
-import com.skyd.imomoe.util.Util.process
+import com.su.mediabox.plugin.Constant.ActionUrl
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.gone
 import com.skyd.imomoe.util.visible
@@ -57,17 +57,14 @@ class SearchAdapter(
                                 if (endsWith("/")) "${this}${it[i].title}"
                                 else "${this}/${it[i].title}"
                             }
-                            process(
-                                activity,
-                                Const.ActionUrl.ANIME_CLASSIFY + actionUrl
-                            )
+                            process(ActionUrl.ANIME_CLASSIFY + actionUrl)
                         }
                         holder.flAnimeCover3Type.addView(tvFlowLayout)
                     }
                 }
                 holder.tvAnimeCover3Describe.text = item.describe
                 holder.itemView.setOnClickListener {
-                    process(activity, item.actionUrl)
+                    process(item.actionUrl)
                 }
             }
             else -> {

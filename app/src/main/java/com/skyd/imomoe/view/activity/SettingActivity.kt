@@ -26,8 +26,8 @@ import com.skyd.skin.SkinManager
 import kotlinx.coroutines.*
 
 
-class SettingActivity : BaseActivity<ActivitySettingBinding>() {
-    private val viewModel: SettingViewModel by lazy { ViewModelProvider(this).get(SettingViewModel::class.java) }
+class SettingActivity : BasePluginActivity<ActivitySettingBinding>() {
+    private val viewModel: SettingViewModel by lazy(LazyThreadSafetyMode.NONE) { ViewModelProvider(this).get(SettingViewModel::class.java) }
     private var selfUpdateCheck = false
 
     @SuppressLint("SetTextI18n")
@@ -44,14 +44,14 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
         }
 
         viewModel.getAllHistoryCount()
-        viewModel.mldAllHistoryCount.observe(this, {
+        viewModel.mldAllHistoryCount.observe(this) {
             if (it >= 0) {
                 mBinding.tvSettingActivityAllHistoryCount.apply {
                     visible()
                     text = getString(R.string.all_history_count, it)
                 }
             } else mBinding.tvSettingActivityAllHistoryCount.gone()
-        })
+        }
         // 清理历史记录
         viewModel.mldDeleteAllHistory.observe(this, Observer {
             if (it == null) return@Observer
@@ -70,9 +70,9 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
         }
 
         // 清理缓存文件
-        viewModel.mldCacheSize.observe(this, {
+        viewModel.mldCacheSize.observe(this) {
             mBinding.tvSettingActivityClearCacheSize.text = it
-        })
+        }
         viewModel.mldClearAllCache.observe(this, Observer {
             if (it == null) return@Observer
             lifecycleScope.launch(Dispatchers.IO) {
@@ -151,17 +151,6 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
         }
 
         mBinding.tvSettingActivityInfoDomain.text = Api.MAIN_URL
-
-        mBinding.tvSettingActivityCustomDataSource.text =
-            getString(R.string.custom_data_source, DataSourceManager.dataSourceName.let {
-                if (it == DataSourceManager.DEFAULT_DATA_SOURCE)
-                    getString(R.string.default_data_source)
-                else it
-            })
-
-        mBinding.rlSettingActivityCustomDataSource.setOnClickListener {
-            startActivity(Intent(this, ConfigDataSourceActivity::class.java))
-        }
 
         mBinding.rlSettingActivityDoh.setOnClickListener { selectDnsServer() }
 

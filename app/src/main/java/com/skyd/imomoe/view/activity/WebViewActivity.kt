@@ -10,7 +10,7 @@ import android.webkit.*
 import com.skyd.imomoe.databinding.ActivityWebViewBinding
 
 
-class WebViewActivity : BaseActivity<ActivityWebViewBinding>() {
+class WebViewActivity : BasePluginActivity<ActivityWebViewBinding>() {
     private lateinit var url: String
     private lateinit var headers: HashMap<String, String>
 

@@ -4,7 +4,7 @@
     <string name="press_again_to_exit">再按一次退出</string>
     <string name="currently_not_supported">目前尚未支持</string>
     <string name="unknown_view_holder">未知类型的模块！</string>
-    <string name="unknown_route">未知跳转：%s</string>
+    <string name="unknown_route">未知路由</string>
     <string name="website_format_error">网址格式错误，请输入完整的网址</string>
     <string name="anime_detail_alias">别名：</string>
     <string name="anime_detail_index">索引：</string>

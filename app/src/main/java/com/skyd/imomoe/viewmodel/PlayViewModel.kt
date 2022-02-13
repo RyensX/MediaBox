@@ -1,17 +1,15 @@
 package com.skyd.imomoe.viewmodel
 
-import android.app.Activity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.skyd.imomoe.App
+import com.skyd.imomoe.PluginManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.*
-import com.skyd.imomoe.config.Const.ViewHolderTypeString
 import com.skyd.imomoe.database.getAppDataBase
-import com.skyd.imomoe.model.DataSourceManager
-import com.skyd.imomoe.model.impls.PlayModel
 import com.skyd.imomoe.util.showToast
+import com.su.mediabox.plugin.Constant
 import com.su.mediabox.plugin.interfaces.IPlayModel
 import com.su.mediabox.plugin.standard.been.AnimeEpisodeDataBean
 import com.su.mediabox.plugin.standard.been.IAnimeDetailBean
@@ -22,8 +20,8 @@ import kotlinx.coroutines.launch
 
 
 class PlayViewModel : ViewModel() {
-    private val playModel: IPlayModel by lazy {
-        DataSourceManager.create(IPlayModel::class.java) ?: PlayModel()
+    private val playModel: IPlayModel by lazy(LazyThreadSafetyMode.NONE) {
+        PluginManager.acquireComponent(IPlayModel::class.java)
     }
     var playBean: PlayBean? = null
     var partUrl: String = ""
@@ -37,14 +35,6 @@ class PlayViewModel : ViewModel() {
     val animeEpisodeDataBean = AnimeEpisodeDataBean("animeEpisode1", "", "")
     val mldAnimeEpisodeDataRefreshed: MutableLiveData<Boolean> = MutableLiveData()
     val mldGetAnimeEpisodeData: MutableLiveData<Int> = MutableLiveData()
-
-    fun setActivity(activity: Activity) {
-        playModel.setActivity(activity)
-    }
-
-    fun clearActivity() {
-        playModel.clearActivity()
-    }
 
     fun refreshAnimeEpisodeData(partUrl: String, currentEpisodeIndex: Int, title: String = "") {
         viewModelScope.launch(Dispatchers.IO) {
@@ -139,7 +129,7 @@ class PlayViewModel : ViewModel() {
                         this ?: return@apply
                         getAppDataBase().historyDao().insertHistory(
                             HistoryBean(
-                                ViewHolderTypeString.ANIME_COVER_9, "", detailPartUrl,
+                                Constant.ViewHolderTypeString.ANIME_COVER_9, "", detailPartUrl,
                                 playBean?.title?.title ?: "",
                                 System.currentTimeMillis(),
                                 this,
@@ -151,7 +141,7 @@ class PlayViewModel : ViewModel() {
                 } else {
                     getAppDataBase().historyDao().insertHistory(
                         HistoryBean(
-                            ViewHolderTypeString.ANIME_COVER_9, "", detailPartUrl,
+                            Constant.ViewHolderTypeString.ANIME_COVER_9, "", detailPartUrl,
                             playBean?.title?.title ?: "",
                             System.currentTimeMillis(),
                             animeCover,

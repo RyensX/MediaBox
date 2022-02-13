@@ -21,7 +21,7 @@ import tv.danmaku.ijk.media.player.IjkMediaPlayer
 import java.io.File
 
 
-class SimplePlayActivity : BaseActivity<ActivitySimplePlayBinding>() {
+class SimplePlayActivity : BasePluginActivity<ActivitySimplePlayBinding>() {
     private var url = ""
     private var title = ""
     private lateinit var orientationUtils: OrientationUtils

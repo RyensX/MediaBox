@@ -11,9 +11,8 @@ import android.os.Build
 import android.widget.RemoteViews
 import com.google.gson.Gson
 import com.skyd.imomoe.App
+import com.skyd.imomoe.AppRouteProcessor
 import com.skyd.imomoe.R
-import com.skyd.imomoe.model.DataSourceManager
-import com.skyd.imomoe.model.impls.RouteProcessor
 import com.skyd.imomoe.util.Util.getWeekday
 import com.skyd.imomoe.util.showToast
 import com.su.mediabox.plugin.standard.been.AnimeCoverBean
@@ -111,7 +110,7 @@ class EverydayAnimeWidgetProvider : AppWidgetProvider() {
 
     private fun startPlayActivity(context: Context, actionUrl: String?) {
         actionUrl ?: return
-        (DataSourceManager.getRouterProcessor() ?: RouteProcessor()).process(context, actionUrl)
+        AppRouteProcessor.process(actionUrl)
     }
 
     companion object {

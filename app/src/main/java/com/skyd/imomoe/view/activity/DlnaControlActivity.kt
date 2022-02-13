@@ -24,7 +24,7 @@ import com.skyd.imomoe.view.listener.dsl.setOnSeekBarChangeListener
 import org.fourthline.cling.model.meta.Device
 import kotlin.collections.HashMap
 
-class DlnaControlActivity : BaseActivity<ActivityDlnaControlBinding>() {
+class DlnaControlActivity : BasePluginActivity<ActivityDlnaControlBinding>() {
     private lateinit var layoutDlnaControlActivityLoading: RelativeLayout
     private var mediaServer: MediaServer? = null
     private lateinit var deviceKey: String

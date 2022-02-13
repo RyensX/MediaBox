@@ -3,11 +3,11 @@ package com.skyd.imomoe.view.adapter
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.skyd.imomoe.App
+import com.skyd.imomoe.PluginManager.process
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.LicenseBean
 import com.skyd.imomoe.util.License1ViewHolder
 import com.skyd.imomoe.util.LicenseHeader1ViewHolder
-import com.skyd.imomoe.util.Util.process
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.view.activity.LicenseActivity
 
@@ -27,7 +27,7 @@ class LicenseAdapter(
                 holder.tvLicense1Name.text = item.title
                 holder.tvLicense1License.text = item.license
                 holder.itemView.setOnClickListener {
-                    process(activity, item.actionUrl + item.url)
+                    process(item.actionUrl + item.url)
                 }
             }
             else -> {

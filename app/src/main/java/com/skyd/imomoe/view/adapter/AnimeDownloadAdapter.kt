@@ -3,10 +3,10 @@ package com.skyd.imomoe.view.adapter
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.skyd.imomoe.App
+import com.skyd.imomoe.PluginManager.process
 import com.skyd.imomoe.R
-import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.util.AnimeCover7ViewHolder
-import com.skyd.imomoe.util.Util.process
+import com.su.mediabox.plugin.Constant.ActionUrl
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.gone
 import com.skyd.imomoe.util.invisible
@@ -35,14 +35,14 @@ class AnimeDownloadAdapter(
                 } else {
                     holder.tvAnimeCover7OldPath.gone()
                 }
-                if (item.actionUrl.startsWith(Const.ActionUrl.ANIME_ANIME_DOWNLOAD_EPISODE)) {
+                if (item.actionUrl.startsWith(ActionUrl.ANIME_ANIME_DOWNLOAD_EPISODE)) {
                     holder.tvAnimeCover7Episodes.text = item.episodeCount
                     holder.tvAnimeCover7Episodes.visible()
                 } else {
                     holder.tvAnimeCover7Episodes.invisible()
                 }
                 holder.itemView.setOnClickListener {
-                    process(activity, item.actionUrl + "/" + item.path)
+                    process(item.actionUrl + "/" + item.path)
                 }
             }
             else -> {

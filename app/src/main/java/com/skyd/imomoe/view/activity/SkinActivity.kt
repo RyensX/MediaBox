@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.recyclerview.widget.GridLayoutManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.SkinBean
-import com.skyd.imomoe.config.Const.ViewHolderTypeString
+import com.su.mediabox.plugin.Constant.ViewHolderTypeString
 import com.skyd.imomoe.databinding.ActivitySkinBinding
 import com.skyd.imomoe.util.Util.getDefaultResColor
 import com.skyd.imomoe.view.adapter.SkinAdapter
@@ -13,7 +13,7 @@ import com.skyd.imomoe.view.adapter.decoration.SkinItemDecoration
 import com.skyd.imomoe.view.adapter.spansize.SkinSpanSize
 import com.skyd.skin.core.SkinResourceProcessor
 
-class SkinActivity : BaseActivity<ActivitySkinBinding>() {
+class SkinActivity : BasePluginActivity<ActivitySkinBinding>() {
     private val list: MutableList<SkinBean> = ArrayList()
     private val adapter: SkinAdapter = SkinAdapter(this, list)
 

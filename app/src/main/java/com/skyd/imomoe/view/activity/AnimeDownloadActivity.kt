@@ -16,7 +16,7 @@ import com.skyd.imomoe.util.visible
 import com.skyd.imomoe.view.adapter.AnimeDownloadAdapter
 import com.skyd.imomoe.viewmodel.AnimeDownloadViewModel
 
-class AnimeDownloadActivity : BaseActivity<ActivityAnimeDownloadBinding>() {
+class AnimeDownloadActivity : BasePluginActivity<ActivityAnimeDownloadBinding>() {
     private var mode = 0        //0是默认的，是番剧；1是番剧每一集
     private var actionBarTitle = ""
     private var directoryName = ""

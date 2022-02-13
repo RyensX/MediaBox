@@ -1,8 +1,11 @@
 package com.su.mediabox.plugin.interfaces
 
+import com.su.mediabox.plugin.IComponentFactory
+
 /**
  * 工具类
  */
+@IComponentFactory.SingletonComponent
 interface IUtil : IBase {
     /**
      * 通过播放页面的网址获取详情页面的网址

@@ -5,9 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.skyd.imomoe.App
+import com.skyd.imomoe.PluginManager
 import com.skyd.imomoe.R
-import com.skyd.imomoe.model.DataSourceManager
-import com.skyd.imomoe.model.impls.EverydayAnimeModel
 import com.skyd.imomoe.util.Util.getRealDayOfWeek
 import com.skyd.imomoe.util.showToast
 import com.su.mediabox.plugin.interfaces.IEverydayAnimeModel
@@ -20,8 +19,8 @@ import java.util.*
 
 
 class EverydayAnimeViewModel : ViewModel() {
-    private val everydayAnimeModel: IEverydayAnimeModel by lazy {
-        DataSourceManager.create(IEverydayAnimeModel::class.java) ?: EverydayAnimeModel()
+    private val everydayAnimeModel: IEverydayAnimeModel by lazy(LazyThreadSafetyMode.NONE) {
+        PluginManager.acquireComponent(IEverydayAnimeModel::class.java)
     }
     var header: AnimeShowBean = AnimeShowBean(
         "", "", "", "",

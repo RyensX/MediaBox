@@ -5,9 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.skyd.imomoe.App
+import com.skyd.imomoe.PluginManager
 import com.skyd.imomoe.R
-import com.skyd.imomoe.model.DataSourceManager
-import com.skyd.imomoe.model.impls.HomeModel
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.view.adapter.SerializableRecycledViewPool
 import com.su.mediabox.plugin.interfaces.IHomeModel
@@ -17,8 +16,8 @@ import kotlinx.coroutines.launch
 
 
 class HomeViewModel : ViewModel() {
-    private val homeModel: IHomeModel by lazy {
-        DataSourceManager.create(IHomeModel::class.java) ?: HomeModel()
+    private val homeModel: IHomeModel by lazy(LazyThreadSafetyMode.NONE) {
+        PluginManager.acquireComponent(IHomeModel::class.java)
     }
     val childViewPool = SerializableRecycledViewPool()
     val viewPool = SerializableRecycledViewPool()

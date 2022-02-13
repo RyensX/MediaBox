@@ -8,6 +8,7 @@ import androidx.annotation.UiThread
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.util.html.source.GettingCallback
 import com.skyd.imomoe.util.html.source.GettingUICallback
+import com.su.mediabox.plugin.Constant
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -61,8 +62,7 @@ class GettingUtil private constructor() {
     @Synchronized
     fun referer(referer: String): GettingUtil {
         mHeader["Referer"] = referer
-        mHeader["User-Agent"] =
-            Const.Request.USER_AGENT_ARRAY[Random.nextInt(Const.Request.USER_AGENT_ARRAY.size)]
+        mHeader["User-Agent"] = Constant.Request.getRandomUserAgent()
         mHeader["Accept"] =
             "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8"
         mHeader["Accept-Encoding"] = "gzip, deflate"

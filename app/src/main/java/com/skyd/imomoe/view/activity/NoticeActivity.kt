@@ -6,7 +6,7 @@ import com.skyd.imomoe.databinding.ActivityNoticeBinding
 import java.io.UnsupportedEncodingException
 import java.net.URLDecoder
 
-class NoticeActivity : BaseActivity<ActivityNoticeBinding>() {
+class NoticeActivity : BasePluginActivity<ActivityNoticeBinding>() {
     companion object {
         const val PARAM = "param"
         const val TOOLBAR_TITLE = "toolbarTitle"

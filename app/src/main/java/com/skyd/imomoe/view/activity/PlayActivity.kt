@@ -26,16 +26,14 @@ import com.shuyu.gsyvideoplayer.utils.GSYVideoType
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoView
 import com.skyd.imomoe.App
+import com.skyd.imomoe.PluginManager.acquireComponent
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.FavoriteAnimeBean
 import com.skyd.imomoe.config.Api
-import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.databinding.ActivityPlayBinding
-import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.util.*
 import com.skyd.imomoe.util.Util.dp
-import com.skyd.imomoe.util.Util.getDetailLinkByEpisodeLink
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.getResDrawable
 import com.skyd.imomoe.util.Util.getSkinResourceId
@@ -56,6 +54,9 @@ import com.skyd.imomoe.view.component.player.DetailPlayerActivity
 import com.skyd.imomoe.view.fragment.MoreDialogFragment
 import com.skyd.imomoe.view.fragment.ShareDialogFragment
 import com.skyd.imomoe.viewmodel.PlayViewModel
+import com.su.mediabox.plugin.Constant
+import com.su.mediabox.plugin.interfaces.IConst
+import com.su.mediabox.plugin.interfaces.IUtil
 import com.su.mediabox.plugin.standard.been.AnimeEpisodeDataBean
 import kotlinx.coroutines.*
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
@@ -80,6 +81,8 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
     private var danmakuParamMap: HashMap<String, String> = HashMap()
     private var currentNightMode: Int = 0
     private var lastCanCollapsed: Boolean? = null
+
+    private val pluginUtil by lazy{acquireComponent(IUtil::class.java)!!}
 
     private fun initView() {
         currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
@@ -157,7 +160,6 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
 
         initView()
 
-        viewModel.setActivity(this)
         adapter = PlayAdapter(this, viewModel.playBeanDataList)
 
         initVideoBuilderMode()
@@ -166,9 +168,8 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
         detailPartUrl = intent.getStringExtra("detailPartUrl") ?: ""
 
         // 如果没有传入详情页面的网址，则通过播放页面的网址计算出详情页面的网址
-        val const = DataSourceManager.getConst() ?: com.skyd.imomoe.model.impls.Const()
-        if (detailPartUrl.isBlank() || detailPartUrl == const.actionUrl.ANIME_DETAIL())
-            detailPartUrl = getDetailLinkByEpisodeLink(partUrl)
+        if (detailPartUrl.isBlank())
+            detailPartUrl = pluginUtil.getDetailLinkByEpisodeLink(partUrl)
 
         mBinding.apply {
             rvPlayActivity.layoutManager = GridLayoutManager(this@PlayActivity, 4)
@@ -206,7 +207,7 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
                         Thread {
                             getAppDataBase().favoriteAnimeDao().insertFavoriteAnime(
                                 FavoriteAnimeBean(
-                                    Const.ViewHolderTypeString.ANIME_COVER_8, "",
+                                    Constant.ViewHolderTypeString.ANIME_COVER_8, "",
                                     detailPartUrl,
                                     viewModel.playBean?.title?.title ?: "",
                                     System.currentTimeMillis(),
@@ -363,11 +364,6 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
         }
         //开始播放
         startPlayLogic()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        viewModel.clearActivity()
     }
 
     override fun onVideoSizeChanged() {

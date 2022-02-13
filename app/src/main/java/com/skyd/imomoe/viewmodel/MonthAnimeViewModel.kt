@@ -4,9 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.skyd.imomoe.App
+import com.skyd.imomoe.PluginManager
 import com.skyd.imomoe.R
-import com.skyd.imomoe.model.DataSourceManager
-import com.skyd.imomoe.model.impls.MonthAnimeModel
 import com.skyd.imomoe.util.showToast
 import com.su.mediabox.plugin.interfaces.IMonthAnimeModel
 import com.su.mediabox.plugin.standard.been.AnimeCoverBean
@@ -16,8 +15,8 @@ import kotlinx.coroutines.launch
 
 
 class MonthAnimeViewModel : ViewModel() {
-    private val monthAnimeModel: IMonthAnimeModel by lazy {
-        DataSourceManager.create(IMonthAnimeModel::class.java) ?: MonthAnimeModel()
+    private val monthAnimeModel: IMonthAnimeModel by lazy(LazyThreadSafetyMode.NONE) {
+        PluginManager.acquireComponent(IMonthAnimeModel::class.java)
     }
     var monthAnimeList: MutableList<AnimeCoverBean> = ArrayList()
     var mldMonthAnimeList: MutableLiveData<Boolean> = MutableLiveData()

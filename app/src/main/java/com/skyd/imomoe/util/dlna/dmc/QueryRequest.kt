@@ -19,8 +19,8 @@ import org.fourthline.cling.support.renderingcontrol.callback.GetVolume
 
 internal abstract class QueryRequest<T>(protected val service: Service<*, *>) {
     private var listener: GetInfoListener<T>? = null
-    private val logger: ILogger by lazy { DefaultLoggerImpl(this) }
-    private val mainHandler by lazy { Handler(Looper.getMainLooper()) }
+    private val logger: ILogger by lazy(LazyThreadSafetyMode.NONE) { DefaultLoggerImpl(this) }
+    private val mainHandler by lazy(LazyThreadSafetyMode.NONE) { Handler(Looper.getMainLooper()) }
 
     protected abstract val actionName: String
     protected abstract val action: ActionCallback

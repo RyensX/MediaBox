@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.skyd.imomoe.App
+import com.skyd.imomoe.PluginManager.process
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.database.getAppDataBase
@@ -20,12 +21,13 @@ import com.skyd.imomoe.util.Util.dp
 import com.skyd.imomoe.util.coil.CoilUtil.loadImage
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.getResDrawable
-import com.skyd.imomoe.util.Util.process
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.view.activity.AnimeDetailActivity
 import com.skyd.imomoe.view.adapter.decoration.AnimeCoverItemDecoration
 import com.skyd.imomoe.view.adapter.decoration.AnimeEpisodeItemDecoration
 import com.skyd.imomoe.view.component.BottomSheetRecyclerView
+import com.su.mediabox.plugin.Constant
+import com.su.mediabox.plugin.Text.buildRouteActionUrl
 import com.su.mediabox.plugin.standard.been.AnimeCoverBean
 import com.su.mediabox.plugin.standard.been.AnimeEpisodeDataBean
 import com.su.mediabox.plugin.standard.been.IAnimeDetailBean
@@ -123,15 +125,8 @@ class AnimeDetailAdapter(
                         tvFlowLayout.text = it.animeType[i].title
                         tvFlowLayout.setOnClickListener { it1 ->
                             if (it.animeType[i].actionUrl.isBlank()) return@setOnClickListener
-                            //此处是”类型“，若要修改，需要注意Tab大分类是否还是”类型“
-                            val actionUrl = it.animeType[i].actionUrl.run {
-                                if (endsWith("/")) "${this}${it.animeType[i].title}"
-                                else "${this}/${it.animeType[i].title}"
-                            }
-                            process(
-                                activity,
-                                Const.ActionUrl.ANIME_CLASSIFY + actionUrl
-                            )
+                            val actionUrl = it.tag[i].actionUrl
+                            process(actionUrl)
                         }
                         holder.flAnimeInfo1Type.addView(tvFlowLayout)
                     }
@@ -146,15 +141,8 @@ class AnimeDetailAdapter(
                             ) as TextView
                         tvFlowLayout.text = it.tag[i].title
                         tvFlowLayout.setOnClickListener { _ ->
-                            //此处是”标签“，由于分类没有这一大项，因此传入”“串
-                            val actionUrl = it.tag[i].actionUrl.run {
-                                if (endsWith("/")) "${this}${it.tag[i].title}"
-                                else "${this}/${it.tag[i].title}"
-                            }
-                            process(
-                                activity,
-                                Const.ActionUrl.ANIME_CLASSIFY + actionUrl
-                            )
+                            val actionUrl = it.tag[i].actionUrl
+                            process(buildRouteActionUrl(Constant.ActionUrl.ANIME_CLASSIFY,actionUrl))
                         }
                         holder.flAnimeInfo1Tag.addView(tvFlowLayout)
                     }
@@ -168,7 +156,7 @@ class AnimeDetailAdapter(
                                 setOnClickListener { v ->
                                     val url = v.tag
                                     if (url is String) {
-                                        process(activity, url, url)
+                                        process(url)
                                     }
                                 }
                                 visible()
@@ -202,7 +190,7 @@ class AnimeDetailAdapter(
                     holder.tvAnimeCover1Episode.text = item.episode
                 }
                 holder.itemView.setOnClickListener {
-                    process(activity, item.actionUrl)
+                    process(item.actionUrl)
                 }
             }
             else -> {
@@ -269,10 +257,7 @@ class AnimeDetailAdapter(
                         getResDrawable(R.drawable.shape_circle_corner_edge_main_color_2_ripper_5_skin)
                     }
                     holder.itemView.setOnClickListener {
-                        val const = DataSourceManager.getConst()
-                        if (const != null && item.actionUrl.startsWith(const.actionUrl.ANIME_PLAY()))
-                            process(activity, item.actionUrl + detailPartUrl, item.actionUrl)
-                        else process(activity, item.actionUrl, item.actionUrl)
+                        process(item.actionUrl)
                         dialog?.dismiss()
                     }
                 }

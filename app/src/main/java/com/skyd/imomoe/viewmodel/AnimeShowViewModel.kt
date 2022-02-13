@@ -4,10 +4,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.skyd.imomoe.App
+import com.skyd.imomoe.PluginManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.ResponseDataType
-import com.skyd.imomoe.model.DataSourceManager
-import com.skyd.imomoe.model.impls.AnimeShowModel
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.view.adapter.SerializableRecycledViewPool
 import com.su.mediabox.plugin.interfaces.IAnimeShowModel
@@ -18,8 +17,8 @@ import kotlinx.coroutines.launch
 
 
 class AnimeShowViewModel : ViewModel() {
-    private val animeShowModel: IAnimeShowModel by lazy {
-        DataSourceManager.create(IAnimeShowModel::class.java) ?: AnimeShowModel()
+    private val animeShowModel: IAnimeShowModel by lazy(LazyThreadSafetyMode.NONE) {
+        PluginManager.acquireComponent(IAnimeShowModel::class.java)
     }
     var childViewPool: SerializableRecycledViewPool? = null
     var viewPool: SerializableRecycledViewPool? = null

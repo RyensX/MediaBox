@@ -12,6 +12,7 @@ import com.skyd.imomoe.util.downloadanime.AnimeDownloadHelper.Companion.getAnime
 import com.skyd.imomoe.util.downloadanime.AnimeDownloadHelper.Companion.save2Xml
 import com.skyd.imomoe.util.formatSize
 import com.skyd.imomoe.util.toMD5
+import com.su.mediabox.plugin.Constant
 import com.su.mediabox.plugin.standard.been.AnimeCoverBean
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -42,8 +43,8 @@ class AnimeDownloadViewModel : ViewModel() {
                             }?.size
                             animeCoverList.add(
                                 animeCoverList.size, AnimeCoverBean(
-                                    Const.ViewHolderTypeString.ANIME_COVER_7,
-                                    Const.ActionUrl.ANIME_ANIME_DOWNLOAD_EPISODE + "/" + file.name,
+                                    Constant.ViewHolderTypeString.ANIME_COVER_7,
+                                    Constant.ActionUrl.ANIME_ANIME_DOWNLOAD_EPISODE + "/" + file.name,
                                     "",
                                     file.name,
                                     null,
@@ -124,10 +125,10 @@ class AnimeDownloadViewModel : ViewModel() {
                                 "/" + anime.fileName
                     animeCoverList.add(
                         AnimeCoverBean(
-                            Const.ViewHolderTypeString.ANIME_COVER_7,
+                            Constant.ViewHolderTypeString.ANIME_COVER_7,
                             (if (fileName.endsWith(".m3u8", true))
-                                Const.ActionUrl.ANIME_ANIME_DOWNLOAD_M3U8
-                            else Const.ActionUrl.ANIME_ANIME_DOWNLOAD_PLAY)
+                                Constant.ActionUrl.ANIME_ANIME_DOWNLOAD_M3U8
+                            else Constant.ActionUrl.ANIME_ANIME_DOWNLOAD_PLAY)
                                     + "/" + fileName,
                             "",
                             anime.title,

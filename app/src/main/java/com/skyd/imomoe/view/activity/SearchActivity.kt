@@ -13,7 +13,6 @@ import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.ResponseDataType
 import com.skyd.imomoe.bean.SearchHistoryBean
-import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.databinding.ActivitySearchBinding
 import com.skyd.imomoe.util.Util.showKeyboard
 import com.skyd.imomoe.util.showToast
@@ -23,8 +22,10 @@ import com.skyd.imomoe.util.visible
 import com.skyd.imomoe.view.adapter.SearchAdapter
 import com.skyd.imomoe.view.adapter.SearchHistoryAdapter
 import com.skyd.imomoe.viewmodel.SearchViewModel
+import com.su.mediabox.plugin.Constant
 
-class SearchActivity : BaseActivity<ActivitySearchBinding>() {
+//TODO 实现搜索联想Model
+class SearchActivity : BasePluginActivity<ActivitySearchBinding>() {
     private lateinit var mLayoutCircleProgressTextTip1: RelativeLayout
     private lateinit var tvCircleProgressTextTip1: TextView
     private lateinit var viewModel: SearchViewModel
@@ -87,7 +88,7 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
             }
         }
 
-        viewModel.mldSearchResultList.observe(this, {
+        viewModel.mldSearchResultList.observe(this) {
             mBinding.srlSearchActivity.closeHeaderOrFooter()
             if (this::mLayoutCircleProgressTextTip1.isInitialized) mLayoutCircleProgressTextTip1.gone()
             // 仅在搜索框不为“”时展示搜索结果
@@ -107,7 +108,7 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
                     }
                 }
             }
-        })
+        }
 
         viewModel.mldSearchHistoryList.observe(this, {
             if (viewModel.searchResultList.size == 0) {
@@ -176,7 +177,7 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
         }
         viewModel.insertSearchHistory(
             SearchHistoryBean(
-                Const.ViewHolderTypeString.SEARCH_HISTORY_1,
+                Constant.ViewHolderTypeString.SEARCH_HISTORY_1,
                 "", System.currentTimeMillis(), key
             )
         )

@@ -25,7 +25,7 @@ object SnifferVideo {
     const val SERVER_API = "api"
     const val DANMU_URL = "danmuUrl"
     const val REFEREER_URL = "referer"
-    private val sniffingUrlList: MutableList<String> by lazy { ArrayList() }
+    private val sniffingUrlList: MutableList<String> by lazy(LazyThreadSafetyMode.NONE) { ArrayList() }
     private var serverApi: String = "https://yuan.cuan.la/barrage"
     private var serverKey: String = "mao"
     private var videoId: String = ""

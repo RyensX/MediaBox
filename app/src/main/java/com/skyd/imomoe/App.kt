@@ -9,24 +9,26 @@ import com.scwang.smart.refresh.header.MaterialHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import com.skyd.imomoe.util.CrashHandler
 import com.skyd.imomoe.util.PushHelper
-import com.skyd.imomoe.util.Util
 import com.skyd.imomoe.util.Util.getManifestMetaValue
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.getSkinResourceId
 import com.skyd.imomoe.util.release
 import com.skyd.imomoe.util.skin.SkinUtil
 import com.skyd.skin.core.attrs.SrlPrimaryColorAttr
+import com.su.mediabox.plugin.AppUtil
 import com.umeng.analytics.MobclickAgent
 import com.umeng.commonsdk.UMConfigure
 import com.umeng.message.PushAgent
 import com.umeng.message.UmengNotificationClickHandler
 import com.umeng.message.entity.UMessage
 
-
 class App : Application() {
     override fun onCreate() {
         super.onCreate()
         context = this
+
+        //初始化路由及插件配置
+        AppUtil.init(this, PluginManager)
 
         release {
             // Crash提示
@@ -51,7 +53,7 @@ class App : Application() {
                 notificationClickHandler = object : UmengNotificationClickHandler() {
                     override fun dealWithCustomAction(context: Context, msg: UMessage) {
                         super.dealWithCustomAction(context, msg)
-                        Util.process(context, msg.custom)
+                        AppRouteProcessor.process(msg.custom)
                     }
                 }
             }

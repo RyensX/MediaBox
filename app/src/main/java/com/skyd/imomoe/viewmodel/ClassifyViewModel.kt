@@ -1,14 +1,12 @@
 package com.skyd.imomoe.viewmodel
 
-import android.app.Activity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.skyd.imomoe.App
+import com.skyd.imomoe.PluginManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.ResponseDataType
-import com.skyd.imomoe.model.DataSourceManager
-import com.skyd.imomoe.model.impls.ClassifyModel
 import com.skyd.imomoe.util.showToast
 import com.su.mediabox.plugin.interfaces.IClassifyModel
 import com.su.mediabox.plugin.standard.been.AnimeCoverBean
@@ -19,8 +17,8 @@ import kotlinx.coroutines.launch
 
 
 class ClassifyViewModel : ViewModel() {
-    private val classifyModel: IClassifyModel by lazy {
-        DataSourceManager.create(IClassifyModel::class.java) ?: ClassifyModel()
+    private val classifyModel: IClassifyModel by lazy(LazyThreadSafetyMode.NONE) {
+        PluginManager.acquireComponent(IClassifyModel::class.java)
     }
     var isRequesting = false
     var classifyTabList: MutableList<ClassifyBean> = ArrayList()        //上方分类数据
@@ -30,14 +28,6 @@ class ClassifyViewModel : ViewModel() {
     var mldClassifyList: MutableLiveData<Pair<ResponseDataType, MutableList<AnimeCoverBean>>> =
         MutableLiveData()
     var pageNumberBean: PageNumberBean? = null
-
-    fun setActivity(activity: Activity) {
-        classifyModel.setActivity(activity)
-    }
-
-    fun clearActivity() {
-        classifyModel.clearActivity()
-    }
 
     fun getClassifyTabData() {
         viewModelScope.launch(Dispatchers.IO) {

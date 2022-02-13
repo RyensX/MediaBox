@@ -14,7 +14,7 @@ import com.skyd.imomoe.databinding.ActivityRankBinding
 import com.skyd.imomoe.view.fragment.RankFragment
 import com.skyd.imomoe.viewmodel.RankViewModel
 
-class RankActivity : BaseActivity<ActivityRankBinding>() {
+class RankActivity : BasePluginActivity<ActivityRankBinding>() {
     private lateinit var viewModel: RankViewModel
     private lateinit var adapter: VpAdapter
     private var offscreenPageLimit = 1

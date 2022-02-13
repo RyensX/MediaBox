@@ -26,7 +26,7 @@ import com.su.mediabox.plugin.standard.been.ClassifyBean
 import com.su.mediabox.plugin.standard.been.ClassifyDataBean
 
 
-class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
+class ClassifyActivity : BasePluginActivity<ActivityClassifyBinding>() {
     private lateinit var viewModel: ClassifyViewModel
     private var lastRefreshTime: Long = System.currentTimeMillis() - 500
     private lateinit var spinnerAdapter: ArrayAdapter<ClassifyBean>
@@ -150,7 +150,7 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
             }
         })
 
-        viewModel.mldClassifyList.observe(this, {
+        viewModel.mldClassifyList.observe(this) {
             mBinding.srlClassifyActivity.closeHeaderOrFooter()
             viewModel.isRequesting = false
             classifyAdapter.smartNotifyDataSetChanged(it.first, it.second, viewModel.classifyList)
@@ -164,16 +164,9 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
                         else classifyTabTitle
                     }：$classifyTitle"
             }
-        })
-
-        viewModel.setActivity(this)
+        }
 
         viewModel.getClassifyTabData()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        viewModel.clearActivity()
     }
 
     override fun getBinding(): ActivityClassifyBinding =

@@ -1,6 +1,5 @@
 package com.skyd.imomoe.util.coil
 
-import android.util.Log
 import android.widget.ImageView
 import androidx.annotation.DrawableRes
 import coil.Coil
@@ -13,15 +12,13 @@ import coil.util.DebugLogger
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Api.Companion.MAIN_URL
-import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.net.okhttpClient
 import com.skyd.imomoe.util.Util.toEncodedUrl
 import com.skyd.imomoe.util.debug
 import com.skyd.imomoe.util.logE
+import com.su.mediabox.plugin.Constant
 import okhttp3.OkHttpClient
 import java.net.URL
-import kotlin.random.Random
-
 
 object CoilUtil {
     private val imageLoaderBuilder = ImageLoader.Builder(App.context)
@@ -81,7 +78,7 @@ object CoilUtil {
             addHeader("Connection", "keep-alive")
             addHeader(
                 "User-Agent",
-                Const.Request.USER_AGENT_ARRAY[Random.nextInt(Const.Request.USER_AGENT_ARRAY.size)]
+                Constant.Request.getRandomUserAgent()
             )
         }
     }

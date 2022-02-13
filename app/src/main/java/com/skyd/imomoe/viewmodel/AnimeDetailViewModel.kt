@@ -4,10 +4,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.skyd.imomoe.App
+import com.skyd.imomoe.PluginManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.*
-import com.skyd.imomoe.model.DataSourceManager
-import com.skyd.imomoe.model.impls.AnimeDetailModel
 import com.skyd.imomoe.util.showToast
 import com.su.mediabox.plugin.interfaces.IAnimeDetailModel
 import com.su.mediabox.plugin.standard.been.IAnimeDetailBean
@@ -17,8 +16,8 @@ import kotlinx.coroutines.launch
 
 
 class AnimeDetailViewModel : ViewModel() {
-    private val animeDetailModel: IAnimeDetailModel by lazy {
-        DataSourceManager.create(IAnimeDetailModel::class.java) ?: AnimeDetailModel()
+    private val animeDetailModel: IAnimeDetailModel by lazy(LazyThreadSafetyMode.NONE) {
+       PluginManager.acquireComponent(IAnimeDetailModel::class.java)
     }
     var cover: ImageBean = ImageBean("", "", "", "")
     var title: String = ""
@@ -26,7 +25,6 @@ class AnimeDetailViewModel : ViewModel() {
     var mldAnimeDetailList: MutableLiveData<Pair<ResponseDataType, MutableList<IAnimeDetailBean>>> =
         MutableLiveData()
 
-    //www.yhdm.io
     fun getAnimeDetailData(partUrl: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {

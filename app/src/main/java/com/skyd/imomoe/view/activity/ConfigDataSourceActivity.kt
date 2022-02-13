@@ -17,7 +17,7 @@ import com.skyd.imomoe.util.*
 import java.io.File
 
 
-class ConfigDataSourceActivity : BaseActivity<ActivityConfigDataSourceBinding>() {
+class ConfigDataSourceActivity : BasePluginActivity<ActivityConfigDataSourceBinding>() {
     private lateinit var viewModel: ConfigDataSourceViewModel
     private lateinit var adapter: ConfigDataSourceAdapter
 
@@ -36,9 +36,9 @@ class ConfigDataSourceActivity : BaseActivity<ActivityConfigDataSourceBinding>()
             atbDataSourceConfigActivity.setButtonClickListener(0) { resetDataSource() }
         }
 
-        viewModel.mldDataSourceList.observe(this, {
+        viewModel.mldDataSourceList.observe(this) {
             adapter.smartNotifyDataSetChanged(it.first, it.second, viewModel.dataSourceList)
-        })
+        }
 
         viewModel.getDataSourceList()
     }

@@ -23,6 +23,7 @@ import com.skyd.imomoe.view.adapter.decoration.AnimeShowItemDecoration
 import com.skyd.imomoe.view.adapter.spansize.AnimeDetailSpanSize
 import com.skyd.imomoe.view.fragment.ShareDialogFragment
 import com.skyd.imomoe.viewmodel.AnimeDetailViewModel
+import com.su.mediabox.plugin.Constant
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -30,7 +31,7 @@ import java.net.URL
 import kotlin.random.Random
 
 
-class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
+class AnimeDetailActivity : BasePluginActivity<ActivityAnimeDetailBinding>() {
     private var partUrl: String = ""
     private var isFavorite: Boolean = false
     private lateinit var viewModel: AnimeDetailViewModel
@@ -79,7 +80,7 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
                     } else {
                         getAppDataBase().favoriteAnimeDao().insertFavoriteAnime(
                             FavoriteAnimeBean(
-                                Const.ViewHolderTypeString.ANIME_COVER_8, "",
+                                Constant.ViewHolderTypeString.ANIME_COVER_8, "",
                                 partUrl,
                                 viewModel.title,
                                 System.currentTimeMillis(),
@@ -120,10 +121,7 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
                 addHeader("Accept", "*/*")
                 addHeader("Accept-Encoding", "gzip, deflate")
                 addHeader("Connection", "keep-alive")
-                addHeader(
-                    "User-Agent",
-                    Const.Request.USER_AGENT_ARRAY[Random.nextInt(Const.Request.USER_AGENT_ARRAY.size)]
-                )
+                addHeader("User-Agent", Constant.Request.getRandomUserAgent())
             }
             mBinding.atbAnimeDetailActivityToolbar.titleText = viewModel.title
         })

@@ -12,7 +12,7 @@ import com.skyd.imomoe.view.adapter.decoration.AnimeEpisodeItemDecoration
 import com.skyd.imomoe.view.adapter.FavoriteAdapter
 import com.skyd.imomoe.viewmodel.FavoriteViewModel
 
-class FavoriteActivity : BaseActivity<ActivityFavoriteBinding>() {
+class FavoriteActivity : BasePluginActivity<ActivityFavoriteBinding>() {
     private lateinit var viewModel: FavoriteViewModel
     private lateinit var adapter: FavoriteAdapter
 

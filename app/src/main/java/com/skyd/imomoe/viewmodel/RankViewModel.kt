@@ -4,8 +4,7 @@ import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.skyd.imomoe.model.DataSourceManager
-import com.skyd.imomoe.model.impls.RankModel
+import com.skyd.imomoe.PluginManager
 import com.skyd.imomoe.util.showToast
 import com.su.mediabox.plugin.interfaces.IRankModel
 import com.su.mediabox.plugin.standard.been.TabBean
@@ -15,8 +14,8 @@ import java.util.*
 
 
 class RankViewModel : ViewModel() {
-    private val rankModel: IRankModel by lazy {
-        DataSourceManager.create(IRankModel::class.java) ?: RankModel()
+    private val rankModel: IRankModel by lazy(LazyThreadSafetyMode.NONE) {
+        PluginManager.acquireComponent(IRankModel::class.java)
     }
     var isRequesting = false
     var tabList: MutableList<TabBean> = Collections.synchronizedList(ArrayList())

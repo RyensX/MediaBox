@@ -18,7 +18,7 @@ import com.skyd.imomoe.viewmodel.UpnpViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class DlnaActivity : BaseActivity<ActivityDlnaBinding>() {
+class DlnaActivity : BasePluginActivity<ActivityDlnaBinding>() {
     private lateinit var viewModel: UpnpViewModel
     private lateinit var adapter: UpnpAdapter
     lateinit var title: String

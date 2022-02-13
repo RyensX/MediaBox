@@ -12,7 +12,7 @@ import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.view.adapter.SearchAdapter
 import com.skyd.imomoe.viewmodel.MonthAnimeViewModel
 
-class MonthAnimeActivity : BaseActivity<ActivityMonthAnimeBinding>() {
+class MonthAnimeActivity : BasePluginActivity<ActivityMonthAnimeBinding>() {
     private var partUrl: String = ""
     private lateinit var viewModel: MonthAnimeViewModel
     private lateinit var adapter: SearchAdapter

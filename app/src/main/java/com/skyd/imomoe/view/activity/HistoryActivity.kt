@@ -15,7 +15,7 @@ import com.skyd.imomoe.util.Util.getResDrawable
 import com.skyd.imomoe.view.adapter.HistoryAdapter
 import com.skyd.imomoe.viewmodel.HistoryViewModel
 
-class HistoryActivity : BaseActivity<ActivityHistoryBinding>() {
+class HistoryActivity : BasePluginActivity<ActivityHistoryBinding>() {
     private lateinit var viewModel: HistoryViewModel
     private lateinit var adapter: HistoryAdapter
 

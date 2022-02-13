@@ -12,10 +12,10 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
+import com.skyd.imomoe.PluginManager.process
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.FragmentHomeBinding
 import com.skyd.imomoe.model.DataSourceManager
-import com.skyd.imomoe.util.Util.process
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.clickScale
 import com.skyd.imomoe.util.eventbus.EventBusSubscriber
@@ -26,6 +26,7 @@ import com.skyd.imomoe.util.requestManageExternalStorage
 import com.skyd.imomoe.view.activity.*
 import com.skyd.imomoe.view.listener.dsl.addOnTabSelectedListener
 import com.skyd.imomoe.viewmodel.HomeViewModel
+import com.su.mediabox.plugin.Constant
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -80,8 +81,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), EventBusSubscriber {
 
             tvHomeFragmentHeaderSearch.setOnClickListener {
                 activity?.let {
-                    val const = DataSourceManager.getConst() ?: com.skyd.imomoe.model.impls.Const()
-                    process(it, const.actionUrl.ANIME_SEARCH() + "")
+                    process(Constant.ActionUrl.ANIME_SEARCH)
                     it.overridePendingTransition(R.anim.anl_push_top_in, R.anim.anl_stay)
                 }
             }
@@ -105,7 +105,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), EventBusSubscriber {
             }
         }
 
-        viewModel.mldGetAllTabList.observe(viewLifecycleOwner, {
+        viewModel.mldGetAllTabList.observe(viewLifecycleOwner) {
             adapter.clearAllFragment()
             if (!it) {
                 showLoadFailedTip(getString(R.string.load_data_failed_click_to_retry)) {
@@ -129,7 +129,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), EventBusSubscriber {
                 }
             }
             adapter.notifyDataSetChanged()
-        })
+        }
 
         viewModel.getAllTabData()
     }

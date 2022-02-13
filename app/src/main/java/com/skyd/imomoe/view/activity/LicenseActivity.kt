@@ -4,13 +4,13 @@ import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.LicenseBean
-import com.skyd.imomoe.config.Const.ActionUrl
-import com.skyd.imomoe.config.Const.ViewHolderTypeString
+import com.su.mediabox.plugin.Constant.ActionUrl
+import com.su.mediabox.plugin.Constant.ViewHolderTypeString
 import com.skyd.imomoe.databinding.ActivityLicenseBinding
 import com.skyd.imomoe.view.adapter.LicenseAdapter
 
 
-class LicenseActivity : BaseActivity<ActivityLicenseBinding>() {
+class LicenseActivity : BasePluginActivity<ActivityLicenseBinding>() {
     private val list: MutableList<LicenseBean> = ArrayList()
     private val adapter: LicenseAdapter = LicenseAdapter(this, list)
 

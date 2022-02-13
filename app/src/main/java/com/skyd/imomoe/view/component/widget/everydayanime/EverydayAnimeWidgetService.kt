@@ -7,9 +7,8 @@ import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import android.widget.RemoteViewsService.RemoteViewsFactory
 import com.google.gson.Gson
+import com.skyd.imomoe.PluginManager
 import com.skyd.imomoe.R
-import com.skyd.imomoe.model.DataSourceManager
-import com.skyd.imomoe.model.impls.EverydayAnimeWidgetModel
 import com.skyd.imomoe.util.Util
 import com.su.mediabox.plugin.interfaces.IEverydayAnimeWidgetModel
 import com.su.mediabox.plugin.standard.been.AnimeCoverBean
@@ -25,8 +24,7 @@ internal class EverydayAnimeRemoteViewsFactory(
     private val mContext: Context,
     intent: Intent
 ) : RemoteViewsFactory {
-    private val model = DataSourceManager.create(IEverydayAnimeWidgetModel::class.java)
-        ?: EverydayAnimeWidgetModel()
+    private val model = PluginManager.acquireComponent(IEverydayAnimeWidgetModel::class.java)
     private val mWidgetItems: MutableList<AnimeCoverBean> = ArrayList()
 
     override fun onCreate() {

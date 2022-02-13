@@ -10,16 +10,16 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.skyd.imomoe.App
+import com.skyd.imomoe.PluginManager.process
 import com.skyd.imomoe.R
-import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.util.*
 import com.skyd.imomoe.util.coil.CoilUtil.loadImage
-import com.skyd.imomoe.util.Util.process
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.view.fragment.AnimeShowFragment
 import com.skyd.imomoe.view.component.bannerview.adapter.MyCycleBannerAdapter
 import com.skyd.imomoe.view.component.bannerview.indicator.DotIndicator
-import com.skyd.imomoe.config.Const.ViewHolderTypeString
+import com.su.mediabox.plugin.Constant.ViewHolderTypeString
+import com.su.mediabox.plugin.Constant.ActionUrl
 import com.skyd.imomoe.util.Util.dp
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.getResDrawable
@@ -152,7 +152,7 @@ class AnimeShowAdapter(
                     holder.tvAnimeCover1Episode.text = item.episode
                 }
                 holder.itemView.setOnClickListener {
-                    process(fragment, item.actionUrl)
+                    process(item.actionUrl)
                 }
             }
             holder is AnimeCover3ViewHolder && item is AnimeCoverBean -> {
@@ -190,8 +190,7 @@ class AnimeShowAdapter(
                                 else "${this}/${it[i].title}"
                             }
                             process(
-                                fragment,
-                                Const.ActionUrl.ANIME_CLASSIFY + actionUrl
+                                ActionUrl.ANIME_CLASSIFY + actionUrl
                             )
                         }
                         holder.flAnimeCover3Type.addView(tvFlowLayout)
@@ -199,7 +198,7 @@ class AnimeShowAdapter(
                 }
                 holder.tvAnimeCover3Describe.text = item.describe
                 holder.itemView.setOnClickListener {
-                    process(fragment, item.actionUrl)
+                    process( item.actionUrl)
                 }
             }
             holder is AnimeCover4ViewHolder && item is AnimeCoverBean -> {
@@ -214,7 +213,7 @@ class AnimeShowAdapter(
                 }
                 holder.tvAnimeCover4Title.text = item.title
                 holder.itemView.setOnClickListener {
-                    process(fragment, item.actionUrl)
+                    process(item.actionUrl)
                 }
             }
             holder is AnimeCover5ViewHolder && item is AnimeCoverBean -> {
@@ -253,8 +252,8 @@ class AnimeShowAdapter(
                 }
                 holder.itemView.setOnClickListener {
                     if (item.episodeClickable?.actionUrl.equals(item.actionUrl))
-                        process(fragment, item.episodeClickable?.actionUrl)
-                    else process(fragment, item.episodeClickable?.actionUrl + item.actionUrl)
+                        process(item.episodeClickable!!.actionUrl)
+                    else process(item.episodeClickable?.actionUrl + item.actionUrl)
                 }
                 holder.tvAnimeCover5Area.setOnClickListener {
                     val actionUrl = item.area?.actionUrl.toString().run {
@@ -262,12 +261,11 @@ class AnimeShowAdapter(
                         else "${this}/${item.area?.title}"
                     }
                     process(
-                        fragment,
-                        Const.ActionUrl.ANIME_CLASSIFY + actionUrl
+                        ActionUrl.ANIME_CLASSIFY + actionUrl
                     )
                 }
                 holder.tvAnimeCover5Title.setOnClickListener {
-                    process(fragment, item.actionUrl)
+                    process( item.actionUrl)
                 }
             }
             else -> {
@@ -322,7 +320,7 @@ class AnimeShowAdapter(
                         holder.tvAnimeCover1Episode.text = item.episode
                     }
                     holder.itemView.setOnClickListener {
-                        process(activity, item.actionUrl)
+                        process(item.actionUrl)
                     }
                 }
                 is AnimeCover3ViewHolder -> {
@@ -361,8 +359,7 @@ class AnimeShowAdapter(
                                     else "${this}/${it[i].title}"
                                 }
                                 process(
-                                    activity,
-                                    Const.ActionUrl.ANIME_CLASSIFY + actionUrl
+                                    ActionUrl.ANIME_CLASSIFY + actionUrl
                                 )
                             }
                             holder.flAnimeCover3Type.addView(tvFlowLayout)
@@ -370,7 +367,7 @@ class AnimeShowAdapter(
                     }
                     holder.tvAnimeCover3Describe.text = item.describe
                     holder.itemView.setOnClickListener {
-                        process(activity, item.actionUrl)
+                        process(item.actionUrl)
                     }
                 }
                 is AnimeCover4ViewHolder -> {
@@ -385,7 +382,7 @@ class AnimeShowAdapter(
                     }
                     holder.tvAnimeCover4Title.text = item.title
                     holder.itemView.setOnClickListener {
-                        process(activity, item.actionUrl)
+                        process(item.actionUrl)
                     }
                 }
                 is AnimeCover5ViewHolder -> {
@@ -443,8 +440,8 @@ class AnimeShowAdapter(
                     }
                     holder.itemView.setOnClickListener {
                         if (item.episodeClickable?.actionUrl.equals(item.actionUrl))
-                            process(activity, item.episodeClickable?.actionUrl)
-                        else process(activity, item.episodeClickable?.actionUrl + item.actionUrl)
+                            process(item.episodeClickable!!.actionUrl)
+                        else process(item.episodeClickable?.actionUrl + item.actionUrl)
                     }
                     holder.tvAnimeCover5Area.setOnClickListener {
                         val actionUrl = item.area?.actionUrl.toString().run {
@@ -452,12 +449,11 @@ class AnimeShowAdapter(
                             else "${this}/${item.area?.title}"
                         }
                         process(
-                            activity,
-                            Const.ActionUrl.ANIME_CLASSIFY + actionUrl
+                            ActionUrl.ANIME_CLASSIFY + actionUrl
                         )
                     }
                     holder.tvAnimeCover5Title.setOnClickListener {
-                        process(activity, item.actionUrl)
+                        process(item.actionUrl)
                     }
                 }
                 else -> {

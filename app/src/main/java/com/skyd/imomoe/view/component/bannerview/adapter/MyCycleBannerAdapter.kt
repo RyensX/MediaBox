@@ -5,11 +5,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.skyd.imomoe.App
+import com.skyd.imomoe.PluginManager.process
 import com.skyd.imomoe.R
 import com.skyd.imomoe.util.AnimeCover6ViewHolder
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.coil.CoilUtil.loadImage
-import com.skyd.imomoe.util.Util.process
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.ViewHolderUtil
 import com.skyd.imomoe.util.gone
@@ -60,7 +60,7 @@ class MyCycleBannerAdapter(
                         holder.tvAnimeCover6Describe.text = item.describe
                     }
                     holder.itemView.setOnClickListener {
-                        process(activity, item.actionUrl)
+                        process(item.actionUrl)
                     }
                 }
             }
