@@ -9,10 +9,11 @@ import android.os.Build
 import android.os.Bundle
 import android.text.Html
 import android.widget.Toast
+import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.FragmentTransaction
 import com.afollestad.materialdialogs.MaterialDialog
 import com.su.mediabox.App
-import com.su.mediabox.PluginManager.getPluginName
+import com.su.mediabox.PluginManager.getPluginInfo
 import com.su.mediabox.R
 import com.su.mediabox.config.Const
 import com.su.mediabox.config.Const.ShortCuts.Companion.ACTION_EVERYDAY
@@ -54,9 +55,9 @@ class MainActivity : BasePluginActivity<ActivityMainBinding>(), EventBusSubscrib
 
         action = intent.action ?: ""
 
-        getPluginName()?.also {
+        getPluginInfo().also {
             //UP_TODO 2022/2/13 22:24 0 图标
-            val description = TaskDescription(it)
+            val description = TaskDescription(it.name, it.icon.toBitmap())
             setTaskDescription(description)
         }
 
