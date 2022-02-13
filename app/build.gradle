@@ -175,7 +175,7 @@ dependencies {
 // UM U-APM性能报告
 efs {
     //是否对启动过程进程插桩的开关，如果使用自动集成监控则必须开启
-    isAutoTrack = true
+    isAutoTrack = false
     //您自定义Application的类名称，必填项，如没有自定义则填写系统Application
     applicationName = "App"
     //您自定义Activity的类名称，必填项，将您所有Activity的类名按如下格式填写
