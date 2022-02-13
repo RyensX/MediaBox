@@ -35,6 +35,7 @@ def lifecycle = [:]
 lifecycle.lifecycle_livedata_ktx = "androidx.lifecycle:lifecycle-livedata-ktx:2.3.1"
 lifecycle.lifecycle_viewmodel_ktx = "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
 lifecycle.lifecycle_runtime_ktx = "androidx.lifecycle:lifecycle-runtime-ktx:2.3.1"
+lifecycle.lifecycle_activity_ktx = "androidx.activity:activity-ktx:1.4.0"
 deps.lifecycle = lifecycle
 
 def okhttp3 = [:]

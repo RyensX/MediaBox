@@ -4,6 +4,8 @@ import kotlin.random.Random
 
 object Constant {
 
+    const val PLUGIN_ACTION = "media_box_plugin_action"
+
     /**
      * 此动作为App自身路由使用，与服务器无关
      *

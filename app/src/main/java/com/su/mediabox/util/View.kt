@@ -2,6 +2,7 @@ package com.su.mediabox.util
 
 import android.view.View
 import android.view.animation.AlphaAnimation
+import androidx.recyclerview.widget.RecyclerView
 
 fun View.enable() {
     if (isEnabled) return
@@ -36,4 +37,13 @@ fun View.clickScale(scale: Float = 0.75f, duration: Long = 100) {
         .withEndAction {
             animate().scaleX(1f).scaleY(1f).setDuration(duration).start()
         }.start()
+}
+
+inline fun RecyclerView.ViewHolder.setOnClickListener(
+    target: View,
+    crossinline onClick: (position: Int) -> Unit
+) {
+    target.setOnClickListener {
+        onClick(bindingAdapterPosition)
+    }
 }
