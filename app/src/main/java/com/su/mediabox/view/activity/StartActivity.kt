@@ -1,15 +1,13 @@
 package com.su.mediabox.view.activity
 
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import com.su.mediabox.PluginManager
 import com.su.mediabox.databinding.ActivityPluginBinding
 import com.su.mediabox.view.adapter.PluginAdapter
-import com.su.mediabox.viewmodel.PluginViewModel
 
 class StartActivity : BaseActivity<ActivityPluginBinding>() {
 
-    private val pluginViewModel by viewModels<PluginViewModel>()
     private val adapter = PluginAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,14 +19,10 @@ class StartActivity : BaseActivity<ActivityPluginBinding>() {
             startPluginList.adapter = adapter
         }
 
-        pluginViewModel.pluginLiveData.observe(this) {
+        PluginManager.pluginLiveData.observe(this) {
             adapter.submitList(it)
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        pluginViewModel.scanPlugin(packageManager)
+        PluginManager.scanPlugin(packageManager)
     }
 
     override fun getBinding() = ActivityPluginBinding.inflate(layoutInflater)

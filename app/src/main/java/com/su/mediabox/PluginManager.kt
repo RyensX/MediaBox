@@ -2,13 +2,19 @@ package com.su.mediabox
 
 import android.app.Activity
 import android.content.Intent
-import com.su.mediabox.PluginManager.getPluginName
-import com.su.mediabox.PluginManager.getPluginPath
+import android.content.pm.PackageManager
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.su.mediabox.bean.PluginInfo
+import com.su.mediabox.plugin.Constant
 import com.su.mediabox.view.activity.BasePluginActivity
 import com.su.mediabox.plugin.IComponentFactory
 import com.su.mediabox.plugin.interfaces.IBase
 import com.su.mediabox.plugin.interfaces.IRouteProcessor
 import dalvik.system.DexClassLoader
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.File
 
 object PluginManager : IRouteProcessor {
@@ -24,6 +30,28 @@ object PluginManager : IRouteProcessor {
      * 最低支持的插件API版本
      */
     private const val minPluginApiVersion = 1
+
+    private val _pluginLiveData = MutableLiveData<List<PluginInfo>>()
+    private val pluginIntent = Intent(Constant.PLUGIN_ACTION)
+    private val pluginWorkScope: CoroutineScope = CoroutineScope(Dispatchers.IO)
+
+    val pluginLiveData: LiveData<List<PluginInfo>>
+        get() = _pluginLiveData
+
+    fun scanPlugin(packageManager: PackageManager) {
+        pluginWorkScope.launch {
+            val plugin = packageManager.queryIntentActivities(pluginIntent, 0).map {
+                PluginInfo(
+                    it.activityInfo.packageName,
+                    it.activityInfo.name,
+                    it.loadLabel(packageManager).toString(),
+                    it.loadIcon(packageManager),
+                    it.activityInfo.applicationInfo.sourceDir
+                )
+            }
+            _pluginLiveData.postValue(plugin)
+        }
+    }
 
     fun Activity.getPluginName() = intent.getStringExtra(BasePluginActivity.PLUGIN_NAME)
     fun Activity.getPluginPath() = intent.getStringExtra(BasePluginActivity.PLUGIN_PATH)
