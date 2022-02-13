@@ -1,5 +1,6 @@
 package com.su.mediabox.view.activity
 
+import android.app.ActivityManager.TaskDescription
 import android.content.Intent
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
@@ -11,6 +12,7 @@ import android.widget.Toast
 import androidx.fragment.app.FragmentTransaction
 import com.afollestad.materialdialogs.MaterialDialog
 import com.su.mediabox.App
+import com.su.mediabox.PluginManager.getPluginName
 import com.su.mediabox.R
 import com.su.mediabox.config.Const
 import com.su.mediabox.config.Const.ShortCuts.Companion.ACTION_EVERYDAY
@@ -23,11 +25,11 @@ import com.su.mediabox.util.Util.getUserNoticeContent
 import com.su.mediabox.util.Util.lastReadUserNoticeVersion
 import com.su.mediabox.util.Util.setReadUserNoticeVersion
 import com.su.mediabox.util.clickScale
-import com.su.mediabox.util.showToast
 import com.su.mediabox.util.eventbus.EventBusSubscriber
 import com.su.mediabox.util.eventbus.MessageEvent
 import com.su.mediabox.util.eventbus.RefreshEvent
 import com.su.mediabox.util.eventbus.SelectHomeTabEvent
+import com.su.mediabox.util.showToast
 import com.su.mediabox.util.update.AppUpdateHelper
 import com.su.mediabox.util.update.AppUpdateStatus
 import com.su.mediabox.view.fragment.EverydayAnimeFragment
@@ -51,6 +53,12 @@ class MainActivity : BasePluginActivity<ActivityMainBinding>(), EventBusSubscrib
         super.onCreate(savedInstanceState)
 
         action = intent.action ?: ""
+
+        getPluginName()?.also {
+            //UP_TODO 2022/2/13 22:24 0 图标
+            val description = TaskDescription(it)
+            setTaskDescription(description)
+        }
 
         PushAgent.getInstance(this).onAppStart()
 

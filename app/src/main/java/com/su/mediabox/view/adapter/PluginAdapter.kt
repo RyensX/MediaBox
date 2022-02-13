@@ -1,13 +1,16 @@
 package com.su.mediabox.view.adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.su.mediabox.PluginManager.setPluginInfo
 import com.su.mediabox.bean.PluginInfo
 import com.su.mediabox.databinding.ItemPluginBinding
 import com.su.mediabox.util.setOnClickListener
+import com.su.mediabox.view.activity.MainActivity
 
 class PluginAdapter : ListAdapter<PluginInfo, PluginAdapter.ItemPluginViewHolder>(Diff) {
 
@@ -16,7 +19,11 @@ class PluginAdapter : ListAdapter<PluginInfo, PluginAdapter.ItemPluginViewHolder
             //UP_TODO 2022/2/13 21:46 0 验证、启动
             setOnClickListener(viewBinding.root) {
                 getItem(it)?.also {
-
+                    viewBinding.root.context.apply {
+                        startActivity(Intent(this, MainActivity::class.java).apply {
+                            setPluginInfo(it.name, it.sourcePath)
+                        })
+                    }
                 }
             }
         }

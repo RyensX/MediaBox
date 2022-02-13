@@ -30,9 +30,7 @@ object DataSourceManager {
     private val cache: LruCache<Class<*>, Class<*>> = LruCache(10)
     private val singletonCache: LruCache<Class<*>, Any> = LruCache(5)
 
-    fun getJarDirectory(): String {
-        return PluginManager.getPluginsDirectory()
-    }
+    fun getJarDirectory(): String = ""
 
     /**
      * 在更换数据源后必须调用此方法

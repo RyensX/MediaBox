@@ -1,6 +1,9 @@
 package com.su.mediabox
 
 import android.app.Activity
+import android.content.Intent
+import com.su.mediabox.PluginManager.getPluginName
+import com.su.mediabox.PluginManager.getPluginPath
 import com.su.mediabox.view.activity.BasePluginActivity
 import com.su.mediabox.plugin.IComponentFactory
 import com.su.mediabox.plugin.interfaces.IBase
@@ -23,9 +26,19 @@ object PluginManager : IRouteProcessor {
     private const val minPluginApiVersion = 1
 
     fun Activity.getPluginName() = intent.getStringExtra(BasePluginActivity.PLUGIN_NAME)
+    fun Activity.getPluginPath() = intent.getStringExtra(BasePluginActivity.PLUGIN_PATH)
+
+    fun Intent.setPluginInfo(pluginName: String?, pluginPath: String?) {
+        pluginName?.also {
+            putExtra(BasePluginActivity.PLUGIN_NAME, it)
+        }
+        pluginPath?.also {
+            putExtra(BasePluginActivity.PLUGIN_PATH, it)
+        }
+    }
 
     fun acquireComponentFactory() =
-        AppRouteProcessor.currentActivity?.get()?.getPluginName()
+        AppRouteProcessor.currentActivity?.get()?.getPluginPath()
             ?.let { acquireComponentFactory(it) }
             ?: throw RuntimeException("当前未绑定插件")
 
@@ -35,9 +48,9 @@ object PluginManager : IRouteProcessor {
      * 获取组件工厂实例
      */
     @Throws(Exception::class)
-    fun acquireComponentFactory(pluginName: String): IComponentFactory =
-        componentFactoryPool[pluginName] ?: run {
-            val pluginFile = File(getPluginPath(pluginName))
+    fun acquireComponentFactory(pluginPath: String): IComponentFactory =
+        componentFactoryPool[pluginPath] ?: run {
+            val pluginFile = File(pluginPath)
                 .apply {
                     if (!exists() || !isFile)
                         throw RuntimeException("插件不存在")
@@ -63,13 +76,13 @@ object PluginManager : IRouteProcessor {
                 throw RuntimeException("该插件API版本过低，请联系作者升级API")
 
             (clz.newInstance() as IComponentFactory).also {
-                componentFactoryPool[pluginName] = it
+                componentFactoryPool[pluginPath] = it
             }
         }
 
     @Throws(Exception::class)
     fun <T : IBase> acquireComponent(clazz: Class<T>) =
-        AppRouteProcessor.currentActivity?.get()?.getPluginName()
+        AppRouteProcessor.currentActivity?.get()?.getPluginPath()
             ?.let {
                 acquireComponent(it, clazz)
             } ?: throw RuntimeException("当前未绑定插件")
@@ -78,29 +91,22 @@ object PluginManager : IRouteProcessor {
      * 获取组件实例
      */
     @Throws(Exception::class)
-    fun <T : IBase> acquireComponent(pluginName: String, clazz: Class<T>): T {
+    fun <T : IBase> acquireComponent(pluginPath: String, clazz: Class<T>): T {
         val isSingleton =
             clazz.isAnnotationPresent(IComponentFactory.SingletonComponent::class.java)
         if (isSingleton) {
             //被标注为单例组件，从组件池查找
-            componentPool[pluginName]?.get(clazz)?.also { return it as T }
+            componentPool[pluginPath]?.get(clazz)?.also { return it as T }
         }
-        return acquireComponentFactory(pluginName).create(clazz)?.also { component ->
+        return acquireComponentFactory(pluginPath).create(clazz)?.also { component ->
             if (isSingleton)
             //存入组件库
-                (componentPool[pluginName] ?: mutableMapOf<Class<out IBase>, IBase>()
+                (componentPool[pluginPath] ?: mutableMapOf<Class<out IBase>, IBase>()
                     .also {
-                        componentPool[pluginName] = it
+                        componentPool[pluginPath] = it
                     })[clazz] = component
         }
             ?: throw RuntimeException("当前插件未提供该组件")
-    }
-
-    fun getPluginPath(pluginName: String): String =
-        "${getPluginsDirectory()}/${pluginName}"
-
-    fun getPluginsDirectory(): String {
-        return "${App.context.getExternalFilesDir(null).toString()}/$PLUGIN_FOLDER_NAME"
     }
 
     override fun process(actionUrl: String): Boolean =
