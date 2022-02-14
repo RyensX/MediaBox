@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/start_menu_skin"
+        android:icon="@drawable/ic_skin_white_32_skin"
+        android:title="@string/skin_center"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/start_menu_settings"
+        android:title="@string/setting" />
+
+    <item
+        android:id="@+id/start_menu_about"
+        android:title="@string/about" />
+
+</menu>

@@ -29,7 +29,7 @@
                 android:id="@+id/iv_about_activity_icon"
                 android:layout_width="90dp"
                 android:layout_height="90dp"
-                android:layout_marginTop="60dp"
+                android:layout_marginTop="36dp"
                 android:src="@mipmap/ic_launcher"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -53,6 +53,7 @@
                 android:text="@string/app_name"
                 android:textColor="@color/foreground_main_color_2_skin"
                 android:textSize="17sp"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/iv_about_activity_icon"
@@ -63,6 +64,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
+                android:gravity="center"
                 android:textColor="@color/foreground_main_color_2_skin"
                 android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -72,57 +74,16 @@
                 tools:text="version" />
 
             <RelativeLayout
-                android:id="@+id/rl_about_activity_imomoe"
+                android:id="@+id/rl_about_activity_github"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="8dp"
                 android:background="?android:selectableItemBackground"
                 android:paddingStart="25dp"
                 android:paddingEnd="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_about_activity_version">
-
-                <com.su.mediabox.view.component.textview.TypefaceTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
-                    android:layout_toStartOf="@id/iv_about_activity_custom_data_source_about"
-                    android:text="@string/data_source_url"
-                    android:textColor="@color/foreground_main_color_2_skin"
-                    android:textSize="16sp"
-                    app:typeface="bPRTypeface" />
-
-                <ImageView
-                    android:id="@+id/iv_about_activity_custom_data_source_about"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_centerVertical="true"
-                    android:layout_toStartOf="@id/iv_about_activity_imomoe"
-                    android:src="@drawable/ic_info_white_24"
-                    app:tint="@color/foreground_main_color_2_skin" />
-
-                <ImageView
-                    android:id="@+id/iv_about_activity_imomoe"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/ic_arrow_right_main_color_2_24_skin" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/rl_about_activity_github"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="?android:selectableItemBackground"
-                android:paddingStart="25dp"
-                android:paddingEnd="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rl_about_activity_imomoe">
 
                 <com.su.mediabox.view.component.textview.TypefaceTextView
                     android:layout_width="wrap_content"
@@ -209,38 +170,6 @@
                     android:src="@drawable/ic_arrow_right_main_color_2_24_skin" />
             </RelativeLayout>
 
-            <RelativeLayout
-                android:id="@+id/rl_about_activity_test_device"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="?android:selectableItemBackground"
-                android:paddingStart="25dp"
-                android:paddingEnd="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rl_about_activity_user_notice">
-
-                <com.su.mediabox.view.component.textview.TypefaceTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
-                    android:layout_toStartOf="@id/iv_about_activity_test_device"
-                    android:text="@string/test_device"
-                    android:textColor="@color/foreground_main_color_2_skin"
-                    android:textSize="16sp"
-                    app:typeface="bPRTypeface" />
-
-                <ImageView
-                    android:id="@+id/iv_about_activity_test_device"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/ic_arrow_right_main_color_2_24_skin" />
-            </RelativeLayout>
-
             <com.su.mediabox.view.component.textview.TypefaceTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -252,7 +181,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rl_about_activity_test_device" />
+                app:layout_constraintTop_toBottomOf="@id/rl_about_activity_user_notice" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </LinearLayout>

@@ -13,7 +13,7 @@ import com.su.mediabox.view.adapter.decoration.SkinItemDecoration
 import com.su.mediabox.view.adapter.spansize.SkinSpanSize
 import com.su.skin.core.SkinResourceProcessor
 
-class SkinActivity : BasePluginActivity<ActivitySkinBinding>() {
+class SkinActivity : BaseActivity<ActivitySkinBinding>() {
     private val list: MutableList<SkinBean> = ArrayList()
     private val adapter: SkinAdapter = SkinAdapter(this, list)
 

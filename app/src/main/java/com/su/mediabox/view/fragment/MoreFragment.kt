@@ -45,39 +45,6 @@ class MoreFragment : BaseFragment<FragmentMoreBinding>() {
                 R.drawable.ic_insert_link_white_24
             )
         )
-        list.add(
-            MoreBean(
-                ViewHolderTypeString.MORE_1,
-                buildRouteActionUrl(
-                    ActionUrl.ANIME_LAUNCH_ACTIVITY,
-                    SkinActivity::class.qualifiedName!!
-                ),
-                getString(R.string.skin_center),
-                R.drawable.ic_skin_white_32_skin
-            )
-        )
-        list.add(
-            MoreBean(
-                ViewHolderTypeString.MORE_1,
-                buildRouteActionUrl(
-                    ActionUrl.ANIME_LAUNCH_ACTIVITY,
-                    SettingActivity::class.qualifiedName!!
-                ),
-                getString(R.string.setting),
-                R.drawable.ic_settings_white_24
-            )
-        )
-        list.add(
-            MoreBean(
-                ViewHolderTypeString.MORE_1,
-                buildRouteActionUrl(
-                    ActionUrl.ANIME_LAUNCH_ACTIVITY,
-                    AboutActivity::class.qualifiedName!!
-                ),
-                getString(R.string.about),
-                R.drawable.ic_info_white_24
-            )
-        )
 
         mBinding.run {
             rvMoreFragment.layoutManager = GridLayoutManager(activity, 2)

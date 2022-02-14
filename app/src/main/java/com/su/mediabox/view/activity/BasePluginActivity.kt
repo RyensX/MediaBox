@@ -16,10 +16,15 @@ abstract class BasePluginActivity<VB : ViewBinding> : BaseActivity<VB>() {
     /**
      * 传染式传递当前所属插件
      *
-     * 根据打开插件时第一个传递的[PLUGIN_NAME]决定
+     * 根据打开插件时第一个传递的[PLUGIN_INFO_INDEX]决定
      */
     override fun startActivity(intent: Intent?, options: Bundle?) {
-        intent?.setPluginInfo(getPluginIndex())
+        intent?.apply {
+            getPluginIndex().also {
+                if (it != -1)
+                    setPluginInfo(it)
+            }
+        }
         super.startActivity(intent, options)
     }
 

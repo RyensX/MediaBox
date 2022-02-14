@@ -9,7 +9,7 @@ import com.su.mediabox.databinding.ActivityLicenseBinding
 import com.su.mediabox.view.adapter.LicenseAdapter
 
 
-class LicenseActivity : BasePluginActivity<ActivityLicenseBinding>() {
+class LicenseActivity : BaseActivity<ActivityLicenseBinding>() {
     private val list: MutableList<LicenseBean> = ArrayList()
     private val adapter: LicenseAdapter = LicenseAdapter(this, list)
 

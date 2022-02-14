@@ -19,9 +19,7 @@ import com.su.mediabox.util.visible
 import java.net.URL
 import java.util.*
 
-class AboutActivity : BasePluginActivity<ActivityAboutBinding>() {
-
-    private val pluginConfig by lazy(LazyThreadSafetyMode.NONE) { acquireComponent(IConst::class.java)!! }
+class AboutActivity : BaseActivity<ActivityAboutBinding>() {
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,10 +44,13 @@ class AboutActivity : BasePluginActivity<ActivityAboutBinding>() {
                 ivAboutActivityIconEgg.setImageResource(R.drawable.ic_christmas_hat)
             }
 
-            tvAboutActivityVersion.text =
-                getString(R.string.app_version_name, getAppVersionName()) +
-                        "\n" + getString(R.string.app_version_code, getAppVersionCode())
+            tvAboutActivityVersion.text = String.format("%s(%s)",
+                getAppVersionName(),
+                getAppVersionCode()
+            )
 
+            //UP_TODO 2022/2/14 15:10 0 暂时移除检查更新
+            /**
             rlAboutActivityImomoe.setOnClickListener {
                 var warningString: String = getString(R.string.jump_to_data_source_website_warning)
                 if (URL(Api.MAIN_URL).protocol == "http") {
@@ -85,6 +86,7 @@ class AboutActivity : BasePluginActivity<ActivityAboutBinding>() {
                     positiveButton(res = R.string.ok) { dismiss() }
                 }
             }
+            */
 
             rlAboutActivityGithub.setOnClickListener {
                 openBrowser(Const.Common.GITHUB_URL)
@@ -105,19 +107,6 @@ class AboutActivity : BasePluginActivity<ActivityAboutBinding>() {
                 }
             }
 
-            rlAboutActivityTestDevice.setOnClickListener {
-                MaterialDialog(this@AboutActivity).show {
-                    title(res = R.string.test_device)
-                    message(
-                        text = "Physical Device: \nAndroid 10\n" +
-                                "OPPO A57 Android 6.0.1\n\n" +
-                                "Virtual Machine: \nPixel Android 5\n" +
-                                "Pixel 4 Android 7\n" +
-                                "Pixel 2 Android 12\n"
-                    )
-                    positiveButton(res = R.string.ok) { dismiss() }
-                }
-            }
         }
     }
 

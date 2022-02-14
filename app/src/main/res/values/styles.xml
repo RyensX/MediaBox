@@ -14,4 +14,9 @@
         <!--        是否加遮罩（对话框出现时，背景变暗。为true则充许变暗）-->
         <item name="android:backgroundDimEnabled">true</item>
     </style>
+
+    <style name="SkinToolBar" parent="@style/ThemeOverlay.AppCompat.DayNight.ActionBar">
+        <item name="colorControlNormal">@color/foreground_white_skin</item>
+    </style>
+
 </resources>

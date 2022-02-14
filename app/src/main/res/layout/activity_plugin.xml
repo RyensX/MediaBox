@@ -19,6 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/main_color_2_skin"
+            app:theme="@style/SkinToolBar"
             app:title="@string/app_name"
             app:titleTextColor="@color/foreground_white_skin" />
 

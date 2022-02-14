@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.afollestad.materialdialogs.MaterialDialog
 import com.su.mediabox.R
-import com.su.mediabox.config.Api
 import com.su.mediabox.config.Const
 import com.su.mediabox.databinding.ActivitySettingBinding
 import com.su.mediabox.net.DnsServer.selectDnsServer
@@ -24,7 +23,7 @@ import com.su.skin.SkinManager
 import kotlinx.coroutines.*
 
 
-class SettingActivity : BasePluginActivity<ActivitySettingBinding>() {
+class SettingActivity : BaseActivity<ActivitySettingBinding>() {
     private val viewModel: SettingViewModel by lazy(LazyThreadSafetyMode.NONE) { ViewModelProvider(this).get(SettingViewModel::class.java) }
     private var selfUpdateCheck = false
 
@@ -32,7 +31,8 @@ class SettingActivity : BasePluginActivity<ActivitySettingBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val appUpdateHelper = AppUpdateHelper.instance
+        //UP_TODO 2022/2/14 15:10 0 暂时移除检查更新
+        //val appUpdateHelper = AppUpdateHelper.instance
 
         mBinding.run {
             atbSettingActivityToolbar.setBackButtonClickListener { finish() }
@@ -109,6 +109,7 @@ class SettingActivity : BasePluginActivity<ActivitySettingBinding>() {
             tvSettingActivityUpdateInfo.text =
                 getString(R.string.current_version, getAppVersionName())
 
+            /**
             appUpdateHelper.getUpdateStatus().observe(this@SettingActivity, Observer {
                 when (it) {
                     AppUpdateStatus.UNCHECK -> {
@@ -145,10 +146,8 @@ class SettingActivity : BasePluginActivity<ActivitySettingBinding>() {
                     "已在检查，请稍等...".showToast()
                 }
                 else -> appUpdateHelper.checkUpdate()
-            }
+            }*/
         }
-
-        mBinding.tvSettingActivityInfoDomain.text = Api.MAIN_URL
 
         mBinding.rlSettingActivityDoh.setOnClickListener { selectDnsServer() }
 

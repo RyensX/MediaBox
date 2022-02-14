@@ -63,9 +63,6 @@ class MainActivity : BasePluginActivity<ActivityMainBinding>(), EventBusSubscrib
 
         PushAgent.getInstance(this).onAppStart()
 
-        if (DataSourceManager.dataSourceName != DataSourceManager.DEFAULT_DATA_SOURCE)
-            getString(R.string.using_custom_data_source).showToast(Toast.LENGTH_LONG)
-
         if (lastReadUserNoticeVersion() < Const.Common.USER_NOTICE_VERSION) {
             MaterialDialog(this).show {
                 title(res = R.string.user_notice_update)

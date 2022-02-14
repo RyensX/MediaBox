@@ -69,9 +69,8 @@ object PluginManager : IRouteProcessor {
     fun Activity.getPluginName() = getPluginInfo().name
     fun Activity.getPluginPath() = getPluginInfo().sourcePath
 
-    fun Intent.setPluginInfo(pluginInfoIndex: Int) {
+    fun Intent.setPluginInfo(pluginInfoIndex: Int) =
         putExtra(BasePluginActivity.PLUGIN_INFO_INDEX, pluginInfoIndex)
-    }
 
     fun acquireComponentFactory() =
         AppRouteProcessor.currentActivity?.get()?.getPluginPath()

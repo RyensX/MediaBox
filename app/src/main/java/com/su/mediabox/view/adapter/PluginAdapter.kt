@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.su.mediabox.PluginManager.setPluginInfo
 import com.su.mediabox.bean.PluginInfo
 import com.su.mediabox.databinding.ItemPluginBinding
+import com.su.mediabox.util.goActivity
 import com.su.mediabox.util.setOnClickListener
 import com.su.mediabox.view.activity.MainActivity
 
@@ -18,11 +19,7 @@ class PluginAdapter : ListAdapter<PluginInfo, PluginAdapter.ItemPluginViewHolder
         ItemPluginViewHolder(parent).apply {
             //UP_TODO 2022/2/13 21:46 0 验证、启动
             setOnClickListener(viewBinding.root) {
-                viewBinding.root.context.apply {
-                    startActivity(Intent(this, MainActivity::class.java).apply {
-                        setPluginInfo(it)
-                    })
-                }
+                viewBinding.root.context.goActivity<MainActivity>(Intent().setPluginInfo(it))
             }
         }
 
