@@ -7,16 +7,15 @@ import com.su.mediabox.App
 import com.su.mediabox.PluginManager
 import com.su.mediabox.R
 import com.su.mediabox.util.showToast
-import com.su.mediabox.plugin.interfaces.IMonthAnimeModel
-import com.su.mediabox.plugin.standard.been.AnimeCoverBean
-import com.su.mediabox.plugin.standard.been.PageNumberBean
+import com.su.mediabox.pluginapi.been.AnimeCoverBean
+import com.su.mediabox.pluginapi.been.PageNumberBean
+import com.su.mediabox.pluginapi.components.IMonthAnimeComponent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-
 class MonthAnimeViewModel : ViewModel() {
-    private val monthAnimeModel: IMonthAnimeModel by lazy(LazyThreadSafetyMode.NONE) {
-        PluginManager.acquireComponent(IMonthAnimeModel::class.java)
+    private val monthAnimeModel: IMonthAnimeComponent by lazy(LazyThreadSafetyMode.NONE) {
+        PluginManager.acquireComponent(IMonthAnimeComponent::class.java)
     }
     var monthAnimeList: MutableList<AnimeCoverBean> = ArrayList()
     var mldMonthAnimeList: MutableLiveData<Boolean> = MutableLiveData()

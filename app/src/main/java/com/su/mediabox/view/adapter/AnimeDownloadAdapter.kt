@@ -6,13 +6,13 @@ import com.su.mediabox.App
 import com.su.mediabox.PluginManager.process
 import com.su.mediabox.R
 import com.su.mediabox.util.AnimeCover7ViewHolder
-import com.su.mediabox.plugin.Constant.ActionUrl
+import com.su.mediabox.pluginapi.Constant.ActionUrl
+import com.su.mediabox.pluginapi.been.AnimeCoverBean
 import com.su.mediabox.util.showToast
 import com.su.mediabox.util.gone
 import com.su.mediabox.util.invisible
 import com.su.mediabox.util.visible
 import com.su.mediabox.view.activity.AnimeDownloadActivity
-import com.su.mediabox.plugin.standard.been.AnimeCoverBean
 
 class AnimeDownloadAdapter(
     val activity: AnimeDownloadActivity,

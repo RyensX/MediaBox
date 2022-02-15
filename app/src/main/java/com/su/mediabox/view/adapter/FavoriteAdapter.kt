@@ -7,6 +7,7 @@ import com.su.mediabox.App
 import com.su.mediabox.PluginManager.process
 import com.su.mediabox.R
 import com.su.mediabox.bean.FavoriteAnimeBean
+import com.su.mediabox.config.Api
 import com.su.mediabox.util.AnimeCover8ViewHolder
 import com.su.mediabox.util.showToast
 import com.su.mediabox.util.coil.CoilUtil.loadImage
@@ -50,8 +51,8 @@ class FavoriteAdapter(
         when (holder) {
             is AnimeCover8ViewHolder -> {
                 holder.ivAnimeCover8Cover.loadImage(
-                    url = item.cover.url,
-                    referer = item.cover.referer
+                    url = item.cover,
+                    referer = Api.refererProcessor?.processor(item.cover)
                 )
                 holder.tvAnimeCover8Title.text = item.animeTitle
                 holder.tvAnimeCover8Episodes.text = item.lastEpisode?.let {

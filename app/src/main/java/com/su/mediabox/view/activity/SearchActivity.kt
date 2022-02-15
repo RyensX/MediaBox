@@ -21,7 +21,7 @@ import com.su.mediabox.util.visible
 import com.su.mediabox.view.adapter.SearchAdapter
 import com.su.mediabox.view.adapter.SearchHistoryAdapter
 import com.su.mediabox.viewmodel.SearchViewModel
-import com.su.mediabox.plugin.Constant
+import com.su.mediabox.pluginapi.Constant
 import com.su.mediabox.util.Util.showKeyboard
 
 //TODO 实现搜索联想Model

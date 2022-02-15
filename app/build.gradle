@@ -142,7 +142,6 @@ dependencies {
     implementation deps.material_dialogs.input
     implementation deps.room.room_runtime
     implementation deps.room.room_ktx
-    implementation project(path: ':plugin')
     androidTestImplementation 'junit:junit:4.12'
     kapt deps.room.room_compiler
     implementation deps.filedownloader.library
@@ -171,6 +170,7 @@ dependencies {
     implementation project(':skin_dark')
     implementation project(':skin_lemon')
     implementation project(':skin_sweat_soybean')
+    implementation project(':MediaBoxPluginApi')
 }
 
 // UM U-APM性能报告

@@ -13,6 +13,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.su.mediabox.App
 import com.su.mediabox.PluginManager.process
 import com.su.mediabox.R
+import com.su.mediabox.config.Api
 import com.su.mediabox.database.getAppDataBase
 import com.su.mediabox.util.*
 import com.su.mediabox.util.Util.dp
@@ -24,11 +25,11 @@ import com.su.mediabox.view.activity.AnimeDetailActivity
 import com.su.mediabox.view.adapter.decoration.AnimeCoverItemDecoration
 import com.su.mediabox.view.adapter.decoration.AnimeEpisodeItemDecoration
 import com.su.mediabox.view.component.BottomSheetRecyclerView
-import com.su.mediabox.plugin.Constant
-import com.su.mediabox.plugin.Text.buildRouteActionUrl
-import com.su.mediabox.plugin.standard.been.AnimeCoverBean
-import com.su.mediabox.plugin.standard.been.AnimeEpisodeDataBean
-import com.su.mediabox.plugin.standard.been.IAnimeDetailBean
+import com.su.mediabox.pluginapi.Constant
+import com.su.mediabox.pluginapi.Text.buildRouteActionUrl
+import com.su.mediabox.pluginapi.been.AnimeCoverBean
+import com.su.mediabox.pluginapi.been.AnimeEpisodeDataBean
+import com.su.mediabox.pluginapi.been.IAnimeDetailBean
 
 class AnimeDetailAdapter(
     val activity: AnimeDetailActivity,
@@ -96,11 +97,11 @@ class AnimeDetailAdapter(
             }
             holder is AnimeInfo1ViewHolder -> {
                 item.headerInfo?.let {
-                    holder.ivAnimeInfo1Cover.setTag(R.id.image_view_tag, it.cover.url)
-                    if (holder.ivAnimeInfo1Cover.getTag(R.id.image_view_tag) == it.cover.url) {
+                    holder.ivAnimeInfo1Cover.setTag(R.id.image_view_tag, it.cover)
+                    if (holder.ivAnimeInfo1Cover.getTag(R.id.image_view_tag) == it.cover) {
                         holder.ivAnimeInfo1Cover.loadImage(
-                            it.cover.url,
-                            referer = it.cover.referer,
+                            it.cover,
+                            referer = Api.refererProcessor?.processor(it.cover) ?: "",
                             placeholder = 0,
                             error = 0
                         )
@@ -140,7 +141,12 @@ class AnimeDetailAdapter(
                         tvFlowLayout.text = it.tag[i].title
                         tvFlowLayout.setOnClickListener { _ ->
                             val actionUrl = it.tag[i].actionUrl
-                            process(buildRouteActionUrl(Constant.ActionUrl.ANIME_CLASSIFY,actionUrl))
+                            process(
+                                buildRouteActionUrl(
+                                    Constant.ActionUrl.ANIME_CLASSIFY,
+                                    actionUrl
+                                )
+                            )
                         }
                         holder.flAnimeInfo1Tag.addView(tvFlowLayout)
                     }
@@ -172,12 +178,12 @@ class AnimeDetailAdapter(
                 }
             }
             holder is AnimeCover1ViewHolder && item is AnimeCoverBean -> {
-                holder.ivAnimeCover1Cover.setTag(R.id.image_view_tag, item.cover?.url)
+                holder.ivAnimeCover1Cover.setTag(R.id.image_view_tag, item.cover)
                 holder.tvAnimeCover1Title.setTextColor(activity.getResColor(R.color.foreground_white_skin))
-                if (holder.ivAnimeCover1Cover.getTag(R.id.image_view_tag) == item.cover?.url) {
+                if (holder.ivAnimeCover1Cover.getTag(R.id.image_view_tag) == item.cover) {
                     holder.ivAnimeCover1Cover.loadImage(
-                        item.cover?.url ?: "",
-                        referer = item.cover?.referer
+                        item.cover ?: "",
+                        referer = item.cover
                     )
                 }
                 holder.tvAnimeCover1Title.text = item.title

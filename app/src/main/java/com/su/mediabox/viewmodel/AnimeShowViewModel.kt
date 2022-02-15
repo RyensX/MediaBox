@@ -7,23 +7,22 @@ import com.su.mediabox.App
 import com.su.mediabox.PluginManager
 import com.su.mediabox.R
 import com.su.mediabox.bean.ResponseDataType
+import com.su.mediabox.pluginapi.been.IAnimeShowBean
+import com.su.mediabox.pluginapi.been.PageNumberBean
+import com.su.mediabox.pluginapi.components.IAnimeShowComponent
 import com.su.mediabox.util.showToast
 import com.su.mediabox.view.adapter.SerializableRecycledViewPool
-import com.su.mediabox.plugin.interfaces.IAnimeShowModel
-import com.su.mediabox.plugin.standard.been.IAnimeShowBean
-import com.su.mediabox.plugin.standard.been.PageNumberBean
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-
 class AnimeShowViewModel : ViewModel() {
-    private val animeShowModel: IAnimeShowModel by lazy(LazyThreadSafetyMode.NONE) {
-        PluginManager.acquireComponent(IAnimeShowModel::class.java)
+    private val animeShowModel: IAnimeShowComponent by lazy(LazyThreadSafetyMode.NONE) {
+        PluginManager.acquireComponent(IAnimeShowComponent::class.java)
     }
     var childViewPool: SerializableRecycledViewPool? = null
     var viewPool: SerializableRecycledViewPool? = null
     var animeShowList: MutableList<IAnimeShowBean> = ArrayList()
-    var mldGetAnimeShowList: MutableLiveData<Pair<ResponseDataType, MutableList<IAnimeShowBean>>> =
+    var mldGetAnimeShowList: MutableLiveData<Pair<ResponseDataType, List<IAnimeShowBean>>> =
         MutableLiveData()   // value：-1错误；0重新获取；1刷新
     var pageNumberBean: PageNumberBean? = null
 

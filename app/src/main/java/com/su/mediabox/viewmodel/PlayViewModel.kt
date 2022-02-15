@@ -9,23 +9,22 @@ import com.su.mediabox.R
 import com.su.mediabox.bean.*
 import com.su.mediabox.database.getAppDataBase
 import com.su.mediabox.util.showToast
-import com.su.mediabox.plugin.Constant
-import com.su.mediabox.plugin.interfaces.IPlayModel
-import com.su.mediabox.plugin.standard.been.AnimeEpisodeDataBean
-import com.su.mediabox.plugin.standard.been.IAnimeDetailBean
-import com.su.mediabox.plugin.standard.been.ImageBean
-import com.su.mediabox.plugin.standard.been.PlayBean
+import com.su.mediabox.pluginapi.Constant
+import com.su.mediabox.pluginapi.been.AnimeEpisodeDataBean
+import com.su.mediabox.pluginapi.been.IAnimeDetailBean
+import com.su.mediabox.pluginapi.been.PlayBean
+import com.su.mediabox.pluginapi.components.IPlayComponent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
 class PlayViewModel : ViewModel() {
-    private val playModel: IPlayModel by lazy(LazyThreadSafetyMode.NONE) {
-        PluginManager.acquireComponent(IPlayModel::class.java)
+    private val playModel: IPlayComponent by lazy(LazyThreadSafetyMode.NONE) {
+        PluginManager.acquireComponent(IPlayComponent::class.java)
     }
     var playBean: PlayBean? = null
     var partUrl: String = ""
-    var animeCover: ImageBean = ImageBean("", "", "", "")
+    var animeCover = ""
     var mldAnimeCover: MutableLiveData<Boolean> = MutableLiveData()
     var mldPlayBean: MutableLiveData<PlayBean> = MutableLiveData()
     var playBeanDataList: MutableList<IAnimeDetailBean> = ArrayList()
@@ -124,7 +123,7 @@ class PlayViewModel : ViewModel() {
     fun insertHistoryData(detailPartUrl: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                if (animeCover.url.isBlank()) {
+                if (animeCover.isBlank()) {
                     playModel.getAnimeCoverImageBean(detailPartUrl).apply {
                         this ?: return@apply
                         getAppDataBase().historyDao().insertHistory(
@@ -161,8 +160,7 @@ class PlayViewModel : ViewModel() {
             try {
                 playModel.getAnimeCoverImageBean(detailPartUrl).apply {
                     this ?: return@apply
-                    animeCover.url = url
-                    animeCover.referer = referer
+                    animeCover = this
                     mldAnimeCover.postValue(true)
                 }
             } catch (e: Exception) {

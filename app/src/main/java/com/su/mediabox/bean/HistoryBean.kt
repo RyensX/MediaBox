@@ -4,8 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.su.mediabox.config.Const
-import com.su.mediabox.plugin.standard.been.BaseBean
-import com.su.mediabox.plugin.standard.been.ImageBean
+import com.su.mediabox.pluginapi.been.BaseBean
 import java.io.Serializable
 
 @Entity(tableName = Const.Database.AppDataBase.HISTORY_TABLE_NAME)
@@ -22,7 +21,7 @@ class HistoryBean(      //下面的url都是partUrl
     @ColumnInfo(name = "time")
     var time: Long,                 // 观看日期
     @ColumnInfo(name = "cover")
-    var cover: ImageBean,           // 封面
+    var cover: String,           // 封面
     @ColumnInfo(name = "lastEpisodeUrl")
     var lastEpisodeUrl: String? = null,        //上次看到哪一集
     @ColumnInfo(name = "lastEpisode")

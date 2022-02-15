@@ -1,14 +1,17 @@
 package com.su.mediabox.config
 
 import com.su.mediabox.PluginManager
-import com.su.mediabox.plugin.interfaces.IConst
+import com.su.mediabox.pluginapi.components.IConstComponent
 
 interface Api {
     companion object {
 
         //这里不能写死
         val MAIN_URL: String
-            get() = PluginManager.acquireComponent(IConst::class.java).MAIN_URL()
+            get() = PluginManager.acquireComponent(IConstComponent::class.java).host
+
+        val refererProcessor
+            get() = PluginManager.acquireComponent(IConstComponent::class.java).refererProcessor
 
         // github
         const val CHECK_UPDATE_URL = "https://api.github.com/repos/Ryensu/MediaBox/releases/latest"

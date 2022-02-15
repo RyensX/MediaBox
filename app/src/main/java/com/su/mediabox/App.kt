@@ -8,6 +8,7 @@ import com.liulishuo.filedownloader.FileDownloader
 import com.scwang.smart.refresh.footer.BallPulseFooter
 import com.scwang.smart.refresh.header.MaterialHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
+import com.su.mediabox.pluginapi.AppUtil
 import com.su.mediabox.util.CrashHandler
 import com.su.mediabox.util.PushHelper
 import com.su.mediabox.util.Util.getManifestMetaValue
@@ -16,7 +17,6 @@ import com.su.mediabox.util.Util.getSkinResourceId
 import com.su.mediabox.util.release
 import com.su.mediabox.util.skin.SkinUtil
 import com.su.skin.core.attrs.SrlPrimaryColorAttr
-import com.su.mediabox.plugin.AppUtil
 import com.umeng.analytics.MobclickAgent
 import com.umeng.commonsdk.UMConfigure
 import com.umeng.message.PushAgent

@@ -3,7 +3,6 @@ package com.su.mediabox.database.dao
 import androidx.room.*
 import com.su.mediabox.bean.FavoriteAnimeBean
 import com.su.mediabox.config.Const.Database.AppDataBase.FAVORITE_ANIME_TABLE_NAME
-import com.su.mediabox.plugin.standard.been.ImageBean
 
 @Dao
 interface FavoriteAnimeDao {
@@ -21,7 +20,7 @@ interface FavoriteAnimeDao {
     fun updateFavoriteAnime(favoriteAnimeBean: FavoriteAnimeBean)
 
     @Query(value = "UPDATE $FAVORITE_ANIME_TABLE_NAME SET cover = :cover WHERE animeUrl = :animeUrl")
-    fun updateFavoriteAnimeCover(animeUrl: String, cover: ImageBean)
+    fun updateFavoriteAnimeCover(animeUrl: String, cover: String)
 
     @Query(value = "UPDATE $FAVORITE_ANIME_TABLE_NAME SET animeTitle = :animeTitle WHERE animeUrl = :animeUrl")
     fun updateFavoriteAnimeTitle(animeUrl: String, animeTitle: String)

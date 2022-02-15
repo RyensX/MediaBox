@@ -1,0 +1,3 @@
+[submodule "submodules/MediaBoxPlugin"]
+	path = submodules/MediaBoxPlugin
+	url = https://github.com/Ryensu/MediaBoxPlugin.git

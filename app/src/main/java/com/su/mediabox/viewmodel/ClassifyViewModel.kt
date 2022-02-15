@@ -7,25 +7,24 @@ import com.su.mediabox.App
 import com.su.mediabox.PluginManager
 import com.su.mediabox.R
 import com.su.mediabox.bean.ResponseDataType
+import com.su.mediabox.pluginapi.been.AnimeCoverBean
+import com.su.mediabox.pluginapi.been.ClassifyBean
+import com.su.mediabox.pluginapi.been.PageNumberBean
+import com.su.mediabox.pluginapi.components.IClassifyComponent
 import com.su.mediabox.util.showToast
-import com.su.mediabox.plugin.interfaces.IClassifyModel
-import com.su.mediabox.plugin.standard.been.AnimeCoverBean
-import com.su.mediabox.plugin.standard.been.ClassifyBean
-import com.su.mediabox.plugin.standard.been.PageNumberBean
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-
 class ClassifyViewModel : ViewModel() {
-    private val classifyModel: IClassifyModel by lazy(LazyThreadSafetyMode.NONE) {
-        PluginManager.acquireComponent(IClassifyModel::class.java)
+    private val classifyModel: IClassifyComponent by lazy(LazyThreadSafetyMode.NONE) {
+        PluginManager.acquireComponent(IClassifyComponent::class.java)
     }
     var isRequesting = false
     var classifyTabList: MutableList<ClassifyBean> = ArrayList()        //上方分类数据
-    var mldClassifyTabList: MutableLiveData<Pair<MutableList<ClassifyBean>, ResponseDataType>> =
+    var mldClassifyTabList: MutableLiveData<Pair<List<ClassifyBean>, ResponseDataType>> =
         MutableLiveData()
     var classifyList: MutableList<AnimeCoverBean> = ArrayList()       //下方tv数据
-    var mldClassifyList: MutableLiveData<Pair<ResponseDataType, MutableList<AnimeCoverBean>>> =
+    var mldClassifyList: MutableLiveData<Pair<ResponseDataType,List<AnimeCoverBean>>> =
         MutableLiveData()
     var pageNumberBean: PageNumberBean? = null
 

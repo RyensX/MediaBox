@@ -13,9 +13,9 @@ import com.google.gson.Gson
 import com.su.mediabox.App
 import com.su.mediabox.AppRouteProcessor
 import com.su.mediabox.R
+import com.su.mediabox.pluginapi.been.AnimeCoverBean
 import com.su.mediabox.util.Util.getWeekday
 import com.su.mediabox.util.showToast
-import com.su.mediabox.plugin.standard.been.AnimeCoverBean
 import java.util.*
 
 

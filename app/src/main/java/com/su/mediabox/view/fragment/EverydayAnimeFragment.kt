@@ -15,6 +15,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.su.mediabox.R
 import com.su.mediabox.config.Const.ViewHolderTypeInt
 import com.su.mediabox.databinding.FragmentEverydayAnimeBinding
+import com.su.mediabox.pluginapi.been.AnimeCoverBean
 import com.su.mediabox.util.GridRecyclerView1ViewHolder
 import com.su.mediabox.util.eventbus.EventBusSubscriber
 import com.su.mediabox.util.eventbus.MessageEvent
@@ -23,7 +24,6 @@ import com.su.mediabox.view.adapter.AnimeShowAdapter
 import com.su.mediabox.view.adapter.SkinRvAdapter
 import com.su.mediabox.view.component.WrapLinearLayoutManager
 import com.su.mediabox.viewmodel.EverydayAnimeViewModel
-import com.su.mediabox.plugin.standard.been.AnimeCoverBean
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
@@ -71,11 +71,11 @@ class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), Even
             })
         }
 
-        viewModel.mldHeader.observe(viewLifecycleOwner, {
-            mBinding.atbEverydayAnimeFragment.titleText = it.title
-        })
+        viewModel.mldHeader.observe(viewLifecycleOwner) {
+            mBinding.atbEverydayAnimeFragment.titleText = it
+        }
 
-        viewModel.mldEverydayAnimeList.observe(viewLifecycleOwner, {
+        viewModel.mldEverydayAnimeList.observe(viewLifecycleOwner) {
             mBinding.srlEverydayAnimeFragment.isRefreshing = false
 
             if (it != null) {
@@ -136,7 +136,7 @@ class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), Even
                     hideLoadFailedTip()
                 }
             }
-        })
+        }
 
         mBinding.srlEverydayAnimeFragment.isRefreshing = true
         viewModel.getEverydayAnimeData()

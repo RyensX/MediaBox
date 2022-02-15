@@ -54,9 +54,8 @@ import com.su.mediabox.view.component.player.DetailPlayerActivity
 import com.su.mediabox.view.fragment.MoreDialogFragment
 import com.su.mediabox.view.fragment.ShareDialogFragment
 import com.su.mediabox.viewmodel.PlayViewModel
-import com.su.mediabox.plugin.Constant
-import com.su.mediabox.plugin.interfaces.IUtil
-import com.su.mediabox.plugin.standard.been.AnimeEpisodeDataBean
+import com.su.mediabox.pluginapi.Constant
+import com.su.mediabox.pluginapi.been.AnimeEpisodeDataBean
 import kotlinx.coroutines.*
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
 import tv.danmaku.ijk.media.player.IjkMediaPlayer
@@ -80,8 +79,6 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
     private var danmakuParamMap: HashMap<String, String> = HashMap()
     private var currentNightMode: Int = 0
     private var lastCanCollapsed: Boolean? = null
-
-    private val pluginUtil by lazy{acquireComponent(IUtil::class.java)!!}
 
     private fun initView() {
         currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
@@ -166,9 +163,11 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
         partUrl = intent.getStringExtra("partUrl") ?: ""
         detailPartUrl = intent.getStringExtra("detailPartUrl") ?: ""
 
+        /**
         // 如果没有传入详情页面的网址，则通过播放页面的网址计算出详情页面的网址
         if (detailPartUrl.isBlank())
             detailPartUrl = pluginUtil.getDetailLinkByEpisodeLink(partUrl)
+        */
 
         mBinding.apply {
             rvPlayActivity.layoutManager = GridLayoutManager(this@PlayActivity, 4)

@@ -11,8 +11,8 @@ import com.su.mediabox.view.component.bannerview.BannerView
 import com.su.mediabox.view.component.textview.TypefaceTextView
 import com.su.mediabox.view.component.FlowLayout
 import com.su.mediabox.config.Const.ViewHolderTypeInt
-import com.su.mediabox.plugin.Constant.ViewHolderTypeString
-import com.su.mediabox.plugin.standard.been.BaseBean
+import com.su.mediabox.pluginapi.Constant.ViewHolderTypeString
+import com.su.mediabox.pluginapi.been.BaseBean
 
 //UP_TODO 2022/1/22 12:31 0 ViewHolder直接使用ViewBinding
 class ViewHolderUtil {

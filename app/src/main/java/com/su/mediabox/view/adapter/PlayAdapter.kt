@@ -8,6 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.su.mediabox.App
 import com.su.mediabox.PluginManager.process
 import com.su.mediabox.R
+import com.su.mediabox.config.Api
+import com.su.mediabox.pluginapi.been.AnimeCoverBean
+import com.su.mediabox.pluginapi.been.IAnimeDetailBean
 import com.su.mediabox.util.*
 import com.su.mediabox.util.Util.dp
 import com.su.mediabox.util.Util.getResColor
@@ -16,8 +19,6 @@ import com.su.mediabox.util.showToast
 import com.su.mediabox.util.coil.CoilUtil.loadImage
 import com.su.mediabox.view.activity.PlayActivity
 import com.su.mediabox.view.adapter.decoration.AnimeCoverItemDecoration
-import com.su.mediabox.plugin.standard.been.AnimeCoverBean
-import com.su.mediabox.plugin.standard.been.IAnimeDetailBean
 
 class PlayAdapter(
     val activity: PlayActivity,
@@ -88,11 +89,11 @@ class PlayAdapter(
                 }
             }
             holder is AnimeCover1ViewHolder && item is AnimeCoverBean -> {
-                holder.ivAnimeCover1Cover.setTag(R.id.image_view_tag, item.cover?.url)
-                if (holder.ivAnimeCover1Cover.getTag(R.id.image_view_tag) == item.cover?.url) {
+                holder.ivAnimeCover1Cover.setTag(R.id.image_view_tag, item.cover)
+                if (holder.ivAnimeCover1Cover.getTag(R.id.image_view_tag) == item.cover) {
                     holder.ivAnimeCover1Cover.loadImage(
-                        item.cover?.url ?: "",
-                        referer = item.cover?.referer
+                        item.cover?: "",
+                        referer = item.cover?.also { Api.refererProcessor?.processor(it) } ?: ""
                     )
                 }
                 holder.tvAnimeCover1Title.text = item.title

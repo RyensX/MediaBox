@@ -6,19 +6,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.su.mediabox.PluginManager
 import com.su.mediabox.bean.ResponseDataType
+import com.su.mediabox.pluginapi.been.AnimeCoverBean
+import com.su.mediabox.pluginapi.been.PageNumberBean
+import com.su.mediabox.pluginapi.components.IRankListComponent
 import com.su.mediabox.util.showToast
-import com.su.mediabox.plugin.interfaces.IRankListModel
-import com.su.mediabox.plugin.standard.been.AnimeCoverBean
-import com.su.mediabox.plugin.standard.been.PageNumberBean
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
 
-
 class RankListViewModel : ViewModel() {
-    private val rankModel: IRankListModel by lazy(LazyThreadSafetyMode.NONE) {
-        PluginManager.acquireComponent(IRankListModel::class.java)
+    private val rankModel: IRankListComponent by lazy(LazyThreadSafetyMode.NONE) {
+        PluginManager.acquireComponent(IRankListComponent::class.java)
     }
     var isRequesting = false
     var rankList: MutableList<AnimeCoverBean> = Collections.synchronizedList(ArrayList())

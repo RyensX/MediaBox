@@ -9,21 +9,20 @@ import com.su.mediabox.R
 import com.su.mediabox.bean.ResponseDataType
 import com.su.mediabox.bean.SearchHistoryBean
 import com.su.mediabox.database.getAppDataBase
+import com.su.mediabox.pluginapi.been.AnimeCoverBean
+import com.su.mediabox.pluginapi.been.PageNumberBean
+import com.su.mediabox.pluginapi.components.ISearchComponent
 import com.su.mediabox.util.showToast
-import com.su.mediabox.plugin.interfaces.ISearchModel
-import com.su.mediabox.plugin.standard.been.AnimeCoverBean
-import com.su.mediabox.plugin.standard.been.PageNumberBean
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-
 class SearchViewModel : ViewModel() {
-    private val searchModel: ISearchModel by lazy(LazyThreadSafetyMode.NONE) {
-        PluginManager.acquireComponent(ISearchModel::class.java)
+    private val searchModel: ISearchComponent by lazy(LazyThreadSafetyMode.NONE) {
+        PluginManager.acquireComponent(ISearchComponent::class.java)
     }
 
     var searchResultList: MutableList<AnimeCoverBean> = ArrayList()
-    var mldSearchResultList: MutableLiveData<Pair<ResponseDataType, MutableList<AnimeCoverBean>>> =
+    var mldSearchResultList: MutableLiveData<Pair<ResponseDataType, List<AnimeCoverBean>>> =
         MutableLiveData()
     var keyWord = ""
     var searchHistoryList: MutableList<SearchHistoryBean> = ArrayList()

@@ -3,7 +3,7 @@ package com.su.mediabox.view.adapter
 import androidx.recyclerview.widget.RecyclerView
 import com.su.skin.SkinManager
 import com.su.mediabox.config.Const
-import com.su.mediabox.plugin.standard.been.BaseBean
+import com.su.mediabox.pluginapi.been.BaseBean
 
 abstract class BaseRvAdapter(
     private val dataList: List<BaseBean>

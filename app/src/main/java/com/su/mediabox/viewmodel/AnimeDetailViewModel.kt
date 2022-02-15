@@ -7,22 +7,21 @@ import com.su.mediabox.App
 import com.su.mediabox.PluginManager
 import com.su.mediabox.R
 import com.su.mediabox.bean.*
+import com.su.mediabox.pluginapi.been.IAnimeDetailBean
+import com.su.mediabox.pluginapi.components.IAnimeDetailComponent
 import com.su.mediabox.util.showToast
-import com.su.mediabox.plugin.interfaces.IAnimeDetailModel
-import com.su.mediabox.plugin.standard.been.IAnimeDetailBean
-import com.su.mediabox.plugin.standard.been.ImageBean
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
 class AnimeDetailViewModel : ViewModel() {
-    private val animeDetailModel: IAnimeDetailModel by lazy(LazyThreadSafetyMode.NONE) {
-       PluginManager.acquireComponent(IAnimeDetailModel::class.java)
+    private val animeDetailModel: IAnimeDetailComponent by lazy(LazyThreadSafetyMode.NONE) {
+        PluginManager.acquireComponent(IAnimeDetailComponent::class.java)
     }
-    var cover: ImageBean = ImageBean("", "", "", "")
+    var cover = ""
     var title: String = ""
     var animeDetailList: MutableList<IAnimeDetailBean> = ArrayList()
-    var mldAnimeDetailList: MutableLiveData<Pair<ResponseDataType, MutableList<IAnimeDetailBean>>> =
+    var mldAnimeDetailList: MutableLiveData<Pair<ResponseDataType, List<IAnimeDetailBean>>> =
         MutableLiveData()
 
     fun getAnimeDetailData(partUrl: String) {

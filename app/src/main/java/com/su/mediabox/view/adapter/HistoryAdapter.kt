@@ -6,6 +6,7 @@ import com.su.mediabox.App
 import com.su.mediabox.PluginManager.process
 import com.su.mediabox.R
 import com.su.mediabox.bean.HistoryBean
+import com.su.mediabox.config.Api
 import com.su.mediabox.util.AnimeCover9ViewHolder
 import com.su.mediabox.util.showToast
 import com.su.mediabox.util.Util.time2Now
@@ -24,8 +25,8 @@ class HistoryAdapter(
         when (holder) {
             is AnimeCover9ViewHolder -> {
                 holder.ivAnimeCover9Cover.loadImage(
-                    url = item.cover.url,
-                    referer = item.cover.referer
+                    url = item.cover,
+                    referer = Api.refererProcessor?.processor(item.cover)
                 )
                 holder.tvAnimeCover9Title.text = item.animeTitle
                 holder.tvAnimeCover9Episodes.text = item.lastEpisode

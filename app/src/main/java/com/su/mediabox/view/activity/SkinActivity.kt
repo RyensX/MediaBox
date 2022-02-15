@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.recyclerview.widget.GridLayoutManager
 import com.su.mediabox.R
 import com.su.mediabox.bean.SkinBean
-import com.su.mediabox.plugin.Constant.ViewHolderTypeString
+import com.su.mediabox.pluginapi.Constant.ViewHolderTypeString
 import com.su.mediabox.databinding.ActivitySkinBinding
 import com.su.mediabox.util.Util.getDefaultResColor
 import com.su.mediabox.view.adapter.SkinAdapter

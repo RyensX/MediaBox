@@ -9,9 +9,8 @@ import android.widget.RemoteViewsService.RemoteViewsFactory
 import com.google.gson.Gson
 import com.su.mediabox.PluginManager
 import com.su.mediabox.R
+import com.su.mediabox.pluginapi.been.AnimeCoverBean
 import com.su.mediabox.util.Util
-import com.su.mediabox.plugin.interfaces.IEverydayAnimeWidgetModel
-import com.su.mediabox.plugin.standard.been.AnimeCoverBean
 import java.util.*
 
 class EverydayAnimeService : RemoteViewsService() {
@@ -24,7 +23,8 @@ internal class EverydayAnimeRemoteViewsFactory(
     private val mContext: Context,
     intent: Intent
 ) : RemoteViewsFactory {
-    private val model = PluginManager.acquireComponent(IEverydayAnimeWidgetModel::class.java)
+    //UP_TODO 2022/2/15 21:51 0 暂时不提供小部件
+    //private val model = PluginManager.acquireComponent(IEverydayAnimeWidgetModel::class.java)
     private val mWidgetItems: MutableList<AnimeCoverBean> = ArrayList()
 
     override fun onCreate() {
@@ -87,6 +87,7 @@ internal class EverydayAnimeRemoteViewsFactory(
     }
 
     private fun getEverydayAnimeData(): MutableList<List<AnimeCoverBean>> {
-        return model.getEverydayAnimeData()
+        //return model.getEverydayAnimeData()
+        return mutableListOf()
     }
 }

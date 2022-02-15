@@ -16,7 +16,7 @@ import com.su.mediabox.net.okhttpClient
 import com.su.mediabox.util.Util.toEncodedUrl
 import com.su.mediabox.util.debug
 import com.su.mediabox.util.logE
-import com.su.mediabox.plugin.Constant
+import com.su.mediabox.pluginapi.Constant
 import okhttp3.OkHttpClient
 import java.net.URL
 

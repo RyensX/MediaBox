@@ -12,8 +12,8 @@ import com.su.mediabox.util.downloadanime.AnimeDownloadHelper.Companion.getAnime
 import com.su.mediabox.util.downloadanime.AnimeDownloadHelper.Companion.save2Xml
 import com.su.mediabox.util.formatSize
 import com.su.mediabox.util.toMD5
-import com.su.mediabox.plugin.Constant
-import com.su.mediabox.plugin.standard.been.AnimeCoverBean
+import com.su.mediabox.pluginapi.Constant
+import com.su.mediabox.pluginapi.been.AnimeCoverBean
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File

@@ -7,31 +7,26 @@ import androidx.lifecycle.viewModelScope
 import com.su.mediabox.App
 import com.su.mediabox.PluginManager
 import com.su.mediabox.R
+import com.su.mediabox.pluginapi.been.AnimeCoverBean
 import com.su.mediabox.util.Util.getRealDayOfWeek
 import com.su.mediabox.util.showToast
-import com.su.mediabox.plugin.interfaces.IEverydayAnimeModel
-import com.su.mediabox.plugin.standard.been.AnimeCoverBean
-import com.su.mediabox.plugin.standard.been.AnimeShowBean
-import com.su.mediabox.plugin.standard.been.TabBean
+import com.su.mediabox.pluginapi.been.TabBean
+import com.su.mediabox.pluginapi.components.IEverydayAnimeComponent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 
-
 class EverydayAnimeViewModel : ViewModel() {
-    private val everydayAnimeModel: IEverydayAnimeModel by lazy(LazyThreadSafetyMode.NONE) {
-        PluginManager.acquireComponent(IEverydayAnimeModel::class.java)
+    private val everydayAnimeModel: IEverydayAnimeComponent by lazy(LazyThreadSafetyMode.NONE) {
+        PluginManager.acquireComponent(IEverydayAnimeComponent::class.java)
     }
-    var header: AnimeShowBean = AnimeShowBean(
-        "", "", "", "",
-        "", null, "", null
-    )
+    var header=""
     var selectedTabIndex = -1
-    var mldHeader: MutableLiveData<AnimeShowBean> = MutableLiveData()
+    var mldHeader: MutableLiveData<String> = MutableLiveData()
     var tabList: MutableList<TabBean> = ArrayList()
     var mldTabList: MutableLiveData<List<TabBean>> = MutableLiveData()
     var everydayAnimeList: MutableList<List<AnimeCoverBean>> = ArrayList()
-    var mldEverydayAnimeList: MutableLiveData<MutableList<List<AnimeCoverBean>>?> =
+    var mldEverydayAnimeList: MutableLiveData<List<List<AnimeCoverBean>>?> =
         MutableLiveData()
 
     fun getEverydayAnimeData() {

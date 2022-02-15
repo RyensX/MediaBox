@@ -11,7 +11,7 @@ import com.su.mediabox.bean.ResponseDataType
  */
 fun <T, VH : RecyclerView.ViewHolder> RecyclerView.Adapter<VH>.smartNotifyDataSetChanged(
     type: ResponseDataType,
-    deltaDataSet: MutableList<T>,
+    deltaDataSet: List<T>,
     dataSet: MutableList<T>
 ) {
     when (type) {

@@ -125,11 +125,14 @@
 
         </activity>
 
+        <!--
         <service
             android:name="com.su.mediabox.view.component.widget.everydayanime.EverydayAnimeService"
             android:exported="false"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
+            -->
 
+        <!--
         <receiver
             android:name="com.su.mediabox.view.component.widget.everydayanime.EverydayAnimeWidgetProvider"
             android:exported="true"
@@ -142,6 +145,7 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_everyday_anime" />
         </receiver>
+        -->
 
         <service
             android:name="com.su.mediabox.util.dlna.dmc.DLNACastService"

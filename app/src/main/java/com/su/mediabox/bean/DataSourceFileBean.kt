@@ -1,6 +1,6 @@
 package com.su.mediabox.bean
 
-import com.su.mediabox.plugin.standard.been.BaseBean
+import com.su.mediabox.pluginapi.been.BaseBean
 import java.io.File
 
 class DataSourceFileBean(

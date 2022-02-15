@@ -21,7 +21,7 @@ import com.su.mediabox.view.adapter.decoration.AnimeShowItemDecoration
 import com.su.mediabox.view.adapter.spansize.AnimeDetailSpanSize
 import com.su.mediabox.view.fragment.ShareDialogFragment
 import com.su.mediabox.viewmodel.AnimeDetailViewModel
-import com.su.mediabox.plugin.Constant
+import com.su.mediabox.pluginapi.Constant
 import com.su.mediabox.util.coil.CoilUtil.loadImage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -111,11 +111,11 @@ class AnimeDetailActivity : BasePluginActivity<ActivityAnimeDetailBinding>() {
             adapter.smartNotifyDataSetChanged(it.first, it.second, viewModel.animeDetailList)
             mBinding.atbAnimeDetailActivityToolbar.setButtonEnable(1, true)
 
-            if (viewModel.cover.url.isBlank()) return@Observer
-            mBinding.ivAnimeDetailActivityBackground.loadImage(viewModel.cover.url) {
+            if (viewModel.cover.isBlank()) return@Observer
+            mBinding.ivAnimeDetailActivityBackground.loadImage(viewModel.cover) {
                 transformations(DarkBlurTransformation(this@AnimeDetailActivity))
-                addHeader("Referer", viewModel.cover.referer)
-                addHeader("Host", URL(viewModel.cover.url).host)
+                addHeader("Referer", Api.refererProcessor?.processor(viewModel.cover)?:"")
+                addHeader("Host", URL(viewModel.cover).host)
                 addHeader("Accept", "*/*")
                 addHeader("Accept-Encoding", "gzip, deflate")
                 addHeader("Connection", "keep-alive")

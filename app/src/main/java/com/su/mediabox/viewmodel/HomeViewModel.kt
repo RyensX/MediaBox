@@ -7,17 +7,16 @@ import androidx.lifecycle.viewModelScope
 import com.su.mediabox.App
 import com.su.mediabox.PluginManager
 import com.su.mediabox.R
+import com.su.mediabox.pluginapi.been.TabBean
+import com.su.mediabox.pluginapi.components.IHomeComponent
 import com.su.mediabox.util.showToast
 import com.su.mediabox.view.adapter.SerializableRecycledViewPool
-import com.su.mediabox.plugin.interfaces.IHomeModel
-import com.su.mediabox.plugin.standard.been.TabBean
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-
 class HomeViewModel : ViewModel() {
-    private val homeModel: IHomeModel by lazy(LazyThreadSafetyMode.NONE) {
-        PluginManager.acquireComponent(IHomeModel::class.java)
+    private val homeModel: IHomeComponent by lazy(LazyThreadSafetyMode.NONE) {
+        PluginManager.acquireComponent(IHomeComponent::class.java)
     }
     val childViewPool = SerializableRecycledViewPool()
     val viewPool = SerializableRecycledViewPool()

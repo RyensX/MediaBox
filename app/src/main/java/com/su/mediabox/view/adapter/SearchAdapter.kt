@@ -7,13 +7,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.su.mediabox.App
 import com.su.mediabox.PluginManager.process
 import com.su.mediabox.R
+import com.su.mediabox.config.Api
 import com.su.mediabox.util.AnimeCover3ViewHolder
 import com.su.mediabox.util.coil.CoilUtil.loadImage
-import com.su.mediabox.plugin.Constant.ActionUrl
+import com.su.mediabox.pluginapi.Constant.ActionUrl
+import com.su.mediabox.pluginapi.been.AnimeCoverBean
 import com.su.mediabox.util.showToast
 import com.su.mediabox.util.gone
 import com.su.mediabox.util.visible
-import com.su.mediabox.plugin.standard.been.AnimeCoverBean
 
 class SearchAdapter(
     val activity: Activity,
@@ -26,11 +27,11 @@ class SearchAdapter(
 
         when (holder) {
             is AnimeCover3ViewHolder -> {
-                holder.ivAnimeCover3Cover.setTag(R.id.image_view_tag, item.cover?.url)
-                if (holder.ivAnimeCover3Cover.getTag(R.id.image_view_tag) == item.cover?.url) {
+                holder.ivAnimeCover3Cover.setTag(R.id.image_view_tag, item.cover)
+                if (holder.ivAnimeCover3Cover.getTag(R.id.image_view_tag) == item.cover) {
                     holder.ivAnimeCover3Cover.loadImage(
-                        item.cover?.url ?: "",
-                        referer = item.cover?.referer
+                        item.cover?: "",
+                        referer = item.cover?.also { Api.refererProcessor?.processor(it) } ?: ""
                     )
                 }
                 holder.tvAnimeCover3Title.text = item.title

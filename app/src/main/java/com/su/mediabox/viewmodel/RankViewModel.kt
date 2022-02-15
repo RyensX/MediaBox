@@ -5,17 +5,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.su.mediabox.PluginManager
+import com.su.mediabox.pluginapi.been.TabBean
+import com.su.mediabox.pluginapi.components.IRankComponent
 import com.su.mediabox.util.showToast
-import com.su.mediabox.plugin.interfaces.IRankModel
-import com.su.mediabox.plugin.standard.been.TabBean
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 
 
 class RankViewModel : ViewModel() {
-    private val rankModel: IRankModel by lazy(LazyThreadSafetyMode.NONE) {
-        PluginManager.acquireComponent(IRankModel::class.java)
+    private val rankModel: IRankComponent by lazy(LazyThreadSafetyMode.NONE) {
+        PluginManager.acquireComponent(IRankComponent::class.java)
     }
     var isRequesting = false
     var tabList: MutableList<TabBean> = Collections.synchronizedList(ArrayList())

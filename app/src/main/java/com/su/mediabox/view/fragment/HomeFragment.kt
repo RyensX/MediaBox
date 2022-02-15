@@ -23,7 +23,7 @@ import com.su.mediabox.util.eventbus.SelectHomeTabEvent
 import com.su.mediabox.util.requestManageExternalStorage
 import com.su.mediabox.view.activity.*
 import com.su.mediabox.viewmodel.HomeViewModel
-import com.su.mediabox.plugin.Constant
+import com.su.mediabox.pluginapi.Constant
 import com.su.mediabox.util.clickScale
 import com.su.mediabox.view.listener.dsl.addOnTabSelectedListener
 import org.greenrobot.eventbus.EventBus

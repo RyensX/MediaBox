@@ -1,6 +1,6 @@
 package com.su.mediabox.util.comparator
 
-import com.su.mediabox.plugin.standard.been.AnimeCoverBean
+import com.su.mediabox.pluginapi.been.AnimeCoverBean
 
 
 /**

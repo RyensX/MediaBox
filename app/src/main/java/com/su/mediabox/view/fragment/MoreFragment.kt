@@ -6,15 +6,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import com.su.mediabox.R
 import com.su.mediabox.bean.MoreBean
-import com.su.mediabox.plugin.Constant.ViewHolderTypeString
+import com.su.mediabox.pluginapi.Constant.ViewHolderTypeString
 import com.su.mediabox.databinding.FragmentMoreBinding
 import com.su.mediabox.view.activity.AboutActivity
 import com.su.mediabox.view.activity.HistoryActivity
 import com.su.mediabox.view.activity.SettingActivity
 import com.su.mediabox.view.activity.SkinActivity
 import com.su.mediabox.view.adapter.MoreAdapter
-import com.su.mediabox.plugin.Constant.ActionUrl
-import com.su.mediabox.plugin.Text.buildRouteActionUrl
+import com.su.mediabox.pluginapi.Constant.ActionUrl
+import com.su.mediabox.pluginapi.Text.buildRouteActionUrl
 
 class MoreFragment : BaseFragment<FragmentMoreBinding>() {
     private val list: MutableList<MoreBean> = ArrayList()

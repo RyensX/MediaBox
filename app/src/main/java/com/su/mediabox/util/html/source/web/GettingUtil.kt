@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.annotation.UiThread
 import com.su.mediabox.util.html.source.GettingCallback
 import com.su.mediabox.util.html.source.GettingUICallback
-import com.su.mediabox.plugin.Constant
+import com.su.mediabox.pluginapi.Constant
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

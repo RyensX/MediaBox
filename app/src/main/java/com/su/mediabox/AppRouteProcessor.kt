@@ -4,16 +4,16 @@ import android.app.Activity
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.widget.Toast
+import com.su.mediabox.pluginapi.AppUtil
 import com.su.mediabox.util.Util
 import com.su.mediabox.util.showToast
 import com.su.mediabox.view.activity.*
-import com.su.mediabox.plugin.Constant.ActionUrl
-import com.su.mediabox.plugin.interfaces.IRouteProcessor
+import com.su.mediabox.pluginapi.Constant.ActionUrl
 import java.lang.ref.WeakReference
 import java.net.URLDecoder
 
 object AppRouteProcessor :
-    IRouteProcessor {
+    AppUtil.IRouteProcessor {
 
     private val activityPool by lazy(LazyThreadSafetyMode.NONE) { mutableMapOf<Int, WeakReference<Activity>>() }
 

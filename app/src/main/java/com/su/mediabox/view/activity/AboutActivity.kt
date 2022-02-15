@@ -5,18 +5,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Html
 import com.afollestad.materialdialogs.MaterialDialog
-import com.su.mediabox.PluginManager.acquireComponent
 import com.su.mediabox.R
-import com.su.mediabox.config.Api
 import com.su.mediabox.config.Const
 import com.su.mediabox.databinding.ActivityAboutBinding
 import com.su.mediabox.util.Util
 import com.su.mediabox.util.Util.getAppVersionCode
 import com.su.mediabox.util.Util.getAppVersionName
 import com.su.mediabox.util.Util.openBrowser
-import com.su.mediabox.plugin.interfaces.IConst
 import com.su.mediabox.util.visible
-import java.net.URL
 import java.util.*
 
 class AboutActivity : BaseActivity<ActivityAboutBinding>() {

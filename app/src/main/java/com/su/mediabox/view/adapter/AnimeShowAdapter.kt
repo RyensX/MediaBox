@@ -12,21 +12,22 @@ import androidx.recyclerview.widget.RecyclerView
 import com.su.mediabox.App
 import com.su.mediabox.PluginManager.process
 import com.su.mediabox.R
+import com.su.mediabox.config.Api
 import com.su.mediabox.util.*
 import com.su.mediabox.util.coil.CoilUtil.loadImage
 import com.su.mediabox.util.showToast
 import com.su.mediabox.view.fragment.AnimeShowFragment
 import com.su.mediabox.view.component.bannerview.adapter.MyCycleBannerAdapter
 import com.su.mediabox.view.component.bannerview.indicator.DotIndicator
-import com.su.mediabox.plugin.Constant.ViewHolderTypeString
-import com.su.mediabox.plugin.Constant.ActionUrl
+import com.su.mediabox.pluginapi.Constant.ViewHolderTypeString
+import com.su.mediabox.pluginapi.Constant.ActionUrl
+import com.su.mediabox.pluginapi.been.AnimeCoverBean
+import com.su.mediabox.pluginapi.been.IAnimeShowBean
 import com.su.mediabox.util.Util.dp
 import com.su.mediabox.util.Util.getResColor
 import com.su.mediabox.util.Util.getResDrawable
 import com.su.mediabox.view.adapter.decoration.AnimeCoverItemDecoration
 import com.su.skin.SkinManager
-import com.su.mediabox.plugin.standard.been.AnimeCoverBean
-import com.su.mediabox.plugin.standard.been.IAnimeShowBean
 
 class AnimeShowAdapter(
     val fragment: AnimeShowFragment,
@@ -135,12 +136,13 @@ class AnimeShowAdapter(
                 }
             }
             holder is AnimeCover1ViewHolder && item is AnimeCoverBean -> {
-                holder.ivAnimeCover1Cover.setTag(R.id.image_view_tag, item.cover?.url)
+                holder.ivAnimeCover1Cover.setTag(R.id.image_view_tag, item.cover)
                 fragment.activity?.let {
-                    if (holder.ivAnimeCover1Cover.getTag(R.id.image_view_tag) == item.cover?.url) {
+                    if (holder.ivAnimeCover1Cover.getTag(R.id.image_view_tag) == item.cover) {
                         holder.ivAnimeCover1Cover.loadImage(
-                            item.cover?.url ?: "",
-                            referer = item.cover?.referer
+                            item.cover?: "",
+                            referer = item.cover?.also { Api.refererProcessor?.processor(it) } ?: ""
+
                         )
                     }
                 }
@@ -156,12 +158,12 @@ class AnimeShowAdapter(
                 }
             }
             holder is AnimeCover3ViewHolder && item is AnimeCoverBean -> {
-                holder.ivAnimeCover3Cover.setTag(R.id.image_view_tag, item.cover?.url)
+                holder.ivAnimeCover3Cover.setTag(R.id.image_view_tag, item.cover)
                 fragment.activity?.let { activity ->
-                    if (holder.ivAnimeCover3Cover.getTag(R.id.image_view_tag) == item.cover?.url) {
+                    if (holder.ivAnimeCover3Cover.getTag(R.id.image_view_tag) == item.cover) {
                         holder.ivAnimeCover3Cover.loadImage(
-                            item.cover?.url ?: "",
-                            referer = item.cover?.referer
+                            item.cover?: "",
+                            referer = item.cover?.also { Api.refererProcessor?.processor(it) } ?: ""
                         )
                     }
                 }
@@ -202,12 +204,12 @@ class AnimeShowAdapter(
                 }
             }
             holder is AnimeCover4ViewHolder && item is AnimeCoverBean -> {
-                holder.ivAnimeCover4Cover.setTag(R.id.image_view_tag, item.cover?.url)
+                holder.ivAnimeCover4Cover.setTag(R.id.image_view_tag, item.cover)
                 fragment.activity?.let { activity ->
-                    if (holder.ivAnimeCover4Cover.getTag(R.id.image_view_tag) == item.cover?.url) {
+                    if (holder.ivAnimeCover4Cover.getTag(R.id.image_view_tag) == item.cover) {
                         holder.ivAnimeCover4Cover.loadImage(
-                            item.cover?.url ?: "",
-                            referer = item.cover?.referer
+                            item.cover?: "",
+                            referer = item.cover?.also { Api.refererProcessor?.processor(it) } ?: ""
                         )
                     }
                 }
@@ -305,11 +307,11 @@ class AnimeShowAdapter(
                     holder.viewAnimeCover1Night.setBackgroundColor(activity.getResColor(R.color.transparent_skin))
                     holder.tvAnimeCover1Title.setTextColor(titleColor)
                     holder.tvAnimeCover1Episode.setTextColor(activity.getResColor(R.color.main_color_skin))
-                    holder.ivAnimeCover1Cover.setTag(R.id.image_view_tag, item.cover?.url)
-                    if (holder.ivAnimeCover1Cover.getTag(R.id.image_view_tag) == item.cover?.url) {
+                    holder.ivAnimeCover1Cover.setTag(R.id.image_view_tag, item.cover)
+                    if (holder.ivAnimeCover1Cover.getTag(R.id.image_view_tag) == item.cover) {
                         holder.ivAnimeCover1Cover.loadImage(
-                            item.cover?.url ?: "",
-                            referer = item.cover?.referer
+                            item.cover?: "",
+                            referer = item.cover?.also { Api.refererProcessor?.processor(it) } ?: ""
                         )
                     }
                     holder.tvAnimeCover1Title.text = item.title
@@ -327,11 +329,11 @@ class AnimeShowAdapter(
                     holder.viewAnimeCover3Night.setBackgroundColor(activity.getResColor(R.color.transparent_skin))
                     holder.tvAnimeCover3Title.setTextColor(titleColor)
                     holder.tvAnimeCover3Episode.setTextColor(activity.getResColor(R.color.main_color_skin))
-                    holder.ivAnimeCover3Cover.setTag(R.id.image_view_tag, item.cover?.url)
-                    if (holder.ivAnimeCover3Cover.getTag(R.id.image_view_tag) == item.cover?.url) {
+                    holder.ivAnimeCover3Cover.setTag(R.id.image_view_tag, item.cover)
+                    if (holder.ivAnimeCover3Cover.getTag(R.id.image_view_tag) == item.cover) {
                         holder.ivAnimeCover3Cover.loadImage(
-                            item.cover?.url ?: "",
-                            referer = item.cover?.referer
+                            item.cover?: "",
+                            referer = item.cover?.also { Api.refererProcessor?.processor(it) } ?: ""
                         )
                     }
                     holder.tvAnimeCover3Title.text = item.title
@@ -373,11 +375,11 @@ class AnimeShowAdapter(
                 is AnimeCover4ViewHolder -> {
                     holder.viewAnimeCover4Night.setBackgroundColor(activity.getResColor(R.color.transparent_skin))
                     holder.tvAnimeCover4Title.setTextColor(titleColor)
-                    holder.ivAnimeCover4Cover.setTag(R.id.image_view_tag, item.cover?.url)
-                    if (holder.ivAnimeCover4Cover.getTag(R.id.image_view_tag) == item.cover?.url) {
+                    holder.ivAnimeCover4Cover.setTag(R.id.image_view_tag, item.cover)
+                    if (holder.ivAnimeCover4Cover.getTag(R.id.image_view_tag) == item.cover) {
                         holder.ivAnimeCover4Cover.loadImage(
-                            item.cover?.url ?: "",
-                            referer = item.cover?.referer
+                            item.cover?: "",
+                            referer = item.cover?.also { Api.refererProcessor?.processor(it) } ?: ""
                         )
                     }
                     holder.tvAnimeCover4Title.text = item.title

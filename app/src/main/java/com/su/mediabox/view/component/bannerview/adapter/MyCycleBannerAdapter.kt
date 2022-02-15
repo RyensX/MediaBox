@@ -7,6 +7,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.su.mediabox.App
 import com.su.mediabox.PluginManager.process
 import com.su.mediabox.R
+import com.su.mediabox.config.Api
+import com.su.mediabox.pluginapi.been.AnimeCoverBean
+import com.su.mediabox.pluginapi.been.BaseBean
 import com.su.mediabox.util.AnimeCover6ViewHolder
 import com.su.mediabox.util.Util.getResColor
 import com.su.mediabox.util.coil.CoilUtil.loadImage
@@ -14,8 +17,6 @@ import com.su.mediabox.util.showToast
 import com.su.mediabox.util.ViewHolderUtil
 import com.su.mediabox.util.gone
 import com.su.mediabox.util.visible
-import com.su.mediabox.plugin.standard.been.BaseBean
-import com.su.mediabox.plugin.standard.been.AnimeCoverBean
 
 /**
  * Created by Sky_D on 2021-02-08.
@@ -48,8 +49,8 @@ class MyCycleBannerAdapter(
                 if (item is AnimeCoverBean) {
                     holder.tvAnimeCover6Night.setBackgroundColor(activity.getResColor(R.color.transparent_skin))
                     holder.ivAnimeCover6Cover.loadImage(
-                        item.cover?.url ?: "",
-                        referer = item.cover?.referer
+                        item.cover?: "",
+                        referer = item.cover?.also { Api.refererProcessor?.processor(it) } ?: ""
                     )
                     holder.tvAnimeCover6Title.text = item.title
                     holder.tvAnimeCover6Episode.text = item.episodeClickable?.title

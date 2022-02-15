@@ -3,8 +3,8 @@ package com.su.mediabox.view.activity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.su.mediabox.bean.LicenseBean
-import com.su.mediabox.plugin.Constant.ActionUrl
-import com.su.mediabox.plugin.Constant.ViewHolderTypeString
+import com.su.mediabox.pluginapi.Constant.ActionUrl
+import com.su.mediabox.pluginapi.Constant.ViewHolderTypeString
 import com.su.mediabox.databinding.ActivityLicenseBinding
 import com.su.mediabox.view.adapter.LicenseAdapter
 

@@ -25,6 +25,8 @@ import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoView
 import com.su.mediabox.App
 import com.su.mediabox.R
+import com.su.mediabox.pluginapi.been.AnimeEpisodeDataBean
+import com.su.mediabox.pluginapi.been.BaseBean
 import com.su.mediabox.util.Util.dp
 import com.su.mediabox.util.Util.getResColor
 import com.su.mediabox.util.Util.getResDrawable
@@ -40,8 +42,6 @@ import com.su.mediabox.view.component.ZoomView
 import com.su.mediabox.view.component.textview.TypefaceTextView
 import com.su.mediabox.view.listener.dsl.setOnSeekBarChangeListener
 import com.su.skin.SkinManager
-import com.su.mediabox.plugin.standard.been.BaseBean
-import com.su.mediabox.plugin.standard.been.AnimeEpisodeDataBean
 import kotlinx.coroutines.*
 import java.io.File
 import java.io.Serializable

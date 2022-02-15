@@ -15,14 +15,14 @@ import com.su.mediabox.App
 import com.su.mediabox.R
 import com.su.mediabox.bean.ResponseDataType
 import com.su.mediabox.databinding.ActivityClassifyBinding
+import com.su.mediabox.pluginapi.been.ClassifyBean
+import com.su.mediabox.pluginapi.been.ClassifyDataBean
 import com.su.mediabox.util.Util.getResColor
 import com.su.mediabox.util.showToast
 import com.su.mediabox.util.smartNotifyDataSetChanged
 import com.su.mediabox.view.adapter.BaseRvAdapter
 import com.su.mediabox.view.adapter.SearchAdapter
 import com.su.mediabox.viewmodel.ClassifyViewModel
-import com.su.mediabox.plugin.standard.been.ClassifyBean
-import com.su.mediabox.plugin.standard.been.ClassifyDataBean
 import com.su.mediabox.view.listener.dsl.setOnItemSelectedListener
 
 

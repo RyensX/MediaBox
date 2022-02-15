@@ -8,7 +8,7 @@ import com.su.mediabox.bean.ResponseDataType
 import com.su.mediabox.model.DataSourceManager
 import com.su.mediabox.net.RetrofitManager
 import com.su.mediabox.util.Util
-import com.su.mediabox.plugin.Constant.ViewHolderTypeString.DATA_SOURCE_1
+import com.su.mediabox.pluginapi.Constant.ViewHolderTypeString.DATA_SOURCE_1
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File

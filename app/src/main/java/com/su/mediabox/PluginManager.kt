@@ -6,24 +6,25 @@ import android.content.pm.PackageManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.su.mediabox.bean.PluginInfo
-import com.su.mediabox.plugin.Constant
+import com.su.mediabox.pluginapi.AppUtil
+import com.su.mediabox.pluginapi.Constant
 import com.su.mediabox.view.activity.BasePluginActivity
-import com.su.mediabox.plugin.IComponentFactory
-import com.su.mediabox.plugin.interfaces.IBase
-import com.su.mediabox.plugin.interfaces.IRouteProcessor
+import com.su.mediabox.pluginapi.IComponentFactory
+import com.su.mediabox.pluginapi.components.IBaseComponent
 import dalvik.system.DexClassLoader
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
 
-object PluginManager : IRouteProcessor {
+object PluginManager : AppUtil.IRouteProcessor {
 
     const val PLUGIN_OPTI_FOLDER_NAME = "PluginsOpti"
-    const val PLUGIN_INIT_CLASS = "com.su.mediabox.plugin.ComponentFactory"
+    const val PLUGIN_INIT_CLASS = "com.su.mediabox.pluginapi.ComponentFactory"
 
     private val componentFactoryPool = mutableMapOf<String, IComponentFactory>()
-    private val componentPool = mutableMapOf<String, MutableMap<Class<out IBase>, IBase>>()
+    private val componentPool =
+        mutableMapOf<String, MutableMap<Class<out IBaseComponent>, IBaseComponent>>()
 
     /**
      * 最低支持的插件API版本
@@ -77,8 +78,6 @@ object PluginManager : IRouteProcessor {
             ?.let { acquireComponentFactory(it) }
             ?: throw RuntimeException("当前未绑定插件")
 
-    private val processor by lazy(LazyThreadSafetyMode.NONE) { acquireComponent(IRouteProcessor::class.java) }
-
     /**
      * 获取组件工厂实例
      */
@@ -116,7 +115,7 @@ object PluginManager : IRouteProcessor {
         }
 
     @Throws(Exception::class)
-    fun <T : IBase> acquireComponent(clazz: Class<T>) =
+    fun <T : IBaseComponent> acquireComponent(clazz: Class<T>) =
         AppRouteProcessor.currentActivity?.get()?.getPluginPath()
             ?.let {
                 acquireComponent(it, clazz)
@@ -126,25 +125,26 @@ object PluginManager : IRouteProcessor {
      * 获取组件实例
      */
     @Throws(Exception::class)
-    fun <T : IBase> acquireComponent(pluginPath: String, clazz: Class<T>): T {
+    fun <T : IBaseComponent> acquireComponent(pluginPath: String, clazz: Class<T>): T {
         val isSingleton =
             clazz.isAnnotationPresent(IComponentFactory.SingletonComponent::class.java)
         if (isSingleton) {
             //被标注为单例组件，从组件池查找
             componentPool[pluginPath]?.get(clazz)?.also { return it as T }
         }
-        return acquireComponentFactory(pluginPath).create(clazz)?.also { component ->
+        return acquireComponentFactory(pluginPath).createComponent(clazz)?.also { component ->
             if (isSingleton)
             //存入组件库
-                (componentPool[pluginPath] ?: mutableMapOf<Class<out IBase>, IBase>()
-                    .also {
-                        componentPool[pluginPath] = it
-                    })[clazz] = component
+                (componentPool[pluginPath]
+                    ?: mutableMapOf<Class<out IBaseComponent>, IBaseComponent>()
+                        .also {
+                            componentPool[pluginPath] = it
+                        })[clazz] = component
         }
             ?: throw RuntimeException("当前插件未提供该组件")
     }
 
     override fun process(actionUrl: String): Boolean =
-        processor.process(actionUrl).let { if (it) it else AppRouteProcessor.process(actionUrl) }
+        AppRouteProcessor.process(actionUrl)
 
 }
