@@ -42,7 +42,8 @@ class AnimeDownloadAdapter(
                     holder.tvAnimeCover7Episodes.invisible()
                 }
                 holder.itemView.setOnClickListener {
-                    process(item.actionUrl + "/" + item.path)
+                    //UP_TODO 2022/2/16 22:48 0 暂不支持缓存
+                    //process(item.actionUrl + "/" + item.path)
                 }
             }
             else -> {

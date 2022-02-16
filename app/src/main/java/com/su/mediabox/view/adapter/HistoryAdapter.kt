@@ -7,6 +7,9 @@ import com.su.mediabox.PluginManager.process
 import com.su.mediabox.R
 import com.su.mediabox.bean.HistoryBean
 import com.su.mediabox.config.Api
+import com.su.mediabox.pluginapi.Constant
+import com.su.mediabox.pluginapi.Text
+import com.su.mediabox.pluginapi.Text.buildRouteActionUrl
 import com.su.mediabox.util.AnimeCover9ViewHolder
 import com.su.mediabox.util.showToast
 import com.su.mediabox.util.Util.time2Now
@@ -39,9 +42,9 @@ class HistoryAdapter(
                 }
                 holder.itemView.setOnClickListener {
                     if (item.lastEpisodeUrl != null)
-                        process(item.lastEpisodeUrl + item.animeUrl)
+                        process(buildRouteActionUrl(Constant.ActionUrl.ANIME_PLAY, item.lastEpisodeUrl!!, item.lastEpisodeUrl!!))
                     else
-                        process(item.animeUrl)
+                        process(buildRouteActionUrl(Constant.ActionUrl.ANIME_DETAIL, item.animeUrl))
                 }
             }
             else -> {

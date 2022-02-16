@@ -88,7 +88,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), EventBusSubscriber {
             ivHomeFragmentAnimeDownload.setOnClickListener {
                 it.clickScale(0.8f, 70)
                 requestManageExternalStorage {
-                    onGranted { startActivity(Intent(activity, AnimeDownloadActivity::class.java)) }
+                    onGranted {
+                        "缓存功能重制中".showToast()
+                        //startActivity(Intent(activity, AnimeDownloadActivity::class.java))
+                    }
                     onDenied { "无存储权限，无法播放本地缓存视频".showToast(Toast.LENGTH_LONG) }
                 }
             }

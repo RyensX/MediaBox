@@ -54,11 +54,7 @@ class SearchAdapter(
                         tvFlowLayout.setOnClickListener { _ ->
                             if (it[i].actionUrl.isBlank()) return@setOnClickListener
                             //此处是”类型“，若要修改，需要注意Tab大分类是否还是”类型“
-                            val actionUrl = it[i].actionUrl.run {
-                                if (endsWith("/")) "${this}${it[i].title}"
-                                else "${this}/${it[i].title}"
-                            }
-                            process(ActionUrl.ANIME_CLASSIFY + actionUrl)
+                            process(it[i].actionUrl)
                         }
                         holder.flAnimeCover3Type.addView(tvFlowLayout)
                     }
