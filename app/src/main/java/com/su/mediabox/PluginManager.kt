@@ -20,7 +20,6 @@ import java.io.File
 object PluginManager : AppUtil.IRouteProcessor {
 
     const val PLUGIN_OPTI_FOLDER_NAME = "PluginsOpti"
-    const val PLUGIN_INIT_CLASS = "com.su.mediabox.pluginapi.ComponentFactory"
 
     private val componentFactoryPool = mutableMapOf<String, IComponentFactory>()
     private val componentPool =
@@ -101,7 +100,7 @@ object PluginManager : AppUtil.IRouteProcessor {
                 pluginFile.path, optimizedDirectory.path,
                 null, App.context.classLoader
             )
-            val clz = classLoader.loadClass(PLUGIN_INIT_CLASS)
+            val clz = classLoader.loadClass(Constant.PLUGIN_INIT_CLASS)
 
             //检查插件API版本
             val version = clz.getAnnotation(IComponentFactory.PluginSdkVersion::class.java)
