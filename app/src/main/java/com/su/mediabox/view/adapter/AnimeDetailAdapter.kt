@@ -124,7 +124,7 @@ class AnimeDetailAdapter(
                         tvFlowLayout.text = it.animeType[i].title
                         tvFlowLayout.setOnClickListener { it1 ->
                             if (it.animeType[i].actionUrl.isBlank()) return@setOnClickListener
-                            val actionUrl = it.tag[i].actionUrl
+                            val actionUrl = it.animeType[i].actionUrl
                             process(actionUrl)
                         }
                         holder.flAnimeInfo1Type.addView(tvFlowLayout)
@@ -141,12 +141,7 @@ class AnimeDetailAdapter(
                         tvFlowLayout.text = it.tag[i].title
                         tvFlowLayout.setOnClickListener { _ ->
                             val actionUrl = it.tag[i].actionUrl
-                            process(
-                                buildRouteActionUrl(
-                                    Constant.ActionUrl.ANIME_CLASSIFY,
-                                    actionUrl
-                                )
-                            )
+                            process(actionUrl)
                         }
                         holder.flAnimeInfo1Tag.addView(tvFlowLayout)
                     }

@@ -110,9 +110,12 @@ object AppRouteProcessor :
             matchAndGetParams(actionUrl, ActionUrl.ANIME_CLASSIFY) {
                 activity.startActivity(
                     Intent(activity, ClassifyActivity::class.java)
-                        .putExtra("partUrl", "/" + it[0] + "/")
-                        .putExtra("classifyTabTitle", "")
-                        .putExtra("classifyTitle", it[1])
+                        //具体分类的链接
+                        .putExtra("partUrl", it[0])
+                        //如地区
+                        .putExtra("classifyTabTitle", it.getOrNull(1) ?: "")
+                        //如大陆
+                        .putExtra("classifyTitle", it.getOrNull(2) ?: "")
                 )
             } -> true
             //打开浏览器

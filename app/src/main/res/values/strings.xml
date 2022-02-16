@@ -20,7 +20,7 @@
     <string name="everyday_anime">每日更新</string>
     <string name="everyday_anime_list">每日更新列表</string>
     <string name="rank_list">排行榜</string>
-    <string name="anime_classify">动漫分类</string>
+    <string name="anime_classify">分类</string>
     <string name="year_month_anime">新番列表：%s</string>
     <string name="get_home_tab_data_failed">获取首页标签信息失败:(</string>
     <string name="setting">设置</string>

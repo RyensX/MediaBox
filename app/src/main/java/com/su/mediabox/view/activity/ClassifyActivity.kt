@@ -156,13 +156,7 @@ class ClassifyActivity : BasePluginActivity<ActivityClassifyBinding>() {
             classifyAdapter.smartNotifyDataSetChanged(it.first, it.second, viewModel.classifyList)
             if (it.first == ResponseDataType.REFRESH) {
                 mBinding.atbClassifyActivityToolbar.titleText =
-                    if (classifyTabTitle.isEmpty()) "${getString(R.string.anime_classify)}  $classifyTitle"
-                    else "${getString(R.string.anime_classify)}  ${
-                        if (classifyTabTitle.endsWith(":") ||
-                            classifyTabTitle.endsWith("：")
-                        ) classifyTabTitle.substring(0, classifyTabTitle.length - 1)
-                        else classifyTabTitle
-                    }：$classifyTitle"
+                    "${getString(R.string.anime_classify)}：$classifyTabTitle${if (classifyTabTitle.isBlank()) "" else " "}$classifyTitle"
             }
         }
 
