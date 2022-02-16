@@ -47,3 +47,12 @@ inline fun RecyclerView.ViewHolder.setOnClickListener(
         onClick(bindingAdapterPosition)
     }
 }
+
+inline fun RecyclerView.ViewHolder.setOnLongClickListener(
+    target: View,
+    crossinline onLongClick: (position: Int) -> Boolean
+) {
+    target.setOnLongClickListener {
+        onLongClick(bindingAdapterPosition)
+    }
+}
