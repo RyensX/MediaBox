@@ -43,7 +43,7 @@ object PluginManager : AppUtil.IRouteProcessor {
                 PluginInfo(
                     it.activityInfo.packageName,
                     it.activityInfo.name,
-                    it.loadLabel(packageManager).toString(),
+                    it.activityInfo.applicationInfo.loadLabel(packageManager).toString(),
                     it.loadIcon(packageManager),
                     it.activityInfo.applicationInfo.sourceDir
                 )
