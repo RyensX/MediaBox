@@ -153,7 +153,10 @@ object AppRouteProcessor :
                 activity.startActivity(Intent(activity, cls).addFlags(FLAG_ACTIVITY_NEW_TASK))
             } -> true
             //未知路由
-            else -> false
+            else -> {
+                "未知路由，请联系插件作者解决".showToast()
+                false
+            }
         }
     }
 }

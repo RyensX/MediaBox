@@ -8,6 +8,8 @@ import com.su.mediabox.PluginManager.process
 import com.su.mediabox.R
 import com.su.mediabox.bean.FavoriteAnimeBean
 import com.su.mediabox.config.Api
+import com.su.mediabox.pluginapi.Constant
+import com.su.mediabox.pluginapi.Text.buildRouteActionUrl
 import com.su.mediabox.util.AnimeCover8ViewHolder
 import com.su.mediabox.util.showToast
 import com.su.mediabox.util.coil.CoilUtil.loadImage
@@ -22,21 +24,18 @@ class FavoriteAdapter(
         return super.onCreateViewHolder(parent, viewType).also {
             when (it) {
                 is AnimeCover8ViewHolder -> {
-                    //TODO 本地的操作不应该交给不定的插件处理
                     //点击
                     it.itemView.setOnClickListener { _ ->
                         val item = dataList[it.bindingAdapterPosition]
                         if (item.lastEpisodeUrl != null)
-                            process(
-                                item.lastEpisodeUrl + item.animeUrl
-                            )
+                            process(buildRouteActionUrl(Constant.ActionUrl.ANIME_PLAY,item.lastEpisodeUrl!!,item.lastEpisodeUrl!!))
                         else
-                            process(item.animeUrl)
+                            process(buildRouteActionUrl(Constant.ActionUrl.ANIME_DETAIL,item.animeUrl))
                     }
                     //长度跳转详情页
                     it.itemView.setOnLongClickListener { _ ->
                         val item = dataList[it.bindingAdapterPosition]
-                        process(item.animeUrl)
+                        process(buildRouteActionUrl(Constant.ActionUrl.ANIME_DETAIL,item.animeUrl))
                         true
                     }
                 }

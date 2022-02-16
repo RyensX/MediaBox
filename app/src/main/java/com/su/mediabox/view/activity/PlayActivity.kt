@@ -274,10 +274,10 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
             }
         })
 
-        viewModel.mldAnimeEpisodeDataRefreshed.observe(this, {
+        viewModel.mldAnimeEpisodeDataRefreshed.observe(this) {
             if (it) mBinding.avpPlayActivity.currentPlayer
                 .startPlay(partUrl = viewModel.animeEpisodeDataBean.actionUrl)
-        })
+        }
 
         mBinding.srlPlayActivity.isRefreshing = true
         viewModel.getPlayData(partUrl)

@@ -140,9 +140,8 @@ class AnimeShowAdapter(
                 fragment.activity?.let {
                     if (holder.ivAnimeCover1Cover.getTag(R.id.image_view_tag) == item.cover) {
                         holder.ivAnimeCover1Cover.loadImage(
-                            item.cover?: "",
+                            item.cover ?: "",
                             referer = item.cover?.also { Api.refererProcessor?.processor(it) } ?: ""
-
                         )
                     }
                 }
@@ -162,7 +161,7 @@ class AnimeShowAdapter(
                 fragment.activity?.let { activity ->
                     if (holder.ivAnimeCover3Cover.getTag(R.id.image_view_tag) == item.cover) {
                         holder.ivAnimeCover3Cover.loadImage(
-                            item.cover?: "",
+                            item.cover ?: "",
                             referer = item.cover?.also { Api.refererProcessor?.processor(it) } ?: ""
                         )
                     }
@@ -185,22 +184,14 @@ class AnimeShowAdapter(
                             ) as TextView
                         tvFlowLayout.text = it[i].title
                         tvFlowLayout.setOnClickListener { _ ->
-                            if (it[i].actionUrl.isBlank()) return@setOnClickListener
-                            //此处是”类型“，若要修改，需要注意Tab大分类是否还是”类型“
-                            val actionUrl = it[i].actionUrl.run {
-                                if (endsWith("/")) "${this}${it[i].title}"
-                                else "${this}/${it[i].title}"
-                            }
-                            process(
-                                ActionUrl.ANIME_CLASSIFY + actionUrl
-                            )
+                            process(it[i].actionUrl)
                         }
                         holder.flAnimeCover3Type.addView(tvFlowLayout)
                     }
                 }
                 holder.tvAnimeCover3Describe.text = item.describe
                 holder.itemView.setOnClickListener {
-                    process( item.actionUrl)
+                    process(item.actionUrl)
                 }
             }
             holder is AnimeCover4ViewHolder && item is AnimeCoverBean -> {
@@ -208,7 +199,7 @@ class AnimeShowAdapter(
                 fragment.activity?.let { activity ->
                     if (holder.ivAnimeCover4Cover.getTag(R.id.image_view_tag) == item.cover) {
                         holder.ivAnimeCover4Cover.loadImage(
-                            item.cover?: "",
+                            item.cover ?: "",
                             referer = item.cover?.also { Api.refererProcessor?.processor(it) } ?: ""
                         )
                     }
@@ -252,22 +243,12 @@ class AnimeShowAdapter(
                         )
                     }
                 }
-                holder.itemView.setOnClickListener {
-                    if (item.episodeClickable?.actionUrl.equals(item.actionUrl))
-                        process(item.episodeClickable!!.actionUrl)
-                    else process(item.episodeClickable?.actionUrl + item.actionUrl)
-                }
-                holder.tvAnimeCover5Area.setOnClickListener {
-                    val actionUrl = item.area?.actionUrl.toString().run {
-                        if (endsWith("/")) "${this}${item.area?.title}"
-                        else "${this}/${item.area?.title}"
-                    }
-                    process(
-                        ActionUrl.ANIME_CLASSIFY + actionUrl
-                    )
-                }
-                holder.tvAnimeCover5Title.setOnClickListener {
-                    process( item.actionUrl)
+                View.OnClickListener {
+                    process(item.actionUrl)
+                }.apply {
+                    holder.itemView.setOnClickListener(this)
+                    holder.tvAnimeCover5Area.setOnClickListener(this)
+                    holder.tvAnimeCover5Title.setOnClickListener(this)
                 }
             }
             else -> {
@@ -310,7 +291,7 @@ class AnimeShowAdapter(
                     holder.ivAnimeCover1Cover.setTag(R.id.image_view_tag, item.cover)
                     if (holder.ivAnimeCover1Cover.getTag(R.id.image_view_tag) == item.cover) {
                         holder.ivAnimeCover1Cover.loadImage(
-                            item.cover?: "",
+                            item.cover ?: "",
                             referer = item.cover?.also { Api.refererProcessor?.processor(it) } ?: ""
                         )
                     }
@@ -332,7 +313,7 @@ class AnimeShowAdapter(
                     holder.ivAnimeCover3Cover.setTag(R.id.image_view_tag, item.cover)
                     if (holder.ivAnimeCover3Cover.getTag(R.id.image_view_tag) == item.cover) {
                         holder.ivAnimeCover3Cover.loadImage(
-                            item.cover?: "",
+                            item.cover ?: "",
                             referer = item.cover?.also { Api.refererProcessor?.processor(it) } ?: ""
                         )
                     }
@@ -355,14 +336,7 @@ class AnimeShowAdapter(
                             tvFlowLayout.text = it[i].title
                             tvFlowLayout.setOnClickListener { _ ->
                                 if (it[i].actionUrl.isBlank()) return@setOnClickListener
-                                //此处是”类型“，若要修改，需要注意Tab大分类是否还是”类型“
-                                val actionUrl = it[i].actionUrl.run {
-                                    if (endsWith("/")) "${this}${it[i].title}"
-                                    else "${this}/${it[i].title}"
-                                }
-                                process(
-                                    ActionUrl.ANIME_CLASSIFY + actionUrl
-                                )
+                                process(it[i].actionUrl)
                             }
                             holder.flAnimeCover3Type.addView(tvFlowLayout)
                         }
@@ -378,7 +352,7 @@ class AnimeShowAdapter(
                     holder.ivAnimeCover4Cover.setTag(R.id.image_view_tag, item.cover)
                     if (holder.ivAnimeCover4Cover.getTag(R.id.image_view_tag) == item.cover) {
                         holder.ivAnimeCover4Cover.loadImage(
-                            item.cover?: "",
+                            item.cover ?: "",
                             referer = item.cover?.also { Api.refererProcessor?.processor(it) } ?: ""
                         )
                     }
@@ -440,22 +414,12 @@ class AnimeShowAdapter(
                             )
                         }
                     }
-                    holder.itemView.setOnClickListener {
-                        if (item.episodeClickable?.actionUrl.equals(item.actionUrl))
-                            process(item.episodeClickable!!.actionUrl)
-                        else process(item.episodeClickable?.actionUrl + item.actionUrl)
-                    }
-                    holder.tvAnimeCover5Area.setOnClickListener {
-                        val actionUrl = item.area?.actionUrl.toString().run {
-                            if (endsWith("/")) "${this}${item.area?.title}"
-                            else "${this}/${item.area?.title}"
-                        }
-                        process(
-                            ActionUrl.ANIME_CLASSIFY + actionUrl
-                        )
-                    }
-                    holder.tvAnimeCover5Title.setOnClickListener {
+                    View.OnClickListener {
                         process(item.actionUrl)
+                    }.apply {
+                        holder.itemView.setOnClickListener(this)
+                        holder.tvAnimeCover5Area.setOnClickListener(this)
+                        holder.tvAnimeCover5Title.setOnClickListener(this)
                     }
                 }
                 else -> {
