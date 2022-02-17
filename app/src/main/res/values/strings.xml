@@ -59,6 +59,7 @@
     <string name="weibo">微博</string>
     <string name="qq">QQ</string>
     <string name="copy_url">复制链接</string>
+    <string name="open_url">外部浏览</string>
     <string name="cancel">取消</string>
     <string name="not_install_qq">未安装QQ</string>
     <string name="not_install_wechat">未安装微信</string>

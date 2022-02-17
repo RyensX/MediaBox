@@ -71,10 +71,10 @@
             android:gravity="center"
             android:paddingTop="7dp"
             android:paddingBottom="7dp"
-            android:text="@string/copy_url"
+            android:text="@string/open_url"
             android:textColor="@color/foreground_main_color_2_skin"
             android:textSize="12sp"
-            app:drawableTopCompat="@drawable/ic_link_main_color_2_34_skin" />
+            app:drawableTopCompat="@drawable/ic_baseline_open_in_new" />
 
     </LinearLayout>
 

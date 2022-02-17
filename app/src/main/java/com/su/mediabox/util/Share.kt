@@ -5,7 +5,9 @@ import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import com.su.mediabox.App
+import com.su.mediabox.AppRouteProcessor
 import com.su.mediabox.R
+import com.su.mediabox.pluginapi.Constant
 import com.su.mediabox.util.Util.copy2Clipboard
 
 object Share {
@@ -13,6 +15,7 @@ object Share {
     const val SHARE_WECHAT = 2
     const val SHARE_WEIBO = 3
     const val SHARE_LINK = 4
+    const val SHARE_WEB = 5
 
     fun isInstalled(packageName: String): Boolean {
         val packageInfo: PackageInfo? = try {
@@ -66,6 +69,14 @@ object Share {
             SHARE_LINK -> {
                 shareContent.copy2Clipboard(activity)
                 activity.resources.getString(R.string.already_copy_to_clipboard).showToast()
+            }
+            SHARE_WEB -> {
+                AppRouteProcessor.process(
+                    com.su.mediabox.pluginapi.Text.buildRouteActionUrl(
+                        Constant.ActionUrl.ANIME_BROWSER,
+                        shareContent
+                    )
+                )
             }
         }
     }

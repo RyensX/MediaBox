@@ -119,7 +119,7 @@ object AppRouteProcessor :
             } -> true
             //打开浏览器
             matchAndGetParams(actionUrl, ActionUrl.ANIME_BROWSER) {
-                Util.openBrowser(actionUrl.replaceFirst(ActionUrl.ANIME_BROWSER, ""))
+                Util.openBrowser(it[0])
             } -> true
             //缓存的每一集列表
             matchAndGetParams(actionUrl, ActionUrl.ANIME_ANIME_DOWNLOAD_EPISODE) {

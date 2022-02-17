@@ -10,6 +10,7 @@ import com.su.mediabox.R
 import com.su.mediabox.databinding.FragmentShareDialogBinding
 import com.su.mediabox.util.Share.SHARE_LINK
 import com.su.mediabox.util.Share.SHARE_QQ
+import com.su.mediabox.util.Share.SHARE_WEB
 import com.su.mediabox.util.Share.SHARE_WECHAT
 import com.su.mediabox.util.Share.SHARE_WEIBO
 import com.su.mediabox.util.Share.share
@@ -58,8 +59,13 @@ open class ShareDialogFragment : BottomSheetDialogFragment() {
                 dismiss()
             }
             mBinding.tvCopyLink.setOnClickListener {
+                share(attachedActivity, shareContent, SHARE_WEB)
+                dismiss()
+            }
+            mBinding.tvCopyLink.setOnLongClickListener {
                 share(attachedActivity, shareContent, SHARE_LINK)
                 dismiss()
+                true
             }
             mBinding.tvCancelShare.setOnClickListener {
                 dismiss()
