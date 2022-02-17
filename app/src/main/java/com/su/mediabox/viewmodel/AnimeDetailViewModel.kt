@@ -18,6 +18,7 @@ class AnimeDetailViewModel : ViewModel() {
     private val animeDetailModel: IAnimeDetailComponent by lazy(LazyThreadSafetyMode.NONE) {
         PluginManager.acquireComponent(IAnimeDetailComponent::class.java)
     }
+    var partUrl: String = ""
     var cover = ""
     var title: String = ""
     var animeDetailList: MutableList<IAnimeDetailBean> = ArrayList()

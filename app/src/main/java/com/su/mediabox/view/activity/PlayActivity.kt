@@ -63,15 +63,14 @@ import kotlin.math.abs
 
 
 class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBinding>() {
+
+    companion object{
+        const val INTENT_EPISODE="episodeUrl"
+        const val INTENT_COVER="coverUrl"
+        const val INTENT_DPU="detailPartUrl"
+    }
+
     override var statusBarSkin: Boolean = false
-    private var isFavorite: Boolean = false
-    private var favoriteBeanDataReady: Int = 0
-        set(value) {
-            field = value
-            if (value == 2) mBinding.ivPlayActivityFavorite.isEnabled = true
-        }
-    private var partUrl: String = ""
-    private var detailPartUrl: String = ""
     private lateinit var viewModel: PlayViewModel
     private lateinit var adapter: PlayAdapter
     private var isFirstTime = true
@@ -154,14 +153,15 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this).get(PlayViewModel::class.java)
 
+        viewModel.partUrl = intent.getStringExtra(INTENT_EPISODE) ?: ""
+        viewModel.animeCover = intent.getStringExtra(INTENT_COVER) ?: ""
+        viewModel.detailPartUrl = intent.getStringExtra(INTENT_DPU) ?: ""
+
         initView()
 
         adapter = PlayAdapter(this, viewModel.playBeanDataList)
 
         initVideoBuilderMode()
-
-        partUrl = intent.getStringExtra("partUrl") ?: ""
-        detailPartUrl = intent.getStringExtra("detailPartUrl") ?: ""
 
         /**
         // 如果没有传入详情页面的网址，则通过播放页面的网址计算出详情页面的网址
@@ -177,60 +177,13 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
             rvPlayActivity.setHasFixedSize(true)
             rvPlayActivity.adapter = adapter
 
-            srlPlayActivity.setOnRefreshListener { viewModel.getPlayData(partUrl) }
+            srlPlayActivity.setOnRefreshListener { viewModel.getPlayData(viewModel.partUrl) }
             srlPlayActivity.setColorSchemeResources(getSkinResourceId(R.color.main_color_skin))
 
             avpPlayActivity.playPositionMemoryStore = AnimeVideoPositionMemoryStore
         }
 
-        lifecycleScope.launch(Dispatchers.IO) {
-            val favoriteAnime = getAppDataBase().favoriteAnimeDao().getFavoriteAnime(detailPartUrl)
-            runOnUiThread {
-                isFavorite = if (favoriteAnime == null) {
-                    mBinding.ivPlayActivityFavorite.setImageDrawable(getResDrawable(R.drawable.ic_star_border_main_color_2_24_skin))
-                    false
-                } else {
-                    mBinding.ivPlayActivityFavorite.setImageDrawable(getResDrawable(R.drawable.ic_star_main_color_2_24_skin))
-                    true
-                }
-                mBinding.ivPlayActivityFavorite.setOnClickListener {
-                    if (isFavorite) {
-                        Thread {
-                            getAppDataBase().favoriteAnimeDao().deleteFavoriteAnime(detailPartUrl)
-                        }.start()
-                        isFavorite = false
-                        mBinding.ivPlayActivityFavorite.setImageDrawable(getResDrawable(R.drawable.ic_star_border_main_color_2_24_skin))
-                        getString(R.string.remove_favorite_succeed).showToast()
-                    } else {
-                        Thread {
-                            getAppDataBase().favoriteAnimeDao().insertFavoriteAnime(
-                                FavoriteAnimeBean(
-                                    Constant.ViewHolderTypeString.ANIME_COVER_8, "",
-                                    detailPartUrl,
-                                    viewModel.playBean?.title?.title ?: "",
-                                    System.currentTimeMillis(),
-                                    viewModel.animeCover,
-                                    lastEpisodeUrl = viewModel.partUrl,
-                                    lastEpisode = viewModel.animeEpisodeDataBean.title
-                                )
-                            )
-                        }.start()
-                        isFavorite = true
-                        mBinding.ivPlayActivityFavorite.setImageDrawable(getResDrawable(R.drawable.ic_star_main_color_2_24_skin))
-                        getString(R.string.favorite_succeed).showToast()
-                    }
-                }
-            }
-        }
-        mBinding.ivPlayActivityFavorite.isEnabled = false
-
-        viewModel.mldAnimeCover.observe(this, {
-            if (it) {
-                favoriteBeanDataReady++
-            }
-        })
-
-        viewModel.mldPlayBean.observe(this, {
+        viewModel.mldPlayBean.observe(this) {
             mBinding.srlPlayActivity.isRefreshing = false
 
             val title = viewModel.playBean?.title?.title
@@ -238,20 +191,18 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
 
             adapter.notifyDataSetChanged()
 
-            favoriteBeanDataReady++
-
             if (isFirstTime) {
                 mBinding.avpPlayActivity.startPlay()
                 isFirstTime = false
             }
-        })
+        }
 
         //缓存番剧调用getAnimeEpisodeData()来获取视频url
         viewModel.mldGetAnimeEpisodeData.observe(this, Observer {
             val url = viewModel.episodesList[it].videoUrl
             if (url.endsWith("\$qzz", true)) {
                 SnifferVideo.getQzzVideoUrl(
-                    this@PlayActivity, viewModel.episodesList[it].actionUrl, detailPartUrl
+                    this@PlayActivity, viewModel.episodesList[it].actionUrl, viewModel.detailPartUrl
                 ) { videoUrl, paramMap ->
 //                    danmuUrl = danMuUrl
 //                    danmuParamMap.clear()
@@ -280,8 +231,7 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
         }
 
         mBinding.srlPlayActivity.isRefreshing = true
-        viewModel.getPlayData(partUrl)
-        viewModel.getAnimeCoverImageBean(detailPartUrl)
+        viewModel.getPlayData(viewModel.partUrl)
 
         val videoOptionModel =
             VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "enable-accurate-seek", 1)
@@ -296,7 +246,7 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
 
     private fun GSYBaseVideoPlayer.startPlay(
         episodeDataBean: AnimeEpisodeDataBean? = null,
-        partUrl: String = this@PlayActivity.partUrl
+        partUrl: String = viewModel.partUrl
     ) {
         mBinding.tvPlayActivityToolbarVideoTitle.text =
             episodeDataBean?.title ?: viewModel.animeEpisodeDataBean.title
@@ -306,12 +256,12 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
         if (episodeDataBean == null) {
             if (!isDestroyed) {
                 viewModel.updateFavoriteData(
-                    detailPartUrl,
+                    viewModel.detailPartUrl,
                     viewModel.partUrl,
                     viewModel.animeEpisodeDataBean.title,
                     System.currentTimeMillis()
                 )
-                viewModel.insertHistoryData(detailPartUrl)
+                viewModel.insertHistoryData(viewModel.detailPartUrl)
             }
             if (!viewModel.animeEpisodeDataBean.videoUrl.endsWith("\$qzz", true)) {
                 danmakuUrl = ""
@@ -323,7 +273,7 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
                 SnifferVideo.getQzzVideoUrl(
                     this@PlayActivity,
                     partUrl,
-                    detailPartUrl
+                    viewModel.detailPartUrl
                 ) { videoUrl, paramMap ->
                     danmakuParamMap.clear()
                     danmakuParamMap.putAll(paramMap)
@@ -339,16 +289,16 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
         } else {
             if (!isDestroyed) {
                 viewModel.updateFavoriteData(
-                    detailPartUrl, viewModel.partUrl, episodeDataBean.title,
+                    viewModel.detailPartUrl, viewModel.partUrl, episodeDataBean.title,
                     System.currentTimeMillis()
                 )
-                viewModel.insertHistoryData(detailPartUrl)
+                viewModel.insertHistoryData(viewModel.detailPartUrl)
             }
             if (!episodeDataBean.videoUrl.endsWith("\$qzz", true)) {
                 danmakuUrl = ""
                 setUp(episodeDataBean.videoUrl, false, episodeDataBean.title)
             } else {
-                SnifferVideo.getQzzVideoUrl(this@PlayActivity, partUrl, detailPartUrl)
+                SnifferVideo.getQzzVideoUrl(this@PlayActivity, partUrl, viewModel.detailPartUrl)
                 { videoUrl, paramMap ->
                     danmakuParamMap.clear()
                     danmakuParamMap.putAll(paramMap)
@@ -523,7 +473,7 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
             action
         )
         recyclerView.adapter = adapter
-        viewModel.mldEpisodesList.observe(this, {
+        viewModel.mldEpisodesList.observe(this) {
             adapter.notifyDataSetChanged()
             mBinding.avpPlayActivity.setEpisodeAdapter(
                 PlayerEpisodeRecyclerViewAdapter(
@@ -531,7 +481,7 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
                     viewModel.episodesList
                 )
             )
-        })
+        }
         return bottomSheetDialog
     }
 
@@ -541,13 +491,6 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
             if (it != currentNightMode) {
                 currentNightMode = it
                 adapter.notifyDataSetChanged()
-                mBinding.ivPlayActivityFavorite.setImageDrawable(
-                    if (isFavorite) {
-                        getResDrawable(R.drawable.ic_star_main_color_2_24_skin)
-                    } else {
-                        getResDrawable(R.drawable.ic_star_border_main_color_2_24_skin)
-                    }
-                )
             }
         }
     }
@@ -639,9 +582,5 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
                 }
             }
         }
-    }
-
-    companion object {
-        const val TAG = "PlayActivity"
     }
 }

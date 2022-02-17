@@ -90,8 +90,7 @@ object AppRouteProcessor :
             matchAndGetParams(actionUrl, ActionUrl.ANIME_PLAY) {
                 activity.startActivity(
                     Intent(activity, PlayActivity::class.java)
-                        .putExtra("partUrl", it[0])
-                        .putExtra("detailPartUrl", it[1])
+                        .putExtra(PlayActivity.INTENT_EPISODE, it[0])
                 )
             } -> true
             //打开排行榜页面

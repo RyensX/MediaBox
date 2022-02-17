@@ -1,5 +1,6 @@
 package com.su.mediabox.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -23,9 +24,11 @@ class PlayViewModel : ViewModel() {
         PluginManager.acquireComponent(IPlayComponent::class.java)
     }
     var playBean: PlayBean? = null
-    var partUrl: String = ""
+
+    var partUrl = ""
     var animeCover = ""
-    var mldAnimeCover: MutableLiveData<Boolean> = MutableLiveData()
+    var detailPartUrl = ""
+
     var mldPlayBean: MutableLiveData<PlayBean> = MutableLiveData()
     var playBeanDataList: MutableList<IAnimeDetailBean> = ArrayList()
     val episodesList: MutableList<AnimeEpisodeDataBean> = ArrayList()
@@ -122,21 +125,10 @@ class PlayViewModel : ViewModel() {
     // 插入观看历史记录
     fun insertHistoryData(detailPartUrl: String) {
         viewModelScope.launch(Dispatchers.IO) {
+            Log.d("更新播放历史", detailPartUrl)
             try {
                 if (animeCover.isBlank()) {
-                    playModel.getAnimeCoverImageBean(detailPartUrl).apply {
-                        this ?: return@apply
-                        getAppDataBase().historyDao().insertHistory(
-                            HistoryBean(
-                                Constant.ViewHolderTypeString.ANIME_COVER_9, "", detailPartUrl,
-                                playBean?.title?.title ?: "",
-                                System.currentTimeMillis(),
-                                this,
-                                partUrl,
-                                animeEpisodeDataBean.title
-                            )
-                        )
-                    }
+                    "封面为空，无法记录播放历史".showToast()
                 } else {
                     getAppDataBase().historyDao().insertHistory(
                         HistoryBean(
@@ -153,25 +145,5 @@ class PlayViewModel : ViewModel() {
                 e.printStackTrace()
             }
         }
-    }
-
-    fun getAnimeCoverImageBean(detailPartUrl: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                playModel.getAnimeCoverImageBean(detailPartUrl).apply {
-                    this ?: return@apply
-                    animeCover = this
-                    mldAnimeCover.postValue(true)
-                }
-            } catch (e: Exception) {
-                mldAnimeCover.postValue(false)
-                e.printStackTrace()
-                "${App.context.getString(R.string.get_data_failed)}\n${e.message}".showToast()
-            }
-        }
-    }
-
-    companion object {
-        const val TAG = "PlayViewModel"
     }
 }

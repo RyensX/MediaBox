@@ -19,7 +19,7 @@
 	</p>
 </div>
 
-<center><font size="4">规范化媒体浏览器，不含广告，免费开源，便于学习Android开发。</font></center>
+<p align="center"><font size="4">规范化媒体浏览器，不含广告，免费开源，便于学习Android开发。</font></p>
 
 ----
 
@@ -87,6 +87,9 @@ App本身不提供任何数据，请用户自行添加各类插件学习和体�
 ## 相关项目
 - 本项目基于[Imomoe](https://github.com/SkyD666/Imomoe)
 - [插件API](https://github.com/Ryensu/MediaBoxPlugin)
+
+## 构建相关
+- [secret.gradle](doc/about_secret.gradle.md)文件
 
 ## 许可证
 

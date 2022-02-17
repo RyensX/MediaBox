@@ -1,5 +1,6 @@
 package com.su.mediabox.view.activity
 
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.lifecycle.Observer
@@ -28,9 +29,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.net.URL
 
-
 class AnimeDetailActivity : BasePluginActivity<ActivityAnimeDetailBinding>() {
-    private var partUrl: String = ""
     private var isFavorite: Boolean = false
     private lateinit var viewModel: AnimeDetailViewModel
     private lateinit var adapter: AnimeDetailAdapter
@@ -44,19 +43,20 @@ class AnimeDetailActivity : BasePluginActivity<ActivityAnimeDetailBinding>() {
         viewModel = ViewModelProvider(this).get(AnimeDetailViewModel::class.java)
         adapter = AnimeDetailAdapter(this, viewModel.animeDetailList)
 
-        partUrl = intent.getStringExtra("partUrl") ?: ""
+        viewModel.partUrl = intent.getStringExtra("partUrl") ?: ""
 
         mBinding.atbAnimeDetailActivityToolbar.run {
             setBackButtonClickListener { finish() }
             // 分享
             setButtonClickListener(0) {
-                ShareDialogFragment().setShareContent(Api.MAIN_URL + partUrl)
+                ShareDialogFragment().setShareContent(Api.MAIN_URL + viewModel.partUrl)
                     .show(supportFragmentManager, "share_dialog")
             }
             addButton(null)
             // 收藏
             lifecycleScope.launch(Dispatchers.IO) {
-                val favoriteAnime = getAppDataBase().favoriteAnimeDao().getFavoriteAnime(partUrl)
+                val favoriteAnime =
+                    getAppDataBase().favoriteAnimeDao().getFavoriteAnime(viewModel.partUrl)
                 isFavorite = favoriteAnime != null
                 withContext(Dispatchers.Main) {
                     setButtonDrawable(
@@ -69,7 +69,7 @@ class AnimeDetailActivity : BasePluginActivity<ActivityAnimeDetailBinding>() {
             setButtonClickListener(1) {
                 lifecycleScope.launch(Dispatchers.IO) {
                     if (isFavorite) {
-                        getAppDataBase().favoriteAnimeDao().deleteFavoriteAnime(partUrl)
+                        getAppDataBase().favoriteAnimeDao().deleteFavoriteAnime(viewModel.partUrl)
                         withContext(Dispatchers.Main) {
                             isFavorite = false
                             setButtonDrawable(1, R.drawable.ic_star_border_white_24)
@@ -79,7 +79,7 @@ class AnimeDetailActivity : BasePluginActivity<ActivityAnimeDetailBinding>() {
                         getAppDataBase().favoriteAnimeDao().insertFavoriteAnime(
                             FavoriteAnimeBean(
                                 Constant.ViewHolderTypeString.ANIME_COVER_8, "",
-                                partUrl,
+                                viewModel.partUrl,
                                 viewModel.title,
                                 System.currentTimeMillis(),
                                 viewModel.cover
@@ -102,7 +102,7 @@ class AnimeDetailActivity : BasePluginActivity<ActivityAnimeDetailBinding>() {
             rvAnimeDetailActivityInfo.addItemDecoration(AnimeShowItemDecoration())
             rvAnimeDetailActivityInfo.adapter = adapter
 
-            srlAnimeDetailActivity.setOnRefreshListener { viewModel.getAnimeDetailData(partUrl) }
+            srlAnimeDetailActivity.setOnRefreshListener { viewModel.getAnimeDetailData(viewModel.partUrl) }
             srlAnimeDetailActivity.setColorSchemeResources(getSkinResourceId(R.color.main_color_skin))
         }
 
@@ -114,7 +114,7 @@ class AnimeDetailActivity : BasePluginActivity<ActivityAnimeDetailBinding>() {
             if (viewModel.cover.isBlank()) return@Observer
             mBinding.ivAnimeDetailActivityBackground.loadImage(viewModel.cover) {
                 transformations(DarkBlurTransformation(this@AnimeDetailActivity))
-                addHeader("Referer", Api.refererProcessor?.processor(viewModel.cover)?:"")
+                addHeader("Referer", Api.refererProcessor?.processor(viewModel.cover) ?: "")
                 addHeader("Host", URL(viewModel.cover).host)
                 addHeader("Accept", "*/*")
                 addHeader("Accept-Encoding", "gzip, deflate")
@@ -125,13 +125,13 @@ class AnimeDetailActivity : BasePluginActivity<ActivityAnimeDetailBinding>() {
         })
 
         mBinding.srlAnimeDetailActivity.isRefreshing = true
-        viewModel.getAnimeDetailData(partUrl)
+        viewModel.getAnimeDetailData(viewModel.partUrl)
     }
 
     override fun getBinding(): ActivityAnimeDetailBinding =
         ActivityAnimeDetailBinding.inflate(layoutInflater)
 
-    fun getPartUrl(): String = partUrl
+    fun getPartUrl(): String = viewModel.partUrl
 
     override fun onChangeSkin() {
         super.onChangeSkin()
@@ -141,5 +141,16 @@ class AnimeDetailActivity : BasePluginActivity<ActivityAnimeDetailBinding>() {
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         adapter.notifyDataSetChanged()
+    }
+
+    override fun startActivity(intent: Intent?, options: Bundle?) {
+        //主动向下一级路由目标提供一些信息
+        intent?.apply {
+            //封面
+            putExtra(PlayActivity.INTENT_COVER, viewModel.cover)
+            //详情链接
+            putExtra(PlayActivity.INTENT_DPU, viewModel.partUrl)
+        }
+        super.startActivity(intent, options)
     }
 }
