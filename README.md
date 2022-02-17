@@ -1,5 +1,6 @@
-![readme_cover](image/readme_cover.png)
-
+<p align="center">
+<img src="image/cover.png" width="150">
+</p>
 <div align="center">
     <h1>媒体盒子</h1>
     <p>
@@ -12,25 +13,18 @@
         <a href="https://img.shields.io/badge/Android-5.0%2B-brightgreen" style="text-decoration:none" >
             <img src="https://img.shields.io/badge/Android-5.0%2B-brightgreen" alt="Android version"/>
         </a>
-        <a href="https://github.com/Ryensu/MediaBox/blob/master/LICENSE" style="text-decoration:none" >
+        <a href="LICENSE" style="text-decoration:none" >
             <img src="https://img.shields.io/github/license/Ryensu/MediaBox" alt="GitHub license"/>
         </a>
 	</p>
-    <p>
-        规范化媒体浏览器，不含广告，免费开源，便于学习Android开发。
-    </p>
-    <p>本项目基于https://github.com/SkyD666/Imomoe</p>
 </div>
+
+<center><font size="4">规范化媒体浏览器，不含广告，免费开源，便于学习Android开发。</font></center>
 
 ----
 
-**原理**：基于[**自定义数据源（插件）**](doc/customdatasource/README.md)解析出**外部数据**然后通过本项目用户界面**规范化**展示媒体内容（类似专用内容浏览器）
-
-## [>>必看使用说明(自定义数据源)<<](doc/customdatasource/README.md)
-
-## [>>必看安全说明<<](#安全说明)
-
-## [>>关于http网站或数据源的安全问题<<](doc/about_http_security.md)
+## 原理
+根据[**插件API**](https://github.com/Ryensu/MediaBoxPlugin)实现各个组件解析外部数据然后通过本项目的用户界面**规范化**展示媒体数据（和浏览器差不多,类似内容受限的浏览器）
 
 ## 功能
 ### 视频
@@ -41,35 +35,23 @@
 5. 支持视频**投屏**到电视
 6. 支持部分视频**显示**、**发送弹幕**（需要数据源支持弹幕）
 7. 支持输入某站弹幕链接播放网络弹幕（ 例如https://api.bilibili.com/x/v1/dm/list.so?oid=97495910 ）
-8. 支持**缓存视频**到本地（暂不支持m3u8格式资源缓存）
-9. 支持**追番**（数据保存在本地）
-10. 支持显示**观看历史**记录
-11. 支持显示**搜索历史**记录
-12. 支持改变视频**播放速度**
-13. 支持改变**视频**显示**比例**（16:9, 4:3, 全屏等）
-14. 支持**本地记忆**视频**播放进度**
-16. ......
+8. 支持**追番**（数据保存在本地）
+9. 支持显示**观看历史**记录
+10. 支持显示**搜索历史**记录
+11. 支持改变视频**播放速度**
+12. 支持改变**视频**显示**比例**（16:9, 4:3, 全屏等）
+13. 支持**本地记忆**视频**播放进度**
+14. ......
 
-### 其他
+### 其他媒体资源
 暂未支持
 
-## 运行截图
-
-![main](screenshot/main.jpg) ![anime_detail](screenshot/anime_detail.jpg)
-
-![new_anime](screenshot/new_anime.jpg) ![everyday_anime](screenshot/everyday_anime.jpg)
-
-![search](screenshot/search.jpg) ![play](screenshot/play.jpg)
-
-![classify](screenshot/classify.jpg) ![rank](screenshot/rank.jpg)
-
-![favorite](screenshot/favorite.jpg) ![history](screenshot/history.jpg)
-
-![player](screenshot/player.jpg)
+## 使用效果
+见[**插件API**](https://github.com/Ryensu/MediaBoxPlugin)下的各个示例
 
 ## 安全说明
 
-**请勿**私自**传播APK**安装包，Github仓库为唯一长期仓库，**请仅在Github仓库下载安装包**，请勿下载来历不明的应用与ads包，谨防隐私泄露，谨防受骗！
+**请勿**私自**传播APK**安装包，Github仓库为唯一长期仓库，**请仅在Github仓库下载安装包**，请勿下载来历不明的插件，谨防恶意代码！
 
 ## 应用主要权限说明
 
@@ -93,7 +75,7 @@
 
 ## 附加说明
 
-App内不提供默认数据源，需要用户自行导入使用。
+App本身不提供任何数据，请用户自行添加各类插件学习和体验
 
 ## 免责声明
 
@@ -102,9 +84,12 @@ App内不提供默认数据源，需要用户自行导入使用。
 3. 此软件**仅可用作学习交流**，未经授权，**禁止用于其他用途**，请在下载**24小时内删除**。
 4. 因使用此软件产生的版权问题，软件作者概不负责。
 
+## 相关项目
+- 本项目基于[Imomoe](https://github.com/SkyD666/Imomoe)
+- [插件API](https://github.com/Ryensu/MediaBoxPlugin)
+
 ## 许可证
 
 使用此软件代码需**遵循以下许可证协议**
 
 [**GNU General Public License v3.0**](LICENSE)
-

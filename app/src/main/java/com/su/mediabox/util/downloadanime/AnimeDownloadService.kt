@@ -137,7 +137,7 @@ class AnimeDownloadService : Service() {
         clickIntent.setClass(this, MainActivity::class.java)
         clickIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         clickIntent.putExtra(DOWNLOAD_ANIME_NOTIFICATION_ID, notificationId)
-        downloadServiceHashMap[key]?.builder?.setSmallIcon(R.mipmap.ic_launcher)
+        downloadServiceHashMap[key]?.builder?.setSmallIcon(R.mipmap.ic_mediabox)
             ?.setContentTitle("正在下载$folderAndFileName")
             ?.setContentText("0%")
             ?.setProgress(100, 0, false)
