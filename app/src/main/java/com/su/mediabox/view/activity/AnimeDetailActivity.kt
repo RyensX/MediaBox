@@ -76,13 +76,19 @@ class AnimeDetailActivity : BasePluginActivity<ActivityAnimeDetailBinding>() {
                             getString(R.string.remove_favorite_succeed).showToast()
                         }
                     } else {
+                        //如果按追番前已经看过则同步进度
+                        val history = getAppDataBase().historyDao().getHistory(viewModel.partUrl)
                         getAppDataBase().favoriteAnimeDao().insertFavoriteAnime(
                             FavoriteAnimeBean(
-                                Constant.ViewHolderTypeString.ANIME_COVER_8, "",
+                                //UP_TODO 2022/2/18 13:09 0 不应该把类型持久化
+                                Constant.ViewHolderTypeString.ANIME_COVER_8,
+                                "",
                                 viewModel.partUrl,
                                 viewModel.title,
                                 System.currentTimeMillis(),
-                                viewModel.cover
+                                viewModel.cover,
+                                lastEpisode = history?.lastEpisode,
+                                lastEpisodeUrl = history?.lastEpisodeUrl
                             )
                         )
                         withContext(Dispatchers.Main) {
