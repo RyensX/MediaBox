@@ -24,7 +24,7 @@ interface Const {
 
     interface Database {
         object AppDataBase {
-            const val APP_DATA_BASE_FILE_NAME = "app.db"
+            const val APP_DATA_BASE_FILE_NAME = "app_%s_%s.db"
             const val ANIME_DOWNLOAD_TABLE_NAME = "animeDownloadList"
             const val FAVORITE_ANIME_TABLE_NAME = "favoriteAnimeList"
             const val HISTORY_TABLE_NAME = "historyList"

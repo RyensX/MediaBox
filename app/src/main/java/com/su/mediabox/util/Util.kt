@@ -29,10 +29,16 @@ import androidx.core.graphics.drawable.DrawableCompat
 import com.su.mediabox.App
 import com.su.mediabox.R
 import com.su.skin.SkinManager
+import okhttp3.internal.and
 import java.io.*
+import java.lang.StringBuilder
 import java.net.HttpURLConnection
 import java.net.URL
+import java.security.MessageDigest
+import java.security.cert.CertificateFactory
+import java.security.cert.X509Certificate
 import java.util.*
+import java.util.jar.JarFile
 
 
 object Util {
@@ -471,5 +477,79 @@ object Util {
         if (includeVirtualKey) display.getRealSize(outPoint)
         else display.getSize(outPoint)
         return outPoint.x
+    }
+
+    /**
+     * 获取apk包签名基本信息
+     * @return string[0]证书发行者,string[1]证书所有者,string[2]序列号，string[3]证书起始时间 string[4]证书结束时间
+     */
+    fun getApkSignInfo(filePath: String): Array<String> {
+        var subjectDN = ""
+        var issuerDN = ""
+        var serial = ""
+        var notBefore = ""
+        var notAfter = ""
+        try {
+            val JarFile = JarFile(filePath)
+            val jarEntry = JarFile.getJarEntry("AndroidManifest.xml")
+            if (jarEntry != null) {
+                val readBuffer = ByteArray(8192)
+                val ins = BufferedInputStream(JarFile.getInputStream(jarEntry))
+                while (ins.read(readBuffer, 0, readBuffer.size) !== -1);
+                val certs = jarEntry.certificates
+                if (certs != null && certs.isNotEmpty()) {
+                    //获取证书
+                    val x509cert: X509Certificate = certs[0] as X509Certificate
+                    //获取证书发行者
+                    issuerDN = x509cert.issuerDN.toString()
+                    //System.out.println("发行者：" + issuerDN);
+                    //获取证书所有者
+                    subjectDN = x509cert.subjectDN.toString()
+                    //System.out.println("所有者：" + subjectDN);
+                    //证书序列号
+                    serial = x509cert.serialNumber.toString()
+                    //System.out.println("publicKey：" + publicKey);
+                    //证书起始有效期
+                    notBefore = x509cert.notBefore.toString()
+                    //证书结束有效期
+                    notAfter = x509cert.notAfter.toString()
+                }
+            }
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+        }
+        return arrayOf(subjectDN, issuerDN, serial, notBefore, notAfter)
+    }
+
+    fun PackageManager.getSignatures(packageName: String): String {
+        return try {
+            //获取签名信息
+            val cert: ByteArray = getPackageInfo(
+                packageName,
+                PackageManager.GET_SIGNATURES
+            ).signatures[0].toByteArray()
+            //将签名转换为字节数组流
+            val input: InputStream = ByteArrayInputStream(cert)
+            //证书工厂类，这个类实现了出厂合格证算法的功能
+            val cf: CertificateFactory = CertificateFactory.getInstance("X509")
+            //X509 证书，X.509 是一种非常通用的证书格式
+            val c = cf.generateCertificate(input) as X509Certificate
+            //加密算法的类，这里的参数可以使 MD5 等加密算法
+            val md: MessageDigest = MessageDigest.getInstance("SHA1")
+            //获得公钥
+            val publicKey: ByteArray = md.digest(c.encoded)
+            //字节到十六进制的格式转换
+            val str = StringBuilder()
+            var temp: String
+            for (i in publicKey.indices) {
+                temp = Integer.toHexString(publicKey[i] and 0xFF)
+                str.append(temp)
+            }
+            str.deleteCharAt(str.length - 1)
+            str.toString()
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+            ""
+        }
     }
 }

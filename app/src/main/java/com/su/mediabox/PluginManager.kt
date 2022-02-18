@@ -11,6 +11,7 @@ import com.su.mediabox.pluginapi.Constant
 import com.su.mediabox.view.activity.BasePluginActivity
 import com.su.mediabox.pluginapi.IComponentFactory
 import com.su.mediabox.pluginapi.components.IBaseComponent
+import com.su.mediabox.util.Util.getSignatures
 import dalvik.system.DexClassLoader
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -45,7 +46,8 @@ object PluginManager : AppUtil.IRouteProcessor {
                     it.activityInfo.name,
                     it.activityInfo.applicationInfo.loadLabel(packageManager).toString(),
                     it.loadIcon(packageManager),
-                    it.activityInfo.applicationInfo.sourceDir
+                    it.activityInfo.applicationInfo.sourceDir,
+                    packageManager.getSignatures(it.activityInfo.packageName)
                 )
             }
             _pluginLiveData.postValue(plugin)
