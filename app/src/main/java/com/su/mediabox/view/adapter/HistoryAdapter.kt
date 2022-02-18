@@ -35,16 +35,20 @@ class HistoryAdapter(
                 holder.tvAnimeCover9Episodes.text = item.lastEpisode
                 holder.tvAnimeCover9Time.text = time2Now(item.time)
                 holder.tvAnimeCover9DetailPage.setOnClickListener {
-                    process(item.animeUrl)
+                    process(buildRouteActionUrl(Constant.ActionUrl.ANIME_DETAIL, item.animeUrl))
                 }
                 holder.ivAnimeCover9Delete.setOnClickListener {
                     activity.deleteHistory(item)
                 }
                 holder.itemView.setOnClickListener {
-                    if (item.lastEpisodeUrl != null)
-                        process(buildRouteActionUrl(Constant.ActionUrl.ANIME_PLAY, item.lastEpisodeUrl!!, item.lastEpisodeUrl!!))
-                    else
-                        process(buildRouteActionUrl(Constant.ActionUrl.ANIME_DETAIL, item.animeUrl))
+                    process(
+                        buildRouteActionUrl(
+                            Constant.ActionUrl.ANIME_PLAY,
+                            item.lastEpisodeUrl!!,
+                            item.cover,
+                            item.animeUrl
+                        )
+                    )
                 }
             }
             else -> {

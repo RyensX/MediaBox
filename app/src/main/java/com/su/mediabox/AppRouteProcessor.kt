@@ -88,9 +88,17 @@ object AppRouteProcessor :
             } -> true
             //打开播放页面
             matchAndGetParams(actionUrl, ActionUrl.ANIME_PLAY) {
+                //参数：剧集信息/[封面]/[详情]
                 activity.startActivity(
-                    Intent(activity, PlayActivity::class.java)
-                        .putExtra(PlayActivity.INTENT_EPISODE, it[0])
+                    Intent(activity, PlayActivity::class.java).apply {
+                        //必填的剧集信息
+                        putExtra(PlayActivity.INTENT_EPISODE, it[0])
+                        //可选（在详情页打开时由Activity主动提供）
+                        //封面
+                        it.getOrNull(1)?.also { putExtra(PlayActivity.INTENT_COVER, it) }
+                        //详情链接
+                        it.getOrNull(2)?.also { putExtra(PlayActivity.INTENT_DPU, it) }
+                    }
                 )
             } -> true
             //打开排行榜页面

@@ -21,6 +21,8 @@ class HistoryBean(      //下面的url都是partUrl
     @ColumnInfo(name = "time")
     var time: Long,                 // 观看日期
     @ColumnInfo(name = "cover")
+    //FIX_TODO 2022/2/18 1:35 0 从历史记录打开播放无法得到封面信息
+    //FIX_TODO 2022/2/18 1:36 0 历史记录无法路由到详情页
     var cover: String,           // 封面
     @ColumnInfo(name = "lastEpisodeUrl")
     var lastEpisodeUrl: String? = null,        //上次看到哪一集
