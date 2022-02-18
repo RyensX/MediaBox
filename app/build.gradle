@@ -169,6 +169,7 @@ dependencies {
     implementation project(':skin_blue')
     implementation project(':skin_dark')
     implementation project(':skin_lemon')
+    implementation project(':skin_dark_sakura')
     implementation project(':skin_sweat_soybean')
     implementation project(':MediaBoxPluginApi')
 }

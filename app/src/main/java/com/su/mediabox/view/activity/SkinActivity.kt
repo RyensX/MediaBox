@@ -107,5 +107,16 @@ class SkinActivity : BaseActivity<ActivitySkinBinding>() {
                 "_sweat_soybean"
             )
         )
+        list.add(
+            SkinBean(
+                ViewHolderTypeString.SKIN_COVER_1,
+                "",
+                getDefaultResColor(R.color.main_color_2_skin_dark_sakura),
+                "暗色樱花🌺",
+                usingSkin("", "_dark_sakura"),
+                "",
+                "_dark_sakura"
+            )
+        )
     }
 }
