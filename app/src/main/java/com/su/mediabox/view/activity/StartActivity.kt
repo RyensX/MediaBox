@@ -7,9 +7,12 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.ViewStub
 import androidx.recyclerview.widget.GridLayoutManager
+import com.afollestad.materialdialogs.MaterialDialog
 import com.su.mediabox.PluginManager
 import com.su.mediabox.R
+import com.su.mediabox.config.Const
 import com.su.mediabox.databinding.ActivityPluginBinding
+import com.su.mediabox.util.Util
 import com.su.mediabox.util.goActivity
 import com.su.mediabox.util.update.AppUpdateHelper
 import com.su.mediabox.view.adapter.PluginAdapter
@@ -40,6 +43,17 @@ class StartActivity : BaseActivity<ActivityPluginBinding>() {
                 noticeUpdate(this@StartActivity)
             }
             checkUpdate()
+        }
+
+        if (Util.lastReadUserNoticeVersion() < Const.Common.USER_NOTICE_VERSION) {
+            MaterialDialog(this).show {
+                title(res = R.string.user_notice_update)
+                message(text = Html.fromHtml(Util.getUserNoticeContent()))
+                cancelable(false)
+                positiveButton(res = R.string.ok) {
+                    Util.setReadUserNoticeVersion(Const.Common.USER_NOTICE_VERSION)
+                }
+            }
         }
     }
 

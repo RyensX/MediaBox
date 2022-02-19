@@ -1,38 +1,20 @@
 package com.su.mediabox.view.activity
 
 import android.app.ActivityManager.TaskDescription
-import android.content.Intent
-import android.content.pm.ShortcutInfo
-import android.content.pm.ShortcutManager
-import android.graphics.drawable.Icon
-import android.os.Build
 import android.os.Bundle
-import android.text.Html
-import android.widget.Toast
 import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.FragmentTransaction
-import com.afollestad.materialdialogs.MaterialDialog
 import com.su.mediabox.App
 import com.su.mediabox.PluginManager.getPluginInfo
 import com.su.mediabox.R
-import com.su.mediabox.config.Const
 import com.su.mediabox.config.Const.ShortCuts.Companion.ACTION_EVERYDAY
-import com.su.mediabox.config.Const.ShortCuts.Companion.ID_DOWNLOAD
-import com.su.mediabox.config.Const.ShortCuts.Companion.ID_EVERYDAY
-import com.su.mediabox.config.Const.ShortCuts.Companion.ID_FAVORITE
 import com.su.mediabox.databinding.ActivityMainBinding
-import com.su.mediabox.model.DataSourceManager
-import com.su.mediabox.util.Util.getUserNoticeContent
-import com.su.mediabox.util.Util.lastReadUserNoticeVersion
-import com.su.mediabox.util.Util.setReadUserNoticeVersion
 import com.su.mediabox.util.clickScale
 import com.su.mediabox.util.eventbus.EventBusSubscriber
 import com.su.mediabox.util.eventbus.MessageEvent
 import com.su.mediabox.util.eventbus.RefreshEvent
 import com.su.mediabox.util.eventbus.SelectHomeTabEvent
 import com.su.mediabox.util.showToast
-import com.su.mediabox.util.update.AppUpdateHelper
-import com.su.mediabox.util.update.AppUpdateStatus
 import com.su.mediabox.view.fragment.EverydayAnimeFragment
 import com.su.mediabox.view.fragment.HomeFragment
 import com.su.mediabox.view.fragment.MoreFragment
@@ -56,33 +38,11 @@ class MainActivity : BasePluginActivity<ActivityMainBinding>(), EventBusSubscrib
         action = intent.action ?: ""
 
         getPluginInfo().also {
-            //UP_TODO 2022/2/13 22:24 0 图标
             val description = TaskDescription(it.name, it.icon.toBitmap())
             setTaskDescription(description)
         }
 
         PushAgent.getInstance(this).onAppStart()
-
-        if (lastReadUserNoticeVersion() < Const.Common.USER_NOTICE_VERSION) {
-            MaterialDialog(this).show {
-                title(res = R.string.user_notice_update)
-                message(text = Html.fromHtml(getUserNoticeContent()))
-                cancelable(false)
-                positiveButton(res = R.string.ok) {
-                    setReadUserNoticeVersion(Const.Common.USER_NOTICE_VERSION)
-                }
-            }
-        }
-
-        //检查更新
-        val appUpdateHelper = AppUpdateHelper.instance
-        appUpdateHelper.getUpdateStatus().observe(this) {
-            when (it) {
-                AppUpdateStatus.UNCHECK -> appUpdateHelper.checkUpdate()
-                AppUpdateStatus.DATED -> appUpdateHelper.noticeUpdate(this)
-                else -> Unit
-            }
-        }
 
         if (savedInstanceState != null) {
             homeFragment = supportFragmentManager.getFragment(
