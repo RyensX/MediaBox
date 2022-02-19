@@ -41,6 +41,8 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
             tvSettingActivityDownloadPathInfo.text = Const.DownloadAnime.animeFilePath
         }
 
+        //UP_TODO 2022/2/19 12:32 0 暂时移除，因为后面每个插件会有独立数据管理
+        /**
         viewModel.getAllHistoryCount()
         viewModel.mldAllHistoryCount.observe(this) {
             if (it >= 0) {
@@ -66,6 +68,7 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
                 negativeButton(res = R.string.cancel) { dismiss() }
             }
         }
+        */
 
         // 清理缓存文件
         viewModel.mldCacheSize.observe(this) {
