@@ -153,18 +153,17 @@ class AnimeDetailAdapter(
                             .getHistoryLiveData(activity.getPartUrl())
                             .also {
                                 setOnClickListener { v ->
-                                    val url = v.tag
-                                    if (url is String) {
-                                        process(url)
+                                    val action = v.tag
+                                    if (action is String) {
+                                        process(action)
                                     }
                                 }
                                 visible()
                             }
-                            //FIX_TODO 2022/1/22 14:53 0 这里没有在打开播放后更新，原因未知，所以暂时只能手动刷新
                             .observe(activity) { hb ->
                                 if (hb != null) {
                                     text = "续播 ${hb.lastEpisode}"
-                                    tag = hb.lastEpisodeUrl
+                                    tag = buildRouteActionUrl(Constant.ActionUrl.ANIME_PLAY,hb.lastEpisodeUrl!!)
                                 } else
                                 //小心复用，所以主要主动隐藏
                                     gone()
