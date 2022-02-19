@@ -178,7 +178,7 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
             rvPlayActivity.adapter = adapter
 
             srlPlayActivity.setOnRefreshListener { viewModel.getPlayData(viewModel.partUrl) }
-            srlPlayActivity.setColorSchemeResources(getSkinResourceId(R.color.main_color_skin))
+            srlPlayActivity.setColorSchemeResources(getSkinResourceId(R.color.unchanged_main_color_2_skin))
 
             avpPlayActivity.playPositionMemoryStore = AnimeVideoPositionMemoryStore
         }

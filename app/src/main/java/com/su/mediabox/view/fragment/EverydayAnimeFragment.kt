@@ -17,6 +17,7 @@ import com.su.mediabox.config.Const.ViewHolderTypeInt
 import com.su.mediabox.databinding.FragmentEverydayAnimeBinding
 import com.su.mediabox.pluginapi.been.AnimeCoverBean
 import com.su.mediabox.util.GridRecyclerView1ViewHolder
+import com.su.mediabox.util.Util.getResColor
 import com.su.mediabox.util.eventbus.EventBusSubscriber
 import com.su.mediabox.util.eventbus.MessageEvent
 import com.su.mediabox.util.eventbus.RefreshEvent
@@ -53,6 +54,9 @@ class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), Even
         super.onActivityCreated(savedInstanceState)
 
         mBinding.run {
+            srlEverydayAnimeFragment.setColorSchemeColors(
+                requireContext().getResColor(R.color.unchanged_main_color_2_skin)
+            )
             vp2EverydayAnimeFragment.setOffscreenPageLimit(offscreenPageLimit)
             srlEverydayAnimeFragment.setOnRefreshListener { refresh() }
 

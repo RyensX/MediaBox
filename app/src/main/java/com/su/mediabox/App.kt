@@ -91,7 +91,7 @@ class App : Application() {
 
             // 全局设置默认的 Header
             SmartRefreshLayout.setDefaultRefreshHeaderCreator { context, layout -> //开始设置全局的基本参数（这里设置的属性只跟下面的MaterialHeader绑定，其他Header不会生效，能覆盖DefaultRefreshInitializer的属性和Xml设置的属性）
-                val colorSchemeResources = R.color.main_color_skin
+                val colorSchemeResources = R.color.unchanged_main_color_2_skin
                 SrlPrimaryColorAttr.materialHeaderColorSchemeRes = colorSchemeResources
                 layout.setEnableHeaderTranslationContent(true)
                     .setHeaderHeight(70f)

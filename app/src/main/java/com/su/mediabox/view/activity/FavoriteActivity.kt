@@ -26,7 +26,7 @@ class FavoriteActivity : BasePluginActivity<ActivityFavoriteBinding>() {
             atbFavoriteActivity.setBackButtonClickListener { finish() }
 
             srlFavoriteActivity.setColorSchemeColors(
-                this@FavoriteActivity.getResColor(R.color.main_color_skin)
+                this@FavoriteActivity.getResColor(R.color.unchanged_main_color_2_skin)
             )
             srlFavoriteActivity.setOnRefreshListener { viewModel.getFavoriteData() }
             rvFavoriteActivity.layoutManager = GridLayoutManager(this@FavoriteActivity, 3)

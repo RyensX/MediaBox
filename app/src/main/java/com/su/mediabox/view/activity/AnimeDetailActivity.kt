@@ -109,7 +109,7 @@ class AnimeDetailActivity : BasePluginActivity<ActivityAnimeDetailBinding>() {
             rvAnimeDetailActivityInfo.adapter = adapter
 
             srlAnimeDetailActivity.setOnRefreshListener { viewModel.getAnimeDetailData(viewModel.partUrl) }
-            srlAnimeDetailActivity.setColorSchemeResources(getSkinResourceId(R.color.main_color_skin))
+            srlAnimeDetailActivity.setColorSchemeResources(getSkinResourceId(R.color.unchanged_main_color_2_skin))
         }
 
         viewModel.mldAnimeDetailList.observe(this, Observer {
