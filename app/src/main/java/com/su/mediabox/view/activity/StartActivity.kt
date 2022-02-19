@@ -8,6 +8,7 @@ import com.su.mediabox.PluginManager
 import com.su.mediabox.R
 import com.su.mediabox.databinding.ActivityPluginBinding
 import com.su.mediabox.util.goActivity
+import com.su.mediabox.util.update.AppUpdateHelper
 import com.su.mediabox.view.adapter.PluginAdapter
 
 class StartActivity : BaseActivity<ActivityPluginBinding>() {
@@ -27,6 +28,13 @@ class StartActivity : BaseActivity<ActivityPluginBinding>() {
             adapter.submitList(it)
         }
         PluginManager.scanPlugin(packageManager)
+
+        AppUpdateHelper.instance.apply {
+            getUpdateStatus().observe(this@StartActivity) {
+                noticeUpdate(this@StartActivity)
+            }
+            checkUpdate()
+        }
     }
 
     override fun getBinding() = ActivityPluginBinding.inflate(layoutInflater)

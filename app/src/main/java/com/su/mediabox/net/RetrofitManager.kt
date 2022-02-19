@@ -32,7 +32,7 @@ class RetrofitManager private constructor() {
 //        }
 
     private val builder = Retrofit.Builder()
-        .baseUrl(Api.MAIN_URL)
+        .baseUrl("https://github.com/")
         .addConverterFactory(GsonConverterFactory.create()) //设置数据解析器
 
     private var mRetrofit: Retrofit = builder.client(okhttpClient).build()

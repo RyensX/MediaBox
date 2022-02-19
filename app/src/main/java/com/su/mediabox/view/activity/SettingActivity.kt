@@ -32,7 +32,7 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
         super.onCreate(savedInstanceState)
 
         //UP_TODO 2022/2/14 15:10 0 暂时移除检查更新
-        //val appUpdateHelper = AppUpdateHelper.instance
+        val appUpdateHelper = AppUpdateHelper.instance
 
         mBinding.run {
             atbSettingActivityToolbar.setBackButtonClickListener { finish() }
@@ -112,7 +112,7 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
             tvSettingActivityUpdateInfo.text =
                 getString(R.string.current_version, getAppVersionName())
 
-            /**
+
             appUpdateHelper.getUpdateStatus().observe(this@SettingActivity, Observer {
                 when (it) {
                     AppUpdateStatus.UNCHECK -> {
@@ -149,7 +149,7 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
                     "已在检查，请稍等...".showToast()
                 }
                 else -> appUpdateHelper.checkUpdate()
-            }*/
+            }
         }
 
         mBinding.rlSettingActivityDoh.setOnClickListener { selectDnsServer() }

@@ -48,8 +48,8 @@ object AppUpdateModel {
         }
         status.value = AppUpdateStatus.CHECKING
         val request = RetrofitManager.get().create(UpdateService::class.java)
-        val check = request?.checkUpdate()
-        check?.enqueue(object : Callback<UpdateBean> {
+        val check = request.checkUpdate()
+        check.enqueue(object : Callback<UpdateBean> {
             override fun onFailure(call: Call<UpdateBean>, t: Throwable) {
                 logD("checkUpdate", t.message ?: "")
                 status.postValue(AppUpdateStatus.ERROR)
