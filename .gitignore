@@ -15,3 +15,5 @@ local.properties
 /app/schemas
 /app/release
 *.jks
+*.apk
+output-metadata.json

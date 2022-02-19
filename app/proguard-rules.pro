@@ -75,10 +75,14 @@ public static final int *;
 }
 -keep enum org.greenrobot.eventbus.ThreadMode { *; }
 
-# And if you use AsyncExecutor:
--keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
+# If using AsyncExecutord, keep required constructor of default event used.
+# Adjust the class name if a custom failure event type is used.
+-keepclassmembers class org.greenrobot.eventbus.util.ThrowableFailureEvent {
     <init>(java.lang.Throwable);
 }
+
+# Accessed via reflection, avoid renaming or removal
+-keep class org.greenrobot.eventbus.android.AndroidComponentsImpl
 
 #-------------------------okhttp
 -keep class okhttp3.internal.publicsuffix.PublicSuffixDatabase
@@ -224,4 +228,9 @@ public static final int *;
     void *(**On*Event);
 }
 -ignorewarnings
+
+# 插件系统
+# 组件不能混淆
+-keep class com.su.mediabox.pluginapi.** {*;}
+-keep class com.su.mediabox.PluginManager {*;}
 #-----------------------------
