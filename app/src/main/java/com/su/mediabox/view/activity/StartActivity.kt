@@ -1,8 +1,11 @@
 package com.su.mediabox.view.activity
 
 import android.os.Bundle
+import android.text.Html
+import android.text.method.LinkMovementMethod
 import android.view.Menu
 import android.view.MenuItem
+import android.view.ViewStub
 import androidx.recyclerview.widget.GridLayoutManager
 import com.su.mediabox.PluginManager
 import com.su.mediabox.R
@@ -25,7 +28,10 @@ class StartActivity : BaseActivity<ActivityPluginBinding>() {
         }
 
         PluginManager.pluginLiveData.observe(this) {
-            adapter.submitList(it)
+            if (it.isEmpty())
+                showLoadFailedTip(Html.fromHtml("""<p>没有插件！前往<a href="https://github.com/Ryensu/MediaBoxPlugin">插件API</a>查看示例</p>""")) {}
+            else
+                adapter.submitList(it)
         }
         PluginManager.scanPlugin(packageManager)
 
@@ -52,4 +58,6 @@ class StartActivity : BaseActivity<ActivityPluginBinding>() {
         }
         return true
     }
+
+    override fun getLoadFailedTipView(): ViewStub = mBinding.startPluginEmpty
 }

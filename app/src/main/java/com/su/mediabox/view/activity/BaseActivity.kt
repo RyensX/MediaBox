@@ -1,6 +1,7 @@
 package com.su.mediabox.view.activity
 
 import android.os.Bundle
+import android.text.method.LinkMovementMethod
 import android.view.View
 import android.view.ViewStub
 import android.widget.TextView
@@ -70,11 +71,15 @@ abstract class BaseActivity<VB : ViewBinding> : SkinBaseActivity() {
 
     protected open fun getLoadFailedTipView(): ViewStub? = null
 
-    protected open fun showLoadFailedTip(text: String, onClickListener: View.OnClickListener?) {
+    protected open fun showLoadFailedTip(
+        text: CharSequence,
+        onClickListener: View.OnClickListener?
+    ) {
         val loadFailedTipViewStub = getLoadFailedTipView() ?: return
         if (loadFailedTipViewStub.parent != null) {
             loadFailedTipView = loadFailedTipViewStub.inflate()
             tvImageTextTip1 = loadFailedTipView.findViewById(R.id.tv_image_text_tip_1)
+            tvImageTextTip1.movementMethod = LinkMovementMethod.getInstance()
             tvImageTextTip1.text = text
             if (onClickListener != null) loadFailedTipView.setOnClickListener(onClickListener)
         } else {

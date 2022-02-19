@@ -34,4 +34,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/start_plugin_bar_layout" />
 
+    <ViewStub
+        android:id="@+id/start_plugin_empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout="@layout/layout_image_text_tip_1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/start_plugin_bar_layout"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
