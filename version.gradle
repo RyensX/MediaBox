@@ -1,4 +1,4 @@
-ext.version_code = 25
+ext.version_code = 30
 ext.version_name = "1.0"
 
 def build_versions = [:]
