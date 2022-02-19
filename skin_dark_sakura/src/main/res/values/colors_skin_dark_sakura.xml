@@ -6,8 +6,8 @@
 
     <color name="main_color_skin_dark_sakura">#EEEEEE</color>
     <color name="main_color_2_skin_dark_sakura">#242A38</color>
-    <color name="unchanged_main_color_2_skin_dark_sakura">#EEEEEE</color>
-    <color name="foreground_main_color_2_skin_dark_sakura">#969FBC</color>
+    <color name="unchanged_main_color_2_skin_dark_sakura">@color/bottom_bar_color</color>
+    <color name="foreground_main_color_2_skin_dark_sakura">@color/bottom_bar_color</color>
     <color name="foreground_main_color_3_skin_dark_sakura">#EEEEEE</color>
     <color name="main_color_3_skin_dark_sakura">#474b56</color>
 
