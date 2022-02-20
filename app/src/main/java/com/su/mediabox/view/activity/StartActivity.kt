@@ -15,6 +15,7 @@ import com.su.mediabox.databinding.ActivityPluginBinding
 import com.su.mediabox.util.Util
 import com.su.mediabox.util.goActivity
 import com.su.mediabox.util.update.AppUpdateHelper
+import com.su.mediabox.util.update.AppUpdateStatus
 import com.su.mediabox.view.adapter.PluginAdapter
 
 class StartActivity : BaseActivity<ActivityPluginBinding>() {
@@ -40,7 +41,8 @@ class StartActivity : BaseActivity<ActivityPluginBinding>() {
 
         AppUpdateHelper.instance.apply {
             getUpdateStatus().observe(this@StartActivity) {
-                noticeUpdate(this@StartActivity)
+                if (it == AppUpdateStatus.DATED)
+                    noticeUpdate(this@StartActivity)
             }
             checkUpdate()
         }

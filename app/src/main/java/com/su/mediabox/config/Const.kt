@@ -13,6 +13,12 @@ interface Const {
         }
     }
 
+    interface Setting {
+        companion object {
+            const val SHOW_PLAY_BOTTOM_BAR = "show_play_bottom_bar"
+        }
+    }
+
     interface ShortCuts {
         companion object {
             const val ID_FAVORITE = "favorite"

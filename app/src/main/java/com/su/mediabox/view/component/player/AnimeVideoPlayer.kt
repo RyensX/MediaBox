@@ -25,17 +25,15 @@ import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoView
 import com.su.mediabox.App
 import com.su.mediabox.R
+import com.su.mediabox.config.Const
 import com.su.mediabox.pluginapi.been.AnimeEpisodeDataBean
 import com.su.mediabox.pluginapi.been.BaseBean
+import com.su.mediabox.util.*
 import com.su.mediabox.util.Util.dp
 import com.su.mediabox.util.Util.getResColor
 import com.su.mediabox.util.Util.getResDrawable
 import com.su.mediabox.util.Util.getScreenBrightness
 import com.su.mediabox.util.Util.openVideoByExternalPlayer
-import com.su.mediabox.util.showToast
-import com.su.mediabox.util.gone
-import com.su.mediabox.util.invisible
-import com.su.mediabox.util.visible
 import com.su.mediabox.view.activity.DlnaActivity
 import com.su.mediabox.view.adapter.SkinRvAdapter
 import com.su.mediabox.view.component.ZoomView
@@ -309,21 +307,12 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
             }
         }
         cbBottomProgress?.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) {
-                pbBottomProgress?.let {
-                    mBottomProgressBar = it
-                    it.visible()
-                }
-            } else {
-                mBottomProgressBar?.let {
-                    pbBottomProgress = it
-                    it.gone()
-                    mBottomProgressBar = null
-                }
-            }
-            mBottomProgressCheckBoxValue = isChecked
+            updateBottomProgressBar(isChecked)
         }
-        cbBottomProgress?.isChecked = mBottomProgressBar != null
+        context?.sharedPreferences()?.getBoolean(Const.Setting.SHOW_PLAY_BOTTOM_BAR, true)?.also {
+            cbBottomProgress?.isChecked = it
+            updateBottomProgressBar(it)
+        }
 
         //重置视频比例
         GSYVideoType.setShowType(mScaleStrings[mScaleIndex].second)
@@ -396,7 +385,6 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
             cancelDismissControlViewTimer()
             if (mReverseValue == null) mReverseValue = rgReverse?.getChildAt(0)?.id
             mReverseValue?.let { id -> findViewById<RadioButton>(id).isChecked = true }
-            cbBottomProgress?.isChecked = mBottomProgressCheckBoxValue
 
 //            mMediaCodecCheckBox?.isChecked = GSYVideoType.isMediaCodec()
 //            mMediaCodecCheckBox?.setOnCheckedChangeListener { buttonView, isChecked ->
@@ -656,6 +644,25 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         } else {
             super.updateStartImage()
         }
+    }
+
+    fun updateBottomProgressBar(isChecked: Boolean) {
+        if (isChecked) {
+            pbBottomProgress?.let {
+                mBottomProgressBar = it
+                it.visible()
+            }
+        } else {
+            mBottomProgressBar?.let {
+                pbBottomProgress = it
+                it.gone()
+                mBottomProgressBar = null
+            }
+        }
+        context?.sharedPreferences()?.editor {
+            putBoolean(Const.Setting.SHOW_PLAY_BOTTOM_BAR, isChecked)
+        }
+        mBottomProgressCheckBoxValue = isChecked
     }
 
     override fun onBrightnessSlide(percent: Float) {
