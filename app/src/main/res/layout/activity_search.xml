@@ -52,7 +52,7 @@
             app:layout_constraintTop_toTopOf="@id/et_search_activity_search"
             tools:visibility="visible" />
 
-        <com.skyd.imomoe.view.component.textview.TypefaceTextView
+        <com.su.mediabox.view.component.textview.TypefaceTextView
             android:id="@+id/tv_search_activity_cancel"
             android:layout_width="wrap_content"
             android:layout_height="0px"
@@ -70,7 +70,7 @@
             app:typeface="bPRTypeface" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.skyd.imomoe.view.component.textview.TypefaceTextView
+    <com.su.mediabox.view.component.textview.TypefaceTextView
         android:id="@+id/tv_search_activity_tip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

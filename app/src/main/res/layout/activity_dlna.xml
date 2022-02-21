@@ -7,7 +7,7 @@
     android:background="@color/white_skin"
     tools:context=".view.activity.DlnaActivity">
 
-    <com.skyd.imomoe.view.component.AnimeToolbar
+    <com.su.mediabox.view.component.AnimeToolbar
         android:id="@+id/atb_dlna_activity"
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -31,7 +31,7 @@
                 android:background="@color/main_color_skin"
                 android:orientation="horizontal">
 
-                <com.skyd.imomoe.view.component.textview.TypefaceTextView
+                <com.su.mediabox.view.component.textview.TypefaceTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingStart="16dp"
@@ -58,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:nestedScrollingEnabled="false" />
 
-            <com.skyd.imomoe.view.component.textview.TypefaceTextView
+            <com.su.mediabox.view.component.textview.TypefaceTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/main_color_skin"
@@ -70,7 +70,7 @@
                 android:textSize="15sp"
                 app:typeface="bPRTypeface" />
 
-            <com.skyd.imomoe.view.component.textview.TypefaceTextView
+            <com.su.mediabox.view.component.textview.TypefaceTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="16dp"

@@ -13,7 +13,7 @@
         android:layout_centerHorizontal="true"
         android:src="@drawable/ic_sentiment_very_dissatisfied_main_color_24_skin" />
 
-    <com.skyd.imomoe.view.component.textview.TypefaceTextView
+    <com.su.mediabox.view.component.textview.TypefaceTextView
         android:id="@+id/tv_image_text_tip_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -23,7 +23,7 @@
         android:layout_marginTop="20dp"
         android:gravity="center_horizontal"
         android:textColor="@color/foreground_main_color_2_skin"
-        android:textSize="17sp"
+        android:textSize="14sp"
         app:typeface="bPRTypeface"
         tools:text="@string/no_download_video" />
 </RelativeLayout>

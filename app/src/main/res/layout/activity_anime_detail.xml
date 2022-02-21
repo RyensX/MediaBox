@@ -19,7 +19,7 @@
         android:layout_height="match_parent"
         android:background="@color/transparent_skin" />
 
-    <com.skyd.imomoe.view.component.AnimeToolbar
+    <com.su.mediabox.view.component.AnimeToolbar
         android:id="@+id/atb_anime_detail_activity_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

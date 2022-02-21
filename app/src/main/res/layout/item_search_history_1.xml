@@ -17,7 +17,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.skyd.imomoe.view.component.textview.TypefaceTextView
+    <com.su.mediabox.view.component.textview.TypefaceTextView
         android:id="@+id/tv_search_history_1_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -8,7 +8,7 @@
     android:orientation="vertical"
     tools:context=".view.activity.HistoryActivity">
 
-    <com.skyd.imomoe.view.component.AnimeToolbar
+    <com.su.mediabox.view.component.AnimeToolbar
         android:id="@+id/atb_history_activity"
         android:layout_width="match_parent"
         android:layout_height="50dp"

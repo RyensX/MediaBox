@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.skyd.imomoe">
+    package="com.su.mediabox">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -21,25 +21,37 @@
     <uses-permission
         android:name="android.permission.RECEIVE_BOOT_COMPLETED"
         tools:node="remove" />
+    <uses-permission
+        android:name="android.permission.QUERY_ALL_PACKAGES"
+        tools:ignore="QueryAllPackagesPermission" />
 
     <application
-        android:name=".App"
+        android:name="com.su.mediabox.App"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_mediabox"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
         android:requestLegacyExternalStorage="true"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_mediabox_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Anime.skin"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".view.activity.ConfigDataSourceActivity"
+            android:name="com.su.mediabox.view.activity.StartActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.su.mediabox.view.activity.ConfigDataSourceActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize"
             android:exported="true"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:scheme="file" />
@@ -48,82 +60,81 @@
                 <data android:mimeType="*/*" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.activity.NoticeActivity" />
+        <activity android:name="com.su.mediabox.view.activity.NoticeActivity" />
         <activity
-            android:name=".view.activity.WebViewActivity"
+            android:name="com.su.mediabox.view.activity.WebViewActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
-            android:name=".view.activity.SkinActivity"
+            android:name="com.su.mediabox.view.activity.SkinActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
-            android:name=".view.activity.CrashActivity"
+            android:name="com.su.mediabox.view.activity.CrashActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
-            android:name=".view.activity.HistoryActivity"
+            android:name="com.su.mediabox.view.activity.HistoryActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
-            android:name=".view.activity.FavoriteActivity"
+            android:name="com.su.mediabox.view.activity.FavoriteActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
-            android:name=".view.activity.DlnaControlActivity"
+            android:name="com.su.mediabox.view.activity.DlnaControlActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
-            android:name=".view.activity.DlnaActivity"
+            android:name="com.su.mediabox.view.activity.DlnaActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
-            android:name=".view.activity.SimplePlayActivity"
+            android:name="com.su.mediabox.view.activity.SimplePlayActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode" />
         <activity
-            android:name=".view.activity.AnimeDownloadActivity"
+            android:name="com.su.mediabox.view.activity.AnimeDownloadActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
-            android:name=".view.activity.LicenseActivity"
+            android:name="com.su.mediabox.view.activity.LicenseActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
-            android:name=".view.activity.AboutActivity"
+            android:name="com.su.mediabox.view.activity.AboutActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
-            android:name=".view.activity.SettingActivity"
+            android:name="com.su.mediabox.view.activity.SettingActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
-            android:name=".view.activity.MonthAnimeActivity"
+            android:name="com.su.mediabox.view.activity.MonthAnimeActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
-            android:name=".view.activity.ClassifyActivity"
+            android:name="com.su.mediabox.view.activity.ClassifyActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
-            android:name=".view.activity.RankActivity"
+            android:name="com.su.mediabox.view.activity.RankActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
-            android:name=".view.activity.SearchActivity"
+            android:name="com.su.mediabox.view.activity.SearchActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
-            android:name=".view.activity.PlayActivity"
+            android:name="com.su.mediabox.view.activity.PlayActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode" />
         <activity
-            android:name=".view.activity.AnimeDetailActivity"
+            android:name="com.su.mediabox.view.activity.AnimeDetailActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
-            android:name=".view.activity.BaseActivity"
+            android:name="com.su.mediabox.view.activity.BaseActivity"
             android:configChanges="uiMode" />
         <activity
-            android:name=".view.activity.MainActivity"
+            android:name="com.su.mediabox.view.activity.MainActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
+        <!--
         <service
-            android:name=".view.component.widget.everydayanime.EverydayAnimeService"
+            android:name="com.su.mediabox.view.component.widget.everydayanime.EverydayAnimeService"
             android:exported="false"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
+            -->
 
+        <!--
         <receiver
-            android:name=".view.component.widget.everydayanime.EverydayAnimeWidgetProvider"
+            android:name="com.su.mediabox.view.component.widget.everydayanime.EverydayAnimeWidgetProvider"
             android:exported="true"
             android:label="@string/widget_everyday_anime">
             <intent-filter>
@@ -134,16 +145,17 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_everyday_anime" />
         </receiver>
+        -->
 
         <service
-            android:name=".util.dlna.dmc.DLNACastService"
+            android:name="com.su.mediabox.util.dlna.dmc.DLNACastService"
             android:exported="false" />
         <service
-            android:name=".util.downloadanime.AnimeDownloadService"
+            android:name="com.su.mediabox.util.downloadanime.AnimeDownloadService"
             android:enabled="true" />
 
         <receiver
-            android:name=".util.downloadanime.AnimeDownloadNotificationReceiver"
+            android:name="com.su.mediabox.util.downloadanime.AnimeDownloadNotificationReceiver"
             android:exported="false" />
 
         <provider

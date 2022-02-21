@@ -49,8 +49,8 @@ android {
         }
 
         manifestPlaceholders = secret.manifestPlaceholders
+        resConfigs 'xxxhdpi', 'anydpi-v26'
 
-        resConfigs "xxxhdpi", "anydpi-v26"
     }
 
     signingConfigs {
@@ -103,26 +103,15 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-
     packagingOptions {
-        exclude 'META-INF/beans.xml'
-        exclude 'META-INF/rxjava.properties'
-        exclude 'META-INF/README.md'
-        exclude 'META-INF/CHANGES'
-        exclude 'META-INF/LICENSE'
-        exclude 'META-INF/eclipse.inf'
-        exclude 'META-INF/DEPENDENCIES'
-        exclude 'META-INF/nanohttpd/**'
-        exclude 'about_files/LICENSE_CDDL.txt'
-        exclude 'DebugProbesKt.bin'
-        exclude 'jetty-dir.css'
-        exclude 'plugin.properties'
-        exclude 'org/seamless/**'
-        exclude 'org/eclipse/jetty/**'
-        exclude 'org/fourthline/cling/**'
-//        exclude 'okhttp3/internal/**'
-        exclude 'com/badlogic/**'
+        jniLibs {
+            excludes += ['META-INF/nanohttpd/**', 'org/seamless/**', 'org/eclipse/jetty/**', 'org/fourthline/cling/**', 'com/badlogic/**']
+        }
+        resources {
+            excludes += ['META-INF/beans.xml', 'META-INF/rxjava.properties', 'META-INF/README.md', 'META-INF/CHANGES', 'META-INF/LICENSE', 'META-INF/eclipse.inf', 'META-INF/DEPENDENCIES', 'META-INF/nanohttpd/**', 'about_files/LICENSE_CDDL.txt', 'DebugProbesKt.bin', 'jetty-dir.css', 'plugin.properties', 'org/seamless/**', 'org/eclipse/jetty/**', 'org/fourthline/cling/**', 'com/badlogic/**']
+        }
     }
+
 
     buildFeatures {
         viewBinding true
@@ -141,6 +130,7 @@ dependencies {
     implementation deps.lifecycle.lifecycle_livedata_ktx
     implementation deps.lifecycle.lifecycle_viewmodel_ktx
     implementation deps.lifecycle.lifecycle_runtime_ktx
+    implementation deps.lifecycle.lifecycle_activity_ktx
     implementation deps.support.viewpager2
     implementation deps.okhttp3.okhttp
     implementation deps.shuyu.GSYVideoPlayer
@@ -152,6 +142,7 @@ dependencies {
     implementation deps.material_dialogs.input
     implementation deps.room.room_runtime
     implementation deps.room.room_ktx
+    androidTestImplementation 'junit:junit:4.12'
     kapt deps.room.room_compiler
     implementation deps.filedownloader.library
     implementation deps.cling.cling_core
@@ -178,17 +169,20 @@ dependencies {
     implementation project(':skin_blue')
     implementation project(':skin_dark')
     implementation project(':skin_lemon')
+    implementation project(':skin_dark_sakura')
     implementation project(':skin_sweat_soybean')
+    implementation project(':MediaBoxPluginApi')
 }
 
 // UM U-APM性能报告
 efs {
     //是否对启动过程进程插桩的开关，如果使用自动集成监控则必须开启
-    isAutoTrack = true
+    isAutoTrack = false
     //您自定义Application的类名称，必填项，如没有自定义则填写系统Application
     applicationName = "App"
     //您自定义Activity的类名称，必填项，将您所有Activity的类名按如下格式填写
     activityList = [
+            "StartActivity",
             "AboutActivity",
             "AnimeDetailActivity",
             "AnimeDownloadActivity",
@@ -250,24 +244,3 @@ andResGuard {
      **/
     // digestalg = "SHA-256"
 }
-
-//class转jar
-//删除之前打出的包，默认将包打在'build/libs/'下
-task deleteOldJar(type: Delete) {
-    delete 'build/libs/CustomDataSource.jar'
-}
-//自定义数据源打包为普通的jar包操作
-task makeJar(type: Jar) {
-    //要打成的包的名字
-    baseName 'CustomDataSource'
-    //选取要打包的文件夹
-    from('build\\tmp\\kotlin-classes\\GithubDebug\\com\\skyd\\imomoe\\model\\impls\\custom')
-    //需要跟实际类的包名路径一样
-    into('com/skyd/imomoe/model/impls/custom')
-    //排除在外的文件
-    exclude('BuildConfig.class', 'R.class', 'MainActivity.class', 'TestClass.class')
-    //排除以R$开头的文件
-    exclude { it.name.startsWith('R$') }
-}
-//打包~
-makeJar.dependsOn(deleteOldJar)

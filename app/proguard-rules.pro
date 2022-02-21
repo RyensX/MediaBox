@@ -36,7 +36,7 @@
     public static **[] values();
     public static ** valueOf(java.lang.String);
 }
--keep public class com.skyd.imomoe.R$*{
+-keep public class com.su.mediabox.R$*{
 public static final int *;
 }
 
@@ -75,10 +75,14 @@ public static final int *;
 }
 -keep enum org.greenrobot.eventbus.ThreadMode { *; }
 
-# And if you use AsyncExecutor:
--keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
+# If using AsyncExecutord, keep required constructor of default event used.
+# Adjust the class name if a custom failure event type is used.
+-keepclassmembers class org.greenrobot.eventbus.util.ThrowableFailureEvent {
     <init>(java.lang.Throwable);
 }
+
+# Accessed via reflection, avoid renaming or removal
+-keep class org.greenrobot.eventbus.android.AndroidComponentsImpl
 
 #-------------------------okhttp
 -keep class okhttp3.internal.publicsuffix.PublicSuffixDatabase
@@ -93,19 +97,19 @@ public static final int *;
 -keep class tv.danmaku.ijk.** { *; }
 -dontwarn tv.danmaku.ijk.**
 # 不混淆AnimeVideoPlayer，否则SimplePlayActivity横屏后布局是未横屏的
--keep class com.skyd.imomoe.view.component.player.AnimeVideoPlayer { *; }
--keep class com.skyd.imomoe.view.component.player.DanmakuVideoPlayer { *; }
+-keep class com.su.mediabox.view.component.player.AnimeVideoPlayer { *; }
+-keep class com.su.mediabox.view.component.player.DanmakuVideoPlayer { *; }
 
 # 自定义数据源接口不应被混淆
--keep class com.skyd.imomoe.model.interfaces.** { *; }
+-keep class com.su.mediabox.model.interfaces.** { *; }
 # 与自定义数据源相关的类不应该被混淆
--keep class com.skyd.imomoe.util.Util { *; }
--keep class com.skyd.imomoe.bean.** { *; }
--keep class com.skyd.imomoe.config.** { *; }
--keep class com.skyd.imomoe.model.util.** { *; }
--keep class com.skyd.imomoe.util.html.source.** { *; }
--keep class com.skyd.imomoe.util.eventbus.** { *; }
--keep class com.skyd.imomoe.util.ToastKt { *; }
+-keep class com.su.mediabox.util.Util { *; }
+-keep class com.su.mediabox.bean.** { *; }
+-keep class com.su.mediabox.config.** { *; }
+-keep class com.su.mediabox.model.util.** { *; }
+-keep class com.su.mediabox.util.html.source.** { *; }
+-keep class com.su.mediabox.util.eventbus.** { *; }
+-keep class com.su.mediabox.util.ToastKt { *; }
 # 与自定义数据源相关的库不应该被混淆
 -keep class org.jsoup.** { *; }
 -keep class org.greenrobot.eventbus.** { *; }
@@ -224,4 +228,9 @@ public static final int *;
     void *(**On*Event);
 }
 -ignorewarnings
+
+# 插件系统
+# 组件不能混淆
+-keep class com.su.mediabox.pluginapi.** {*;}
+-keep class com.su.mediabox.PluginManager {*;}
 #-----------------------------

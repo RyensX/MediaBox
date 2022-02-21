@@ -11,4 +11,5 @@
     <color name="main_color_3_skin_dark">#222222</color>
     <color name="foreground_transparent_skin_dark">#00000000</color>
     <color name="transparent_skin_dark">#5E000000</color>
+    <color name="unchanged_main_color_2_skin_dark">@color/white_skin_dark</color>
 </resources>

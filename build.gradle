@@ -11,15 +11,15 @@ buildscript {
         google()
         maven { url 'https://maven.aliyun.com/repository/public' }
         mavenCentral()
+        mavenLocal()
         maven { url 'https://jitpack.io' }
         maven { allowInsecureProtocol = true
             url 'http://4thline.org/m2' }
         maven { url 'https://repo1.maven.org/maven2/' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.0.2'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-
+        classpath 'com.android.tools.build:gradle:7.1.1'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
         classpath 'com.tencent.mm:AndResGuard-gradle-plugin:1.2.20'
         classpath "com.umeng.umsdk:apm-plugin:0.0.1"
         // NOTE: Do not place your application dependencies here; they belong

@@ -24,7 +24,7 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@drawable/ic_launcher_background" />
 
-        <com.skyd.imomoe.view.component.textview.TypefaceTextView
+        <com.su.mediabox.view.component.textview.TypefaceTextView
             android:id="@+id/tv_skin_cover_1_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

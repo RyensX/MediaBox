@@ -1,0 +1,27 @@
+package com.su.mediabox.database.dao
+
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import com.su.mediabox.config.Const.Database.OfflineDataBase.PLAY_RECORD_TABLE_NAME
+import com.su.mediabox.database.entity.PlayRecordEntity
+
+@Dao
+interface PlayRecordDao {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(vararg record: PlayRecordEntity)
+
+    @Query("SELECT * FROM $PLAY_RECORD_TABLE_NAME WHERE url = :url")
+    suspend fun query(url: String): PlayRecordEntity?
+
+    @Query("DELETE FROM $PLAY_RECORD_TABLE_NAME WHERE url = :url")
+    fun delete(url: String)
+
+    @Query(value = "DELETE FROM $PLAY_RECORD_TABLE_NAME")
+    fun deleteAll()
+
+    // 获取记录条数
+    @Query(value = "SELECT COUNT(1) FROM $PLAY_RECORD_TABLE_NAME")
+    fun getPlayRecordCount(): Long
+}

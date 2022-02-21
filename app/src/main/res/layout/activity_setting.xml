@@ -8,7 +8,7 @@
     android:orientation="vertical"
     tools:context=".view.activity.SettingActivity">
 
-    <com.skyd.imomoe.view.component.AnimeToolbar
+    <com.su.mediabox.view.component.AnimeToolbar
         android:id="@+id/atb_setting_activity_toolbar"
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -24,59 +24,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-
-            <RelativeLayout
-                android:id="@+id/rl_setting_activity_domain"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?android:selectableItemBackground"
-                android:paddingHorizontal="15dp"
-                android:paddingVertical="15dp"
-                android:visibility="gone">
-
-                <ImageView
-                    android:id="@+id/iv_setting_activity_domain"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_centerVertical="true"
-                    android:padding="1dp"
-                    android:src="@drawable/ic_language_main_color_2_24_skin" />
-
-                <com.skyd.imomoe.view.component.textview.TypefaceTextView
-                    android:id="@+id/tv_setting_activity_domain"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:layout_toStartOf="@id/tv_setting_activity_default_domain"
-                    android:layout_toEndOf="@id/iv_setting_activity_domain"
-                    android:text="@string/website_domain"
-                    android:textColor="@color/foreground_black_skin"
-                    android:textSize="15sp"
-                    app:typeface="bPRTypeface" />
-
-                <com.skyd.imomoe.view.component.textview.TypefaceTextView
-                    android:id="@+id/tv_setting_activity_info_domain"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_setting_activity_domain"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_toStartOf="@id/tv_setting_activity_default_domain"
-                    android:layout_toEndOf="@id/iv_setting_activity_domain"
-                    android:textColor="@color/gray_1"
-                    android:textSize="12sp"
-                    app:typeface="bPRTypeface"
-                    tools:text="http://www.yhdm.io" />
-
-                <com.skyd.imomoe.view.component.textview.TypefaceTextView
-                    android:id="@+id/tv_setting_activity_default_domain"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:text="@string/recovery_default"
-                    android:textColor="@color/foreground_main_color_2_skin" />
-            </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/rl_setting_activity_download_path"
@@ -95,7 +42,7 @@
                     android:src="@drawable/ic_arrow_circle_down_main_color_2_24_skin"
                     app:tint="@color/foreground_main_color_2_skin" />
 
-                <com.skyd.imomoe.view.component.textview.TypefaceTextView
+                <com.su.mediabox.view.component.textview.TypefaceTextView
                     android:id="@+id/tv_setting_activity_download_path"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -108,7 +55,7 @@
                     android:textSize="15sp"
                     app:typeface="bPRTypeface" />
 
-                <com.skyd.imomoe.view.component.textview.TypefaceTextView
+                <com.su.mediabox.view.component.textview.TypefaceTextView
                     android:id="@+id/tv_setting_activity_download_path_info"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -138,65 +85,6 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/rl_setting_activity_delete_all_history"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?android:selectableItemBackground"
-                android:paddingHorizontal="15dp"
-                android:paddingVertical="15dp">
-
-                <ImageView
-                    android:id="@+id/iv_setting_activity_delete_all_history"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/ic_delete_main_color_2_24_skin" />
-
-                <com.skyd.imomoe.view.component.textview.TypefaceTextView
-                    android:id="@+id/tv_setting_activity_delete_all_history"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:layout_toEndOf="@id/iv_setting_activity_delete_all_history"
-                    android:text="@string/delete_all_history"
-                    android:textColor="@color/foreground_black_skin"
-                    android:textSize="15sp"
-                    app:typeface="bPRTypeface" />
-
-                <com.skyd.imomoe.view.component.textview.TypefaceTextView
-                    android:id="@+id/tv_setting_activity_all_history_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:layout_toEndOf="@id/tv_setting_activity_delete_all_history"
-                    android:textColor="@color/main_color_skin"
-                    android:textSize="15sp"
-                    android:visibility="gone"
-                    app:typeface="bPRTypeface"
-                    tools:text="@string/all_history_count"
-                    tools:visibility="visible" />
-
-                <com.skyd.imomoe.view.component.textview.TypefaceTextView
-                    android:id="@+id/tv_setting_activity_delete_all_history_info"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_setting_activity_delete_all_history"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_toEndOf="@id/iv_setting_activity_delete_all_history"
-                    android:ellipsize="marquee"
-                    android:focusable="true"
-                    android:marqueeRepeatLimit="marquee_forever"
-                    android:singleLine="true"
-                    android:text="@string/delete_all_history_info"
-                    android:textColor="@color/gray_1"
-                    android:textSize="12sp"
-                    app:focused="true"
-                    app:typeface="bPRTypeface" />
-            </RelativeLayout>
-
-            <RelativeLayout
                 android:id="@+id/rl_setting_activity_clear_cache"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -212,7 +100,7 @@
                     android:padding="2dp"
                     android:src="@drawable/ic_sd_storage_main_color_2_24_skin" />
 
-                <com.skyd.imomoe.view.component.textview.TypefaceTextView
+                <com.su.mediabox.view.component.textview.TypefaceTextView
                     android:id="@+id/tv_setting_activity_clear_cache"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -223,7 +111,7 @@
                     android:textSize="15sp"
                     app:typeface="bPRTypeface" />
 
-                <com.skyd.imomoe.view.component.textview.TypefaceTextView
+                <com.su.mediabox.view.component.textview.TypefaceTextView
                     android:id="@+id/tv_setting_activity_clear_cache_size"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -233,7 +121,7 @@
                     android:textSize="15sp"
                     app:typeface="bPRTypeface" />
 
-                <com.skyd.imomoe.view.component.textview.TypefaceTextView
+                <com.su.mediabox.view.component.textview.TypefaceTextView
                     android:id="@+id/tv_setting_activity_clear_cache_info"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -268,7 +156,7 @@
                     android:padding="1dp"
                     android:src="@drawable/ic_nights_stay_main_color_2_24_skin" />
 
-                <com.skyd.imomoe.view.component.textview.TypefaceTextView
+                <com.su.mediabox.view.component.textview.TypefaceTextView
                     android:id="@+id/tv_setting_activity_night_mode"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -280,7 +168,7 @@
                     android:textSize="15sp"
                     app:typeface="bPRTypeface" />
 
-                <com.skyd.imomoe.view.component.textview.TypefaceTextView
+                <com.su.mediabox.view.component.textview.TypefaceTextView
                     android:id="@+id/tv_setting_activity_night_mode_info"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -336,7 +224,7 @@
                     android:layout_centerVertical="true"
                     android:src="@drawable/ic_update_main_color_2_24_skin" />
 
-                <com.skyd.imomoe.view.component.textview.TypefaceTextView
+                <com.su.mediabox.view.component.textview.TypefaceTextView
                     android:id="@+id/tv_setting_activity_update"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -347,7 +235,7 @@
                     android:textSize="15sp"
                     app:typeface="bPRTypeface" />
 
-                <com.skyd.imomoe.view.component.textview.TypefaceTextView
+                <com.su.mediabox.view.component.textview.TypefaceTextView
                     android:id="@+id/tv_setting_activity_update_tip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -358,7 +246,7 @@
                     android:textSize="15sp"
                     app:typeface="bPRTypeface" />
 
-                <com.skyd.imomoe.view.component.textview.TypefaceTextView
+                <com.su.mediabox.view.component.textview.TypefaceTextView
                     android:id="@+id/tv_setting_activity_update_info"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -370,55 +258,6 @@
                     android:textSize="12sp"
                     app:typeface="bPRTypeface"
                     tools:text="Panda(1.2.4)" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/rl_setting_activity_custom_data_source"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?android:selectableItemBackground"
-                android:paddingHorizontal="15dp"
-                android:paddingVertical="15dp">
-
-                <ImageView
-                    android:id="@+id/iv_setting_activity_custom_data_source"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_centerVertical="true"
-                    android:paddingHorizontal="1dp"
-                    android:src="@drawable/ic_category_main_color_2_24_skin" />
-
-                <com.skyd.imomoe.view.component.textview.TypefaceTextView
-                    android:id="@+id/tv_setting_activity_custom_data_source"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:layout_toEndOf="@id/iv_setting_activity_custom_data_source"
-                    android:ellipsize="marquee"
-                    android:focusable="true"
-                    android:marqueeRepeatLimit="marquee_forever"
-                    android:singleLine="true"
-                    android:text="@string/custom_data_source"
-                    android:textColor="@color/foreground_black_skin"
-                    android:textSize="15sp"
-                    app:typeface="bPRTypeface" />
-
-                <com.skyd.imomoe.view.component.textview.TypefaceTextView
-                    android:id="@+id/tv_setting_activity_custom_data_source_info"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_setting_activity_custom_data_source"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_toEndOf="@id/iv_setting_activity_custom_data_source"
-                    android:ellipsize="marquee"
-                    android:focusable="true"
-                    android:marqueeRepeatLimit="marquee_forever"
-                    android:singleLine="true"
-                    android:text="@string/custom_data_source_describe"
-                    android:textColor="@color/gray_1"
-                    android:textSize="12sp"
-                    app:typeface="bPRTypeface" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -437,7 +276,7 @@
                     android:paddingHorizontal="1dp"
                     android:src="@drawable/ic_dns_main_color_2_24_skin" />
 
-                <com.skyd.imomoe.view.component.textview.TypefaceTextView
+                <com.su.mediabox.view.component.textview.TypefaceTextView
                     android:id="@+id/tv_setting_activity_doh"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -448,7 +287,7 @@
                     android:textSize="15sp"
                     app:typeface="bPRTypeface" />
 
-                <com.skyd.imomoe.view.component.textview.TypefaceTextView
+                <com.su.mediabox.view.component.textview.TypefaceTextView
                     android:id="@+id/tv_setting_activity_doh_info"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

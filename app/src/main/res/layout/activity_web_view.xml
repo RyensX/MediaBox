@@ -5,9 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.skyd.imomoe.view.activity.WebViewActivity">
+    tools:context="com.su.mediabox.view.activity.WebViewActivity">
 
-    <com.skyd.imomoe.view.component.AnimeToolbar
+    <com.su.mediabox.view.component.AnimeToolbar
         android:id="@+id/atb_web_view_activity_toolbar"
         android:layout_width="match_parent"
         android:layout_height="50dp"

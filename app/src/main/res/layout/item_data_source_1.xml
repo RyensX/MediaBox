@@ -16,7 +16,7 @@
         android:layout_height="36dp"
         android:src="@drawable/ic_insert_drive_file_main_color_2_24_skin" />
 
-    <com.skyd.imomoe.view.component.textview.TypefaceTextView
+    <com.su.mediabox.view.component.textview.TypefaceTextView
         android:id="@+id/tv_data_source_1_name"
         android:layout_width="0px"
         android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
         android:layout_marginStart="6dp"
         android:src="@drawable/ic_check_circle_main_color_2_24_skin" />
 
-    <com.skyd.imomoe.view.component.textview.TypefaceTextView
+    <com.su.mediabox.view.component.textview.TypefaceTextView
         android:id="@+id/tv_data_source_1_size"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
