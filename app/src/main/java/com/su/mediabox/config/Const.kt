@@ -77,14 +77,7 @@ interface Const {
 
     interface DownloadAnime {
         companion object {
-            var new: Boolean = true
-            val animeFilePath: String
-                get() {
-                    return if (new) App.context.getExternalFilesDir(null)
-                        .toString() + "/DownloadAnime/"
-                    else Environment.getExternalStorageDirectory()
-                        .toString() + "/Imomoe/DownloadAnime/"
-                }
+            val animeFilePath = App.context.getExternalFilesDir(null).toString() + "/DownloadAnime/"
         }
     }
 

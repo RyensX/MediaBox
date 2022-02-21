@@ -29,7 +29,7 @@ object PluginManager : AppUtil.IRouteProcessor {
     /**
      * 最低支持的插件API版本
      */
-    private const val minPluginApiVersion = 1
+    private const val minPluginApiVersion = 2
 
     private val _pluginLiveData = MutableLiveData<List<PluginInfo>>()
     private val pluginIntent = Intent(Constant.PLUGIN_ACTION)
@@ -61,11 +61,14 @@ object PluginManager : AppUtil.IRouteProcessor {
             val index = getPluginIndex()
             if (index == -1)
                 throw RuntimeException()
-            _pluginLiveData.value?.get(index) ?: throw RuntimeException()
+            _pluginLiveData.value?.get(index) ?: throw RuntimeException("持久信息为空")
         }.onSuccess {
             return it
+        }.onFailure {
+            it.printStackTrace()
+            throw RuntimeException("插件信息读取错误：${it.message ?: "null"}")
         }
-        throw RuntimeException("插件信息读取错误")
+        throw RuntimeException()
     }
 
     fun Activity.getPluginName() = getPluginInfo().name
@@ -104,6 +107,7 @@ object PluginManager : AppUtil.IRouteProcessor {
             )
             val clz = classLoader.loadClass(Constant.PLUGIN_INIT_CLASS)
 
+            //FIX_TODO 2022/2/21 21:13 0 因为双亲委托机制导致无法取得当前插件的实际插件API版本
             //检查插件API版本
             val version = clz.getAnnotation(IComponentFactory.PluginSdkVersion::class.java)
                 ?: throw RuntimeException("插件初始化错误")

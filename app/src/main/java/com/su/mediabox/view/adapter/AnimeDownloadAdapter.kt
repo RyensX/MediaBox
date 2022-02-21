@@ -29,12 +29,6 @@ class AnimeDownloadAdapter(
                 holder.tvAnimeCover7Title.text = item.title
                 holder.tvAnimeCover7Size.isFocused = true
                 holder.tvAnimeCover7Size.text = item.size
-                if (item.path == 1) {
-                    holder.tvAnimeCover7OldPath.text = activity.getString(R.string.old_path)
-                    holder.tvAnimeCover7OldPath.visible()
-                } else {
-                    holder.tvAnimeCover7OldPath.gone()
-                }
                 if (item.actionUrl.startsWith(ActionUrl.ANIME_ANIME_DOWNLOAD_EPISODE)) {
                     holder.tvAnimeCover7Episodes.text = item.episodeCount
                     holder.tvAnimeCover7Episodes.visible()
@@ -42,8 +36,7 @@ class AnimeDownloadAdapter(
                     holder.tvAnimeCover7Episodes.invisible()
                 }
                 holder.itemView.setOnClickListener {
-                    //UP_TODO 2022/2/16 22:48 0 暂不支持缓存
-                    //process(item.actionUrl + "/" + item.path)
+                    process(item.actionUrl)
                 }
             }
             else -> {

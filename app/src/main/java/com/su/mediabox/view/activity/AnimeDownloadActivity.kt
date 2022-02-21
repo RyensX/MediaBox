@@ -3,6 +3,7 @@ package com.su.mediabox.view.activity
 import android.os.Bundle
 import android.view.ViewStub
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,27 +18,22 @@ import com.su.mediabox.view.adapter.AnimeDownloadAdapter
 import com.su.mediabox.viewmodel.AnimeDownloadViewModel
 
 class AnimeDownloadActivity : BasePluginActivity<ActivityAnimeDownloadBinding>() {
-    private var mode = 0        //0是默认的，是番剧；1是番剧每一集
-    private var actionBarTitle = ""
-    private var directoryName = ""
-    private var path = 0
-    private lateinit var viewModel: AnimeDownloadViewModel
+
+    private val viewModel by viewModels<AnimeDownloadViewModel>()
     private lateinit var adapter: AnimeDownloadAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mode = intent.getIntExtra("mode", 0)
-        actionBarTitle =
+        viewModel.mode = intent.getIntExtra("mode", 0)
+        viewModel.actionBarTitle =
             intent.getStringExtra("actionBarTitle") ?: getString(R.string.download_anime)
-        directoryName = intent.getStringExtra("directoryName") ?: ""
-        path = intent.getIntExtra("path", 0)
+        viewModel.directoryName = intent.getStringExtra("directoryName") ?: ""
 
-        viewModel = ViewModelProvider(this).get(AnimeDownloadViewModel::class.java)
         adapter = AnimeDownloadAdapter(this, viewModel.animeCoverList)
 
         mBinding.run {
-            atbAnimeDownloadActivityToolbar.titleText = actionBarTitle
+            atbAnimeDownloadActivityToolbar.titleText = viewModel.actionBarTitle
             atbAnimeDownloadActivityToolbar.setBackButtonClickListener { finish() }
             atbAnimeDownloadActivityToolbar.setButtonClickListener(0) {
                 MaterialDialog(this@AnimeDownloadActivity).show {
@@ -70,10 +66,10 @@ class AnimeDownloadActivity : BasePluginActivity<ActivityAnimeDownloadBinding>()
 
         requestManageExternalStorage {
             onGranted {
-                if (mode == 0) viewModel.getAnimeCover()
-                else if (mode == 1) {
+                if (viewModel.mode == 0) viewModel.getAnimeCover()
+                else if (viewModel.mode == 1) {
                     mBinding.layoutAnimeDownloadLoading.layoutCircleProgressTextTip1.visible()
-                    viewModel.getAnimeCoverEpisode(directoryName, path)
+                    viewModel.getAnimeCoverEpisode(viewModel.directoryName)
                 }
             }
             onDenied {

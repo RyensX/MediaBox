@@ -129,29 +129,22 @@ object AppRouteProcessor :
             matchAndGetParams(actionUrl, ActionUrl.ANIME_BROWSER) {
                 Util.openBrowser(it[0])
             } -> true
-            //缓存的每一集列表
+            //打开缓存列表
             matchAndGetParams(actionUrl, ActionUrl.ANIME_ANIME_DOWNLOAD_EPISODE) {
-                val directoryName: String = it[0] + "/" + it[1]
-                val path: Int = it.last().toInt()
                 activity.startActivity(
                     Intent(activity, AnimeDownloadActivity::class.java)
-                        //模式
-                        .putExtra("mode", 1)
-                        .putExtra("actionBarTitle", directoryName.replace("/", ""))
-                        .putExtra("directoryName", directoryName)
-                        .putExtra("path", path)
+                        .putExtra("mode", it[0].toInt())
+                        .putExtra("actionBarTitle", it[1])
+                        .putExtra("directoryName", it[2])
                 )
             } -> true
-            //播放缓存的每一集
+            //播放本地缓存
             matchAndGetParams(actionUrl, ActionUrl.ANIME_ANIME_DOWNLOAD_PLAY) {
-                val filePath =
-                    actionUrl.replaceFirst(ActionUrl.ANIME_ANIME_DOWNLOAD_PLAY + "/", "")
-                        .replace(Regex("/\\d+$"), "")
-                val fileName = filePath.split("/").last()
+                //参数：URL/标题
                 activity.startActivity(
                     Intent(activity, SimplePlayActivity::class.java)
-                        .putExtra("url", "file://$filePath")
-                        .putExtra("title", fileName)
+                        .putExtra(SimplePlayActivity.URL, it[0])
+                        .putExtra(SimplePlayActivity.TITLE, it[1])
                 )
             } -> true
             matchAndGetParams(actionUrl, ActionUrl.ANIME_ANIME_DOWNLOAD_M3U8) {
