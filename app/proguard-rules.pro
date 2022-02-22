@@ -232,5 +232,5 @@ public static final int *;
 # 插件系统
 # 组件不能混淆
 -keep class com.su.mediabox.pluginapi.** {*;}
--keep class com.su.mediabox.PluginManager {*;}
+-keep class com.su.mediabox.plugin.** {*;}
 #-----------------------------

@@ -11,7 +11,7 @@ import android.os.Build
 import android.widget.RemoteViews
 import com.google.gson.Gson
 import com.su.mediabox.App
-import com.su.mediabox.AppRouteProcessor
+import com.su.mediabox.plugin.AppRouteProcessor
 import com.su.mediabox.R
 import com.su.mediabox.pluginapi.been.AnimeCoverBean
 import com.su.mediabox.util.Util.getWeekday

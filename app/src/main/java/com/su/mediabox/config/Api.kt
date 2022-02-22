@@ -1,6 +1,6 @@
 package com.su.mediabox.config
 
-import com.su.mediabox.PluginManager
+import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.pluginapi.components.IConstComponent
 
 interface Api {

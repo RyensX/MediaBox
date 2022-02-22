@@ -1,10 +1,11 @@
-package com.su.mediabox
+package com.su.mediabox.plugin
 
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.su.mediabox.App
 import com.su.mediabox.bean.PluginInfo
 import com.su.mediabox.pluginapi.AppUtil
 import com.su.mediabox.pluginapi.Constant
@@ -12,6 +13,7 @@ import com.su.mediabox.view.activity.BasePluginActivity
 import com.su.mediabox.pluginapi.IComponentFactory
 import com.su.mediabox.pluginapi.components.IBaseComponent
 import com.su.mediabox.util.Util.getSignatures
+import com.su.mediabox.util.showToast
 import dalvik.system.DexClassLoader
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -107,14 +109,13 @@ object PluginManager : AppUtil.IRouteProcessor {
             )
             val clz = classLoader.loadClass(Constant.PLUGIN_INIT_CLASS)
 
-            //FIX_TODO 2022/2/21 21:13 0 因为双亲委托机制导致无法取得当前插件的实际插件API版本
-            //检查插件API版本
-            val version = clz.getAnnotation(IComponentFactory.PluginSdkVersion::class.java)
-                ?: throw RuntimeException("插件初始化错误")
-            if (version.version < minPluginApiVersion)
-                throw RuntimeException("该插件API版本过低，请联系作者升级API")
-
             (clz.newInstance() as IComponentFactory).also {
+                //检查插件API版本
+                val version = it.apiVersion
+                if (version < minPluginApiVersion) {
+                    throw RuntimeException("该插件API版本($version)过低，请联系作者升级API(当前支持最低$minPluginApiVersion)")
+                }
+
                 componentFactoryPool[pluginPath] = it
             }
         }

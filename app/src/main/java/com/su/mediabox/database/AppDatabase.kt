@@ -6,8 +6,8 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.su.mediabox.App
-import com.su.mediabox.AppRouteProcessor
-import com.su.mediabox.PluginManager.getPluginInfo
+import com.su.mediabox.plugin.AppRouteProcessor
+import com.su.mediabox.plugin.PluginManager.getPluginInfo
 import com.su.mediabox.bean.SearchHistoryBean
 import com.su.mediabox.database.converter.AnimeDownloadStatusConverter
 import com.su.mediabox.database.entity.AnimeDownloadEntity

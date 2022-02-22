@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.su.mediabox.App
-import com.su.mediabox.PluginManager.process
+import com.su.mediabox.plugin.PluginManager.process
 import com.su.mediabox.R
 import com.su.mediabox.config.Api
 import com.su.mediabox.util.*
@@ -20,7 +20,6 @@ import com.su.mediabox.view.fragment.AnimeShowFragment
 import com.su.mediabox.view.component.bannerview.adapter.MyCycleBannerAdapter
 import com.su.mediabox.view.component.bannerview.indicator.DotIndicator
 import com.su.mediabox.pluginapi.Constant.ViewHolderTypeString
-import com.su.mediabox.pluginapi.Constant.ActionUrl
 import com.su.mediabox.pluginapi.been.AnimeCoverBean
 import com.su.mediabox.pluginapi.been.IAnimeShowBean
 import com.su.mediabox.util.Util.dp

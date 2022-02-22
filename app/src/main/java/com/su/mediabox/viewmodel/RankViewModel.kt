@@ -4,7 +4,7 @@ import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.su.mediabox.PluginManager
+import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.pluginapi.been.TabBean
 import com.su.mediabox.pluginapi.components.IRankComponent
 import com.su.mediabox.util.showToast

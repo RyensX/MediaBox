@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.su.mediabox.PluginManager.setPluginInfo
+import com.su.mediabox.plugin.PluginManager.setPluginInfo
 import com.su.mediabox.bean.PluginInfo
 import com.su.mediabox.databinding.ItemPluginBinding
 import com.su.mediabox.util.goActivity

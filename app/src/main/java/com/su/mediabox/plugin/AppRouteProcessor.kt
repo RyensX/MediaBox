@@ -1,4 +1,4 @@
-package com.su.mediabox
+package com.su.mediabox.plugin
 
 import android.app.Activity
 import android.content.Intent

@@ -3,7 +3,7 @@ package com.su.mediabox.view.adapter
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.su.mediabox.App
-import com.su.mediabox.PluginManager.process
+import com.su.mediabox.plugin.PluginManager.process
 import com.su.mediabox.R
 import com.su.mediabox.bean.MoreBean
 import com.su.mediabox.util.More1ViewHolder

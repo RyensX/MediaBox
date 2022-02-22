@@ -13,7 +13,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.AppBarLayout
@@ -26,16 +25,12 @@ import com.shuyu.gsyvideoplayer.utils.GSYVideoType
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoView
 import com.su.mediabox.App
-import com.su.mediabox.PluginManager.acquireComponent
 import com.su.mediabox.R
-import com.su.mediabox.bean.FavoriteAnimeBean
 import com.su.mediabox.config.Api
-import com.su.mediabox.database.getAppDataBase
 import com.su.mediabox.databinding.ActivityPlayBinding
 import com.su.mediabox.util.*
 import com.su.mediabox.util.Util.dp
 import com.su.mediabox.util.Util.getResColor
-import com.su.mediabox.util.Util.getResDrawable
 import com.su.mediabox.util.Util.getSkinResourceId
 import com.su.mediabox.util.Util.openVideoByExternalPlayer
 import com.su.mediabox.util.Util.setColorStatusBar
@@ -54,9 +49,7 @@ import com.su.mediabox.view.component.player.DetailPlayerActivity
 import com.su.mediabox.view.fragment.MoreDialogFragment
 import com.su.mediabox.view.fragment.ShareDialogFragment
 import com.su.mediabox.viewmodel.PlayViewModel
-import com.su.mediabox.pluginapi.Constant
 import com.su.mediabox.pluginapi.been.AnimeEpisodeDataBean
-import kotlinx.coroutines.*
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
 import tv.danmaku.ijk.media.player.IjkMediaPlayer
 import kotlin.math.abs
