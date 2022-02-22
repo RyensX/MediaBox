@@ -33,7 +33,7 @@ class StartActivity : BaseActivity<ActivityPluginBinding>() {
 
         PluginManager.pluginLiveData.observe(this) {
             if (it.isEmpty())
-                showLoadFailedTip(Html.fromHtml("""<p>没有插件！前往<a href="https://github.com/Ryensu/MediaBoxPlugin">插件API</a>查看示例</p>""")) {}
+                showLoadFailedTip(Html.fromHtml("""<p>没有插件！前往<a href="https://github.com/RyensX/MediaBoxPlugin">插件API</a>查看示例</p>""")) {}
             else
                 adapter.submitList(it)
         }

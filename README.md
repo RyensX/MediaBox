@@ -4,17 +4,17 @@
 <div align="center">
     <h1>媒体盒子</h1>
     <p>
-        <a href="https://github.com/Ryensu/MediaBox/releases/latest" style="text-decoration:none">
-            <img src="https://img.shields.io/github/v/release/Ryensu/MediaBox?display_name=release" alt="GitHub release (latest by date)"/>
+        <a href="https://github.com/RyensX/MediaBox/releases/latest" style="text-decoration:none">
+            <img src="https://img.shields.io/github/v/release/RyensX/MediaBox?display_name=release" alt="GitHub release (latest by date)"/>
         </a>
-        <a href="https://github.com/Ryensu/MediaBox/releases/latest" style="text-decoration:none" >
-            <img src="https://img.shields.io/github/downloads/Ryensu/MediaBox/total" alt="GitHub all downloads"/>
+        <a href="https://github.com/RyensX/MediaBox/releases/latest" style="text-decoration:none" >
+            <img src="https://img.shields.io/github/downloads/RyensX/MediaBox/total" alt="GitHub all downloads"/>
         </a>
         <a href="https://img.shields.io/badge/Android-5.0%2B-brightgreen" style="text-decoration:none" >
             <img src="https://img.shields.io/badge/Android-5.0%2B-brightgreen" alt="Android version"/>
         </a>
         <a href="LICENSE" style="text-decoration:none" >
-            <img src="https://img.shields.io/github/license/Ryensu/MediaBox" alt="GitHub license"/>
+            <img src="https://img.shields.io/github/license/RyensX/MediaBox" alt="GitHub license"/>
         </a>
 	</p>
 </div>
@@ -24,7 +24,7 @@
 ----
 
 ## 原理
-根据[**插件API**](https://github.com/Ryensu/MediaBoxPlugin)实现各个组件解析外部数据然后通过本项目的用户界面**规范化**展示媒体数据（和浏览器差不多,类似内容受限的浏览器）
+根据[**插件API**](https://github.com/RyensX/MediaBoxPlugin)实现各个组件解析外部数据然后通过本项目的用户界面**规范化**展示媒体数据（和浏览器差不多,类似内容受限的浏览器）
 
 ## 功能
 ### 视频
@@ -47,7 +47,7 @@
 暂未支持
 
 ## 使用效果
-见[**插件API**](https://github.com/Ryensu/MediaBoxPlugin)下的各个示例
+见[**插件API**](https://github.com/RyensX/MediaBoxPlugin)下的各个示例
 
 ## 安全说明
 
@@ -86,7 +86,7 @@ App本身不提供任何数据，请用户自行添加各类插件学习和体�
 
 ## 相关项目
 - 本项目基于[Imomoe](https://github.com/SkyD666/Imomoe)
-- [插件API](https://github.com/Ryensu/MediaBoxPlugin)
+- [插件API](https://github.com/RyensX/MediaBoxPlugin)
 
 ## 构建相关
 - [secret.gradle](doc/about_secret.gradle.md)文件

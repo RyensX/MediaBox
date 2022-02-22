@@ -7,8 +7,8 @@ import com.su.mediabox.R
 interface Const {
     interface Common {
         companion object {
-            const val GITHUB_URL = "https://github.com/Ryensu/MediaBox"
-            const val GITHUB_NEW_ISSUE_URL = "https://github.com/Ryensu/MediaBox/issues/new"
+            const val GITHUB_URL = "https://github.com/RyensX/MediaBox"
+            const val GITHUB_NEW_ISSUE_URL = "https://github.com/RyensX/MediaBox/issues/new"
             const val USER_NOTICE_VERSION = 2
         }
     }
