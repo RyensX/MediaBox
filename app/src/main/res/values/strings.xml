@@ -39,7 +39,7 @@
     <string name="data_source_info">数据源信息</string>
     <string name="open_source_licenses">开放源代码许可</string>
     <string name="search_history">搜索历史</string>
-    <string name="download_anime">缓存动漫(请于24h内删除)</string>
+    <string name="download_anime">缓存动漫</string>
     <string name="please_delete_anime_in_24h">请于24h内手动删除缓存动漫</string>
     <string name="anime_download_path">视频缓存目录</string>
     <string name="no_download_video">没有缓存视频</string>
@@ -96,6 +96,7 @@
     <string name="shortcuts_download_long">缓存番剧</string>
     <string name="shortcuts_download_short">缓存番剧</string>
     <string name="attention">声明</string>
+    <string name="download_anime_delete_tip">是否删除该番剧？</string>
     <string name="update_widget">正在更新小组件</string>
     <string name="widget_everyday_anime">每日更新动漫</string>
     <string name="play_sound_only">只播放音频</string>

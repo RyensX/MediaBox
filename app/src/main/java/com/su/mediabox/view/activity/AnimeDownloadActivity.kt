@@ -39,9 +39,7 @@ class AnimeDownloadActivity : BasePluginActivity<ActivityAnimeDownloadBinding>()
                 MaterialDialog(this@AnimeDownloadActivity).show {
                     title(res = R.string.attention)
                     message(
-                        text = "由于新版Android存储机制变更，因此新缓存的动漫将存储在App的私有路径，" +
-                                "以前缓存的动漫依旧能够观看，其后面将有“旧”字样。新缓存的动漫与以前缓存的互不影响。" +
-                                "\n\n注意：新缓存的动漫将在App被卸载或数据被清除后丢失。"
+                        text = "缓存功能及缓存仅用于学习交流，请在下载24小时内删除\n\n注意：缓存的动漫在App被卸载或数据被清除时丢失。"
                     )
                     positiveButton { dismiss() }
                 }
@@ -69,7 +67,7 @@ class AnimeDownloadActivity : BasePluginActivity<ActivityAnimeDownloadBinding>()
                 if (viewModel.mode == 0) viewModel.getAnimeCover()
                 else if (viewModel.mode == 1) {
                     mBinding.layoutAnimeDownloadLoading.layoutCircleProgressTextTip1.visible()
-                    viewModel.getAnimeCoverEpisode(viewModel.directoryName)
+                    getAnimeCoverEpisode()
                 }
             }
             onDenied {
@@ -77,6 +75,10 @@ class AnimeDownloadActivity : BasePluginActivity<ActivityAnimeDownloadBinding>()
                 finish()
             }
         }
+    }
+
+    fun getAnimeCoverEpisode() {
+        viewModel.getAnimeCoverEpisode(viewModel.directoryName)
     }
 
     override fun getBinding(): ActivityAnimeDownloadBinding =
