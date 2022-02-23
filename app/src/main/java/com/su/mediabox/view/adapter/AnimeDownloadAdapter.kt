@@ -85,9 +85,13 @@ class AnimeDownloadAdapter(
             )
             positiveButton {
                 animeWorkCoroutineScope.launch {
-                    File(Const.DownloadAnime.animeFilePath, animeName).deleteRecursively()
-                    withContext(Dispatchers.Main) {
-                        activity.getAnimeCoverEpisode()
+                    File(Const.DownloadAnime.animeFilePath, animeName).deleteRecursively().also {
+                        if (it)
+                            activity.getAnimeCover()
+                        else
+                            withContext(Dispatchers.Main) {
+                                "删除失败，请检查权限".showToast()
+                            }
                     }
                 }
             }

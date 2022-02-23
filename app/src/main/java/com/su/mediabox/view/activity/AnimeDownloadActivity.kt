@@ -5,7 +5,6 @@ import android.view.ViewStub
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.su.mediabox.R
@@ -17,7 +16,7 @@ import com.su.mediabox.util.visible
 import com.su.mediabox.view.adapter.AnimeDownloadAdapter
 import com.su.mediabox.viewmodel.AnimeDownloadViewModel
 
-class AnimeDownloadActivity : BasePluginActivity<ActivityAnimeDownloadBinding>() {
+class AnimeDownloadActivity : BaseActivity<ActivityAnimeDownloadBinding>() {
 
     private val viewModel by viewModels<AnimeDownloadViewModel>()
     private lateinit var adapter: AnimeDownloadAdapter
@@ -52,7 +51,7 @@ class AnimeDownloadActivity : BasePluginActivity<ActivityAnimeDownloadBinding>()
                 getString(R.string.read_download_data_file)
         }
 
-        viewModel.mldAnimeCoverList.observe(this, Observer {
+        viewModel.mldAnimeCoverList.observe(this) {
             if (it) {
                 mBinding.layoutAnimeDownloadLoading.layoutCircleProgressTextTip1.gone()
                 if (viewModel.animeCoverList.size == 0) {
@@ -60,14 +59,14 @@ class AnimeDownloadActivity : BasePluginActivity<ActivityAnimeDownloadBinding>()
                 }
                 adapter.notifyDataSetChanged()
             }
-        })
+        }
 
         requestManageExternalStorage {
             onGranted {
-                if (viewModel.mode == 0) viewModel.getAnimeCover()
+                if (viewModel.mode == 0) getAnimeCover()
                 else if (viewModel.mode == 1) {
                     mBinding.layoutAnimeDownloadLoading.layoutCircleProgressTextTip1.visible()
-                    getAnimeCoverEpisode()
+                    viewModel.getAnimeCoverEpisode(viewModel.directoryName)
                 }
             }
             onDenied {
@@ -77,8 +76,8 @@ class AnimeDownloadActivity : BasePluginActivity<ActivityAnimeDownloadBinding>()
         }
     }
 
-    fun getAnimeCoverEpisode() {
-        viewModel.getAnimeCoverEpisode(viewModel.directoryName)
+    fun getAnimeCover() {
+        viewModel.getAnimeCover()
     }
 
     override fun getBinding(): ActivityAnimeDownloadBinding =

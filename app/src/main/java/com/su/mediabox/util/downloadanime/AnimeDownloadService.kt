@@ -25,6 +25,7 @@ import com.su.mediabox.util.downloadanime.AnimeDownloadHelper.Companion.download
 import com.su.mediabox.util.downloadanime.AnimeDownloadHelper.Companion.save2Xml
 import com.su.mediabox.util.downloadanime.AnimeDownloadNotificationReceiver.Companion.DOWNLOAD_ANIME_NOTIFICATION_ID
 import com.su.mediabox.util.toMD5
+import com.su.mediabox.view.activity.AnimeDownloadActivity
 import com.su.mediabox.view.activity.MainActivity
 import kotlinx.coroutines.*
 import java.io.File
@@ -133,8 +134,7 @@ class AnimeDownloadService : Service() {
         stopIntent.putExtra("key", key)
 
         val clickIntent = Intent(Intent.ACTION_MAIN)
-        clickIntent.addCategory(Intent.CATEGORY_LAUNCHER)
-        clickIntent.setClass(this, MainActivity::class.java)
+        clickIntent.setClass(this, AnimeDownloadActivity::class.java)
         clickIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         clickIntent.putExtra(DOWNLOAD_ANIME_NOTIFICATION_ID, notificationId)
         downloadServiceHashMap[key]?.builder?.setSmallIcon(R.mipmap.ic_mediabox)
