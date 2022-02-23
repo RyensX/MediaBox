@@ -215,4 +215,5 @@
     <string name="have_not_watched_this_anime">追番后还未观看</string>
     <string name="already_seen_episode_x">看到 %s</string>
     <string name="all_history_count">%d条</string>
+    <string name="item_unknown_type">未知类型</string>
 </resources>

@@ -2,39 +2,36 @@ package com.su.mediabox.view.activity
 
 import android.os.Bundle
 import android.text.Html
-import android.view.Menu
-import android.view.MenuItem
-import android.view.ViewStub
-import androidx.recyclerview.widget.GridLayoutManager
+import android.view.*
 import com.afollestad.materialdialogs.MaterialDialog
 import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.R
+import com.su.mediabox.bean.PluginInfo
 import com.su.mediabox.config.Const
 import com.su.mediabox.databinding.ActivityPluginBinding
 import com.su.mediabox.util.Util
 import com.su.mediabox.util.goActivity
 import com.su.mediabox.util.update.AppUpdateHelper
 import com.su.mediabox.util.update.AppUpdateStatus
-import com.su.mediabox.view.adapter.PluginAdapter
+import com.su.mediabox.view.adapter.type.*
+import com.su.mediabox.view.adapter.viewholder.ItemPluginViewHolder
 
 class StartActivity : BaseActivity<ActivityPluginBinding>() {
-
-    private val adapter = PluginAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         mBinding.apply {
             setSupportActionBar(startPluginBar)
-            startPluginList.layoutManager = GridLayoutManager(this@StartActivity, 4)
-            startPluginList.adapter = adapter
+            startPluginList.grid(4)
+                .initTypeList(DataViewMap().registerDataViewMap<PluginInfo, ItemPluginViewHolder>()) {}
         }
 
         PluginManager.pluginLiveData.observe(this) {
             if (it.isEmpty())
                 showLoadFailedTip(Html.fromHtml("""<p>没有插件！前往<a href="https://github.com/RyensX/MediaBoxPlugin">插件API</a>查看示例</p>""")) {}
             else
-                adapter.submitList(it)
+                mBinding.startPluginList.submitList(it)
         }
         PluginManager.scanPlugin(packageManager)
 
