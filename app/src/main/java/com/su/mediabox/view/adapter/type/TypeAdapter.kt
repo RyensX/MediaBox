@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 
 typealias DataViewMap = ArrayList<Pair<Class<Any>, Class<TypeViewHolder<Any>>>>
 
@@ -16,6 +17,8 @@ class TypeAdapter(
     companion object {
         const val UNKNOWN_TYPE = -1
         val globalDataViewMap = DataViewMap()
+
+        val globalTypeRecycledViewPool by lazy(LazyThreadSafetyMode.NONE) { RecyclerView.RecycledViewPool() }
     }
 
     @Suppress("UNCHECKED_CAST")

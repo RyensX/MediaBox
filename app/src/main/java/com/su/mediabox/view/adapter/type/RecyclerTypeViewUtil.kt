@@ -57,8 +57,14 @@ fun RecyclerView.staggered(
 inline fun RecyclerView.initTypeList(
     dataViewMap: DataViewMap = TypeAdapter.globalDataViewMap,
     diff: DiffUtil.ItemCallback<Any> = TypeAdapter.DefaultDiff,
-    block: TypeAdapter.(RecyclerView) -> Unit
+    useSharedRecycledViewPool: Boolean = true,
+    block: TypeAdapter.(RecyclerView) -> Unit,
 ): TypeAdapter {
+    if (useSharedRecycledViewPool) {
+        setRecycledViewPool(TypeAdapter.globalTypeRecycledViewPool)
+        if (layoutManager is LinearLayoutManager)
+            (layoutManager as LinearLayoutManager).recycleChildrenOnDetach = true
+    }
     return TypeAdapter(dataViewMap, diff).apply {
         block(this@initTypeList)
         adapter = this
