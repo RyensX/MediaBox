@@ -24,7 +24,7 @@ class StartActivity : BaseActivity<ActivityPluginBinding>() {
         mBinding.apply {
             setSupportActionBar(startPluginBar)
             startPluginList.grid(4)
-                .initTypeList(DataViewMap().registerDataViewMap<PluginInfo, ItemPluginViewHolder>()) {}
+                .initTypeList(DataViewMapList().registerDataViewMap<PluginInfo, ItemPluginViewHolder>()) {}
         }
 
         PluginManager.pluginLiveData.observe(this) {

@@ -55,7 +55,7 @@ fun RecyclerView.staggered(
 }
 
 inline fun RecyclerView.initTypeList(
-    dataViewMap: DataViewMap = TypeAdapter.globalDataViewMap,
+    dataViewMap: DataViewMapList = TypeAdapter.globalDataViewMap,
     diff: DiffUtil.ItemCallback<Any> = TypeAdapter.DefaultDiff,
     useSharedRecycledViewPool: Boolean = true,
     block: TypeAdapter.(RecyclerView) -> Unit,
@@ -77,7 +77,7 @@ fun RecyclerView.submitList(list: List<Any>) = typeAdapter().submitList(list)
  * 注册一个数据与视图关系到全局映射
  */
 @Suppress("UNCHECKED_CAST")
-inline fun <reified D : Any, reified V : TypeViewHolder<*>> DataViewMap.registerDataViewMap(): DataViewMap {
+inline fun <reified D : Any, reified V : TypeViewHolder<*>> DataViewMapList.registerDataViewMap(): DataViewMapList {
     add(
         Pair(
             D::class.java as Class<Any>,

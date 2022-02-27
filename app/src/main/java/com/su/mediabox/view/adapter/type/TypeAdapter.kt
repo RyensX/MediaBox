@@ -6,30 +6,39 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 
-typealias DataViewMap = ArrayList<Pair<Class<Any>, Class<TypeViewHolder<Any>>>>
+typealias DataViewMapList = ArrayList<Pair<Class<Any>, Class<TypeViewHolder<Any>>>>
 
 class TypeAdapter(
-    private val dataViewMap: DataViewMap,
+    private val dataViewMapList: DataViewMapList,
     diff: DiffUtil.ItemCallback<Any>
 ) :
     ListAdapter<Any, TypeViewHolder<Any>>(diff) {
 
     companion object {
         const val UNKNOWN_TYPE = -1
-        val globalDataViewMap = DataViewMap()
+        val globalDataViewMap = DataViewMapList()
 
         val globalTypeRecycledViewPool by lazy(LazyThreadSafetyMode.NONE) { RecyclerView.RecycledViewPool() }
     }
 
+    private val dataViewPosMap = mutableMapOf<Int, Int>()
+
     @Suppress("UNCHECKED_CAST")
     fun <T> getData(position: Int) = getItem(position) as? T
+
+    override fun submitList(list: MutableList<Any>?, commitCallback: Runnable?) {
+        if (list != currentList) {
+            dataViewPosMap.clear()
+        }
+        super.submitList(list, commitCallback)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TypeViewHolder<Any> =
         if (viewType == UNKNOWN_TYPE)
             TypeViewHolder.UnknownTypeViewHolder(parent)
         else {
             try {
-                dataViewMap[viewType].second
+                dataViewMapList[viewType].second
                     .getConstructor(ViewGroup::class.java)
                     .newInstance(parent)
             } catch (e: Exception) {
@@ -58,10 +67,13 @@ class TypeAdapter(
      * @return 返回结果是查找目前的index
      */
     override fun getItemViewType(position: Int): Int {
-        return getItem(position)?.let { data ->
-            dataViewMap.forEachIndexed { index, pair ->
-                if (data.javaClass == pair.first)
+        return dataViewPosMap[position] ?: getItem(position)?.let { data ->
+            dataViewMapList.forEachIndexed { index, pair ->
+                //必须对应真实类型，即使是子类也是不同的
+                if (data.javaClass == pair.first) {
+                    dataViewPosMap[position] = index
                     return index
+                }
             }
             UNKNOWN_TYPE
         } ?: UNKNOWN_TYPE
