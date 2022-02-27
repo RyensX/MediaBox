@@ -1,7 +1,12 @@
 package com.su.mediabox.view.activity
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.text.Html
+import android.util.Log
 import android.view.*
 import com.afollestad.materialdialogs.MaterialDialog
 import com.su.mediabox.plugin.PluginManager
@@ -35,6 +40,7 @@ class StartActivity : BaseActivity<ActivityPluginBinding>() {
         }
         PluginManager.scanPlugin(packageManager)
 
+        //检测更新
         AppUpdateHelper.instance.apply {
             getUpdateStatus().observe(this@StartActivity) {
                 if (it == AppUpdateStatus.DATED)
@@ -43,6 +49,7 @@ class StartActivity : BaseActivity<ActivityPluginBinding>() {
             checkUpdate()
         }
 
+        //使用须知
         if (Util.lastReadUserNoticeVersion() < Const.Common.USER_NOTICE_VERSION) {
             MaterialDialog(this).show {
                 title(res = R.string.user_notice_update)
@@ -53,6 +60,30 @@ class StartActivity : BaseActivity<ActivityPluginBinding>() {
                 }
             }
         }
+
+        //自动刷新
+        listenInstallBroadcasts()
+    }
+
+    private val installBroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            PluginManager.scanPlugin(packageManager)
+        }
+    }
+
+    private fun listenInstallBroadcasts() {
+        val intentFilter = IntentFilter().apply {
+            addAction(Intent.ACTION_PACKAGE_ADDED)
+            addAction(Intent.ACTION_PACKAGE_REPLACED)
+            addAction(Intent.ACTION_PACKAGE_REMOVED)
+            addDataScheme("package")
+        }
+        registerReceiver(installBroadcastReceiver, intentFilter)
+    }
+
+    override fun onDestroy() {
+        unregisterReceiver(installBroadcastReceiver)
+        super.onDestroy()
     }
 
     override fun getBinding() = ActivityPluginBinding.inflate(layoutInflater)
