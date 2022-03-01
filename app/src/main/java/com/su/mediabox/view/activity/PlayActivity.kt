@@ -29,7 +29,7 @@ import com.su.mediabox.R
 import com.su.mediabox.config.Api
 import com.su.mediabox.databinding.ActivityPlayBinding
 import com.su.mediabox.util.*
-import com.su.mediabox.util.Util.dp
+import com.su.mediabox.pluginapi.UI.dp
 import com.su.mediabox.util.Util.getResColor
 import com.su.mediabox.util.Util.getSkinResourceId
 import com.su.mediabox.util.Util.openVideoByExternalPlayer

@@ -1,5 +1,6 @@
 package com.su.mediabox.database.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.su.mediabox.bean.FavoriteAnimeBean
 import com.su.mediabox.config.Const.Database.AppDataBase.FAVORITE_ANIME_TABLE_NAME
@@ -15,6 +16,9 @@ interface FavoriteAnimeDao {
 
     @Query(value = "SELECT * FROM $FAVORITE_ANIME_TABLE_NAME WHERE animeUrl = :animeUrl")
     fun getFavoriteAnime(animeUrl: String): FavoriteAnimeBean?
+
+    @Query(value = "SELECT * FROM $FAVORITE_ANIME_TABLE_NAME WHERE animeUrl = :videoUrl")
+    fun getFavoriteAnimeLiveData(videoUrl: String): LiveData<FavoriteAnimeBean?>
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     fun updateFavoriteAnime(favoriteAnimeBean: FavoriteAnimeBean)

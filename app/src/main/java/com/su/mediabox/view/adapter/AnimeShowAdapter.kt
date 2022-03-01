@@ -22,7 +22,7 @@ import com.su.mediabox.view.component.bannerview.indicator.DotIndicator
 import com.su.mediabox.pluginapi.Constant.ViewHolderTypeString
 import com.su.mediabox.pluginapi.been.AnimeCoverBean
 import com.su.mediabox.pluginapi.been.IAnimeShowBean
-import com.su.mediabox.util.Util.dp
+import com.su.mediabox.pluginapi.UI.dp
 import com.su.mediabox.util.Util.getResColor
 import com.su.mediabox.util.Util.getResDrawable
 import com.su.mediabox.view.adapter.decoration.AnimeCoverItemDecoration

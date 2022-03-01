@@ -54,6 +54,9 @@ fun RecyclerView.staggered(
     return this
 }
 
+/**
+ * @param useSharedRecycledViewPool 使用相同映射表共享的VH缓存池
+ */
 inline fun RecyclerView.initTypeList(
     dataViewMap: DataViewMapList = TypeAdapter.globalDataViewMap,
     diff: DiffUtil.ItemCallback<Any> = TypeAdapter.DefaultDiff,
@@ -61,9 +64,13 @@ inline fun RecyclerView.initTypeList(
     block: TypeAdapter.(RecyclerView) -> Unit,
 ): TypeAdapter {
     if (useSharedRecycledViewPool) {
-        setRecycledViewPool(TypeAdapter.globalTypeRecycledViewPool)
-        if (layoutManager is LinearLayoutManager)
-            (layoutManager as LinearLayoutManager).recycleChildrenOnDetach = true
+        setRecycledViewPool(
+            //如果是全局映射表则不再额外计算
+            if (dataViewMap == TypeAdapter.globalDataViewMap)
+                TypeAdapter.globalTypeRecycledViewPool
+            else
+                TypeAdapter.getRecycledViewPool(dataViewMap)
+        )
     }
     return TypeAdapter(dataViewMap, diff).apply {
         block(this@initTypeList)

@@ -1,5 +1,6 @@
 package com.su.mediabox.util.coil
 
+import android.content.Context
 import android.widget.ImageView
 import androidx.annotation.DrawableRes
 import coil.Coil
@@ -11,6 +12,7 @@ import coil.util.CoilUtils
 import coil.util.DebugLogger
 import com.su.mediabox.App
 import com.su.mediabox.R
+import com.su.mediabox.config.Api
 import com.su.mediabox.config.Api.Companion.MAIN_URL
 import com.su.mediabox.net.okhttpClient
 import com.su.mediabox.util.Util.toEncodedUrl
@@ -71,16 +73,23 @@ object CoilUtil {
         loadImage(url) {
             placeholder(placeholder)
             error(error)
-            addHeader("Referer", amendReferer.toEncodedUrl())
+            addHeader("Referer", referer ?: Api.refererProcessor?.processor(url) ?: "")
             addHeader("Host", URL(url).host)
             addHeader("Accept", "*/*")
             addHeader("Accept-Encoding", "gzip, deflate")
             addHeader("Connection", "keep-alive")
-            addHeader(
-                "User-Agent",
-                Constant.Request.getRandomUserAgent()
-            )
+            addHeader("User-Agent", Constant.Request.getRandomUserAgent())
         }
+    }
+
+    fun ImageView.loadGaussianBlurCover(
+        url: String,
+        context: Context,
+        radius: Float = 25F,
+        sampling: Float = 2F,
+        dark: Float = 0.7F
+    ) = loadImage(url) {
+        transformations(DarkBlurTransformation(context, radius, sampling, dark))
     }
 
 

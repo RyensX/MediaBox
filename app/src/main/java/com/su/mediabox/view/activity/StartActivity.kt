@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.text.Html
-import android.util.Log
 import android.view.*
 import com.afollestad.materialdialogs.MaterialDialog
 import com.su.mediabox.plugin.PluginManager
@@ -19,7 +18,7 @@ import com.su.mediabox.util.goActivity
 import com.su.mediabox.util.update.AppUpdateHelper
 import com.su.mediabox.util.update.AppUpdateStatus
 import com.su.mediabox.view.adapter.type.*
-import com.su.mediabox.view.adapter.viewholder.ItemPluginViewHolder
+import com.su.mediabox.view.viewcomponents.ItemPluginViewHolder
 
 class StartActivity : BaseActivity<ActivityPluginBinding>() {
 

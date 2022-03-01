@@ -18,6 +18,10 @@ def kotlinx = [:]
 kotlinx.kotlinx_coroutines_android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.1"
 deps.kotlinx = kotlinx
 
+def google = [:]
+google.flexbox = "com.google.android.flexbox:flexbox:3.0.0"
+deps.google = google
+
 def support = [:]
 support.constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.1"
 support.material = "com.google.android.material:material:1.4.0"

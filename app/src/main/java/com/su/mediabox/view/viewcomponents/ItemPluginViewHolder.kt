@@ -1,4 +1,4 @@
-package com.su.mediabox.view.adapter.viewholder
+package com.su.mediabox.view.viewcomponents
 
 import android.content.Intent
 import android.view.LayoutInflater

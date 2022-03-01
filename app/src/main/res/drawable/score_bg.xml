@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/main_color_2_skin" />
+    <!--这里皮肤系统无法深入生效，皮肤必需重写整个drawable-->
+    <stroke
+        android:width="1dip"
+        android:color="@color/main_color_2_skin" />
+    <corners android:bottomRightRadius="6dp" />
+</shape>

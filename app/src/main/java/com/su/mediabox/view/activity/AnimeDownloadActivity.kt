@@ -38,7 +38,7 @@ class AnimeDownloadActivity : BaseActivity<ActivityAnimeDownloadBinding>() {
                 MaterialDialog(this@AnimeDownloadActivity).show {
                     title(res = R.string.attention)
                     message(
-                        text = "缓存功能及缓存仅用于学习交流，请在下载24小时内删除\n\n注意：缓存的动漫在App被卸载或数据被清除时丢失。"
+                        text = "缓存功能及缓存仅用于学习交流，请在下载24小时内删除\n\n注意：缓存的视频在App被卸载或数据被清除时丢失。"
                     )
                     positiveButton { dismiss() }
                 }

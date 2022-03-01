@@ -16,7 +16,7 @@ import com.su.mediabox.R
 import com.su.mediabox.config.Api
 import com.su.mediabox.database.getAppDataBase
 import com.su.mediabox.util.*
-import com.su.mediabox.util.Util.dp
+import com.su.mediabox.pluginapi.UI.dp
 import com.su.mediabox.util.coil.CoilUtil.loadImage
 import com.su.mediabox.util.Util.getResColor
 import com.su.mediabox.util.Util.getResDrawable
@@ -31,6 +31,7 @@ import com.su.mediabox.pluginapi.been.AnimeCoverBean
 import com.su.mediabox.pluginapi.been.AnimeEpisodeDataBean
 import com.su.mediabox.pluginapi.been.IAnimeDetailBean
 
+@Deprecated("在v2 API完善后移除")
 class AnimeDetailAdapter(
     val activity: AnimeDetailActivity,
     private val dataList: List<IAnimeDetailBean>

@@ -5,6 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.su.mediabox.pluginapi.v2.been.*
+import com.su.mediabox.view.viewcomponents.*
+import com.su.skin.SkinManager
 
 typealias DataViewMapList = ArrayList<Pair<Class<Any>, Class<TypeViewHolder<Any>>>>
 
@@ -19,6 +22,34 @@ class TypeAdapter(
         val globalDataViewMap = DataViewMapList()
 
         val globalTypeRecycledViewPool by lazy(LazyThreadSafetyMode.NONE) { RecyclerView.RecycledViewPool() }
+
+        /**
+         * VH缓存池集，每种映射表对应一个VH缓存池
+         */
+        private val recycledViewPools = mutableMapOf<Int, RecyclerView.RecycledViewPool>()
+        fun getRecycledViewPool(dataViewMapList: DataViewMapList): RecyclerView.RecycledViewPool {
+            var key = 0
+            dataViewMapList.forEach {
+                key += it.first.hashCode() + it.second.hashCode()
+            }
+            return recycledViewPools[key] ?: RecyclerView.RecycledViewPool()
+                .also { recycledViewPools[key] = it }
+        }
+
+        init {
+            //初始化全局数据视图对照表
+            Thread {
+                globalDataViewMap
+                    .registerDataViewMap<TextData, TextViewHolder>()
+                    .registerDataViewMap<TagFlowData, TagFlowViewHolder>()
+                    .registerDataViewMap<VideoPlayListData, VideoPlayListViewHolder>()
+                    .registerDataViewMap<VideoCover1Data, VideoCover1ViewHolder>()
+                    .registerDataViewMap<EpisodeData, VideoPlayListViewHolder.EpisodeViewHolder>()
+                    .registerDataViewMap<VideoGridItemData, VideoGridItemViewHolder>()
+                    .registerDataViewMap<VideoGridData, VideoGridViewHolder>()
+                    .registerDataViewMap<TagData, TagViewHolder>()
+            }.start()
+        }
     }
 
     private val dataViewPosMap = mutableMapOf<Int, Int>()
@@ -47,6 +78,7 @@ class TypeAdapter(
         }
 
     override fun onBindViewHolder(holder: TypeViewHolder<Any>, position: Int) {
+        SkinManager.applyViews(holder.itemView)
         getItem(position)?.also {
             holder.onBind(it)
         }
@@ -57,6 +89,7 @@ class TypeAdapter(
         position: Int,
         payloads: MutableList<Any>
     ) {
+        SkinManager.applyViews(holder.itemView)
         getItem(position)?.also {
             holder.onBind(it, payloads)
         }

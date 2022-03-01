@@ -13,7 +13,7 @@ import com.su.mediabox.util.showToast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-
+@Deprecated("在v2 API完善后移除")
 class AnimeDetailViewModel : ViewModel() {
     private val animeDetailModel: IAnimeDetailComponent by lazy(LazyThreadSafetyMode.NONE) {
         PluginManager.acquireComponent(IAnimeDetailComponent::class.java)

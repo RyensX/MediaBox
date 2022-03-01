@@ -37,8 +37,7 @@ object PluginManager : AppUtil.IRouteProcessor {
     private val pluginIntent = Intent(Constant.PLUGIN_ACTION)
     private val pluginWorkScope: CoroutineScope = CoroutineScope(Dispatchers.IO)
 
-    val pluginLiveData: LiveData<List<PluginInfo>>
-        get() = _pluginLiveData
+    val pluginLiveData: LiveData<List<PluginInfo>> = _pluginLiveData
 
     fun scanPlugin(packageManager: PackageManager) {
         pluginWorkScope.launch {
@@ -62,8 +61,9 @@ object PluginManager : AppUtil.IRouteProcessor {
         runCatching {
             val index = getPluginIndex()
             if (index == -1)
-                throw RuntimeException()
-            _pluginLiveData.value?.get(index) ?: throw RuntimeException("持久信息为空")
+                throw RuntimeException("插件索引错误")
+            _pluginLiveData.value?.get(index)
+                ?: throw RuntimeException("插件持久信息为空($index/${_pluginLiveData.value?.size ?: -1})")
         }.onSuccess {
             return it
         }.onFailure {

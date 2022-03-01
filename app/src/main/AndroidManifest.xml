@@ -115,6 +115,10 @@
         <activity
             android:name="com.su.mediabox.view.activity.AnimeDetailActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
+
+        <activity
+            android:name=".v2.view.activity.VideoDetailActivity"
+            android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
             android:name="com.su.mediabox.view.activity.BaseActivity"
             android:configChanges="uiMode" />

@@ -3,12 +3,14 @@ package com.su.mediabox.plugin
 import android.app.Activity
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+import android.util.Log
 import android.widget.Toast
 import com.su.mediabox.pluginapi.AppUtil
 import com.su.mediabox.util.Util
 import com.su.mediabox.util.showToast
 import com.su.mediabox.view.activity.*
 import com.su.mediabox.pluginapi.Constant.ActionUrl
+import com.su.mediabox.v2.view.activity.VideoDetailActivity
 import java.lang.ref.WeakReference
 import java.net.URLDecoder
 
@@ -51,6 +53,8 @@ object AppRouteProcessor :
                 true
             } else false
         } catch (e: Exception) {
+            Log.d("路由错误", e.message ?: "")
+            e.printStackTrace()
             false
         }
 
@@ -82,7 +86,7 @@ object AppRouteProcessor :
             //打开番剧详情页面
             matchAndGetParams(actionUrl, ActionUrl.ANIME_DETAIL) {
                 activity.startActivity(
-                    Intent(activity, AnimeDetailActivity::class.java)
+                    Intent(activity, VideoDetailActivity::class.java)
                         .putExtra("partUrl", it[0])
                 )
             } -> true

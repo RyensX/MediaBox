@@ -165,6 +165,7 @@ dependencies {
     implementation deps.kuaishou.akdanmaku
     implementation deps.okhttp3.okhttp_dnsoverhttps
     implementation deps.jakewharton.disklrucache
+    implementation deps.google.flexbox
     implementation project(':skin')
     implementation project(':skin_blue')
     implementation project(':skin_dark')
