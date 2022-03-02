@@ -39,6 +39,7 @@
     <string name="data_source_info">数据源信息</string>
     <string name="open_source_licenses">开放源代码许可</string>
     <string name="search_history">搜索历史</string>
+    <string name="cover_play_history_str_format">续播 %s</string>
     <string name="download_anime">缓存视频</string>
     <string name="please_delete_anime_in_24h">请于24h内手动删除缓存视频</string>
     <string name="anime_download_path">视频缓存目录</string>
