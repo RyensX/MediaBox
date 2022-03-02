@@ -119,4 +119,8 @@ def jakewharton = [:]
 jakewharton.disklrucache = "com.jakewharton:disklrucache:2.0.2"
 deps.jakewharton = jakewharton
 
+def cretin = [:]
+cretin.etv = "com.github.MZCretin:ExpandableTextView:v1.6.1-x"
+deps.cretin = cretin
+
 ext.deps = deps

@@ -48,6 +48,7 @@ class TypeAdapter(
                     .registerDataViewMap<VideoGridItemData, VideoGridItemViewHolder>()
                     .registerDataViewMap<VideoGridData, VideoGridViewHolder>()
                     .registerDataViewMap<TagData, TagViewHolder>()
+                    .registerDataViewMap<LongTextData, LongTextViewHolder>()
             }.start()
         }
     }
