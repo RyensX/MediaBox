@@ -13,16 +13,13 @@ import com.su.mediabox.view.activity.BasePluginActivity
 import com.su.mediabox.pluginapi.IComponentFactory
 import com.su.mediabox.pluginapi.components.IBaseComponent
 import com.su.mediabox.util.Util.getSignatures
-import com.su.mediabox.util.showToast
-import dalvik.system.DexClassLoader
+import dalvik.system.PathClassLoader
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
 
 object PluginManager : AppUtil.IRouteProcessor {
-
-    const val PLUGIN_OPTI_FOLDER_NAME = "PluginsOpti"
 
     private val componentFactoryPool = mutableMapOf<String, IComponentFactory>()
     private val componentPool =
@@ -96,17 +93,7 @@ object PluginManager : AppUtil.IRouteProcessor {
                         throw RuntimeException("插件不存在")
                 }
 
-            val optimizedDirectory =
-                File(App.context.getExternalFilesDir(null).toString() + "/$PLUGIN_OPTI_FOLDER_NAME")
-                    .apply {
-                        if (!exists() && !mkdirs())
-                            throw RuntimeException("创建插件优化文件夹失败")
-                    }
-
-            val classLoader = DexClassLoader(
-                pluginFile.path, optimizedDirectory.path,
-                null, App.context.classLoader
-            )
+            val classLoader = PathClassLoader(pluginFile.path, App.context.classLoader)
             val clz = classLoader.loadClass(Constant.PLUGIN_INIT_CLASS)
 
             (clz.newInstance() as IComponentFactory).also {
