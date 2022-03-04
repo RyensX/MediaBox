@@ -46,6 +46,7 @@
     <string name="no_download_video">没有缓存视频</string>
     <string name="read_download_data_file">正在读取缓存文件…</string>
     <string name="play_list">播放列表</string>
+    <string name="episode_bottom_sheet_format">共%d集</string>
     <string name="check_update_server">检查更新服务器</string>
     <string name="play_speed">倍速</string>
     <string name="device_list">设备列表</string>

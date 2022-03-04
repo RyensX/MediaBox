@@ -16,12 +16,15 @@ import com.su.mediabox.pluginapi.UI.dp
 import com.su.mediabox.util.Util.getResColor
 import com.su.mediabox.util.setOnClickListener
 import com.su.mediabox.view.adapter.type.*
+import com.su.mediabox.view.episodeSheetDialog
 
 /**
  * 播放列表视图组件
  */
 class VideoPlayListViewHolder private constructor(private val binding: ItemHorizontalRecyclerView1Binding) :
     TypeViewHolder<VideoPlayListData>(binding.root) {
+
+    var episodeDataList: List<EpisodeData>? = null
 
     constructor(parent: ViewGroup) : this(
         ItemHorizontalRecyclerView1Binding.inflate(
@@ -33,9 +36,17 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
         binding.rvHorizontalRecyclerView1
             .linear(RecyclerView.HORIZONTAL)
             .initTypeList { }
+
+        binding.ivHorizontalRecyclerView1More.setOnClickListener {
+            episodeDataList?.also {
+                episodeSheetDialog(binding.root.context, it)?.show()
+            }
+        }
     }
 
     override fun onBind(data: VideoPlayListData) {
+        episodeDataList = data.playList
+
         binding.rvHorizontalRecyclerView1.typeAdapter().submitList(data.playList)
         binding.ivHorizontalRecyclerView1More.apply {
             setImageDrawable(Util.getResDrawable(R.drawable.ic_keyboard_arrow_down_main_color_2_24_skin))
@@ -45,7 +56,7 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
     }
 
     //剧集视图
-    class EpisodeViewHolder(private val binding: ItemAnimeEpisode2Binding) :
+    open class EpisodeViewHolder(protected val binding: ItemAnimeEpisode2Binding) :
         TypeViewHolder<EpisodeData>(binding.root) {
 
         private var adapter: TypeAdapter? = null

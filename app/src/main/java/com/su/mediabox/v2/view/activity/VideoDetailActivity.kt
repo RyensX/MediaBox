@@ -85,7 +85,7 @@ class VideoDetailActivity : BasePluginActivity<ActivityAnimeDetailBinding>() {
             if (viewModel.cover.isBlank()) return@Observer
             //高斯模糊封面背景
             mBinding.ivAnimeDetailActivityBackground.loadGaussianBlurCover(viewModel.cover, this)
-            //标题，如果不想显示可以返回""
+            //标题
             mBinding.atbAnimeDetailActivityToolbar.titleText = viewModel.title
             //详情数据
             mBinding.rvAnimeDetailActivityInfo.typeAdapter().submitList(it.second)

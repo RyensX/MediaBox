@@ -58,7 +58,7 @@ class TypeAdapter(
     @Suppress("UNCHECKED_CAST")
     fun <T> getData(position: Int) = getItem(position) as? T
 
-    override fun submitList(list: MutableList<Any>?, commitCallback: Runnable?) {
+    override fun submitList(list: List<Any>?, commitCallback: Runnable?) {
         if (list != currentList) {
             dataViewPosMap.clear()
         }
