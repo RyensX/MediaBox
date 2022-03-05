@@ -44,6 +44,7 @@ class App : Application() {
             // Crash提示
             CrashHandler.getInstance(this)
 
+            //TODO 满足工信部相关合规要求preInit
             // 友盟
             // 初始化组件化基础库, 所有友盟业务SDK都必须调用此初始化接口。
             UMConfigure.init(
@@ -51,7 +52,7 @@ class App : Application() {
                 getManifestMetaValue("UMENG_APPKEY"),
                 getManifestMetaValue("UMENG_CHANNEL"),
                 UMConfigure.DEVICE_TYPE_PHONE,
-                BuildConfig.UMENG_MESSAGE_SECRET
+                getManifestMetaValue("UMENG_MESSAGE_SECRET")
             )
             UMConfigure.setLogEnabled(BuildConfig.DEBUG)
 

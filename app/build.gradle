@@ -3,23 +3,10 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'AndResGuard'
-    id 'com.efs.sdk.plugin'
 }
 
 apply from: secret
 apply from: andresguard
-
-android.defaultConfig {
-    secret.buildConfigField.forEach({ k, v ->
-        buildConfigField("String", k, "\"${v}\"")
-    })
-    secret.shieldTextList.forEach({ k, v ->
-        buildConfigField("String[]", k, v)
-    })
-    secret.dataSource.forEach({ k, v ->
-        buildConfigField("String", k, "\"${v}\"")
-    })
-}
 
 android {
     compileSdkVersion build_versions.compile_sdk
@@ -48,17 +35,28 @@ android {
             abiFilters 'armeabi', 'arm64-v8a'
         }
 
-        manifestPlaceholders = secret.manifestPlaceholders
+        try {
+            manifestPlaceholders = secret.manifestPlaceholders
+        } catch (Exception ignored) {
+            def tmpManifestPlaceholders = [:]
+            tmpManifestPlaceholders.UMENG_APPKEY_VALUE = ""
+            tmpManifestPlaceholders.UMENG_MESSAGE_SECRET = ""
+            manifestPlaceholders = tmpManifestPlaceholders
+        }
+
         resConfigs 'xxxhdpi', 'anydpi-v26'
 
     }
 
     signingConfigs {
         release {
-            keyAlias secret.sign.RELEASE_KEY_ALIAS
-            keyPassword secret.sign.RELEASE_KEY_PASSWORD
-            storeFile file('../key.jks')
-            storePassword secret.sign.RELEASE_STORE_PASSWORD
+            try {
+                keyAlias secret.sign.RELEASE_KEY_ALIAS
+                keyPassword secret.sign.RELEASE_KEY_PASSWORD
+                storeFile file('../key.jks')
+                storePassword secret.sign.RELEASE_STORE_PASSWORD
+            } catch (Exception ignored) {
+            }
         }
     }
 
@@ -151,7 +149,8 @@ dependencies {
     implementation deps.jetty.jetty_servlet
     implementation deps.jetty.jetty_client
     implementation deps.nanohttpd.nanohttpd
-    compileOnly files ('libs/cdi-api.jar')      // DLNACastService编译需要javax.enterprise.inject.Alternative类
+    compileOnly files('libs/cdi-api.jar')
+    // DLNACastService编译需要javax.enterprise.inject.Alternative类
 //    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.4'
     implementation deps.greenrobot.eventbus
     implementation deps.umsdk.common
@@ -174,39 +173,6 @@ dependencies {
     implementation project(':skin_dark_sakura')
     implementation project(':skin_sweat_soybean')
     implementation project(':MediaBoxPluginApi')
-}
-
-// UM U-APM性能报告
-efs {
-    //是否对启动过程进程插桩的开关，如果使用自动集成监控则必须开启
-    isAutoTrack = false
-    //您自定义Application的类名称，必填项，如没有自定义则填写系统Application
-    applicationName = "App"
-    //您自定义Activity的类名称，必填项，将您所有Activity的类名按如下格式填写
-    activityList = [
-            "StartActivity",
-            "AboutActivity",
-            "AnimeDetailActivity",
-            "AnimeDownloadActivity",
-            "ClassifyActivity",
-            "CrashActivity",
-            "DlnaActivity",
-            "DlnaControlActivity",
-            "FavoriteActivity",
-            "HistoryActivity",
-            "LicenseActivity",
-            "MainActivity",
-            "MonthAnimeActivity",
-            "PlayActivity",
-            "RankActivity",
-            "SearchActivity",
-            "SettingActivity",
-            "SimplePlayActivity",
-            "DetailPlayerActivity",
-            "WebViewActivity",
-            "SkinActivity",
-            "NoticeActivity"
-    ]
 }
 
 //AndResGuard资源混淆工具
