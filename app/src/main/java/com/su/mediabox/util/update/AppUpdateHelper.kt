@@ -39,10 +39,11 @@ class AppUpdateHelper private constructor() {
         listOf<Function<Unit>> { checkUpdate() }
         val updateBean = AppUpdateModel.updateBean ?: return
         val isImportantUpdate = updateBean.name.contains("*")
+        val name = updateBean.name.replace("*", "")
         MaterialDialog(activity)
             .cancelable(!isImportantUpdate)
             .show {
-                title(text = "发现${if (isImportantUpdate) "重要" else ""}新版本\n版本名：${updateBean.name}\n版本代号：${updateBean.tagName}")
+                title(text = "发现${if (isImportantUpdate) "重要" else ""}新版本\n版本名：${name}\n版本代号：${updateBean.tagName}")
                 StringBuffer().apply {
                     val size = updateBean.assets[0].size
                     if (size > 0) {

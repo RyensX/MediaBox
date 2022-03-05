@@ -5,7 +5,11 @@ plugins {
     id 'AndResGuard'
 }
 
-apply from: secret
+try {
+    apply from: secret
+} catch (Exception ignored) {
+}
+
 apply from: andresguard
 
 android {
