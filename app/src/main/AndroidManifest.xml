@@ -44,22 +44,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.su.mediabox.view.activity.ConfigDataSourceActivity"
-            android:configChanges="uiMode|orientation|keyboardHidden|screenSize"
-            android:exported="true"
-            android:launchMode="singleTask">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:scheme="file" />
-                <data android:scheme="content" />
-                <data android:pathPattern=".*\\.ads" />
-                <data android:mimeType="*/*" />
-            </intent-filter>
-        </activity>
         <activity android:name="com.su.mediabox.view.activity.NoticeActivity" />
         <activity
             android:name="com.su.mediabox.view.activity.WebViewActivity"
