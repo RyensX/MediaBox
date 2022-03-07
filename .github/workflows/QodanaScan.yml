@@ -9,8 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v2
       - name: 'Qodana Scan'
         uses: JetBrains/qodana-action@v4.2.2
         with:
