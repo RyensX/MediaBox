@@ -23,6 +23,7 @@ import com.su.mediabox.view.adapter.type.*
 import com.su.mediabox.view.episodeSheetDialog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlin.math.absoluteValue
 
 /**
  * 播放列表视图组件
@@ -81,6 +82,7 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
             coroutineScope.launch {
                 episodeDataList?.forEachIndexed { index, data ->
                     if (data.url == target.lastEpisodeUrl) {
+                        val jumpLength = (index - (lastEpisodeIndex ?: 0)).absoluteValue
                         launch(Dispatchers.Main) {
                             //更新新位置
                             adapter.notifyItemChanged(index)
@@ -88,7 +90,12 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
                                 //如果有上一个位置页更新
                                 adapter.notifyItemChanged(it)
                             }
-                            smoothScrollToPosition(index)
+                            if (jumpLength <= 30)
+                                smoothScrollToPosition(index)
+                            else
+                            //过长直接跳转
+                                scrollToPosition(index)
+
                             lastEpisodeIndex = index
                         }
 
