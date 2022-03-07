@@ -55,6 +55,22 @@ class TypeAdapter(
 
     private val dataViewPosMap = mutableMapOf<Int, Int>()
 
+    /**
+     * 用于父子VH交换信息
+     */
+    private var tag: Any? = null
+
+    fun setTag(data: Any?) {
+        tag = data
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    fun <T> getTag(): T? = try {
+        tag as? T
+    } catch (e: Exception) {
+        null
+    }
+
     @Suppress("UNCHECKED_CAST")
     fun <T> getData(position: Int) = getItem(position) as? T
 

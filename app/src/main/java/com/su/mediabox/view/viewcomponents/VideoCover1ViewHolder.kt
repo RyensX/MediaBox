@@ -53,6 +53,7 @@ class VideoCover1ViewHolder private constructor(private val binding: ViewCompone
                 text = data.score.toString()
             }
         }
+        //TODO 支持定义不绑定历史播放信息
         //查找是否有观看记录
         bindHistoryPlayInfo(this)
     }

@@ -4,8 +4,11 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.activity.ComponentActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.su.mediabox.R
+import com.su.mediabox.bean.HistoryBean
 import com.su.mediabox.databinding.ItemAnimeEpisode2Binding
 import com.su.mediabox.databinding.ItemHorizontalRecyclerView1Binding
 import com.su.mediabox.plugin.AppRouteProcessor
@@ -14,9 +17,12 @@ import com.su.mediabox.pluginapi.v2.been.VideoPlayListData
 import com.su.mediabox.util.Util
 import com.su.mediabox.pluginapi.UI.dp
 import com.su.mediabox.util.Util.getResColor
+import com.su.mediabox.util.bindHistoryPlayInfo
 import com.su.mediabox.util.setOnClickListener
 import com.su.mediabox.view.adapter.type.*
 import com.su.mediabox.view.episodeSheetDialog
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 /**
  * 播放列表视图组件
@@ -25,6 +31,8 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
     TypeViewHolder<VideoPlayListData>(binding.root) {
 
     var episodeDataList: List<EpisodeData>? = null
+    private val coroutineScope = (binding.root.context as ComponentActivity).lifecycleScope
+    private var lastEpisodeIndex: Int? = null
 
     constructor(parent: ViewGroup) : this(
         ItemHorizontalRecyclerView1Binding.inflate(
@@ -47,11 +55,47 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
     override fun onBind(data: VideoPlayListData) {
         episodeDataList = data.playList
 
-        binding.rvHorizontalRecyclerView1.typeAdapter().submitList(data.playList)
+        binding.rvHorizontalRecyclerView1.typeAdapter().apply {
+            //TODO 支持定义不绑定历史播放信息
+            bindHistoryPlayInfo {
+                setTag(it)
+                submitList(data.playList) {
+                    jumpEpisode(this)
+                }
+            }
+        }
+
         binding.ivHorizontalRecyclerView1More.apply {
             setImageDrawable(Util.getResDrawable(R.drawable.ic_keyboard_arrow_down_main_color_2_24_skin))
             imageTintList =
                 ColorStateList.valueOf(binding.root.context.getResColor(R.color.foreground_white_skin))
+        }
+    }
+
+    /**
+     * 自动跳转到历史剧集位置
+     */
+    private fun jumpEpisode(adapter: TypeAdapter) {
+        binding.rvHorizontalRecyclerView1.apply {
+            val target = adapter.getTag<HistoryBean>() ?: return
+            coroutineScope.launch {
+                episodeDataList?.forEachIndexed { index, data ->
+                    if (data.url == target.lastEpisodeUrl) {
+                        launch(Dispatchers.Main) {
+                            //更新新位置
+                            adapter.notifyItemChanged(index)
+                            lastEpisodeIndex?.also {
+                                //如果有上一个位置页更新
+                                adapter.notifyItemChanged(it)
+                            }
+                            smoothScrollToPosition(index)
+                            lastEpisodeIndex = index
+                        }
+
+                        return@forEachIndexed
+                    }
+                }
+            }
         }
     }
 
@@ -69,17 +113,18 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
             )
         ) {
             adapter = (parent as? RecyclerView)?.typeAdapter()
-        }
 
-        init {
             setOnClickListener(itemView) { pos ->
                 adapter?.getData<EpisodeData>(pos)?.also {
                     AppRouteProcessor.process(it.actionUrl)
                 }
             }
+
         }
 
         override fun onBind(data: EpisodeData) {
+            val historyBean = adapter?.getTag<HistoryBean>()
+
             binding.tvAnimeEpisode2.apply {
                 setTextColor(Color.WHITE)
             }.text = data.name
@@ -89,7 +134,15 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
                 if (layoutParams is ViewGroup.MarginLayoutParams) {
                     (layoutParams as ViewGroup.MarginLayoutParams).setMargins(0, 4.dp, 8.dp, 4.dp)
                 }
-                setTextColor(binding.root.context.getResColor(R.color.foreground_white_skin))
+
+                if (data.url == historyBean?.lastEpisodeUrl) {
+                    //有对应播放记录，高亮显示并置顶
+                    setTextColor(binding.root.context.getResColor(R.color.foreground_main_color_2_skin))
+                } else {
+                    setTextColor(binding.root.context.getResColor(R.color.foreground_white_skin))
+                }
+
+                //setTextColor(binding.root.context.getResColor(R.color.foreground_white_skin))
                 background =
                     Util.getResDrawable(R.drawable.shape_circle_corner_edge_white_ripper_5_skin)
             }
