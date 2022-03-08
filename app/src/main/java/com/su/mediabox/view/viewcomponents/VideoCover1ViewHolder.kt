@@ -3,6 +3,7 @@ package com.su.mediabox.view.viewcomponents
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import com.su.mediabox.Pref
 import com.su.mediabox.R
 import com.su.mediabox.bean.HistoryBean
 import com.su.mediabox.databinding.ViewComponentVideoCover1Binding
@@ -21,6 +22,7 @@ class VideoCover1ViewHolder private constructor(private val binding: ViewCompone
     TypeViewHolder<VideoCover1Data>(binding.root), Observer<HistoryBean?> {
 
     private var videoCover1Data: VideoCover1Data? = null
+    private val isShowHistory = Pref.videoCover1ShowHistory
 
     constructor(parent: ViewGroup) : this(
         ViewComponentVideoCover1Binding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -53,9 +55,9 @@ class VideoCover1ViewHolder private constructor(private val binding: ViewCompone
                 text = data.score.toString()
             }
         }
-        //TODO 支持定义不绑定历史播放信息
+        if (isShowHistory)
         //查找是否有观看记录
-        bindHistoryPlayInfo(this)
+            bindHistoryPlayInfo(this)
     }
 
     override fun onChanged(hb: HistoryBean?) {

@@ -169,6 +169,7 @@ dependencies {
     implementation deps.jakewharton.disklrucache
     implementation deps.google.flexbox
     implementation deps.cretin.etv
+    implementation deps.pref.kotpref
     implementation project(':skin')
     implementation project(':skin_blue')
     implementation project(':skin_dark')

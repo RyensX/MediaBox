@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
+import com.su.mediabox.Pref
 import com.su.mediabox.R
 import com.su.mediabox.bean.HistoryBean
 import com.su.mediabox.databinding.ItemAnimeEpisode2Binding
@@ -34,6 +35,7 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
     var episodeDataList: List<EpisodeData>? = null
     private val coroutineScope = (binding.root.context as ComponentActivity).lifecycleScope
     private var lastEpisodeIndex: Int? = null
+    private val isShowHistory = Pref.videoPlayListShowHistory
 
     constructor(parent: ViewGroup) : this(
         ItemHorizontalRecyclerView1Binding.inflate(
@@ -57,13 +59,15 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
         episodeDataList = data.playList
 
         binding.rvHorizontalRecyclerView1.typeAdapter().apply {
-            //TODO 支持定义不绑定历史播放信息
-            bindHistoryPlayInfo {
-                setTag(it)
-                submitList(data.playList) {
-                    jumpEpisode(this)
+            if (isShowHistory)
+                bindHistoryPlayInfo {
+                    setTag(it)
+                    submitList(data.playList) {
+                        jumpEpisode(this)
+                    }
                 }
-            }
+            else
+                submitList(data.playList)
         }
 
         binding.ivHorizontalRecyclerView1More.apply {

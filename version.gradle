@@ -123,4 +123,8 @@ def cretin = [:]
 cretin.etv = "com.github.MZCretin:ExpandableTextView:v1.6.1-x"
 deps.cretin = cretin
 
+def pref = [:]
+pref.kotpref = "com.chibatching.kotpref:kotpref:2.13.1"
+deps.pref = pref
+
 ext.deps = deps

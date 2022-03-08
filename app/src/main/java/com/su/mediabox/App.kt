@@ -3,6 +3,7 @@ package com.su.mediabox
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
+import com.chibatching.kotpref.Kotpref
 import com.efs.sdk.launch.LaunchManager
 import com.liulishuo.filedownloader.FileDownloader
 import com.scwang.smart.refresh.footer.BallPulseFooter
@@ -39,6 +40,8 @@ class App : Application() {
 
         //初始化路由及插件配置
         AppUtil.init(this, PluginManager)
+
+        Kotpref.init(context)
 
         release {
             // Crash提示
