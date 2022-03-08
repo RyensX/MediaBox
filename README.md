@@ -16,38 +16,20 @@
         <a href="LICENSE" style="text-decoration:none" >
             <img src="https://img.shields.io/github/license/RyensX/MediaBox" alt="GitHub license"/>
         </a>
-	</p>
+    </p>
 </div>
 
-<p align="center"><font size="4">规范化媒体浏览器，不含广告，免费开源，便于学习Android开发。</font></p>
+<p align="center"><font size="4">插件化媒体浏览器，不含广告，免费开源，便于学习Android开发。</font></p>
 
 ----
 
-## 原理
+## ## 原理
+
 根据[**插件API**](https://github.com/RyensX/MediaBoxPlugin)实现各个组件解析外部数据然后通过本项目的用户界面**规范化**展示媒体数据（和浏览器差不多,类似内容受限的浏览器）
 
-## 功能
-### 视频
-1. 支持显示**排行榜**
-2. 支持显示**每日更新**的番剧
-3. 支持**分类查看**动漫
-4. 支持**双指缩放**、**移动**、**旋转**视频
-5. 支持视频**投屏**到电视
-6. 支持部分视频**显示**、**发送弹幕**（需要数据源支持弹幕）
-7. 支持输入某站弹幕链接播放网络弹幕（ 例如https://api.bilibili.com/x/v1/dm/list.so?oid=97495910 ）
-8. 支持**追番**（数据保存在本地）
-9. 支持显示**观看历史**记录
-10. 支持显示**搜索历史**记录
-11. 支持改变视频**播放速度**
-12. 支持改变**视频**显示**比例**（16:9, 4:3, 全屏等）
-13. 支持**本地记忆**视频**播放进度**
-14. ......
-
-### 其他媒体资源
-暂未支持
-
 ## 使用效果
-见[**插件API**](https://github.com/RyensX/MediaBoxPlugin)下的各个示例
+
+[MediaBox示例插件-樱花动漫第三方客户端](https://github.com/RyensX/SakuraAnimePlugin)
 
 ## 安全说明
 
@@ -85,10 +67,12 @@ App本身不提供任何数据，请用户自行添加各类插件学习和体�
 4. 因使用此软件产生的版权问题，软件作者概不负责。
 
 ## 相关项目
+
 - 本项目基于[Imomoe](https://github.com/SkyD666/Imomoe)
 - [插件API](https://github.com/RyensX/MediaBoxPlugin)
 
 ## 构建相关
+
 - [secret.gradle](doc/about_secret.gradle.md)文件
 
 ## 许可证
