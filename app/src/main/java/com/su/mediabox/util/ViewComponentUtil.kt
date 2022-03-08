@@ -19,9 +19,13 @@ fun bindHistoryPlayInfo(
             else -> null
         }
     } ?: return
-    getAppDataBase().historyDao()
-        .getHistoryLiveData(detailUrl)
-        .observe(context) { hb ->
-            observer.onChanged(hb)
-        }
+    //优先绑定收藏的历史播放记录
+    val lv = getAppDataBase().favoriteAnimeDao()
+        .getFavoriteAnimeLiveData(detailUrl)
+    if (lv.value == null)
+        getAppDataBase().historyDao()
+            .getHistoryLiveData(detailUrl)
+            .observe(context, observer)
+    else
+        lv.observe(context, observer)
 }

@@ -17,8 +17,8 @@ interface FavoriteAnimeDao {
     @Query(value = "SELECT * FROM $FAVORITE_ANIME_TABLE_NAME WHERE animeUrl = :animeUrl")
     fun getFavoriteAnime(animeUrl: String): FavoriteAnimeBean?
 
-    @Query(value = "SELECT * FROM $FAVORITE_ANIME_TABLE_NAME WHERE animeUrl = :videoUrl")
-    fun getFavoriteAnimeLiveData(videoUrl: String): LiveData<FavoriteAnimeBean?>
+    @Query(value = "SELECT * FROM $FAVORITE_ANIME_TABLE_NAME WHERE animeUrl = :animeUrl")
+    fun getFavoriteAnimeLiveData(animeUrl: String): LiveData<FavoriteAnimeBean?>
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     fun updateFavoriteAnime(favoriteAnimeBean: FavoriteAnimeBean)
