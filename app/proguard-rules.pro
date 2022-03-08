@@ -233,4 +233,5 @@ public static final int *;
 # 组件不能混淆
 -keep class com.su.mediabox.pluginapi.** {*;}
 -keep class com.su.mediabox.plugin.** {*;}
+-keep class com.su.mediabox.view.viewcomponents.** {*;}
 #-----------------------------
