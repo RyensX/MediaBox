@@ -18,13 +18,9 @@ import com.su.mediabox.view.adapter.type.typeAdapter
 class ItemPluginViewHolder private constructor(private val binding: ItemPluginBinding) :
     TypeViewHolder<PluginInfo>(binding.root) {
 
-    var adapter: TypeAdapter? = null
-
     constructor(parent: ViewGroup) : this(
         ItemPluginBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-    ) {
-        adapter = (parent as? RecyclerView)?.typeAdapter()
-    }
+    )
 
     init {
         setOnClickListener(itemView) {
@@ -32,7 +28,7 @@ class ItemPluginViewHolder private constructor(private val binding: ItemPluginBi
         }
         //TODO 暂时这样。后面做成展示插件详细信息
         setOnLongClickListener(itemView) { position ->
-            adapter?.getData<PluginInfo>(position)?.also { data ->
+            bindingTypeAdapter.getData<PluginInfo>(position)?.also { data ->
                 itemView.context.apply {
                     startActivity(Intent().also {
                         it.setClassName(data.packageName, data.pageActivity)

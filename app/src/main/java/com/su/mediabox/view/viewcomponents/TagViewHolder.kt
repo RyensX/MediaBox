@@ -20,10 +20,8 @@ class TagViewHolder private constructor(private val binding: ItemAnimeType1Bindi
     constructor(parent: ViewGroup) : this(
         ItemAnimeType1Binding.inflate(LayoutInflater.from(parent.context), parent, false)
     ) {
-        val adapter = (parent as? RecyclerView)?.typeAdapter()
-
         setOnClickListener(binding.root) { pos ->
-            adapter?.getData<TagData>(pos)?.also {
+            bindingTypeAdapter?.getData<TagData>(pos)?.also {
                 AppRouteProcessor.process(it.actionUrl)
             }
         }

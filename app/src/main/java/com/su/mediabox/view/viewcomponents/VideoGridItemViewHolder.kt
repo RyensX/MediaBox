@@ -21,10 +21,8 @@ class VideoGridItemViewHolder private constructor(private val binding: ItemAnime
     constructor(parent: ViewGroup) : this(
         ItemAnimeCover1Binding.inflate(LayoutInflater.from(parent.context), parent, false)
     ) {
-        val adapter = (parent as? RecyclerView)?.typeAdapter()
-
         setOnClickListener(binding.root) { pos ->
-            adapter?.getData<VideoGridItemData>(pos)?.also {
+            bindingTypeAdapter.getData<VideoGridItemData>(pos)?.also {
                 AppRouteProcessor.process(it.actionUrl)
             }
         }

@@ -114,8 +114,6 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
     open class EpisodeViewHolder(protected val binding: ItemAnimeEpisode2Binding) :
         TypeViewHolder<EpisodeData>(binding.root) {
 
-        private var adapter: TypeAdapter? = null
-
         constructor(parent: ViewGroup) : this(
             ItemAnimeEpisode2Binding.inflate(
                 LayoutInflater.from(parent.context),
@@ -123,10 +121,9 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
                 false
             )
         ) {
-            adapter = (parent as? RecyclerView)?.typeAdapter()
 
             setOnClickListener(itemView) { pos ->
-                adapter?.getData<EpisodeData>(pos)?.also {
+                bindingTypeAdapter.getData<EpisodeData>(pos)?.also {
                     AppRouteProcessor.process(it.actionUrl)
                 }
             }
@@ -134,7 +131,7 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
         }
 
         override fun onBind(data: EpisodeData) {
-            val historyBean = adapter?.getTag<HistoryBean>()
+            val historyBean = bindingTypeAdapter.getTag<HistoryBean>()
 
             binding.tvAnimeEpisode2.apply {
                 setTextColor(Color.WHITE)
