@@ -12,7 +12,7 @@ import com.su.skin.SkinManager
 typealias DataViewMapList = ArrayList<Pair<Class<Any>, Class<TypeViewHolder<Any>>>>
 
 class TypeAdapter(
-    private val dataViewMapList: DataViewMapList,
+    dataViewMapList: DataViewMapList,
     diff: DiffUtil.ItemCallback<Any>
 ) :
     ListAdapter<Any, TypeViewHolder<Any>>(diff) {
@@ -54,6 +54,17 @@ class TypeAdapter(
     }
 
     private val dataViewPosMap = mutableMapOf<Int, Int>()
+
+    fun clearDataViewPosMap() = dataViewPosMap.clear()
+
+    /**
+     * 注意增删元素需要手动调用[clearDataViewPosMap]
+     */
+    var dataViewMapList: DataViewMapList = dataViewMapList
+        set(value) {
+            field = value
+            clearDataViewPosMap()
+        }
 
     /**
      * 用于父子VH交换信息
