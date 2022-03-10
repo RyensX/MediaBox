@@ -1,6 +1,5 @@
 package com.su.mediabox.v2.viewmodel
 
-import android.view.Gravity
 import androidx.lifecycle.*
 import com.su.mediabox.App
 import com.su.mediabox.plugin.PluginManager
@@ -62,6 +61,7 @@ class VideoDetailViewModel : ViewModel() {
     private fun updateFavTarget() {
         viewModelScope.launch(Dispatchers.IO) {
             getAppDataBase().favoriteAnimeDao().getFavoriteAnimeLiveData(partUrl).also { liveData ->
+                //重新绑定
                 withContext(Dispatchers.Main) {
                     rawFavData?.also {
                         _isFavVideo.removeSource(it)
@@ -70,6 +70,14 @@ class VideoDetailViewModel : ViewModel() {
                         _isFavVideo.postValue(it != null)
                     }
                     rawFavData = liveData
+                }
+                //智能更新封面
+                liveData.value?.also {
+                    if (it.cover != cover) {
+                        getAppDataBase().favoriteAnimeDao().updateFavoriteAnime(it.apply {
+                            cover = this@VideoDetailViewModel.cover
+                        })
+                    }
                 }
             }
         }
