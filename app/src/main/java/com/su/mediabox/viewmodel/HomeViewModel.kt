@@ -9,6 +9,7 @@ import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.R
 import com.su.mediabox.pluginapi.been.TabBean
 import com.su.mediabox.pluginapi.components.IHomeComponent
+import com.su.mediabox.util.PluginIO
 import com.su.mediabox.util.showToast
 import com.su.mediabox.view.adapter.SerializableRecycledViewPool
 import kotlinx.coroutines.Dispatchers
@@ -24,7 +25,7 @@ class HomeViewModel : ViewModel() {
     var mldGetAllTabList: MutableLiveData<Boolean> = MutableLiveData()
 
     fun getAllTabData() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.PluginIO) {
             try {
                 homeModel.getAllTabData().apply {
                     allTabList.clear()

@@ -74,8 +74,10 @@ class AppUpdateHelper private constructor() {
                     }
                     append(updateBean.body)
                     this@show.message(
-                        text = Html.fromHtml(this.toString())
-                    )
+                        text = this.toString()
+                    ) {
+                        html()
+                    }
                 }
                 positiveButton(text = "下载更新") {
                     openBrowser(

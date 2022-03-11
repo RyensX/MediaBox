@@ -11,6 +11,7 @@ import com.su.mediabox.pluginapi.been.AnimeCoverBean
 import com.su.mediabox.pluginapi.been.ClassifyBean
 import com.su.mediabox.pluginapi.been.PageNumberBean
 import com.su.mediabox.pluginapi.components.IClassifyComponent
+import com.su.mediabox.util.PluginIO
 import com.su.mediabox.util.showToast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -44,7 +45,7 @@ class ClassifyViewModel : ViewModel() {
     }
 
     fun getClassifyData(partUrl: String, isRefresh: Boolean = true) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.PluginIO) {
             try {
                 if (isRequesting) return@launch
                 isRequesting = true

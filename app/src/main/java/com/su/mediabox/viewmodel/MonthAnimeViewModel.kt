@@ -10,6 +10,7 @@ import com.su.mediabox.util.showToast
 import com.su.mediabox.pluginapi.been.AnimeCoverBean
 import com.su.mediabox.pluginapi.been.PageNumberBean
 import com.su.mediabox.pluginapi.components.IMonthAnimeComponent
+import com.su.mediabox.util.PluginIO
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -23,7 +24,7 @@ class MonthAnimeViewModel : ViewModel() {
     var newPageIndex: Pair<Int, Int>? = null
 
     fun getMonthAnimeData(partUrl: String, isRefresh: Boolean = true) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.PluginIO) {
             try {
                 monthAnimeModel.getMonthAnimeData(partUrl).apply {
                     if (isRefresh) monthAnimeList.clear()

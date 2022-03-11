@@ -9,6 +9,7 @@ import com.su.mediabox.bean.ResponseDataType
 import com.su.mediabox.pluginapi.been.AnimeCoverBean
 import com.su.mediabox.pluginapi.been.PageNumberBean
 import com.su.mediabox.pluginapi.components.IRankListComponent
+import com.su.mediabox.util.PluginIO
 import com.su.mediabox.util.showToast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,7 +27,7 @@ class RankListViewModel : ViewModel() {
         MutableLiveData()
 
     fun getRankListData(partUrl: String, isRefresh: Boolean = true) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.PluginIO) {
             try {
                 if (isRequesting) return@launch
                 isRequesting = true

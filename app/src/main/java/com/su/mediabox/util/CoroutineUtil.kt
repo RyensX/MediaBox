@@ -1,6 +1,7 @@
 package com.su.mediabox.util
 
 import android.app.Dialog
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
@@ -15,3 +16,14 @@ fun Dialog.createCoroutineScope(context: CoroutineContext = Dispatchers.Default)
             cs.cancel()
         }
     }
+
+val pluginExceptionHandler = CoroutineExceptionHandler { _, e ->
+    when (e.javaClass) {
+        NoSuchMethodError::class.java -> "该插件API版本过低！请更新插件！".showToast()
+        else -> e.message?.showToast()
+    }
+}
+
+private val pluginIO = Dispatchers.IO + pluginExceptionHandler
+val Dispatchers.PluginIO
+    get() = pluginIO

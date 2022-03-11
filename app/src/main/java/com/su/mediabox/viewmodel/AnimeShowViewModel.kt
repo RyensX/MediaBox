@@ -10,6 +10,7 @@ import com.su.mediabox.bean.ResponseDataType
 import com.su.mediabox.pluginapi.been.IAnimeShowBean
 import com.su.mediabox.pluginapi.been.PageNumberBean
 import com.su.mediabox.pluginapi.components.IAnimeShowComponent
+import com.su.mediabox.util.PluginIO
 import com.su.mediabox.util.showToast
 import com.su.mediabox.view.adapter.SerializableRecycledViewPool
 import kotlinx.coroutines.Dispatchers
@@ -30,7 +31,7 @@ class AnimeShowViewModel : ViewModel() {
 
     //http://www.yhdm.io版本
     fun getAnimeShowData(partUrl: String, isRefresh: Boolean = true) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.PluginIO) {
             try {
                 if (isRequesting) return@launch
                 isRequesting = true

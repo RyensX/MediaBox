@@ -15,6 +15,7 @@ import com.su.mediabox.pluginapi.been.AnimeEpisodeDataBean
 import com.su.mediabox.pluginapi.been.IAnimeDetailBean
 import com.su.mediabox.pluginapi.been.PlayBean
 import com.su.mediabox.pluginapi.components.IPlayComponent
+import com.su.mediabox.util.PluginIO
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -39,7 +40,7 @@ class PlayViewModel : ViewModel() {
     val mldGetAnimeEpisodeData: MutableLiveData<Int> = MutableLiveData()
 
     fun refreshAnimeEpisodeData(partUrl: String, currentEpisodeIndex: Int, title: String = "") {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.PluginIO) {
             try {
                 this@PlayViewModel.partUrl = partUrl
                 playModel.refreshAnimeEpisodeData(partUrl, animeEpisodeDataBean).apply {

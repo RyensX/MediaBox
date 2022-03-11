@@ -7,6 +7,7 @@ import com.su.mediabox.App
 import com.su.mediabox.R
 import com.su.mediabox.bean.FavoriteAnimeBean
 import com.su.mediabox.database.getAppDataBase
+import com.su.mediabox.util.PluginIO
 import com.su.mediabox.util.showToast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,7 +18,7 @@ class FavoriteViewModel : ViewModel() {
     var mldFavoriteList: MutableLiveData<Boolean> = MutableLiveData()
 
     fun getFavoriteData() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.PluginIO) {
             try {
                 favoriteList.clear()
                 favoriteList.addAll(getAppDataBase().favoriteAnimeDao().getFavoriteAnimeList())
