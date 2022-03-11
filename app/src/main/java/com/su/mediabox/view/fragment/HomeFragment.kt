@@ -1,5 +1,6 @@
 package com.su.mediabox.view.fragment
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -25,13 +26,13 @@ import com.su.mediabox.view.activity.*
 import com.su.mediabox.viewmodel.HomeViewModel
 import com.su.mediabox.pluginapi.Constant
 import com.su.mediabox.util.clickScale
+import com.su.mediabox.util.setViewsOnClickListener
 import com.su.mediabox.view.listener.dsl.addOnTabSelectedListener
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
-
-class HomeFragment : BaseFragment<FragmentHomeBinding>(), EventBusSubscriber {
+class HomeFragment : BaseFragment<FragmentHomeBinding>(), View.OnClickListener, EventBusSubscriber {
     private lateinit var viewModel: HomeViewModel
     private lateinit var adapter: VpAdapter
     private var currentTab = -1
@@ -65,40 +66,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), EventBusSubscriber {
             }
             tabLayoutMediator.attach()
 
-            ivHomeFragmentRank.setOnClickListener {
-                it.clickScale(0.8f, 70)
-                activity?.let { it1 ->
-                    it1.startActivity(Intent(it1, RankActivity::class.java))
-                    it1.overridePendingTransition(R.anim.anl_push_left_in, R.anim.anl_stay)
-                }
-            }
-
-            ivHomeFragmentClassify.setOnClickListener {
-                it.clickScale(0.8f, 70)
-                startActivity(Intent(activity, ClassifyActivity::class.java))
-            }
-
-            tvHomeFragmentHeaderSearch.setOnClickListener {
-                activity?.let {
-                    process(Constant.ActionUrl.ANIME_SEARCH)
-                    it.overridePendingTransition(R.anim.anl_push_top_in, R.anim.anl_stay)
-                }
-            }
-
-            ivHomeFragmentAnimeDownload.setOnClickListener {
-                it.clickScale(0.8f, 70)
-                requestManageExternalStorage {
-                    onGranted {
-                        startActivity(Intent(activity, AnimeDownloadActivity::class.java))
-                    }
-                    onDenied { "无存储权限，无法播放本地缓存视频".showToast(Toast.LENGTH_LONG) }
-                }
-            }
-
-            ivHomeFragmentFavorite.setOnClickListener {
-                it.clickScale(0.8f, 70)
-                startActivity(Intent(activity, FavoriteActivity::class.java))
-            }
+            //菜单
+            setViewsOnClickListener(
+                ivHomeFragmentRank,
+                ivHomeFragmentClassify,
+                tvHomeFragmentHeaderSearch,
+                ivHomeFragmentAnimeDownload,
+                ivHomeFragmentFavorite
+            )
 
             tlHomeFragment.addOnTabSelectedListener {
                 onTabSelected { currentTab = it!!.position }
@@ -137,6 +112,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), EventBusSubscriber {
 
     // priority = 1比MainActivity的高，以便在找不到相应子页面时拦截SelectHomeTabEvent
     // 使得不会切换到MainActivity页面
+    @SuppressLint("StringFormatInvalid")
     @Subscribe(threadMode = ThreadMode.MAIN, priority = 1)
     override fun onMessageEvent(event: MessageEvent) {
         when (event) {
@@ -162,6 +138,38 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), EventBusSubscriber {
                     getString(R.string.unknown_route, event.actionUrl).showToast()
                 }
             }
+        }
+    }
+
+    override fun onClick(v: View?) {
+        mBinding.apply {
+            when (v) {
+                ivHomeFragmentRank -> activity?.let { it1 ->
+                    it1.startActivity(Intent(it1, RankActivity::class.java))
+                    it1.overridePendingTransition(R.anim.anl_push_left_in, R.anim.anl_stay)
+                }
+                ivHomeFragmentClassify -> startActivity(
+                    Intent(activity, ClassifyActivity::class.java)
+                )
+                tvHomeFragmentHeaderSearch -> activity?.let {
+                    process(Constant.ActionUrl.ANIME_SEARCH)
+                    it.overridePendingTransition(R.anim.anl_push_top_in, R.anim.anl_stay)
+                    return
+                }
+                ivHomeFragmentAnimeDownload -> requestManageExternalStorage {
+                    onGranted {
+                        startActivity(Intent(activity, AnimeDownloadActivity::class.java))
+                    }
+                    onDenied { "无存储权限，无法播放本地缓存视频".showToast(Toast.LENGTH_LONG) }
+                }
+                ivHomeFragmentFavorite -> startActivity(
+                    Intent(
+                        activity,
+                        FavoriteActivity::class.java
+                    )
+                )
+            }
+            v?.clickScale(0.8f, 70)
         }
     }
 

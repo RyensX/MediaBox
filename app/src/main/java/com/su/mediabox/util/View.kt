@@ -56,3 +56,7 @@ inline fun RecyclerView.ViewHolder.setOnLongClickListener(
         onLongClick(bindingAdapterPosition)
     }
 }
+
+fun View.OnClickListener.setViewsOnClickListener(vararg views: View) {
+    views.forEach { it.setOnClickListener(this) }
+}
