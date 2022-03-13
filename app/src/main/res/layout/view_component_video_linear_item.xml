@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:selectableItemBackground">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/vc_video_linear_item_cover_card"
+        android:layout_width="90dp"
+        android:layout_height="120dp"
+        android:layout_marginVertical="8dp"
+        android:layout_marginStart="16dp"
+        app:cardCornerRadius="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0">
+
+        <ImageView
+            android:id="@+id/vc_video_linear_item_cover"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            tools:src="@drawable/ic_launcher_background" />
+
+    </androidx.cardview.widget.CardView>
+
+    <com.su.mediabox.view.component.textview.TypefaceTextView
+        android:id="@+id/vc_video_linear_item_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="16dp"
+        android:textColor="@color/foreground_black_skin"
+        android:textStyle="bold"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toTopOf="@id/vc_video_linear_item_episode"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@id/vc_video_linear_item_cover_card"
+        app:layout_constraintTop_toTopOf="parent"
+        app:typeface="bPRTypeface"
+        tools:text="中二病也要谈恋爱！" />
+
+    <com.su.mediabox.view.component.textview.TypefaceTextView
+        android:id="@+id/vc_video_linear_item_episode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="16dp"
+        android:textColor="@color/main_color_skin"
+        android:textSize="12sp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toTopOf="@id/vc_video_linear_item_tag_list"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="@id/vc_video_linear_item_name"
+        app:layout_constraintTop_toBottomOf="@id/vc_video_linear_item_name"
+        app:typeface="bPRTypeface"
+        tools:text="全12集" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/vc_video_linear_item_tag_list"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toTopOf="@id/vc_video_linear_item_desc"
+        app:layout_constraintRight_toRightOf="@id/vc_video_linear_item_desc"
+        app:layout_constraintStart_toStartOf="@id/vc_video_linear_item_name"
+        app:layout_constraintTop_toBottomOf="@id/vc_video_linear_item_episode" />
+
+    <com.su.mediabox.view.component.textview.TypefaceTextView
+        android:id="@+id/vc_video_linear_item_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:ellipsize="end"
+        android:maxLines="3"
+        android:textColor="@color/gray_1"
+        android:textSize="12sp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toTopOf="@id/vc_video_linear_item_custom_data"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="@id/vc_video_linear_item_name"
+        app:layout_constraintTop_toBottomOf="@id/vc_video_linear_item_tag_list"
+        app:layout_constraintVertical_bias="0"
+        app:typeface="bPRTypeface"
+        tools:text="春天，新生入学后开始考虑要加入哪个社团的时候—— 田井中律被从小一起长大的玩伴秋山澪带到轻音部见习。" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/vc_video_linear_item_custom_data"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/vc_video_linear_item_name"
+        app:layout_constraintTop_toBottomOf="@id/vc_video_linear_item_desc" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

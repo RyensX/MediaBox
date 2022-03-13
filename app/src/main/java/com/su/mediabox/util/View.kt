@@ -60,3 +60,15 @@ inline fun RecyclerView.ViewHolder.setOnLongClickListener(
 fun View.OnClickListener.setViewsOnClickListener(vararg views: View) {
     views.forEach { it.setOnClickListener(this) }
 }
+
+/**
+ * 仅在有数据时visible，否则gone
+ */
+inline fun <T, V : View> V.displayOnlyIfHasData(data: T?, hasData: V.(T) -> Unit): V {
+    if (data != null && data.toString().isNotBlank()) {
+        visible()
+        hasData(data)
+    } else
+        gone()
+    return this
+}
