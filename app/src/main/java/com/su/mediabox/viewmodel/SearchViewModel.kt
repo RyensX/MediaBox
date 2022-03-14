@@ -106,16 +106,7 @@ class SearchViewModel : ViewModel() {
     }
 
     fun deleteSearchHistory(itemPosition: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val searchHistoryBean = searchHistoryList.removeAt(itemPosition)
-                getAppDataBase().searchHistoryDao().deleteSearchHistory(searchHistoryBean.timeStamp)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            } finally {
-                mldDeleteCompleted.postValue(itemPosition)
-            }
-        }
+
     }
 
     companion object {

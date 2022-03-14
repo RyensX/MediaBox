@@ -11,6 +11,7 @@ import com.su.mediabox.util.showToast
 import com.su.mediabox.view.activity.*
 import com.su.mediabox.pluginapi.Constant.ActionUrl
 import com.su.mediabox.v2.view.activity.VideoDetailActivity
+import com.su.mediabox.v2.view.activity.VideoSearchActivity
 import java.lang.ref.WeakReference
 import java.net.URLDecoder
 
@@ -75,10 +76,9 @@ object AppRouteProcessor :
             //打开搜索页面
             matchAndGetParams(actionUrl, ActionUrl.ANIME_SEARCH) {
                 activity.startActivity(
-                    Intent(activity, SearchActivity::class.java).apply {
+                    Intent(activity, VideoSearchActivity::class.java).apply {
                         runCatching {
-                            putExtra("keyWord", it[0])
-                            putExtra("pageNumber", it[1])
+                            putExtra(VideoSearchActivity.EXTRA_KEY_WORK, it[0])
                         }
                     }
                 )

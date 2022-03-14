@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white_skin"
-    tools:context=".view.activity.SearchActivity">
+    android:background="@color/white_skin">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_search_activity_header"

@@ -13,7 +13,8 @@ typealias DataViewMapList = ArrayList<Pair<Class<Any>, Class<TypeViewHolder<Any>
 
 class TypeAdapter(
     dataViewMapList: DataViewMapList,
-    diff: DiffUtil.ItemCallback<Any>
+    diff: DiffUtil.ItemCallback<Any>,
+    var dataViewMapCache: Boolean = true
 ) :
     ListAdapter<Any, TypeViewHolder<Any>>(diff) {
 
@@ -99,7 +100,8 @@ class TypeAdapter(
         else {
             try {
                 dataViewMapList[viewType].second
-                    .getConstructor(ViewGroup::class.java)
+                    .getDeclaredConstructor(ViewGroup::class.java)
+                    .apply { isAccessible = true }
                     .newInstance(parent)
             } catch (e: Exception) {
                 TypeViewHolder.UnknownTypeViewHolder(parent)
@@ -126,19 +128,22 @@ class TypeAdapter(
 
     /**
      * 根据类型在数据视图映射表里查找
-     * @return 返回结果是查找目前的index
+     * @return 返回结果是查找目前类型在映射表里的index
      */
     override fun getItemViewType(position: Int): Int {
-        return dataViewPosMap[position] ?: getItem(position)?.let { data ->
-            dataViewMapList.forEachIndexed { index, pair ->
-                //必须对应真实类型，即使是子类也是不同的
-                if (data.javaClass == pair.first) {
-                    dataViewPosMap[position] = index
-                    return index
+        //FIX_TODO 2022/3/14 21:43 0 这里缓存还有些问题，见[VideoSearchActivity]
+        return (if (dataViewMapCache) dataViewPosMap[position] else null)
+            ?: getItem(position)?.let { data ->
+                dataViewMapList.forEachIndexed { index, pair ->
+                    //必须对应真实类型，即使是子类也是不同的
+                    if (data.javaClass == pair.first) {
+                        if (dataViewMapCache)
+                            dataViewPosMap[position] = index
+                        return index
+                    }
                 }
-            }
-            UNKNOWN_TYPE
-        } ?: UNKNOWN_TYPE
+                UNKNOWN_TYPE
+            } ?: UNKNOWN_TYPE
     }
 
     object DefaultDiff : DiffUtil.ItemCallback<Any>() {

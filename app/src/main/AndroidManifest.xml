@@ -90,8 +90,8 @@
         <activity
             android:name="com.su.mediabox.view.activity.RankActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
-        <activity
-            android:name="com.su.mediabox.view.activity.SearchActivity"
+                <activity
+            android:name="com.su.mediabox.v2.view.activity.VideoSearchActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
             android:name="com.su.mediabox.view.activity.PlayActivity"
@@ -165,6 +165,7 @@
         <meta-data
             android:name="UMENG_MESSAGE_SECRET"
             android:value="${UMENG_MESSAGE_SECRET}" />
+
         <service
             android:name="com.taobao.accs.ChannelService"
             android:exported="false"
