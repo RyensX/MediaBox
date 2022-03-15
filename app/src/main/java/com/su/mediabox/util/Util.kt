@@ -524,4 +524,14 @@ object Util {
             ""
         }
     }
+
+    /**
+     * 异常则返回null
+     */
+    inline fun <T> withoutExceptionGet(block: () -> T) = try {
+        block()
+    } catch (e: Exception) {
+        e.printStackTrace()
+        null
+    }
 }

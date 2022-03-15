@@ -15,7 +15,7 @@ abstract class TypeViewHolder<T>(view: View) : RecyclerView.ViewHolder(view) {
     //因为复用问题，这两项都不能缓存
     protected val mOwnerRecyclerView: RecyclerView?
         get() = javaClass.geMemberOrNull("mOwnerRecyclerView", this)
-    protected val bindingTypeAdapter: TypeAdapter
+    val bindingTypeAdapter: TypeAdapter
         get() = bindingAdapter as TypeAdapter
 
     open fun onBind(data: T) {}

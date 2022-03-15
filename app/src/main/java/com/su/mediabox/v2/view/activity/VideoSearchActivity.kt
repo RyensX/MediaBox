@@ -50,6 +50,13 @@ class VideoSearchActivity : BasePluginActivity<ActivitySearchBinding>() {
                 .linear()
                 .initTypeList(searchDataViewMapList) {
                     dataViewMapCache = false
+
+                    addViewHolderClickListener<SearchHistoryViewHolder> { pos ->
+                        getData<SearchHistoryBean>(pos)?.also {
+                            mBinding.etSearchActivitySearch.setText(it.title)
+                            viewModel.getSearchData(it.title)
+                        }
+                    }
                 }
             //上拉刷新
             srlSearchActivity.setEnableRefresh(false)
@@ -138,9 +145,6 @@ class VideoSearchActivity : BasePluginActivity<ActivitySearchBinding>() {
         constructor(parent: ViewGroup) : this(
             ItemSearchHistory1Binding.inflate(LayoutInflater.from(parent.context), parent, false)
         ) {
-            setOnClickListener(binding.root) {
-                //TODO 点击搜索
-            }
             setOnClickListener(binding.ivSearchHistory1Delete) { pos ->
                 coroutineScope.launch {
                     data?.title?.also {

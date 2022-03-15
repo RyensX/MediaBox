@@ -6,6 +6,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.su.mediabox.pluginapi.v2.been.*
+import com.su.mediabox.util.Util.withoutExceptionGet
+import com.su.mediabox.util.setOnClickListener
+import com.su.mediabox.util.setOnLongClickListener
 import com.su.mediabox.view.viewcomponents.*
 import com.su.skin.SkinManager
 
@@ -84,8 +87,29 @@ class TypeAdapter(
         null
     }
 
+    val clickListeners = mutableMapOf<Class<*>, TypeViewHolder<*>.(position: Int) -> Unit>()
+    val longClickListeners = mutableMapOf<Class<*>, TypeViewHolder<*>.(position: Int) -> Boolean>()
+
+    /**
+     * 为某种VH的itemView添加点击监听，重复添加会覆盖
+     * @param V VH类型
+     */
     @Suppress("UNCHECKED_CAST")
-    fun <T> getData(position: Int) = getItem(position) as? T
+    inline fun <reified V : TypeViewHolder<*>> addViewHolderClickListener(noinline onClick: V.(position: Int) -> Unit) {
+        clickListeners[V::class.java] = onClick as TypeViewHolder<*>.(Int) -> Unit
+    }
+
+    /**
+     * 为某种VH的itemView添加长按监听，重复添加会覆盖
+     * @param V VH类型
+     */
+    @Suppress("UNCHECKED_CAST")
+    inline fun <reified V : TypeViewHolder<*>> addViewHolderLongClickListener(noinline onClick: V.(position: Int) -> Boolean) {
+        longClickListeners[V::class.java] = onClick as TypeViewHolder<*>.(Int) -> Boolean
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    fun <T> getData(position: Int) = withoutExceptionGet { getItem(position) as? T }
 
     override fun submitList(list: List<Any>?, commitCallback: Runnable?) {
         if (list != currentList) {
@@ -99,10 +123,16 @@ class TypeAdapter(
             TypeViewHolder.UnknownTypeViewHolder(parent)
         else {
             try {
-                dataViewMapList[viewType].second
-                    .getDeclaredConstructor(ViewGroup::class.java)
+                val vhClass = dataViewMapList[viewType].second
+                vhClass.getDeclaredConstructor(ViewGroup::class.java)
                     .apply { isAccessible = true }
                     .newInstance(parent)
+                    .apply {
+                        //点击
+                        clickListeners[vhClass]?.also { setOnClickListener(itemView) { it(it) } }
+                        //长按
+                        longClickListeners[vhClass]?.also { setOnLongClickListener(itemView) { it(it) } }
+                    }
             } catch (e: Exception) {
                 TypeViewHolder.UnknownTypeViewHolder(parent)
             }
