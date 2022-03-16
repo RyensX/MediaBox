@@ -31,14 +31,22 @@ class TypeAdapter(
          * VH缓存池集，每种映射表对应一个VH缓存池
          */
         private val recycledViewPools = mutableMapOf<Int, RecyclerView.RecycledViewPool>()
-        fun getRecycledViewPool(dataViewMapList: DataViewMapList): RecyclerView.RecycledViewPool {
+        private fun DataViewMapList.getDataViewMapListKey() = run {
             var key = 0
-            dataViewMapList.forEach {
+            forEach {
                 key += it.first.hashCode() + it.second.hashCode()
             }
+            key
+        }
+
+        fun getRecycledViewPool(dataViewMapList: DataViewMapList): RecyclerView.RecycledViewPool {
+            val key = dataViewMapList.getDataViewMapListKey()
             return recycledViewPools[key] ?: RecyclerView.RecycledViewPool()
                 .also { recycledViewPools[key] = it }
         }
+
+        fun clearRecycledViewPool(dataViewMapList: DataViewMapList) =
+            recycledViewPools.remove(dataViewMapList.getDataViewMapListKey())
 
         init {
             //初始化全局数据视图对照表
@@ -58,6 +66,9 @@ class TypeAdapter(
         }
     }
 
+    /**
+     * 映射缓存，<数据pos，对应VH在映射表的pos>
+     */
     private val dataViewPosMap = mutableMapOf<Int, Int>()
 
     fun clearDataViewPosMap() = dataViewPosMap.clear()

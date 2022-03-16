@@ -145,7 +145,7 @@ class VideoSearchActivity : BasePluginActivity<ActivitySearchBinding>() {
         constructor(parent: ViewGroup) : this(
             ItemSearchHistory1Binding.inflate(LayoutInflater.from(parent.context), parent, false)
         ) {
-            setOnClickListener(binding.ivSearchHistory1Delete) { pos ->
+            setOnClickListener(binding.ivSearchHistory1Delete) {
                 coroutineScope.launch {
                     data?.title?.also {
                         getAppDataBase().searchHistoryDao().deleteSearchHistory(it)
