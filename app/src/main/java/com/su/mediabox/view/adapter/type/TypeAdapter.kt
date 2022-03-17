@@ -9,6 +9,7 @@ import com.su.mediabox.pluginapi.v2.been.*
 import com.su.mediabox.util.Util.withoutExceptionGet
 import com.su.mediabox.util.setOnClickListener
 import com.su.mediabox.util.setOnLongClickListener
+import com.su.mediabox.util.showToast
 import com.su.mediabox.view.viewcomponents.*
 import com.su.skin.SkinManager
 
@@ -92,11 +93,7 @@ class TypeAdapter(
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun <T> getTag(): T? = try {
-        tag as? T
-    } catch (e: Exception) {
-        null
-    }
+    fun <T> getTag(): T? = withoutExceptionGet { tag as? T }
 
     val clickListeners = mutableMapOf<Class<*>, TypeViewHolder<*>.(position: Int) -> Unit>()
     val longClickListeners = mutableMapOf<Class<*>, TypeViewHolder<*>.(position: Int) -> Boolean>()
@@ -122,9 +119,16 @@ class TypeAdapter(
     @Suppress("UNCHECKED_CAST")
     fun <T> getData(position: Int) = withoutExceptionGet { getItem(position) as? T }
 
+    override fun submitList(list: List<Any>?) {
+        if (dataViewMapCache && (list == null || list != currentList)) {
+            clearDataViewPosMap()
+        }
+        super.submitList(list)
+    }
+
     override fun submitList(list: List<Any>?, commitCallback: Runnable?) {
-        if (list != currentList) {
-            dataViewPosMap.clear()
+        if (dataViewMapCache && (list == null || list != currentList)) {
+            clearDataViewPosMap()
         }
         super.submitList(list, commitCallback)
     }
