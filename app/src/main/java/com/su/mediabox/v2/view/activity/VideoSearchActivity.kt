@@ -49,8 +49,6 @@ class VideoSearchActivity : BasePluginActivity<ActivitySearchBinding>() {
             rvSearchActivity
                 .linear()
                 .initTypeList(searchDataViewMapList) {
-                    dataViewMapCache = false
-
                     addViewHolderClickListener<SearchHistoryViewHolder> { pos ->
                         getData<SearchHistoryBean>(pos)?.also {
                             mBinding.etSearchActivitySearch.setText(it.title)
@@ -100,24 +98,27 @@ class VideoSearchActivity : BasePluginActivity<ActivitySearchBinding>() {
             mBinding.srlSearchActivity.setEnableLoadMore(false)
             when (it) {
                 VideoSearchViewModel.ShowState.KEYWORD -> {
-                    mBinding.tvSearchActivityTip.gone()
-                    mBinding.rvSearchActivity.typeAdapter().submitList(viewModel.resultData)
+                    mBinding.rvSearchActivity.typeAdapter().submitList(viewModel.resultData) {
+                        mBinding.tvSearchActivityTip.gone()
+                    }
                 }
                 VideoSearchViewModel.ShowState.RESULT -> {
-                    val size = viewModel.resultData?.size ?: 0
-                    mBinding.tvSearchActivityTip.apply {
-                        visible()
-                        text = getString(R.string.search_activity_tip, viewModel.mKeyWord, size)
+                    mBinding.rvSearchActivity.typeAdapter().submitList(viewModel.resultData) {
+                        val size = viewModel.resultData?.size ?: 0
+                        if (size == 0)
+                            getString(R.string.no_more_info).showToast()
+                        else
+                            mBinding.srlSearchActivity.setEnableLoadMore(true)
+                        mBinding.tvSearchActivityTip.apply {
+                            visible()
+                            text = getString(R.string.search_activity_tip, viewModel.mKeyWord, size)
+                        }
                     }
-                    if (size == 0)
-                        getString(R.string.no_more_info).showToast()
-                    else
-                        mBinding.srlSearchActivity.setEnableLoadMore(true)
-                    mBinding.rvSearchActivity.typeAdapter().submitList(viewModel.resultData)
                 }
                 VideoSearchViewModel.ShowState.FAILED -> {
-                    mBinding.tvSearchActivityTip.gone()
-                    mBinding.rvSearchActivity.typeAdapter().submitList(null)
+                    mBinding.rvSearchActivity.typeAdapter().submitList(null) {
+                        mBinding.tvSearchActivityTip.gone()
+                    }
                 }
                 else -> {}
             }

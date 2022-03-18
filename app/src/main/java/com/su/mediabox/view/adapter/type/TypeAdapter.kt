@@ -9,7 +9,6 @@ import com.su.mediabox.pluginapi.v2.been.*
 import com.su.mediabox.util.Util.withoutExceptionGet
 import com.su.mediabox.util.setOnClickListener
 import com.su.mediabox.util.setOnLongClickListener
-import com.su.mediabox.util.showToast
 import com.su.mediabox.view.viewcomponents.*
 import com.su.skin.SkinManager
 
@@ -176,7 +175,6 @@ class TypeAdapter(
      * @return 返回结果是查找目前类型在映射表里的index
      */
     override fun getItemViewType(position: Int): Int {
-        //FIX_TODO 2022/3/14 21:43 0 这里缓存还有些问题，见[VideoSearchActivity]
         return (if (dataViewMapCache) dataViewPosMap[position] else null)
             ?: getItem(position)?.let { data ->
                 dataViewMapList.forEachIndexed { index, pair ->
