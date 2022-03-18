@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.activity.viewModels
@@ -13,11 +14,8 @@ import com.su.mediabox.database.getAppDataBase
 import com.su.mediabox.databinding.ActivitySearchBinding
 import com.su.mediabox.databinding.ItemSearchHistory1Binding
 import com.su.mediabox.pluginapi.v2.been.VideoLinearItemData
-import com.su.mediabox.util.showToast
-import com.su.mediabox.util.gone
-import com.su.mediabox.util.visible
+import com.su.mediabox.util.*
 import com.su.mediabox.util.Util.showKeyboard
-import com.su.mediabox.util.setOnClickListener
 import com.su.mediabox.v2.viewmodel.VideoSearchViewModel
 import com.su.mediabox.view.activity.BasePluginActivity
 import com.su.mediabox.view.adapter.type.*
@@ -51,7 +49,11 @@ class VideoSearchActivity : BasePluginActivity<ActivitySearchBinding>() {
                 .initTypeList(searchDataViewMapList) {
                     addViewHolderClickListener<SearchHistoryViewHolder> { pos ->
                         getData<SearchHistoryBean>(pos)?.also {
-                            mBinding.etSearchActivitySearch.setText(it.title)
+                            mBinding.etSearchActivitySearch.apply {
+                                setText(it.title)
+                                setSelection(it.title.length)
+                            }
+                            showLoading()
                             viewModel.getSearchData(it.title)
                         }
                     }
@@ -59,6 +61,7 @@ class VideoSearchActivity : BasePluginActivity<ActivitySearchBinding>() {
             //上拉刷新
             srlSearchActivity.setEnableRefresh(false)
             srlSearchActivity.setOnLoadMoreListener {
+                showLoading()
                 viewModel.getSearchData()
             }
             //搜索框
@@ -93,9 +96,11 @@ class VideoSearchActivity : BasePluginActivity<ActivitySearchBinding>() {
         }
 
         viewModel.showState.observe(this) {
-            mBinding.srlSearchActivity.finishLoadMore()
-            mBinding.etSearchActivitySearch.isEnabled = true
-            mBinding.srlSearchActivity.setEnableLoadMore(false)
+            mBinding.apply {
+                srlSearchActivity.finishLoadMore()
+                etSearchActivitySearch.isEnabled = true
+                srlSearchActivity.setEnableLoadMore(false)
+            }
             when (it) {
                 VideoSearchViewModel.ShowState.KEYWORD -> {
                     mBinding.rvSearchActivity.typeAdapter().submitList(viewModel.resultData) {
@@ -113,11 +118,13 @@ class VideoSearchActivity : BasePluginActivity<ActivitySearchBinding>() {
                             visible()
                             text = getString(R.string.search_activity_tip, viewModel.mKeyWord, size)
                         }
+                        mBinding.layoutSearchActivityLoading.visibility = View.GONE
                     }
                 }
                 VideoSearchViewModel.ShowState.FAILED -> {
                     mBinding.rvSearchActivity.typeAdapter().submitList(null) {
                         mBinding.tvSearchActivityTip.gone()
+                        mBinding.layoutSearchActivityLoading.visibility = View.GONE
                     }
                 }
                 else -> {}
@@ -130,6 +137,13 @@ class VideoSearchActivity : BasePluginActivity<ActivitySearchBinding>() {
     override fun finish() {
         super.finish()
         overridePendingTransition(0, R.anim.anl_push_top_out)
+    }
+
+    private fun showLoading() {
+        mBinding.layoutSearchActivityLoading.apply {
+            smartInflate()
+            visibility = View.VISIBLE
+        }
     }
 
     private class SearchHistoryViewHolder private constructor(private val binding: ItemSearchHistory1Binding) :

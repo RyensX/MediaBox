@@ -1,6 +1,7 @@
 package com.su.mediabox.util
 
 import android.view.View
+import android.view.ViewStub
 import android.view.animation.AlphaAnimation
 import androidx.recyclerview.widget.RecyclerView
 
@@ -71,4 +72,12 @@ inline fun <T, V : View> V.displayOnlyIfHasData(data: T?, hasData: V.(T) -> Unit
     } else
         gone()
     return this
+}
+
+val ViewStub.isInflate: Boolean
+    get() = parent == null
+
+fun ViewStub.smartInflate() {
+    if (!isInflate)
+        inflate()
 }
