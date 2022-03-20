@@ -76,7 +76,14 @@ class VideoSearchActivity : BasePluginActivity<ActivitySearchBinding>() {
             }
             //清空关键字
             etSearchActivitySearch.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                }
+
                 override fun afterTextChanged(s: Editable?) {}
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     ivSearchActivityClearKeyWords.apply {
@@ -111,6 +118,8 @@ class VideoSearchActivity : BasePluginActivity<ActivitySearchBinding>() {
                     mBinding.rvSearchActivity.typeAdapter().submitList(viewModel.resultData) {
                         val size = viewModel.resultData?.size ?: 0
                         if (size == 0)
+                            getString(R.string.no_result_info).showToast()
+                        else if (viewModel.lastLoadSize == 0)
                             getString(R.string.no_more_info).showToast()
                         else
                             mBinding.srlSearchActivity.setEnableLoadMore(true)

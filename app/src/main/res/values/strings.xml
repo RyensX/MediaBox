@@ -112,6 +112,7 @@
     <string name="dark">深色</string>
     <string name="follow_system">跟随系统</string>
     <string name="ok">确定</string>
+    <string name="no_result_info">搜索结果为空</string>
     <string name="no_more_info">没有更多了</string>
     <string name="warning">警告</string>
     <string name="delete">删除</string>

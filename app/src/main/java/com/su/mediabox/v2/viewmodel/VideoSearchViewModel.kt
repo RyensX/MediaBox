@@ -20,8 +20,10 @@ class VideoSearchViewModel : ViewModel() {
         PluginManager.acquireComponent(IVideoSearchDataComponent::class.java)
     }
 
-    private var page = 0
+    private var page = 1
     var mKeyWord = ""
+    var lastLoadSize = 0
+        private set
 
     private val _showState = MutableLiveData<ShowState>()
 
@@ -65,13 +67,14 @@ class VideoSearchViewModel : ViewModel() {
 
                 //不一致则表示新的搜索
                 if (keyWord != mKeyWord) {
-                    page = 0
+                    page = 1
                     mKeyWord = keyWord
                 }
                 if (showState.value == ShowState.RESULT)
                     _resultData?.also { list.addAll(it) }
 
                 val result = videoSearchViewModel.getSearchData(keyWord, page++)
+                lastLoadSize = result.size
                 list.addAll(result)
                 _resultData = list
                 _showState.postValue(ShowState.RESULT)
