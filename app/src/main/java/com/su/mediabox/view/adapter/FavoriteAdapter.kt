@@ -28,7 +28,7 @@ class FavoriteAdapter(
                     it.itemView.setOnClickListener { _ ->
                         val item = dataList[it.bindingAdapterPosition]
                         if (item.lastEpisodeUrl != null)
-                            process(buildRouteActionUrl(Constant.ActionUrl.ANIME_PLAY,item.lastEpisodeUrl!!,item.cover,item.animeUrl))
+                            process(buildRouteActionUrl(Constant.ActionUrl.ANIME_PLAY,item.lastEpisodeUrl!!,item.cover,item.animeUrl,item.animeTitle))
                         else
                             process(buildRouteActionUrl(Constant.ActionUrl.ANIME_DETAIL,item.animeUrl))
                     }

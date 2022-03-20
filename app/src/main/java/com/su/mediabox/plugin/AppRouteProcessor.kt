@@ -103,6 +103,8 @@ object AppRouteProcessor :
                         it.getOrNull(1)?.also { putExtra(VideoMediaPlayActivity.INTENT_COVER, it) }
                         //详情链接
                         it.getOrNull(2)?.also { putExtra(VideoMediaPlayActivity.INTENT_DPU, it) }
+                        //视频名称
+                        it.getOrNull(3)?.also { putExtra(VideoMediaPlayActivity.INTENT_NAME, it) }
                     }
                 )
             } -> true

@@ -31,6 +31,7 @@ class VideoMediaPlayViewModel : ViewModel() {
 
     fun playVideoMedia(episodeUrl: String = currentPlayEpisodeUrl) {
         if (episodeUrl.isNotBlank()) {
+            currentPlayEpisodeUrl = episodeUrl
             //开始解析
             viewModelScope.launch(Dispatchers.PluginIO) {
                 playComponent.getVideoPlayMedia(episodeUrl).also {

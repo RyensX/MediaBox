@@ -47,7 +47,10 @@ class VideoMediaPlayActivity : BasePluginActivity<ActivityVideoMediaPlayBinding>
             //视频
             currentVideoPlayMedia.observe(this@VideoMediaPlayActivity) {
                 mBinding.vmPlay.apply {
-                    setUp(it.videoPlayUrl, false, it.title)
+                    setUp(
+                        it.videoPlayUrl, false,
+                        String.format("%s %s", viewModel.videoName, it.title)
+                    )
                     startPlayLogic()
                 }
             }
