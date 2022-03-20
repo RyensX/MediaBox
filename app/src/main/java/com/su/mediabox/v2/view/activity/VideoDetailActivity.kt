@@ -114,9 +114,11 @@ class VideoDetailActivity : BasePluginActivity<ActivityAnimeDetailBinding>() {
         //主动向下一级路由目标提供一些信息
         intent?.apply {
             //封面
-            putExtra(PlayActivity.INTENT_COVER, viewModel.cover)
+            putExtra(VideoMediaPlayActivity.INTENT_COVER, viewModel.cover)
             //详情链接
-            putExtra(PlayActivity.INTENT_DPU, viewModel.partUrl)
+            putExtra(VideoMediaPlayActivity.INTENT_DPU, viewModel.partUrl)
+            //视频名称
+            putExtra(VideoMediaPlayActivity.INTENT_NAME, viewModel.title)
         }
         super.startActivity(intent, options)
     }

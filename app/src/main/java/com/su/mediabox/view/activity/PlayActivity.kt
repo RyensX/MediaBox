@@ -54,13 +54,13 @@ import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
 import tv.danmaku.ijk.media.player.IjkMediaPlayer
 import kotlin.math.abs
 
-
+@Deprecated("已重写V2版，不再使用，将在后面逐步移除")
 class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBinding>() {
 
-    companion object{
-        const val INTENT_EPISODE="episodeUrl"
-        const val INTENT_COVER="coverUrl"
-        const val INTENT_DPU="detailPartUrl"
+    companion object {
+        const val INTENT_EPISODE = "episodeUrl"
+        const val INTENT_COVER = "coverUrl"
+        const val INTENT_DPU = "detailPartUrl"
     }
 
     override var statusBarSkin: Boolean = false
@@ -159,8 +159,8 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
         /**
         // 如果没有传入详情页面的网址，则通过播放页面的网址计算出详情页面的网址
         if (detailPartUrl.isBlank())
-            detailPartUrl = pluginUtil.getDetailLinkByEpisodeLink(partUrl)
-        */
+        detailPartUrl = pluginUtil.getDetailLinkByEpisodeLink(partUrl)
+         */
 
         mBinding.apply {
             rvPlayActivity.layoutManager = GridLayoutManager(this@PlayActivity, 4)

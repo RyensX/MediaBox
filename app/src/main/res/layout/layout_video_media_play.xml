@@ -1,0 +1,610 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black">
+
+    <FrameLayout
+        android:id="@+id/bigger_surface"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.su.mediabox.view.component.ZoomView
+            android:id="@+id/surface_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center" />
+    </FrameLayout>
+
+    <com.kuaishou.akdanmaku.ui.DanmakuView
+        android:id="@+id/danmaku_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <RelativeLayout
+        android:id="@+id/thumb"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:scaleType="fitCenter" />
+
+    <!--  要在这个位置，若往上，则深色会遮不住某些view，若往下，深色会遮住控制view  -->
+    <View
+        android:id="@+id/view_player_night_screen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!--高度都加了20dp，让阴影往下延伸一点-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="85dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/shape_gray_transparent_angle_90"
+        android:paddingTop="20dp"
+        android:paddingBottom="5dp">
+
+        <SeekBar
+            android:id="@+id/progress"
+            android:layout_width="match_parent"
+            android:layout_height="17dp"
+            android:background="@null"
+            android:max="100"
+            android:maxHeight="2dp"
+            android:minHeight="2dp"
+            android:paddingTop="7dp"
+            android:paddingBottom="7dp"
+            android:progressDrawable="@drawable/seek_bar_progress_1_skin"
+            android:thumb="@drawable/seek_bar_thumb_1_skin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/start"
+            android:layout_width="48dp"
+            android:layout_height="0px"
+            android:layout_marginStart="10dp"
+            android:paddingHorizontal="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/progress"
+            tools:src="@drawable/ic_play_white_24" />
+
+        <ImageView
+            android:id="@+id/iv_next"
+            android:layout_width="40dp"
+            android:layout_height="0px"
+            android:paddingHorizontal="5dp"
+            android:src="@drawable/ic_skip_next_white_24"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/start"
+            app:layout_constraintTop_toBottomOf="@id/progress" />
+
+        <com.su.mediabox.view.component.textview.TypefaceTextView
+            android:id="@+id/current"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:textColor="@color/foreground_white_skin"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_next"
+            app:layout_constraintTop_toBottomOf="@id/progress"
+            app:typeface="bPRTypeface"
+            tools:text="00:00" />
+
+        <com.su.mediabox.view.component.textview.TypefaceTextView
+            android:id="@+id/split"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:text="/"
+            android:textColor="@color/foreground_white_skin"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/current"
+            app:layout_constraintTop_toBottomOf="@id/progress" />
+
+        <com.su.mediabox.view.component.textview.TypefaceTextView
+            android:id="@+id/total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/foreground_white_skin"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/split"
+            app:layout_constraintTop_toBottomOf="@id/progress"
+            app:typeface="bPRTypeface"
+            tools:text="00:00" />
+
+        <EditText
+            android:id="@+id/et_input_danmu"
+            android:layout_width="0px"
+            android:layout_height="0px"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="5dp"
+            android:background="@drawable/shape_fill_circle_corner_danmu_6"
+            android:hint="@string/send_a_danmaku"
+            android:imeOptions="actionSend"
+            android:paddingHorizontal="10dp"
+            android:singleLine="true"
+            android:textColor="@color/white_skin"
+            android:textColorHint="#7AFFFFFF"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/iv_show_danmu"
+            app:layout_constraintStart_toEndOf="@id/total"
+            app:layout_constraintTop_toBottomOf="@id/progress" />
+
+        <ImageView
+            android:id="@+id/iv_show_danmu"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="3dp"
+            android:background="@drawable/selector_turn_on_off_danmu_skin"
+            android:backgroundTint="@color/foreground_white_skin"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_speed"
+            app:layout_constraintStart_toEndOf="@id/et_input_danmu"
+            app:layout_constraintTop_toBottomOf="@id/progress" />
+
+        <com.su.mediabox.view.component.textview.TypefaceTextView
+            android:id="@+id/tv_speed"
+            android:layout_width="wrap_content"
+            android:layout_height="0px"
+            android:gravity="center"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:text="@string/play_speed"
+            android:textColor="@color/foreground_white_skin"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_more_scale"
+            app:layout_constraintTop_toBottomOf="@id/progress"
+            app:typeface="bPRTypeface" />
+
+        <com.su.mediabox.view.component.textview.TypefaceTextView
+            android:id="@+id/tv_more_scale"
+            android:layout_width="wrap_content"
+            android:layout_height="0px"
+            android:gravity="center"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:textColor="@color/foreground_white_skin"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/fullscreen"
+            app:layout_constraintTop_toBottomOf="@id/progress"
+            app:typeface="bPRTypeface"
+            tools:text="4:3" />
+
+        <ImageView
+            android:id="@+id/fullscreen"
+            android:layout_width="wrap_content"
+            android:layout_height="0px"
+            android:layout_marginEnd="10dp"
+            android:adjustViewBounds="true"
+            android:padding="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/progress"
+            tools:src="@drawable/ic_fullscreen_exit_white_24" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/tv_restore_screen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/layout_bottom"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/shape_circle_corner_white_ripper_5"
+        android:backgroundTint="@color/gray_2"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="10dp"
+        android:text="@string/restore_screen"
+        android:textColor="@color/foreground_white_skin"
+        android:textSize="17sp"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+    <ProgressBar
+        android:id="@+id/bottom_progressbar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="1.5dp"
+        android:layout_alignParentBottom="true"
+        android:max="100"
+        android:progressDrawable="@drawable/layerlist_video_progress_bg_skin" />
+
+    <ImageView
+        android:id="@+id/back_tiny"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="6dp"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/main_color_skin"
+        android:indeterminateTintMode="src_atop"
+        android:visibility="invisible" />
+
+    <ImageView
+        android:id="@+id/lock_screen"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="50dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/unlock"
+        android:visibility="gone" />
+
+    <!--高度都加了20dp，让阴影往下延伸一点-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_top"
+        android:layout_width="match_parent"
+        android:layout_height="68dp"
+        android:background="@drawable/shape_gray_transparent_angle_270"
+        android:gravity="center_vertical"
+        android:paddingBottom="20dp">
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="0px"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_arrow_back_ios_white_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.su.mediabox.view.component.textview.TypefaceTextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:singleLine="true"
+            android:textColor="@color/foreground_white_skin"
+            android:textSize="18sp"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/iv_setting"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@id/back"
+            app:layout_constraintTop_toTopOf="parent"
+            app:typeface="bPRTypeface" />
+
+        <ImageView
+            android:id="@+id/iv_setting"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:paddingStart="0px"
+            android:paddingEnd="10dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_settings_white_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextClock
+            android:id="@+id/tc_system_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:format24Hour="HH:mm"
+            android:textColor="@color/foreground_white_skin"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/iv_setting"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/tv_touch_down_high_speed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/layout_top"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/shape_circle_corner_white_ripper_5"
+        android:backgroundTint="@color/gray_2"
+        android:paddingHorizontal="17dp"
+        android:paddingVertical="6dp"
+        android:text="@string/touch_down_high_speed"
+        android:textColor="@color/foreground_white_skin"
+        android:textSize="17sp" />
+
+    <RelativeLayout
+        android:id="@+id/layout_right"
+        android:layout_width="150dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:background="@color/gray_2"
+        android:clickable="true"
+        android:focusable="true"
+        tools:visibility="gone">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_right"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
+    </RelativeLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/layout_setting"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:background="@color/gray_2"
+        android:clickable="true"
+        android:focusable="true">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="12dp">
+
+            <CheckBox
+                android:id="@+id/cb_bottom_progress"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:buttonTint="@color/foreground_main_color_2_skin"
+                android:text="@string/bottom_progress"
+                android:textColor="@color/foreground_white_skin"
+                android:textSize="12sp" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/tv_open_by_external_player"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:paddingHorizontal="16dp"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp"
+                    android:text="@string/open_by_external_player"
+                    android:textColor="@color/foreground_white_skin"
+                    android:textSize="12sp"
+                    app:drawableTopCompat="@drawable/ic_player_white_24_skin"
+                    app:layout_constraintEnd_toStartOf="@id/tv_dlna"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_dlna"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:paddingHorizontal="16dp"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp"
+                    android:text="@string/play_on_tv"
+                    android:textColor="@color/foreground_white_skin"
+                    android:textSize="12sp"
+                    app:drawableTopCompat="@drawable/ic_live_tv_white_24_skin"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tv_open_by_external_player" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/danmaku"
+                android:textColor="@color/foreground_white_skin"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tv_input_custom_danmaku_url"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/shape_circle_corner_edge_white_ripper_5_skin"
+                android:gravity="center"
+                android:paddingVertical="7dp"
+                android:text="@string/input_custom_danmaku_url"
+                android:textColor="@color/foreground_white_skin" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/tv_player_rewind_danmaku_progress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:paddingHorizontal="16dp"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp"
+                    android:text="@string/rewind_danmaku_progress"
+                    android:textColor="@color/foreground_white_skin"
+                    android:textSize="12sp"
+                    android:visibility="gone"
+                    app:drawableTopCompat="@drawable/ic_fast_rewind_white_24_skin_dark"
+                    app:layout_constraintEnd_toStartOf="@id/tv_player_reset_danmaku_progress"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/tv_player_reset_danmaku_progress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:paddingHorizontal="16dp"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp"
+                    android:text="@string/reset_danmaku_progress"
+                    android:textColor="@color/foreground_white_skin"
+                    android:textSize="12sp"
+                    android:visibility="gone"
+                    app:drawableTopCompat="@drawable/ic_restore_white_24_skin_dark"
+                    app:layout_constraintEnd_toStartOf="@id/tv_player_forward_danmaku_progress"
+                    app:layout_constraintStart_toEndOf="@id/tv_player_rewind_danmaku_progress"
+                    tools:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/tv_player_forward_danmaku_progress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:paddingHorizontal="16dp"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp"
+                    android:text="@string/forward_danmaku_progress"
+                    android:textColor="@color/foreground_white_skin"
+                    android:textSize="12sp"
+                    android:visibility="gone"
+                    app:drawableTopCompat="@drawable/ic_fast_forward_white_24_skin"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tv_player_reset_danmaku_progress"
+                    tools:visibility="visible" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_danmaku_text_size_scale_header"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/danmaku_text_size_scale"
+                    android:textColor="@color/foreground_white_skin"
+                    android:textSize="12sp"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/tv_danmaku_text_size_scale"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:textColor="@color/foreground_white_skin"
+                    android:visibility="gone"
+                    tools:text="160%"
+                    tools:visibility="visible" />
+            </LinearLayout>
+
+            <SeekBar
+                android:id="@+id/sb_danmaku_text_size_scale"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="150"
+                android:paddingVertical="6dp"
+                android:progress="0"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/player_night_screen"
+                android:textColor="@color/foreground_white_skin"
+                android:textSize="12sp" />
+
+            <SeekBar
+                android:id="@+id/sb_player_night_screen"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="100"
+                android:paddingVertical="6dp"
+                android:progress="0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/reverse"
+                android:textColor="@color/foreground_white_skin"
+                android:textSize="12sp" />
+
+            <RadioGroup
+                android:id="@+id/rg_reverse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/rb_no_reverse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@null"
+                    android:drawablePadding="6dp"
+                    android:gravity="center_horizontal"
+                    android:paddingHorizontal="6dp"
+                    android:paddingTop="6dp"
+                    android:text="@string/no_reverse"
+                    android:textColor="@drawable/selector_no_reverse_button_skin"
+                    android:textSize="12sp"
+                    app:drawableTopCompat="@drawable/selector_no_reverse_button_skin" />
+
+                <RadioButton
+                    android:id="@+id/rb_horizontal_reverse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@null"
+                    android:drawablePadding="6dp"
+                    android:gravity="center_horizontal"
+                    android:paddingHorizontal="6dp"
+                    android:paddingTop="6dp"
+                    android:text="@string/horizontal_reverse"
+                    android:textColor="@drawable/selector_horizontal_reverse_button_skin"
+                    android:textSize="12sp"
+                    app:drawableTopCompat="@drawable/selector_horizontal_reverse_button_skin" />
+
+                <RadioButton
+                    android:id="@+id/rb_vertical_reverse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@null"
+                    android:drawablePadding="6dp"
+                    android:gravity="center_horizontal"
+                    android:paddingHorizontal="6dp"
+                    android:paddingTop="6dp"
+                    android:text="@string/vertical_reverse"
+                    android:textColor="@drawable/selector_vertical_reverse_button_skin"
+                    android:textSize="12sp"
+                    app:drawableTopCompat="@drawable/selector_vertical_reverse_button_skin" />
+            </RadioGroup>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</RelativeLayout>

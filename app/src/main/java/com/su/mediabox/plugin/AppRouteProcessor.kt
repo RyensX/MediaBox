@@ -11,6 +11,7 @@ import com.su.mediabox.util.showToast
 import com.su.mediabox.view.activity.*
 import com.su.mediabox.pluginapi.Constant.ActionUrl
 import com.su.mediabox.v2.view.activity.VideoDetailActivity
+import com.su.mediabox.v2.view.activity.VideoMediaPlayActivity
 import com.su.mediabox.v2.view.activity.VideoSearchActivity
 import java.lang.ref.WeakReference
 import java.net.URLDecoder
@@ -94,14 +95,14 @@ object AppRouteProcessor :
             matchAndGetParams(actionUrl, ActionUrl.ANIME_PLAY) {
                 //参数：剧集信息/[封面]/[详情]
                 activity.startActivity(
-                    Intent(activity, PlayActivity::class.java).apply {
+                    Intent(activity, VideoMediaPlayActivity::class.java).apply {
                         //必填的剧集信息
-                        putExtra(PlayActivity.INTENT_EPISODE, it[0])
+                        putExtra(VideoMediaPlayActivity.INTENT_EPISODE, it[0])
                         //可选（在详情页打开时由Activity主动提供）
                         //封面
-                        it.getOrNull(1)?.also { putExtra(PlayActivity.INTENT_COVER, it) }
+                        it.getOrNull(1)?.also { putExtra(VideoMediaPlayActivity.INTENT_COVER, it) }
                         //详情链接
-                        it.getOrNull(2)?.also { putExtra(PlayActivity.INTENT_DPU, it) }
+                        it.getOrNull(2)?.also { putExtra(VideoMediaPlayActivity.INTENT_DPU, it) }
                     }
                 )
             } -> true

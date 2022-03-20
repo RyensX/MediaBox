@@ -10,7 +10,6 @@ import android.util.AttributeSet
 import android.view.*
 import android.view.View.OnClickListener
 import android.widget.*
-import androidx.annotation.WorkerThread
 import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.children
 import androidx.core.view.isVisible
@@ -26,7 +25,6 @@ import com.shuyu.gsyvideoplayer.video.base.GSYVideoView
 import com.su.mediabox.App
 import com.su.mediabox.R
 import com.su.mediabox.config.Const
-import com.su.mediabox.pluginapi.been.AnimeEpisodeDataBean
 import com.su.mediabox.pluginapi.been.BaseBean
 import com.su.mediabox.util.*
 import com.su.mediabox.pluginapi.UI.dp
@@ -45,8 +43,8 @@ import java.io.File
 import java.io.Serializable
 import kotlin.math.abs
 
-
-open class AnimeVideoPlayer : StandardGSYVideoPlayer {
+//TODO 太乱了，需要后续整理重写
+open class VideoMediaPlayer : StandardGSYVideoPlayer {
     companion object {
         val mScaleStrings = listOf(
             "默认比例" to GSYVideoType.SCREEN_TYPE_DEFAULT,
@@ -74,7 +72,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
      */
     var playPositionMemoryTimeLimit = 5000L
 
-    var playPositionMemoryStore: PlayPositionMemoryDataStore? = null
+    var playPositionMemoryStore: AnimeVideoPlayer.PlayPositionMemoryDataStore? = null
     private var playPositionViewJob: Job? = null
 
     // 预跳转进度
@@ -83,7 +81,8 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
     // 正在双指缩放移动
     private var doublePointerZoomingMoving = false
 
-    private var ivDownloadButton: ImageView? = null
+    var ivDownloadButton: ImageView? = null
+        private set
 
     private var initFirstLoad = true
 
@@ -101,16 +100,22 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
     private var mPlaySpeed = 1f
 
     //投屏按钮
-    private var ivCling: ImageView? = null
+    var ivCling: ImageView? = null
+        private set
 
     //分享按钮
-    private var ivShare: ImageView? = null
+    var ivShare: ImageView? = null
+        private set
 
     //更多按钮
-    private var ivMore: ImageView? = null
+    var ivMore: ImageView? = null
+        private set
+
+    val mBottomContainer: ViewGroup? = mBottomContainer
 
     //下一集按钮
-    private var ivNextEpisode: ImageView? = null
+    var ivNextEpisode: ImageView? = null
+        private set
 
     // 进度记忆组
     private var vgPlayPosition: ViewGroup? = null
@@ -120,13 +125,6 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
 
     // 关闭进度提示ImageView
     private var ivClosePlayPositionTip: ImageView? = null
-
-    //选集
-    private var tvEpisode: TextView? = null
-    private var mEpisodeTextViewVisibility: Int = View.VISIBLE
-    private var mEpisodeButtonOnClickListener: OnClickListener? = null
-    private var rvEpisode: RecyclerView? = null
-    private var mEpisodeAdapter: EpisodeRecyclerViewAdapter? = null
 
     // 设置
     protected var vgSettingContainer: ViewGroup? = null
@@ -152,7 +150,8 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
     private var cbMediaCodec: CheckBox? = null
 
     // 右侧弹出栏
-    protected var vgRightContainer: ViewGroup? = null
+    var vgRightContainer: ViewGroup? = null
+        private set
 
     // 按住高速播放的tv
     private var tvTouchDownHighSpeed: TextView? = null
@@ -197,8 +196,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
 
-    override fun getLayoutId() = if (mIfCurrentIsFullscreen)
-        R.layout.layout_anime_video_player_land else R.layout.layout_anime_video_player
+    override fun getLayoutId() = R.layout.layout_video_media_play
 
     @SuppressLint("ClickableViewAccessibility")
     override fun init(context: Context?) {
@@ -207,21 +205,17 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         ivDownloadButton = findViewById(R.id.iv_play_activity_toolbar_download)
         tvMoreScale = findViewById(R.id.tv_more_scale)
         tvSpeed = findViewById(R.id.tv_speed)
-//        mClingImageView = findViewById(R.id.iv_cling)
         vgRightContainer = findViewById(R.id.layout_right)
         rvSpeed = findViewById(R.id.rv_right)
-        rvEpisode = findViewById(R.id.rv_right)
         ivShare = findViewById(R.id.iv_play_activity_toolbar_share)
         ivNextEpisode = findViewById(R.id.iv_next)
-        tvEpisode = findViewById(R.id.tv_episode)
         ivSetting = findViewById(R.id.iv_setting)
         vgSettingContainer = findViewById(R.id.layout_setting)
         rgReverse = findViewById(R.id.rg_reverse)
         cbBottomProgress = findViewById(R.id.cb_bottom_progress)
-        pbBottomProgress = super.mBottomProgressBar
+        pbBottomProgress = findViewById(R.id.progress)
         ivMore = findViewById(R.id.iv_play_activity_toolbar_more)
         tvOpenByExternalPlayer = findViewById(R.id.tv_open_by_external_player)
-//        mMediaCodecCheckBox = findViewById(R.id.cb_media_codec)
         tvRestoreScreen = findViewById(R.id.tv_restore_screen)
         tvTouchDownHighSpeed = findViewById(R.id.tv_touch_down_high_speed)
         vgBiggerSurface = findViewById(R.id.bigger_surface)
@@ -266,7 +260,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
             }
         }
         tvSpeed?.setOnClickListener {
-            //TODO 优化
+            //TODO 需要改进
             vgRightContainer?.let {
                 val adapter = SpeedAdapter(
                     listOf(
@@ -280,16 +274,6 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
                 )
                 rvSpeed?.layoutManager = LinearLayoutManager(context)
                 rvSpeed?.adapter = adapter
-            }
-            showRightContainer()
-        }
-        //TODO 重写
-        tvEpisode?.setOnClickListener {
-            vgRightContainer?.let {
-                rvEpisode?.layoutManager = LinearLayoutManager(context)
-                rvEpisode?.adapter = mEpisodeAdapter
-                mEpisodeAdapter?.notifyDataSetChanged()
-                rvEpisode?.scrollToPosition(mEpisodeAdapter?.currentIndex ?: 0)
             }
             showRightContainer()
         }
@@ -469,13 +453,10 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
             context,
             actionBar,
             statusBar
-        ) as AnimeVideoPlayer
+        ) as VideoMediaPlayer
         player.mScaleIndex = mScaleIndex
         player.tvSpeed?.text = tvSpeed?.text
         player.mFullscreenButton.visibility = mFullscreenButton.visibility
-        player.mEpisodeTextViewVisibility = mEpisodeTextViewVisibility
-        player.tvEpisode?.visibility = mEpisodeTextViewVisibility
-        player.mEpisodeAdapter = mEpisodeAdapter
         player.mTextureViewTransform = mTextureViewTransform
         player.mReverseValue = mReverseValue
         player.mBottomProgressCheckBoxValue = mBottomProgressCheckBoxValue
@@ -512,13 +493,10 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
     ) {
         super.resolveNormalVideoShow(oldF, vp, gsyVideoPlayer)
         if (gsyVideoPlayer != null) {
-            val player = gsyVideoPlayer as AnimeVideoPlayer
+            val player = gsyVideoPlayer as VideoMediaPlayer
             mScaleIndex = player.mScaleIndex
             mFullscreenButton.visibility = player.mFullscreenButton.visibility
             tvSpeed?.text = player.tvSpeed?.text
-            mEpisodeTextViewVisibility = player.mEpisodeTextViewVisibility
-            tvEpisode?.visibility = mEpisodeTextViewVisibility
-            mEpisodeAdapter = player.mEpisodeAdapter
             mTextureViewTransform = player.mTextureViewTransform
             mReverseValue = player.mReverseValue
             mBottomProgressCheckBoxValue = player.mBottomProgressCheckBoxValue
@@ -828,12 +806,14 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
                 vgSettingContainer?.gone()
                 vgRightContainer?.gone()
             }
+            R.id.back -> (context as Activity).finish()
         }
     }
 
     /**
      * 双击的时候调用此方法
      */
+    //TODO 双击应该隐藏其他界面
     override fun touchDoubleUp(e: MotionEvent?) {
         // 处理双击前的逻辑
         val oldUiVisibilityState = mBottomContainer?.visibility ?: VISIBLE
@@ -1000,12 +980,19 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
             playPositionMemoryStoreCoroutineScope.launch {
                 getPlayPosition(mOriginUrl)?.also {
                     preSeekPlayPosition = it
-                    playPositionViewJob = launch(Dispatchers.Main) {
-                        tvPlayPosition?.text = positionFormat(it)
-                        vgPlayPosition?.visible()
-                        //展示5秒
-                        delay(5000)
-                        vgPlayPosition?.gone(true, 200L)
+                    if (it > 0L) {
+                        //TODO 自动跳转开关
+                        val isAutoSeek = true
+                        if (isAutoSeek)
+                            seekTo(it)
+                        else
+                            playPositionViewJob = launch(Dispatchers.Main) {
+                                tvPlayPosition?.text = positionFormat(it)
+                                vgPlayPosition?.visible()
+                                //展示5秒
+                                delay(5000)
+                                vgPlayPosition?.gone(true, 200L)
+                            }
                     }
                 }
             }
@@ -1067,35 +1054,6 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         storePlayPosition(-1L)
     }
 
-    fun setEpisodeButtonOnClickListener(listener: OnClickListener) {
-        mEpisodeButtonOnClickListener = listener
-    }
-
-    fun setEpisodeAdapter(adapter: EpisodeRecyclerViewAdapter) {
-        mEpisodeAdapter = adapter
-    }
-
-    fun getShareButton() = ivShare
-
-    fun getMoreButton() = ivMore
-
-    fun getEpisodeButton() = tvEpisode
-
-    fun getDownloadButton() = ivDownloadButton
-
-    fun getBottomContainer() = mBottomContainer
-
-    fun getClingButton() = ivCling
-
-    fun getNextButton() = ivNextEpisode
-
-    fun getRightContainer() = vgRightContainer
-
-    fun setEpisodeButtonVisibility(visibility: Int) {
-        tvEpisode?.visibility = visibility
-        mEpisodeTextViewVisibility = visibility
-    }
-
     fun enableDismissControlViewTimer(start: Boolean) {
         if (start) super.startDismissControlViewTimer()
         else super.cancelDismissControlViewTimer()
@@ -1110,7 +1068,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
     inner class SpeedAdapter(val list: List<SpeedBean>) : SkinRvAdapter() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-            return RightRecyclerViewViewHolder(
+            return AnimeVideoPlayer.RightRecyclerViewViewHolder(
                 LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_player_list_item_1, parent, false)
             ).apply { SkinManager.setSkin(itemView) }
@@ -1122,7 +1080,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
             val item = list[position]
 
             when (holder) {
-                is RightRecyclerViewViewHolder -> {
+                is AnimeVideoPlayer.RightRecyclerViewViewHolder -> {
                     if (item.type == "speed") {
                         if (item.title.toFloat() == speed) {
                             holder.tvTitle.setTextColor(context.getResColor(R.color.unchanged_main_color_2_skin))
@@ -1146,42 +1104,5 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         }
 
         override fun getItemCount(): Int = list.size
-    }
-
-    abstract class EpisodeRecyclerViewAdapter(
-        private val activity: Activity,
-        private val dataList: List<AnimeEpisodeDataBean>,
-    ) : SkinRvAdapter() {
-
-        abstract val currentIndex: Int
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-            return RightRecyclerViewViewHolder(
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_player_list_item_1, parent, false)
-            ).apply { SkinManager.setSkin(itemView) }
-        }
-
-        override fun getItemCount(): Int = dataList.size
-    }
-
-    class RightRecyclerViewViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val tvTitle = view as TextView
-    }
-
-    interface PlayPositionMemoryDataStore {
-
-        suspend fun getPlayPosition(url: String): Long?
-
-        /**
-         * @param position 播放进度毫秒，可用GSYVideoViewBridge::currentPosition获取
-         */
-        @WorkerThread
-        suspend fun putPlayPosition(url: String, position: Long)
-
-        @WorkerThread
-        suspend fun deletePlayPosition(url: String)
-
-        fun positionFormat(position: Long): String
     }
 }

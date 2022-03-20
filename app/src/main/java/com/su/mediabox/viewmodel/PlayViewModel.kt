@@ -19,7 +19,7 @@ import com.su.mediabox.util.PluginIO
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-
+@Deprecated("已重写V2版，不再使用，将在后面逐步移除")
 class PlayViewModel : ViewModel() {
     private val playModel: IPlayComponent by lazy(LazyThreadSafetyMode.NONE) {
         PluginManager.acquireComponent(IPlayComponent::class.java)

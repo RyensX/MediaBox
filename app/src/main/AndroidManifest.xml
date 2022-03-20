@@ -90,12 +90,17 @@
         <activity
             android:name="com.su.mediabox.view.activity.RankActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
-                <activity
+        <activity
             android:name="com.su.mediabox.v2.view.activity.VideoSearchActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
             android:name="com.su.mediabox.view.activity.PlayActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode" />
+        <activity
+            android:name=".v2.view.activity.VideoMediaPlayActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            />
         <activity
             android:name="com.su.mediabox.view.activity.AnimeDetailActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />

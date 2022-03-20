@@ -3,6 +3,7 @@ package com.su.mediabox.bean
 import androidx.room.Entity
 import com.su.mediabox.config.Const
 
+@Deprecated("不需要继承BaseBeen多那么多冗余字段，也不应该持久化视图类型")
 @Entity(tableName = Const.Database.AppDataBase.FAVORITE_ANIME_TABLE_NAME)
 class FavoriteAnimeBean(      //下面的url都是partUrl
     override var type: String,
