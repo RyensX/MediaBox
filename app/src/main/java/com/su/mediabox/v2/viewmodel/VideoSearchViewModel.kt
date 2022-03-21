@@ -6,7 +6,6 @@ import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.R
 import com.su.mediabox.bean.SearchHistoryBean
 import com.su.mediabox.database.getAppDataBase
-import com.su.mediabox.pluginapi.v2.been.VideoLinearItemData
 import com.su.mediabox.pluginapi.v2.components.IVideoSearchDataComponent
 import com.su.mediabox.util.PluginIO
 import com.su.mediabox.util.removeAllObserver

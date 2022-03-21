@@ -58,7 +58,7 @@ class TypeAdapter(
                     .registerDataViewMap<VideoCover1Data, VideoCover1ViewHolder>()
                     .registerDataViewMap<EpisodeData, VideoPlayListViewHolder.EpisodeViewHolder>()
                     .registerDataViewMap<VideoGridItemData, VideoGridItemViewHolder>()
-                    .registerDataViewMap<VideoGridData, VideoGridViewHolder>()
+                    .registerDataViewMap<GridData, GridViewHolder>()
                     .registerDataViewMap<TagData, TagViewHolder>()
                     .registerDataViewMap<LongTextData, LongTextViewHolder>()
                     .registerDataViewMap<VideoInfoItemData, VideoInfoItemViewHolder>()

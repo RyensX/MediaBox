@@ -13,13 +13,11 @@ import com.su.mediabox.bean.SearchHistoryBean
 import com.su.mediabox.database.getAppDataBase
 import com.su.mediabox.databinding.ActivitySearchBinding
 import com.su.mediabox.databinding.ItemSearchHistory1Binding
-import com.su.mediabox.pluginapi.v2.been.VideoLinearItemData
 import com.su.mediabox.util.*
 import com.su.mediabox.util.Util.showKeyboard
 import com.su.mediabox.v2.viewmodel.VideoSearchViewModel
 import com.su.mediabox.view.activity.BasePluginActivity
 import com.su.mediabox.view.adapter.type.*
-import com.su.mediabox.view.viewcomponents.VideoInfoItemViewHolder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
