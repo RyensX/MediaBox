@@ -19,20 +19,20 @@ import com.su.mediabox.util.Util.showKeyboard
 import com.su.mediabox.v2.viewmodel.VideoSearchViewModel
 import com.su.mediabox.view.activity.BasePluginActivity
 import com.su.mediabox.view.adapter.type.*
-import com.su.mediabox.view.viewcomponents.VideoLinearItemViewHolder
+import com.su.mediabox.view.viewcomponents.VideoInfoItemViewHolder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlin.concurrent.thread
 
 class VideoSearchActivity : BasePluginActivity<ActivitySearchBinding>() {
 
     companion object {
         const val EXTRA_KEY_WORK = "keyWord"
 
-        private val searchDataViewMapList = DataViewMapList()
-            .registerDataViewMap<VideoLinearItemData, VideoLinearItemViewHolder>()
-            .registerDataViewMap<SearchHistoryBean, SearchHistoryViewHolder>()
+        private val searchDataViewMapList = DataViewMapList().apply {
+            registerDataViewMap<SearchHistoryBean, SearchHistoryViewHolder>()
+            addAll(TypeAdapter.globalDataViewMap)
+        }
     }
 
     private val viewModel by viewModels<VideoSearchViewModel>()

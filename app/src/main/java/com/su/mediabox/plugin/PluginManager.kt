@@ -28,7 +28,7 @@ object PluginManager : AppUtil.IRouteProcessor {
     /**
      * 最低支持的插件API版本
      */
-    private const val minPluginApiVersion = 2
+    private const val minPluginApiVersion = 4
 
     private val _pluginLiveData = MutableLiveData<List<PluginInfo>>()
     private val pluginIntent = Intent(Constant.PLUGIN_ACTION)

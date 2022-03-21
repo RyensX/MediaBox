@@ -16,11 +16,15 @@ import kotlinx.coroutines.launch
 
 class VideoSearchViewModel : ViewModel() {
 
+    companion object {
+        const val DEFAULT_PAGE = 1
+    }
+
     private val videoSearchViewModel: IVideoSearchDataComponent by lazy(LazyThreadSafetyMode.NONE) {
         PluginManager.acquireComponent(IVideoSearchDataComponent::class.java)
     }
 
-    private var page = 1
+    private var page = DEFAULT_PAGE
     var mKeyWord = ""
     var lastLoadSize = 0
         private set
@@ -67,7 +71,7 @@ class VideoSearchViewModel : ViewModel() {
 
                 //不一致则表示新的搜索
                 if (keyWord != mKeyWord) {
-                    page = 1
+                    page = DEFAULT_PAGE
                     mKeyWord = keyWord
                 }
                 if (showState.value == ShowState.RESULT)
@@ -89,7 +93,7 @@ class VideoSearchViewModel : ViewModel() {
 
     fun showSearchHistory() {
         _resultData = searchHistory.value?.let { mutableListOf<Any>().apply { addAll(it) } }
-        page = 0
+        page = DEFAULT_PAGE
         _showState.postValue(ShowState.KEYWORD)
     }
 

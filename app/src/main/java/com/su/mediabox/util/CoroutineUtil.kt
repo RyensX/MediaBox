@@ -18,8 +18,9 @@ fun Dialog.createCoroutineScope(context: CoroutineContext = Dispatchers.Default)
     }
 
 val pluginExceptionHandler = CoroutineExceptionHandler { _, e ->
+    e.printStackTrace()
     when (e.javaClass) {
-        NoSuchMethodError::class.java -> "该插件API版本过低！请更新插件！".showToast()
+        NoSuchMethodError::class.java, InstantiationError::class.java -> "该插件API版本过低！请更新插件！".showToast()
         else -> e.message?.showToast()
     }
 }

@@ -3,22 +3,22 @@ package com.su.mediabox.view.viewcomponents
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.google.android.flexbox.FlexboxLayoutManager
-import com.su.mediabox.databinding.ViewComponentVideoLinearItemBinding
+import com.su.mediabox.databinding.ViewComponentVideoInfoItemBinding
 import com.su.mediabox.plugin.AppRouteProcessor
 import com.su.mediabox.pluginapi.v2.been.TagData
-import com.su.mediabox.pluginapi.v2.been.VideoLinearItemData
+import com.su.mediabox.pluginapi.v2.been.VideoInfoItemData
 import com.su.mediabox.util.coil.CoilUtil.loadImage
 import com.su.mediabox.util.displayOnlyIfHasData
 import com.su.mediabox.util.setOnClickListener
 import com.su.mediabox.view.adapter.type.*
 
-class VideoLinearItemViewHolder private constructor(private val binding: ViewComponentVideoLinearItemBinding) :
-    TypeViewHolder<VideoLinearItemData>(binding.root) {
+class VideoInfoItemViewHolder private constructor(private val binding: ViewComponentVideoInfoItemBinding) :
+    TypeViewHolder<VideoInfoItemData>(binding.root) {
 
-    private var data: VideoLinearItemData? = null
+    private var data: VideoInfoItemData? = null
 
     constructor(parent: ViewGroup) : this(
-        ViewComponentVideoLinearItemBinding.inflate(
+        ViewComponentVideoInfoItemBinding.inflate(
             LayoutInflater.from(parent.context),
             parent, false
         )
@@ -40,7 +40,7 @@ class VideoLinearItemViewHolder private constructor(private val binding: ViewCom
         }
     }
 
-    override fun onBind(data: VideoLinearItemData) {
+    override fun onBind(data: VideoInfoItemData) {
         this.data = data
         binding.apply {
             vcVideoLinearItemCover.displayOnlyIfHasData(data.coverUrl) { loadImage(it) }
