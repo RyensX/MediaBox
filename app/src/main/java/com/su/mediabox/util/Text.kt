@@ -9,4 +9,19 @@ object Text {
     fun String.shield(): Boolean {
         return false
     }
+
+    /**
+     * 从字符串中提取第一个数字，只支持阿拉伯数字
+     */
+    fun String.getNum(): Int {
+        var isNum = false
+        var num = 0
+        for (c in toCharArray())
+            if (c.isDigit()) {
+                isNum = true
+                num += c.digitToInt()
+            } else if (isNum)
+                break
+        return num
+    }
 }

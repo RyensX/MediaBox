@@ -17,6 +17,7 @@ import com.su.mediabox.pluginapi.v2.been.EpisodeData
 import com.su.mediabox.pluginapi.v2.been.VideoPlayListData
 import com.su.mediabox.util.Util
 import com.su.mediabox.pluginapi.UI.dp
+import com.su.mediabox.util.Text.getNum
 import com.su.mediabox.util.Util.getResColor
 import com.su.mediabox.util.bindHistoryPlayInfo
 import com.su.mediabox.util.setOnClickListener
@@ -24,6 +25,8 @@ import com.su.mediabox.view.adapter.type.*
 import com.su.mediabox.view.episodeSheetDialog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import kotlin.math.absoluteValue
 
 /**
@@ -58,16 +61,28 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
     override fun onBind(data: VideoPlayListData) {
         episodeDataList = data.playList
 
-        binding.rvHorizontalRecyclerView1.typeAdapter().apply {
-            if (isShowHistory)
-                bindHistoryPlayInfo {
-                    setTag(it)
-                    submitList(data.playList) {
-                        jumpEpisode(this)
-                    }
+        coroutineScope.launch(Dispatchers.Default) {
+            var list = data.playList
+            runCatching {
+                //尝试自动排序为集数顺序
+                if (list[0].name.getNum() > list[1].name.getNum())
+                    list = list.asReversed()
+            }
+            episodeDataList = list
+
+            withContext(Dispatchers.Main) {
+                binding.rvHorizontalRecyclerView1.typeAdapter().apply {
+                    if (isShowHistory)
+                        bindHistoryPlayInfo {
+                            setTag(it)
+                            submitList(episodeDataList) {
+                                jumpEpisode(this)
+                            }
+                        }
+                    else
+                        submitList(episodeDataList)
                 }
-            else
-                submitList(data.playList)
+            }
         }
 
         binding.ivHorizontalRecyclerView1More.apply {
