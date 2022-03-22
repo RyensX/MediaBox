@@ -18,6 +18,7 @@ import com.su.mediabox.view.activity.PlayActivity
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
 import tv.danmaku.ijk.media.player.IjkMediaPlayer
 
+//FIX_TODO 2022/3/21 19:05 0 播放完毕崩溃
 class VideoMediaPlayActivity : BasePluginActivity<ActivityVideoMediaPlayBinding>() {
 
     private lateinit var orientationUtils: OrientationUtils
@@ -88,6 +89,11 @@ class VideoMediaPlayActivity : BasePluginActivity<ActivityVideoMediaPlayBinding>
                     this@run.currentPlayer.seekRatio = this@run.currentPlayer.duration / 90_000f
                     //设置弹幕
                     viewModel.initDanmakuData()
+                }
+
+                override fun onAutoComplete(url: String?, vararg objects: Any?) {
+                    finish()
+                    //TODO 自动跳转下一集
                 }
             })
 

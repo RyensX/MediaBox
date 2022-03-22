@@ -710,7 +710,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
     override fun changeUiToCompleteShow() {
         super.changeUiToCompleteShow()
         viewTopContainerShadow?.visible()
-        mBottomContainer.gone()
+        mBottomContainer?.gone()
         tvTouchDownHighSpeed?.gone()
         mUiCleared = false
 
