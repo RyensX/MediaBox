@@ -18,7 +18,6 @@ import com.su.mediabox.view.activity.PlayActivity
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
 import tv.danmaku.ijk.media.player.IjkMediaPlayer
 
-//FIX_TODO 2022/3/21 19:05 0 播放完毕崩溃
 class VideoMediaPlayActivity : BasePluginActivity<ActivityVideoMediaPlayBinding>() {
 
     private lateinit var orientationUtils: OrientationUtils
