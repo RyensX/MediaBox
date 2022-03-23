@@ -64,9 +64,11 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
         coroutineScope.launch(Dispatchers.Default) {
             var list = data.playList
             runCatching {
-                //尝试自动排序为集数顺序
-                if (list[0].name.getNum() > list[1].name.getNum())
-                    list = list.asReversed()
+                if (list.size > 1) {
+                    //尝试自动排序为集数顺序
+                    if (list[0].name.getNum() > list[1].name.getNum() || list[list.size - 2].name.getNum() > list[list.size - 1].name.getNum())
+                        list = list.asReversed()
+                }
             }
             episodeDataList = list
 
