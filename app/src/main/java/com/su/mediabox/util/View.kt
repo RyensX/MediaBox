@@ -42,7 +42,7 @@ fun View.clickScale(scale: Float = 0.75f, duration: Long = 100) {
 
 inline fun RecyclerView.ViewHolder.setOnClickListener(
     target: View,
-    crossinline onClick: (position: Int) -> Unit
+    crossinline onClick: RecyclerView.ViewHolder.(position: Int) -> Unit
 ) {
     target.setOnClickListener {
         onClick(bindingAdapterPosition)
@@ -51,7 +51,7 @@ inline fun RecyclerView.ViewHolder.setOnClickListener(
 
 inline fun RecyclerView.ViewHolder.setOnLongClickListener(
     target: View,
-    crossinline onLongClick: (position: Int) -> Boolean
+    crossinline onLongClick: RecyclerView.ViewHolder.(position: Int) -> Boolean
 ) {
     target.setOnLongClickListener {
         onLongClick(bindingAdapterPosition)

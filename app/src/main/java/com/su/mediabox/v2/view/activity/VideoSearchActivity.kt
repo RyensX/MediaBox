@@ -3,6 +3,7 @@ package com.su.mediabox.v2.view.activity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -47,12 +48,13 @@ class VideoSearchActivity : BasePluginActivity<ActivitySearchBinding>() {
                 .initTypeList(searchDataViewMapList) {
                     addViewHolderClickListener<SearchHistoryViewHolder> { pos ->
                         getData<SearchHistoryBean>(pos)?.also {
+                            val keyWork = it.title.trim()
                             mBinding.etSearchActivitySearch.apply {
-                                setText(it.title)
-                                setSelection(it.title.length)
+                                setText(keyWork)
+                                setSelection(keyWork.length)
                             }
                             showLoading()
-                            viewModel.getSearchData(it.title)
+                            viewModel.getSearchData(keyWork)
                         }
                     }
                 }

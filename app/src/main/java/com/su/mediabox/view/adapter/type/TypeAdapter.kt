@@ -74,6 +74,8 @@ class TypeAdapter(
     fun clearDataViewPosMap() = dataViewPosMap.clear()
 
     /**
+     * <数据CLass,VH的Class>
+     *
      * 注意增删元素需要手动调用[clearDataViewPosMap]
      */
     var dataViewMapList: DataViewMapList = dataViewMapList
@@ -94,6 +96,7 @@ class TypeAdapter(
     @Suppress("UNCHECKED_CAST")
     fun <T> getTag(): T? = withoutExceptionGet { tag as? T }
 
+    //<VH的Class,对应Listener>
     val clickListeners = mutableMapOf<Class<*>, TypeViewHolder<*>.(position: Int) -> Unit>()
     val longClickListeners = mutableMapOf<Class<*>, TypeViewHolder<*>.(position: Int) -> Boolean>()
 
@@ -143,9 +146,19 @@ class TypeAdapter(
                     .newInstance(parent)
                     .apply {
                         //点击
-                        clickListeners[vhClass]?.also { setOnClickListener(itemView) { it(it) } }
+                        if (clickListeners[vhClass] != null)
+                            setOnClickListener(itemView) { pos ->
+                                (this as TypeViewHolder<*>).bindingTypeAdapter.clickListeners[vhClass]?.also {
+                                    it(pos)
+                                }
+                            }
                         //长按
-                        longClickListeners[vhClass]?.also { setOnLongClickListener(itemView) { it(it) } }
+                        if (longClickListeners[vhClass] != null)
+                            setOnLongClickListener(itemView) { pos ->
+                                (this as TypeViewHolder<*>).bindingTypeAdapter.longClickListeners[vhClass]?.let {
+                                    it(pos)
+                                } ?: true
+                            }
                     }
             } catch (e: Exception) {
                 TypeViewHolder.UnknownTypeViewHolder(parent)
