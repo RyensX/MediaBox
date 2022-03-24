@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_circle_corner_bottom_dialog_white_12_skin"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/episode_bottom_sheet_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_clear_main_color_24_skin" />
+
+        <com.su.mediabox.view.component.textview.TypefaceTextView
+            android:id="@+id/episode_bottom_sheet_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:gravity="center_vertical"
+            android:textColor="@color/foreground_main_color_2_skin"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/episode_bottom_sheet_close"
+
+            app:layout_constraintLeft_toRightOf="@id/episode_bottom_sheet_close"
+            app:layout_constraintTop_toTopOf="@id/episode_bottom_sheet_close"
+            app:typeface="bPRTypeface"
+            tools:text="@string/episode_bottom_sheet_format" />
+
+        <ImageView
+            android:id="@+id/episode_bottom_sheet_order"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:layout_constraintBottom_toBottomOf="@id/episode_bottom_sheet_close"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/episode_bottom_sheet_close"
+            app:srcCompat="@drawable/ic_baseline_format_line_spacing_24" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!--TODO 直接在ConstraintLayout使用MATCH_CONSTRAINT会有问题-->
+    <com.su.mediabox.view.component.BottomSheetRecyclerView
+        android:id="@+id/episode_bottom_sheet_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginVertical="2dp"/>
+
+</LinearLayout>

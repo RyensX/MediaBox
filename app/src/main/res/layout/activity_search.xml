@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white_skin"
-    tools:context=".view.activity.SearchActivity">
+    android:background="@color/white_skin">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_search_activity_header"
@@ -104,8 +103,8 @@
 
     <ViewStub
         android:id="@+id/layout_search_activity_loading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_centerInParent="true"
         android:layout="@layout/layout_circle_progress_text_tip_1" />
 </RelativeLayout>

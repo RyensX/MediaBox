@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.su.mediabox.App
-import com.su.mediabox.PluginManager
+import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.R
 import com.su.mediabox.bean.*
 import com.su.mediabox.database.getAppDataBase
@@ -15,10 +15,11 @@ import com.su.mediabox.pluginapi.been.AnimeEpisodeDataBean
 import com.su.mediabox.pluginapi.been.IAnimeDetailBean
 import com.su.mediabox.pluginapi.been.PlayBean
 import com.su.mediabox.pluginapi.components.IPlayComponent
+import com.su.mediabox.util.PluginIO
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-
+@Deprecated("已重写V2版，不再使用，将在后面逐步移除")
 class PlayViewModel : ViewModel() {
     private val playModel: IPlayComponent by lazy(LazyThreadSafetyMode.NONE) {
         PluginManager.acquireComponent(IPlayComponent::class.java)
@@ -39,7 +40,7 @@ class PlayViewModel : ViewModel() {
     val mldGetAnimeEpisodeData: MutableLiveData<Int> = MutableLiveData()
 
     fun refreshAnimeEpisodeData(partUrl: String, currentEpisodeIndex: Int, title: String = "") {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.PluginIO) {
             try {
                 this@PlayViewModel.partUrl = partUrl
                 playModel.refreshAnimeEpisodeData(partUrl, animeEpisodeDataBean).apply {

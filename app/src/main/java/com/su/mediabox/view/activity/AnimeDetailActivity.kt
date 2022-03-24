@@ -29,6 +29,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.net.URL
 
+@Deprecated("在v2 API完善后移除")
 class AnimeDetailActivity : BasePluginActivity<ActivityAnimeDetailBinding>() {
     private var isFavorite: Boolean = false
     private lateinit var viewModel: AnimeDetailViewModel

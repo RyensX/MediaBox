@@ -5,9 +5,9 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
-import com.su.mediabox.AppRouteProcessor
-import com.su.mediabox.PluginManager.getPluginIndex
-import com.su.mediabox.PluginManager.setPluginInfo
+import com.su.mediabox.plugin.AppRouteProcessor
+import com.su.mediabox.plugin.PluginManager.getPluginIndex
+import com.su.mediabox.plugin.PluginManager.setPluginInfo
 
 abstract class BasePluginActivity<VB : ViewBinding> : BaseActivity<VB>() {
 

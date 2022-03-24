@@ -13,65 +13,59 @@ import com.su.mediabox.util.downloadanime.AnimeDownloadHelper.Companion.save2Xml
 import com.su.mediabox.util.formatSize
 import com.su.mediabox.util.toMD5
 import com.su.mediabox.pluginapi.Constant
+import com.su.mediabox.pluginapi.Text.buildRouteActionUrl
 import com.su.mediabox.pluginapi.been.AnimeCoverBean
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
 
-
 class AnimeDownloadViewModel : ViewModel() {
+
+    var mode = 0        //0是默认的，是番剧；1是番剧每一集
+    var actionBarTitle = ""
+    var directoryName = ""
+
     var animeCoverList: MutableList<AnimeCoverBean> = ArrayList()
     var mldAnimeCoverList: MutableLiveData<Boolean> = MutableLiveData()
 
     fun getAnimeCover() {
         viewModelScope.launch(Dispatchers.IO) {
-            val files = arrayOf(File(Const.DownloadAnime.animeFilePath).listFiles(),
-                Const.DownloadAnime.run {
-                    new = false
-                    val f = File(animeFilePath).listFiles()
-                    new = true
-                    f
-                })
+            val files = File(Const.DownloadAnime.animeFilePath).listFiles()
             animeCoverList.clear()
-            for (i: Int in 0..1) {
-                files[i]?.let {
-                    for (file in it) {
-                        if (file.isDirectory) {
-                            val episodeCount = file.listFiles { file, s ->
-                                //查找文件名不以.temp结尾的文件
-                                !s.endsWith(".temp") && !s.endsWith(".xml")
-                            }?.size
-                            animeCoverList.add(
-                                animeCoverList.size, AnimeCoverBean(
-                                    Constant.ViewHolderTypeString.ANIME_COVER_7,
-                                    Constant.ActionUrl.ANIME_ANIME_DOWNLOAD_EPISODE + "/" + file.name,
-                                    "",
-                                    file.name,
-                                    null,
-                                    "",
-                                    size = file.formatSize(),
-                                    episodeCount = episodeCount.toString() + "P",
-                                    path = if (i == 0) 0 else 1
-                                )
-                            )
-                        }
-                    }
+            files?.forEach { file ->
+                if (file.isDirectory) {
+                    val episodeCount = file.listFiles { file, s ->
+                        //查找文件名不以.temp结尾的文件
+                        !s.endsWith(".temp") && !s.endsWith(".xml")
+                    }?.size
+                    val action = buildRouteActionUrl(
+                        Constant.ActionUrl.ANIME_ANIME_DOWNLOAD_EPISODE,
+                        "1",
+                        file.name,
+                        file.name
+                    )
+                    animeCoverList.add(
+                        animeCoverList.size, AnimeCoverBean(
+                            Constant.ViewHolderTypeString.ANIME_COVER_7,
+                            action,
+                            "",
+                            file.name,
+                            null,
+                            "",
+                            size = file.formatSize(),
+                            episodeCount = episodeCount.toString() + "P",
+                        )
+                    )
                 }
             }
             mldAnimeCoverList.postValue(true)
         }
     }
 
-    fun getAnimeCoverEpisode(directoryName: String, path: Int = 0) {
+    fun getAnimeCoverEpisode(directoryName: String) {
         //不支持重命名文件
         viewModelScope.launch(Dispatchers.IO) {
-            val animeFilePath = if (path == 0) Const.DownloadAnime.animeFilePath
-            else {
-                Const.DownloadAnime.new = false
-                val p = Const.DownloadAnime.animeFilePath
-                Const.DownloadAnime.new = true
-                p
-            }
+            val animeFilePath = Const.DownloadAnime.animeFilePath
             val files = File(animeFilePath + directoryName).listFiles()
             animeCoverList.clear()
             files?.let {
@@ -120,22 +114,21 @@ class AnimeDownloadViewModel : ViewModel() {
                 }
 
                 for (anime in animeList) {
-                    val fileName =
-                        animeFilePath + directoryName.substring(1, directoryName.length) +
-                                "/" + anime.fileName
+                    val filePath = animeFilePath + directoryName + "/" + anime.fileName
                     animeCoverList.add(
                         AnimeCoverBean(
                             Constant.ViewHolderTypeString.ANIME_COVER_7,
-                            (if (fileName.endsWith(".m3u8", true))
+                            (if (filePath.endsWith(".m3u8", true))
                                 Constant.ActionUrl.ANIME_ANIME_DOWNLOAD_M3U8
-                            else Constant.ActionUrl.ANIME_ANIME_DOWNLOAD_PLAY)
-                                    + "/" + fileName,
+                            else buildRouteActionUrl(
+                                Constant.ActionUrl.ANIME_ANIME_DOWNLOAD_PLAY,
+                                "file://$filePath", anime.title
+                            )),
                             "",
                             anime.title,
                             null,
                             "",
-                            size = File(animeFilePath + directoryName + "/" + anime.fileName).formatSize(),
-                            path = path
+                            size = File(filePath).formatSize(),
                         )
                     )
                 }

@@ -39,12 +39,14 @@
     <string name="data_source_info">数据源信息</string>
     <string name="open_source_licenses">开放源代码许可</string>
     <string name="search_history">搜索历史</string>
-    <string name="download_anime">缓存动漫(请于24h内删除)</string>
-    <string name="please_delete_anime_in_24h">请于24h内手动删除缓存动漫</string>
+    <string name="cover_play_history_str_format">续播 %s</string>
+    <string name="download_anime">缓存视频</string>
+    <string name="please_delete_anime_in_24h">请于24h内手动删除缓存视频</string>
     <string name="anime_download_path">视频缓存目录</string>
     <string name="no_download_video">没有缓存视频</string>
     <string name="read_download_data_file">正在读取缓存文件…</string>
     <string name="play_list">播放列表</string>
+    <string name="episode_bottom_sheet_format">共%d集</string>
     <string name="check_update_server">检查更新服务器</string>
     <string name="play_speed">倍速</string>
     <string name="device_list">设备列表</string>
@@ -67,7 +69,7 @@
     <string name="share_unknown_error">分享出现未知异常</string>
     <string name="already_copy_to_clipboard">已复制到剪贴板</string>
     <string name="more">更多</string>
-    <string name="my_favorite">我的追番</string>
+    <string name="my_favorite">我的收藏</string>
     <string name="no_favorite">没有追番记录</string>
     <string name="watch_history">观看历史</string>
     <string name="no_history">没有观看历史</string>
@@ -85,17 +87,18 @@
     <string name="choose_episode">选集</string>
     <string name="test_device">测试设备</string>
     <string name="app_icon_describe">APP图标修改自动漫《日常》</string>
-    <string name="favorite_succeed">追番成功</string>
-    <string name="remove_favorite_succeed">取消追番成功</string>
+    <string name="favorite_succeed">收藏成功</string>
+    <string name="remove_favorite_succeed">取消收藏成功</string>
     <string name="parsing_video">解析视频中…</string>
     <string name="shortcuts_disabled">暂时无法使用</string>
-    <string name="shortcuts_favorite_long">我的追番</string>
+    <string name="shortcuts_favorite_long">我的收藏</string>
     <string name="shortcuts_favorite_short">追番</string>
     <string name="shortcuts_everyday_long">每日更新动漫</string>
     <string name="shortcuts_everyday_short">日更动漫</string>
-    <string name="shortcuts_download_long">缓存番剧</string>
-    <string name="shortcuts_download_short">缓存番剧</string>
+    <string name="shortcuts_download_long">视频</string>
+    <string name="shortcuts_download_short">缓存视频</string>
     <string name="attention">声明</string>
+    <string name="download_anime_delete_tip">是否删除该番剧？</string>
     <string name="update_widget">正在更新小组件</string>
     <string name="widget_everyday_anime">每日更新动漫</string>
     <string name="play_sound_only">只播放音频</string>
@@ -109,7 +112,9 @@
     <string name="dark">深色</string>
     <string name="follow_system">跟随系统</string>
     <string name="ok">确定</string>
+    <string name="no_result_info">搜索结果为空</string>
     <string name="no_more_info">没有更多了</string>
+    <string name="play_auto_seek">已自动跳转到上次进度</string>
     <string name="warning">警告</string>
     <string name="delete">删除</string>
     <string name="clean">清理</string>
@@ -214,4 +219,5 @@
     <string name="have_not_watched_this_anime">追番后还未观看</string>
     <string name="already_seen_episode_x">看到 %s</string>
     <string name="all_history_count">%d条</string>
+    <string name="item_unknown_type">未知类型</string>
 </resources>

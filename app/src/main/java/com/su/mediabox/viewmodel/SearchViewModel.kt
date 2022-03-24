@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.su.mediabox.App
-import com.su.mediabox.PluginManager
+import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.R
 import com.su.mediabox.bean.ResponseDataType
 import com.su.mediabox.bean.SearchHistoryBean
@@ -12,6 +12,7 @@ import com.su.mediabox.database.getAppDataBase
 import com.su.mediabox.pluginapi.been.AnimeCoverBean
 import com.su.mediabox.pluginapi.been.PageNumberBean
 import com.su.mediabox.pluginapi.components.ISearchComponent
+import com.su.mediabox.util.PluginIO
 import com.su.mediabox.util.showToast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -33,7 +34,7 @@ class SearchViewModel : ViewModel() {
     var pageNumberBean: PageNumberBean? = null
 
     fun getSearchData(keyWord: String, isRefresh: Boolean = true, partUrl: String = "") {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.PluginIO) {
             try {
                 searchModel.getSearchData(keyWord, partUrl).apply {
                     pageNumberBean = second
@@ -105,16 +106,7 @@ class SearchViewModel : ViewModel() {
     }
 
     fun deleteSearchHistory(itemPosition: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val searchHistoryBean = searchHistoryList.removeAt(itemPosition)
-                getAppDataBase().searchHistoryDao().deleteSearchHistory(searchHistoryBean.timeStamp)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            } finally {
-                mldDeleteCompleted.postValue(itemPosition)
-            }
-        }
+
     }
 
     companion object {

@@ -4,7 +4,7 @@ import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.su.mediabox.util.Util.dp
+import com.su.mediabox.pluginapi.UI.dp
 
 
 class SkinItemDecoration : RecyclerView.ItemDecoration() {

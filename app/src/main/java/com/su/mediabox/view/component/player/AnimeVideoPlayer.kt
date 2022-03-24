@@ -29,7 +29,7 @@ import com.su.mediabox.config.Const
 import com.su.mediabox.pluginapi.been.AnimeEpisodeDataBean
 import com.su.mediabox.pluginapi.been.BaseBean
 import com.su.mediabox.util.*
-import com.su.mediabox.util.Util.dp
+import com.su.mediabox.pluginapi.UI.dp
 import com.su.mediabox.util.Util.getResColor
 import com.su.mediabox.util.Util.getResDrawable
 import com.su.mediabox.util.Util.getScreenBrightness
@@ -266,6 +266,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
             }
         }
         tvSpeed?.setOnClickListener {
+            //TODO 优化
             vgRightContainer?.let {
                 val adapter = SpeedAdapter(
                     listOf(
@@ -282,6 +283,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
             }
             showRightContainer()
         }
+        //TODO 重写
         tvEpisode?.setOnClickListener {
             vgRightContainer?.let {
                 rvEpisode?.layoutManager = LinearLayoutManager(context)

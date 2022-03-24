@@ -2,7 +2,6 @@ package com.su.mediabox.model
 
 import android.util.LruCache
 import com.su.mediabox.App
-import com.su.mediabox.PluginManager
 import com.su.mediabox.util.editor
 import com.su.mediabox.util.sharedPreferences
 

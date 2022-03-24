@@ -15,9 +15,9 @@ import android.widget.LinearLayout
 import androidx.annotation.ColorInt
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.toDrawable
-import com.su.mediabox.util.Util.dp
+import com.su.mediabox.pluginapi.UI.dp
 import com.su.mediabox.util.Util.getResDrawable
-import com.su.mediabox.util.Util.sp
+import com.su.mediabox.pluginapi.UI.sp
 import com.su.mediabox.util.gone
 import com.su.mediabox.util.visible
 import com.su.mediabox.view.component.textview.TypefaceTextView

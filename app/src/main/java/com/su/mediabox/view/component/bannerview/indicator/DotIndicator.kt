@@ -6,7 +6,7 @@ import android.graphics.Paint
 import android.view.View
 import android.widget.RelativeLayout
 import com.su.mediabox.R
-import com.su.mediabox.util.Util.dp
+import com.su.mediabox.pluginapi.UI.dp
 import com.su.mediabox.util.Util.getResColor
 import com.su.mediabox.util.skin.attrs.BannerIndicatorDotSelectedColorAttr
 import com.su.mediabox.util.skin.attrs.BannerIndicatorDotUnselectedColorAttr

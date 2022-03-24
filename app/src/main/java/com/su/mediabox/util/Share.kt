@@ -5,7 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import com.su.mediabox.App
-import com.su.mediabox.AppRouteProcessor
+import com.su.mediabox.plugin.AppRouteProcessor
 import com.su.mediabox.R
 import com.su.mediabox.pluginapi.Constant
 import com.su.mediabox.util.Util.copy2Clipboard

@@ -6,13 +6,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.su.mediabox.App
-import com.su.mediabox.PluginManager.process
+import com.su.mediabox.plugin.PluginManager.process
 import com.su.mediabox.R
 import com.su.mediabox.config.Api
 import com.su.mediabox.pluginapi.been.AnimeCoverBean
 import com.su.mediabox.pluginapi.been.IAnimeDetailBean
 import com.su.mediabox.util.*
-import com.su.mediabox.util.Util.dp
+import com.su.mediabox.pluginapi.UI.dp
 import com.su.mediabox.util.Util.getResColor
 import com.su.mediabox.util.Util.getResDrawable
 import com.su.mediabox.util.showToast

@@ -1,6 +1,6 @@
 package com.su.mediabox.config
 
-import com.su.mediabox.PluginManager
+import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.pluginapi.components.IConstComponent
 
 interface Api {
@@ -14,7 +14,7 @@ interface Api {
             get() = PluginManager.acquireComponent(IConstComponent::class.java).refererProcessor
 
         // github
-        const val CHECK_UPDATE_URL = "https://api.github.com/repos/Ryensu/MediaBox/releases/latest"
+        const val CHECK_UPDATE_URL = "https://api.github.com/repos/RyensX/MediaBox/releases/latest"
 
         // 弹幕url
         const val DANMU_URL = "https://yuan.cuan.la/barrage/api"

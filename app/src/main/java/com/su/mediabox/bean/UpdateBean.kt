@@ -3,6 +3,7 @@ package com.su.mediabox.bean
 import com.google.gson.annotations.SerializedName
 import com.su.mediabox.pluginapi.been.BaseBean
 
+@Deprecated("不需要继承BaseBeen多那么多冗余字段")
 class UpdateBean(
     override var type: String,
     override var actionUrl: String,

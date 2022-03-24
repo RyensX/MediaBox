@@ -1,6 +1,7 @@
 package com.su.mediabox.util
 
 import android.view.View
+import android.view.ViewStub
 import android.view.animation.AlphaAnimation
 import androidx.recyclerview.widget.RecyclerView
 
@@ -41,7 +42,7 @@ fun View.clickScale(scale: Float = 0.75f, duration: Long = 100) {
 
 inline fun RecyclerView.ViewHolder.setOnClickListener(
     target: View,
-    crossinline onClick: (position: Int) -> Unit
+    crossinline onClick: RecyclerView.ViewHolder.(position: Int) -> Unit
 ) {
     target.setOnClickListener {
         onClick(bindingAdapterPosition)
@@ -50,9 +51,33 @@ inline fun RecyclerView.ViewHolder.setOnClickListener(
 
 inline fun RecyclerView.ViewHolder.setOnLongClickListener(
     target: View,
-    crossinline onLongClick: (position: Int) -> Boolean
+    crossinline onLongClick: RecyclerView.ViewHolder.(position: Int) -> Boolean
 ) {
     target.setOnLongClickListener {
         onLongClick(bindingAdapterPosition)
     }
+}
+
+fun View.OnClickListener.setViewsOnClickListener(vararg views: View) {
+    views.forEach { it.setOnClickListener(this) }
+}
+
+/**
+ * 仅在有数据时visible，否则gone
+ */
+inline fun <T, V : View> V.displayOnlyIfHasData(data: T?, hasData: V.(T) -> Unit): V {
+    if (data != null && data.toString().isNotBlank()) {
+        visible()
+        hasData(data)
+    } else
+        gone()
+    return this
+}
+
+val ViewStub.isInflate: Boolean
+    get() = parent == null
+
+fun ViewStub.smartInflate() {
+    if (!isInflate)
+        inflate()
 }

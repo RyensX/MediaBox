@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName
 import com.su.mediabox.pluginapi.been.BaseBean
 import java.io.Serializable
 
+@Deprecated("不需要继承BaseBeen多那么多冗余字段，也不应该持久化视图类型")
 class DoHJsonBean(
     override var type: String = "",
     override var actionUrl: String = "",

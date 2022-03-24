@@ -26,13 +26,18 @@ class SimplePlayActivity : BasePluginActivity<ActivitySimplePlayBinding>() {
     private var title = ""
     private lateinit var orientationUtils: OrientationUtils
 
+    companion object {
+        val URL = this::class.java.name + "url"
+        val TITLE = this::class.java.name + "title"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setFullScreen(window)
 
-        url = intent.getStringExtra("url") ?: ""
-        title = intent.getStringExtra("title") ?: ""
+        url = intent.getStringExtra(URL) ?: ""
+        title = intent.getStringExtra(TITLE) ?: ""
 
         init()
 

@@ -5,12 +5,11 @@ import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.su.mediabox.App
-import com.su.mediabox.PluginManager.process
+import com.su.mediabox.plugin.PluginManager.process
 import com.su.mediabox.R
 import com.su.mediabox.config.Api
 import com.su.mediabox.util.AnimeCover3ViewHolder
 import com.su.mediabox.util.coil.CoilUtil.loadImage
-import com.su.mediabox.pluginapi.Constant.ActionUrl
 import com.su.mediabox.pluginapi.been.AnimeCoverBean
 import com.su.mediabox.util.showToast
 import com.su.mediabox.util.gone

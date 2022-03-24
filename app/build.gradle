@@ -3,22 +3,12 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'AndResGuard'
-    id 'com.efs.sdk.plugin'
 }
 
-apply from: secret
-apply from: andresguard
-
-android.defaultConfig {
-    secret.buildConfigField.forEach({ k, v ->
-        buildConfigField("String", k, "\"${v}\"")
-    })
-    secret.shieldTextList.forEach({ k, v ->
-        buildConfigField("String[]", k, v)
-    })
-    secret.dataSource.forEach({ k, v ->
-        buildConfigField("String", k, "\"${v}\"")
-    })
+try {
+    apply from: secret
+    apply from: andresguard
+} catch (Exception ignored) {
 }
 
 android {
@@ -48,17 +38,28 @@ android {
             abiFilters 'armeabi', 'arm64-v8a'
         }
 
-        manifestPlaceholders = secret.manifestPlaceholders
+        try {
+            manifestPlaceholders = secret.manifestPlaceholders
+        } catch (Exception ignored) {
+            def tmpManifestPlaceholders = [:]
+            tmpManifestPlaceholders.UMENG_APPKEY_VALUE = ""
+            tmpManifestPlaceholders.UMENG_MESSAGE_SECRET = ""
+            manifestPlaceholders = tmpManifestPlaceholders
+        }
+
         resConfigs 'xxxhdpi', 'anydpi-v26'
 
     }
 
     signingConfigs {
         release {
-            keyAlias secret.sign.RELEASE_KEY_ALIAS
-            keyPassword secret.sign.RELEASE_KEY_PASSWORD
-            storeFile file('../key.jks')
-            storePassword secret.sign.RELEASE_STORE_PASSWORD
+            try {
+                keyAlias secret.sign.RELEASE_KEY_ALIAS
+                keyPassword secret.sign.RELEASE_KEY_PASSWORD
+                storeFile file('../key.jks')
+                storePassword secret.sign.RELEASE_STORE_PASSWORD
+            } catch (Exception ignored) {
+            }
         }
     }
 
@@ -151,7 +152,8 @@ dependencies {
     implementation deps.jetty.jetty_servlet
     implementation deps.jetty.jetty_client
     implementation deps.nanohttpd.nanohttpd
-    compileOnly files ('libs/cdi-api.jar')      // DLNACastService编译需要javax.enterprise.inject.Alternative类
+    compileOnly files('libs/cdi-api.jar')
+    // DLNACastService编译需要javax.enterprise.inject.Alternative类
 //    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.4'
     implementation deps.greenrobot.eventbus
     implementation deps.umsdk.common
@@ -165,6 +167,9 @@ dependencies {
     implementation deps.kuaishou.akdanmaku
     implementation deps.okhttp3.okhttp_dnsoverhttps
     implementation deps.jakewharton.disklrucache
+    implementation deps.google.flexbox
+    implementation deps.cretin.etv
+    implementation deps.pref.kotpref
     implementation project(':skin')
     implementation project(':skin_blue')
     implementation project(':skin_dark')
@@ -174,73 +179,43 @@ dependencies {
     implementation project(':MediaBoxPluginApi')
 }
 
-// UM U-APM性能报告
-efs {
-    //是否对启动过程进程插桩的开关，如果使用自动集成监控则必须开启
-    isAutoTrack = false
-    //您自定义Application的类名称，必填项，如没有自定义则填写系统Application
-    applicationName = "App"
-    //您自定义Activity的类名称，必填项，将您所有Activity的类名按如下格式填写
-    activityList = [
-            "StartActivity",
-            "AboutActivity",
-            "AnimeDetailActivity",
-            "AnimeDownloadActivity",
-            "ClassifyActivity",
-            "CrashActivity",
-            "DlnaActivity",
-            "DlnaControlActivity",
-            "FavoriteActivity",
-            "HistoryActivity",
-            "LicenseActivity",
-            "MainActivity",
-            "MonthAnimeActivity",
-            "PlayActivity",
-            "RankActivity",
-            "SearchActivity",
-            "SettingActivity",
-            "SimplePlayActivity",
-            "DetailPlayerActivity",
-            "WebViewActivity",
-            "SkinActivity",
-            "NoticeActivity"
-    ]
-}
-
+try {
 //AndResGuard资源混淆工具
-andResGuard {
-    // 使用mappingFile，防止需要换肤的资源id被替换
-    mappingFile = file("./resource_mapping.txt")
-//    mappingFile = null
-    use7zip = true
-    useSign = true
-    // 打开这个开关，会keep住所有资源的原始路径，只混淆资源的名字
-    keepRoot = false
-    // 设置这个值，会把arsc name列混淆成相同的名字，减少string常量池的大小
-    fixedResName = "arg"
-    // 打开这个开关会合并所有哈希值相同的资源，但请不要过度依赖这个功能去除去冗余资源
-    mergeDuplicatedRes = true
-    whiteList = andresguard.whiteList
-    compressFilePattern = [
-            "*.png",
-            "*.jpg",
-            "*.jpeg",
-            "*.gif",
-            "resources.arsc"
-    ]
-    sevenzip {
-        artifact = 'com.tencent.mm:SevenZip:1.2.20'
-        //path = "/usr/local/bin/7za"
+    andResGuard {
+        // 使用mappingFile，防止需要换肤的资源id被替换
+        mappingFile = file("./resource_mapping.txt")
+        //mappingFile = null
+        use7zip = true
+        useSign = true
+        // 打开这个开关，会keep住所有资源的原始路径，只混淆资源的名字
+        keepRoot = false
+        // 设置这个值，会把arsc name列混淆成相同的名字，减少string常量池的大小
+        fixedResName = "arg"
+        // 打开这个开关会合并所有哈希值相同的资源，但请不要过度依赖这个功能去除去冗余资源
+        mergeDuplicatedRes = true
+        whiteList = andresguard.whiteList
+        compressFilePattern = [
+                "*.png",
+                "*.jpg",
+                "*.jpeg",
+                "*.gif",
+                "resources.arsc"
+        ]
+        sevenzip {
+            artifact = 'com.tencent.mm:SevenZip:1.2.20'
+            //path = "/usr/local/bin/7za"
+        }
+
+        /**
+         * 可选： 如果不设置则会默认覆盖assemble输出的apk
+         **/
+        // finalApkBackupPath = "${project.rootDir}/final.apk"
+
+        /**
+         * 可选: 指定v1签名时生成jar文件的摘要算法
+         * 默认值为“SHA-1”
+         **/
+        // digestalg = "SHA-256"
     }
-
-    /**
-     * 可选： 如果不设置则会默认覆盖assemble输出的apk
-     **/
-    // finalApkBackupPath = "${project.rootDir}/final.apk"
-
-    /**
-     * 可选: 指定v1签名时生成jar文件的摘要算法
-     * 默认值为“SHA-1”
-     **/
-    // digestalg = "SHA-256"
+} catch (Exception ignored) {
 }

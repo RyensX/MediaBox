@@ -13,7 +13,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.AppBarLayout
@@ -26,16 +25,12 @@ import com.shuyu.gsyvideoplayer.utils.GSYVideoType
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoView
 import com.su.mediabox.App
-import com.su.mediabox.PluginManager.acquireComponent
 import com.su.mediabox.R
-import com.su.mediabox.bean.FavoriteAnimeBean
 import com.su.mediabox.config.Api
-import com.su.mediabox.database.getAppDataBase
 import com.su.mediabox.databinding.ActivityPlayBinding
 import com.su.mediabox.util.*
-import com.su.mediabox.util.Util.dp
+import com.su.mediabox.pluginapi.UI.dp
 import com.su.mediabox.util.Util.getResColor
-import com.su.mediabox.util.Util.getResDrawable
 import com.su.mediabox.util.Util.getSkinResourceId
 import com.su.mediabox.util.Util.openVideoByExternalPlayer
 import com.su.mediabox.util.Util.setColorStatusBar
@@ -48,26 +43,24 @@ import com.su.mediabox.view.adapter.decoration.AnimeEpisodeItemDecoration
 import com.su.mediabox.view.adapter.decoration.AnimeShowItemDecoration
 import com.su.mediabox.view.adapter.spansize.PlaySpanSize
 import com.su.mediabox.view.component.player.AnimeVideoPlayer
-import com.su.mediabox.view.component.player.AnimeVideoPositionMemoryStore
+import com.su.mediabox.view.component.player.VideoPositionMemoryDbStore
 import com.su.mediabox.view.component.player.DanmakuVideoPlayer
 import com.su.mediabox.view.component.player.DetailPlayerActivity
 import com.su.mediabox.view.fragment.MoreDialogFragment
 import com.su.mediabox.view.fragment.ShareDialogFragment
 import com.su.mediabox.viewmodel.PlayViewModel
-import com.su.mediabox.pluginapi.Constant
 import com.su.mediabox.pluginapi.been.AnimeEpisodeDataBean
-import kotlinx.coroutines.*
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
 import tv.danmaku.ijk.media.player.IjkMediaPlayer
 import kotlin.math.abs
 
-
+@Deprecated("已重写V2版，不再使用，将在后面逐步移除")
 class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBinding>() {
 
-    companion object{
-        const val INTENT_EPISODE="episodeUrl"
-        const val INTENT_COVER="coverUrl"
-        const val INTENT_DPU="detailPartUrl"
+    companion object {
+        const val INTENT_EPISODE = "episodeUrl"
+        const val INTENT_COVER = "coverUrl"
+        const val INTENT_DPU = "detailPartUrl"
     }
 
     override var statusBarSkin: Boolean = false
@@ -166,8 +159,8 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
         /**
         // 如果没有传入详情页面的网址，则通过播放页面的网址计算出详情页面的网址
         if (detailPartUrl.isBlank())
-            detailPartUrl = pluginUtil.getDetailLinkByEpisodeLink(partUrl)
-        */
+        detailPartUrl = pluginUtil.getDetailLinkByEpisodeLink(partUrl)
+         */
 
         mBinding.apply {
             rvPlayActivity.layoutManager = GridLayoutManager(this@PlayActivity, 4)
@@ -180,7 +173,7 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
             srlPlayActivity.setOnRefreshListener { viewModel.getPlayData(viewModel.partUrl) }
             srlPlayActivity.setColorSchemeResources(getSkinResourceId(R.color.unchanged_main_color_2_skin))
 
-            avpPlayActivity.playPositionMemoryStore = AnimeVideoPositionMemoryStore
+            avpPlayActivity.playPositionMemoryStore = VideoPositionMemoryDbStore
         }
 
         viewModel.mldPlayBean.observe(this) {

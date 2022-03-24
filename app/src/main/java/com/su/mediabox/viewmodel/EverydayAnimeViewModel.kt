@@ -5,13 +5,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.su.mediabox.App
-import com.su.mediabox.PluginManager
+import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.R
 import com.su.mediabox.pluginapi.been.AnimeCoverBean
 import com.su.mediabox.util.Util.getRealDayOfWeek
 import com.su.mediabox.util.showToast
 import com.su.mediabox.pluginapi.been.TabBean
 import com.su.mediabox.pluginapi.components.IEverydayAnimeComponent
+import com.su.mediabox.util.PluginIO
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
@@ -30,7 +31,7 @@ class EverydayAnimeViewModel : ViewModel() {
         MutableLiveData()
 
     fun getEverydayAnimeData() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.PluginIO) {
             try {
                 everydayAnimeModel.getEverydayAnimeData().apply {
                     if (first.size != second.size) throw Exception("tabs count != tabList count")

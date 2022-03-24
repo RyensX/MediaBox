@@ -4,7 +4,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.su.mediabox.App
-import com.su.mediabox.PluginManager.process
+import com.su.mediabox.plugin.PluginManager.process
 import com.su.mediabox.R
 import com.su.mediabox.bean.FavoriteAnimeBean
 import com.su.mediabox.config.Api
@@ -28,7 +28,7 @@ class FavoriteAdapter(
                     it.itemView.setOnClickListener { _ ->
                         val item = dataList[it.bindingAdapterPosition]
                         if (item.lastEpisodeUrl != null)
-                            process(buildRouteActionUrl(Constant.ActionUrl.ANIME_PLAY,item.lastEpisodeUrl!!,item.cover,item.animeUrl))
+                            process(buildRouteActionUrl(Constant.ActionUrl.ANIME_PLAY,item.lastEpisodeUrl!!,item.cover,item.animeUrl,item.animeTitle))
                         else
                             process(buildRouteActionUrl(Constant.ActionUrl.ANIME_DETAIL,item.animeUrl))
                     }

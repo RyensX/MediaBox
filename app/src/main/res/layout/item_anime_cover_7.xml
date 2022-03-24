@@ -53,16 +53,4 @@
         android:textSize="15sp"
         app:typeface="bPRTypeface"
         tools:text="12P" />
-
-    <com.su.mediabox.view.component.textview.TypefaceTextView
-        android:id="@+id/tv_anime_cover_7_old_path"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:gravity="end"
-        android:paddingStart="10dp"
-        android:paddingEnd="0px"
-        android:textColor="@color/foreground_main_color_2_skin"
-        app:typeface="bPRTypeface"
-        tools:text="旧" />
 </LinearLayout>

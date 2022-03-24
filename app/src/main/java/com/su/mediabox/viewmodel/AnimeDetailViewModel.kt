@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.su.mediabox.App
-import com.su.mediabox.PluginManager
+import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.R
 import com.su.mediabox.bean.*
 import com.su.mediabox.pluginapi.been.IAnimeDetailBean
@@ -13,7 +13,7 @@ import com.su.mediabox.util.showToast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-
+@Deprecated("在v2 API完善后移除")
 class AnimeDetailViewModel : ViewModel() {
     private val animeDetailModel: IAnimeDetailComponent by lazy(LazyThreadSafetyMode.NONE) {
         PluginManager.acquireComponent(IAnimeDetailComponent::class.java)

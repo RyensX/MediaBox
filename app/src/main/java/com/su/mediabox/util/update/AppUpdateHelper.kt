@@ -3,10 +3,15 @@ package com.su.mediabox.util.update
 import android.text.Html
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.lifecycleScope
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.WhichButton
+import com.afollestad.materialdialogs.actions.getActionButton
 import com.su.mediabox.model.AppUpdateModel
 import com.su.mediabox.util.Util.openBrowser
 import com.su.mediabox.util.formatSize
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
@@ -39,10 +44,11 @@ class AppUpdateHelper private constructor() {
         listOf<Function<Unit>> { checkUpdate() }
         val updateBean = AppUpdateModel.updateBean ?: return
         val isImportantUpdate = updateBean.name.contains("*")
+        val name = updateBean.name.replace("*", "")
         MaterialDialog(activity)
             .cancelable(!isImportantUpdate)
             .show {
-                title(text = "发现${if (isImportantUpdate) "重要" else ""}新版本\n版本名：${updateBean.name}\n版本代号：${updateBean.tagName}")
+                title(text = "发现${if (isImportantUpdate) "重要" else ""}新版本\n版本名：${name}\n版本代号：${updateBean.tagName}")
                 StringBuffer().apply {
                     val size = updateBean.assets[0].size
                     if (size > 0) {
@@ -73,10 +79,13 @@ class AppUpdateHelper private constructor() {
                     }
                     append(updateBean.body)
                     this@show.message(
-                        text = Html.fromHtml(this.toString())
-                    )
+                        text = this.toString()
+                    ) {
+                        html()
+                    }
                 }
-                positiveButton(text = "下载更新") {
+                val t = "下载更新"
+                positiveButton(text = t) {
                     openBrowser(
                         AppUpdateModel.updateBean?.assets?.get(0)?.browserDownloadUrl
                             ?: return@positiveButton
@@ -86,6 +95,18 @@ class AppUpdateHelper private constructor() {
                     negativeButton(text = "取消") {
                         dismiss()
                         AppUpdateModel.status.value = AppUpdateStatus.LATER
+                    }
+                if (isImportantUpdate)
+                    getActionButton(WhichButton.POSITIVE).apply {
+                        isEnabled = false
+                        activity.lifecycleScope.launch {
+                            for (i in 15 downTo 0) {
+                                delay(1000)
+                                text = String.format("%s(%d)", t, i)
+                            }
+                            text = t
+                            isEnabled = true
+                        }
                     }
             }
     }

@@ -1,10 +1,11 @@
-package com.su.mediabox
+package com.su.mediabox.plugin
 
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.su.mediabox.App
 import com.su.mediabox.bean.PluginInfo
 import com.su.mediabox.pluginapi.AppUtil
 import com.su.mediabox.pluginapi.Constant
@@ -12,15 +13,13 @@ import com.su.mediabox.view.activity.BasePluginActivity
 import com.su.mediabox.pluginapi.IComponentFactory
 import com.su.mediabox.pluginapi.components.IBaseComponent
 import com.su.mediabox.util.Util.getSignatures
-import dalvik.system.DexClassLoader
+import dalvik.system.PathClassLoader
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
 
 object PluginManager : AppUtil.IRouteProcessor {
-
-    const val PLUGIN_OPTI_FOLDER_NAME = "PluginsOpti"
 
     private val componentFactoryPool = mutableMapOf<String, IComponentFactory>()
     private val componentPool =
@@ -29,14 +28,13 @@ object PluginManager : AppUtil.IRouteProcessor {
     /**
      * 最低支持的插件API版本
      */
-    private const val minPluginApiVersion = 1
+    private const val minPluginApiVersion = 4
 
     private val _pluginLiveData = MutableLiveData<List<PluginInfo>>()
     private val pluginIntent = Intent(Constant.PLUGIN_ACTION)
     private val pluginWorkScope: CoroutineScope = CoroutineScope(Dispatchers.IO)
 
-    val pluginLiveData: LiveData<List<PluginInfo>>
-        get() = _pluginLiveData
+    val pluginLiveData: LiveData<List<PluginInfo>> = _pluginLiveData
 
     fun scanPlugin(packageManager: PackageManager) {
         pluginWorkScope.launch {
@@ -60,12 +58,16 @@ object PluginManager : AppUtil.IRouteProcessor {
         runCatching {
             val index = getPluginIndex()
             if (index == -1)
-                throw RuntimeException()
-            _pluginLiveData.value?.get(index) ?: throw RuntimeException()
+                throw RuntimeException("插件索引错误")
+            _pluginLiveData.value?.get(index)
+                ?: throw RuntimeException("插件持久信息为空($index/${_pluginLiveData.value?.size ?: -1})")
         }.onSuccess {
             return it
+        }.onFailure {
+            it.printStackTrace()
+            throw RuntimeException("插件信息读取错误：${it.message ?: "null"}")
         }
-        throw RuntimeException("插件信息读取错误")
+        throw RuntimeException()
     }
 
     fun Activity.getPluginName() = getPluginInfo().name
@@ -91,26 +93,16 @@ object PluginManager : AppUtil.IRouteProcessor {
                         throw RuntimeException("插件不存在")
                 }
 
-            val optimizedDirectory =
-                File(App.context.getExternalFilesDir(null).toString() + "/$PLUGIN_OPTI_FOLDER_NAME")
-                    .apply {
-                        if (!exists() && !mkdirs())
-                            throw RuntimeException("创建插件优化文件夹失败")
-                    }
-
-            val classLoader = DexClassLoader(
-                pluginFile.path, optimizedDirectory.path,
-                null, App.context.classLoader
-            )
+            val classLoader = PathClassLoader(pluginFile.path, App.context.classLoader)
             val clz = classLoader.loadClass(Constant.PLUGIN_INIT_CLASS)
 
-            //检查插件API版本
-            val version = clz.getAnnotation(IComponentFactory.PluginSdkVersion::class.java)
-                ?: throw RuntimeException("插件初始化错误")
-            if (version.version < minPluginApiVersion)
-                throw RuntimeException("该插件API版本过低，请联系作者升级API")
-
             (clz.newInstance() as IComponentFactory).also {
+                //检查插件API版本
+                val version = it.apiVersion
+                if (version < minPluginApiVersion) {
+                    throw RuntimeException("该插件API版本($version)过低，请联系作者升级API(当前支持最低$minPluginApiVersion)")
+                }
+
                 componentFactoryPool[pluginPath] = it
             }
         }

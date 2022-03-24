@@ -7,8 +7,9 @@ import com.su.mediabox.config.Const
 import com.su.mediabox.pluginapi.been.BaseBean
 import java.io.Serializable
 
+@Deprecated("不需要继承BaseBeen多那么多冗余字段，也不应该持久化视图类型")
 @Entity(tableName = Const.Database.AppDataBase.HISTORY_TABLE_NAME)
-class HistoryBean(      //下面的url都是partUrl
+open class HistoryBean(      //下面的url都是partUrl
     @ColumnInfo(name = "type")
     override var type: String,
     @ColumnInfo(name = "actionUrl")

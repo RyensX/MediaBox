@@ -4,9 +4,10 @@ import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.su.mediabox.PluginManager
+import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.pluginapi.been.TabBean
 import com.su.mediabox.pluginapi.components.IRankComponent
+import com.su.mediabox.util.PluginIO
 import com.su.mediabox.util.showToast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,7 +23,7 @@ class RankViewModel : ViewModel() {
     var mldRankData: MutableLiveData<Boolean> = MutableLiveData()
 
     fun getRankTabData() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.PluginIO) {
             try {
                 if (isRequesting) return@launch
                 isRequesting = true

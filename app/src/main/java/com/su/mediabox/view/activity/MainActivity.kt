@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.FragmentTransaction
 import com.su.mediabox.App
-import com.su.mediabox.PluginManager.getPluginInfo
+import com.su.mediabox.plugin.PluginManager.getPluginInfo
 import com.su.mediabox.R
 import com.su.mediabox.config.Const.ShortCuts.Companion.ACTION_EVERYDAY
 import com.su.mediabox.databinding.ActivityMainBinding

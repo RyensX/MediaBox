@@ -7,8 +7,8 @@ import com.su.mediabox.R
 interface Const {
     interface Common {
         companion object {
-            const val GITHUB_URL = "https://github.com/Ryensu/MediaBox"
-            const val GITHUB_NEW_ISSUE_URL = "https://github.com/Ryensu/MediaBox/issues/new"
+            const val GITHUB_URL = "https://github.com/RyensX/MediaBox"
+            const val GITHUB_NEW_ISSUE_URL = "https://github.com/RyensX/MediaBox/issues/new"
             const val USER_NOTICE_VERSION = 2
         }
     }
@@ -77,14 +77,7 @@ interface Const {
 
     interface DownloadAnime {
         companion object {
-            var new: Boolean = true
-            val animeFilePath: String
-                get() {
-                    return if (new) App.context.getExternalFilesDir(null)
-                        .toString() + "/DownloadAnime/"
-                    else Environment.getExternalStorageDirectory()
-                        .toString() + "/Imomoe/DownloadAnime/"
-                }
+            val animeFilePath = App.context.getExternalFilesDir(null).toString() + "/DownloadAnime/"
         }
     }
 

@@ -44,22 +44,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.su.mediabox.view.activity.ConfigDataSourceActivity"
-            android:configChanges="uiMode|orientation|keyboardHidden|screenSize"
-            android:exported="true"
-            android:launchMode="singleTask">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:scheme="file" />
-                <data android:scheme="content" />
-                <data android:pathPattern=".*\\.ads" />
-                <data android:mimeType="*/*" />
-            </intent-filter>
-        </activity>
         <activity android:name="com.su.mediabox.view.activity.NoticeActivity" />
         <activity
             android:name="com.su.mediabox.view.activity.WebViewActivity"
@@ -107,13 +91,22 @@
             android:name="com.su.mediabox.view.activity.RankActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
-            android:name="com.su.mediabox.view.activity.SearchActivity"
+            android:name="com.su.mediabox.v2.view.activity.VideoSearchActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
             android:name="com.su.mediabox.view.activity.PlayActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode" />
         <activity
+            android:name=".v2.view.activity.VideoMediaPlayActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            />
+        <activity
             android:name="com.su.mediabox.view.activity.AnimeDetailActivity"
+            android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
+
+        <activity
+            android:name=".v2.view.activity.VideoDetailActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
             android:name="com.su.mediabox.view.activity.BaseActivity"
@@ -174,6 +167,10 @@
         <meta-data
             android:name="UMENG_CHANNEL"
             android:value="${UMENG_CHANNEL_VALUE}" /> <!-- U-PUSH 移除关联启动能力 -->
+        <meta-data
+            android:name="UMENG_MESSAGE_SECRET"
+            android:value="${UMENG_MESSAGE_SECRET}" />
+
         <service
             android:name="com.taobao.accs.ChannelService"
             android:exported="false"

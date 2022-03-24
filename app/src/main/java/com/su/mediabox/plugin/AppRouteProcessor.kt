@@ -1,14 +1,18 @@
-package com.su.mediabox
+package com.su.mediabox.plugin
 
 import android.app.Activity
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+import android.util.Log
 import android.widget.Toast
 import com.su.mediabox.pluginapi.AppUtil
 import com.su.mediabox.util.Util
 import com.su.mediabox.util.showToast
 import com.su.mediabox.view.activity.*
 import com.su.mediabox.pluginapi.Constant.ActionUrl
+import com.su.mediabox.v2.view.activity.VideoDetailActivity
+import com.su.mediabox.v2.view.activity.VideoMediaPlayActivity
+import com.su.mediabox.v2.view.activity.VideoSearchActivity
 import java.lang.ref.WeakReference
 import java.net.URLDecoder
 
@@ -51,6 +55,8 @@ object AppRouteProcessor :
                 true
             } else false
         } catch (e: Exception) {
+            Log.d("路由错误", e.message ?: "")
+            e.printStackTrace()
             false
         }
 
@@ -71,10 +77,9 @@ object AppRouteProcessor :
             //打开搜索页面
             matchAndGetParams(actionUrl, ActionUrl.ANIME_SEARCH) {
                 activity.startActivity(
-                    Intent(activity, SearchActivity::class.java).apply {
+                    Intent(activity, VideoSearchActivity::class.java).apply {
                         runCatching {
-                            putExtra("keyWord", it[0])
-                            putExtra("pageNumber", it[1])
+                            putExtra(VideoSearchActivity.EXTRA_KEY_WORK, it[0])
                         }
                     }
                 )
@@ -82,7 +87,7 @@ object AppRouteProcessor :
             //打开番剧详情页面
             matchAndGetParams(actionUrl, ActionUrl.ANIME_DETAIL) {
                 activity.startActivity(
-                    Intent(activity, AnimeDetailActivity::class.java)
+                    Intent(activity, VideoDetailActivity::class.java)
                         .putExtra("partUrl", it[0])
                 )
             } -> true
@@ -90,14 +95,16 @@ object AppRouteProcessor :
             matchAndGetParams(actionUrl, ActionUrl.ANIME_PLAY) {
                 //参数：剧集信息/[封面]/[详情]
                 activity.startActivity(
-                    Intent(activity, PlayActivity::class.java).apply {
+                    Intent(activity, VideoMediaPlayActivity::class.java).apply {
                         //必填的剧集信息
-                        putExtra(PlayActivity.INTENT_EPISODE, it[0])
+                        putExtra(VideoMediaPlayActivity.INTENT_EPISODE, it[0])
                         //可选（在详情页打开时由Activity主动提供）
                         //封面
-                        it.getOrNull(1)?.also { putExtra(PlayActivity.INTENT_COVER, it) }
+                        it.getOrNull(1)?.also { putExtra(VideoMediaPlayActivity.INTENT_COVER, it) }
                         //详情链接
-                        it.getOrNull(2)?.also { putExtra(PlayActivity.INTENT_DPU, it) }
+                        it.getOrNull(2)?.also { putExtra(VideoMediaPlayActivity.INTENT_DPU, it) }
+                        //视频名称
+                        it.getOrNull(3)?.also { putExtra(VideoMediaPlayActivity.INTENT_NAME, it) }
                     }
                 )
             } -> true
@@ -129,29 +136,22 @@ object AppRouteProcessor :
             matchAndGetParams(actionUrl, ActionUrl.ANIME_BROWSER) {
                 Util.openBrowser(it[0])
             } -> true
-            //缓存的每一集列表
+            //打开缓存列表
             matchAndGetParams(actionUrl, ActionUrl.ANIME_ANIME_DOWNLOAD_EPISODE) {
-                val directoryName: String = it[0] + "/" + it[1]
-                val path: Int = it.last().toInt()
                 activity.startActivity(
                     Intent(activity, AnimeDownloadActivity::class.java)
-                        //模式
-                        .putExtra("mode", 1)
-                        .putExtra("actionBarTitle", directoryName.replace("/", ""))
-                        .putExtra("directoryName", directoryName)
-                        .putExtra("path", path)
+                        .putExtra("mode", it[0].toInt())
+                        .putExtra("actionBarTitle", it[1])
+                        .putExtra("directoryName", it[2])
                 )
             } -> true
-            //播放缓存的每一集
+            //播放本地缓存
             matchAndGetParams(actionUrl, ActionUrl.ANIME_ANIME_DOWNLOAD_PLAY) {
-                val filePath =
-                    actionUrl.replaceFirst(ActionUrl.ANIME_ANIME_DOWNLOAD_PLAY + "/", "")
-                        .replace(Regex("/\\d+$"), "")
-                val fileName = filePath.split("/").last()
+                //参数：URL/标题
                 activity.startActivity(
                     Intent(activity, SimplePlayActivity::class.java)
-                        .putExtra("url", "file://$filePath")
-                        .putExtra("title", fileName)
+                        .putExtra(SimplePlayActivity.URL, it[0])
+                        .putExtra(SimplePlayActivity.TITLE, it[1])
                 )
             } -> true
             matchAndGetParams(actionUrl, ActionUrl.ANIME_ANIME_DOWNLOAD_M3U8) {

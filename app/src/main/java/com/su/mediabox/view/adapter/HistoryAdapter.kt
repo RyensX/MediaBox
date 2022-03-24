@@ -3,12 +3,11 @@ package com.su.mediabox.view.adapter
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.su.mediabox.App
-import com.su.mediabox.PluginManager.process
+import com.su.mediabox.plugin.PluginManager.process
 import com.su.mediabox.R
 import com.su.mediabox.bean.HistoryBean
 import com.su.mediabox.config.Api
 import com.su.mediabox.pluginapi.Constant
-import com.su.mediabox.pluginapi.Text
 import com.su.mediabox.pluginapi.Text.buildRouteActionUrl
 import com.su.mediabox.util.AnimeCover9ViewHolder
 import com.su.mediabox.util.showToast

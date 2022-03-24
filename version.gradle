@@ -1,5 +1,5 @@
-ext.version_code = 32
-ext.version_name = "1.01"
+ext.version_code = 34
+ext.version_name = "1.2"
 
 def build_versions = [:]
 build_versions.compile_sdk = 31
@@ -17,6 +17,10 @@ deps.kotlin = kotlin
 def kotlinx = [:]
 kotlinx.kotlinx_coroutines_android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.1"
 deps.kotlinx = kotlinx
+
+def google = [:]
+google.flexbox = "com.google.android.flexbox:flexbox:3.0.0"
+deps.google = google
 
 def support = [:]
 support.constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.1"
@@ -114,5 +118,13 @@ deps.kuaishou = kuaishou
 def jakewharton = [:]
 jakewharton.disklrucache = "com.jakewharton:disklrucache:2.0.2"
 deps.jakewharton = jakewharton
+
+def cretin = [:]
+cretin.etv = "com.github.MZCretin:ExpandableTextView:v1.6.1-x"
+deps.cretin = cretin
+
+def pref = [:]
+pref.kotpref = "com.chibatching.kotpref:kotpref:2.13.1"
+deps.pref = pref
 
 ext.deps = deps

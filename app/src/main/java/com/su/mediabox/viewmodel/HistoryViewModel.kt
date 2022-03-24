@@ -7,6 +7,7 @@ import com.su.mediabox.App
 import com.su.mediabox.R
 import com.su.mediabox.bean.HistoryBean
 import com.su.mediabox.database.getAppDataBase
+import com.su.mediabox.util.PluginIO
 import com.su.mediabox.util.showToast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,7 +20,7 @@ class HistoryViewModel : ViewModel() {
     var mldDeleteAllHistory: MutableLiveData<Int> = MutableLiveData()
 
     fun getHistoryList() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.PluginIO) {
             try {
                 historyList.clear()
                 historyList.addAll(getAppDataBase().historyDao().getHistoryList())

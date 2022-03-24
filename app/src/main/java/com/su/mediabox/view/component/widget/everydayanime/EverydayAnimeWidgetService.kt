@@ -7,7 +7,6 @@ import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import android.widget.RemoteViewsService.RemoteViewsFactory
 import com.google.gson.Gson
-import com.su.mediabox.PluginManager
 import com.su.mediabox.R
 import com.su.mediabox.pluginapi.been.AnimeCoverBean
 import com.su.mediabox.util.Util
