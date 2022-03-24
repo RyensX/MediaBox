@@ -138,9 +138,9 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
 
     // 底部进度条CheckBox
     private var cbBottomProgress: CheckBox? = null
-    private var mBottomProgressCheckBoxValue: Boolean = true
+    private var playBottomProgress: ProgressBar? = null
 
-    //底部进度调
+    //控制进度条
     private var pbBottomProgress: ProgressBar? = null
 
     // 外部播放器打开
@@ -214,6 +214,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
         rgReverse = findViewById(R.id.rg_reverse)
         cbBottomProgress = findViewById(R.id.cb_bottom_progress)
         pbBottomProgress = findViewById(R.id.progress)
+        playBottomProgress = findViewById(R.id.play_bottom_progressbar)
         ivMore = findViewById(R.id.iv_play_activity_toolbar_more)
         tvOpenByExternalPlayer = findViewById(R.id.tv_open_by_external_player)
         tvRestoreScreen = findViewById(R.id.tv_restore_screen)
@@ -292,12 +293,14 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
                 }
             }
         }
-        cbBottomProgress?.setOnCheckedChangeListener { buttonView, isChecked ->
-            updateBottomProgressBar(isChecked)
-        }
+
+        //全屏时的底部进度条
         context?.sharedPreferences()?.getBoolean(Const.Setting.SHOW_PLAY_BOTTOM_BAR, true)?.also {
             cbBottomProgress?.isChecked = it
             updateBottomProgressBar(it)
+        }
+        cbBottomProgress?.setOnCheckedChangeListener { buttonView, isChecked ->
+            updateBottomProgressBar(isChecked)
         }
 
         //重置视频比例
@@ -459,11 +462,8 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
         player.mFullscreenButton.visibility = mFullscreenButton.visibility
         player.mTextureViewTransform = mTextureViewTransform
         player.mReverseValue = mReverseValue
-        player.mBottomProgressCheckBoxValue = mBottomProgressCheckBoxValue
         player.mPlaySpeed = mPlaySpeed
         player.sbNightScreen?.progress = mNightScreenSeekBarProgress
-        if (player.mBottomProgressBar != null) player.pbBottomProgress = player.mBottomProgressBar
-        if (!player.mBottomProgressCheckBoxValue) player.mBottomProgressBar = null
         touchSurfaceUp()
         player.setRestoreScreenTextViewVisibility()
         player.resolveTypeUI()
@@ -499,11 +499,8 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
             tvSpeed?.text = player.tvSpeed?.text
             mTextureViewTransform = player.mTextureViewTransform
             mReverseValue = player.mReverseValue
-            mBottomProgressCheckBoxValue = player.mBottomProgressCheckBoxValue
             mPlaySpeed = player.mPlaySpeed
             mNightScreenSeekBarProgress = player.sbNightScreen?.progress ?: 0
-            if (mBottomProgressBar != null) pbBottomProgress = mBottomProgressBar
-            if (!mBottomProgressCheckBoxValue) mBottomProgressBar = null
             player.touchSurfaceUp()
             setRestoreScreenTextViewVisibility()
             resolveTypeUI()
@@ -627,22 +624,11 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
     }
 
     fun updateBottomProgressBar(isChecked: Boolean) {
-        if (isChecked) {
-            pbBottomProgress?.let {
-                mBottomProgressBar = it
-                it.visible()
-            }
-        } else {
-            mBottomProgressBar?.let {
-                pbBottomProgress = it
-                it.gone()
-                mBottomProgressBar = null
-            }
-        }
+        playBottomProgress?.isVisible = isChecked
         context?.sharedPreferences()?.editor {
             putBoolean(Const.Setting.SHOW_PLAY_BOTTOM_BAR, isChecked)
         }
-        mBottomProgressCheckBoxValue = isChecked
+        mBottomProgressBar = if (isChecked) playBottomProgress else null
     }
 
     override fun onBrightnessSlide(percent: Float) {

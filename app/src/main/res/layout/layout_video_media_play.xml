@@ -219,7 +219,7 @@
         tools:visibility="visible" />
 
     <ProgressBar
-        android:id="@+id/bottom_progressbar"
+        android:id="@+id/play_bottom_progressbar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="1.5dp"
