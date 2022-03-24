@@ -43,7 +43,7 @@ import com.su.mediabox.view.adapter.decoration.AnimeEpisodeItemDecoration
 import com.su.mediabox.view.adapter.decoration.AnimeShowItemDecoration
 import com.su.mediabox.view.adapter.spansize.PlaySpanSize
 import com.su.mediabox.view.component.player.AnimeVideoPlayer
-import com.su.mediabox.view.component.player.AnimeVideoPositionMemoryStore
+import com.su.mediabox.view.component.player.VideoPositionMemoryDbStore
 import com.su.mediabox.view.component.player.DanmakuVideoPlayer
 import com.su.mediabox.view.component.player.DetailPlayerActivity
 import com.su.mediabox.view.fragment.MoreDialogFragment
@@ -173,7 +173,7 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
             srlPlayActivity.setOnRefreshListener { viewModel.getPlayData(viewModel.partUrl) }
             srlPlayActivity.setColorSchemeResources(getSkinResourceId(R.color.unchanged_main_color_2_skin))
 
-            avpPlayActivity.playPositionMemoryStore = AnimeVideoPositionMemoryStore
+            avpPlayActivity.playPositionMemoryStore = VideoPositionMemoryDbStore
         }
 
         viewModel.mldPlayBean.observe(this) {

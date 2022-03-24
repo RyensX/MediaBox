@@ -11,10 +11,9 @@ import com.shuyu.gsyvideoplayer.utils.OrientationUtils
 import com.su.mediabox.databinding.ActivityVideoMediaPlayBinding
 import com.su.mediabox.util.Util.setFullScreen
 import com.su.mediabox.util.gone
-import com.su.mediabox.util.showToast
 import com.su.mediabox.v2.viewmodel.VideoMediaPlayViewModel
 import com.su.mediabox.view.activity.BasePluginActivity
-import com.su.mediabox.view.activity.PlayActivity
+import com.su.mediabox.view.component.player.VideoPositionMemoryDbStore
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
 import tv.danmaku.ijk.media.player.IjkMediaPlayer
 
@@ -68,6 +67,8 @@ class VideoMediaPlayActivity : BasePluginActivity<ActivityVideoMediaPlayBinding>
 
     private fun init() {
         mBinding.vmPlay.run {
+            //进度记忆
+            playPositionMemoryStore = VideoPositionMemoryDbStore
             //设置旋转
             orientationUtils = OrientationUtils(this@VideoMediaPlayActivity, this)
             orientationUtils.resolveByClick()

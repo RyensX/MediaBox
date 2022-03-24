@@ -960,7 +960,6 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
      * 准备好视频，开始查找进度
      */
     override fun onPrepared() {
-        super.onPrepared()
         playPositionViewJob?.cancel()
         playPositionMemoryStore?.apply {
             playPositionMemoryStoreCoroutineScope.launch {
@@ -969,9 +968,10 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
                     if (it > 0L) {
                         //TODO 自动跳转开关
                         val isAutoSeek = true
-                        if (isAutoSeek)
-                            seekTo(it)
-                        else
+                        if (isAutoSeek) {
+                            seekOnStart = it
+                            context.getString(R.string.play_auto_seek).showToast()
+                        } else
                             playPositionViewJob = launch(Dispatchers.Main) {
                                 tvPlayPosition?.text = positionFormat(it)
                                 vgPlayPosition?.visible()
@@ -983,6 +983,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
                 }
             }
         }
+        super.onPrepared()
     }
 
     /**
@@ -1020,6 +1021,9 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
      * 注意：记忆单位是每个视频而不是一部番剧；一部番剧里面的每集都有记录，并非只记录最后看的那一集
      */
     private fun storePlayPosition(position: Long = gsyVideoManager.currentPosition) {
+        when (currentState) {
+            CURRENT_STATE_PREPAREING, CURRENT_STATE_PLAYING_BUFFERING_START, CURRENT_STATE_ERROR -> return
+        }
         val url = mOriginUrl
         val duration = gsyVideoManager.duration
         // 进度为负（已经播放完） 或 当前进度大于最小限制且小于最大限制（播放完时不记录），则记录
