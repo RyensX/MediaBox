@@ -1,0 +1,19 @@
+name: 合并累积更新
+
+on:
+  push:
+    tags:
+      - '*'
+    
+jobs:
+  pull-request:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: pull-request
+      uses: repo-sync/pull-request@v2
+      with:
+        source_branch: 'dev'
+        destination_branch: 'master'
+        pr_title: '合并累积更新 版本:${{github.ref_name}}'
+        github_token: ${{ secrets.GITHUB_TOKEN }}
