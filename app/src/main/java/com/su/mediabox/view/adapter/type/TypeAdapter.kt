@@ -1,6 +1,7 @@
 package com.su.mediabox.view.adapter.type
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -62,6 +63,7 @@ class TypeAdapter(
                     .registerDataViewMap<TagData, TagViewHolder>()
                     .registerDataViewMap<LongTextData, LongTextViewHolder>()
                     .registerDataViewMap<VideoInfoItemData, VideoInfoItemViewHolder>()
+                    .registerDataViewMap<ViewPagerData, ViewPagerViewHolder>()
             }.start()
         }
     }
@@ -161,6 +163,8 @@ class TypeAdapter(
                             }
                     }
             } catch (e: Exception) {
+                e.printStackTrace()
+                Log.d("VH创建错误", e.message ?: viewType.toString())
                 TypeViewHolder.UnknownTypeViewHolder(parent)
             }
         }

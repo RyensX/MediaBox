@@ -132,6 +132,7 @@ dependencies {
     implementation deps.lifecycle.lifecycle_viewmodel_ktx
     implementation deps.lifecycle.lifecycle_runtime_ktx
     implementation deps.lifecycle.lifecycle_activity_ktx
+    implementation deps.lifecycle.lifecycle_fragment_ktx
     implementation deps.support.viewpager2
     implementation deps.okhttp3.okhttp
     implementation deps.shuyu.GSYVideoPlayer
