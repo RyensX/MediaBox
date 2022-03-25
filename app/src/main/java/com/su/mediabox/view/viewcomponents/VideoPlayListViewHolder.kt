@@ -25,7 +25,6 @@ import com.su.mediabox.view.adapter.type.*
 import com.su.mediabox.view.episodeSheetDialog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import kotlin.math.absoluteValue
 
