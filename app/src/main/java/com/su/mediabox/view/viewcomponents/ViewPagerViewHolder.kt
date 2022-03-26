@@ -19,6 +19,7 @@ import com.su.mediabox.databinding.ViewComponentViewPagerBinding
 import com.su.mediabox.pluginapi.v2.been.BaseData
 import com.su.mediabox.pluginapi.v2.been.ViewPagerData
 import com.su.mediabox.util.PluginIO
+import com.su.mediabox.util.showToast
 import com.su.mediabox.util.toLiveData
 import com.su.mediabox.view.adapter.type.TypeViewHolder
 import com.su.mediabox.view.adapter.type.initTypeList
@@ -42,7 +43,7 @@ class ViewPagerViewHolder private constructor(private val binding: ViewComponent
         binding.vcViewPagerTabs,
         binding.vcViewPagerPages.getViewPager()
     ) { tab, pos ->
-        tab.text = currentData?.pageLoaders?.get(pos)?.pageName ?: "标签"
+        tab.text = currentData?.pageLoaders?.get(pos)?.pageName(pos) ?: "标签"
     }
 
     private var currentData: ViewPagerData? = null
@@ -75,6 +76,7 @@ class ViewPagerViewHolder private constructor(private val binding: ViewComponent
                     getPages(bindingAdapter.hashCode(), data.pageLoaders)
                 )
             )
+            setCurrentItem(data.defaultPage.coerceAtMost(data.pageLoaders.size - 1))
             tlm.apply {
                 if (!isAttached)
                     attach()
