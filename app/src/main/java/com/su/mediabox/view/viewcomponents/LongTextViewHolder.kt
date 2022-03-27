@@ -20,9 +20,7 @@ class LongTextViewHolder private constructor(private val binding: ViewComponentL
         ViewComponentLongTextBinding.inflate(LayoutInflater.from(parent.context), parent, false)
     ) {
         setOnClickListener(binding.root) {
-            textData?.actionUrl?.also {
-                AppRouteProcessor.process(it)
-            }
+            textData?.action?.go()
         }
     }
 

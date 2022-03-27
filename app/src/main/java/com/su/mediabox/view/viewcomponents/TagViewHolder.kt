@@ -24,9 +24,7 @@ class TagViewHolder private constructor(private val binding: ItemAnimeType1Bindi
         ItemAnimeType1Binding.inflate(LayoutInflater.from(parent.context), parent, false)
     ) {
         setOnClickListener(binding.root) { pos ->
-            data?.also {
-                AppRouteProcessor.process(it.actionUrl)
-            }
+            data?.action?.go()
         }
     }
 

@@ -137,6 +137,7 @@ object PluginManager : AppUtil.IRouteProcessor {
             ?: throw RuntimeException("当前插件未提供该组件")
     }
 
+    @Deprecated("全部更新V2后移除，使用新的动作系统")
     override fun process(actionUrl: String): Boolean =
         AppRouteProcessor.process(actionUrl)
 

@@ -9,6 +9,7 @@ import com.liulishuo.filedownloader.FileDownloader
 import com.scwang.smart.refresh.footer.BallPulseFooter
 import com.scwang.smart.refresh.header.MaterialHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
+import com.su.mediabox.plugin.AppAction
 import com.su.mediabox.plugin.AppRouteProcessor
 import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.pluginapi.AppUtil
@@ -40,6 +41,7 @@ class App : Application() {
 
         //初始化路由及插件配置
         AppUtil.init(this, PluginManager)
+        AppAction.init()
 
         Kotpref.init(context)
 

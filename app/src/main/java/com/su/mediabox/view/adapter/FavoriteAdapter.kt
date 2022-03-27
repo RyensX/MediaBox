@@ -10,6 +10,8 @@ import com.su.mediabox.bean.FavoriteAnimeBean
 import com.su.mediabox.config.Api
 import com.su.mediabox.pluginapi.Constant
 import com.su.mediabox.pluginapi.Text.buildRouteActionUrl
+import com.su.mediabox.pluginapi.v2.action.DetailAction
+import com.su.mediabox.pluginapi.v2.action.PlayAction
 import com.su.mediabox.util.AnimeCover8ViewHolder
 import com.su.mediabox.util.showToast
 import com.su.mediabox.util.coil.CoilUtil.loadImage
@@ -28,14 +30,19 @@ class FavoriteAdapter(
                     it.itemView.setOnClickListener { _ ->
                         val item = dataList[it.bindingAdapterPosition]
                         if (item.lastEpisodeUrl != null)
-                            process(buildRouteActionUrl(Constant.ActionUrl.ANIME_PLAY,item.lastEpisodeUrl!!,item.cover,item.animeUrl,item.animeTitle))
+                            PlayAction.obtain(
+                                item.lastEpisodeUrl!!,
+                                item.cover,
+                                item.animeUrl,
+                                item.animeTitle
+                            ).go()
                         else
-                            process(buildRouteActionUrl(Constant.ActionUrl.ANIME_DETAIL,item.animeUrl))
+                            DetailAction.obtain(item.animeUrl).go()
                     }
                     //长度跳转详情页
                     it.itemView.setOnLongClickListener { _ ->
                         val item = dataList[it.bindingAdapterPosition]
-                        process(buildRouteActionUrl(Constant.ActionUrl.ANIME_DETAIL,item.animeUrl))
+                        DetailAction.obtain(item.animeUrl).go()
                         true
                     }
                 }

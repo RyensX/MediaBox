@@ -140,7 +140,7 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
 
             setOnClickListener(itemView) { pos ->
                 bindingTypeAdapter.getData<EpisodeData>(pos)?.also {
-                    AppRouteProcessor.process(it.actionUrl)
+                    it.action?.go()
                 }
             }
 
