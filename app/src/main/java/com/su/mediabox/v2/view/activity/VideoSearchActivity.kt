@@ -41,10 +41,6 @@ class VideoSearchActivity : BasePluginActivity<ActivitySearchBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        getAction<SearchAction>()?.also {
-            viewModel.mKeyWord = it.keyWork
-        }
-
         mBinding.run {
             //列表
             rvSearchActivity
@@ -142,6 +138,10 @@ class VideoSearchActivity : BasePluginActivity<ActivitySearchBinding>() {
                 }
                 else -> {}
             }
+        }
+
+        getAction<SearchAction>()?.also {
+            viewModel.getSearchData(it.keyWork)
         }
     }
 
