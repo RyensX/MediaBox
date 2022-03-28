@@ -58,7 +58,7 @@
             android:name="com.su.mediabox.view.activity.HistoryActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
-            android:name="com.su.mediabox.view.activity.FavoriteActivity"
+            android:name=".v2.view.activity.VideoFavoriteActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
             android:name="com.su.mediabox.view.activity.DlnaControlActivity"
@@ -98,9 +98,8 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode" />
         <activity
             android:name=".v2.view.activity.VideoMediaPlayActivity"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
-            />
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
         <activity
             android:name="com.su.mediabox.view.activity.AnimeDetailActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />

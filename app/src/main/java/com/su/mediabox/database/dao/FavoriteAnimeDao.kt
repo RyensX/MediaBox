@@ -14,6 +14,10 @@ interface FavoriteAnimeDao {
     @Query(value = "SELECT * FROM $FAVORITE_ANIME_TABLE_NAME ORDER BY time DESC")
     fun getFavoriteAnimeList(): MutableList<FavoriteAnimeBean>
 
+    //按照时间戳顺序，从大到小。最后搜索的元组在最上方（下标0）显示
+    @Query(value = "SELECT * FROM $FAVORITE_ANIME_TABLE_NAME ORDER BY time DESC")
+    fun getFavoriteAnimeListLiveData(): LiveData<List<FavoriteAnimeBean>>
+
     @Query(value = "SELECT * FROM $FAVORITE_ANIME_TABLE_NAME WHERE animeUrl = :animeUrl")
     fun getFavoriteAnime(animeUrl: String): FavoriteAnimeBean?
 

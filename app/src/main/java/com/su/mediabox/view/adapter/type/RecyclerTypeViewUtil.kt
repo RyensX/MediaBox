@@ -57,9 +57,10 @@ fun RecyclerView.staggered(
 /**
  * @param useSharedRecycledViewPool 使用相同映射表共享的VH缓存池
  */
+@Suppress("UNCHECKED_CAST")
 inline fun RecyclerView.initTypeList(
     dataViewMap: DataViewMapList = TypeAdapter.globalDataViewMap,
-    diff: DiffUtil.ItemCallback<Any> = TypeAdapter.DefaultDiff,
+    diff: DiffUtil.ItemCallback<*> = TypeAdapter.DefaultDiff,
     useSharedRecycledViewPool: Boolean = true,
     block: TypeAdapter.(RecyclerView) -> Unit,
 ): TypeAdapter {
@@ -72,7 +73,7 @@ inline fun RecyclerView.initTypeList(
                 TypeAdapter.getRecycledViewPool(dataViewMap)
         )
     }
-    return TypeAdapter(dataViewMap, diff).apply {
+    return TypeAdapter(dataViewMap, diff as DiffUtil.ItemCallback<Any>).apply {
         block(this@initTypeList)
         adapter = this
     }

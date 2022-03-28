@@ -27,6 +27,7 @@ import com.su.mediabox.viewmodel.HomeViewModel
 import com.su.mediabox.pluginapi.Constant
 import com.su.mediabox.util.clickScale
 import com.su.mediabox.util.setViewsOnClickListener
+import com.su.mediabox.v2.view.activity.VideoFavoriteActivity
 import com.su.mediabox.view.listener.dsl.addOnTabSelectedListener
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -165,7 +166,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), View.OnClickListener, 
                 ivHomeFragmentFavorite -> startActivity(
                     Intent(
                         activity,
-                        FavoriteActivity::class.java
+                        VideoFavoriteActivity::class.java
                     )
                 )
             }
