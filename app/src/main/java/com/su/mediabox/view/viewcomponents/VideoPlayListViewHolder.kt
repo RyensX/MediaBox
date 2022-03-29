@@ -52,7 +52,9 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
 
         binding.ivHorizontalRecyclerView1More.setOnClickListener {
             episodeDataList?.also {
-                episodeSheetDialog(binding.root.context, it)?.show()
+                bindingTypeAdapter.getTag<String>()?.also { name ->
+                    episodeSheetDialog(binding.root.context, name, it)?.show()
+                }
             }
         }
     }
