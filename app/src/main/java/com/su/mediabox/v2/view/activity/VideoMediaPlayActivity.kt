@@ -42,7 +42,7 @@ class VideoMediaPlayActivity : BasePluginActivity<ActivityVideoMediaPlayBinding>
         getAction<PlayAction>()?.also {
             viewModel.apply {
                 detailPartUrl = it.detailPartUrl
-                coverUrl = it.detailPartUrl
+                coverUrl = it.coverUrl
                 videoName = it.videoName
             }
 

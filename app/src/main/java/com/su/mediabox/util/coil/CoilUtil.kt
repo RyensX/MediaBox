@@ -54,14 +54,14 @@ object CoilUtil {
         referer: String? = null,
         @DrawableRes placeholder: Int = 0,
         @DrawableRes error: Int = R.drawable.ic_warning_main_color_3_24_skin
-    ) {
+    ) = runCatching {
         // 是本地drawable
         url.toIntOrNull()?.let { drawableResId ->
             load(drawableResId) {
                 placeholder(placeholder)
                 error(error)
             }
-            return
+            return@runCatching
         }
 
         // 是网络图片
