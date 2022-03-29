@@ -17,7 +17,9 @@ import com.su.mediabox.bean.ResponseDataType
 import com.su.mediabox.databinding.ActivityClassifyBinding
 import com.su.mediabox.pluginapi.been.ClassifyBean
 import com.su.mediabox.pluginapi.been.ClassifyDataBean
+import com.su.mediabox.pluginapi.v2.action.ClassifyAction
 import com.su.mediabox.util.Util.getResColor
+import com.su.mediabox.util.getAction
 import com.su.mediabox.util.showToast
 import com.su.mediabox.util.smartNotifyDataSetChanged
 import com.su.mediabox.view.adapter.BaseRvAdapter
@@ -43,9 +45,16 @@ class ClassifyActivity : BasePluginActivity<ActivityClassifyBinding>() {
 
         viewModel = ViewModelProvider(this).get(ClassifyViewModel::class.java)
 
+        //TODO 暂时兼容处理
         currentPartUrl = intent.getStringExtra("partUrl") ?: ""
         classifyTabTitle = intent.getStringExtra("classifyTabTitle") ?: ""
         classifyTitle = intent.getStringExtra("classifyTitle") ?: ""
+
+        getAction<ClassifyAction>()?.also {
+            currentPartUrl = it.url ?: ""
+            classifyTabTitle = it.classifyCategory ?: ""
+            classifyTitle = it.classify ?: ""
+        }
 
         mBinding.atbClassifyActivityToolbar.setBackButtonClickListener { finish() }
 

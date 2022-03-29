@@ -14,6 +14,7 @@ import com.su.mediabox.bean.SearchHistoryBean
 import com.su.mediabox.database.getAppDataBase
 import com.su.mediabox.databinding.ActivitySearchBinding
 import com.su.mediabox.databinding.ItemSearchHistory1Binding
+import com.su.mediabox.pluginapi.v2.action.SearchAction
 import com.su.mediabox.util.*
 import com.su.mediabox.util.Util.showKeyboard
 import com.su.mediabox.v2.viewmodel.VideoSearchViewModel
@@ -26,6 +27,7 @@ import kotlinx.coroutines.launch
 class VideoSearchActivity : BasePluginActivity<ActivitySearchBinding>() {
 
     companion object {
+        @Deprecated("全部更新V2后移除")
         const val EXTRA_KEY_WORK = "keyWord"
 
         private val searchDataViewMapList = DataViewMapList().apply {
@@ -38,8 +40,6 @@ class VideoSearchActivity : BasePluginActivity<ActivitySearchBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        viewModel.mKeyWord = intent.getStringExtra(EXTRA_KEY_WORK) ?: ""
 
         mBinding.run {
             //列表
@@ -138,6 +138,10 @@ class VideoSearchActivity : BasePluginActivity<ActivitySearchBinding>() {
                 }
                 else -> {}
             }
+        }
+
+        getAction<SearchAction>()?.also {
+            viewModel.getSearchData(it.keyWork)
         }
     }
 

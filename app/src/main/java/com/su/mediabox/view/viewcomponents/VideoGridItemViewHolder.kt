@@ -23,7 +23,7 @@ class VideoGridItemViewHolder private constructor(private val binding: ItemAnime
     ) {
         setOnClickListener(binding.root) { pos ->
             bindingTypeAdapter.getData<VideoGridItemData>(pos)?.also {
-                AppRouteProcessor.process(it.actionUrl)
+                it.action?.go()
             }
         }
     }

@@ -70,7 +70,7 @@
     <string name="already_copy_to_clipboard">已复制到剪贴板</string>
     <string name="more">更多</string>
     <string name="my_favorite">我的收藏</string>
-    <string name="no_favorite">没有追番记录</string>
+    <string name="no_favorite">没有收藏记录</string>
     <string name="watch_history">观看历史</string>
     <string name="no_history">没有观看历史</string>
     <string name="delete_all_history_info">清空所有历史记录，包括搜索历史、观看历史和观看进度</string>
@@ -216,7 +216,7 @@
     <string name="danmaku_data_is_null_or_blank">弹幕数据为null或空！</string>
     <string name="danmaku_input_stream_is_null">弹幕输入流为null！</string>
     <string name="episode_play_completed">已看完</string>
-    <string name="have_not_watched_this_anime">追番后还未观看</string>
+    <string name="have_not_watched_this_anime">未观看</string>
     <string name="already_seen_episode_x">看到 %s</string>
     <string name="all_history_count">%d条</string>
     <string name="item_unknown_type">未知类型</string>

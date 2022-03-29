@@ -34,9 +34,7 @@ class VideoInfoItemViewHolder private constructor(private val binding: ViewCompo
             .initTypeList { }
 
         setOnClickListener(binding.root) { pos ->
-            data?.also {
-                AppRouteProcessor.process(it.actionUrl)
-            }
+            data?.action?.go()
         }
     }
 

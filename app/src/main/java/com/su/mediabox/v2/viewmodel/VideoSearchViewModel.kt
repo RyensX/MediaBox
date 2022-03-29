@@ -24,7 +24,11 @@ class VideoSearchViewModel : ViewModel() {
     }
 
     private var page = DEFAULT_PAGE
+
+    //搜索关键字不能用LiveData观察，因为这样无法保证时序，无法让对应UI的更新一定在submitList后从而可能导致多类型错误
     var mKeyWord = ""
+        private set
+
     var lastLoadSize = 0
         private set
 

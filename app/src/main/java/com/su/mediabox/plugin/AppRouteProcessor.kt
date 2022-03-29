@@ -66,6 +66,7 @@ object AppRouteProcessor :
      * 必须以[ActionUrl]内常量开头加上参数，如:/action/param1/param2 (参数必须经过单独编码)
      * @return 路由成功与否
      */
+    @Deprecated("全部更新V2后移除，使用新的动作系统")
     override fun process(actionUrl: String): Boolean {
         if (actionUrl.isEmpty())
             return false

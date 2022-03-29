@@ -9,10 +9,15 @@ import androidx.lifecycle.Observer
 import com.su.mediabox.R
 import com.su.mediabox.config.Api
 import com.su.mediabox.databinding.ActivityAnimeDetailBinding
+import com.su.mediabox.pluginapi.v2.action.DetailAction
+import com.su.mediabox.pluginapi.v2.action.PlayAction
 import com.su.mediabox.util.Util.setTransparentStatusBar
 import com.su.mediabox.util.showToast
 import com.su.mediabox.view.fragment.ShareDialogFragment
 import com.su.mediabox.util.coil.CoilUtil.loadGaussianBlurCover
+import com.su.mediabox.util.getAction
+import com.su.mediabox.util.getActionIns
+import com.su.mediabox.util.putAction
 import com.su.mediabox.v2.viewmodel.VideoDetailViewModel
 import com.su.mediabox.view.activity.BasePluginActivity
 import com.su.mediabox.view.activity.PlayActivity
@@ -31,7 +36,11 @@ class VideoDetailActivity : BasePluginActivity<ActivityAnimeDetailBinding>() {
 
         setTransparentStatusBar(window, isDark = false)
 
+        //TODO 暂时兼容处理
         viewModel.partUrl = intent.getStringExtra("partUrl") ?: ""
+        getAction<DetailAction>()?.also {
+            viewModel.partUrl = it.url
+        }
 
         //详情数据列表
         mBinding.rvAnimeDetailActivityInfo.linear().initTypeList { }
@@ -113,12 +122,12 @@ class VideoDetailActivity : BasePluginActivity<ActivityAnimeDetailBinding>() {
     override fun startActivity(intent: Intent?, options: Bundle?) {
         //主动向下一级路由目标提供一些信息
         intent?.apply {
-            //封面
-            putExtra(VideoMediaPlayActivity.INTENT_COVER, viewModel.cover)
-            //详情链接
-            putExtra(VideoMediaPlayActivity.INTENT_DPU, viewModel.partUrl)
-            //视频名称
-            putExtra(VideoMediaPlayActivity.INTENT_NAME, viewModel.title)
+            getActionIns<PlayAction>()?.apply {
+                coverUrl = viewModel.cover
+                detailPartUrl = viewModel.partUrl
+                videoName = viewModel.title
+                putAction(this)
+            }
         }
         super.startActivity(intent, options)
     }

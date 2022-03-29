@@ -19,9 +19,7 @@ class TextViewHolder private constructor(private val binding: ViewComponentTextB
         ViewComponentTextBinding.inflate(LayoutInflater.from(parent.context), parent, false)
     ) {
         setOnClickListener(binding.root) {
-            textData?.actionUrl?.also {
-                AppRouteProcessor.process(it)
-            }
+            textData?.action?.go()
         }
     }
 
