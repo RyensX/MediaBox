@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.su.mediabox.R
+import com.su.mediabox.config.Const
 import com.su.mediabox.databinding.DialogEpisodeBottomSheetBinding
 import com.su.mediabox.plugin.AppRouteProcessor
 import com.su.mediabox.plugin.PluginManager
@@ -91,6 +92,7 @@ fun episodeSheetDialog(
             DataViewMapList()
                 .registerDataViewMap<EpisodeData, BottomSheetEpisodeViewHolder>()
         ) {
+            setTag(episodeDataList, Const.ViewComponent.EPISODE_LIST_TAG)
             //长按缓存视频
             addViewHolderLongClickListener<BottomSheetEpisodeViewHolder> { pos ->
                 bindingTypeAdapter.getData<EpisodeData>(pos)?.also {

@@ -1,10 +1,20 @@
 package com.su.mediabox.config
 
-import android.os.Environment
 import com.su.mediabox.App
 import com.su.mediabox.R
 
 interface Const {
+
+    object ViewComponent {
+        const val HISTORY_INFO_TAG = "history_info_tag"
+        const val EPISODE_LIST_TAG = "episode_list_tag"
+    }
+
+    object Player {
+        val SELECT_ITEM_COLOR = App.context.resources.getColor(R.color.unchanged_main_color_2_skin)
+        val UNSELECT_ITEM_COLOR = App.context.resources.getColor(android.R.color.white)
+    }
+
     interface Common {
         companion object {
             const val GITHUB_URL = "https://github.com/RyensX/MediaBox"

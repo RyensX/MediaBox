@@ -1,6 +1,7 @@
 package com.su.mediabox.view.activity
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.lifecycleScope
 import com.shuyu.gsyvideoplayer.GSYVideoManager
@@ -20,7 +21,7 @@ import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
 import tv.danmaku.ijk.media.player.IjkMediaPlayer
 import java.io.File
 
-
+@Deprecated("在新播放器完善后弃用")
 class SimplePlayActivity : BasePluginActivity<ActivitySimplePlayBinding>() {
     private var url = ""
     private var title = ""
@@ -38,6 +39,8 @@ class SimplePlayActivity : BasePluginActivity<ActivitySimplePlayBinding>() {
 
         url = intent.getStringExtra(URL) ?: ""
         title = intent.getStringExtra(TITLE) ?: ""
+
+        Log.d("播放本地视频", url)
 
         init()
 

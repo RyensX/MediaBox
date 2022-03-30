@@ -3,7 +3,9 @@ package com.su.mediabox.util
 import android.view.View
 import android.view.ViewStub
 import android.view.animation.AlphaAnimation
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlin.math.absoluteValue
 
 fun View.enable() {
     if (isEnabled) return
@@ -80,4 +82,17 @@ val ViewStub.isInflate: Boolean
 fun ViewStub.smartInflate() {
     if (!isInflate)
         inflate()
+}
+
+/**
+ * 智能跳转，根据目标位置与当前位置差距对比[smoothLimit]选择直接跳转还是带动画跳转
+ */
+fun RecyclerView.smartScrollToPosition(position: Int, smoothLimit: Int = 30) {
+    var visibilityItemPos = 0
+    if (layoutManager is LinearLayoutManager)
+        visibilityItemPos = (layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+    if ((position - visibilityItemPos).absoluteValue > smoothLimit)
+        scrollToPosition(position)
+    else
+        smoothScrollToPosition(position)
 }

@@ -2,6 +2,7 @@ package com.su.mediabox.view.viewcomponents
 
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.activity.ComponentActivity
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.su.mediabox.Pref
 import com.su.mediabox.R
 import com.su.mediabox.bean.HistoryBean
+import com.su.mediabox.config.Const
 import com.su.mediabox.databinding.ItemAnimeEpisode2Binding
 import com.su.mediabox.databinding.ItemHorizontalRecyclerView1Binding
 import com.su.mediabox.plugin.AppRouteProcessor
@@ -17,10 +19,12 @@ import com.su.mediabox.pluginapi.v2.been.EpisodeData
 import com.su.mediabox.pluginapi.v2.been.VideoPlayListData
 import com.su.mediabox.util.Util
 import com.su.mediabox.pluginapi.UI.dp
+import com.su.mediabox.pluginapi.v2.action.PlayAction
 import com.su.mediabox.util.Text.getNum
 import com.su.mediabox.util.Util.getResColor
 import com.su.mediabox.util.bindHistoryPlayInfo
 import com.su.mediabox.util.setOnClickListener
+import com.su.mediabox.v2.view.activity.VideoMediaPlayActivity
 import com.su.mediabox.view.adapter.type.*
 import com.su.mediabox.view.episodeSheetDialog
 import kotlinx.coroutines.Dispatchers
@@ -60,8 +64,6 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
     }
 
     override fun onBind(data: VideoPlayListData) {
-        episodeDataList = data.playList
-
         coroutineScope.launch(Dispatchers.Default) {
             var list = data.playList
             runCatching {
@@ -75,9 +77,11 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
 
             withContext(Dispatchers.Main) {
                 binding.rvHorizontalRecyclerView1.typeAdapter().apply {
+                    setTag(list, Const.ViewComponent.EPISODE_LIST_TAG)
+                    //自动定位
                     if (isShowHistory)
                         bindHistoryPlayInfo {
-                            setTag(it)
+                            setTag(it, Const.ViewComponent.HISTORY_INFO_TAG)
                             submitList(episodeDataList) {
                                 jumpEpisode(this)
                             }
@@ -100,7 +104,7 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
      */
     private fun jumpEpisode(adapter: TypeAdapter) {
         binding.rvHorizontalRecyclerView1.apply {
-            val target = adapter.getTag<HistoryBean>() ?: return
+            val target = adapter.getTag<HistoryBean>(Const.ViewComponent.HISTORY_INFO_TAG) ?: return
             coroutineScope.launch {
                 episodeDataList?.forEachIndexed { index, data ->
                     if (data.url == target.lastEpisodeUrl) {
@@ -142,14 +146,24 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
 
             setOnClickListener(itemView) { pos ->
                 bindingTypeAdapter.getData<EpisodeData>(pos)?.also {
-                    it.action?.go()
+                    val action = it.action
+                    if (action is PlayAction) {
+                        //如果是跳转播放则填入播放列表
+                        val playList =
+                            bindingTypeAdapter.getTag<List<EpisodeData>>(Const.ViewComponent.EPISODE_LIST_TAG)
+                        if (playList != null) {
+                            VideoMediaPlayActivity.playList = playList
+                        }
+                    }
+                    action?.go()
                 }
             }
 
         }
 
         override fun onBind(data: EpisodeData) {
-            val historyBean = bindingTypeAdapter.getTag<HistoryBean>()
+            val historyBean =
+                bindingTypeAdapter.getTag<HistoryBean>(Const.ViewComponent.HISTORY_INFO_TAG)
 
             binding.tvAnimeEpisode2.apply {
                 setTextColor(Color.WHITE)
