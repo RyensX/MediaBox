@@ -374,30 +374,25 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
                         }
                     }
                 }
+            //调出选集块
             setOnClickListener {
                 rvSpeed?.gone()
                 rvEpisode?.apply {
-
                     val adapter = typeAdapter()
                     isVisible = true
                     showRightContainer()
-                    //第一次打开则先查找定位
-                    if (adapter.currentList.isNullOrEmpty()) {
-                        VideoMediaPlayActivity.playList?.forEachIndexed { index, episodeData ->
-                            if (episodeData.url.isNotBlank() && episodeData.url == playViewModel?.currentPlayEpisodeUrl) {
-                                Log.d("找到初始标记", index.toString())
-                                adapter.setTag(index)
-                                return@forEachIndexed
-                            }
-                        }
-                    }
                     adapter.submitList(VideoMediaPlayActivity.playList) {
                         //定位
                         adapter.getTag<Int>()?.also {
-                            Log.d("默认标记", it.toString())
                             smartScrollToPosition(it)
                         }
                     }
+                }
+            }
+            //下一集
+            ivNextEpisode?.apply {
+                setOnClickListener {
+                    playNextEpisode()
                 }
             }
         }
@@ -451,9 +446,50 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
         videoName: String = this.videoName,
         cacheWithPlay: Boolean = false
     ) {
+        if (this.videoName.isBlank())
+        //为了使下一集按钮有效，需要在第一次加载时初始化播放列表的初始定位
+            playPositionMemoryStoreCoroutineScope.launch {
+                //查找初始定位
+                VideoMediaPlayActivity.playList?.forEachIndexed { index, episodeData ->
+                    if (episodeData.url.isNotBlank() && episodeData.url == playViewModel?.currentPlayEpisodeUrl) {
+                        Log.d("找到初始标记", index.toString())
+                        rvEpisode?.typeAdapter()?.setTag(index)
+                        return@forEachIndexed
+                    }
+                }
+            }
         this.videoName = videoName
+
         setUp(playUrl, cacheWithPlay, String.format("%s %s", videoName, episodeName))
         startPlayLogic()
+    }
+
+    /**
+     * 切换下一集
+     * @return 是否有下一集可切换
+     */
+    fun playNextEpisode(): Boolean {
+        val episodeAdapter = rvEpisode?.typeAdapter()
+        episodeAdapter?.getTag<Int>()?.also { pos ->
+            if (pos < (VideoMediaPlayActivity.playList?.size ?: pos) - 1)
+                VideoMediaPlayActivity.playList?.getOrNull(pos + 1)?.url?.also {
+                    episodeAdapter.apply {
+                        //更新上次选项
+                        notifyItemChanged(pos)
+                        //更新当前选项
+                        notifyItemChanged(pos + 1)
+                        //更新标记
+                        episodeAdapter.setTag(pos + 1)
+                    }
+                    playViewModel?.playVideoMedia(it)
+                    return true
+                }
+            else {
+                "已是最后一集".showToast()
+                return false
+            }
+        }
+        return false
     }
 
     class PlayerEpisodeViewHolder private constructor(private val binding: ItemPlayEpisodeBinding) :
@@ -816,6 +852,9 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
         super.changeUiToPreparingShow()
         viewTopContainerShadow?.visible()
         mUiCleared = false
+
+        if (VideoMediaPlayActivity.playList != null)
+            ivNextEpisode?.gone()
     }
 
     //播放中
@@ -828,6 +867,9 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
 //        }
         initFirstLoad = false
         mUiCleared = false
+
+        if (VideoMediaPlayActivity.playList != null)
+            ivNextEpisode?.visible()
     }
 
     //自动播放结束

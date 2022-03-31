@@ -67,7 +67,7 @@
 
         <ImageView
             android:id="@+id/start"
-            android:layout_width="48dp"
+            android:layout_width="40dp"
             android:layout_height="0px"
             android:layout_marginStart="10dp"
             android:paddingHorizontal="5dp"
@@ -85,7 +85,8 @@
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/start"
-            app:layout_constraintTop_toBottomOf="@id/progress" />
+            app:layout_constraintTop_toBottomOf="@id/progress"
+            tools:visibility="visible" />
 
         <com.su.mediabox.view.component.textview.TypefaceTextView
             android:id="@+id/current"

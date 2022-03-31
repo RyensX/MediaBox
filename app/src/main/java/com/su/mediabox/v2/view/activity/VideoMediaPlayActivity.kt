@@ -60,7 +60,7 @@ class VideoMediaPlayActivity : BasePluginActivity<ActivityVideoMediaPlayBinding>
             viewModel.apply {
                 //视频
                 currentVideoPlayMedia.observe(this@VideoMediaPlayActivity) {
-                    mBinding.vmPlay.playVideo(it.videoPlayUrl, viewModel.videoName, it.title)
+                    mBinding.vmPlay.playVideo(it.videoPlayUrl, it.title, viewModel.videoName)
                 }
                 //弹幕
                 currentDanmakuData.observe(this@VideoMediaPlayActivity) {
@@ -105,8 +105,8 @@ class VideoMediaPlayActivity : BasePluginActivity<ActivityVideoMediaPlayBinding>
                 }
 
                 override fun onAutoComplete(url: String?, vararg objects: Any?) {
-                    finish()
-                    //TODO 自动跳转下一集
+                    //自动切换下一集
+                    playNextEpisode()
                 }
             })
 
