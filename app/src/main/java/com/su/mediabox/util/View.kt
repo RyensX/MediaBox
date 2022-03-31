@@ -1,5 +1,6 @@
 package com.su.mediabox.util
 
+import android.util.Log
 import android.view.View
 import android.view.ViewStub
 import android.view.animation.AlphaAnimation
@@ -90,7 +91,10 @@ fun ViewStub.smartInflate() {
 fun RecyclerView.smartScrollToPosition(position: Int, smoothLimit: Int = 30) {
     var visibilityItemPos = 0
     if (layoutManager is LinearLayoutManager)
-        visibilityItemPos = (layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+        visibilityItemPos =
+            (layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+                .coerceAtLeast(visibilityItemPos)
+    Log.d("列表跳转", "目标:$position 当前可见:$visibilityItemPos")
     if ((position - visibilityItemPos).absoluteValue > smoothLimit)
         scrollToPosition(position)
     else

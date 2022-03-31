@@ -4,10 +4,11 @@
     android:id="@+id/vc_play_episode_name"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
     android:gravity="center"
     android:padding="12dp"
     android:textColor="@android:color/white"
-    tools:textColor="@color/black"
-    tools:text="第1集">
+    tools:text="第1集"
+    tools:textColor="@color/black">
 
 </com.su.mediabox.view.component.textview.TypefaceTextView>

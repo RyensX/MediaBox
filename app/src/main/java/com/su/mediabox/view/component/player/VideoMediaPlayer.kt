@@ -362,15 +362,15 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
                     addViewHolderClickListener<PlayerEpisodeViewHolder> { pos ->
                         val adapter = bindingTypeAdapter
                         adapter.getData<EpisodeData>(pos)?.also { episodeData ->
-                            //标记当前选集pos
-                            setTag(pos)
-                            playViewModel?.playVideoMedia(episodeData.url)
-                            //更新当前选项
-                            adapter.notifyItemChanged(pos)
                             //更新上次选项
                             adapter.getTag<Int>()?.also {
                                 adapter.notifyItemChanged(it)
                             }
+                            //更新当前选项
+                            adapter.notifyItemChanged(pos)
+                            //标记当前选集pos
+                            adapter.setTag(pos)
+                            playViewModel?.playVideoMedia(episodeData.url)
                         }
                     }
                 }
@@ -385,6 +385,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
                     if (adapter.currentList.isNullOrEmpty()) {
                         VideoMediaPlayActivity.playList?.forEachIndexed { index, episodeData ->
                             if (episodeData.url.isNotBlank() && episodeData.url == playViewModel?.currentPlayEpisodeUrl) {
+                                Log.d("找到初始标记", index.toString())
                                 adapter.setTag(index)
                                 return@forEachIndexed
                             }
@@ -393,7 +394,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
                     adapter.submitList(VideoMediaPlayActivity.playList) {
                         //定位
                         adapter.getTag<Int>()?.also {
-                            //TODO 未知原因会偶尔持续滚动
+                            Log.d("默认标记", it.toString())
                             smartScrollToPosition(it)
                         }
                     }
@@ -410,7 +411,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
                         val adapter = bindingTypeAdapter
                         adapter.getData<Float>(pos)?.also { speed ->
                             setSpeed(speed, true)
-                            text = if (speed > 1F) "${speed}X"
+                            text = if (speed != 1F) "${speed}X"
                             else App.context.getString(R.string.play_speed)
 
                             vgRightContainer?.gone()
@@ -467,7 +468,6 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
         )
 
         override fun onBind(data: EpisodeData) {
-            //TODO 使用tag标记选集
             binding.vcPlayEpisodeName.apply {
                 setTextColor(if (bindingAdapterPosition == bindingTypeAdapter.getTag<Int>()) Const.Player.SELECT_ITEM_COLOR else Const.Player.UNSELECT_ITEM_COLOR)
             }.text = data.name
