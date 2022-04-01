@@ -524,7 +524,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
         override fun onBind(data: Float) {
             binding.itemPlayerSpeedName.apply {
                 setTextColor(if (bindingAdapterPosition == bindingTypeAdapter.getTag<Int>()) Const.Player.SELECT_ITEM_COLOR else Const.Player.UNSELECT_ITEM_COLOR)
-            }.text = data.toString()
+            }.text = "${data}X"
         }
     }
 
@@ -1229,5 +1229,10 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
     fun enableDismissControlViewTimer(start: Boolean) {
         if (start) super.startDismissControlViewTimer()
         else super.cancelDismissControlViewTimer()
+    }
+
+    override fun lockTouchLogic() {
+        super.lockTouchLogic()
+        mLockScreen.setImageResource(if (mLockCurScreen) R.drawable.ic_outline_lock_24 else R.drawable.ic_outline_lock_open_24)
     }
 }
