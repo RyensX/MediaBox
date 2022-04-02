@@ -104,6 +104,8 @@
     <string name="play_sound_only">只播放音频</string>
     <string name="vertical_reverse">上下镜像</string>
     <string name="horizontal_reverse">左右镜像</string>
+    <string name="play_error_retry">点击重试</string>
+    <string name="play_error">播放错误，网络错误或目标资源已失效</string>
     <string name="reverse">镜像</string>
     <string name="no_reverse">正常</string>
     <string name="bottom_progress">底部进度条</string>

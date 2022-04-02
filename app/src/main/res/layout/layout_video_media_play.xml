@@ -18,6 +18,17 @@
             android:gravity="center" />
     </FrameLayout>
 
+    <Button
+        android:id="@+id/play_error_retry"
+        style="@style/Widget.AppCompat.Button.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:backgroundTint="@color/main_color_2_skin"
+        android:text="@string/play_error_retry"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
     <com.kuaishou.akdanmaku.ui.DanmakuView
         android:id="@+id/danmaku_view"
         android:layout_width="match_parent"
@@ -301,10 +312,10 @@
             android:layout_height="wrap_content"
             android:ellipsize="marquee"
             android:focusable="true"
+            android:gravity="center"
             android:marqueeRepeatLimit="marquee_forever"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
-            android:gravity="center"
             android:singleLine="true"
             android:textColor="@color/foreground_white_skin"
             android:textSize="14sp"
