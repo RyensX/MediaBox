@@ -27,7 +27,7 @@ import com.su.mediabox.view.adapter.SearchAdapter
 import com.su.mediabox.viewmodel.ClassifyViewModel
 import com.su.mediabox.view.listener.dsl.setOnItemSelectedListener
 
-
+@Deprecated("V2后废弃")
 class ClassifyActivity : BasePluginActivity<ActivityClassifyBinding>() {
     private lateinit var viewModel: ClassifyViewModel
     private var lastRefreshTime: Long = System.currentTimeMillis() - 500

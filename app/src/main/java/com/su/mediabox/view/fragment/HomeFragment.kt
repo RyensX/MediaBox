@@ -27,6 +27,7 @@ import com.su.mediabox.viewmodel.HomeViewModel
 import com.su.mediabox.pluginapi.Constant
 import com.su.mediabox.util.clickScale
 import com.su.mediabox.util.setViewsOnClickListener
+import com.su.mediabox.v2.view.activity.MediaClassifyActivity
 import com.su.mediabox.v2.view.activity.VideoFavoriteActivity
 import com.su.mediabox.view.listener.dsl.addOnTabSelectedListener
 import org.greenrobot.eventbus.EventBus
@@ -150,7 +151,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), View.OnClickListener, 
                     it1.overridePendingTransition(R.anim.anl_push_left_in, R.anim.anl_stay)
                 }
                 ivHomeFragmentClassify -> startActivity(
-                    Intent(activity, ClassifyActivity::class.java)
+                    Intent(activity, MediaClassifyActivity::class.java)
                 )
                 tvHomeFragmentHeaderSearch -> activity?.let {
                     process(Constant.ActionUrl.ANIME_SEARCH)
