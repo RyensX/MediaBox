@@ -10,12 +10,14 @@ import com.shuyu.gsyvideoplayer.utils.GSYVideoType
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils
 import com.su.mediabox.databinding.ActivityVideoMediaPlayBinding
 import com.su.mediabox.pluginapi.v2.action.PlayAction
+import com.su.mediabox.pluginapi.v2.been.EpisodeData
 import com.su.mediabox.util.Util.setFullScreen
 import com.su.mediabox.util.getAction
 import com.su.mediabox.util.gone
 import com.su.mediabox.util.showToast
 import com.su.mediabox.v2.viewmodel.VideoMediaPlayViewModel
 import com.su.mediabox.view.activity.BasePluginActivity
+import com.su.mediabox.view.component.player.VideoMediaPlayer
 import com.su.mediabox.view.component.player.VideoPositionMemoryDbStore
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
 import tv.danmaku.ijk.media.player.IjkMediaPlayer
@@ -25,46 +27,48 @@ class VideoMediaPlayActivity : BasePluginActivity<ActivityVideoMediaPlayBinding>
     private lateinit var orientationUtils: OrientationUtils
     private val viewModel by viewModels<VideoMediaPlayViewModel>()
 
-    @Deprecated("全部更新V2后移除")
     companion object {
+        @Deprecated("全部更新V2后移除")
         const val INTENT_EPISODE = "episodeUrl"
+
+        @Deprecated("全部更新V2后移除")
         const val INTENT_COVER = "coverUrl"
+
+        @Deprecated("全部更新V2后移除")
         const val INTENT_DPU = "detailPartUrl"
+
+        @Deprecated("全部更新V2后移除")
         const val INTENT_NAME = "videoName"
+
+        var playList: List<EpisodeData>? = null
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        VideoMediaPlayer.playViewModel = viewModel
         super.onCreate(savedInstanceState)
 
         setFullScreen(window)
         init()
 
-        getAction<PlayAction>()?.also {
+        getAction<PlayAction>()?.also { action ->
             viewModel.apply {
-                detailPartUrl = it.detailPartUrl
-                coverUrl = it.detailPartUrl
-                videoName = it.videoName
+                detailPartUrl = action.detailPartUrl
+                coverUrl = action.coverUrl
+                videoName = action.videoName
             }
 
             viewModel.apply {
                 //视频
                 currentVideoPlayMedia.observe(this@VideoMediaPlayActivity) {
-                    mBinding.vmPlay.apply {
-                        setUp(
-                            it.videoPlayUrl, false,
-                            String.format("%s %s", viewModel.videoName, it.title)
-                        )
-                        startPlayLogic()
-                    }
+                    mBinding.vmPlay.playVideo(it.videoPlayUrl, it.title, viewModel.videoName)
                 }
                 //弹幕
                 currentDanmakuData.observe(this@VideoMediaPlayActivity) {
                     mBinding.vmPlay.setDanmakuUrl(it.first, it.second)
                 }
-                //TODO 选集传递，支持快速切换和上下切换
             }
 
-            viewModel.playVideoMedia(it.episodeUrl)
+            viewModel.playVideoMedia(action.episodeUrl)
         } ?: run {
             "播放信息错误".showToast()
             finish()
@@ -101,8 +105,8 @@ class VideoMediaPlayActivity : BasePluginActivity<ActivityVideoMediaPlayBinding>
                 }
 
                 override fun onAutoComplete(url: String?, vararg objects: Any?) {
-                    finish()
-                    //TODO 自动跳转下一集
+                    //自动切换下一集
+                    playNextEpisode()
                 }
             })
 
@@ -134,5 +138,8 @@ class VideoMediaPlayActivity : BasePluginActivity<ActivityVideoMediaPlayBinding>
         mBinding.vmPlay.setVideoAllCallBack(null)
         GSYVideoManager.releaseAllVideos()
         orientationUtils.releaseListener()
+        //释放播放列表
+        playList = null
+        VideoMediaPlayer.playViewModel = null
     }
 }

@@ -16,6 +16,7 @@ import com.su.mediabox.util.showToast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+@Deprecated("V2后废弃")
 class ClassifyViewModel : ViewModel() {
     private val classifyModel: IClassifyComponent by lazy(LazyThreadSafetyMode.NONE) {
         PluginManager.acquireComponent(IClassifyComponent::class.java)

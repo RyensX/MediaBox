@@ -18,6 +18,17 @@
             android:gravity="center" />
     </FrameLayout>
 
+    <Button
+        android:id="@+id/play_error_retry"
+        style="@style/Widget.AppCompat.Button.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:backgroundTint="@color/main_color_2_skin"
+        android:text="@string/play_error_retry"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
     <com.kuaishou.akdanmaku.ui.DanmakuView
         android:id="@+id/danmaku_view"
         android:layout_width="match_parent"
@@ -43,7 +54,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_bottom"
         android:layout_width="match_parent"
-        android:layout_height="85dp"
+        android:layout_height="90dp"
         android:layout_alignParentBottom="true"
         android:background="@drawable/shape_gray_transparent_angle_90"
         android:paddingTop="20dp"
@@ -55,7 +66,7 @@
             android:layout_height="17dp"
             android:background="@null"
             android:max="100"
-            android:maxHeight="2dp"
+            android:maxHeight="1dp"
             android:minHeight="2dp"
             android:paddingTop="7dp"
             android:paddingBottom="7dp"
@@ -67,7 +78,7 @@
 
         <ImageView
             android:id="@+id/start"
-            android:layout_width="48dp"
+            android:layout_width="36dp"
             android:layout_height="0px"
             android:layout_marginStart="10dp"
             android:paddingHorizontal="5dp"
@@ -78,14 +89,15 @@
 
         <ImageView
             android:id="@+id/iv_next"
-            android:layout_width="40dp"
+            android:layout_width="36dp"
             android:layout_height="0px"
             android:paddingHorizontal="5dp"
             android:src="@drawable/ic_skip_next_white_24"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/start"
-            app:layout_constraintTop_toBottomOf="@id/progress" />
+            app:layout_constraintTop_toBottomOf="@id/progress"
+            tools:visibility="visible" />
 
         <com.su.mediabox.view.component.textview.TypefaceTextView
             android:id="@+id/current"
@@ -93,7 +105,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:textColor="@color/foreground_white_skin"
-            android:textSize="13sp"
+            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/iv_next"
             app:layout_constraintTop_toBottomOf="@id/progress"
@@ -118,7 +130,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/foreground_white_skin"
-            android:textSize="13sp"
+            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/split"
             app:layout_constraintTop_toBottomOf="@id/progress"
@@ -155,9 +167,24 @@
             android:focusable="true"
             android:gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/tv_speed"
+            app:layout_constraintEnd_toStartOf="@id/tv_episode"
             app:layout_constraintStart_toEndOf="@id/et_input_danmu"
             app:layout_constraintTop_toBottomOf="@id/progress" />
+
+        <com.su.mediabox.view.component.textview.TypefaceTextView
+            android:id="@+id/tv_episode"
+            android:layout_width="wrap_content"
+            android:layout_height="0px"
+            android:gravity="center"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:text="@string/choose_episode"
+            android:textColor="@color/foreground_white_skin"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_speed"
+            app:layout_constraintTop_toBottomOf="@id/progress"
+            app:typeface="bPRTypeface" />
 
         <com.su.mediabox.view.component.textview.TypefaceTextView
             android:id="@+id/tv_speed"
@@ -178,24 +205,26 @@
             android:id="@+id/tv_more_scale"
             android:layout_width="wrap_content"
             android:layout_height="0px"
+            android:layout_marginEnd="12dp"
             android:gravity="center"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
             android:textColor="@color/foreground_white_skin"
             android:textSize="13sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/fullscreen"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/progress"
             app:typeface="bPRTypeface"
             tools:text="4:3" />
 
         <ImageView
             android:id="@+id/fullscreen"
-            android:layout_width="wrap_content"
-            android:layout_height="0px"
-            android:layout_marginEnd="10dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="16dp"
             android:adjustViewBounds="true"
             android:padding="12dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/progress"
@@ -252,9 +281,9 @@
         android:layout_height="30dp"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:layout_marginEnd="50dp"
+        android:layout_marginEnd="36dp"
         android:scaleType="centerInside"
-        android:src="@drawable/unlock"
+        android:src="@drawable/ic_outline_lock_open_24"
         android:visibility="gone" />
 
     <!--高度都加了20dp，让阴影往下延伸一点-->
@@ -268,11 +297,10 @@
 
         <ImageView
             android:id="@+id/back"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
             android:paddingStart="10dp"
-            android:paddingEnd="0px"
-            android:scaleType="centerInside"
+            android:paddingEnd="0dp"
             android:src="@drawable/ic_arrow_back_ios_white_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -284,12 +312,13 @@
             android:layout_height="wrap_content"
             android:ellipsize="marquee"
             android:focusable="true"
+            android:gravity="center"
             android:marqueeRepeatLimit="marquee_forever"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
             android:singleLine="true"
             android:textColor="@color/foreground_white_skin"
-            android:textSize="18sp"
+            android:textSize="14sp"
             app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/iv_setting"
@@ -300,8 +329,8 @@
 
         <ImageView
             android:id="@+id/iv_setting"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
             android:paddingStart="0px"
             android:paddingEnd="10dp"
             android:scaleType="centerInside"
@@ -317,7 +346,7 @@
             android:layout_marginEnd="16dp"
             android:format24Hour="HH:mm"
             android:textColor="@color/foreground_white_skin"
-            android:textSize="16sp"
+            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/iv_setting"
             app:layout_constraintTop_toTopOf="parent" />
@@ -339,7 +368,7 @@
 
     <RelativeLayout
         android:id="@+id/layout_right"
-        android:layout_width="150dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_alignParentEnd="true"
         android:background="@color/gray_2"
@@ -348,10 +377,20 @@
         tools:visibility="gone">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_right"
-            android:layout_width="match_parent"
+            android:id="@+id/rv_episode"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true" />
+            android:layout_centerInParent="true"
+            android:padding="8dp"
+            android:visibility="gone" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_speed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+
     </RelativeLayout>
 
     <androidx.core.widget.NestedScrollView
@@ -361,7 +400,8 @@
         android:layout_alignParentEnd="true"
         android:background="@color/gray_2"
         android:clickable="true"
-        android:focusable="true">
+        android:focusable="true"
+        tools:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="wrap_content"

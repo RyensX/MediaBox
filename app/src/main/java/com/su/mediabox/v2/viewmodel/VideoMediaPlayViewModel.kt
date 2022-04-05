@@ -35,6 +35,7 @@ class VideoMediaPlayViewModel : ViewModel() {
             //开始解析
             viewModelScope.launch(Dispatchers.PluginIO) {
                 playComponent.getVideoPlayMedia(episodeUrl).also {
+               // VideoPlayMedia("测试","file:///storage/emulated/0/Android/data/com.su.mediabox.debug/files/DownloadAnime/萌萌侵略者/GEfErSXSJIsA.mp4").also {
                     currentVideoPlayMedia.postValue(it)
                     //记录历史
                     viewModelScope.apply {

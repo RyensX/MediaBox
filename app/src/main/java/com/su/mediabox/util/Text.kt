@@ -30,4 +30,13 @@ object Text {
             num += length
         return num
     }
+
+    /**
+     * 格式化合成字符串，生成类似"1 - 2 - 3"这样的字符串，空白或者null不会加上多余分隔符
+     */
+    fun formatMergedStr(delimiter: String, vararg strs: String?) = StringBuilder().apply {
+        for (str in strs)
+            if (!str.isNullOrBlank())
+                append(str).append(delimiter)
+    }.removeSuffix(delimiter).toString()
 }

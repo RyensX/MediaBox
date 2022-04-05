@@ -13,6 +13,7 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
+import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.view.Window
@@ -531,6 +532,7 @@ object Util {
     inline fun <T> withoutExceptionGet(block: () -> T) = try {
         block()
     } catch (e: Exception) {
+        Log.d("取值错误", e.message ?: "")
         e.printStackTrace()
         null
     }

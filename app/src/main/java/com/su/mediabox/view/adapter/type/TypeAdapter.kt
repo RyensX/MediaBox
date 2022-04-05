@@ -89,14 +89,18 @@ class TypeAdapter(
     /**
      * 用于父子VH交换信息
      */
-    private var tag: Any? = null
+    val tags by lazy { mutableMapOf<String, Any?>() }
 
-    fun setTag(data: Any?) {
-        tag = data
+    /**
+     * 不主动指定[key]要非常注意null，key会变成""覆盖或者设置错值
+     */
+    fun setTag(data: Any?, key: String = data?.javaClass?.simpleName ?: "") {
+        tags[key] = data
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun <T> getTag(): T? = withoutExceptionGet { tag as? T }
+    inline fun <reified T> getTag(key: String = T::class.java.simpleName): T? =
+        withoutExceptionGet { tags[key] as? T }
 
     //<VH的Class,对应Listener>
     val clickListeners = mutableMapOf<Class<*>, TypeViewHolder<*>.(position: Int) -> Unit>()

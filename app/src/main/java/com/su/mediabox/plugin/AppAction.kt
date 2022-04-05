@@ -5,12 +5,11 @@ import android.content.Intent
 import com.su.mediabox.pluginapi.v2.action.*
 import com.su.mediabox.util.goActivity
 import com.su.mediabox.util.putAction
+import com.su.mediabox.v2.view.activity.MediaClassifyActivity
 import com.su.mediabox.v2.view.activity.VideoDetailActivity
 import com.su.mediabox.v2.view.activity.VideoMediaPlayActivity
 import com.su.mediabox.v2.view.activity.VideoSearchActivity
-import com.su.mediabox.view.activity.ClassifyActivity
 import com.su.mediabox.view.activity.WebViewActivity
-import kotlin.concurrent.thread
 
 /**
  * 内置数据动作
@@ -26,7 +25,7 @@ object AppAction {
             routeToComponentPage<PlayAction, VideoMediaPlayActivity>()
         }
         ClassifyAction.GO = {
-            routeToComponentPage<ClassifyAction, ClassifyActivity>()
+            routeToComponentPage<ClassifyAction, MediaClassifyActivity>()
         }
         SearchAction.GO = {
             routeToComponentPage<SearchAction, VideoSearchActivity>()

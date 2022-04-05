@@ -85,7 +85,7 @@
             android:name="com.su.mediabox.view.activity.MonthAnimeActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
-            android:name="com.su.mediabox.view.activity.ClassifyActivity"
+            android:name=".v2.view.activity.MediaClassifyActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
             android:name="com.su.mediabox.view.activity.RankActivity"

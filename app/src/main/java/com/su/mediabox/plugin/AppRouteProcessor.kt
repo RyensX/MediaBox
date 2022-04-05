@@ -10,6 +10,7 @@ import com.su.mediabox.util.Util
 import com.su.mediabox.util.showToast
 import com.su.mediabox.view.activity.*
 import com.su.mediabox.pluginapi.Constant.ActionUrl
+import com.su.mediabox.v2.view.activity.MediaClassifyActivity
 import com.su.mediabox.v2.view.activity.VideoDetailActivity
 import com.su.mediabox.v2.view.activity.VideoMediaPlayActivity
 import com.su.mediabox.v2.view.activity.VideoSearchActivity
@@ -124,7 +125,7 @@ object AppRouteProcessor :
             //打开分类页面
             matchAndGetParams(actionUrl, ActionUrl.ANIME_CLASSIFY) {
                 activity.startActivity(
-                    Intent(activity, ClassifyActivity::class.java)
+                    Intent(activity, MediaClassifyActivity::class.java)
                         //具体分类的链接
                         .putExtra("partUrl", it[0])
                         //如地区

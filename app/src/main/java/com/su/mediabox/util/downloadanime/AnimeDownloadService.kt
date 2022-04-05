@@ -61,7 +61,7 @@ class AnimeDownloadService : Service() {
                     val file = File("$animeFilePath$animeDir/$fileName")
                     if (file.exists()) {
                         downloadHashMap[key]?.postValue(AnimeDownloadStatus.COMPLETE)
-                        GlobalScope.launch(Dispatchers.IO) {
+                        coroutineScope.launch(Dispatchers.IO) {
                             file.toMD5()?.let {
                                 val entity = AnimeDownloadEntity(it, title, fileName)
                                 getAppDataBase().animeDownloadDao().insertAnimeDownload(entity)

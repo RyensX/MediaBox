@@ -46,7 +46,7 @@
     <string name="no_download_video">没有缓存视频</string>
     <string name="read_download_data_file">正在读取缓存文件…</string>
     <string name="play_list">播放列表</string>
-    <string name="episode_bottom_sheet_format">共%d集</string>
+    <string name="episode_bottom_sheet_format">共%d集（长按缓存）</string>
     <string name="check_update_server">检查更新服务器</string>
     <string name="play_speed">倍速</string>
     <string name="device_list">设备列表</string>
@@ -104,6 +104,8 @@
     <string name="play_sound_only">只播放音频</string>
     <string name="vertical_reverse">上下镜像</string>
     <string name="horizontal_reverse">左右镜像</string>
+    <string name="play_error_retry">点击重试</string>
+    <string name="play_error">播放错误，网络错误或目标资源已失效</string>
     <string name="reverse">镜像</string>
     <string name="no_reverse">正常</string>
     <string name="bottom_progress">底部进度条</string>
@@ -147,7 +149,7 @@
     <string name="fail_to_parse_page_url">解析网页地址失败</string>
     <string name="loading_danmaku">加载弹幕中…</string>
     <string name="the_video_has_danmaku">此视频含弹幕</string>
-    <string name="send_a_danmaku">发个弹幕吧…</string>
+    <string name="send_a_danmaku">发个弹幕见证当下</string>
     <string name="send_a_danmaku_is_disabled">发送弹幕功能不可用</string>
     <string name="send_danmaku_failed">发送弹幕失败，%s</string>
     <string name="please_input_danmaku_text">请输入弹幕内容！</string>
@@ -220,4 +222,5 @@
     <string name="already_seen_episode_x">看到 %s</string>
     <string name="all_history_count">%d条</string>
     <string name="item_unknown_type">未知类型</string>
+    <string name="classify_title">媒体分类</string>
 </resources>

@@ -288,7 +288,7 @@
         tools:visibility="gone">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_right"
+            android:id="@+id/rv_speed"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true" />

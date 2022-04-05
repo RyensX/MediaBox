@@ -7,13 +7,13 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Matrix
 import android.util.AttributeSet
+import android.util.Log
 import android.view.*
 import android.view.View.OnClickListener
 import android.widget.*
 import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.children
 import androidx.core.view.isVisible
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.shuyu.gsyvideoplayer.utils.CommonUtil
 import com.shuyu.gsyvideoplayer.utils.Debuger
@@ -25,22 +25,23 @@ import com.shuyu.gsyvideoplayer.video.base.GSYVideoView
 import com.su.mediabox.App
 import com.su.mediabox.R
 import com.su.mediabox.config.Const
-import com.su.mediabox.pluginapi.been.BaseBean
-import com.su.mediabox.util.*
+import com.su.mediabox.databinding.ItemPlayEpisodeBinding
+import com.su.mediabox.databinding.ItemPlayerSpeedBinding
 import com.su.mediabox.pluginapi.UI.dp
-import com.su.mediabox.util.Util.getResColor
+import com.su.mediabox.pluginapi.v2.been.EpisodeData
+import com.su.mediabox.util.*
 import com.su.mediabox.util.Util.getResDrawable
 import com.su.mediabox.util.Util.getScreenBrightness
 import com.su.mediabox.util.Util.openVideoByExternalPlayer
+import com.su.mediabox.v2.view.activity.VideoMediaPlayActivity
+import com.su.mediabox.v2.viewmodel.VideoMediaPlayViewModel
 import com.su.mediabox.view.activity.DlnaActivity
-import com.su.mediabox.view.adapter.SkinRvAdapter
+import com.su.mediabox.view.adapter.type.*
 import com.su.mediabox.view.component.ZoomView
 import com.su.mediabox.view.component.textview.TypefaceTextView
 import com.su.mediabox.view.listener.dsl.setOnSeekBarChangeListener
-import com.su.skin.SkinManager
 import kotlinx.coroutines.*
 import java.io.File
-import java.io.Serializable
 import kotlin.math.abs
 
 //TODO 太乱了，需要后续整理重写
@@ -64,6 +65,8 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
         val playPositionMemoryStoreCoroutineScope by lazy(LazyThreadSafetyMode.NONE) {
             CoroutineScope(Dispatchers.Default)
         }
+
+        var playViewModel: VideoMediaPlayViewModel? = null
 
     }
 
@@ -98,6 +101,11 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
 
     //速度
     private var mPlaySpeed = 1f
+
+    //选集
+    private var tvEpisode: TextView? = null
+    private var rvEpisode: RecyclerView? = null
+    private var videoName = ""
 
     //投屏按钮
     var ivCling: ImageView? = null
@@ -157,6 +165,9 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
     private var tvTouchDownHighSpeed: TextView? = null
     private var mLongPressing: Boolean = false
 
+    //播放错误重试
+    private var playErrorRetry: Button? = null
+
     // 还原屏幕
     private var tvRestoreScreen: TextView? = null
 
@@ -206,7 +217,9 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
         tvMoreScale = findViewById(R.id.tv_more_scale)
         tvSpeed = findViewById(R.id.tv_speed)
         vgRightContainer = findViewById(R.id.layout_right)
-        rvSpeed = findViewById(R.id.rv_right)
+        rvSpeed = findViewById(R.id.rv_speed)
+        tvEpisode = findViewById(R.id.tv_episode)
+        rvEpisode = findViewById(R.id.rv_episode)
         ivShare = findViewById(R.id.iv_play_activity_toolbar_share)
         ivNextEpisode = findViewById(R.id.iv_next)
         ivSetting = findViewById(R.id.iv_setting)
@@ -228,6 +241,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
         vgPlayPosition = findViewById(R.id.ll_play_position_view)
         tvPlayPosition = findViewById(R.id.tv_play_position_time)
         ivClosePlayPositionTip = findViewById(R.id.iv_close_play_position_tip)
+        playErrorRetry = findViewById(R.id.play_error_retry)
 
         vgRightContainer?.gone()
         vgSettingContainer?.gone()
@@ -260,24 +274,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
                 it.gone()
             }
         }
-        tvSpeed?.setOnClickListener {
-            //TODO 需要改进
-            vgRightContainer?.let {
-                val adapter = SpeedAdapter(
-                    listOf(
-                        SpeedBean("speed", "", "0.5"),
-                        SpeedBean("speed", "", "0.75"),
-                        SpeedBean("speed", "", "1"),
-                        SpeedBean("speed", "", "1.25"),
-                        SpeedBean("speed", "", "1.5"),
-                        SpeedBean("speed", "", "2")
-                    )
-                )
-                rvSpeed?.layoutManager = LinearLayoutManager(context)
-                rvSpeed?.adapter = adapter
-            }
-            showRightContainer()
-        }
+
         ivSetting?.setOnClickListener { showSettingContainer() }
         mReverseValue = rgReverse?.getChildAt(0)?.id
         rgReverse?.children?.forEach {
@@ -342,6 +339,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
             }
         }
 
+        //投屏
         tvDlna?.setOnClickListener {
             val url = getUrl()
             if (url == null) {
@@ -354,6 +352,166 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
                     .putExtra("title", getTitle()), null
             )
         }
+
+        //播放列表
+        tvEpisode?.apply {
+            //只有存在选集数据和VM才显示选集
+            if (VideoMediaPlayActivity.playList == null || playViewModel == null) {
+                gone()
+                return@apply
+            }
+            rvEpisode
+                ?.grid(4)
+                ?.initTypeList(DataViewMapList().registerDataViewMap<EpisodeData, PlayerEpisodeViewHolder>()) {
+                    addViewHolderClickListener<PlayerEpisodeViewHolder> { pos ->
+                        val adapter = bindingTypeAdapter
+                        adapter.getData<EpisodeData>(pos)?.also { episodeData ->
+                            //更新上次选项
+                            adapter.getTag<Int>()?.also {
+                                adapter.notifyItemChanged(it)
+                            }
+                            //更新当前选项
+                            adapter.notifyItemChanged(pos)
+                            //标记当前选集pos
+                            adapter.setTag(pos)
+                            playViewModel?.playVideoMedia(episodeData.url)
+                        }
+                    }
+                }
+            setOnClickListener(this@VideoMediaPlayer)
+            //下一集
+            ivNextEpisode?.apply {
+                setOnClickListener {
+                    playNextEpisode()
+                }
+            }
+        }
+
+        //播放速度
+        tvSpeed?.apply {
+            rvSpeed
+                ?.linear()
+                ?.initTypeList(DataViewMapList().registerDataViewMap<Float, PlaySpeedViewHolder>()) {
+                    addViewHolderClickListener<PlaySpeedViewHolder> { pos ->
+                        val adapter = bindingTypeAdapter
+                        adapter.getData<Float>(pos)?.also { speed ->
+                            setSpeed(speed, true)
+                            text = if (speed != 1F) "${speed}X"
+                            else App.context.getString(R.string.play_speed)
+
+                            vgRightContainer?.gone()
+                            startDismissControlViewTimer()
+
+                            //更新当前选项
+                            adapter.notifyItemChanged(pos)
+                            //更新上次选项
+                            adapter.getTag<Int>()?.also {
+                                adapter.notifyItemChanged(it)
+                            }
+
+                            //tag标记当前速度的pos
+                            adapter.setTag(pos)
+                        }
+                    }
+                }
+            setOnClickListener(this@VideoMediaPlayer)
+        }
+
+        //重试
+        playErrorRetry?.setOnClickListener(this)
+    }
+
+    fun playVideo(
+        playUrl: String,
+        episodeName: String,
+        videoName: String = this.videoName,
+        cacheWithPlay: Boolean = false
+    ) {
+        if (this.videoName.isBlank())
+        //为了使下一集按钮有效，需要在第一次加载时初始化播放列表的初始定位
+            playPositionMemoryStoreCoroutineScope.launch {
+                //查找初始定位
+                VideoMediaPlayActivity.playList?.forEachIndexed { index, episodeData ->
+                    if (episodeData.url.isNotBlank() && episodeData.url == playViewModel?.currentPlayEpisodeUrl) {
+                        Log.d("找到初始标记", index.toString())
+                        rvEpisode?.typeAdapter()?.setTag(index)
+                        return@forEachIndexed
+                    }
+                }
+            }
+        this.videoName = videoName
+
+        setUp(playUrl, cacheWithPlay, String.format("%s %s", videoName, episodeName))
+        startPlayLogic()
+    }
+
+    /**
+     * 切换下一集
+     * @return 是否有下一集可切换
+     */
+    fun playNextEpisode(): Boolean {
+        val episodeAdapter = rvEpisode?.typeAdapter()
+        episodeAdapter?.getTag<Int>()?.also { pos ->
+            if (pos < (VideoMediaPlayActivity.playList?.size ?: pos) - 1)
+                VideoMediaPlayActivity.playList?.getOrNull(pos + 1)?.url?.also {
+                    episodeAdapter.apply {
+                        //更新上次选项
+                        notifyItemChanged(pos)
+                        //更新当前选项
+                        notifyItemChanged(pos + 1)
+                        //更新标记
+                        episodeAdapter.setTag(pos + 1)
+                    }
+                    playViewModel?.playVideoMedia(it)
+                    return true
+                }
+            else {
+                "已是最后一集".showToast()
+                return false
+            }
+        }
+        return false
+    }
+
+    override fun onError(what: Int, extra: Int) {
+        super.onError(what, extra)
+        context.getString(R.string.play_error).showToast(Toast.LENGTH_LONG)
+    }
+
+    class PlayerEpisodeViewHolder private constructor(private val binding: ItemPlayEpisodeBinding) :
+        TypeViewHolder<EpisodeData>(binding.root) {
+
+        constructor(parent: ViewGroup) : this(
+            ItemPlayEpisodeBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
+
+        override fun onBind(data: EpisodeData) {
+            binding.vcPlayEpisodeName.apply {
+                setTextColor(if (bindingAdapterPosition == bindingTypeAdapter.getTag<Int>()) Const.Player.SELECT_ITEM_COLOR else Const.Player.UNSELECT_ITEM_COLOR)
+            }.text = data.name
+        }
+    }
+
+    class PlaySpeedViewHolder private constructor(private val binding: ItemPlayerSpeedBinding) :
+        TypeViewHolder<Float>(binding.root) {
+
+        constructor(parent: ViewGroup) : this(
+            ItemPlayerSpeedBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
+
+        override fun onBind(data: Float) {
+            binding.itemPlayerSpeedName.apply {
+                setTextColor(if (bindingAdapterPosition == bindingTypeAdapter.getTag<Int>()) Const.Player.SELECT_ITEM_COLOR else Const.Player.UNSELECT_ITEM_COLOR)
+            }.text = "${data}X"
+        }
     }
 
     fun getUrl(): String? = mUrl
@@ -361,6 +519,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
     fun getTitle(): String = mTitle
 
     private fun showSettingContainer() {
+        mLockScreen?.gone()
         vgSettingContainer?.let {
             hideAllWidget()
             it.translationX = 150f.dp
@@ -396,6 +555,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
     }
 
     private fun showRightContainer() {
+        mLockScreen?.gone()
         vgRightContainer?.let {
             hideAllWidget()
             it.translationX = 150f.dp
@@ -678,6 +838,11 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
         super.changeUiToPreparingShow()
         viewTopContainerShadow?.visible()
         mUiCleared = false
+
+        if (VideoMediaPlayActivity.playList != null)
+            ivNextEpisode?.gone()
+
+        playErrorRetry?.gone()
     }
 
     //播放中
@@ -690,6 +855,11 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
 //        }
         initFirstLoad = false
         mUiCleared = false
+
+        if (VideoMediaPlayActivity.playList != null)
+            ivNextEpisode?.visible()
+
+        ivSetting?.visible()
     }
 
     //自动播放结束
@@ -708,6 +878,12 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
         viewTopContainerShadow?.invisible()
 
         if (vgPlayPosition?.isVisible == true) ivClosePlayPositionTip?.callOnClick()
+
+        mLockScreen?.gone()
+        //不隐藏顶栏以提醒是哪集错误
+        mTopContainer?.visible()
+        playErrorRetry?.visible()
+        ivSetting?.gone()
     }
 
     override fun changeUiToPrepareingClear() {
@@ -762,13 +938,15 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
     }
 
     override fun onClick(v: View) {
-        super.onClick(v)
+        if (currentState != GSYVideoView.CURRENT_STATE_ERROR)
+            super.onClick(v)
 
         when (v.id) {
             // bigger_surface代替原有的surface_container执行点击动作
             R.id.bigger_surface -> {
                 vgSettingContainer?.gone()
                 vgRightContainer?.gone()
+                rvEpisode?.gone()
                 if (mCurrentState == GSYVideoView.CURRENT_STATE_ERROR) {
                     if (mVideoAllCallBack != null) {
                         Debuger.printfLog("onClickStartError")
@@ -791,8 +969,40 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
             R.id.thumb -> {
                 vgSettingContainer?.gone()
                 vgRightContainer?.gone()
+                rvEpisode?.gone()
             }
             R.id.back -> (context as Activity).finish()
+            //重试
+            R.id.play_error_retry -> prepareVideo()
+            //播放速度控制
+            R.id.tv_speed -> {
+                rvEpisode?.gone()
+                rvSpeed?.visible()
+                showRightContainer()
+                val adapter = rvSpeed?.typeAdapter()
+                if (adapter?.currentList.isNullOrEmpty()) {
+                    adapter?.setTag(2)
+                    adapter?.submitList(listOf(0.5F, 0.75F, 1F, 1.25F, 1.5F, 2F, 4F, 8F))
+                }
+                adapter?.getTag<Int>()?.also {
+                    rvSpeed?.smartScrollToPosition(it)
+                }
+            }
+            //播放选集列表
+            R.id.tv_episode -> {
+                rvSpeed?.gone()
+                rvEpisode?.apply {
+                    val adapter = typeAdapter()
+                    isVisible = true
+                    showRightContainer()
+                    adapter.submitList(VideoMediaPlayActivity.playList) {
+                        //定位
+                        adapter.getTag<Int>()?.also {
+                            smartScrollToPosition(it)
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -1049,50 +1259,8 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
         else super.cancelDismissControlViewTimer()
     }
 
-    class SpeedBean(
-        override var type: String,
-        override var actionUrl: String,
-        var title: String
-    ) : BaseBean, Serializable
-
-    inner class SpeedAdapter(val list: List<SpeedBean>) : SkinRvAdapter() {
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-            return AnimeVideoPlayer.RightRecyclerViewViewHolder(
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_player_list_item_1, parent, false)
-            ).apply { SkinManager.setSkin(itemView) }
-        }
-
-        @SuppressLint("SetTextI18n")
-        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-            super.onBindViewHolder(holder, position)
-            val item = list[position]
-
-            when (holder) {
-                is AnimeVideoPlayer.RightRecyclerViewViewHolder -> {
-                    if (item.type == "speed") {
-                        if (item.title.toFloat() == speed) {
-                            holder.tvTitle.setTextColor(context.getResColor(R.color.unchanged_main_color_2_skin))
-                        }
-                        holder.tvTitle.text = item.title
-                        holder.itemView.setOnClickListener {
-                            if (item.title == "1") {
-                                tvSpeed?.text = App.context.getString(R.string.play_speed)
-                            } else {
-                                tvSpeed?.text = item.title + "X"
-                            }
-                            mPlaySpeed = item.title.toFloat()
-                            setSpeed(mPlaySpeed, true)
-                            vgRightContainer?.gone()
-                            //因为右侧界面显示时，不在xx秒后隐藏界面，所以要恢复xx秒后隐藏控制界面
-                            startDismissControlViewTimer()
-                        }
-                    }
-                }
-            }
-        }
-
-        override fun getItemCount(): Int = list.size
+    override fun lockTouchLogic() {
+        super.lockTouchLogic()
+        mLockScreen.setImageResource(if (mLockCurScreen) R.drawable.ic_outline_lock_24 else R.drawable.ic_outline_lock_open_24)
     }
 }

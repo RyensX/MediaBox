@@ -98,6 +98,9 @@ class VideoDetailActivity : BasePluginActivity<ActivityAnimeDetailBinding>() {
             mBinding.atbAnimeDetailActivityToolbar.titleText = viewModel.title
             //详情数据
             mBinding.rvAnimeDetailActivityInfo.typeAdapter().submitList(it.second)
+
+            //嵌入当前视频名称
+            mBinding.rvAnimeDetailActivityInfo.typeAdapter().setTag(viewModel.title)
         })
 
         mBinding.srlAnimeDetailActivity.isRefreshing = true
