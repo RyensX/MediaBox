@@ -2,6 +2,7 @@ package com.su.mediabox.view.adapter.type
 
 import android.annotation.SuppressLint
 import android.util.Log
+import android.view.MotionEvent
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -10,6 +11,7 @@ import com.su.mediabox.pluginapi.v2.been.*
 import com.su.mediabox.util.Util.withoutExceptionGet
 import com.su.mediabox.util.setOnClickListener
 import com.su.mediabox.util.setOnLongClickListener
+import com.su.mediabox.util.setOnTouchListener
 import com.su.mediabox.view.viewcomponents.*
 import com.su.skin.SkinManager
 
@@ -103,8 +105,9 @@ class TypeAdapter(
         withoutExceptionGet { tags[key] as? T }
 
     //<VH的Class,对应Listener>
-    val clickListeners = mutableMapOf<Class<*>, TypeViewHolder<*>.(position: Int) -> Unit>()
-    val longClickListeners = mutableMapOf<Class<*>, TypeViewHolder<*>.(position: Int) -> Boolean>()
+    val clickListeners by lazy(LazyThreadSafetyMode.NONE) { mutableMapOf<Class<*>, TypeViewHolder<*>.(Int) -> Unit>() }
+    val longClickListeners by lazy(LazyThreadSafetyMode.NONE) { mutableMapOf<Class<*>, TypeViewHolder<*>.(Int) -> Boolean>() }
+    val touchListeners by lazy(LazyThreadSafetyMode.NONE) { mutableMapOf<Class<*>, TypeViewHolder<*>.(MotionEvent, Int) -> Boolean>() }
 
     /**
      * 为某种VH的itemView添加点击监听，重复添加会覆盖
@@ -122,6 +125,15 @@ class TypeAdapter(
     @Suppress("UNCHECKED_CAST")
     inline fun <reified V : TypeViewHolder<*>> addViewHolderLongClickListener(noinline onClick: V.(position: Int) -> Boolean) {
         longClickListeners[V::class.java] = onClick as TypeViewHolder<*>.(Int) -> Boolean
+    }
+
+    /**
+     * 为某种VH的itemView添加触摸监听，重复添加会覆盖
+     * @param V VH类型
+     */
+    @Suppress("UNCHECKED_CAST")
+    inline fun <reified V : TypeViewHolder<*>> addViewHolderTouchListener(noinline onTouch: V.(event: MotionEvent, position: Int) -> Boolean) {
+        touchListeners[V::class.java] = onTouch as TypeViewHolder<*>.(MotionEvent, Int) -> Boolean
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -163,6 +175,13 @@ class TypeAdapter(
                             setOnLongClickListener(itemView) { pos ->
                                 (this as TypeViewHolder<*>).bindingTypeAdapter.longClickListeners[vhClass]?.let {
                                     it(pos)
+                                } ?: true
+                            }
+                        //触摸
+                        if (touchListeners[vhClass] != null)
+                            setOnTouchListener(itemView) { event, pos ->
+                                (this as TypeViewHolder<*>).bindingTypeAdapter.touchListeners[vhClass]?.let {
+                                    it(event, pos)
                                 } ?: true
                             }
                     }

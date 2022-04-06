@@ -9,6 +9,7 @@ interface Const {
         const val HISTORY_INFO_TAG = "history_info_tag"
         const val EPISODE_LIST_TAG = "episode_list_tag"
         const val DEFAULT_PAGE = 1
+        const val PLAY_SPEED_TAG = "play_speed_tag"
     }
 
     object Player {

@@ -392,6 +392,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
             rvSpeed
                 ?.linear()
                 ?.initTypeList(DataViewMapList().registerDataViewMap<Float, PlaySpeedViewHolder>()) {
+                    //切换倍速
                     addViewHolderClickListener<PlaySpeedViewHolder> { pos ->
                         val adapter = bindingTypeAdapter
                         adapter.getData<Float>(pos)?.also { speed ->
@@ -400,6 +401,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
                             else App.context.getString(R.string.play_speed)
 
                             vgRightContainer?.gone()
+                            tvTouchDownHighSpeed?.gone()
                             startDismissControlViewTimer()
 
                             //更新当前选项
@@ -412,6 +414,33 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
                             //tag标记当前速度的pos
                             adapter.setTag(pos)
                         }
+                    }
+                    //临时倍速
+                    addViewHolderLongClickListener<PlaySpeedViewHolder> { pos ->
+                        getData<Float>(pos)?.also {
+                            if (speed != it) {
+                                //记录原本倍速
+                                bindingTypeAdapter.setTag(speed, Const.ViewComponent.PLAY_SPEED_TAG)
+                                setSpeed(it, true)
+                                showSpeed(it)
+                                "临时生效${it}X倍速".showToast()
+                            }
+                        }
+                        true
+                    }
+                    addViewHolderTouchListener<PlaySpeedViewHolder> { event, _ ->
+                        if (event.actionMasked == MotionEvent.ACTION_CANCEL) {
+                            //释放则恢复原本倍速
+                            bindingTypeAdapter.getTag<Float>(Const.ViewComponent.PLAY_SPEED_TAG)
+                                ?.also {
+                                    if (speed != it) {
+                                        setSpeed(it, true)
+                                        tvTouchDownHighSpeed?.gone()
+                                        "恢复${it}X倍速".showToast()
+                                    }
+                                }
+                        }
+                        false
                     }
                 }
             setOnClickListener(this@VideoMediaPlayer)
@@ -540,6 +569,14 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
 //                else GSYVideoType.disableMediaCodec()
 //                startPlayLogic()
 //            }
+        }
+    }
+
+    private fun showSpeed(speed: Float) {
+        tvTouchDownHighSpeed?.apply {
+            text =
+                mContext.getString(R.string.touch_down_high_speed, speed.toString())
+            visible()
         }
     }
 
@@ -1028,21 +1065,6 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
             if (oldUiVisibilityState == VISIBLE) changeUiToPauseShow()
             else changeUiToPauseClear()
 //            cancelDismissControlViewTimer()
-        }
-    }
-
-    override fun touchLongPress(e: MotionEvent?) {
-        e ?: return
-        if (e.pointerCount == 1) {
-            // 长按加速
-            if (!mLongPressing && e.action == MotionEvent.ACTION_DOWN && !doublePointerZoomingMoving) {
-                mLongPressing = true
-                // 此处不能设置mPlaySpeed
-                setSpeed(2f, true)
-                tvTouchDownHighSpeed?.text =
-                    mContext.getString(R.string.touch_down_high_speed, "2")
-                tvTouchDownHighSpeed?.visible()
-            }
         }
     }
 

@@ -1,6 +1,9 @@
 package com.su.mediabox.util
 
+import android.annotation.SuppressLint
 import android.util.Log
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewStub
 import android.view.animation.AlphaAnimation
@@ -61,6 +64,16 @@ inline fun RecyclerView.ViewHolder.setOnLongClickListener(
     }
 }
 
+@SuppressLint("ClickableViewAccessibility")
+inline fun RecyclerView.ViewHolder.setOnTouchListener(
+    target: View,
+    crossinline onTouch: RecyclerView.ViewHolder.(event: MotionEvent, position: Int) -> Boolean
+) {
+    target.setOnTouchListener { _, e ->
+        onTouch(e, bindingAdapterPosition)
+    }
+}
+
 fun View.OnClickListener.setViewsOnClickListener(vararg views: View) {
     views.forEach { it.setOnClickListener(this) }
 }
@@ -99,4 +112,18 @@ fun RecyclerView.smartScrollToPosition(position: Int, smoothLimit: Int = 30) {
         scrollToPosition(position)
     else
         smoothScrollToPosition(position)
+}
+
+@SuppressLint("ClickableViewAccessibility")
+fun View.setLongPress() {
+    setOnLongClickListener {
+        Log.d("长按", "sdsdsd")
+        true
+    }
+    setOnTouchListener { _, event ->
+        if (event.actionMasked == MotionEvent.ACTION_CANCEL) {
+            Log.d("释放按钮", "sdd")
+        }
+        false
+    }
 }
