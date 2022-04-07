@@ -7,8 +7,6 @@ import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.pluginapi.v2.action.ClassifyAction
 import com.su.mediabox.pluginapi.v2.been.BaseData
 import com.su.mediabox.pluginapi.v2.been.ClassifyItemData
-import com.su.mediabox.pluginapi.v2.been.GridItemData
-import com.su.mediabox.pluginapi.v2.been.VideoInfoItemData
 import com.su.mediabox.pluginapi.v2.components.IMediaClassifyDataComponent
 import com.su.mediabox.util.PluginIO
 import com.su.mediabox.util.toLiveData
@@ -31,7 +29,7 @@ class MediaClassifyViewModel : ViewModel() {
     private var _currentClassify = MutableLiveData<ClassifyAction>()
     val currentClassify = _currentClassify.toLiveData()
 
-    private val _classifyItemDataList = MutableLiveData<List<GridItemData>>()
+    private val _classifyItemDataList = MutableLiveData<List<BaseData>>()
     val classifyItemDataList = _classifyItemDataList.toLiveData()
 
     private val _classifyDataList = MutableLiveData<List<BaseData>>()
@@ -48,7 +46,7 @@ class MediaClassifyViewModel : ViewModel() {
                 return@launch
             }
             //自动分类
-            val classify = mutableListOf<GridItemData>()
+            val classify = mutableListOf<BaseData>()
             val classifyMap = mutableMapOf<String, MutableList<ClassifyItemData>>()
             rawClassify.forEach { itemData ->
                 itemData.spanSize = 1

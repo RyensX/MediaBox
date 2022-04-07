@@ -4,8 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import com.su.mediabox.databinding.ViewComponentGridBinding
+import com.su.mediabox.pluginapi.Constant
 import com.su.mediabox.pluginapi.v2.been.GridData
-import com.su.mediabox.pluginapi.v2.been.GridItemData
 import com.su.mediabox.view.adapter.decoration.AnimeCoverItemDecoration
 import com.su.mediabox.view.adapter.type.TypeViewHolder
 import com.su.mediabox.view.adapter.type.grid
@@ -29,7 +29,7 @@ class GridViewHolder private constructor(private val binding: ViewComponentGridB
                     object : GridLayoutManager.SpanSizeLookup() {
                         override fun getSpanSize(position: Int) =
                             data?.gridItemList?.get(position)?.spanSize
-                                ?: GridItemData.DEFAULT_SPAN_SIZE
+                                ?: Constant.DEFAULT_SPAN_SIZE
                     }
             }
             .initTypeList { }

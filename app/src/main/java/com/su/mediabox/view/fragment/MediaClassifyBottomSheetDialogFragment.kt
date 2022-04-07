@@ -1,35 +1,25 @@
 package com.su.mediabox.view.fragment
 
 import android.app.Dialog
-import android.graphics.Paint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.setPadding
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.GridLayoutManager
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.su.mediabox.databinding.BottomSheetMediaClassifyBinding
 import com.su.mediabox.databinding.ItemClassifyCategoryBinding
 import com.su.mediabox.databinding.ItemClassifyItemBinding
-import com.su.mediabox.databinding.ViewComponentTextBinding
-import com.su.mediabox.pluginapi.UI.dp
+import com.su.mediabox.pluginapi.Constant
 import com.su.mediabox.pluginapi.v2.action.ClassifyAction
 import com.su.mediabox.pluginapi.v2.been.BaseData
 import com.su.mediabox.pluginapi.v2.been.ClassifyItemData
-import com.su.mediabox.pluginapi.v2.been.GridItemData
-import com.su.mediabox.pluginapi.v2.been.TextData
-import com.su.mediabox.util.setOnClickListener
 import com.su.mediabox.view.adapter.type.*
 
 class MediaClassifyBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
     private lateinit var binding: BottomSheetMediaClassifyBinding
-    var data: List<GridItemData>? = null
+    var data: List<BaseData>? = null
     var currentClassifyAction: ClassifyAction? = null
 
     //载入分类项数据
@@ -64,7 +54,7 @@ class MediaClassifyBottomSheetDialogFragment : BottomSheetDialogFragment() {
                 (layoutManager as GridLayoutManager).spanSizeLookup =
                     object : GridLayoutManager.SpanSizeLookup() {
                         override fun getSpanSize(position: Int) =
-                            data?.get(position)?.spanSize ?: GridItemData.DEFAULT_SPAN_SIZE
+                            data?.get(position)?.spanSize ?: Constant.DEFAULT_SPAN_SIZE
                     }
             }
             .initTypeList(
@@ -81,7 +71,9 @@ class MediaClassifyBottomSheetDialogFragment : BottomSheetDialogFragment() {
             }
     }
 
-    class ClassifyCategoryData(val category: String) : GridItemData(6)
+    class ClassifyCategoryData(val category: String) : BaseData() {
+        override var spanSize = 6
+    }
 
     class ClassifyCategoryViewHolder private constructor(private val binding: ItemClassifyCategoryBinding) :
         TypeViewHolder<ClassifyCategoryData>(binding.root) {
