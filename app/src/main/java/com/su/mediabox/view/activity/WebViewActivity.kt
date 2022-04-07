@@ -8,6 +8,8 @@ import android.os.Build
 import android.os.Bundle
 import android.webkit.*
 import com.su.mediabox.databinding.ActivityWebViewBinding
+import com.su.mediabox.pluginapi.v2.action.WebBrowserAction
+import com.su.mediabox.util.getAction
 
 
 class WebViewActivity : BasePluginActivity<ActivityWebViewBinding>() {
@@ -17,7 +19,8 @@ class WebViewActivity : BasePluginActivity<ActivityWebViewBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        url = intent.getStringExtra("url") ?: ""
+        //兼容处理，但优先Action
+        url = getAction<WebBrowserAction>()?.url ?: intent.getStringExtra("url") ?: ""
         intent.getSerializableExtra("headers").let {
             headers = if (it == null) {
                 HashMap()

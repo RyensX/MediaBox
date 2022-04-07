@@ -49,6 +49,9 @@
             android:name="com.su.mediabox.view.activity.WebViewActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
+            android:name=".v2.view.activity.CustomDataActivity"
+            android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
+        <activity
             android:name="com.su.mediabox.view.activity.SkinActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity

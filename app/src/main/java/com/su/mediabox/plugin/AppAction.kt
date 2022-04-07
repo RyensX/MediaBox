@@ -5,10 +5,7 @@ import android.content.Intent
 import com.su.mediabox.pluginapi.v2.action.*
 import com.su.mediabox.util.goActivity
 import com.su.mediabox.util.putAction
-import com.su.mediabox.v2.view.activity.MediaClassifyActivity
-import com.su.mediabox.v2.view.activity.VideoDetailActivity
-import com.su.mediabox.v2.view.activity.VideoMediaPlayActivity
-import com.su.mediabox.v2.view.activity.VideoSearchActivity
+import com.su.mediabox.v2.view.activity.*
 import com.su.mediabox.view.activity.WebViewActivity
 
 /**
@@ -32,6 +29,9 @@ object AppAction {
         }
         WebBrowserAction.GO = {
             routeToComponentPage<WebBrowserAction, WebViewActivity>()
+        }
+        CustomDataAction.GO = {
+            routeToComponentPage<CustomDataAction, CustomDataActivity>()
         }
     }
 
