@@ -14,10 +14,12 @@ fun RecyclerView.typeAdapter() =
 fun RecyclerView.linear(
     @RecyclerView.Orientation orientation: Int = RecyclerView.VERTICAL,
     reverseLayout: Boolean = false,
-    stackFromEnd: Boolean = false
+    stackFromEnd: Boolean = false,
+    initialPrefetchItemCount: Int = 2
 ): RecyclerView {
     layoutManager = LinearLayoutManager(context, orientation, reverseLayout).apply {
         this.stackFromEnd = stackFromEnd
+        this.initialPrefetchItemCount = initialPrefetchItemCount
     }
     return this
 }
@@ -31,9 +33,12 @@ fun RecyclerView.linear(
 fun RecyclerView.grid(
     spanCount: Int = 2,
     @RecyclerView.Orientation orientation: Int = RecyclerView.VERTICAL,
-    reverseLayout: Boolean = false
+    reverseLayout: Boolean = false,
+    initialPrefetchItemCount: Int = 2
 ): RecyclerView {
-    layoutManager = GridLayoutManager(context, spanCount, orientation, reverseLayout)
+    layoutManager = GridLayoutManager(context, spanCount, orientation, reverseLayout).apply {
+        this.initialPrefetchItemCount = initialPrefetchItemCount
+    }
     return this
 }
 
@@ -64,6 +69,8 @@ inline fun RecyclerView.initTypeList(
     useSharedRecycledViewPool: Boolean = true,
     block: TypeAdapter.(RecyclerView) -> Unit,
 ): TypeAdapter {
+    //默认10以应对复杂的多类型视图
+    setItemViewCacheSize(10)
     if (useSharedRecycledViewPool) {
         setRecycledViewPool(
             //如果是全局映射表则不再额外计算

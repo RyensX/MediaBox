@@ -44,6 +44,7 @@ class TypeAdapter(
 
         fun getRecycledViewPool(dataViewMapList: DataViewMapList): RecyclerView.RecycledViewPool {
             val key = dataViewMapList.getDataViewMapListKey()
+            Log.d("获取缓存池","key=$key")
             return recycledViewPools[key] ?: RecyclerView.RecycledViewPool()
                 .also { recycledViewPools[key] = it }
         }

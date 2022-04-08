@@ -23,6 +23,7 @@ class GridViewHolder private constructor(private val binding: ViewComponentGridB
         binding.root
             .grid(4)
             .apply {
+                isNestedScrollingEnabled = false
                 addItemDecoration(AnimeCoverItemDecoration())
                 //动态大小
                 (layoutManager as GridLayoutManager).spanSizeLookup =
@@ -38,8 +39,12 @@ class GridViewHolder private constructor(private val binding: ViewComponentGridB
     override fun onBind(data: GridData) {
         this.data = data
         binding.root.apply {
-            (layoutManager as GridLayoutManager).spanCount = data.spanCount
-        }.typeAdapter().submitList(data.gridItemList)
+            val layoutManager = layoutManager as GridLayoutManager
+            if (layoutManager.spanCount != data.spanCount)
+                layoutManager.spanCount = data.spanCount
+        }.typeAdapter().apply {
+            submitList(data.gridItemList)
+        }
     }
 
 }
