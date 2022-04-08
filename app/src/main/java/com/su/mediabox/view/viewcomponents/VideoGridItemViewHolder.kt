@@ -1,8 +1,8 @@
 package com.su.mediabox.view.viewcomponents
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
 import com.su.mediabox.R
 import com.su.mediabox.databinding.ItemAnimeCover1Binding
 import com.su.mediabox.plugin.AppRouteProcessor
@@ -12,11 +12,13 @@ import com.su.mediabox.util.coil.CoilUtil.loadImage
 import com.su.mediabox.util.gone
 import com.su.mediabox.util.setOnClickListener
 import com.su.mediabox.util.visible
+import com.su.mediabox.v2.view.activity.VideoDetailActivity
 import com.su.mediabox.view.adapter.type.TypeViewHolder
-import com.su.mediabox.view.adapter.type.typeAdapter
 
 class VideoGridItemViewHolder private constructor(private val binding: ItemAnimeCover1Binding) :
     TypeViewHolder<VideoGridItemData>(binding.root) {
+
+    private val nameColor = binding.root.context.resources.getColor(R.color.foreground_black_skin)
 
     constructor(parent: ViewGroup) : this(
         ItemAnimeCover1Binding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -33,6 +35,11 @@ class VideoGridItemViewHolder private constructor(private val binding: ItemAnime
         binding.tvAnimeCover1Title.apply {
             setTextColor(getResColor(R.color.foreground_white_skin))
             text = data.name
+            //自适应颜色，只有在详情页才需要是白色，其余的根据当前主题自动选择
+            if (AppRouteProcessor.currentActivity?.get()?.javaClass != VideoDetailActivity::class.java)
+                setTextColor(nameColor)
+            else
+                setTextColor(Color.WHITE)
         }
         binding.ivAnimeCover1Cover.loadImage(data.coverUrl)
         binding.tvAnimeCover1Episode.apply {
