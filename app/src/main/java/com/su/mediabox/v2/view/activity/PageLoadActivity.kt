@@ -1,8 +1,9 @@
 package com.su.mediabox.v2.view.activity
 
 import android.os.Bundle
-import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.annotation.CallSuper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
@@ -32,15 +33,8 @@ abstract class PageLoadActivity<VB : ViewBinding> : BasePluginActivity<VB>(),
                 finishLoadMore()
             }
             when (it) {
-                is PageLoadViewModel.LoadState.FAILED -> it.throwable?.message?.showToast()
-                is PageLoadViewModel.LoadState.SUCCESS -> {
-                    dataListView.typeAdapter()
-                        .submitList(it.data) {
-                            if (it.isLoadEmptyData) {
-                                getString(R.string.no_more_info).showToast()
-                            }
-                        }
-                }
+                is PageLoadViewModel.LoadState.FAILED -> loadFailed(it.throwable)
+                is PageLoadViewModel.LoadState.SUCCESS -> loadSuccess(it)
             }
         }
 
@@ -56,6 +50,20 @@ abstract class PageLoadActivity<VB : ViewBinding> : BasePluginActivity<VB>(),
         }
 
         pageLoadViewModel.reLoadData()
+    }
+
+    @CallSuper
+    open fun loadSuccess(loadState: PageLoadViewModel.LoadState.SUCCESS) {
+        dataListView.typeAdapter()
+            .submitList(loadState.data) {
+                if (loadState.isLoadEmptyData) {
+                    getString(R.string.no_more_info).showToast()
+                }
+            }
+    }
+
+    open fun loadFailed(throwable: Throwable?) {
+        throwable?.message?.showToast(Toast.LENGTH_LONG)
     }
 
     abstract val refreshLayout: SmartRefreshLayout

@@ -20,10 +20,10 @@
         android:layout_below="@id/iv_image_text_tip_1"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="8dp"
         android:gravity="center_horizontal"
+        android:text="@string/load_data_failed_click_to_retry"
         android:textColor="@color/foreground_main_color_2_skin"
         android:textSize="14sp"
-        app:typeface="bPRTypeface"
-        tools:text="@string/no_download_video" />
+        app:typeface="bPRTypeface" />
 </RelativeLayout>

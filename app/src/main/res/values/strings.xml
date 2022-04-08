@@ -83,7 +83,7 @@
     <string name="clear_cache_succeed">清空缓存成功！</string>
     <string name="clear_cache_failed">清空缓存失败！</string>
     <string name="detail_page">详情页</string>
-    <string name="load_data_failed_click_to_retry">加载数据失败，点击重试</string>
+    <string name="load_data_failed_click_to_retry">加载数据失败，请重试</string>
     <string name="choose_episode">选集</string>
     <string name="test_device">测试设备</string>
     <string name="app_icon_describe">APP图标修改自动漫《日常》</string>

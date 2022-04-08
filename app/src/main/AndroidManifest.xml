@@ -26,7 +26,7 @@
         tools:ignore="QueryAllPackagesPermission" />
 
     <application
-        android:name="com.su.mediabox.App"
+        android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_mediabox"
         android:label="@string/app_name"
@@ -37,96 +37,95 @@
         android:theme="@style/Theme.Anime.skin"
         android:usesCleartextTraffic="true">
         <activity
-            android:name="com.su.mediabox.view.activity.StartActivity"
+            android:name=".v2.view.activity.HomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.activity.StartActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.su.mediabox.view.activity.NoticeActivity" />
+        <activity android:name=".view.activity.NoticeActivity" />
         <activity
-            android:name="com.su.mediabox.view.activity.WebViewActivity"
+            android:name=".view.activity.WebViewActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
             android:name=".v2.view.activity.CustomDataActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
-            android:name="com.su.mediabox.view.activity.SkinActivity"
+            android:name=".view.activity.SkinActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
-            android:name="com.su.mediabox.view.activity.CrashActivity"
+            android:name=".view.activity.CrashActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
-            android:name="com.su.mediabox.view.activity.HistoryActivity"
+            android:name=".view.activity.HistoryActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
             android:name=".v2.view.activity.VideoFavoriteActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
-            android:name="com.su.mediabox.view.activity.DlnaControlActivity"
+            android:name=".view.activity.DlnaControlActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
-            android:name="com.su.mediabox.view.activity.DlnaActivity"
+            android:name=".view.activity.DlnaActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
-            android:name="com.su.mediabox.view.activity.SimplePlayActivity"
+            android:name=".view.activity.SimplePlayActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode" />
         <activity
-            android:name="com.su.mediabox.view.activity.AnimeDownloadActivity"
+            android:name=".view.activity.AnimeDownloadActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
-            android:name="com.su.mediabox.view.activity.LicenseActivity"
+            android:name=".view.activity.LicenseActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
-            android:name="com.su.mediabox.view.activity.AboutActivity"
+            android:name=".view.activity.AboutActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
-            android:name="com.su.mediabox.view.activity.SettingActivity"
+            android:name=".view.activity.SettingActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
-            android:name="com.su.mediabox.view.activity.MonthAnimeActivity"
+            android:name=".view.activity.MonthAnimeActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
             android:name=".v2.view.activity.MediaClassifyActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
-            android:name="com.su.mediabox.view.activity.RankActivity"
+            android:name=".view.activity.RankActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
-            android:name="com.su.mediabox.v2.view.activity.VideoSearchActivity"
+            android:name=".v2.view.activity.VideoSearchActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
-            android:name="com.su.mediabox.view.activity.PlayActivity"
+            android:name=".view.activity.PlayActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode" />
         <activity
             android:name=".v2.view.activity.VideoMediaPlayActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
         <activity
-            android:name="com.su.mediabox.view.activity.AnimeDetailActivity"
+            android:name=".view.activity.AnimeDetailActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
-
         <activity
             android:name=".v2.view.activity.VideoDetailActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
-            android:name="com.su.mediabox.view.activity.BaseActivity"
+            android:name=".view.activity.BaseActivity"
             android:configChanges="uiMode" />
         <activity
-            android:name="com.su.mediabox.view.activity.MainActivity"
+            android:name=".view.activity.MainActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize"
-            android:exported="true">
-
-        </activity>
-
+            android:exported="true"></activity>
         <!--
         <service
             android:name="com.su.mediabox.view.component.widget.everydayanime.EverydayAnimeService"
             android:exported="false"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
-            -->
-
+        -->
         <!--
         <receiver
             android:name="com.su.mediabox.view.component.widget.everydayanime.EverydayAnimeWidgetProvider"
@@ -141,16 +140,15 @@
                 android:resource="@xml/widget_everyday_anime" />
         </receiver>
         -->
-
         <service
-            android:name="com.su.mediabox.util.dlna.dmc.DLNACastService"
+            android:name=".util.dlna.dmc.DLNACastService"
             android:exported="false" />
         <service
-            android:name="com.su.mediabox.util.downloadanime.AnimeDownloadService"
+            android:name=".util.downloadanime.AnimeDownloadService"
             android:enabled="true" />
 
         <receiver
-            android:name="com.su.mediabox.util.downloadanime.AnimeDownloadNotificationReceiver"
+            android:name=".util.downloadanime.AnimeDownloadNotificationReceiver"
             android:exported="false" />
 
         <provider
