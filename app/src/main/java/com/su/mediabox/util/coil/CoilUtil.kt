@@ -65,6 +65,10 @@ object CoilUtil {
         }
 
         // 是网络图片
+
+        if (tag == url)
+            return@runCatching
+
         var amendReferer = referer ?: MAIN_URL
         if (!amendReferer.startsWith(MAIN_URL))
             amendReferer = MAIN_URL//"http://www.yhdm.io/"
@@ -79,6 +83,9 @@ object CoilUtil {
             addHeader("Accept-Encoding", "gzip, deflate")
             addHeader("Connection", "keep-alive")
             addHeader("User-Agent", Constant.Request.getRandomUserAgent())
+            listener { _, _ ->
+                tag = url
+            }
         }
     }
 
