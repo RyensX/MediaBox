@@ -2,7 +2,6 @@ package com.su.mediabox.view.viewcomponents
 
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.activity.ComponentActivity
@@ -14,13 +13,12 @@ import com.su.mediabox.bean.HistoryBean
 import com.su.mediabox.config.Const
 import com.su.mediabox.databinding.ItemAnimeEpisode2Binding
 import com.su.mediabox.databinding.ItemHorizontalRecyclerView1Binding
-import com.su.mediabox.plugin.AppRouteProcessor
 import com.su.mediabox.pluginapi.v2.been.EpisodeData
 import com.su.mediabox.pluginapi.v2.been.VideoPlayListData
 import com.su.mediabox.util.Util
 import com.su.mediabox.pluginapi.UI.dp
 import com.su.mediabox.pluginapi.v2.action.PlayAction
-import com.su.mediabox.util.Text.getNum
+import com.su.mediabox.util.Text.getEpisodeNum
 import com.su.mediabox.util.Util.getResColor
 import com.su.mediabox.util.bindHistoryPlayInfo
 import com.su.mediabox.util.setOnClickListener
@@ -69,7 +67,7 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
             runCatching {
                 if (list.size > 1) {
                     //尝试自动排序为集数顺序
-                    if (list[0].name.getNum() > list[1].name.getNum() || list[list.size - 2].name.getNum() > list[list.size - 1].name.getNum())
+                    if (list[0].name.getEpisodeNum() > list[1].name.getEpisodeNum() || list[list.size - 2].name.getEpisodeNum() > list[list.size - 1].name.getEpisodeNum())
                         list = list.asReversed()
                 }
             }

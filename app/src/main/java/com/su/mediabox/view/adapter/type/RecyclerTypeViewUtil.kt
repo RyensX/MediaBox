@@ -15,7 +15,7 @@ fun RecyclerView.linear(
     @RecyclerView.Orientation orientation: Int = RecyclerView.VERTICAL,
     reverseLayout: Boolean = false,
     stackFromEnd: Boolean = false,
-    initialPrefetchItemCount: Int = 2
+    initialPrefetchItemCount: Int = 4
 ): RecyclerView {
     layoutManager = LinearLayoutManager(context, orientation, reverseLayout).apply {
         this.stackFromEnd = stackFromEnd
@@ -34,7 +34,7 @@ fun RecyclerView.grid(
     spanCount: Int = 2,
     @RecyclerView.Orientation orientation: Int = RecyclerView.VERTICAL,
     reverseLayout: Boolean = false,
-    initialPrefetchItemCount: Int = 2
+    initialPrefetchItemCount: Int = 4
 ): RecyclerView {
     layoutManager = GridLayoutManager(context, spanCount, orientation, reverseLayout).apply {
         this.initialPrefetchItemCount = initialPrefetchItemCount

@@ -1,5 +1,7 @@
 package com.su.mediabox.util
 
+import java.util.*
+
 object Text {
     /**
      * 屏蔽带有某些关键字的弹幕
@@ -15,7 +17,7 @@ object Text {
      *
      * 没有任何数字的优先放到后面
      */
-    fun String.getNum(): Int {
+    fun String.getEpisodeNum(): Int {
         var isNum = false
         var num = 1
         var hasNum = false
@@ -28,6 +30,8 @@ object Text {
                 break
         if (!hasNum)
             num += length
+        if (lowercase(Locale.getDefault()).startsWith("pv"))
+            num -= length
         return num
     }
 
