@@ -232,8 +232,11 @@ class TypeAdapter(
 
     object DefaultDiff : DiffUtil.ItemCallback<Any>() {
 
+        /**
+         * 对于大多数typeData来说并没有主键确定他们为同一个目标且不会被更改，内容相同就行
+         */
         override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean =
-            oldItem === newItem
+            oldItem == newItem
 
         /**
          * 对比内容，建议使用data class，会自动实现内容equals

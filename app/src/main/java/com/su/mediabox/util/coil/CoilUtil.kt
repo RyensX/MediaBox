@@ -25,7 +25,10 @@ import java.net.URL
 object CoilUtil {
     private val imageLoaderBuilder = ImageLoader.Builder(App.context)
         .crossfade(400)
-        .apply { debug { logger(DebugLogger()) } }
+        .apply {
+            bitmapPoolingEnabled(false)//在2.0.0-rc01中已弃用，去掉rc后再升级，详情 https://github.com/coil-kt/coil/discussions/1186
+            debug { logger(DebugLogger()) }
+        }
 
     init {
         setOkHttpClient(okhttpClient)
@@ -39,28 +42,23 @@ object CoilUtil {
 
     fun ImageView.loadImage(
         url: String,
-        builder: ImageRequest.Builder.() -> Unit = {},
-    ) {
-        if (url.isEmpty()) {
-            logE("loadImage", "cover image url must not be null or empty")
-            return
-        }
-
-        this.load(url, builder = builder)
-    }
-
-    fun ImageView.loadImage(
-        url: String,
         referer: String? = null,
         @DrawableRes placeholder: Int = 0,
-        @DrawableRes error: Int = R.drawable.ic_warning_main_color_3_24_skin
+        @DrawableRes error: Int = R.drawable.ic_warning_main_color_3_24_skin,
+        builder: ImageRequest.Builder.() -> Unit = {}
     ) = runCatching {
         // 是本地drawable
         url.toIntOrNull()?.let { drawableResId ->
             load(drawableResId) {
+                builder()
                 placeholder(placeholder)
                 error(error)
             }
+            return@runCatching
+        }
+
+        if (url.isEmpty()) {
+            logE("loadImage", "cover image url must not be null or empty")
             return@runCatching
         }
 
@@ -74,7 +72,8 @@ object CoilUtil {
             amendReferer = MAIN_URL//"http://www.yhdm.io/"
         if (referer == MAIN_URL || referer == MAIN_URL) amendReferer += "/"
 
-        loadImage(url) {
+        load(url) {
+            builder()
             placeholder(placeholder)
             error(error)
             addHeader("Referer", referer ?: Api.refererProcessor?.processor(url) ?: "")

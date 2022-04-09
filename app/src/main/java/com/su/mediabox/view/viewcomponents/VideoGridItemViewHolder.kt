@@ -41,6 +41,7 @@ class VideoGridItemViewHolder private constructor(private val binding: ItemAnime
             else
                 setTextColor(Color.WHITE)
         }
+        //TODO 滚动延迟加载
         binding.ivAnimeCover1Cover.loadImage(data.coverUrl)
         binding.tvAnimeCover1Episode.apply {
             val other = data.other
