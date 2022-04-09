@@ -23,6 +23,9 @@ abstract class TypeViewHolder<T>(view: View) : RecyclerView.ViewHolder(view) {
         onBind(data)
     }
 
+    open fun onViewAttachedToWindow() {}
+    open fun onViewDetachedFromWindow() {}
+
     class UnknownTypeViewHolder(parent: ViewGroup) : TypeViewHolder<Any>(parent.run {
         LayoutInflater.from(context).inflate(R.layout.item_unknown_type, parent, false)
     }) {

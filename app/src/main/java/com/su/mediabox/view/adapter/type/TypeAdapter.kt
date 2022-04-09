@@ -24,6 +24,16 @@ class TypeAdapter(
 ) :
     ListAdapter<Any, TypeViewHolder<Any>>(diff) {
 
+    private var currentData: List<Any>? = null
+
+    override fun onViewAttachedToWindow(holder: TypeViewHolder<Any>) {
+        holder.onViewAttachedToWindow()
+    }
+
+    override fun onViewDetachedFromWindow(holder: TypeViewHolder<Any>) {
+        holder.onViewAttachedToWindow()
+    }
+
     companion object {
         const val UNKNOWN_TYPE = -1
         val globalDataViewMap = DataViewMapList()
@@ -44,7 +54,7 @@ class TypeAdapter(
 
         fun getRecycledViewPool(dataViewMapList: DataViewMapList): RecyclerView.RecycledViewPool {
             val key = dataViewMapList.getDataViewMapListKey()
-            Log.d("获取缓存池","key=$key")
+            Log.d("获取缓存池", "key=$key")
             return recycledViewPools[key] ?: RecyclerView.RecycledViewPool()
                 .also { recycledViewPools[key] = it }
         }
@@ -140,18 +150,19 @@ class TypeAdapter(
     @Suppress("UNCHECKED_CAST")
     fun <T> getData(position: Int) = withoutExceptionGet { getItem(position) as? T }
 
+    fun checkDataIsSame(list: List<Any>?) = list === currentData
+
     override fun submitList(list: List<Any>?) {
-        if (dataViewMapCache && (list == null || list != currentList)) {
-            clearDataViewPosMap()
-        }
-        super.submitList(list)
+        submitList(list, null)
     }
 
     override fun submitList(list: List<Any>?, commitCallback: Runnable?) {
-        if (dataViewMapCache && (list == null || list != currentList)) {
-            clearDataViewPosMap()
+        if (!checkDataIsSame(list)) {
+            currentData = list
+            if (dataViewMapCache)
+                clearDataViewPosMap()
+            super.submitList(list, commitCallback)
         }
-        super.submitList(list, commitCallback)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TypeViewHolder<Any> =

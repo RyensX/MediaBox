@@ -10,7 +10,7 @@ ext.build_versions = build_versions
 
 def deps = [:]
 def kotlin = [:]
-kotlin.kotlin_stdlib = "org.jetbrains.kotlin:kotlin-stdlib:1.4.32"
+kotlin.kotlin_stdlib = "org.jetbrains.kotlin:kotlin-stdlib:1.6.10"
 kotlin.core_ktx = "androidx.core:core-ktx:1.6.0"
 deps.kotlin = kotlin
 
