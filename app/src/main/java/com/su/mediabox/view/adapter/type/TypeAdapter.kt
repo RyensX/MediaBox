@@ -64,20 +64,21 @@ class TypeAdapter(
 
         init {
             //初始化全局数据视图对照表
-            Thread {
-                globalDataViewMap
-                    .registerDataViewMap<TextData, TextViewHolder>()
-                    .registerDataViewMap<TagFlowData, TagFlowViewHolder>()
-                    .registerDataViewMap<VideoPlayListData, VideoPlayListViewHolder>()
-                    .registerDataViewMap<VideoCover1Data, VideoCover1ViewHolder>()
-                    .registerDataViewMap<EpisodeData, VideoPlayListViewHolder.EpisodeViewHolder>()
-                    .registerDataViewMap<VideoGridItemData, VideoGridItemViewHolder>()
-                    .registerDataViewMap<GridData, GridViewHolder>()
-                    .registerDataViewMap<TagData, TagViewHolder>()
-                    .registerDataViewMap<LongTextData, LongTextViewHolder>()
-                    .registerDataViewMap<VideoInfoItemData, VideoInfoItemViewHolder>()
-                    .registerDataViewMap<ViewPagerData, ViewPagerViewHolder>()
-            }.start()
+            globalDataViewMap
+                .registerDataViewMap<TextData, TextViewHolder>()
+                .registerDataViewMap<TagFlowData, TagFlowViewHolder>()
+                .registerDataViewMap<VideoPlayListData, VideoPlayListViewHolder>()
+                .registerDataViewMap<VideoCover1Data, VideoCover1ViewHolder>()
+                .registerDataViewMap<EpisodeData, VideoPlayListViewHolder.EpisodeViewHolder>()
+                .registerDataViewMap<VideoGridItemData, VideoGridItemViewHolder>()
+                .registerDataViewMap<GridData, GridViewHolder>()
+                .registerDataViewMap<TagData, TagViewHolder>()
+                .registerDataViewMap<LongTextData, LongTextViewHolder>()
+                .registerDataViewMap<VideoInfoItemData, VideoInfoItemViewHolder>()
+                .registerDataViewMap<ViewPagerData, ViewPagerViewHolder>()
+            for (viewType in globalDataViewMap.indices)
+            //全局Pool提供15个槽位
+                globalTypeRecycledViewPool.setMaxRecycledViews(viewType, 15)
         }
     }
 
@@ -171,6 +172,7 @@ class TypeAdapter(
         else {
             try {
                 val vhClass = dataViewMapList[viewType].second
+                Log.d("创建VH","${vhClass.simpleName}")
                 vhClass.getDeclaredConstructor(ViewGroup::class.java)
                     .apply { isAccessible = true }
                     .newInstance(parent)

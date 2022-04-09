@@ -178,6 +178,7 @@ dependencies {
     implementation project(':skin_dark_sakura')
     implementation project(':skin_sweat_soybean')
     implementation project(':MediaBoxPluginApi')
+    //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
 }
 
 try {

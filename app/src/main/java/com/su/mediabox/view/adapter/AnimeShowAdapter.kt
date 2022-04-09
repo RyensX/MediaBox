@@ -3,6 +3,7 @@ package com.su.mediabox.view.adapter
 import android.app.Activity
 import android.graphics.Color
 import android.graphics.Rect
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -59,6 +60,7 @@ class AnimeShowAdapter(
         viewType: Int
     ): RecyclerView.ViewHolder {
         val holder = super.onCreateViewHolder(parent, viewType)
+        Log.d("创建VH","${holder.javaClass.simpleName}")
         when (holder) {
             is GridRecyclerView1ViewHolder -> {
                 holder.rvGridRecyclerView1.setRecycledViewPool(childViewPool)

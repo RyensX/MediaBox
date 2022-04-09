@@ -69,6 +69,8 @@ inline fun RecyclerView.initTypeList(
     useSharedRecycledViewPool: Boolean = true,
     block: TypeAdapter.(RecyclerView) -> Unit,
 ): TypeAdapter {
+    //默认关闭
+    isNestedScrollingEnabled = false
     //默认10以应对复杂的多类型视图
     setItemViewCacheSize(10)
     if (useSharedRecycledViewPool) {
@@ -92,7 +94,7 @@ fun RecyclerView.submitList(list: List<Any>) = typeAdapter().submitList(list)
  * 注册一个数据与视图关系到全局映射
  */
 @Suppress("UNCHECKED_CAST")
-inline fun <reified D : Any, reified V : TypeViewHolder<*>> DataViewMapList.registerDataViewMap(): DataViewMapList {
+inline fun <reified D : Any, reified V : TypeViewHolder<D>> DataViewMapList.registerDataViewMap(): DataViewMapList {
     add(
         Pair(
             D::class.java as Class<Any>,
