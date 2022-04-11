@@ -31,7 +31,7 @@ class VideoGridItemViewHolder private constructor(private val binding: ItemAnime
     }
 
     override fun onBind(data: VideoGridItemData) {
-
+        super.onBind(data)
         binding.tvAnimeCover1Title.apply {
             setTextColor(getResColor(R.color.foreground_white_skin))
             text = data.name

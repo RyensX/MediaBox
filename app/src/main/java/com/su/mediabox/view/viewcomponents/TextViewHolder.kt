@@ -24,13 +24,13 @@ class TextViewHolder private constructor(private val binding: ViewComponentTextB
     }
 
     override fun onBind(data: TextData) {
+        super.onBind(data)
         textData = data
         binding.root.apply {
             setTypeface(typeface, data.fontStyle)
             setTextColor(data.fontColor ?: styleColor)
             textSize = data.fontSize
             gravity = data.gravity
-            setPadding(data.paddingLeft, data.paddingTop, data.paddingRight, data.paddingBottom)
             text = data.text
         }
     }

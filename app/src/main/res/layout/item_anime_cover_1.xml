@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="7dp"
-    android:paddingBottom="3dp">
+    android:layout_marginTop="7dp">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_anime_cover_1_cover"

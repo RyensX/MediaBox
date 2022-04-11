@@ -36,6 +36,7 @@ class GridViewHolder private constructor(private val binding: ViewComponentGridB
     }
 
     override fun onBind(data: GridData) {
+        super.onBind(data)
         this.data = data
         binding.root.apply {
             val layoutManager = layoutManager as GridLayoutManager

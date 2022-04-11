@@ -62,6 +62,7 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
     }
 
     override fun onBind(data: VideoPlayListData) {
+        super.onBind(data)
         coroutineScope.launch(Dispatchers.Default) {
             var list = data.playList
             runCatching {
@@ -170,7 +171,7 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
             binding.root.apply {
                 layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
                 if (layoutParams is ViewGroup.MarginLayoutParams) {
-                    (layoutParams as ViewGroup.MarginLayoutParams).setMargins(0, 4.dp, 8.dp, 4.dp)
+                    (layoutParams as ViewGroup.MarginLayoutParams).setMargins(0, 6.dp, 8.dp, 6.dp)
                 }
 
                 if (data.url == historyBean?.lastEpisodeUrl) {

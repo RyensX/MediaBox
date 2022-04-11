@@ -25,6 +25,7 @@ class LongTextViewHolder private constructor(private val binding: ViewComponentL
     }
 
     override fun onBind(data: LongTextData) {
+        super.onBind(data)
         textData = data
         binding.root.apply {
 
@@ -32,7 +33,6 @@ class LongTextViewHolder private constructor(private val binding: ViewComponentL
             setTextColor(data.fontColor)
             textSize = data.fontSize
             gravity = data.gravity
-            setPadding(paddingLeft, data.paddingTop, paddingRight, data.paddingBottom)
             setContent(data.text)
         }
     }

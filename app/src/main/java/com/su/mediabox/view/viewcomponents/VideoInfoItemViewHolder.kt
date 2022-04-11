@@ -39,6 +39,7 @@ class VideoInfoItemViewHolder private constructor(private val binding: ViewCompo
     }
 
     override fun onBind(data: VideoInfoItemData) {
+        super.onBind(data)
         this.data = data
         binding.apply {
             vcVideoLinearItemCover.displayOnlyIfHasData(data.coverUrl) { loadImage(it) }

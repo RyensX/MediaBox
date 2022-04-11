@@ -41,6 +41,7 @@ class VideoCover1ViewHolder private constructor(private val binding: ViewCompone
     }
 
     override fun onBind(data: VideoCover1Data) {
+        super.onBind(data)
         videoCover1Data = data
         //封面
         binding.vcVideoCover1Cover.loadImage(data.coverUrl)

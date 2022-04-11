@@ -27,6 +27,7 @@ class TagFlowViewHolder private constructor(private val binding: ViewComponentGr
     }
 
     override fun onBind(data: TagFlowData) {
+        super.onBind(data)
         binding.root.typeAdapter().submitList(data.tagList)
     }
 }
