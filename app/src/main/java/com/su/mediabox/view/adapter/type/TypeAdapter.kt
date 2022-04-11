@@ -162,8 +162,8 @@ class TypeAdapter(
             currentData = list
             if (dataViewMapCache)
                 clearDataViewPosMap()
-            super.submitList(list, commitCallback)
         }
+        super.submitList(list, commitCallback)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TypeViewHolder<Any> =
@@ -172,7 +172,7 @@ class TypeAdapter(
         else {
             try {
                 val vhClass = dataViewMapList[viewType].second
-                Log.d("创建VH","${vhClass.simpleName}")
+                Log.d("创建VH", "${vhClass.simpleName}")
                 vhClass.getDeclaredConstructor(ViewGroup::class.java)
                     .apply { isAccessible = true }
                     .newInstance(parent)

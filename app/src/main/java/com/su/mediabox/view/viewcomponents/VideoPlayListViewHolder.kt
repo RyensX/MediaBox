@@ -2,6 +2,7 @@ package com.su.mediabox.view.viewcomponents
 
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.activity.ComponentActivity
@@ -22,6 +23,7 @@ import com.su.mediabox.util.Text.getEpisodeNum
 import com.su.mediabox.util.Util.getResColor
 import com.su.mediabox.util.bindHistoryPlayInfo
 import com.su.mediabox.util.setOnClickListener
+import com.su.mediabox.util.showToast
 import com.su.mediabox.v2.view.activity.VideoMediaPlayActivity
 import com.su.mediabox.view.adapter.type.*
 import com.su.mediabox.view.episodeSheetDialog
@@ -106,6 +108,7 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
             val target = adapter.getTag<HistoryBean>(Const.ViewComponent.HISTORY_INFO_TAG) ?: return
             coroutineScope.launch {
                 episodeDataList?.forEachIndexed { index, data ->
+                    //必须要保证EpisodeData.url有正确链接才支持自动定位和收藏
                     if (data.url == target.lastEpisodeUrl) {
                         val jumpLength = (index - (lastEpisodeIndex ?: 0)).absoluteValue
                         launch(Dispatchers.Main) {
