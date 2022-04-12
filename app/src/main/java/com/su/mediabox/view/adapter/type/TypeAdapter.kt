@@ -76,6 +76,7 @@ class TypeAdapter(
                 .registerDataViewMap<LongTextData, LongTextViewHolder>()
                 .registerDataViewMap<VideoInfoItemData, VideoInfoItemViewHolder>()
                 .registerDataViewMap<ViewPagerData, ViewPagerViewHolder>()
+                .registerDataViewMap<BannerData, BannerViewHolder>()
             for (viewType in globalDataViewMap.indices)
             //全局Pool提供15个槽位
                 globalTypeRecycledViewPool.setMaxRecycledViews(viewType, 15)

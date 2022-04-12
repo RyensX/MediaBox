@@ -27,4 +27,7 @@
     <color name="widget_everyday_anime_title_color">#FFFFFF</color>
     <color name="widget_everyday_anime_item_text_color">#FC719B</color>
 
+    <color name="banner_indicator_select">#fff</color>
+    <color name="banner_indicator_unselect">#70ffffff</color>
+
 </resources>

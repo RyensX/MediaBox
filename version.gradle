@@ -24,10 +24,11 @@ deps.google = google
 
 def support = [:]
 support.constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.1"
-support.material = "com.google.android.material:material:1.4.0"
+support.material = "com.google.android.material:material:1.6.0-beta01"
 support.appcompat = "androidx.appcompat:appcompat:1.3.1"
 support.swiperefreshlayout = "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 support.viewpager2 = "androidx.viewpager2:viewpager2:1.0.0"
+support.viewpager2_indicator = "com.github.zhpanvip:viewpagerindicator:1.2.1"
 deps.support = support
 
 def retrofit2 = [:]

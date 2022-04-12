@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/home_header"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="54dp"
         android:background="@color/main_color_2_skin"
         android:elevation="5dp"
         android:paddingHorizontal="7dp"

@@ -86,6 +86,9 @@ object CoilUtil {
                 tag = url
             }
         }
+    }.onFailure {
+        if (url.isNotBlank())
+            load(url)
     }
 
     fun ImageView.loadGaussianBlurCover(
