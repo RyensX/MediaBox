@@ -19,6 +19,7 @@
         android:id="@+id/custom_data_swipe"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:descendantFocusability="blocksDescendants"
         app:srlPrimaryColor="@color/main_color_3_skin">
 
         <androidx.recyclerview.widget.RecyclerView

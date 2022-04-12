@@ -25,6 +25,7 @@ class PageLoadViewModel : ViewModel() {
         }
 
     fun loadData() {
+        _loadState.value = LoadState.LOADING
         viewModelScope.launch(jobContext) {
             try {
                 _loadState.postValue(LoadState.SUCCESS.appendData(loadDataFun?.load(page).apply {
@@ -45,6 +46,7 @@ class PageLoadViewModel : ViewModel() {
     }
 
     sealed class LoadState {
+        object LOADING : LoadState()
         class FAILED(val throwable: Throwable?) : LoadState()
         object SUCCESS : LoadState() {
 

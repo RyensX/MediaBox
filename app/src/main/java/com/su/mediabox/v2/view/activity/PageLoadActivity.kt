@@ -28,13 +28,10 @@ abstract class PageLoadActivity<VB : ViewBinding> : BasePluginActivity<VB>(),
         pageLoadViewModel.loadDataFun = this
 
         pageLoadViewModel.loadState.observe(this) {
-            refreshLayout.apply {
-                finishRefresh()
-                finishLoadMore()
-            }
             when (it) {
                 is PageLoadViewModel.LoadState.FAILED -> loadFailed(it.throwable)
                 is PageLoadViewModel.LoadState.SUCCESS -> loadSuccess(it)
+                is PageLoadViewModel.LoadState.LOADING -> loading()
             }
         }
 
@@ -54,16 +51,26 @@ abstract class PageLoadActivity<VB : ViewBinding> : BasePluginActivity<VB>(),
 
     @CallSuper
     open fun loadSuccess(loadState: PageLoadViewModel.LoadState.SUCCESS) {
-        dataListView.typeAdapter()
-            .submitList(loadState.data) {
-                if (loadState.isLoadEmptyData) {
-                    getString(R.string.no_more_info).showToast()
+        dataListView.apply {
+            typeAdapter()
+                .submitList(loadState.data) {
+                    if (loadState.isLoadEmptyData) {
+                        getString(R.string.no_more_info).showToast()
+                    }
+                    postDelayed({
+                        refreshLayout.closeHeaderOrFooter()
+                    }, 100)
                 }
-            }
+        }
     }
 
     open fun loadFailed(throwable: Throwable?) {
+        refreshLayout.closeHeaderOrFooter()
         throwable?.message?.showToast(Toast.LENGTH_LONG)
+    }
+
+    open fun loading() {
+        refreshLayout.autoRefresh()
     }
 
     abstract val refreshLayout: SmartRefreshLayout

@@ -22,6 +22,7 @@ import com.zhpan.indicator.enums.IndicatorSlideMode
 import com.zhpan.indicator.enums.IndicatorStyle
 
 //TODO 无限轮播，由于需要改造adapter但使用了TypeAdapter因此暂不实现
+//TODO 有时候因为加载大图片过慢导致列表重测和绑定
 /**
  * 横幅视图组件
  */
