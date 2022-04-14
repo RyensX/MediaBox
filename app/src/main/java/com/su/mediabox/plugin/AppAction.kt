@@ -2,6 +2,7 @@ package com.su.mediabox.plugin
 
 import android.app.Activity
 import android.content.Intent
+import com.su.mediabox.plugin.AppAction.routeToComponentPage
 import com.su.mediabox.pluginapi.v2.action.*
 import com.su.mediabox.util.goActivity
 import com.su.mediabox.util.putAction
@@ -31,7 +32,9 @@ object AppAction {
             routeToComponentPage<WebBrowserAction, WebViewActivity>()
         }
         CustomDataAction.GO = {
-            routeToComponentPage<CustomDataAction, CustomDataActivity>()
+            CustomDataActivity.action = this
+            AppRouteProcessor.currentActivity?.get()
+                ?.goActivity<CustomDataActivity>()
         }
     }
 

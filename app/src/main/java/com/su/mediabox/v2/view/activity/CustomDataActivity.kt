@@ -13,10 +13,11 @@ class CustomDataActivity : PageLoadActivity<ActivityCustomDataBinding>() {
     override val refreshLayout get() = mBinding.customDataSwipe
     override val dataListView get() = mBinding.customDataList
 
-    private var action: CustomDataAction? = null
+    companion object {
+        var action: CustomDataAction? = null
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        action = getAction()
         super.onCreate(savedInstanceState)
         mBinding.customDataBar.apply {
             setSupportActionBar(this)
@@ -46,4 +47,9 @@ class CustomDataActivity : PageLoadActivity<ActivityCustomDataBinding>() {
     }
 
     override fun getBinding() = ActivityCustomDataBinding.inflate(layoutInflater)
+
+    override fun onDestroy() {
+        action = null
+        super.onDestroy()
+    }
 }

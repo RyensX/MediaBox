@@ -66,7 +66,10 @@ abstract class PageLoadActivity<VB : ViewBinding> : BasePluginActivity<VB>(),
 
     open fun loadFailed(throwable: Throwable?) {
         refreshLayout.closeHeaderOrFooter()
-        throwable?.message?.showToast(Toast.LENGTH_LONG)
+        throwable?.apply {
+            printStackTrace()
+            message?.showToast(Toast.LENGTH_LONG)
+        } ?: "请求错误".showToast()
     }
 
     open fun loading() {
