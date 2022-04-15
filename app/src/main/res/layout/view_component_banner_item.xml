@@ -1,61 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
+    <ImageView
+        android:id="@+id/vc_banner_item_image"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:adjustViewBounds="true"
+        tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
-        <ImageView
-            android:id="@+id/vc_banner_item_image"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:adjustViewBounds="true"
-            android:maxHeight="300dp"
-            tools:srcCompat="@tools:sample/backgrounds/scenic" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/vc_banner_item_title"
+        android:layout_alignBottom="@id/vc_banner_item_image"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="-12dp"
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@id/vc_banner_item_title"
-            android:layout_alignBottom="@id/vc_banner_item_image"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="-12dp"
+        android:background="@drawable/shape_gray_transparent_angle_90" />
 
-            android:background="@drawable/shape_gray_transparent_angle_90" />
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/vc_banner_item_title"
+        style="@style/TextAppearance.Material3.TitleLarge"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/vc_banner_item_desc"
+        android:layout_alignStart="@id/vc_banner_item_desc"
+        android:layout_alignEnd="@id/vc_banner_item_desc"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        tools:text="标题" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/vc_banner_item_title"
-            style="@style/TextAppearance.Material3.TitleLarge"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/vc_banner_item_desc"
-            android:layout_alignStart="@id/vc_banner_item_desc"
-            android:layout_alignEnd="@id/vc_banner_item_desc"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            tools:text="标题" />
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/vc_banner_item_desc"
+        style="@style/TextAppearance.Material3.BodySmall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/vc_banner_item_image"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="16dp"
+        android:paddingTop="4dp"
+        android:textColor="@android:color/white"
+        tools:text="说明" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/vc_banner_item_desc"
-            style="@style/TextAppearance.Material3.BodySmall"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/vc_banner_item_image"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginBottom="22dp"
-            android:paddingTop="4dp"
-            android:textColor="@android:color/white"
-            tools:text="说明" />
-
-    </RelativeLayout>
-
-</androidx.cardview.widget.CardView>
+</RelativeLayout>

@@ -99,6 +99,10 @@ class BannerViewHolder private constructor(private val binding: ViewComponentBan
         if (!isPlaying)
             onViewAttachedToWindow()
         mData = data
+        binding.vcBannerViewCard.apply {
+            if (radius.toInt() != data.round)
+                radius = data.round.toFloat()
+        }
         vpAdapter.submitList(data.bannerItems) {
             binding.vcBannerIndicatorView.notifyDataChanged()
         }
@@ -124,11 +128,6 @@ class BannerViewHolder private constructor(private val binding: ViewComponentBan
         override fun onBind(data: BannerData.BannerItemData) {
             tmpData = data
             binding.apply {
-
-                root.apply {
-                    if (radius.toInt() != data.imageRound)
-                        radius = data.imageRound.toFloat()
-                }
 
                 vcBannerItemImage.loadImage(data.imageUrl)
 
