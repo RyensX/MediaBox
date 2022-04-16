@@ -28,11 +28,14 @@ class PageLoadViewModel : ViewModel() {
         _loadState.value = LoadState.LOADING
         viewModelScope.launch(jobContext) {
             try {
-                _loadState.postValue(LoadState.SUCCESS.appendData(loadDataFun?.load(page).apply {
-                    //只有无错误且有数据才递增
-                    if (!isNullOrEmpty())
-                        page++
-                }))
+                _loadState.postValue(
+                    LoadState.SUCCESS.getIns(this@PageLoadViewModel)
+                        .appendData(loadDataFun?.load(page).apply {
+                            //只有无错误且有数据才递增
+                            if (!isNullOrEmpty())
+                                page++
+                        })
+                )
             } catch (e: Exception) {
                 _loadState.postValue(LoadState.FAILED(e))
             }
@@ -41,14 +44,32 @@ class PageLoadViewModel : ViewModel() {
 
     fun reLoadData() {
         page = Const.ViewComponent.DEFAULT_PAGE
-        LoadState.SUCCESS.data = null
+        LoadState.SUCCESS.getIns(this).data = null
         loadData()
+    }
+
+    override fun onCleared() {
+        LoadState.SUCCESS.destroyIns(this)
+        super.onCleared()
     }
 
     sealed class LoadState {
         object LOADING : LoadState()
         class FAILED(val throwable: Throwable?) : LoadState()
-        object SUCCESS : LoadState() {
+        class SUCCESS private constructor() : LoadState() {
+
+            companion object {
+
+                private val insMap = mutableMapOf<Any, SUCCESS>()
+
+                fun destroyIns(obj: Any) {
+                    insMap.remove(obj)
+                }
+
+                fun getIns(obj: Any): SUCCESS {
+                    return insMap[obj] ?: SUCCESS().also { insMap[obj] = it }
+                }
+            }
 
             var data: List<BaseData>? = null
 

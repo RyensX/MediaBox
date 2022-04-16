@@ -28,7 +28,7 @@ class GridViewHolder private constructor(private val binding: ViewComponentGridB
                 (layoutManager as GridLayoutManager).spanSizeLookup =
                     object : GridLayoutManager.SpanSizeLookup() {
                         override fun getSpanSize(position: Int) =
-                            data?.gridItemList?.get(position)?.spanSize
+                            data?.gridItemList?.getOrNull(position)?.spanSize
                                 ?: Constant.DEFAULT_SPAN_SIZE
                     }
             }
