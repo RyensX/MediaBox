@@ -2,6 +2,7 @@ package com.su.mediabox.view.viewcomponents
 
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -104,6 +105,7 @@ class BannerViewHolder private constructor(private val binding: ViewComponentBan
                 radius = data.round.toFloat()
         }
         vpAdapter.submitList(data.bannerItems) {
+            //TODO 未知原因无法显示
             binding.vcBannerIndicatorView.notifyDataChanged()
         }
     }

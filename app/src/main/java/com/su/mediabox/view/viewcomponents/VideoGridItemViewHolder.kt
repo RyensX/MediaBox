@@ -4,7 +4,7 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.su.mediabox.R
-import com.su.mediabox.databinding.ItemAnimeCover1Binding
+import com.su.mediabox.databinding.ViewComponentGridMeidaItemBinding
 import com.su.mediabox.plugin.AppRouteProcessor
 import com.su.mediabox.pluginapi.v2.been.VideoGridItemData
 import com.su.mediabox.util.Util.getResColor
@@ -15,13 +15,17 @@ import com.su.mediabox.util.visible
 import com.su.mediabox.v2.view.activity.VideoDetailActivity
 import com.su.mediabox.view.adapter.type.TypeViewHolder
 
-class VideoGridItemViewHolder private constructor(private val binding: ItemAnimeCover1Binding) :
+class VideoGridItemViewHolder private constructor(private val binding: ViewComponentGridMeidaItemBinding) :
     TypeViewHolder<VideoGridItemData>(binding.root) {
 
     private val nameColor = binding.root.context.resources.getColor(R.color.foreground_black_skin)
 
     constructor(parent: ViewGroup) : this(
-        ItemAnimeCover1Binding.inflate(LayoutInflater.from(parent.context), parent, false)
+        ViewComponentGridMeidaItemBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
     ) {
         setOnClickListener(binding.root) { pos ->
             bindingTypeAdapter.getData<VideoGridItemData>(pos)?.also {
@@ -32,7 +36,7 @@ class VideoGridItemViewHolder private constructor(private val binding: ItemAnime
 
     override fun onBind(data: VideoGridItemData) {
         super.onBind(data)
-        binding.tvAnimeCover1Title.apply {
+        binding.vcGirdMediaItemTitle.apply {
             setTextColor(getResColor(R.color.foreground_white_skin))
             text = data.name
             //自适应颜色，只有在详情页才需要是白色，其余的根据当前主题自动选择
@@ -42,8 +46,8 @@ class VideoGridItemViewHolder private constructor(private val binding: ItemAnime
                 setTextColor(Color.WHITE)
         }
         //TODO 滚动延迟加载
-        binding.ivAnimeCover1Cover.loadImage(data.coverUrl)
-        binding.tvAnimeCover1Episode.apply {
+        binding.vcGirdMediaItemCover.loadImage(data.coverUrl)
+        binding.vcGirdMediaItemEpisode.apply {
             val other = data.other
             if (other.isBlank())
                 gone()

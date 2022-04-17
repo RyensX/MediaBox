@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
  * 只有使用[GridLayoutManager]才有效
  *
  * 根据spanSize和spanCount自动计算每个item需要附加的间隔
+ *
+ * 注意：边距和间隔不相等时可能会导致右侧View空间被挤占
  */
 class DynamicGridItemDecoration(
     var spacing: Int,
