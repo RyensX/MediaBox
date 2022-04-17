@@ -11,6 +11,7 @@ import com.su.mediabox.R
 import com.su.mediabox.util.showToast
 import com.su.mediabox.v2.viewmodel.PageLoadViewModel
 import com.su.mediabox.view.activity.BasePluginActivity
+import com.su.mediabox.view.adapter.type.dynamicGrid
 import com.su.mediabox.view.adapter.type.initTypeList
 import com.su.mediabox.view.adapter.type.linear
 import com.su.mediabox.view.adapter.type.typeAdapter
@@ -23,7 +24,7 @@ abstract class PageLoadActivity<VB : ViewBinding> : BasePluginActivity<VB>(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        dataListView.linear().initTypeList { }
+        dataListView.dynamicGrid().initTypeList { }
 
         pageLoadViewModel.loadDataFun = this
 
@@ -68,8 +69,8 @@ abstract class PageLoadActivity<VB : ViewBinding> : BasePluginActivity<VB>(),
         refreshLayout.closeHeaderOrFooter()
         throwable?.apply {
             printStackTrace()
-            message?.showToast(Toast.LENGTH_LONG)
-        } ?: "请求错误".showToast()
+            message?.let { "加载错误：$it" }?.showToast(Toast.LENGTH_LONG)
+        } ?: "加载错误".showToast()
     }
 
     open fun loading() {

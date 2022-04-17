@@ -44,7 +44,7 @@ class VideoSearchActivity : BasePluginActivity<ActivitySearchBinding>() {
         mBinding.run {
             //列表
             rvSearchActivity
-                .linear()
+                .dynamicGrid()
                 .initTypeList(searchDataViewMapList) {
                     addViewHolderClickListener<SearchHistoryViewHolder> { pos ->
                         getData<SearchHistoryBean>(pos)?.also {

@@ -10,6 +10,7 @@ import com.su.mediabox.util.getAction
 import com.su.mediabox.util.showToast
 import com.su.mediabox.v2.viewmodel.MediaClassifyViewModel
 import com.su.mediabox.view.activity.BasePluginActivity
+import com.su.mediabox.view.adapter.type.dynamicGrid
 import com.su.mediabox.view.adapter.type.initTypeList
 import com.su.mediabox.view.adapter.type.linear
 import com.su.mediabox.view.adapter.type.typeAdapter
@@ -28,7 +29,7 @@ class MediaClassifyActivity : BasePluginActivity<ActivityMediaClassifyBinding>()
                 titleText = getString(R.string.classify_title)
                 setBackButtonClickListener { finish() }
             }
-            mediaClassifyList.linear().initTypeList { }
+            mediaClassifyList.dynamicGrid().initTypeList { }
             mediaClassifyFab.setOnClickListener {
                 if (mediaClassify.data.isNullOrEmpty())
                     viewModel.getClassifyItemData()

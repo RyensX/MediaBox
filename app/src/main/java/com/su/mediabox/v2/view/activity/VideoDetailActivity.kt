@@ -21,6 +21,7 @@ import com.su.mediabox.util.putAction
 import com.su.mediabox.v2.viewmodel.VideoDetailViewModel
 import com.su.mediabox.view.activity.BasePluginActivity
 import com.su.mediabox.view.activity.PlayActivity
+import com.su.mediabox.view.adapter.type.dynamicGrid
 import com.su.mediabox.view.adapter.type.initTypeList
 import com.su.mediabox.view.adapter.type.linear
 import com.su.mediabox.view.adapter.type.typeAdapter
@@ -43,7 +44,7 @@ class VideoDetailActivity : BasePluginActivity<ActivityAnimeDetailBinding>() {
         }
 
         //详情数据列表
-        mBinding.rvAnimeDetailActivityInfo.linear().initTypeList { }
+        mBinding.rvAnimeDetailActivityInfo.dynamicGrid().initTypeList { }
 
         //下拉刷新
         mBinding.srlAnimeDetailActivity.setOnRefreshListener {

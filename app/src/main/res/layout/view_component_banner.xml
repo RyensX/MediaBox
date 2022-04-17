@@ -9,7 +9,8 @@
         android:id="@+id/vc_banner_view_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="8dp">
+        app:cardCornerRadius="8dp"
+        tools:layout_height="300dp">
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/vc_banner_view"

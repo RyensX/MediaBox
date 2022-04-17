@@ -9,8 +9,5 @@ fun <T> Class<*>.geMember(name: String, obj: Any? = null) = getDeclaredField(nam
     get(obj) as T
 }
 
-fun <T> Class<*>.geMemberOrNull(name: String, obj: Any? = null) = try {
-    geMember<T>(name, obj)
-} catch (e: Exception) {
-    null
-}
+fun <T> Class<*>.geMemberOrNull(name: String, obj: Any? = null) =
+    Util.withoutExceptionGet { geMember<T>(name, obj) }

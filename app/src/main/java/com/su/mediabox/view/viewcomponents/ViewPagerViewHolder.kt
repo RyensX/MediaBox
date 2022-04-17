@@ -21,10 +21,7 @@ import com.su.mediabox.pluginapi.v2.been.ViewPagerData
 import com.su.mediabox.util.PluginIO
 import com.su.mediabox.util.showToast
 import com.su.mediabox.util.toLiveData
-import com.su.mediabox.view.adapter.type.TypeViewHolder
-import com.su.mediabox.view.adapter.type.initTypeList
-import com.su.mediabox.view.adapter.type.linear
-import com.su.mediabox.view.adapter.type.submitList
+import com.su.mediabox.view.adapter.type.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.properties.Delegates
@@ -67,6 +64,7 @@ class ViewPagerViewHolder private constructor(private val binding: ViewComponent
     }
 
     override fun onBind(data: ViewPagerData) {
+        super.onBind(data)
         currentData = data
         binding.vcViewPagerPages.apply {
             setOffscreenPageLimit(data.pageLoaders.size)
@@ -135,7 +133,7 @@ class ViewPagerViewHolder private constructor(private val binding: ViewComponent
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             super.onViewCreated(view, savedInstanceState)
             binding.apply {
-                root.linear().initTypeList { }
+                root.dynamicGrid().initTypeList { }
 
                 vm.pageDataLiveData.observe(viewLifecycleOwner) {
                     root.submitList(it)

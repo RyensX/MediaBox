@@ -76,7 +76,8 @@ class PageLoadViewModel : ViewModel() {
             var isLoadEmptyData = false
             fun appendData(appendData: List<BaseData>?): SUCCESS {
                 isLoadEmptyData = appendData.isNullOrEmpty()
-                appendData ?: return this
+                if (appendData.isNullOrEmpty())
+                    return this
                 val list = mutableListOf<BaseData>()
                 data?.also { list.addAll(it) }
                 list.addAll(appendData)

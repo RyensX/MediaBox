@@ -71,7 +71,6 @@ class TypeAdapter(
                 .registerDataViewMap<VideoCover1Data, VideoCover1ViewHolder>()
                 .registerDataViewMap<EpisodeData, VideoPlayListViewHolder.EpisodeViewHolder>()
                 .registerDataViewMap<VideoGridItemData, VideoGridItemViewHolder>()
-                .registerDataViewMap<GridData, GridViewHolder>()
                 .registerDataViewMap<TagData, TagViewHolder>()
                 .registerDataViewMap<LongTextData, LongTextViewHolder>()
                 .registerDataViewMap<VideoInfoItemData, VideoInfoItemViewHolder>()
@@ -150,7 +149,11 @@ class TypeAdapter(
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun <T> getData(position: Int) = withoutExceptionGet { getItem(position) as? T }
+    inline fun <reified T> getData(position: Int) = withoutExceptionGet { getItem(position) as T }
+
+    public override fun getItem(position: Int): Any {
+        return super.getItem(position)
+    }
 
     fun checkDataIsSame(list: List<Any>?) = list === currentData
 

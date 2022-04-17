@@ -1,7 +1,9 @@
 package com.su.mediabox.view.adapter.type
 
 import androidx.recyclerview.widget.*
-
+import com.su.mediabox.pluginapi.Constant
+import com.su.mediabox.pluginapi.UI.dp
+import com.su.mediabox.pluginapi.v2.been.BaseData
 
 fun RecyclerView.typeAdapter() =
     adapter as? TypeAdapter ?: throw RuntimeException("当前绑定的适配器不是TypeAdapter")
@@ -39,6 +41,33 @@ fun RecyclerView.grid(
     layoutManager = GridLayoutManager(context, spanCount, orientation, reverseLayout).apply {
         this.initialPrefetchItemCount = initialPrefetchItemCount
     }
+    return this
+}
+
+/**
+ * 动态网格列表，需要配合[BaseData]使用
+ * @param orientation 列表方向
+ * @param reverseLayout 是否反转
+ */
+fun RecyclerView.dynamicGrid(
+    @RecyclerView.Orientation orientation: Int = RecyclerView.VERTICAL,
+    spacing: Int = 8.dp,
+    leftEdge: Int = 12.dp,
+    rightEdge: Int = 12.dp,
+    reverseLayout: Boolean = false
+): RecyclerView {
+    layoutManager =
+        GridLayoutManager(context, Constant.DEFAULT_SPAN_COUNT, orientation, reverseLayout).apply {
+            //默认添加4dp的边距
+            if (spacing != 0)
+                addItemDecoration(DynamicGridItemDecoration(spacing, leftEdge, rightEdge))
+            //动态spanSize
+            spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                override fun getSpanSize(position: Int) =
+                    typeAdapter().getData<BaseData>(position)?.spanSize
+                        ?: Constant.DEFAULT_SPAN_SIZE
+            }
+        }
     return this
 }
 

@@ -127,3 +127,32 @@ fun View.setLongPress() {
         false
     }
 }
+
+/**
+ * 根据类型删除ItemDecoration
+ */
+fun <T : RecyclerView.ItemDecoration> RecyclerView.removeItemDecorations(target: Class<T>) {
+    for (i in 0 until itemDecorationCount)
+        if (getItemDecorationAt(i).javaClass == target) {
+            Log.d("删除ItemDecoration", "target:${target.simpleName} rv:${toString()} index=$i")
+            removeItemDecorationAt(i)
+            //由于没有列表引用不能使用迭代器且重测重绘方法不公开所以只能递归删除了
+            removeItemDecorations(target)
+            break
+        }else
+            Log.d("尝试删除","$i")
+}
+
+/**
+ * 根据类型返回第一个ItemDecoration
+ *
+ * @return 找不得则返回null
+ */
+inline fun <reified T : RecyclerView.ItemDecoration> RecyclerView.getFirstItemDecorationBy(): T? {
+    for (i in 0 until itemDecorationCount) {
+        val itemDecoration = getItemDecorationAt(i)
+        if (itemDecoration.javaClass == T::class.java)
+            return itemDecoration as T
+    }
+    return null
+}
