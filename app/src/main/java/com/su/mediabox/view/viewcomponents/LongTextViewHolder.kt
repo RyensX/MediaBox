@@ -12,9 +12,7 @@ import com.su.mediabox.view.adapter.type.TypeViewHolder
  * 长文本视图组件，支持收缩（超过4行自动收缩）和链接
  */
 class LongTextViewHolder private constructor(private val binding: ViewComponentLongTextBinding) :
-    TypeViewHolder<LongTextData>(binding.root) {
-
-    private var textData: LongTextData? = null
+    TextViewHolder<LongTextData>(binding.root) {
 
     constructor(parent: ViewGroup) : this(
         ViewComponentLongTextBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -26,13 +24,7 @@ class LongTextViewHolder private constructor(private val binding: ViewComponentL
 
     override fun onBind(data: LongTextData) {
         super.onBind(data)
-        textData = data
         binding.root.apply {
-
-            setTypeface(typeface, data.fontStyle)
-            setTextColor(data.fontColor)
-            textSize = data.fontSize
-            gravity = data.gravity
             setContent(data.text)
         }
     }

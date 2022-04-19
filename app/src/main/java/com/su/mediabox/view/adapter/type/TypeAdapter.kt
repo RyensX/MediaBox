@@ -65,7 +65,7 @@ class TypeAdapter(
         init {
             //初始化全局数据视图对照表
             globalDataViewMap
-                .registerDataViewMap<TextData, TextViewHolder>()
+                .registerDataViewMap<SimpleTextData, SimpleTextViewHolder>()
                 .registerDataViewMap<TagFlowData, TagFlowViewHolder>()
                 .registerDataViewMap<VideoPlayListData, VideoPlayListViewHolder>()
                 .registerDataViewMap<VideoCover1Data, VideoCover1ViewHolder>()

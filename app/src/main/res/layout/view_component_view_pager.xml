@@ -9,7 +9,7 @@
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/vc_view_pager_tabs"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="42dp"
         android:background="@color/white_skin"
         android:elevation="5dp"
         app:tabIndicatorColor="@color/foreground_main_color_2_skin"

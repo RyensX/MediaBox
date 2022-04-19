@@ -20,6 +20,8 @@ class DynamicGridItemDecoration(
 ) :
     RecyclerView.ItemDecoration() {
 
+    private var firstRowSpan = 0
+
     override fun getItemOffsets(
         outRect: Rect,
         view: View,
@@ -28,13 +30,18 @@ class DynamicGridItemDecoration(
     ) {
         val layoutManager = parent.layoutManager
 
+
         if (layoutManager is GridLayoutManager) {
 
             val position = parent.getChildAdapterPosition(view)
 
+            if (position == 0)
+                firstRowSpan = position
+
             val lp = view.layoutParams as GridLayoutManager.LayoutParams
             val spanIndex = lp.spanIndex
             val spanSize = lp.spanSize
+
 
             val spanCount = layoutManager.spanCount / spanSize
 
@@ -42,16 +49,23 @@ class DynamicGridItemDecoration(
 
             //Log.d(
             //    "布局",
-            //    "spanIndex=$spanIndex spanSize=$spanSize spanCount=$spanCount column=$column"
+            //    "pos=$position spanIndex=$spanIndex spanSize=$spanSize spanCount=$spanCount(${layoutManager.spanCount}) column=$column"
             //)
 
+            //TODO 局部更新会有问题
             outRect.left = if (column == 0) leftEdge else
                 spacing - column * spacing / spanCount
             outRect.right = if (column == spanCount - 1) rightEdge else
                 (column + 1) * spacing / spanCount
 
-            if (position < spanCount)
+            if (firstRowSpan != -1) {
+                firstRowSpan += spanSize
+                //只有第一行的item才加top
                 outRect.top = spacing
+            }
+            if (firstRowSpan == layoutManager.spanCount) {
+                firstRowSpan = -1
+            }
 
             outRect.bottom = spacing
         } else

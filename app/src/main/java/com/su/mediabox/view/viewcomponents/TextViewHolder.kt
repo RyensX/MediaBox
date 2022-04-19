@@ -1,37 +1,32 @@
 package com.su.mediabox.view.viewcomponents
 
-import android.view.LayoutInflater
-import android.view.ViewGroup
+import android.view.View
+import android.widget.TextView
 import com.su.mediabox.R
-import com.su.mediabox.databinding.ViewComponentTextBinding
 import com.su.mediabox.pluginapi.v2.been.TextData
-import com.su.mediabox.util.setOnClickListener
 import com.su.mediabox.view.adapter.type.TypeViewHolder
 
-class TextViewHolder private constructor(private val binding: ViewComponentTextBinding) :
-    TypeViewHolder<TextData>(binding.root) {
+abstract class TextViewHolder<T : TextData>(
+    protected val textView: TextView,
+    itemView: View = textView
+) :
+    TypeViewHolder<T>(itemView) {
 
-    private var textData: TextData? = null
+    protected var textData: T? = null
+    protected val styleColor = textView.resources.getColor(R.color.main_color_2_skin)
 
-    private val styleColor = binding.root.resources.getColor(R.color.main_color_2_skin)
-
-    constructor(parent: ViewGroup) : this(
-        ViewComponentTextBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-    ) {
-        setOnClickListener(binding.root) {
-            textData?.action?.go()
-        }
-    }
-
-    override fun onBind(data: TextData) {
+    override fun onBind(data: T) {
         super.onBind(data)
         textData = data
-        binding.root.apply {
+        textView.apply {
+            //字体模式
             setTypeface(typeface, data.fontStyle)
+            //字体颜色
             setTextColor(data.fontColor ?: styleColor)
+            //字体大小
             textSize = data.fontSize
+            //对齐方式
             gravity = data.gravity
-            text = data.text
         }
     }
 }
