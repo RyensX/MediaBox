@@ -40,6 +40,7 @@ object PluginManager : AppUtil.IRouteProcessor {
         pluginWorkScope.launch {
             val plugin = packageManager.queryIntentActivities(pluginIntent, 0).map {
                 PluginInfo(
+                    it.activityInfo.applicationInfo.metaData?.getInt("api_version", -1) ?: -1,
                     it.activityInfo.packageName,
                     it.activityInfo.name,
                     it.activityInfo.applicationInfo.loadLabel(packageManager).toString(),
@@ -97,12 +98,6 @@ object PluginManager : AppUtil.IRouteProcessor {
             val clz = classLoader.loadClass(Constant.PLUGIN_INIT_CLASS)
 
             (clz.newInstance() as IComponentFactory).also {
-                //检查插件API版本
-                val version = it.apiVersion
-                if (version < minPluginApiVersion) {
-                    throw RuntimeException("该插件API版本($version)过低，请联系作者升级API(当前支持最低$minPluginApiVersion)")
-                }
-
                 componentFactoryPool[pluginPath] = it
             }
         }
