@@ -123,7 +123,7 @@ class BannerViewHolder private constructor(private val binding: ViewComponentBan
             )
         ) {
             setOnClickListener(binding.root) {
-                tmpData?.action?.go()
+                tmpData?.action?.go(itemView.context)
             }
         }
 

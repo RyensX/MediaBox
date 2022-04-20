@@ -28,7 +28,7 @@ class VideoCover1ViewHolder private constructor(private val binding: ViewCompone
         ViewComponentVideoCover1Binding.inflate(LayoutInflater.from(parent.context), parent, false)
     ) {
         setOnClickListener(binding.root) {
-            videoCover1Data?.action?.go()
+            videoCover1Data?.action?.go(itemView.context)
         }
         binding.vcVideoCover1ScoreHistory.apply {
             setOnClickListener(this) {

@@ -41,7 +41,7 @@ class CustomDataActivity : PageLoadActivity<ActivityCustomDataBinding>() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         action?.actions?.forEach {
             if (it.extraData == item.title.toString())
-                it.go()
+                it.go(this)
         }
         return super.onOptionsItemSelected(item)
     }

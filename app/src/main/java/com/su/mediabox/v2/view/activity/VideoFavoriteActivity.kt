@@ -67,14 +67,15 @@ class VideoFavoriteActivity : BasePluginActivity<ActivityFavoriteBinding>() {
                 data?.apply {
                     //有播放记录时点击直接续播，没有则打开介绍
                     if (lastEpisodeUrl != null)
-                        PlayAction.obtain(lastEpisodeUrl!!, cover, animeUrl, animeTitle).go()
+                        PlayAction.obtain(lastEpisodeUrl!!, cover, animeUrl, animeTitle)
+                            .go(itemView.context)
                     else
-                        DetailAction.obtain(animeUrl).go()
+                        DetailAction.obtain(animeUrl).go(itemView.context)
                 }
             }
             setOnLongClickListener(binding.root) {
                 data?.animeUrl?.also {
-                    DetailAction.obtain(it).go()
+                    DetailAction.obtain(it).go(itemView.context)
                 }
                 true
             }

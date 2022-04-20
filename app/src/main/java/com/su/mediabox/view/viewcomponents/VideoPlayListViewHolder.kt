@@ -149,7 +149,7 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
                             VideoMediaPlayActivity.playList = playList
                         }
                     }
-                    action?.go()
+                    action?.go(itemView.context)
                 }
             }
 

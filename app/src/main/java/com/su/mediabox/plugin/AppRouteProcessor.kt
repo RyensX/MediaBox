@@ -17,11 +17,14 @@ import com.su.mediabox.v2.view.activity.VideoSearchActivity
 import java.lang.ref.WeakReference
 import java.net.URLDecoder
 
+@Deprecated("使用新的Action动作数据代替")
 object AppRouteProcessor :
     AppUtil.IRouteProcessor {
 
+    @Deprecated("不再持有")
     private val activityPool by lazy(LazyThreadSafetyMode.NONE) { mutableMapOf<Int, WeakReference<Activity>>() }
 
+    @Deprecated("不再持有")
     var currentActivity: WeakReference<Activity>? = null
         private set
 

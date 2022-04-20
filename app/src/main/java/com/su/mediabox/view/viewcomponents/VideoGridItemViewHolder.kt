@@ -29,7 +29,7 @@ class VideoGridItemViewHolder private constructor(private val binding: ViewCompo
     ) {
         setOnClickListener(binding.root) { pos ->
             bindingTypeAdapter.getData<VideoGridItemData>(pos)?.also {
-                it.action?.go()
+                it.action?.go(itemView.context)
             }
         }
     }

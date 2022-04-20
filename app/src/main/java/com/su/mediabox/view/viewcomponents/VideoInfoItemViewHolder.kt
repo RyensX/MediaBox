@@ -34,7 +34,7 @@ class VideoInfoItemViewHolder private constructor(private val binding: ViewCompo
             .initTypeList { }
 
         setOnClickListener(binding.root) { pos ->
-            data?.action?.go()
+            data?.action?.go(itemView.context)
         }
     }
 
