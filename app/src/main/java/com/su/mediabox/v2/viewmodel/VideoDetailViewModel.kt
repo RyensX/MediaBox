@@ -17,8 +17,8 @@ import kotlinx.coroutines.withContext
 
 class VideoDetailViewModel : ViewModel() {
 
-    private val videoDetailModel: IVideoDetailDataComponent by lazy(LazyThreadSafetyMode.NONE) {
-        PluginManager.acquireComponent(IVideoDetailDataComponent::class.java)
+    private val videoDetailModel by lazy(LazyThreadSafetyMode.NONE) {
+        PluginManager.acquireComponent<IVideoDetailDataComponent>()
     }
     var partUrl: String = ""
     var cover = ""

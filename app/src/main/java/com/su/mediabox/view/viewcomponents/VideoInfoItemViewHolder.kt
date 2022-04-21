@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.su.mediabox.databinding.ViewComponentVideoInfoItemBinding
-import com.su.mediabox.plugin.AppRouteProcessor
 import com.su.mediabox.pluginapi.v2.been.TagData
 import com.su.mediabox.pluginapi.v2.been.VideoInfoItemData
 import com.su.mediabox.util.coil.CoilUtil.loadImage

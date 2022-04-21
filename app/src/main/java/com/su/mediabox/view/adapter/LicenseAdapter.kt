@@ -3,7 +3,6 @@ package com.su.mediabox.view.adapter
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.su.mediabox.App
-import com.su.mediabox.plugin.PluginManager.process
 import com.su.mediabox.R
 import com.su.mediabox.bean.LicenseBean
 import com.su.mediabox.util.License1ViewHolder
@@ -27,7 +26,7 @@ class LicenseAdapter(
                 holder.tvLicense1Name.text = item.title
                 holder.tvLicense1License.text = item.license
                 holder.itemView.setOnClickListener {
-                    process(item.actionUrl + item.url)
+
                 }
             }
             else -> {

@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.FragmentTransaction
 import com.su.mediabox.App
-import com.su.mediabox.plugin.PluginManager.getPluginInfo
 import com.su.mediabox.R
 import com.su.mediabox.config.Const.ShortCuts.Companion.ACTION_EVERYDAY
 import com.su.mediabox.databinding.ActivityMainBinding
@@ -36,11 +35,6 @@ class MainActivity : BasePluginActivity<ActivityMainBinding>(), EventBusSubscrib
         super.onCreate(savedInstanceState)
 
         action = intent.action ?: ""
-
-        getPluginInfo().also {
-            val description = TaskDescription(it.name, it.icon.toBitmap())
-            setTaskDescription(description)
-        }
 
         PushAgent.getInstance(this).onAppStart()
 

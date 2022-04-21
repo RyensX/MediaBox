@@ -5,7 +5,6 @@ import com.su.mediabox.App
 import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.R
 import com.su.mediabox.bean.SearchHistoryBean
-import com.su.mediabox.config.Const
 import com.su.mediabox.config.Const.ViewComponent.DEFAULT_PAGE
 import com.su.mediabox.database.getAppDataBase
 import com.su.mediabox.pluginapi.v2.components.IVideoSearchDataComponent
@@ -17,8 +16,8 @@ import kotlinx.coroutines.launch
 
 class VideoSearchViewModel : ViewModel() {
 
-    private val videoSearchViewModel: IVideoSearchDataComponent by lazy(LazyThreadSafetyMode.NONE) {
-        PluginManager.acquireComponent(IVideoSearchDataComponent::class.java)
+    private val videoSearchViewModel by lazy(LazyThreadSafetyMode.NONE) {
+        PluginManager.acquireComponent<IVideoSearchDataComponent>()
     }
 
     private var page = DEFAULT_PAGE

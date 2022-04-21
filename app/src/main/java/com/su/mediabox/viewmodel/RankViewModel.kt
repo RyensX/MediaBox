@@ -13,10 +13,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 
-
+@Deprecated("更新2.0后删除")
 class RankViewModel : ViewModel() {
     private val rankModel: IRankComponent by lazy(LazyThreadSafetyMode.NONE) {
-        PluginManager.acquireComponent(IRankComponent::class.java)
+        PluginManager.acquireComponent()
     }
     var isRequesting = false
     var tabList: MutableList<TabBean> = Collections.synchronizedList(ArrayList())

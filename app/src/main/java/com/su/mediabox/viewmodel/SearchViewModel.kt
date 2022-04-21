@@ -17,9 +17,10 @@ import com.su.mediabox.util.showToast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+@Deprecated("更新2.0后删除")
 class SearchViewModel : ViewModel() {
     private val searchModel: ISearchComponent by lazy(LazyThreadSafetyMode.NONE) {
-        PluginManager.acquireComponent(ISearchComponent::class.java)
+        PluginManager.acquireComponent()
     }
 
     var searchResultList: MutableList<AnimeCoverBean> = ArrayList()

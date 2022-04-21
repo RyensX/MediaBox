@@ -8,10 +8,10 @@ interface Api {
 
         //这里不能写死
         val MAIN_URL: String
-            get() = PluginManager.acquireComponent(IConstComponent::class.java).host
+            get() = PluginManager.acquireComponent<IConstComponent>().host
 
         val refererProcessor
-            get() = PluginManager.acquireComponent(IConstComponent::class.java).refererProcessor
+            get() = PluginManager.acquireComponent<IConstComponent>().refererProcessor
 
         // github
         const val CHECK_UPDATE_URL = "https://api.github.com/repos/RyensX/MediaBox/releases/latest"

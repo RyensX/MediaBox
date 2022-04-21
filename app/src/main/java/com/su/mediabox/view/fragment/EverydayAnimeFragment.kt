@@ -28,7 +28,7 @@ import com.su.mediabox.viewmodel.EverydayAnimeViewModel
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
-
+@Deprecated("更新2.0后删除")
 class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), EventBusSubscriber {
     private lateinit var viewModel: EverydayAnimeViewModel
     private lateinit var adapter: Vp2Adapter

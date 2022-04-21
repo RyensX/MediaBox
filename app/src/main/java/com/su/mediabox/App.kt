@@ -10,8 +10,6 @@ import com.scwang.smart.refresh.footer.BallPulseFooter
 import com.scwang.smart.refresh.header.MaterialHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import com.su.mediabox.plugin.AppAction
-import com.su.mediabox.plugin.AppRouteProcessor
-import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.pluginapi.AppUtil
 import com.su.mediabox.util.CrashHandler
 import com.su.mediabox.util.PushHelper
@@ -40,7 +38,7 @@ class App : Application() {
         context = this
 
         //初始化路由及插件配置
-        AppUtil.init(this, PluginManager)
+        AppUtil.init(this)
         AppAction.init()
 
         Kotpref.init(context)
@@ -69,7 +67,7 @@ class App : Application() {
                 notificationClickHandler = object : UmengNotificationClickHandler() {
                     override fun dealWithCustomAction(context: Context, msg: UMessage) {
                         super.dealWithCustomAction(context, msg)
-                        AppRouteProcessor.process(msg.custom)
+                        //TODO
                     }
                 }
             }

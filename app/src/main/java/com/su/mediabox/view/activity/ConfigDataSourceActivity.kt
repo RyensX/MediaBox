@@ -16,7 +16,7 @@ import com.su.mediabox.model.DataSourceManager
 import com.su.mediabox.util.*
 import java.io.File
 
-
+@Deprecated("更新2.0后删除")
 class ConfigDataSourceActivity : BasePluginActivity<ActivityConfigDataSourceBinding>() {
     private lateinit var viewModel: ConfigDataSourceViewModel
     private lateinit var adapter: ConfigDataSourceAdapter

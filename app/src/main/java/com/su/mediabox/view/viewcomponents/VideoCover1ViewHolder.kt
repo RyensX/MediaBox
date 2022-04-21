@@ -7,7 +7,6 @@ import com.su.mediabox.Pref
 import com.su.mediabox.R
 import com.su.mediabox.bean.HistoryBean
 import com.su.mediabox.databinding.ViewComponentVideoCover1Binding
-import com.su.mediabox.plugin.AppRouteProcessor
 import com.su.mediabox.pluginapi.Constant
 import com.su.mediabox.pluginapi.Text
 import com.su.mediabox.pluginapi.v2.been.VideoCover1Data
@@ -30,14 +29,6 @@ class VideoCover1ViewHolder private constructor(private val binding: ViewCompone
         setOnClickListener(binding.root) {
             videoCover1Data?.action?.go(itemView.context)
         }
-        binding.vcVideoCover1ScoreHistory.apply {
-            setOnClickListener(this) {
-                val actionUrl = tag as? String
-                actionUrl?.also {
-                    AppRouteProcessor.process(it)
-                }
-            }
-        }
     }
 
     override fun onBind(data: VideoCover1Data) {
@@ -54,9 +45,6 @@ class VideoCover1ViewHolder private constructor(private val binding: ViewCompone
                 text = data.score.toString()
             }
         }
-        if (isShowHistory)
-        //查找是否有观看记录
-            bindHistoryPlayInfo(this)
     }
 
     override fun onChanged(hb: HistoryBean?) {

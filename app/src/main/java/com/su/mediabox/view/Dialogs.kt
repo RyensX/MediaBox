@@ -9,7 +9,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.su.mediabox.R
 import com.su.mediabox.config.Const
 import com.su.mediabox.databinding.DialogEpisodeBottomSheetBinding
-import com.su.mediabox.plugin.AppRouteProcessor
 import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.pluginapi.UI.dp
 import com.su.mediabox.pluginapi.v2.been.EpisodeData
@@ -63,7 +62,7 @@ fun episodeSheetDialog(
 
     val bottomSheetDialog = BottomSheetDialog(context, R.style.BottomSheetDialogTheme)
     val coroutineScope by lazy { bottomSheetDialog.createCoroutineScope() }
-    val component by lazy { PluginManager.acquireComponent(IVideoPlayComponent::class.java) }
+    val component by lazy { PluginManager.acquireComponent<IVideoPlayComponent>() }
     val binding = DialogEpisodeBottomSheetBinding.inflate(LayoutInflater.from(context))
 
     binding.episodeBottomSheetTitle.text =
@@ -95,25 +94,26 @@ fun episodeSheetDialog(
             setTag(episodeDataList, Const.ViewComponent.EPISODE_LIST_TAG)
             //长按缓存视频
             addViewHolderLongClickListener<BottomSheetEpisodeViewHolder> { pos ->
-                bindingTypeAdapter.getData<EpisodeData>(pos)?.also {
-                    "开始解析 ${it.name}，请勿关闭...".showToast()
-                    coroutineScope.launch(Dispatchers.IO + SupervisorJob() + CoroutineExceptionHandler { _, e ->
-                        coroutineScope.launch(Dispatchers.Main) {
-                            e.printStackTrace()
-                            "缓存错误:${e.message}".showToast()
-                        }
-                    }) {
-                        component.getVideoPlayMedia(it.url).apply {
-                            Log.d("下载", videoPlayUrl)
-                            withContext(Dispatchers.Main) {
-                                AnimeDownloadHelper.instance.downloadAnime(
-                                    AppRouteProcessor.currentActivity!!.get()!! as AppCompatActivity,
-                                    videoPlayUrl, videoPlayUrl.toMD5(), "$videName/$title"
-                                )
+                if (context is AppCompatActivity)
+                    bindingTypeAdapter.getData<EpisodeData>(pos)?.also {
+                        "开始解析 ${it.name}，请勿关闭...".showToast()
+                        coroutineScope.launch(Dispatchers.IO + SupervisorJob() + CoroutineExceptionHandler { _, e ->
+                            coroutineScope.launch(Dispatchers.Main) {
+                                e.printStackTrace()
+                                "缓存错误:${e.message}".showToast()
+                            }
+                        }) {
+                            component.getVideoPlayMedia(it.url).apply {
+                                Log.d("下载", videoPlayUrl)
+                                withContext(Dispatchers.Main) {
+                                    AnimeDownloadHelper.instance.downloadAnime(
+                                        context,
+                                        videoPlayUrl, videoPlayUrl.toMD5(), "$videName/$title"
+                                    )
+                                }
                             }
                         }
-                    }
-                } ?: "剧集信息错误".showToast()
+                    } ?: "剧集信息错误".showToast()
                 true
             }
             submitList(data)

@@ -14,14 +14,11 @@ import com.su.mediabox.view.fragment.MediaClassifyBottomSheetDialogFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import com.su.mediabox.config.Const.ViewComponent.DEFAULT_PAGE
-import kotlinx.coroutines.delay
 
 class MediaClassifyViewModel : ViewModel() {
 
     private val component by lazy(LazyThreadSafetyMode.NONE) {
-        PluginManager.acquireComponent(
-            IMediaClassifyDataComponent::class.java
-        )
+        PluginManager.acquireComponent<IMediaClassifyDataComponent>()
     }
 
     private var page = DEFAULT_PAGE
@@ -40,7 +37,7 @@ class MediaClassifyViewModel : ViewModel() {
             //获取原始分类项数据
             val rawClassify =
                 //testData()
-            component.getClassifyItemData()
+                component.getClassifyItemData()
             if (rawClassify.isEmpty()) {
                 _classifyItemDataList.postValue(rawClassify)
                 return@launch

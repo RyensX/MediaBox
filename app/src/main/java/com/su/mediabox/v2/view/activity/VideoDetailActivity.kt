@@ -20,10 +20,8 @@ import com.su.mediabox.util.getActionIns
 import com.su.mediabox.util.putAction
 import com.su.mediabox.v2.viewmodel.VideoDetailViewModel
 import com.su.mediabox.view.activity.BasePluginActivity
-import com.su.mediabox.view.activity.PlayActivity
 import com.su.mediabox.view.adapter.type.dynamicGrid
 import com.su.mediabox.view.adapter.type.initTypeList
-import com.su.mediabox.view.adapter.type.linear
 import com.su.mediabox.view.adapter.type.typeAdapter
 
 class VideoDetailActivity : BasePluginActivity<ActivityAnimeDetailBinding>() {

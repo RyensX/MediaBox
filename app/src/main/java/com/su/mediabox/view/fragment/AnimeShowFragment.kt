@@ -18,7 +18,7 @@ import com.su.mediabox.view.adapter.decoration.AnimeShowItemDecoration
 import com.su.mediabox.view.adapter.spansize.AnimeShowSpanSize
 import com.su.mediabox.viewmodel.AnimeShowViewModel
 
-
+@Deprecated("更新2.0后删除")
 class AnimeShowFragment : BaseFragment<FragmentAnimeShowBinding>() {
     private var partUrl: String = ""
     private lateinit var viewModel: AnimeShowViewModel

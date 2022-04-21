@@ -5,15 +5,15 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.su.mediabox.bean.PluginInfo
 import com.su.mediabox.databinding.ItemPluginBinding
-import com.su.mediabox.plugin.PluginManager.setPluginInfo
-import com.su.mediabox.util.goActivity
+import com.su.mediabox.plugin.PluginManager.launchPlugin
 import com.su.mediabox.util.setOnClickListener
 import com.su.mediabox.util.setOnLongClickListener
-import com.su.mediabox.v2.view.activity.HomeActivity
 import com.su.mediabox.view.adapter.type.TypeViewHolder
 
 class ItemPluginViewHolder private constructor(private val binding: ItemPluginBinding) :
     TypeViewHolder<PluginInfo>(binding.root) {
+
+    private var pluginData: PluginInfo? = null
 
     constructor(parent: ViewGroup) : this(
         ItemPluginBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -21,7 +21,7 @@ class ItemPluginViewHolder private constructor(private val binding: ItemPluginBi
 
     init {
         setOnClickListener(itemView) {
-            itemView.context.goActivity<HomeActivity>(Intent().setPluginInfo(it))
+            itemView.context.launchPlugin(pluginData)
         }
         //TODO 暂时这样。后面做成展示插件详细信息
         setOnLongClickListener(itemView) { position ->
@@ -37,6 +37,7 @@ class ItemPluginViewHolder private constructor(private val binding: ItemPluginBi
     }
 
     override fun onBind(data: PluginInfo) {
+        pluginData = data
         binding.apply {
             pluginIcon.setImageDrawable(data.icon)
             pluginName.text = data.name

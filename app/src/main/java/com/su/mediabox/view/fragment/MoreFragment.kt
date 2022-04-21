@@ -13,6 +13,7 @@ import com.su.mediabox.view.adapter.MoreAdapter
 import com.su.mediabox.pluginapi.Constant.ActionUrl
 import com.su.mediabox.pluginapi.Text.buildRouteActionUrl
 
+@Deprecated("更新2.0后删除")
 class MoreFragment : BaseFragment<FragmentMoreBinding>() {
     private val list: MutableList<MoreBean> = ArrayList()
     private val adapter: MoreAdapter = MoreAdapter(this, list)

@@ -14,6 +14,7 @@ import com.su.mediabox.util.Util.getResDrawable
 import com.su.mediabox.view.adapter.HistoryAdapter
 import com.su.mediabox.viewmodel.HistoryViewModel
 
+@Deprecated("更新2.0后删除")
 class HistoryActivity : BasePluginActivity<ActivityHistoryBinding>() {
     private lateinit var viewModel: HistoryViewModel
     private lateinit var adapter: HistoryAdapter

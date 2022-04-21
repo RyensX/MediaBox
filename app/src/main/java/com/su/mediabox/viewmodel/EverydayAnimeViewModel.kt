@@ -17,11 +17,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 
+@Deprecated("更新2.0后删除")
 class EverydayAnimeViewModel : ViewModel() {
     private val everydayAnimeModel: IEverydayAnimeComponent by lazy(LazyThreadSafetyMode.NONE) {
-        PluginManager.acquireComponent(IEverydayAnimeComponent::class.java)
+        PluginManager.acquireComponent()
     }
-    var header=""
+    var header = ""
     var selectedTabIndex = -1
     var mldHeader: MutableLiveData<String> = MutableLiveData()
     var tabList: MutableList<TabBean> = ArrayList()

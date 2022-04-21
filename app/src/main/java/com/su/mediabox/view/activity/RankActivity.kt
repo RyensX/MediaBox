@@ -14,6 +14,7 @@ import com.su.mediabox.databinding.ActivityRankBinding
 import com.su.mediabox.view.fragment.RankFragment
 import com.su.mediabox.viewmodel.RankViewModel
 
+@Deprecated("更新2.0后删除")
 class RankActivity : BasePluginActivity<ActivityRankBinding>() {
     private lateinit var viewModel: RankViewModel
     private lateinit var adapter: VpAdapter

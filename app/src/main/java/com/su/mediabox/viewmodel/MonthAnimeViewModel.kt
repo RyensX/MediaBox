@@ -14,9 +14,10 @@ import com.su.mediabox.util.PluginIO
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+@Deprecated("更新2.0后删除")
 class MonthAnimeViewModel : ViewModel() {
     private val monthAnimeModel: IMonthAnimeComponent by lazy(LazyThreadSafetyMode.NONE) {
-        PluginManager.acquireComponent(IMonthAnimeComponent::class.java)
+        PluginManager.acquireComponent()
     }
     var monthAnimeList: MutableList<AnimeCoverBean> = ArrayList()
     var mldMonthAnimeList: MutableLiveData<Boolean> = MutableLiveData()

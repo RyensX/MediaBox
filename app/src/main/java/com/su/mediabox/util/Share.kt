@@ -5,9 +5,8 @@ import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import com.su.mediabox.App
-import com.su.mediabox.plugin.AppRouteProcessor
 import com.su.mediabox.R
-import com.su.mediabox.pluginapi.Constant
+import com.su.mediabox.pluginapi.v2.action.WebBrowserAction
 import com.su.mediabox.util.Util.copy2Clipboard
 
 object Share {
@@ -71,12 +70,7 @@ object Share {
                 activity.resources.getString(R.string.already_copy_to_clipboard).showToast()
             }
             SHARE_WEB -> {
-                AppRouteProcessor.process(
-                    com.su.mediabox.pluginapi.Text.buildRouteActionUrl(
-                        Constant.ActionUrl.ANIME_BROWSER,
-                        shareContent
-                    )
-                )
+                WebBrowserAction.obtain(shareContent).go(activity)
             }
         }
     }

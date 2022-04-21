@@ -64,6 +64,11 @@ class StartActivity : BaseActivity<ActivityPluginBinding>() {
         listenInstallBroadcasts()
     }
 
+    override fun onResume() {
+        PluginManager.initPluginEnv()
+        super.onResume()
+    }
+
     private val installBroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             PluginManager.scanPlugin(packageManager)

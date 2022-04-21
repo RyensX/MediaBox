@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.su.mediabox.R
 import com.su.mediabox.databinding.ViewComponentGridMeidaItemBinding
-import com.su.mediabox.plugin.AppRouteProcessor
 import com.su.mediabox.pluginapi.v2.been.VideoGridItemData
 import com.su.mediabox.util.Util.getResColor
 import com.su.mediabox.util.coil.CoilUtil.loadImage
@@ -40,7 +39,7 @@ class VideoGridItemViewHolder private constructor(private val binding: ViewCompo
             setTextColor(getResColor(R.color.foreground_white_skin))
             text = data.name
             //自适应颜色，只有在详情页才需要是白色，其余的根据当前主题自动选择
-            if (AppRouteProcessor.currentActivity?.get()?.javaClass != VideoDetailActivity::class.java)
+            if (itemView.context.javaClass != VideoDetailActivity::class.java)
                 setTextColor(nameColor)
             else
                 setTextColor(Color.WHITE)

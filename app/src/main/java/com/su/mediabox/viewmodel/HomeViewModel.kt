@@ -15,9 +15,10 @@ import com.su.mediabox.view.adapter.SerializableRecycledViewPool
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+@Deprecated("更新2.0后删除")
 class HomeViewModel : ViewModel() {
     private val homeModel: IHomeComponent by lazy(LazyThreadSafetyMode.NONE) {
-        PluginManager.acquireComponent(IHomeComponent::class.java)
+        PluginManager.acquireComponent()
     }
     val childViewPool = SerializableRecycledViewPool()
     val viewPool = SerializableRecycledViewPool()

@@ -3,7 +3,6 @@ package com.su.mediabox.view.adapter
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.su.mediabox.App
-import com.su.mediabox.plugin.PluginManager.process
 import com.su.mediabox.R
 import com.su.mediabox.bean.HistoryBean
 import com.su.mediabox.config.Api
@@ -34,20 +33,13 @@ class HistoryAdapter(
                 holder.tvAnimeCover9Episodes.text = item.lastEpisode
                 holder.tvAnimeCover9Time.text = time2Now(item.time)
                 holder.tvAnimeCover9DetailPage.setOnClickListener {
-                    process(buildRouteActionUrl(Constant.ActionUrl.ANIME_DETAIL, item.animeUrl))
+
                 }
                 holder.ivAnimeCover9Delete.setOnClickListener {
                     activity.deleteHistory(item)
                 }
                 holder.itemView.setOnClickListener {
-                    process(
-                        buildRouteActionUrl(
-                            Constant.ActionUrl.ANIME_PLAY,
-                            item.lastEpisodeUrl!!,
-                            item.cover,
-                            item.animeUrl
-                        )
-                    )
+
                 }
             }
             else -> {

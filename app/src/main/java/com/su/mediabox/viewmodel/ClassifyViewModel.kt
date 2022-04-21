@@ -19,14 +19,14 @@ import kotlinx.coroutines.launch
 @Deprecated("V2后废弃")
 class ClassifyViewModel : ViewModel() {
     private val classifyModel: IClassifyComponent by lazy(LazyThreadSafetyMode.NONE) {
-        PluginManager.acquireComponent(IClassifyComponent::class.java)
+        PluginManager.acquireComponent()
     }
     var isRequesting = false
     var classifyTabList: MutableList<ClassifyBean> = ArrayList()        //上方分类数据
     var mldClassifyTabList: MutableLiveData<Pair<List<ClassifyBean>, ResponseDataType>> =
         MutableLiveData()
     var classifyList: MutableList<AnimeCoverBean> = ArrayList()       //下方tv数据
-    var mldClassifyList: MutableLiveData<Pair<ResponseDataType,List<AnimeCoverBean>>> =
+    var mldClassifyList: MutableLiveData<Pair<ResponseDataType, List<AnimeCoverBean>>> =
         MutableLiveData()
     var pageNumberBean: PageNumberBean? = null
 
@@ -53,7 +53,10 @@ class ClassifyViewModel : ViewModel() {
                 classifyModel.getClassifyData(partUrl).apply {
                     pageNumberBean = second
                     mldClassifyList.postValue(
-                        Pair(if (isRefresh) ResponseDataType.REFRESH else ResponseDataType.LOAD_MORE, first)
+                        Pair(
+                            if (isRefresh) ResponseDataType.REFRESH else ResponseDataType.LOAD_MORE,
+                            first
+                        )
                     )
                 }
             } catch (e: Exception) {

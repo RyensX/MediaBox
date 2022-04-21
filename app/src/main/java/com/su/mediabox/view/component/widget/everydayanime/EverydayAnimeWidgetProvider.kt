@@ -11,7 +11,6 @@ import android.os.Build
 import android.widget.RemoteViews
 import com.google.gson.Gson
 import com.su.mediabox.App
-import com.su.mediabox.plugin.AppRouteProcessor
 import com.su.mediabox.R
 import com.su.mediabox.pluginapi.been.AnimeCoverBean
 import com.su.mediabox.util.Util.getWeekday
@@ -110,7 +109,6 @@ class EverydayAnimeWidgetProvider : AppWidgetProvider() {
 
     private fun startPlayActivity(context: Context, actionUrl: String?) {
         actionUrl ?: return
-        AppRouteProcessor.process(actionUrl)
     }
 
     companion object {

@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import com.su.mediabox.databinding.ActivityHomeBinding
 import com.su.mediabox.plugin.PluginManager
-import com.su.mediabox.plugin.PluginManager.getPluginInfo
 import com.su.mediabox.pluginapi.v2.been.BaseData
 import com.su.mediabox.pluginapi.v2.components.IHomeDataComponent
 import com.su.mediabox.util.clickScale
@@ -22,9 +21,7 @@ import com.su.mediabox.view.adapter.type.typeAdapter
 class HomeActivity : PageLoadActivity<ActivityHomeBinding>(), View.OnClickListener {
 
     private val dataComponent by lazy(LazyThreadSafetyMode.NONE) {
-        PluginManager.acquireComponent(
-            IHomeDataComponent::class.java
-        )
+        PluginManager.acquireComponent<IHomeDataComponent>()
     }
 
     override val refreshLayout: SmartRefreshLayout
@@ -35,7 +32,8 @@ class HomeActivity : PageLoadActivity<ActivityHomeBinding>(), View.OnClickListen
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        getPluginInfo().also {
+        PluginManager.currentLaunchPlugin.observe(this) {
+            it ?: return@observe
             val description = ActivityManager.TaskDescription(it.name, it.icon.toBitmap())
             setTaskDescription(description)
         }

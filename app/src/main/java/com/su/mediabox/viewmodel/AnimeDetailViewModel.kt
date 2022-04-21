@@ -15,8 +15,8 @@ import kotlinx.coroutines.launch
 
 @Deprecated("在v2 API完善后移除")
 class AnimeDetailViewModel : ViewModel() {
-    private val animeDetailModel: IAnimeDetailComponent by lazy(LazyThreadSafetyMode.NONE) {
-        PluginManager.acquireComponent(IAnimeDetailComponent::class.java)
+    private val animeDetailModel by lazy(LazyThreadSafetyMode.NONE) {
+        PluginManager.acquireComponent<IAnimeDetailComponent>()
     }
     var partUrl: String = ""
     var cover = ""

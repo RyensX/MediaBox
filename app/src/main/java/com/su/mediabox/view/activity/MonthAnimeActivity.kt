@@ -12,6 +12,7 @@ import com.su.mediabox.util.showToast
 import com.su.mediabox.view.adapter.SearchAdapter
 import com.su.mediabox.viewmodel.MonthAnimeViewModel
 
+@Deprecated("更新2.0后删除")
 class MonthAnimeActivity : BasePluginActivity<ActivityMonthAnimeBinding>() {
     private var partUrl: String = ""
     private lateinit var viewModel: MonthAnimeViewModel

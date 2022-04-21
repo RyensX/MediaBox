@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.su.mediabox.App
-import com.su.mediabox.plugin.PluginManager.process
 import com.su.mediabox.R
 import com.su.mediabox.config.Api
 import com.su.mediabox.database.getAppDataBase
@@ -126,7 +125,6 @@ class AnimeDetailAdapter(
                         tvFlowLayout.setOnClickListener { it1 ->
                             if (it.animeType[i].actionUrl.isBlank()) return@setOnClickListener
                             val actionUrl = it.animeType[i].actionUrl
-                            process(actionUrl)
                         }
                         holder.flAnimeInfo1Type.addView(tvFlowLayout)
                     }
@@ -142,7 +140,6 @@ class AnimeDetailAdapter(
                         tvFlowLayout.text = it.tag[i].title
                         tvFlowLayout.setOnClickListener { _ ->
                             val actionUrl = it.tag[i].actionUrl
-                            process(actionUrl)
                         }
                         holder.flAnimeInfo1Tag.addView(tvFlowLayout)
                     }
@@ -156,7 +153,6 @@ class AnimeDetailAdapter(
                                 setOnClickListener { v ->
                                     val action = v.tag
                                     if (action is String) {
-                                        process(action)
                                     }
                                 }
                                 visible()
@@ -189,7 +185,6 @@ class AnimeDetailAdapter(
                     holder.tvAnimeCover1Episode.text = item.episode
                 }
                 holder.itemView.setOnClickListener {
-                    process(item.actionUrl)
                 }
             }
             else -> {
@@ -256,7 +251,6 @@ class AnimeDetailAdapter(
                         getResDrawable(R.drawable.shape_circle_corner_edge_main_color_2_ripper_5_skin)
                     }
                     holder.itemView.setOnClickListener {
-                        process(item.actionUrl)
                         dialog?.dismiss()
                     }
                 }

@@ -16,9 +16,10 @@ import com.su.mediabox.view.adapter.SerializableRecycledViewPool
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+@Deprecated("更新2.0后删除")
 class AnimeShowViewModel : ViewModel() {
     private val animeShowModel: IAnimeShowComponent by lazy(LazyThreadSafetyMode.NONE) {
-        PluginManager.acquireComponent(IAnimeShowComponent::class.java)
+        PluginManager.acquireComponent()
     }
     var childViewPool: SerializableRecycledViewPool? = null
     var viewPool: SerializableRecycledViewPool? = null
@@ -40,7 +41,8 @@ class AnimeShowViewModel : ViewModel() {
                     pageNumberBean = second
                     mldGetAnimeShowList.postValue(
                         Pair(
-                            if (isRefresh) ResponseDataType.REFRESH else ResponseDataType.LOAD_MORE, first
+                            if (isRefresh) ResponseDataType.REFRESH else ResponseDataType.LOAD_MORE,
+                            first
                         )
                     )
                     isRequesting = false

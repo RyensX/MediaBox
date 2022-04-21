@@ -1,17 +1,19 @@
 package com.su.mediabox.view.adapter
 
+import android.content.Intent
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.su.mediabox.App
-import com.su.mediabox.plugin.PluginManager.process
 import com.su.mediabox.R
 import com.su.mediabox.config.Const
+import com.su.mediabox.plugin.AppRouteProcessor.matchAndGetParams
 import com.su.mediabox.pluginapi.Constant.ActionUrl
 import com.su.mediabox.pluginapi.been.AnimeCoverBean
 import com.su.mediabox.util.*
 import com.su.mediabox.view.activity.AnimeDownloadActivity
+import com.su.mediabox.view.activity.SimplePlayActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -34,7 +36,14 @@ class AnimeDownloadAdapter(
             //剧集列表/播放剧集
             setOnClickListener(itemView) { pos ->
                 dataList[pos].also {
-                    process(it.actionUrl)
+                    matchAndGetParams(it.actionUrl, ActionUrl.ANIME_ANIME_DOWNLOAD_PLAY) {
+                        //参数：URL/标题
+                        activity.startActivity(
+                            Intent(activity, SimplePlayActivity::class.java)
+                                .putExtra(SimplePlayActivity.URL, it[0])
+                                .putExtra(SimplePlayActivity.TITLE, it[1])
+                        )
+                    }
                 }
             }
             //剧集列表长按删除

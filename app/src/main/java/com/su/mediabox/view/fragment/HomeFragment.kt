@@ -13,7 +13,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
-import com.su.mediabox.plugin.PluginManager.process
 import com.su.mediabox.R
 import com.su.mediabox.databinding.FragmentHomeBinding
 import com.su.mediabox.util.showToast
@@ -24,7 +23,6 @@ import com.su.mediabox.util.eventbus.SelectHomeTabEvent
 import com.su.mediabox.util.requestManageExternalStorage
 import com.su.mediabox.view.activity.*
 import com.su.mediabox.viewmodel.HomeViewModel
-import com.su.mediabox.pluginapi.Constant
 import com.su.mediabox.util.clickScale
 import com.su.mediabox.util.setViewsOnClickListener
 import com.su.mediabox.v2.view.activity.MediaClassifyActivity
@@ -34,6 +32,7 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
+@Deprecated("更新2.0后删除")
 class HomeFragment : BaseFragment<FragmentHomeBinding>(), View.OnClickListener, EventBusSubscriber {
     private lateinit var viewModel: HomeViewModel
     private lateinit var adapter: VpAdapter
@@ -154,7 +153,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), View.OnClickListener, 
                     Intent(activity, MediaClassifyActivity::class.java)
                 )
                 tvHomeFragmentHeaderSearch -> activity?.let {
-                    process(Constant.ActionUrl.ANIME_SEARCH)
+
                     it.overridePendingTransition(R.anim.anl_push_top_in, R.anim.anl_stay)
                     return
                 }

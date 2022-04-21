@@ -5,7 +5,6 @@ import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.su.mediabox.App
-import com.su.mediabox.plugin.PluginManager.process
 import com.su.mediabox.R
 import com.su.mediabox.config.Api
 import com.su.mediabox.util.AnimeCover3ViewHolder
@@ -53,14 +52,13 @@ class SearchAdapter(
                         tvFlowLayout.setOnClickListener { _ ->
                             if (it[i].actionUrl.isBlank()) return@setOnClickListener
                             //此处是”类型“，若要修改，需要注意Tab大分类是否还是”类型“
-                            process(it[i].actionUrl)
                         }
                         holder.flAnimeCover3Type.addView(tvFlowLayout)
                     }
                 }
                 holder.tvAnimeCover3Describe.text = item.describe
                 holder.itemView.setOnClickListener {
-                    process(item.actionUrl)
+
                 }
             }
             else -> {

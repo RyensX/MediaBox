@@ -16,9 +16,10 @@ import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
 
+@Deprecated("更新2.0后删除")
 class RankListViewModel : ViewModel() {
     private val rankModel: IRankListComponent by lazy(LazyThreadSafetyMode.NONE) {
-        PluginManager.acquireComponent(IRankListComponent::class.java)
+        PluginManager.acquireComponent()
     }
     var isRequesting = false
     var rankList: MutableList<AnimeCoverBean> = Collections.synchronizedList(ArrayList())

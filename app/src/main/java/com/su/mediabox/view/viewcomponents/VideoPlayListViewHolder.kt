@@ -73,7 +73,7 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
                     setTag(list, Const.ViewComponent.EPISODE_LIST_TAG)
                     //自动定位
                     if (isShowHistory)
-                        bindHistoryPlayInfo {
+                        bindHistoryPlayInfo(itemView.context) {
                             setTag(it, Const.ViewComponent.HISTORY_INFO_TAG)
                             submitList(episodeDataList) {
                                 jumpEpisode(this)

@@ -1,12 +1,12 @@
 package com.su.mediabox.util
 
+import android.content.Context
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.su.mediabox.bean.HistoryBean
 import com.su.mediabox.database.getAppDataBase
-import com.su.mediabox.plugin.AppRouteProcessor
 import com.su.mediabox.pluginapi.v2.been.EpisodeData
 import com.su.mediabox.v2.view.activity.VideoDetailActivity
 import com.su.mediabox.v2.viewmodel.VideoDetailViewModel
@@ -16,11 +16,12 @@ import kotlinx.coroutines.withContext
 import java.util.*
 
 fun bindHistoryPlayInfo(
+    context: Context,
     observer: Observer<HistoryBean?>
 ) {
-    val context = AppRouteProcessor.currentActivity?.get() ?: return
     val detailUrl = (context as? ComponentActivity)?.let {
         when (it) {
+            //TODO 使用ca内的vs
             is VideoDetailActivity -> ViewModelProvider(it)[VideoDetailViewModel::class.java].partUrl
             else -> null
         }

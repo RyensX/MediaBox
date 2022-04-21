@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.su.mediabox.App
-import com.su.mediabox.plugin.PluginManager.process
 import com.su.mediabox.R
 import com.su.mediabox.config.Api
 import com.su.mediabox.util.*
@@ -154,7 +153,7 @@ class AnimeShowAdapter(
                     holder.tvAnimeCover1Episode.text = item.episode
                 }
                 holder.itemView.setOnClickListener {
-                    process(item.actionUrl)
+
                 }
             }
             holder is AnimeCover3ViewHolder && item is AnimeCoverBean -> {
@@ -185,14 +184,14 @@ class AnimeShowAdapter(
                             ) as TextView
                         tvFlowLayout.text = it[i].title
                         tvFlowLayout.setOnClickListener { _ ->
-                            process(it[i].actionUrl)
+
                         }
                         holder.flAnimeCover3Type.addView(tvFlowLayout)
                     }
                 }
                 holder.tvAnimeCover3Describe.text = item.describe
                 holder.itemView.setOnClickListener {
-                    process(item.actionUrl)
+
                 }
             }
             holder is AnimeCover4ViewHolder && item is AnimeCoverBean -> {
@@ -207,7 +206,7 @@ class AnimeShowAdapter(
                 }
                 holder.tvAnimeCover4Title.text = item.title
                 holder.itemView.setOnClickListener {
-                    process(item.actionUrl)
+
                 }
             }
             holder is AnimeCover5ViewHolder && item is AnimeCoverBean -> {
@@ -245,7 +244,7 @@ class AnimeShowAdapter(
                     }
                 }
                 View.OnClickListener {
-                    process(item.actionUrl)
+
                 }.apply {
                     holder.itemView.setOnClickListener(this)
                     holder.tvAnimeCover5Area.setOnClickListener(this)
@@ -304,7 +303,7 @@ class AnimeShowAdapter(
                         holder.tvAnimeCover1Episode.text = item.episode
                     }
                     holder.itemView.setOnClickListener {
-                        process(item.actionUrl)
+
                     }
                 }
                 is AnimeCover3ViewHolder -> {
@@ -337,14 +336,14 @@ class AnimeShowAdapter(
                             tvFlowLayout.text = it[i].title
                             tvFlowLayout.setOnClickListener { _ ->
                                 if (it[i].actionUrl.isBlank()) return@setOnClickListener
-                                process(it[i].actionUrl)
+
                             }
                             holder.flAnimeCover3Type.addView(tvFlowLayout)
                         }
                     }
                     holder.tvAnimeCover3Describe.text = item.describe
                     holder.itemView.setOnClickListener {
-                        process(item.actionUrl)
+
                     }
                 }
                 is AnimeCover4ViewHolder -> {
@@ -359,7 +358,7 @@ class AnimeShowAdapter(
                     }
                     holder.tvAnimeCover4Title.text = item.title
                     holder.itemView.setOnClickListener {
-                        process(item.actionUrl)
+
                     }
                 }
                 is AnimeCover5ViewHolder -> {
@@ -416,7 +415,7 @@ class AnimeShowAdapter(
                         }
                     }
                     View.OnClickListener {
-                        process(item.actionUrl)
+
                     }.apply {
                         holder.itemView.setOnClickListener(this)
                         holder.tvAnimeCover5Area.setOnClickListener(this)
