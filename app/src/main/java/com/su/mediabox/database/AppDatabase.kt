@@ -57,7 +57,7 @@ abstract class AppDatabase : RoomDatabase() {
 
 }
 
-fun getAppDataBase() = PluginManager.currentLaunchPlugin.value?.apply { getAppDataBase() }
+fun getAppDataBase() = PluginManager.currentLaunchPlugin.value?.run { getAppDataBase() }
     ?: throw RuntimeException("获取当前插件信息错误！")
 
 fun PluginInfo.getAppDataBase() = AppDatabase.getInstance(App.context, packageName, signature)

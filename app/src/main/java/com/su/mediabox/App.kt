@@ -10,6 +10,7 @@ import com.scwang.smart.refresh.footer.BallPulseFooter
 import com.scwang.smart.refresh.header.MaterialHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import com.su.mediabox.plugin.AppAction
+import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.pluginapi.AppUtil
 import com.su.mediabox.util.CrashHandler
 import com.su.mediabox.util.PushHelper
@@ -37,9 +38,10 @@ class App : Application() {
         super.onCreate()
         context = this
 
-        //初始化路由及插件配置
         AppUtil.init(this)
         AppAction.init()
+
+        PluginManager.scanPlugin()
 
         Kotpref.init(context)
 

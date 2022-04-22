@@ -15,6 +15,7 @@ import com.su.mediabox.config.Const
 import com.su.mediabox.databinding.ActivityPluginBinding
 import com.su.mediabox.util.Util
 import com.su.mediabox.util.goActivity
+import com.su.mediabox.util.showToast
 import com.su.mediabox.util.update.AppUpdateHelper
 import com.su.mediabox.util.update.AppUpdateStatus
 import com.su.mediabox.view.adapter.type.*
@@ -37,7 +38,6 @@ class StartActivity : BaseActivity<ActivityPluginBinding>() {
             else
                 mBinding.startPluginList.submitList(it)
         }
-        PluginManager.scanPlugin(packageManager)
 
         //检测更新
         AppUpdateHelper.instance.apply {
@@ -62,6 +62,8 @@ class StartActivity : BaseActivity<ActivityPluginBinding>() {
 
         //自动刷新
         listenInstallBroadcasts()
+
+        PluginManager.pluginDir?.absolutePath?.showToast()
     }
 
     override fun onResume() {
@@ -71,7 +73,7 @@ class StartActivity : BaseActivity<ActivityPluginBinding>() {
 
     private val installBroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            PluginManager.scanPlugin(packageManager)
+            PluginManager.scanPlugin()
         }
     }
 

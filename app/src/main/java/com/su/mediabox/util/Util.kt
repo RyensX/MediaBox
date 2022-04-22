@@ -6,7 +6,6 @@ import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
-import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.Point
 import android.graphics.drawable.Drawable
@@ -14,7 +13,6 @@ import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import android.util.Log
-import android.util.TypedValue
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
@@ -40,7 +38,6 @@ import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
 import java.util.*
 import java.util.jar.JarFile
-
 
 object Util {
 
@@ -494,13 +491,10 @@ object Util {
         return arrayOf(subjectDN, issuerDN, serial, notBefore, notAfter)
     }
 
-    fun PackageManager.getSignatures(packageName: String): String {
+    fun getSignatures(packageInfo: PackageInfo): String {
         return try {
             //获取签名信息
-            val cert: ByteArray = getPackageInfo(
-                packageName,
-                PackageManager.GET_SIGNATURES
-            ).signatures[0].toByteArray()
+            val cert: ByteArray = packageInfo.signatures[0].toByteArray()
             //将签名转换为字节数组流
             val input: InputStream = ByteArrayInputStream(cert)
             //证书工厂类，这个类实现了出厂合格证算法的功能

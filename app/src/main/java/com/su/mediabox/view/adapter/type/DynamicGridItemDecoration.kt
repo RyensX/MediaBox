@@ -30,7 +30,6 @@ class DynamicGridItemDecoration(
     ) {
         val layoutManager = parent.layoutManager
 
-
         if (layoutManager is GridLayoutManager) {
 
             val position = parent.getChildAdapterPosition(view)
