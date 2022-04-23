@@ -74,8 +74,20 @@ class PluginInstallerViewModel : ViewModel() {
                     info.addAll(buildInfoPair("名称", name))
                     info.addAll(buildInfoPair("包名", packageName))
                     info.addAll(buildInfoPair("API", "$apiVersion"))
-                    //TODO 已安装、安全检测
-                    info.addAll(buildInfoPair("版本", version))
+                    PluginManager.getPluginInfo(packageName)?.also {
+                        //已安装检测
+                        info.addAll(buildInfoPair("版本", "升级 ${it.version} -> $version", Color.RED))
+                        //安全检测
+                        if (signature != it.signature) {
+                            info.addAll(
+                                buildInfoPair("警告", "当前插件包与已安装插件签名不一致，请确认来源是否安全", Color.RED)
+                            )
+                            _pluginInstallState.postValue(
+                                PluginInstallState.ERROR(info)
+                            )
+                            return@launch
+                        }
+                    } ?: info.addAll(buildInfoPair("版本", version))
                     _pluginInstallState.postValue(PluginInstallState.READY(data, this, info))
                 } ?: run {
                     _pluginInstallState.postValue(

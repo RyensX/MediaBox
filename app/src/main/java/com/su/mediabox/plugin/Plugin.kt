@@ -43,7 +43,7 @@ object PluginManager {
     val pluginDir = App.context.getExternalFilesDir("plugins")!!
 
     /**
-     * Map<[BasePluginActivity.PLUGIN_ID],[PluginInfo]>
+     * Map<packageName,[PluginInfo]>
      */
     private val pluginDataFlow = MutableStateFlow(mutableMapOf<String, PluginInfo>())
     private val _currentLaunchPlugin = MutableLiveData<PluginInfo?>()
@@ -67,7 +67,7 @@ object PluginManager {
             pluginDir.listFiles()?.apply {
                 Log.d("内部插件数量", "$size")
             }?.forEach { pluginPackage ->
-                parsePluginInfo(pluginPackage)?.also { plugins[it.id] = it }
+                parsePluginInfo(pluginPackage)?.also { plugins[it.packageName] = it }
             }
             //扫描已安装的，只在debug模式下有效以方便调试
             debug {
@@ -76,13 +76,15 @@ object PluginManager {
                 }.forEach { info ->
                     parsePluginInfo(File(info.activityInfo.applicationInfo.sourceDir))?.also {
                         it.isExternalPlugin = true
-                        plugins[it.id] = it
+                        plugins[it.packageName] = it
                     }
                 }
             }
             pluginDataFlow.value = plugins
         }
     }
+
+    fun getPluginInfo(packageName: String) = pluginDataFlow.value[packageName]
 
     fun parsePluginInfo(pluginPackage: File): PluginInfo? {
         App.context.packageManager.getPackageArchiveInfo(
