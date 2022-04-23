@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.*
 import com.su.mediabox.App
@@ -13,6 +14,7 @@ import com.su.mediabox.view.activity.BasePluginActivity
 import com.su.mediabox.pluginapi.IComponentFactory
 import com.su.mediabox.pluginapi.components.IBaseComponent
 import com.su.mediabox.util.Util.getSignatures
+import com.su.mediabox.util.copyTo
 import com.su.mediabox.util.debug
 import com.su.mediabox.util.goActivity
 import com.su.mediabox.util.toLiveData
@@ -24,6 +26,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 
 object PluginManager {
@@ -84,7 +87,7 @@ object PluginManager {
     fun parsePluginInfo(pluginPackage: File): PluginInfo? {
         App.context.packageManager.getPackageArchiveInfo(
             pluginPackage.absolutePath,
-            PackageManager.GET_META_DATA
+            PackageManager.GET_META_DATA or PackageManager.GET_SIGNATURES
         )?.apply {
             return parsePluginInfo(this)
         }
@@ -108,6 +111,7 @@ object PluginManager {
             apiImpl,
             pluginApplicationInfo.packageName,
             pluginApplicationInfo.loadLabel(packageManager).toString(),
+            pluginPackageInfo.versionName,
             pluginApplicationInfo.loadIcon(packageManager),
             pluginApplicationInfo.sourceDir,
             getSignatures(pluginPackageInfo)
@@ -120,6 +124,14 @@ object PluginManager {
             goActivity<HomeActivity>()
         }
     }
+
+    suspend fun installPlugin(fileUri: Uri, pluginInfo: PluginInfo): File =
+        withContext(Dispatchers.IO) {
+            val plugin = fileUri.copyTo(File(pluginDir, "mediabox_plugin_${pluginInfo.id}.mpp"))
+            if (plugin.exists())
+                scanPlugin()
+            return@withContext plugin
+        }
 
     fun initPluginEnv() {
         _currentLaunchPlugin.value = null

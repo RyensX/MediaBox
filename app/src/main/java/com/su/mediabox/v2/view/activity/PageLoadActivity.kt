@@ -18,7 +18,7 @@ import com.su.mediabox.view.adapter.type.typeAdapter
 
 abstract class PageLoadActivity<VB : ViewBinding> : BasePluginActivity<VB>(),
     PageLoadViewModel.LoadData {
-
+    //TODO 恢复数据
     protected val pageLoadViewModel by viewModels<PageLoadViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {

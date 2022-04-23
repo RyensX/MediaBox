@@ -37,6 +37,38 @@
         android:theme="@style/Theme.Anime.skin"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".v2.view.activity.PluginInstallerActivity"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:label="插件安装"
+            android:launchMode="singleTop"
+            android:theme="@style/PluginInstallerStyle">
+            <!--本地安装-->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:mimeType="*/*"
+                    android:scheme="file" />
+                <data
+                    android:mimeType="*/*"
+                    android:scheme="content" />
+            </intent-filter>
+            <!--在线安装-->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="plugin"
+                    android:path="/install"
+                    android:scheme="mediabox" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".v2.view.activity.HomeActivity"
             android:exported="false" />
         <activity
@@ -119,7 +151,7 @@
         <activity
             android:name=".view.activity.MainActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize"
-            android:exported="true"></activity>
+            android:exported="true" />
         <!--
         <service
             android:name="com.su.mediabox.view.component.widget.everydayanime.EverydayAnimeService"

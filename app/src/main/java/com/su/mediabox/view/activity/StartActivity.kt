@@ -18,6 +18,7 @@ import com.su.mediabox.util.goActivity
 import com.su.mediabox.util.showToast
 import com.su.mediabox.util.update.AppUpdateHelper
 import com.su.mediabox.util.update.AppUpdateStatus
+import com.su.mediabox.v2.view.activity.PluginInstallerActivity
 import com.su.mediabox.view.adapter.type.*
 import com.su.mediabox.view.viewcomponents.ItemPluginViewHolder
 
@@ -62,8 +63,6 @@ class StartActivity : BaseActivity<ActivityPluginBinding>() {
 
         //自动刷新
         listenInstallBroadcasts()
-
-        PluginManager.pluginDir?.absolutePath?.showToast()
     }
 
     override fun onResume() {

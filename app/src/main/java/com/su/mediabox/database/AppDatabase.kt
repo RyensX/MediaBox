@@ -15,7 +15,6 @@ import com.su.mediabox.bean.FavoriteAnimeBean
 import com.su.mediabox.bean.HistoryBean
 import com.su.mediabox.bean.PluginInfo
 import com.su.mediabox.config.Const
-import com.su.mediabox.config.Const.Database.AppDataBase.APP_DATA_BASE_FILE_NAME
 import com.su.mediabox.database.dao.*
 import com.su.mediabox.plugin.PluginManager
 
@@ -41,8 +40,8 @@ abstract class AppDatabase : RoomDatabase() {
 
         private val instances by lazy(LazyThreadSafetyMode.NONE) { mutableMapOf<String, AppDatabase>() }
 
-        fun getInstance(context: Context, packageName: String, signature: String): AppDatabase {
-            val name = String.format(APP_DATA_BASE_FILE_NAME, packageName, signature)
+        fun getInstance(context: Context, id: String): AppDatabase {
+            val name = "plugin_data_$id.db"
             return instances[name] ?: synchronized(this) {
                 instances[name] ?: Room.databaseBuilder(
                     context.applicationContext,
@@ -60,7 +59,7 @@ abstract class AppDatabase : RoomDatabase() {
 fun getAppDataBase() = PluginManager.currentLaunchPlugin.value?.run { getAppDataBase() }
     ?: throw RuntimeException("获取当前插件信息错误！")
 
-fun PluginInfo.getAppDataBase() = AppDatabase.getInstance(App.context, packageName, signature)
+fun PluginInfo.getAppDataBase() = AppDatabase.getInstance(App.context, id)
 
 private val version3to4 = object : Migration(3, 4) {
     override fun migrate(database: SupportSQLiteDatabase) {

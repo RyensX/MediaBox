@@ -223,4 +223,8 @@
     <string name="all_history_count">%d条</string>
     <string name="item_unknown_type">未知类型</string>
     <string name="classify_title">媒体分类</string>
+    <string name="plugin_installer_install">安装</string>
+    <string name="plugin_installer_launch">启动</string>
+    <string name="plugin_installer_download">下载</string>
+    <string name="plugin_installer_cancel">关闭</string>
 </resources>

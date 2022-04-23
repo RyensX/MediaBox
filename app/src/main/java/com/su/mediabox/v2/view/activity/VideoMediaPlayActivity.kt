@@ -1,5 +1,6 @@
 package com.su.mediabox.v2.view.activity
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.viewModels
 import com.shuyu.gsyvideoplayer.GSYVideoManager
@@ -83,8 +84,11 @@ class VideoMediaPlayActivity : BasePluginActivity<ActivityVideoMediaPlayBinding>
             //进度记忆
             playPositionMemoryStore = VideoPositionMemoryDbStore
             //设置旋转
-            orientationUtils = OrientationUtils(this@VideoMediaPlayActivity, this)
-            orientationUtils.resolveByClick()
+            orientationUtils = OrientationUtils(this@VideoMediaPlayActivity, this).apply {
+                isRotateWithSystem = false
+                if (screenType != ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
+                    resolveByClick()
+            }
             ivDownloadButton?.gone()
             fullscreenButton.gone()
             //是否开启自动旋转

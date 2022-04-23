@@ -7,6 +7,8 @@ data class PluginInfo(
     val apiImpl: String,
     val packageName: String,
     val name: String,
+    //这里获取的是versionName
+    val version: String,
     val icon: Drawable,
     val sourcePath: String,
     val signature: String,
@@ -14,5 +16,5 @@ data class PluginInfo(
 ) {
     //当前绑定插件标识，目前为插件包名
     val id: String
-        get() = packageName
+        get() = "$packageName#$signature"
 }
