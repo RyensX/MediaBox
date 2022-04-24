@@ -7,22 +7,18 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Environment
+import android.os.FileObserver
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
 import com.su.mediabox.App
 import com.su.mediabox.bean.PluginInfo
 import com.su.mediabox.pluginapi.Constant
-import com.su.mediabox.view.activity.BasePluginActivity
 import com.su.mediabox.pluginapi.IComponentFactory
 import com.su.mediabox.pluginapi.components.IBaseComponent
+import com.su.mediabox.util.*
 import com.su.mediabox.util.Util.getSignatures
-import com.su.mediabox.util.copyTo
-import com.su.mediabox.util.debug
-import com.su.mediabox.util.goActivity
-import com.su.mediabox.util.toLiveData
 import com.su.mediabox.v2.view.activity.HomeActivity
-import com.su.mediabox.v2.viewmodel.PluginInstallerViewModel
 import dalvik.system.PathClassLoader
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -46,6 +42,10 @@ object PluginManager {
 
     const val PLUGIN_DIR_NAME = "plugins"
     val pluginDir = App.context.getExternalFilesDir(PLUGIN_DIR_NAME)!!
+
+    init {
+        PluginPackageObserver.startWatching()
+    }
 
     /**
      * Map<packageName,[PluginInfo]>
@@ -85,6 +85,7 @@ object PluginManager {
                     }
                 }
             }
+            Log.d("插件扫描完毕", "数量:${plugins.size}")
             pluginDataFlow.value = plugins
         }
     }
@@ -132,16 +133,24 @@ object PluginManager {
         }
     }
 
-    suspend fun installPlugin(fileUri: Uri, pluginInfo: PluginInfo): File =
+    /**
+     * 安装插件
+     *
+     * @param pluginInfo 至少要保证包含有效[PluginInfo.id]
+     */
+    suspend fun installPlugin(
+        fileUri: Uri,
+        pluginInfo: PluginInfo
+    ): File =
         withContext(Dispatchers.IO) {
-            val plugin = fileUri.copyTo(File(pluginDir, pluginInfo.installedPluginName()))
-            if (plugin.exists())
-                scanPlugin()
-            return@withContext plugin
+            Log.d("安装插件", "uri=$fileUri info=$pluginInfo")
+            return@withContext fileUri.copyTo(File(pluginDir, pluginInfo.installedPluginName()))
         }
 
     /**
      * 调用系统下载器下载插件
+     *
+     * @param pluginInfo 至少要保证包含有效[PluginInfo.sourcePath]（作为下载地址）
      * @param directInstall 直接下载安装，一般只用于官方仓库插件，不经安装器验证直接安装
      */
     fun downloadPlugin(pluginInfo: PluginInfo, directInstall: Boolean = false) {
@@ -150,16 +159,11 @@ object PluginManager {
         val uri: Uri = Uri
             .parse(pluginInfo.sourcePath)
         val request = DownloadManager.Request(uri).apply {
+            val fileName = "${pluginInfo.name}_${pluginInfo.packageName}_${pluginInfo.version}.mpp"
             if (directInstall) {
-                setDestinationInExternalFilesDir(
-                    App.context, PLUGIN_DIR_NAME,
-                    pluginInfo.installedPluginName()
-                )
+                setDestinationInExternalFilesDir(App.context, PLUGIN_DIR_NAME, "tmp_$fileName")
             } else {
-                setDestinationInExternalPublicDir(
-                    Environment.DIRECTORY_DOWNLOADS,
-                    "${pluginInfo.name}_${pluginInfo.packageName}_${pluginInfo.version}.mpp"
-                )
+                setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName)
                 setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
             }
             setAllowedOverMetered(true)
@@ -230,5 +234,43 @@ object PluginManager {
     }
 
     private fun PluginInfo.installedPluginName() = "mediabox_plugin_${id}.mpp"
+
+    /**
+     * 插件包(安装/卸载)监听
+     */
+    object PluginPackageObserver : FileObserver(
+        pluginDir.absolutePath,
+        MODIFY or CLOSE_WRITE or MOVED_FROM or MOVED_TO or DELETE or DELETE_SELF or MOVE_SELF
+    ) {
+        override fun onEvent(event: Int, path: String?) {
+            path?.also {
+                File(pluginDir, path).apply {
+                    Log.d("监测到插件变动", "event=$event path=$absolutePath")
+                    when {
+                        //下载安装缓存
+                        path.startsWith("tmp_") -> if (event == CLOSE_WRITE)
+                            pluginWorkScope.launch {
+                                Log.d("安装插件缓存", path)
+                                try {
+                                    parsePluginInfo(this@apply)?.also {
+                                        FileUri.getUriByFile(this@apply, true)
+                                            ?.let { it1 -> installPlugin(it1, it) }
+                                    }
+                                } catch (e: Exception) {
+                                    e.printStackTrace()
+                                } finally {
+                                    delete()
+                                }
+                            }
+                        //插件变动
+                        path.startsWith("mediabox_plugin_") -> {
+                            Log.d("更新插件", path)
+                            scanPlugin()
+                        }
+                    }
+                }
+            }
+        }
+    }
 
 }

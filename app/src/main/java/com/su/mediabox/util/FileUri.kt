@@ -7,7 +7,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.*
-import android.provider.MediaStore.AUTHORITY
 import android.util.Log
 import androidx.core.content.FileProvider
 import com.su.mediabox.App
@@ -23,6 +22,8 @@ import java.io.*
  * 来自 https://github.com/javakam/FileOperator/blob/master/library_core/src/main/java/ando/file/core/FileUri.kt
  */
 object FileUri {
+
+    val AUTHORITY = "${App.context.packageName}.fileProvider"
 
     //Android R
     //----------------------------------------------------------------
@@ -76,8 +77,7 @@ object FileUri {
         return if (isOriginal) Uri.fromFile(file)
         else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                val authority = App.context.packageName + AUTHORITY
-                FileProvider.getUriForFile(App.context, authority, file ?: return null)
+                FileProvider.getUriForFile(App.context, AUTHORITY, file ?: return null)
             } else {
                 Uri.fromFile(file)
             }

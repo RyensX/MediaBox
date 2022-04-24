@@ -8,13 +8,13 @@ import com.su.mediabox.R
 data class PluginInfo(
     val apiVersion: Int,
     val apiImpl: String,
-    val packageName: String,
+    var packageName: String,
     val name: String,
     //这里获取的是versionName
     val version: String,
     val icon: Drawable,
     val sourcePath: String,
-    val signature: String,
+    var signature: String,
     var isExternalPlugin: Boolean = false
 ) {
 

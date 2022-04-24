@@ -37,7 +37,8 @@ class StartActivity : BaseActivity<ActivityPluginBinding>() {
             if (it.isEmpty())
                 showLoadFailedTip(Html.fromHtml("""<p>没有插件！前往<a href="https://github.com/RyensX/MediaBoxPlugin">插件API</a>查看示例</p>""")) {}
             else
-                mBinding.startPluginList.submitList(it)
+                hideLoadFailedTip()
+            mBinding.startPluginList.submitList(it)
         }
 
         //检测更新
