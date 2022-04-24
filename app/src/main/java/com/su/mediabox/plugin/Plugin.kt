@@ -44,7 +44,8 @@ object PluginManager {
      */
     private const val minPluginApiVersion = 1
 
-    val pluginDir = App.context.getExternalFilesDir("plugins")!!
+    const val PLUGIN_DIR_NAME = "plugins"
+    val pluginDir = App.context.getExternalFilesDir(PLUGIN_DIR_NAME)!!
 
     /**
      * Map<packageName,[PluginInfo]>
@@ -133,7 +134,7 @@ object PluginManager {
 
     suspend fun installPlugin(fileUri: Uri, pluginInfo: PluginInfo): File =
         withContext(Dispatchers.IO) {
-            val plugin = fileUri.copyTo(File(pluginDir, "mediabox_plugin_${pluginInfo.id}.mpp"))
+            val plugin = fileUri.copyTo(File(pluginDir, pluginInfo.installedPluginName()))
             if (plugin.exists())
                 scanPlugin()
             return@withContext plugin
@@ -141,20 +142,28 @@ object PluginManager {
 
     /**
      * 调用系统下载器下载插件
+     * @param directInstall 直接下载安装，一般只用于官方仓库插件，不经安装器验证直接安装
      */
-    fun downloadPlugin(pluginInfo: PluginInfo) {
+    fun downloadPlugin(pluginInfo: PluginInfo, directInstall: Boolean = false) {
         val downloadManager =
             App.context.getSystemService(AppCompatActivity.DOWNLOAD_SERVICE) as DownloadManager
         val uri: Uri = Uri
             .parse(pluginInfo.sourcePath)
         val request = DownloadManager.Request(uri).apply {
-            setDestinationInExternalPublicDir(
-                Environment.DIRECTORY_DOWNLOADS,
-                "${pluginInfo.name}_${pluginInfo.packageName}_${pluginInfo.version}.mpp"
-            )
+            if (directInstall) {
+                setDestinationInExternalFilesDir(
+                    App.context, PLUGIN_DIR_NAME,
+                    pluginInfo.installedPluginName()
+                )
+            } else {
+                setDestinationInExternalPublicDir(
+                    Environment.DIRECTORY_DOWNLOADS,
+                    "${pluginInfo.name}_${pluginInfo.packageName}_${pluginInfo.version}.mpp"
+                )
+                setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+            }
             setAllowedOverMetered(true)
             setAllowedOverRoaming(true)
-            setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
         }
         downloadManager.enqueue(request)
     }
@@ -219,5 +228,7 @@ object PluginManager {
         }
             ?: throw RuntimeException("当前插件未提供该组件")
     }
+
+    private fun PluginInfo.installedPluginName() = "mediabox_plugin_${id}.mpp"
 
 }
