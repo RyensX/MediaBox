@@ -1,11 +1,14 @@
 package com.su.mediabox.plugin
 
+import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Environment
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
 import com.su.mediabox.App
 import com.su.mediabox.bean.PluginInfo
@@ -19,6 +22,7 @@ import com.su.mediabox.util.debug
 import com.su.mediabox.util.goActivity
 import com.su.mediabox.util.toLiveData
 import com.su.mediabox.v2.view.activity.HomeActivity
+import com.su.mediabox.v2.viewmodel.PluginInstallerViewModel
 import dalvik.system.PathClassLoader
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -134,6 +138,26 @@ object PluginManager {
                 scanPlugin()
             return@withContext plugin
         }
+
+    /**
+     * 调用系统下载器下载插件
+     */
+    fun downloadPlugin(pluginInfo: PluginInfo) {
+        val downloadManager =
+            App.context.getSystemService(AppCompatActivity.DOWNLOAD_SERVICE) as DownloadManager
+        val uri: Uri = Uri
+            .parse(pluginInfo.sourcePath)
+        val request = DownloadManager.Request(uri).apply {
+            setDestinationInExternalPublicDir(
+                Environment.DIRECTORY_DOWNLOADS,
+                "${pluginInfo.name}_${pluginInfo.packageName}_${pluginInfo.version}.mpp"
+            )
+            setAllowedOverMetered(true)
+            setAllowedOverRoaming(true)
+            setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+        }
+        downloadManager.enqueue(request)
+    }
 
     fun initPluginEnv() {
         _currentLaunchPlugin.value = null

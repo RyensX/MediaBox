@@ -9,6 +9,13 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+    <TextView
+        android:id="@+id/plugin_install_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="8dp"
+        android:text="@string/plugin_installer_loading" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/plugin_install_info_list"
         android:layout_width="match_parent"

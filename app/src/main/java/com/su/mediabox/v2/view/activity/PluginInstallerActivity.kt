@@ -3,6 +3,7 @@ package com.su.mediabox.v2.view.activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.su.mediabox.databinding.ActivityPluginInstallerBinding
@@ -25,14 +26,17 @@ class PluginInstallerActivity : AppCompatActivity(), View.OnClickListener {
 
         mBinding.apply {
             viewModel.pluginInstallState.observe(this@PluginInstallerActivity) {
+                pluginInstallLoading.gone()
                 when (it) {
                     is PluginInstallerViewModel.PluginInstallState.LOADING -> {
                         pluginInstallDownload.gone()
                         pluginInstallInstall.gone()
+                        pluginInstallLoading.visible()
                     }
                     is PluginInstallerViewModel.PluginInstallState.PREVIEW -> {
                         pluginInstallDownload.visible()
                         pluginInstallInstall.gone()
+                        pluginInstallInfoList.submitList(it.previewInfo)
                     }
                     is PluginInstallerViewModel.PluginInstallState.READY -> {
                         pluginInstallDownload.gone()
@@ -61,7 +65,11 @@ class PluginInstallerActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
 
-            setViewsOnClickListener(pluginInstallInstall, pluginInstallCancel)
+            setViewsOnClickListener(
+                pluginInstallInstall,
+                pluginInstallCancel,
+                pluginInstallDownload
+            )
 
             pluginInstallInfoList.dynamicGrid().initTypeList { }
         }
@@ -90,6 +98,14 @@ class PluginInstallerActivity : AppCompatActivity(), View.OnClickListener {
             when (v) {
                 pluginInstallInstall -> viewModel.install()
                 pluginInstallCancel -> finish()
+                pluginInstallDownload -> {
+                    Toast.makeText(
+                        this@PluginInstallerActivity,
+                        "插件开始下载，请注意通知栏", Toast.LENGTH_LONG
+                    ).show()
+                    viewModel.downloadPlugin()
+                    finish()
+                }
             }
         }
     }

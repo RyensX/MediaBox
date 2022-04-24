@@ -10,6 +10,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.su.mediabox.bean.PluginInfo
+import com.su.mediabox.net.RetrofitManager
+import com.su.mediabox.net.service.PluginService
 import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.pluginapi.Text.urlDecode
 import com.su.mediabox.pluginapi.v2.been.BaseData
@@ -101,12 +103,52 @@ class PluginInstallerViewModel : ViewModel() {
     }
 
     private fun onlineLoad(data: Uri) {
-        //TODO 载入在线安装预览信息
-        when (data.path) {
-            "/install" -> {
-                val pluginInfoUrl =
-                    Util.withoutExceptionGet { data.getQueryParameter("pluginInfoUrl") }
+        viewModelScope.launch(Dispatchers.IO) {
+            //TODO 载入在线安装预览信息
+            when (data.path) {
+                "/install" -> try {
+                    Log.d("在线安装", "$data")
+                    val pluginInfoUrl =
+                        Util.withoutExceptionGet {
+                            data.getQueryParameter("previewInfoUrl")?.urlDecode()
+                        }
 
+                    if (pluginInfoUrl != null) {
+                        Log.d("在线安装", "预览信息=$pluginInfoUrl")
+                        val api = RetrofitManager.get().create(PluginService::class.java)
+                        api.fetchPluginPreviewInfo(pluginInfoUrl)?.apply {
+                            val info = mutableListOf<SimpleTextData>()
+
+                            info.addAll(buildInfoPair("来源", pluginInfoUrl))
+                            info.addAll(buildInfoPair("下载", sourcePath))
+                            info.addAll(buildInfoPair("名称", name))
+                            info.addAll(buildInfoPair("包名", packageName))
+                            info.addAll(buildInfoPair("API", "$apiVersion"))
+
+                            _pluginInstallState.postValue(
+                                PluginInstallState.PREVIEW(this, info)
+                            )
+
+                            Log.d("预览信息", toString())
+                            return@launch
+                        }
+                    }
+                    PluginInstallState.ERROR(
+                        buildInfoPair("错误", "加载预览信息失败", Color.RED)
+                    )
+                } catch (e: Exception) {
+                    PluginInstallState.ERROR(
+                        buildInfoPair("错误", "在线安装预览信息加载错误", Color.RED)
+                    )
+                }
+            }
+        }
+    }
+
+    fun downloadPlugin() {
+        when (val data = pluginInstallState.value) {
+            is PluginInstallState.PREVIEW -> {
+                PluginManager.downloadPlugin(data.pluginInfo)
             }
         }
     }
@@ -135,6 +177,7 @@ class PluginInstallerViewModel : ViewModel() {
         class ERROR(val errorInfo: List<BaseData>) : PluginInstallState()
 
         //在线安装时的预览插件包信息
-        class PREVIEW(pluginInfo: PluginInfo) : PluginInstallState()
+        class PREVIEW(val pluginInfo: PluginInfo, val previewInfo: List<BaseData>) :
+            PluginInstallState()
     }
 }
