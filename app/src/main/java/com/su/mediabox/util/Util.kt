@@ -82,7 +82,12 @@ object Util {
     fun getUserNoticeContent(): String {
         val sb = StringBuffer()
         try {
-            val inputStream = App.context.resources.openRawResource(R.raw.notice)
+            val context = App.context
+            //不直接引用以方便CI构建Debug Artifact
+            val noticeResId = context.resources.getIdentifier("notice", "raw", context.packageName)
+            if (noticeResId == 0)
+                return ""
+            val inputStream = context.resources.openRawResource(noticeResId)
             val reader = BufferedReader(InputStreamReader(inputStream, "UTF-8"))
             var out: String?
             while (reader.readLine().also { out = it } != null) {

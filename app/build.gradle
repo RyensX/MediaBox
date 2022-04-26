@@ -1,3 +1,5 @@
+import java.lang.reflect.Field
+
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
@@ -71,7 +73,11 @@ android {
 
     applicationVariants.all { variant ->
         variant.outputs.all {
-            outputFileName = "app_release_${variant.productFlavors[0].name.toLowerCase()}_${variant.versionName}.apk"
+            def buildType = variant.buildType.name.toString()
+            if (buildType != "debug")
+                outputFileName = "MediaBox_release_${variant.productFlavors[0].name.toLowerCase()}_${variant.versionName}_${variant.versionCode}.apk"
+            else
+                outputFileName = "app_debug.apk"
         }
     }
 
