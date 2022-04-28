@@ -1,4 +1,4 @@
-name: Android CI
+name: Android Release CI
 
 on:
   push:
@@ -30,7 +30,7 @@ jobs:
         
     - name: Release Files
       if: ${{ env.FILE_REPO != "" }}
-    - run:  |
+      run:  |
         cd secrets
         cp key.jks ..
         cp secret.gradle ..
