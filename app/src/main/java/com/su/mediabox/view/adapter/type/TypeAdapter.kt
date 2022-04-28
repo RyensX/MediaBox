@@ -151,9 +151,7 @@ class TypeAdapter(
     @Suppress("UNCHECKED_CAST")
     inline fun <reified T> getData(position: Int) = withoutExceptionGet { getItem(position) as T }
 
-    public override fun getItem(position: Int): Any {
-        return super.getItem(position)
-    }
+    public override fun getItem(position: Int) = withoutExceptionGet { super.getItem(position) }
 
     fun checkDataIsSame(list: List<Any>?) = list === currentData
 

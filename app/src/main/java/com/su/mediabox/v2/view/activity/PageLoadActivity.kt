@@ -18,12 +18,12 @@ import com.su.mediabox.view.adapter.type.typeAdapter
 
 abstract class PageLoadActivity<VB : ViewBinding> : BasePluginActivity<VB>(),
     PageLoadViewModel.LoadData {
-    //TODO 恢复数据
+
     protected val pageLoadViewModel by viewModels<PageLoadViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+ 
         dataListView.dynamicGrid().initTypeList { }
 
         pageLoadViewModel.loadDataFun = this
@@ -47,7 +47,8 @@ abstract class PageLoadActivity<VB : ViewBinding> : BasePluginActivity<VB>(),
             }
         }
 
-        pageLoadViewModel.reLoadData()
+        if (pageLoadViewModel.loadState.value !is PageLoadViewModel.LoadState.SUCCESS)
+            pageLoadViewModel.reLoadData()
     }
 
     @CallSuper
