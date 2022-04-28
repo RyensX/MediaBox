@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:padding="12dp">
+
+    <ImageView
+        android:id="@+id/vc_pp_icon"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_baseline_android_24" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/vc_pp_name"
+        style="@style/TextAppearance.Material3.TitleMedium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toTopOf="@id/vc_pp_version"
+        app:layout_constraintStart_toEndOf="@id/vc_pp_icon"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="测试插件" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/vc_pp_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/vc_pp_name"
+        app:layout_constraintTop_toBottomOf="@id/vc_pp_name"
+        tools:text="1.0" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/vc_pp_action"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/shape_fill_circle_corner_main_color_2_50_skin"
+        android:backgroundTint="@color/main_color_2_skin"
+        android:gravity="center"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="4dp"
+        android:textColor="@color/foreground_white_skin"
+        android:textSize="11sp"
+        app:layout_constraintBottom_toBottomOf="@id/vc_pp_icon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/vc_pp_icon"
+        tools:text="下载" />
+</androidx.constraintlayout.widget.ConstraintLayout>

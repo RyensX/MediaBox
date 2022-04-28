@@ -44,7 +44,6 @@ class PluginInstallerActivity : AppCompatActivity(), View.OnClickListener {
                         pluginInstallInfoList.submitList(it.installInfo)
                     }
                     is PluginInstallerViewModel.PluginInstallState.SUCCESS -> {
-                        "插件安装成功".showToast()
                         pluginInstallDownload.gone()
                         pluginInstallInstall.gone()
                         pluginInstallLaunch.apply {

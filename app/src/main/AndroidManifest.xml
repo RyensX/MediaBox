@@ -100,6 +100,9 @@
             android:name=".v2.view.activity.VideoFavoriteActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
+            android:name=".v2.view.activity.PluginRepositoryActivity"
+            android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
+        <activity
             android:name=".view.activity.DlnaControlActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity

@@ -9,9 +9,11 @@ import android.net.Uri
 import android.os.Environment
 import android.os.FileObserver
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
 import com.su.mediabox.App
+import com.su.mediabox.R
 import com.su.mediabox.bean.PluginInfo
 import com.su.mediabox.pluginapi.Constant
 import com.su.mediabox.pluginapi.IComponentFactory
@@ -145,6 +147,10 @@ object PluginManager {
         withContext(Dispatchers.IO) {
             Log.d("安装插件", "uri=$fileUri info=$pluginInfo")
             return@withContext fileUri.copyTo(File(pluginDir, pluginInfo.installedPluginName()))
+                .apply {
+                    App.context.getString(R.string.plugin_installer_hint_format, pluginInfo.name)
+                        .showToast(Toast.LENGTH_LONG)
+                }
         }
 
     /**

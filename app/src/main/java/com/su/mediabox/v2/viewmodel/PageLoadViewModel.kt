@@ -71,14 +71,14 @@ class PageLoadViewModel : ViewModel() {
                 }
             }
 
-            var data: List<BaseData>? = null
+            var data: List<Any>? = null
 
             var isLoadEmptyData = false
-            fun appendData(appendData: List<BaseData>?): SUCCESS {
+            fun appendData(appendData: List<Any>?): SUCCESS {
                 isLoadEmptyData = appendData.isNullOrEmpty()
                 if (appendData.isNullOrEmpty())
                     return this
-                val list = mutableListOf<BaseData>()
+                val list = mutableListOf<Any>()
                 data?.also { list.addAll(it) }
                 list.addAll(appendData)
                 data = list
@@ -89,6 +89,6 @@ class PageLoadViewModel : ViewModel() {
     }
 
     interface LoadData {
-        suspend fun load(page: Int): List<BaseData>?
+        suspend fun load(page: Int): List<Any>?
     }
 }

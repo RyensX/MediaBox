@@ -25,6 +25,11 @@ interface Const {
         }
     }
 
+    object Plugin {
+        const val GITHUB_OFFICIAL_REPOSITORY_PLUGIN_INFO_TEMPLATE =
+            "https://raw.githubusercontent.com/RyensX/MediaBoxPluginRepository/gh-pages/data/data_{page}.json"
+    }
+
     interface Setting {
         companion object {
             const val SHOW_PLAY_BOTTOM_BAR = "show_play_bottom_bar"
