@@ -10,6 +10,7 @@ import com.su.mediabox.database.getAppDataBase
 import com.su.mediabox.pluginapi.Constant
 import com.su.mediabox.pluginapi.v2.been.*
 import com.su.mediabox.pluginapi.v2.components.IVideoDetailDataComponent
+import com.su.mediabox.util.lazyAcquireComponent
 import com.su.mediabox.util.showToast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,9 +18,8 @@ import kotlinx.coroutines.withContext
 
 class VideoDetailViewModel : ViewModel() {
 
-    private val videoDetailModel by lazy(LazyThreadSafetyMode.NONE) {
-        PluginManager.acquireComponent<IVideoDetailDataComponent>()
-    }
+    private val videoDetailModel by lazyAcquireComponent<IVideoDetailDataComponent>()
+
     var partUrl: String = ""
     var cover = ""
     var title: String = ""

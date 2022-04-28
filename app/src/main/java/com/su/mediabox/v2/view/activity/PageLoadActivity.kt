@@ -23,7 +23,7 @@ abstract class PageLoadActivity<VB : ViewBinding> : BasePluginActivity<VB>(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
- 
+
         dataListView.dynamicGrid().initTypeList { }
 
         pageLoadViewModel.loadDataFun = this

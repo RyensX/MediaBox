@@ -9,15 +9,16 @@ import com.su.mediabox.R
 import com.su.mediabox.bean.*
 import com.su.mediabox.pluginapi.been.IAnimeDetailBean
 import com.su.mediabox.pluginapi.components.IAnimeDetailComponent
+import com.su.mediabox.util.lazyAcquireComponent
 import com.su.mediabox.util.showToast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Deprecated("在v2 API完善后移除")
 class AnimeDetailViewModel : ViewModel() {
-    private val animeDetailModel by lazy(LazyThreadSafetyMode.NONE) {
-        PluginManager.acquireComponent<IAnimeDetailComponent>()
-    }
+
+    private val animeDetailModel by lazyAcquireComponent<IAnimeDetailComponent>()
+
     var partUrl: String = ""
     var cover = ""
     var title: String = ""

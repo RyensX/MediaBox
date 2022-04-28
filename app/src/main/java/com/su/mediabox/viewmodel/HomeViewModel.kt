@@ -10,6 +10,7 @@ import com.su.mediabox.R
 import com.su.mediabox.pluginapi.been.TabBean
 import com.su.mediabox.pluginapi.components.IHomeComponent
 import com.su.mediabox.util.PluginIO
+import com.su.mediabox.util.lazyAcquireComponent
 import com.su.mediabox.util.showToast
 import com.su.mediabox.view.adapter.SerializableRecycledViewPool
 import kotlinx.coroutines.Dispatchers
@@ -17,9 +18,9 @@ import kotlinx.coroutines.launch
 
 @Deprecated("更新2.0后删除")
 class HomeViewModel : ViewModel() {
-    private val homeModel: IHomeComponent by lazy(LazyThreadSafetyMode.NONE) {
-        PluginManager.acquireComponent()
-    }
+
+    private val homeModel by lazyAcquireComponent<IHomeComponent>()
+
     val childViewPool = SerializableRecycledViewPool()
     val viewPool = SerializableRecycledViewPool()
     var allTabList: MutableList<TabBean> = ArrayList()

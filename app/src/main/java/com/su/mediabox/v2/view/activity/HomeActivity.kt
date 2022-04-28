@@ -10,19 +10,14 @@ import com.su.mediabox.databinding.ActivityHomeBinding
 import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.pluginapi.v2.been.BaseData
 import com.su.mediabox.pluginapi.v2.components.IHomeDataComponent
-import com.su.mediabox.util.clickScale
-import com.su.mediabox.util.goActivity
-import com.su.mediabox.util.setViewsOnClickListener
-import com.su.mediabox.util.smartInflate
+import com.su.mediabox.util.*
 import com.su.mediabox.v2.viewmodel.PageLoadViewModel
 import com.su.mediabox.view.activity.AnimeDownloadActivity
 import com.su.mediabox.view.adapter.type.typeAdapter
 
 class HomeActivity : PageLoadActivity<ActivityHomeBinding>(), View.OnClickListener {
 
-    private val dataComponent by lazy(LazyThreadSafetyMode.NONE) {
-        PluginManager.acquireComponent<IHomeDataComponent>()
-    }
+    private val dataComponent by lazyAcquireComponent<IHomeDataComponent>()
 
     override val refreshLayout: SmartRefreshLayout
         get() = mBinding.homeDataSwipe

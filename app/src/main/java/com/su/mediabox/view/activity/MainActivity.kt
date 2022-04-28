@@ -1,8 +1,6 @@
 package com.su.mediabox.view.activity
 
-import android.app.ActivityManager.TaskDescription
 import android.os.Bundle
-import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.FragmentTransaction
 import com.su.mediabox.App
 import com.su.mediabox.R
@@ -22,7 +20,7 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
-
+@Deprecated("更新2.0后删除")
 class MainActivity : BasePluginActivity<ActivityMainBinding>(), EventBusSubscriber {
     private var selectedTab = -1
     private var backPressTime = 0L

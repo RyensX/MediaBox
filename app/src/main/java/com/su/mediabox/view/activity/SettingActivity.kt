@@ -22,7 +22,7 @@ import com.su.mediabox.viewmodel.SettingViewModel
 import com.su.skin.SkinManager
 import kotlinx.coroutines.*
 
-
+@Deprecated("需要重新设计")
 class SettingActivity : BaseActivity<ActivitySettingBinding>() {
     private val viewModel: SettingViewModel by lazy(LazyThreadSafetyMode.NONE) { ViewModelProvider(this).get(SettingViewModel::class.java) }
     private var selfUpdateCheck = false

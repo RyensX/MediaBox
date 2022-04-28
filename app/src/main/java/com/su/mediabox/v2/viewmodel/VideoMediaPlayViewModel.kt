@@ -9,15 +9,14 @@ import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.pluginapi.v2.been.VideoPlayMedia
 import com.su.mediabox.pluginapi.v2.components.IVideoPlayComponent
 import com.su.mediabox.util.PluginIO
+import com.su.mediabox.util.lazyAcquireComponent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.properties.Delegates
 
 class VideoMediaPlayViewModel : ViewModel() {
 
-    private val playComponent by lazy(LazyThreadSafetyMode.NONE) {
-        PluginManager.acquireComponent<IVideoPlayComponent>()
-    }
+    private val playComponent by lazyAcquireComponent<IVideoPlayComponent>()
 
     lateinit var detailPartUrl: String
     lateinit var coverUrl: String

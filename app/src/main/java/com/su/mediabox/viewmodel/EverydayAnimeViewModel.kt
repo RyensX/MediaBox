@@ -13,15 +13,16 @@ import com.su.mediabox.util.showToast
 import com.su.mediabox.pluginapi.been.TabBean
 import com.su.mediabox.pluginapi.components.IEverydayAnimeComponent
 import com.su.mediabox.util.PluginIO
+import com.su.mediabox.util.lazyAcquireComponent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 
 @Deprecated("更新2.0后删除")
 class EverydayAnimeViewModel : ViewModel() {
-    private val everydayAnimeModel: IEverydayAnimeComponent by lazy(LazyThreadSafetyMode.NONE) {
-        PluginManager.acquireComponent()
-    }
+
+    private val everydayAnimeModel by lazyAcquireComponent<IEverydayAnimeComponent>()
+
     var header = ""
     var selectedTabIndex = -1
     var mldHeader: MutableLiveData<String> = MutableLiveData()

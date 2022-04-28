@@ -12,15 +12,16 @@ import com.su.mediabox.pluginapi.been.ClassifyBean
 import com.su.mediabox.pluginapi.been.PageNumberBean
 import com.su.mediabox.pluginapi.components.IClassifyComponent
 import com.su.mediabox.util.PluginIO
+import com.su.mediabox.util.lazyAcquireComponent
 import com.su.mediabox.util.showToast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Deprecated("V2后废弃")
 class ClassifyViewModel : ViewModel() {
-    private val classifyModel: IClassifyComponent by lazy(LazyThreadSafetyMode.NONE) {
-        PluginManager.acquireComponent()
-    }
+
+    private val classifyModel by lazyAcquireComponent<IClassifyComponent>()
+
     var isRequesting = false
     var classifyTabList: MutableList<ClassifyBean> = ArrayList()        //上方分类数据
     var mldClassifyTabList: MutableLiveData<Pair<List<ClassifyBean>, ResponseDataType>> =

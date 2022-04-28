@@ -15,6 +15,7 @@ import com.su.mediabox.pluginapi.v2.been.EpisodeData
 import com.su.mediabox.pluginapi.v2.components.IVideoPlayComponent
 import com.su.mediabox.util.createCoroutineScope
 import com.su.mediabox.util.downloadanime.AnimeDownloadHelper
+import com.su.mediabox.util.lazyAcquireComponent
 import com.su.mediabox.util.showToast
 import com.su.mediabox.util.toMD5
 import com.su.mediabox.view.adapter.type.*
@@ -62,7 +63,7 @@ fun episodeSheetDialog(
 
     val bottomSheetDialog = BottomSheetDialog(context, R.style.BottomSheetDialogTheme)
     val coroutineScope by lazy { bottomSheetDialog.createCoroutineScope() }
-    val component by lazy { PluginManager.acquireComponent<IVideoPlayComponent>() }
+    val component by lazyAcquireComponent<IVideoPlayComponent>()
     val binding = DialogEpisodeBottomSheetBinding.inflate(LayoutInflater.from(context))
 
     binding.episodeBottomSheetTitle.text =

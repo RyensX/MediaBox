@@ -3,7 +3,6 @@ package com.su.mediabox.v2.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.pluginapi.v2.action.ClassifyAction
 import com.su.mediabox.pluginapi.v2.been.BaseData
 import com.su.mediabox.pluginapi.v2.been.ClassifyItemData
@@ -14,12 +13,11 @@ import com.su.mediabox.view.fragment.MediaClassifyBottomSheetDialogFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import com.su.mediabox.config.Const.ViewComponent.DEFAULT_PAGE
+import com.su.mediabox.util.lazyAcquireComponent
 
 class MediaClassifyViewModel : ViewModel() {
 
-    private val component by lazy(LazyThreadSafetyMode.NONE) {
-        PluginManager.acquireComponent<IMediaClassifyDataComponent>()
-    }
+    private val component by lazyAcquireComponent<IMediaClassifyDataComponent>()
 
     private var page = DEFAULT_PAGE
 

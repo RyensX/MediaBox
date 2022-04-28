@@ -20,6 +20,7 @@ import com.su.skin.core.SkinResourceProcessor
 import org.greenrobot.eventbus.EventBus
 
 abstract class BaseActivity<VB : ViewBinding> : SkinBaseActivity() {
+
     protected lateinit var mBinding: VB
     private lateinit var loadFailedTipView: View
     private lateinit var tvImageTextTip1: TextView

@@ -7,7 +7,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.su.mediabox.bean.HistoryBean
 import com.su.mediabox.database.getAppDataBase
+import com.su.mediabox.plugin.PluginManager
+import com.su.mediabox.pluginapi.components.IBaseComponent
 import com.su.mediabox.pluginapi.v2.been.EpisodeData
+import com.su.mediabox.pluginapi.v2.components.IHomeDataComponent
 import com.su.mediabox.v2.view.activity.VideoDetailActivity
 import com.su.mediabox.v2.viewmodel.VideoDetailViewModel
 import kotlinx.coroutines.Dispatchers
@@ -81,4 +84,8 @@ fun getCorrectEpisodeList(list: List<EpisodeData>): List<EpisodeData> {
         result = list.asReversed()
 
     return result
+}
+
+inline fun <reified T : IBaseComponent> lazyAcquireComponent() = lazy(LazyThreadSafetyMode.NONE) {
+    PluginManager.acquireComponent<T>()
 }
