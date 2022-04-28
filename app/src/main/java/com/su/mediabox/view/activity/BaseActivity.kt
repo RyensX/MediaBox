@@ -14,6 +14,7 @@ import com.su.mediabox.util.Util.setColorStatusBar
 import com.su.mediabox.util.eventbus.EventBusSubscriber
 import com.su.mediabox.util.gone
 import com.su.mediabox.util.logE
+import com.su.mediabox.util.release
 import com.su.mediabox.util.visible
 import com.su.skin.core.SkinResourceProcessor
 import org.greenrobot.eventbus.EventBus
@@ -30,7 +31,9 @@ abstract class BaseActivity<VB : ViewBinding> : SkinBaseActivity() {
         setContentView(mBinding.root)
         setColorStatusBar(window, getResColor(R.color.main_color_2_skin))
 
-        LaunchManager.onTraceApp(application, LaunchManager.APP_ON_CREATE, false)
+        release {
+            LaunchManager.onTraceApp(application, LaunchManager.APP_ON_CREATE, false)
+        }
     }
 
     override fun onChangeSkin() {
@@ -47,18 +50,23 @@ abstract class BaseActivity<VB : ViewBinding> : SkinBaseActivity() {
     override fun onStart() {
         super.onStart()
         if (this is EventBusSubscriber) EventBus.getDefault().register(this)
-
-        LaunchManager.onTracePage(this, LaunchManager.PAGE_ON_START, true)
+        release {
+            LaunchManager.onTracePage(this, LaunchManager.PAGE_ON_START, true)
+        }
     }
 
     override fun onRestart() {
         super.onRestart()
-        LaunchManager.onTracePage(this, LaunchManager.PAGE_ON_RE_START, true)
+        release {
+            LaunchManager.onTracePage(this, LaunchManager.PAGE_ON_RE_START, true)
+        }
     }
 
     override fun onResume() {
         super.onResume()
-        LaunchManager.onTracePage(this, LaunchManager.PAGE_ON_RESUME, false)
+        release {
+            LaunchManager.onTracePage(this, LaunchManager.PAGE_ON_RESUME, false)
+        }
     }
 
     override fun onStop() {
@@ -66,7 +74,9 @@ abstract class BaseActivity<VB : ViewBinding> : SkinBaseActivity() {
         if (this is EventBusSubscriber && EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().unregister(this)
 
-        LaunchManager.onTracePage(this, LaunchManager.PAGE_ON_STOP, true);
+        release {
+            LaunchManager.onTracePage(this, LaunchManager.PAGE_ON_STOP, true)
+        }
     }
 
     protected open fun getLoadFailedTipView(): ViewStub? = null

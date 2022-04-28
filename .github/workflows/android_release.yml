@@ -52,13 +52,14 @@ jobs:
     - name: Find Apk File Name
       if: ${{ env.FILE_REPO != "" }}
       run:  |
-        echo "file_name=$(app/build/outputs/apk/Github/release)" >> $GITHUB_ENV
+        cd app/build/outputs/apk/Github/release
+        echo "file_name=$(ls *.apk)" >> $GITHUB_ENV
       
     - name: Upload Release
       if: ${{ env.FILE_REPO != "" }}
       uses: softprops/action-gh-release@v1
       with:
         draft:  true
-        tag_name: ${{github.ref_name}}
-        files: "app/build/outputs/apk/Github/release/${{  env.file_name }}"
+        tag_name: ${{ github.ref_name }}
+        files: "app/build/outputs/apk/Github/release/${{ env.file_name }}"
         retention-days: 10
