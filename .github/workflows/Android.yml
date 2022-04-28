@@ -1,6 +1,11 @@
 name: Android CI
 
-on: [push]
+on: 
+  push:
+    paths-ignore:
+    # 构建无关文件不触发
+      - '**.md'
+      - '**.yml'
 
 jobs:
   build:
