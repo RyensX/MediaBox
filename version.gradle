@@ -97,7 +97,7 @@ nanohttpd.nanohttpd = "org.nanohttpd:nanohttpd:2.3.1"
 deps.nanohttpd = nanohttpd
 
 def coil_kt = [:]
-coil_kt.coil = "io.coil-kt:coil:1.4.0"
+coil_kt.coil = "io.coil-kt:coil:2.0.0-rc03"
 deps.coil_kt = coil_kt
 
 def smart = [:]

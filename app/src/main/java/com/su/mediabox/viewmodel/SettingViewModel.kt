@@ -3,6 +3,7 @@ package com.su.mediabox.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import coil.imageLoader
 import coil.util.CoilUtils
 import com.su.mediabox.App
 import com.su.mediabox.R
@@ -40,14 +41,12 @@ class SettingViewModel : ViewModel() {
     // 获取Glide磁盘缓存大小
     fun getCacheSize() {
         viewModelScope.launch(Dispatchers.IO) {
-            mldCacheSize.postValue(
-                try {
-                    CoilUtils.createDefaultCache(App.context).directory.formatSize()
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    "获取缓存大小失败"
-                }
-            )
+            try {
+                mldCacheSize.postValue((App.context.imageLoader.diskCache?.size ?: 0).toString())
+            } catch (e: Exception) {
+                e.printStackTrace()
+                "获取缓存大小失败".showToast()
+            }
         }
     }
 

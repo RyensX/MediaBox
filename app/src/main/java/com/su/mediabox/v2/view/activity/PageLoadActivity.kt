@@ -39,11 +39,13 @@ abstract class PageLoadActivity<VB : ViewBinding> : BasePluginActivity<VB>(),
         refreshLayout.apply {
             //刷新
             setOnRefreshListener {
-                pageLoadViewModel.reLoadData()
+                if (pageLoadViewModel.loadState.value !is PageLoadViewModel.LoadState.LOADING)
+                    pageLoadViewModel.reLoadData()
             }
             //载入更多
             setOnLoadMoreListener {
-                pageLoadViewModel.loadData()
+                if (pageLoadViewModel.loadState.value is PageLoadViewModel.LoadState.SUCCESS)
+                    pageLoadViewModel.loadData()
             }
         }
 

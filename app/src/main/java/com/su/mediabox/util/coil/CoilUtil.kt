@@ -1,32 +1,36 @@
 package com.su.mediabox.util.coil
 
 import android.content.Context
+import android.util.Base64
 import android.widget.ImageView
 import androidx.annotation.DrawableRes
-import coil.Coil
-import coil.ImageLoader
-import coil.imageLoader
-import coil.load
+import coil.*
+import coil.decode.DataSource
+import coil.decode.ImageSource
+import coil.fetch.Fetcher
+import coil.fetch.SourceResult
 import coil.request.ImageRequest
-import coil.util.CoilUtils
+import coil.request.Options
 import coil.util.DebugLogger
 import com.su.mediabox.App
 import com.su.mediabox.R
 import com.su.mediabox.config.Api
 import com.su.mediabox.config.Api.Companion.MAIN_URL
 import com.su.mediabox.net.okhttpClient
-import com.su.mediabox.util.Util.toEncodedUrl
 import com.su.mediabox.util.debug
 import com.su.mediabox.util.logE
 import com.su.mediabox.pluginapi.Constant
+import com.su.mediabox.util.getOrInit
 import okhttp3.OkHttpClient
+import okio.buffer
+import okio.source
+import java.io.ByteArrayInputStream
 import java.net.URL
 
 object CoilUtil {
     private val imageLoaderBuilder = ImageLoader.Builder(App.context)
         .crossfade(400)
         .apply {
-            bitmapPoolingEnabled(false)//在2.0.0-rc01中已弃用，去掉rc后再升级，详情 https://github.com/coil-kt/coil/discussions/1186
             debug { logger(DebugLogger()) }
         }
 
@@ -36,7 +40,7 @@ object CoilUtil {
 
     fun setOkHttpClient(okHttpClient: OkHttpClient) {
         imageLoaderBuilder.okHttpClient(
-            okHttpClient.newBuilder().cache(CoilUtils.createDefaultCache(App.context)).build()
+            okHttpClient.newBuilder().build()
         ).build().apply { Coil.setImageLoader(this) }
     }
 
@@ -101,9 +105,34 @@ object CoilUtil {
         transformations(DarkBlurTransformation(context, radius, sampling, dark))
     }
 
+    object Base64FetcherFactory : Fetcher.Factory<Base64FetcherFactory.Base64Image> {
+
+        private val base64ImagePool = mutableMapOf<Int, Base64Image>()
+
+        fun obtainBase64Image(base64: String) =
+            base64ImagePool.getOrInit(base64.hashCode(), Base64Image(base64))
+
+        class Base64Image internal constructor(val base64: String)
+
+        override fun create(
+            data: Base64Image,
+            options: Options,
+            imageLoader: ImageLoader
+        ) =
+            Fetcher {
+                val imageByteArray = Base64.decode(data.base64.split(",")[1], Base64.DEFAULT)
+                SourceResult(
+                    source = ImageSource(
+                        ByteArrayInputStream(imageByteArray).source().buffer(),
+                        App.context
+                    ),
+                    mimeType = null,
+                    dataSource = DataSource.MEMORY
+                )
+            }
+    }
 
     fun clearMemoryDiskCache() {
-        App.context.imageLoader.memoryCache.clear()
-        CoilUtils.createDefaultCache(App.context).delete()
+        App.context.imageLoader.memoryCache?.clear()
     }
 }
