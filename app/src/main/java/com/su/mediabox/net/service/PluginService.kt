@@ -14,5 +14,9 @@ interface PluginService {
     suspend fun fetchPluginPreviewInfo(@Url url: String): PreviewPluginInfo?
 
     @GET(Const.Plugin.GITHUB_OFFICIAL_REPOSITORY_PLUGIN_INFO_TEMPLATE)
-    suspend fun fetchRepositoryPluginPreviewInfo(@Path("page") page: Int): List<PreviewPluginInfo>
+    suspend fun fetchRepositoryPluginPreviewInfo(): List<PreviewPluginInfo>
+
+    //分页获取插件仓库信息
+    @GET(Const.Plugin.GITHUB_OFFICIAL_REPOSITORY_PAGE_PLUGIN_INFO_TEMPLATE)
+    suspend fun pageFetchRepositoryPluginPreviewInfo(@Path("page") page: Int): List<PreviewPluginInfo>
 }

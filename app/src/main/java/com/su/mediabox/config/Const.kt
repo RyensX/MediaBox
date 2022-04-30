@@ -27,7 +27,14 @@ interface Const {
 
     object Plugin {
         const val GITHUB_OFFICIAL_REPOSITORY_PLUGIN_INFO_TEMPLATE =
+            "https://raw.githubusercontent.com/RyensX/MediaBoxPluginRepository/gh-pages/data/data.json"
+        const val GITHUB_OFFICIAL_REPOSITORY_PAGE_PLUGIN_INFO_TEMPLATE =
             "https://raw.githubusercontent.com/RyensX/MediaBoxPluginRepository/gh-pages/data/data_{page}.json"
+
+        const val PLUGIN_STATE_DOWNLOADABLE = 0
+        const val PLUGIN_STATE_UPDATABLE = 70
+        const val PLUGIN_STATE_DOWNLOADING = 1
+        const val PLUGIN_STATE_OPEN = 100
     }
 
     interface Setting {

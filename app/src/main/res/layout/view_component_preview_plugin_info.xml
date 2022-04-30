@@ -44,6 +44,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginRight="4dp"
         android:background="@drawable/shape_fill_circle_corner_main_color_2_50_skin"
         android:backgroundTint="@color/main_color_2_skin"
         android:gravity="center"

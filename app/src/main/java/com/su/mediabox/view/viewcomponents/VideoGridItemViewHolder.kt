@@ -1,6 +1,7 @@
 package com.su.mediabox.view.viewcomponents
 
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.su.mediabox.R
@@ -36,13 +37,12 @@ class VideoGridItemViewHolder private constructor(private val binding: ViewCompo
     override fun onBind(data: VideoGridItemData) {
         super.onBind(data)
         binding.vcGirdMediaItemTitle.apply {
-            setTextColor(getResColor(R.color.foreground_white_skin))
-            text = data.name
             //自适应颜色，只有在详情页才需要是白色，其余的根据当前主题自动选择
             if (itemView.context.javaClass != VideoDetailActivity::class.java)
                 setTextColor(nameColor)
             else
                 setTextColor(Color.WHITE)
+            text = data.name
         }
         //TODO 滚动延迟加载
         binding.vcGirdMediaItemCover.loadImage(data.coverUrl)
