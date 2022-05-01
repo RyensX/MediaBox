@@ -3,10 +3,13 @@ package com.su.mediabox.v2.view.activity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
+import com.su.mediabox.App
 import com.su.mediabox.databinding.ActivityCustomDataBinding
-import com.su.mediabox.pluginapi.v2.action.CustomDataAction
-import com.su.mediabox.pluginapi.v2.been.BaseData
-import com.su.mediabox.util.getAction
+import com.su.mediabox.plugin.PluginManager
+import com.su.mediabox.pluginapi.v2.action.CustomPageAction
+import com.su.mediabox.pluginapi.v2.components.ICustomPageComponent
+import com.su.mediabox.util.Util
 
 class CustomDataActivity : PageLoadActivity<ActivityCustomDataBinding>() {
 
@@ -14,24 +17,45 @@ class CustomDataActivity : PageLoadActivity<ActivityCustomDataBinding>() {
     override val dataListView get() = mBinding.customDataList
 
     companion object {
-        var action: CustomDataAction? = null
+        var action: CustomPageAction? = null
+    }
+
+    private val customPageComponent by lazy(LazyThreadSafetyMode.NONE) {
+        val customComponentClazz =
+            action?.targetPageComponent as? Class<ICustomPageComponent>
+        customComponentClazz?.let {
+            Util.withoutExceptionGet {
+                PluginManager.acquireComponent(it)
+            }
+        }
+    }
+
+    private val menus by lazy(LazyThreadSafetyMode.NONE) {
+        customPageComponent!!.menus()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (customPageComponent == null) {
+            Toast.makeText(App.context, "找不到对应自定义页面数据组件", Toast.LENGTH_LONG).show()
+            finish()
+            return
+        }
         mBinding.customDataBar.apply {
             setSupportActionBar(this)
-            setNavigationOnClickListener { finish() }
+            if (customPageComponent!!.isShowBack()) {
+                setNavigationOnClickListener { finish() }
+            } else {
+                navigationIcon = null
+            }
         }
-        title = action?.title
+        title = customPageComponent!!.pageName
     }
 
-    override suspend fun load(page: Int): List<BaseData>? {
-        return action?.loader?.loadData(page)
-    }
+    override suspend fun load(page: Int) = customPageComponent!!.getData(page)
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        action?.actions?.forEach {
+        menus?.forEach {
             if (it.extraData is String)
                 menu.add(it.extraData as String)
         }
@@ -39,7 +63,7 @@ class CustomDataActivity : PageLoadActivity<ActivityCustomDataBinding>() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        action?.actions?.forEach {
+        menus?.forEach {
             if (it.extraData == item.title.toString())
                 it.go(this)
         }

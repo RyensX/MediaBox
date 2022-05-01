@@ -31,7 +31,7 @@ object AppAction {
         WebBrowserAction.GO = {
             routeToComponentPage<WebBrowserAction, WebViewActivity>(it)
         }
-        CustomDataAction.GO = {
+        CustomPageAction.GO = {
             CustomDataActivity.action = this
             it.goActivity<CustomDataActivity>()
         }

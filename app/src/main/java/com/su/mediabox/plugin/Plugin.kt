@@ -212,8 +212,11 @@ object PluginManager {
         }
 
     @Throws(Exception::class)
-    inline fun <reified T : IBaseComponent> acquireComponent() =
-        currentLaunchPlugin.value?.acquireComponent(T::class.java)
+    inline fun <reified T : IBaseComponent> acquireComponent() = acquireComponent(T::class.java)
+
+    @Throws(Exception::class)
+    fun <T : IBaseComponent> acquireComponent(clazz: Class<T>) =
+        currentLaunchPlugin.value?.acquireComponent(clazz)
             ?: throw RuntimeException("当前未启动插件！")
 
     /**
