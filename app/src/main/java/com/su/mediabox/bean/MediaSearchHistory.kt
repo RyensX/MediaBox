@@ -6,8 +6,8 @@ import androidx.room.PrimaryKey
 import com.su.mediabox.config.Const
 import com.su.mediabox.pluginapi.been.BaseBean
 
-@Entity(tableName = Const.Database.AppDataBase.SEARCH_HISTORY_TABLE_NAME)
-class SearchHistoryBean(
+@Entity(tableName = Const.Database.AppDataBase.SEARCH_MEDIA_TABLE_NAME)
+class MediaSearchHistory(
     @PrimaryKey
     @ColumnInfo(name = "title")
     var title: String,

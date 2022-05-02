@@ -26,12 +26,11 @@ import com.su.mediabox.util.downloadanime.AnimeDownloadHelper.Companion.save2Xml
 import com.su.mediabox.util.downloadanime.AnimeDownloadNotificationReceiver.Companion.DOWNLOAD_ANIME_NOTIFICATION_ID
 import com.su.mediabox.util.toMD5
 import com.su.mediabox.view.activity.AnimeDownloadActivity
-import com.su.mediabox.view.activity.MainActivity
 import kotlinx.coroutines.*
 import java.io.File
 import java.io.Serializable
 
-
+@Deprecated("需要重新实现")
 class AnimeDownloadService : Service() {
     private val downloadServiceHashMap: HashMap<String, AnimeDownloadServiceDataBean> = HashMap()
     private val folderAndFileNameHashMap: HashMap<String, String> = HashMap()
@@ -39,56 +38,6 @@ class AnimeDownloadService : Service() {
     private var notificationManager: NotificationManager? = null
     private var totalNotificationId = 1002
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
-
-    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        if (intent.extras == null) {
-            coroutineScope.cancel()
-            "取消下载".showToast()
-            return START_NOT_STICKY
-        }
-        val url = intent.getStringExtra("url") ?: ""
-        val key = intent.getStringExtra("key") ?: ""
-        val folderAndFileName = intent.getStringExtra("folderAndFileName") ?: ""
-        folderAndFileNameHashMap[key] = folderAndFileName
-        downloadServiceHashMap[key] = AnimeDownloadServiceDataBean(url, totalNotificationId++)
-        if (isNetWorkAvailable()) {
-            createNotification(key)
-            downloadAnime(key, url, object : DownloadListener {
-                override fun complete(fileName: String) {
-                    deleteNotification(key)
-                    val animeDir = folderAndFileName.split("/").first()
-                    val title = folderAndFileName.split("/").last()
-                    val file = File("$animeFilePath$animeDir/$fileName")
-                    if (file.exists()) {
-                        downloadHashMap[key]?.postValue(AnimeDownloadStatus.COMPLETE)
-                        coroutineScope.launch(Dispatchers.IO) {
-                            file.toMD5()?.let {
-                                val entity = AnimeDownloadEntity(it, title, fileName)
-                                getAppDataBase().animeDownloadDao().insertAnimeDownload(entity)
-                                save2Xml(animeDir, entity)
-                            }
-                        }
-                        "${folderAndFileName}下载完成".showToast()
-                    } else {
-                        if (downloadHashMap[key]?.value != AnimeDownloadStatus.CANCEL) {
-                            downloadHashMap[key]?.postValue(
-                                AnimeDownloadStatus.ERROR
-                            )
-                        }
-                        "文件未找到，下载失败".showToast()
-                    }
-                }
-
-                override fun error() {
-                    super.error()
-                    deleteNotification(key)
-                    downloadHashMap[key]?.postValue(AnimeDownloadStatus.ERROR)
-                }
-            })
-            "开始下载${folderAndFileName}...".showToast()
-        }
-        return START_NOT_STICKY
-    }
 
     private fun deleteNotification(key: String) {
         downloadServiceHashMap[key]?.let {

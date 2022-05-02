@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.DiffUtil
 import com.su.mediabox.R
-import com.su.mediabox.bean.FavoriteAnimeBean
+import com.su.mediabox.bean.MediaFavorite
 import com.su.mediabox.databinding.ActivityFavoriteBinding
 import com.su.mediabox.databinding.ViewComponentFavBinding
 import com.su.mediabox.pluginapi.UI.dp
@@ -35,7 +35,7 @@ class VideoFavoriteActivity : BasePluginActivity<ActivityFavoriteBinding>() {
                     addItemDecoration(DynamicGridItemDecoration(12.dp))
                 }
                 .initTypeList(
-                    DataViewMapList().registerDataViewMap<FavoriteAnimeBean, FavoriteViewHolder>(),
+                    DataViewMapList().registerDataViewMap<MediaFavorite, FavoriteViewHolder>(),
                     FavoriteDiff
                 ) {}
 
@@ -56,9 +56,9 @@ class VideoFavoriteActivity : BasePluginActivity<ActivityFavoriteBinding>() {
     override fun getLoadFailedTipView() = mBinding.layoutFavoriteActivityNoFavorite
 
     class FavoriteViewHolder private constructor(private val binding: ViewComponentFavBinding) :
-        TypeViewHolder<FavoriteAnimeBean>(binding.root) {
+        TypeViewHolder<MediaFavorite>(binding.root) {
 
-        private var data: FavoriteAnimeBean? = null
+        private var data: MediaFavorite? = null
 
         constructor(parent: ViewGroup) : this(
             ViewComponentFavBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -67,44 +67,44 @@ class VideoFavoriteActivity : BasePluginActivity<ActivityFavoriteBinding>() {
                 data?.apply {
                     //有播放记录时点击直接续播，没有则打开介绍
                     if (lastEpisodeUrl != null)
-                        PlayAction.obtain(lastEpisodeUrl!!, cover, animeUrl, animeTitle)
+                        PlayAction.obtain(lastEpisodeUrl!!, cover, mediaUrl, mediaTitle)
                             .go(itemView.context)
                     else
-                        DetailAction.obtain(animeUrl).go(itemView.context)
+                        DetailAction.obtain(mediaUrl).go(itemView.context)
                 }
             }
             setOnLongClickListener(binding.root) {
-                data?.animeUrl?.also {
+                data?.mediaUrl?.also {
                     DetailAction.obtain(it).go(itemView.context)
                 }
                 true
             }
         }
 
-        override fun onBind(data: FavoriteAnimeBean) {
+        override fun onBind(data: MediaFavorite) {
             this.data = data
             binding.apply {
                 vcFavCover.loadImage(data.cover)
-                vcFavTitle.text = data.animeTitle
-                vcFavLastEpisode.text = data.lastEpisode?.let {
+                vcFavTitle.text = data.mediaTitle
+                vcFavLastEpisode.text = data.lastEpisodeTitle?.let {
                     root.context.getString(R.string.already_seen_episode_x, it)
                 } ?: root.context.getString(R.string.have_not_watched_this_anime)
             }
         }
     }
 
-    object FavoriteDiff : DiffUtil.ItemCallback<FavoriteAnimeBean>() {
+    object FavoriteDiff : DiffUtil.ItemCallback<MediaFavorite>() {
         override fun areItemsTheSame(
-            oldItem: FavoriteAnimeBean,
-            newItem: FavoriteAnimeBean
-        ) = oldItem.animeUrl == newItem.animeUrl
+            oldItem: MediaFavorite,
+            newItem: MediaFavorite
+        ) = oldItem.mediaUrl == newItem.mediaUrl
 
         override fun areContentsTheSame(
-            oldItem: FavoriteAnimeBean,
-            newItem: FavoriteAnimeBean
+            oldItem: MediaFavorite,
+            newItem: MediaFavorite
         ) = oldItem.cover == newItem.cover &&
-                oldItem.animeTitle == newItem.animeTitle &&
-                oldItem.lastEpisode == newItem.lastEpisode &&
+                oldItem.mediaTitle == newItem.mediaTitle &&
+                oldItem.lastEpisodeTitle == newItem.lastEpisodeTitle &&
                 oldItem.lastEpisodeUrl == newItem.lastEpisodeUrl
     }
 }

@@ -19,6 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
 
+@Deprecated("需要重新实现")
 class AnimeDownloadViewModel : ViewModel() {
 
     var mode = 0        //0是默认的，是番剧；1是番剧每一集
@@ -63,79 +64,7 @@ class AnimeDownloadViewModel : ViewModel() {
     }
 
     fun getAnimeCoverEpisode(directoryName: String) {
-        //不支持重命名文件
-        viewModelScope.launch(Dispatchers.IO) {
-            val animeFilePath = Const.DownloadAnime.animeFilePath
-            val files = File(animeFilePath + directoryName).listFiles()
-            animeCoverList.clear()
-            files?.let {
-                val animeList = getAnimeFromXml(directoryName, animeFilePath)
 
-                // xml里的文件名
-                val animeFilesName: MutableList<String?> = ArrayList()
-                // 文件夹下的文件名
-                val filesName: MutableList<String> = ArrayList()
-                // 获取文件夹下的文件名
-                for (file in it) filesName.add(file.name)
-                //数据库中的数据
-                val animeMd5InDB = getAppDataBase().animeDownloadDao().getAnimeDownloadMd5List()
-                // 先删除xml里被用户删除的视频，再获取xml里的文件名（保证xml里的文件名都是存在的文件）
-                val iterator: MutableIterator<AnimeDownloadEntity> = animeList.iterator()
-                while (iterator.hasNext()) {
-                    val anime = iterator.next()
-                    if (anime.fileName !in filesName) {
-                        deleteAnimeFromXml(directoryName, anime, animeFilePath)
-                        iterator.remove()
-                    } else {
-                        // 如果不在数据库中，则加入数据库
-                        if (anime.md5 !in animeMd5InDB) {
-                            getAppDataBase().animeDownloadDao().insertAnimeDownload(anime)
-                        }
-                        animeFilesName.add(anime.fileName)
-                    }
-                }
-                // 没有在xml里的视频
-                for (file in it) {
-                    if (file.name !in animeFilesName) {
-                        // 试图从数据库中取出不在xml里的视频的数据，如果没找到则是null
-                        val unsavedAnime: AnimeDownloadEntity? =
-                            getAppDataBase().animeDownloadDao()
-                                .getAnimeDownload(file.toMD5() ?: "")
-                        if (unsavedAnime != null && unsavedAnime.fileName == null) {
-                            unsavedAnime.fileName = file.name
-                            getAppDataBase().animeDownloadDao()
-                                .updateFileNameByMd5(unsavedAnime.md5, file.name)
-                        }
-                        if (unsavedAnime != null) {
-                            save2Xml(directoryName, unsavedAnime, animeFilePath)
-                            animeList.add(unsavedAnime)
-                        }
-                    }
-                }
-
-                for (anime in animeList) {
-                    val filePath = animeFilePath + directoryName + "/" + anime.fileName
-                    animeCoverList.add(
-                        AnimeCoverBean(
-                            Constant.ViewHolderTypeString.ANIME_COVER_7,
-                            (if (filePath.endsWith(".m3u8", true))
-                                Constant.ActionUrl.ANIME_ANIME_DOWNLOAD_M3U8
-                            else buildRouteActionUrl(
-                                Constant.ActionUrl.ANIME_ANIME_DOWNLOAD_PLAY,
-                                "file://$filePath", anime.title
-                            )),
-                            "",
-                            anime.title,
-                            null,
-                            "",
-                            size = File(filePath).formatSize(),
-                        )
-                    )
-                }
-                animeCoverList.sortWith(EpisodeTitleComparator())
-            }
-            mldAnimeCoverList.postValue(true)
-        }
     }
 
     companion object {

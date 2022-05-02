@@ -2,9 +2,8 @@ package com.su.mediabox.v2.viewmodel
 
 import androidx.lifecycle.*
 import com.su.mediabox.App
-import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.R
-import com.su.mediabox.bean.SearchHistoryBean
+import com.su.mediabox.bean.MediaSearchHistory
 import com.su.mediabox.config.Const.ViewComponent.DEFAULT_PAGE
 import com.su.mediabox.database.getAppDataBase
 import com.su.mediabox.pluginapi.v2.components.IVideoSearchDataComponent
@@ -36,7 +35,7 @@ class VideoSearchViewModel : ViewModel() {
     val showState: LiveData<ShowState> = _showState
 
     //搜索历史
-    private val searchHistory = getAppDataBase().searchHistoryDao().getSearchHistoryListLiveData()
+    private val searchHistory = getAppDataBase().searchDao().getSearchHistoryListLiveData()
         .apply {
             //观察搜索历史自动更新
             observeForever {
@@ -55,7 +54,7 @@ class VideoSearchViewModel : ViewModel() {
     private var _resultData: MutableList<Any>? = null
 
     /**
-     * 结果数据，可为搜索历史[SearchHistoryBean]或搜索结果[VideoLinearItemData]
+     * 结果数据，可为搜索历史[MediaSearchHistory]或搜索结果[VideoLinearItemData]
      */
     val resultData: List<Any>?
         get() = _resultData
@@ -98,15 +97,15 @@ class VideoSearchViewModel : ViewModel() {
 
     private fun updateSearchHistory(keyWord: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            getAppDataBase().searchHistoryDao()
-                .insertSearchHistory(SearchHistoryBean(keyWord, System.currentTimeMillis()))
+            getAppDataBase().searchDao()
+                .insertSearchHistory(MediaSearchHistory(keyWord, System.currentTimeMillis()))
         }
     }
 
     fun deleteSearchHistory(keyWord: String = mKeyWord) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                getAppDataBase().searchHistoryDao().deleteSearchHistory(keyWord)
+                getAppDataBase().searchDao().deleteSearchHistory(keyWord)
             } catch (e: Exception) {
                 e.printStackTrace()
             }

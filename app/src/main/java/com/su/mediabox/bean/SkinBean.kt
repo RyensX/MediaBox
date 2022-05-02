@@ -2,6 +2,7 @@ package com.su.mediabox.bean
 
 import com.su.mediabox.pluginapi.been.BaseBean
 
+@Deprecated("等待设计新主题系统")
 class SkinBean(
     override var type: String,
     override var actionUrl: String,

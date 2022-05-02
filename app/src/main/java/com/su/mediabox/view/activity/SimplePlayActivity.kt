@@ -21,7 +21,7 @@ import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
 import tv.danmaku.ijk.media.player.IjkMediaPlayer
 import java.io.File
 
-@Deprecated("在新播放器完善后弃用")
+@Deprecated("在新播放器完善后弃用", replaceWith = ReplaceWith("VideoMediaDanmakuPlayer"))
 class SimplePlayActivity : BasePluginActivity<ActivitySimplePlayBinding>() {
     private var url = ""
     private var title = ""
@@ -55,6 +55,7 @@ class SimplePlayActivity : BasePluginActivity<ActivitySimplePlayBinding>() {
                 statusBar = true
             )
 
+            /**
             lifecycleScope.launch(Dispatchers.IO) {
                 val title = getAppDataBase().animeDownloadDao()
                     .getAnimeDownloadTitleByMd5(File(url.replaceFirst("file://", "")).toMD5() ?: "")
@@ -64,6 +65,7 @@ class SimplePlayActivity : BasePluginActivity<ActivitySimplePlayBinding>() {
                     avpSimplePlayActivity.fullWindowPlayer?.titleTextView?.text = title
                 }
             }
+            */
         }
 
         val videoOptionModel =
@@ -78,8 +80,6 @@ class SimplePlayActivity : BasePluginActivity<ActivitySimplePlayBinding>() {
         mBinding.avpSimplePlayActivity.run {
             //设置旋转
             orientationUtils = OrientationUtils(this@SimplePlayActivity, this)
-            getDownloadButton()?.gone()
-            setEpisodeButtonVisibility(View.GONE)
             fullscreenButton.gone()
             //是否开启自动旋转
             isRotateViewAuto = false

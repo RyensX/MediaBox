@@ -3,14 +3,13 @@ package com.su.mediabox.v2.view.activity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.activity.viewModels
 import com.su.mediabox.R
-import com.su.mediabox.bean.SearchHistoryBean
+import com.su.mediabox.bean.MediaSearchHistory
 import com.su.mediabox.database.getAppDataBase
 import com.su.mediabox.databinding.ActivitySearchBinding
 import com.su.mediabox.databinding.ItemSearchHistory1Binding
@@ -31,7 +30,7 @@ class VideoSearchActivity : BasePluginActivity<ActivitySearchBinding>() {
         const val EXTRA_KEY_WORK = "keyWord"
 
         private val searchDataViewMapList = DataViewMapList().apply {
-            registerDataViewMap<SearchHistoryBean, SearchHistoryViewHolder>()
+            registerDataViewMap<MediaSearchHistory, SearchHistoryViewHolder>()
             addAll(TypeAdapter.globalDataViewMap)
         }
     }
@@ -47,7 +46,7 @@ class VideoSearchActivity : BasePluginActivity<ActivitySearchBinding>() {
                 .dynamicGrid()
                 .initTypeList(searchDataViewMapList) {
                     addViewHolderClickListener<SearchHistoryViewHolder> { pos ->
-                        getData<SearchHistoryBean>(pos)?.also {
+                        getData<MediaSearchHistory>(pos)?.also {
                             val keyWork = it.title.trim()
                             mBinding.etSearchActivitySearch.apply {
                                 setText(keyWork)
@@ -160,7 +159,7 @@ class VideoSearchActivity : BasePluginActivity<ActivitySearchBinding>() {
     }
 
     private class SearchHistoryViewHolder private constructor(private val binding: ItemSearchHistory1Binding) :
-        TypeViewHolder<SearchHistoryBean>(binding.root) {
+        TypeViewHolder<MediaSearchHistory>(binding.root) {
 
         companion object {
             private val coroutineScope by lazy(LazyThreadSafetyMode.NONE) {
@@ -168,7 +167,7 @@ class VideoSearchActivity : BasePluginActivity<ActivitySearchBinding>() {
             }
         }
 
-        private var data: SearchHistoryBean? = null
+        private var data: MediaSearchHistory? = null
 
         constructor(parent: ViewGroup) : this(
             ItemSearchHistory1Binding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -176,13 +175,13 @@ class VideoSearchActivity : BasePluginActivity<ActivitySearchBinding>() {
             setOnClickListener(binding.ivSearchHistory1Delete) {
                 coroutineScope.launch {
                     data?.title?.also {
-                        getAppDataBase().searchHistoryDao().deleteSearchHistory(it)
+                        getAppDataBase().searchDao().deleteSearchHistory(it)
                     }
                 }
             }
         }
 
-        override fun onBind(data: SearchHistoryBean) {
+        override fun onBind(data: MediaSearchHistory) {
             this.data = data
             binding.tvSearchHistory1Title.text = data.title
         }

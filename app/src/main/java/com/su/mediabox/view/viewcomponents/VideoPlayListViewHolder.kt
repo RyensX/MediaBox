@@ -9,7 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.su.mediabox.Pref
 import com.su.mediabox.R
-import com.su.mediabox.bean.HistoryBean
+import com.su.mediabox.bean.MediaHistory
 import com.su.mediabox.config.Const
 import com.su.mediabox.databinding.ItemAnimeEpisode2Binding
 import com.su.mediabox.databinding.ItemHorizontalRecyclerView1Binding
@@ -97,7 +97,8 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
      */
     private fun jumpEpisode(adapter: TypeAdapter) {
         binding.rvHorizontalRecyclerView1.apply {
-            val target = adapter.getTag<HistoryBean>(Const.ViewComponent.HISTORY_INFO_TAG) ?: return
+            val target =
+                adapter.getTag<MediaHistory>(Const.ViewComponent.HISTORY_INFO_TAG) ?: return
             coroutineScope.launch {
                 episodeDataList?.forEachIndexed { index, data ->
                     //必须要保证EpisodeData.url有正确链接才支持自动定位和收藏
@@ -157,7 +158,7 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
 
         override fun onBind(data: EpisodeData) {
             val historyBean =
-                bindingTypeAdapter.getTag<HistoryBean>(Const.ViewComponent.HISTORY_INFO_TAG)
+                bindingTypeAdapter.getTag<MediaHistory>(Const.ViewComponent.HISTORY_INFO_TAG)
 
             binding.tvAnimeEpisode2.apply {
                 setTextColor(Color.WHITE)

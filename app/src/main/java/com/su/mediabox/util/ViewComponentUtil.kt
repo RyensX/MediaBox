@@ -5,12 +5,11 @@ import androidx.activity.ComponentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.su.mediabox.bean.HistoryBean
+import com.su.mediabox.bean.MediaHistory
 import com.su.mediabox.database.getAppDataBase
 import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.pluginapi.components.IBaseComponent
 import com.su.mediabox.pluginapi.v2.been.EpisodeData
-import com.su.mediabox.pluginapi.v2.components.IHomeDataComponent
 import com.su.mediabox.v2.view.activity.VideoDetailActivity
 import com.su.mediabox.v2.viewmodel.VideoDetailViewModel
 import kotlinx.coroutines.Dispatchers
@@ -20,7 +19,7 @@ import java.util.*
 
 fun bindHistoryPlayInfo(
     context: Context,
-    observer: Observer<HistoryBean?>
+    observer: Observer<MediaHistory?>
 ) {
     val detailUrl = (context as? ComponentActivity)?.let {
         when (it) {
@@ -32,10 +31,10 @@ fun bindHistoryPlayInfo(
     context.lifecycleScope.launch(Dispatchers.Main) {
         //优先绑定收藏的历史播放记录
         withContext(Dispatchers.IO) {
-            getAppDataBase().favoriteAnimeDao().getFavoriteAnime(detailUrl)
+            getAppDataBase().favoriteDao().getFavorite(detailUrl)
         }?.also {
-            getAppDataBase().favoriteAnimeDao()
-                .getFavoriteAnimeLiveData(detailUrl).observe(context, observer)
+            getAppDataBase().favoriteDao()
+                .getFavoriteLiveData(detailUrl).observe(context, observer)
             return@launch
         }
         getAppDataBase().historyDao()

@@ -58,6 +58,11 @@ interface Const {
             const val FAVORITE_ANIME_TABLE_NAME = "favoriteAnimeList"
             const val HISTORY_TABLE_NAME = "historyList"
             const val SEARCH_HISTORY_TABLE_NAME = "searchHistoryList"
+
+            const val MEDIA_DB_FILE_NAME_TEMPLATE = "media_plugin_data_%s.db"
+            const val FAVORITE_MEDIA_TABLE_NAME = "favorite"
+            const val HISTORY_MEDIA_TABLE_NAME = "history"
+            const val SEARCH_MEDIA_TABLE_NAME = "search"
         }
 
         object OfflineDataBase {
@@ -69,7 +74,6 @@ interface Const {
     interface ViewHolderTypeInt {
         companion object {
             const val UNKNOWN = -1              //未知类型，使用EmptyViewHolder容错处理。
-            const val HEADER_1 = R.layout.item_header_1
             const val ANIME_COVER_1 = R.layout.item_anime_cover_1
             const val ANIME_COVER_2 = R.layout.item_anime_cover_2
             const val ANIME_COVER_3 = R.layout.item_anime_cover_3
@@ -82,7 +86,6 @@ interface Const {
             const val GRID_RECYCLER_VIEW_1 = R.layout.item_grid_recycler_view_1
             const val BANNER_1 = R.layout.item_banner_1
             const val LICENSE_HEADER_1 = R.layout.item_license_header_1
-            const val LICENSE_1 = R.layout.item_license_1
             const val SEARCH_HISTORY_HEADER_1 = R.layout.item_search_history_header_1
             const val SEARCH_HISTORY_1 = R.layout.item_search_history_1
             const val ANIME_EPISODE_FLOW_LAYOUT_1 = R.layout.item_anime_episode_flow_layout_1

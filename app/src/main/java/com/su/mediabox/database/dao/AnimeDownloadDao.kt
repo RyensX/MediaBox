@@ -4,6 +4,7 @@ import androidx.room.*
 import com.su.mediabox.config.Const.Database.AppDataBase.ANIME_DOWNLOAD_TABLE_NAME
 import com.su.mediabox.database.entity.AnimeDownloadEntity
 
+@Deprecated("需重新实现")
 @Dao
 interface AnimeDownloadDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)

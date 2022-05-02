@@ -102,7 +102,7 @@ class StartActivity : BaseActivity<ActivityPluginBinding>() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.start_menu_skin -> goActivity<PluginRepositoryActivity>()
+            R.id.start_menu_skin -> goActivity<SkinActivity>()
             R.id.start_menu_settings -> goActivity<SettingActivity>()
             R.id.start_menu_about -> goActivity<AboutActivity>()
         }

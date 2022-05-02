@@ -14,12 +14,11 @@ import com.su.mediabox.config.Const.ViewHolderTypeInt
 import com.su.mediabox.pluginapi.Constant.ViewHolderTypeString
 import com.su.mediabox.pluginapi.been.BaseBean
 
-//UP_TODO 2022/1/22 12:31 0 ViewHolder直接使用ViewBinding
+@Deprecated("2.0后删除")
 class ViewHolderUtil {
     companion object {
 
         fun getItemViewType(item: BaseBean): Int = when (item.type) {
-            ViewHolderTypeString.HEADER_1 -> ViewHolderTypeInt.HEADER_1
             ViewHolderTypeString.ANIME_COVER_1 -> ViewHolderTypeInt.ANIME_COVER_1
             ViewHolderTypeString.ANIME_COVER_2 -> ViewHolderTypeInt.ANIME_COVER_2
             ViewHolderTypeString.ANIME_COVER_3 -> ViewHolderTypeInt.ANIME_COVER_3
@@ -36,7 +35,6 @@ class ViewHolderUtil {
             ViewHolderTypeString.GRID_RECYCLER_VIEW_1 -> ViewHolderTypeInt.GRID_RECYCLER_VIEW_1
             ViewHolderTypeString.BANNER_1 -> ViewHolderTypeInt.BANNER_1
             ViewHolderTypeString.LICENSE_HEADER_1 -> ViewHolderTypeInt.LICENSE_HEADER_1
-            ViewHolderTypeString.LICENSE_1 -> ViewHolderTypeInt.LICENSE_1
             ViewHolderTypeString.SEARCH_HISTORY_HEADER_1 -> ViewHolderTypeInt.SEARCH_HISTORY_HEADER_1
             ViewHolderTypeString.SEARCH_HISTORY_1 -> ViewHolderTypeInt.SEARCH_HISTORY_1
             ViewHolderTypeString.ANIME_INFO_1 -> ViewHolderTypeInt.ANIME_INFO_1
@@ -52,7 +50,6 @@ class ViewHolderUtil {
             val view = if (viewType == ViewHolderTypeInt.UNKNOWN) View(parent.context)
             else LayoutInflater.from(parent.context).inflate(viewType, parent, false)
             return when (viewType) {
-                ViewHolderTypeInt.HEADER_1 -> Header1ViewHolder(view)
                 ViewHolderTypeInt.ANIME_COVER_1 -> AnimeCover1ViewHolder(view)
                 ViewHolderTypeInt.ANIME_COVER_2 -> AnimeCover2ViewHolder(view)
                 ViewHolderTypeInt.ANIME_COVER_3 -> AnimeCover3ViewHolder(view)
@@ -68,7 +65,6 @@ class ViewHolderUtil {
                 ViewHolderTypeInt.GRID_RECYCLER_VIEW_1 -> GridRecyclerView1ViewHolder(view)
                 ViewHolderTypeInt.BANNER_1 -> Banner1ViewHolder(view)
                 ViewHolderTypeInt.LICENSE_HEADER_1 -> LicenseHeader1ViewHolder(view)
-                ViewHolderTypeInt.LICENSE_1 -> License1ViewHolder(view)
                 ViewHolderTypeInt.SEARCH_HISTORY_HEADER_1 -> SearchHistoryHeader1ViewHolder(view)
                 ViewHolderTypeInt.SEARCH_HISTORY_1 -> SearchHistory1ViewHolder(view)
                 ViewHolderTypeInt.ANIME_INFO_1 -> AnimeInfo1ViewHolder(view)
@@ -97,10 +93,6 @@ class DataSource1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
 class GridRecyclerView1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val rvGridRecyclerView1: RecyclerView = view.findViewById(R.id.rv_grid_recycler_view_1)
-}
-
-class Header1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val tvHeader1Title: TextView = view.findViewById(R.id.tv_header_1_title)
 }
 
 class AnimeCover1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -188,11 +180,6 @@ class Banner1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 class LicenseHeader1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val tvLicenseHeader1Name: TextView = view.findViewById(R.id.tv_license_header_1_name)
     val tvLicenseHeader1License: TextView = view.findViewById(R.id.tv_license_header_1_license)
-}
-
-class License1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val tvLicense1Name: TextView = view.findViewById(R.id.tv_license_1_name)
-    val tvLicense1License: TextView = view.findViewById(R.id.tv_license_1_license)
 }
 
 class SearchHistoryHeader1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {

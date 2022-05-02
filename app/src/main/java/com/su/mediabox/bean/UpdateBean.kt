@@ -3,11 +3,7 @@ package com.su.mediabox.bean
 import com.google.gson.annotations.SerializedName
 import com.su.mediabox.pluginapi.been.BaseBean
 
-@Deprecated("不需要继承BaseBeen多那么多冗余字段")
 class UpdateBean(
-    override var type: String,
-    override var actionUrl: String,
-
     @SerializedName("tag_name")
     var tagName: String,
 
@@ -23,12 +19,9 @@ class UpdateBean(
     @SerializedName("body")
     var body: String
 
-    ) : BaseBean {
+) {
 
     class AssetsBean(
-        override var type: String,
-        override var actionUrl: String,
-
         @SerializedName("name")
         var name: String,
 
@@ -46,6 +39,6 @@ class UpdateBean(
 
         @SerializedName("updated_at")
         var updatedAt: String?
-    ) : BaseBean
+    )
 
 }

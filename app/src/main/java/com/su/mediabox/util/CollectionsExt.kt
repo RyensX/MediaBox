@@ -5,5 +5,5 @@ package com.su.mediabox.util
  *
  * @return 如果key已绑定非null，则返回该值，否则返回defaultValue
  */
-fun <K, V> MutableMap<K, V>.getOrInit(key: K, defaultValue: V) =
-    this[key] ?: defaultValue.also { this[key] = it }
+inline fun <K, V> MutableMap<K, V>.getOrInit(key: K, defaultValue: () -> V) =
+    this[key] ?: defaultValue().also { this[key] = it }

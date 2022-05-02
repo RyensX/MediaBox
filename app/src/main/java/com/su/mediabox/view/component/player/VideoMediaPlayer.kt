@@ -11,6 +11,7 @@ import android.util.Log
 import android.view.*
 import android.view.View.OnClickListener
 import android.widget.*
+import androidx.annotation.WorkerThread
 import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.children
 import androidx.core.view.isVisible
@@ -75,7 +76,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
      */
     var playPositionMemoryTimeLimit = 5000L
 
-    var playPositionMemoryStore: AnimeVideoPlayer.PlayPositionMemoryDataStore? = null
+    var playPositionMemoryStore: PlayPositionMemoryDataStore? = null
     private var playPositionViewJob: Job? = null
 
     // 预跳转进度
@@ -213,14 +214,12 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
     override fun init(context: Context?) {
         super.init(context)
 
-        ivDownloadButton = findViewById(R.id.iv_play_activity_toolbar_download)
         tvMoreScale = findViewById(R.id.tv_more_scale)
         tvSpeed = findViewById(R.id.tv_speed)
         vgRightContainer = findViewById(R.id.layout_right)
         rvSpeed = findViewById(R.id.rv_speed)
         tvEpisode = findViewById(R.id.tv_episode)
         rvEpisode = findViewById(R.id.rv_episode)
-        ivShare = findViewById(R.id.iv_play_activity_toolbar_share)
         ivNextEpisode = findViewById(R.id.iv_next)
         ivSetting = findViewById(R.id.iv_setting)
         vgSettingContainer = findViewById(R.id.layout_setting)
@@ -228,7 +227,6 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
         cbBottomProgress = findViewById(R.id.cb_bottom_progress)
         pbBottomProgress = findViewById(R.id.progress)
         playBottomProgress = findViewById(R.id.play_bottom_progressbar)
-        ivMore = findViewById(R.id.iv_play_activity_toolbar_more)
         tvOpenByExternalPlayer = findViewById(R.id.tv_open_by_external_player)
         tvRestoreScreen = findViewById(R.id.tv_restore_screen)
         tvTouchDownHighSpeed = findViewById(R.id.tv_touch_down_high_speed)
@@ -1284,5 +1282,21 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
     override fun lockTouchLogic() {
         super.lockTouchLogic()
         mLockScreen.setImageResource(if (mLockCurScreen) R.drawable.ic_outline_lock_24 else R.drawable.ic_outline_lock_open_24)
+    }
+
+    interface PlayPositionMemoryDataStore {
+
+        suspend fun getPlayPosition(url: String): Long?
+
+        /**
+         * @param position 播放进度毫秒，可用GSYVideoViewBridge::currentPosition获取
+         */
+        @WorkerThread
+        suspend fun putPlayPosition(url: String, position: Long)
+
+        @WorkerThread
+        suspend fun deletePlayPosition(url: String)
+
+        fun positionFormat(position: Long): String
     }
 }

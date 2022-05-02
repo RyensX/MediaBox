@@ -96,9 +96,9 @@ public static final int *;
 -dontwarn com.shuyu.gsyvideoplayer.utils.**
 -keep class tv.danmaku.ijk.** { *; }
 -dontwarn tv.danmaku.ijk.**
-# 不混淆AnimeVideoPlayer，否则SimplePlayActivity横屏后布局是未横屏的
--keep class com.su.mediabox.view.component.player.AnimeVideoPlayer { *; }
--keep class com.su.mediabox.view.component.player.DanmakuVideoPlayer { *; }
+
+-keep class com.su.mediabox.view.component.player.VideoMediaPlayer { *; }
+-keep class com.su.mediabox.view.component.player.VideoMediaDanmakuPlayer { *; }
 
 # 自定义数据源接口不应被混淆
 -keep class com.su.mediabox.model.interfaces.** { *; }

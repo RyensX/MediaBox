@@ -26,7 +26,7 @@ class SettingViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 getAppDataBase().historyDao().deleteAllHistory()
-                getAppDataBase().searchHistoryDao().deleteAllSearchHistory()
+                getAppDataBase().searchDao().deleteAllSearchHistory()
                 getOfflineDatabase().playRecordDao().deleteAll()
                 mldDeleteAllHistory.postValue(true)
                 getAllHistoryCount()
@@ -69,7 +69,7 @@ class SettingViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val count = getAppDataBase().historyDao().getHistoryCount() +
-                        getAppDataBase().searchHistoryDao().getSearchHistoryCount() +
+                        getAppDataBase().searchDao().getSearchHistoryCount() +
                         getOfflineDatabase().playRecordDao().getPlayRecordCount()
                 mldAllHistoryCount.postValue(count)
             } catch (e: Exception) {

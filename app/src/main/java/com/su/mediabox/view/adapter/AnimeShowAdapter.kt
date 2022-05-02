@@ -118,12 +118,6 @@ class AnimeShowAdapter(
                         fragment.activity?.let { it1 -> GridRecyclerView1Adapter(it1, it) }
                 }
             }
-            holder is Header1ViewHolder -> {
-                fragment.activity?.let {
-                    holder.tvHeader1Title.setTextColor(it.getResColor(R.color.foreground_main_color_2_skin))
-                }
-                holder.tvHeader1Title.text = item.title
-            }
             holder is Banner1ViewHolder -> {
                 fragment.activity?.let {
                     item.animeCoverList?.let { it1 ->

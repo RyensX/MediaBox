@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.su.mediabox.App
 import com.su.mediabox.R
-import com.su.mediabox.bean.HistoryBean
+import com.su.mediabox.bean.MediaHistory
 import com.su.mediabox.database.getAppDataBase
 import com.su.mediabox.util.PluginIO
 import com.su.mediabox.util.showToast
@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 
 
 class HistoryViewModel : ViewModel() {
-    var historyList: MutableList<HistoryBean> = ArrayList()
+    var historyList: MutableList<MediaHistory> = ArrayList()
     var mldHistoryList: MutableLiveData<Boolean> = MutableLiveData()
     var mldDeleteHistory: MutableLiveData<Int> = MutableLiveData()
     var mldDeleteAllHistory: MutableLiveData<Int> = MutableLiveData()
@@ -26,7 +26,7 @@ class HistoryViewModel : ViewModel() {
                 historyList.addAll(getAppDataBase().historyDao().getHistoryList())
                 historyList.sortWith(Comparator { o1, o2 ->
                     // 负数表示按时间戳从大到小排列
-                    -o1.time.compareTo(o2.time)
+                    -o1.lastViewTime.compareTo(o2.lastViewTime)
                 })
                 mldHistoryList.postValue(true)
             } catch (e: Exception) {
@@ -38,10 +38,10 @@ class HistoryViewModel : ViewModel() {
         }
     }
 
-    fun deleteHistory(historyBean: HistoryBean) {
+    fun deleteHistory(historyBean: MediaHistory) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                getAppDataBase().historyDao().deleteHistory(historyBean.animeUrl)
+                getAppDataBase().historyDao().deleteHistory(historyBean.mediaUrl)
                 val index = historyList.indexOf(historyBean)
                 historyList.removeAt(index)
                 mldDeleteHistory.postValue(index)

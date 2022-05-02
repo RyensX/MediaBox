@@ -9,7 +9,6 @@ class AnimeShowSpanSize(val adapter: RecyclerView.Adapter<RecyclerView.ViewHolde
     override fun getSpanSize(position: Int): Int {
         return when (adapter.getItemViewType(position)) {
             ViewHolderTypeInt.GRID_RECYCLER_VIEW_1 -> 4
-            ViewHolderTypeInt.HEADER_1 -> 4
             ViewHolderTypeInt.BANNER_1 -> 4
             ViewHolderTypeInt.ANIME_COVER_3 -> 4
             ViewHolderTypeInt.ANIME_COVER_5 -> 4

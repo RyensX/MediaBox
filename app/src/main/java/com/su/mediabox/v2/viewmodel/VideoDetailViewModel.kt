@@ -4,7 +4,7 @@ import androidx.lifecycle.*
 import com.su.mediabox.App
 import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.R
-import com.su.mediabox.bean.FavoriteAnimeBean
+import com.su.mediabox.bean.MediaFavorite
 import com.su.mediabox.bean.ResponseDataType
 import com.su.mediabox.database.getAppDataBase
 import com.su.mediabox.pluginapi.Constant
@@ -28,7 +28,7 @@ class VideoDetailViewModel : ViewModel() {
         MutableLiveData()
     val videoData: LiveData<Pair<ResponseDataType, List<BaseData>>> = _videoData
 
-    private var rawFavData: LiveData<FavoriteAnimeBean?>? = null
+    private var rawFavData: LiveData<MediaFavorite?>? = null
     private val _isFavVideo = MediatorLiveData<Boolean>()
     val isFavVideo: LiveData<Boolean> = _isFavVideo
 
@@ -36,20 +36,14 @@ class VideoDetailViewModel : ViewModel() {
     fun switchFavState() {
         viewModelScope.launch(Dispatchers.IO) {
             if (_isFavVideo.value == true) {
-                getAppDataBase().favoriteAnimeDao().deleteFavoriteAnime(partUrl)
+                getAppDataBase().favoriteDao().deleteFavorite(partUrl)
             } else {
                 //如果按追番前已经看过则同步进度
                 val history = getAppDataBase().historyDao().getHistory(partUrl)
-                getAppDataBase().favoriteAnimeDao().insertFavoriteAnime(
-                    FavoriteAnimeBean(
-                        //UP_TODO 2022/2/28 22:16 0 使用新的多类型系统
-                        Constant.ViewHolderTypeString.ANIME_COVER_8,
-                        "",
-                        partUrl,
-                        title,
-                        System.currentTimeMillis(),
-                        cover,
-                        lastEpisode = history?.lastEpisode,
+                getAppDataBase().favoriteDao().insertFavorite(
+                    MediaFavorite(
+                        partUrl, title, System.currentTimeMillis(), cover,
+                        lastEpisodeTitle = history?.lastEpisodeTitle,
                         lastEpisodeUrl = history?.lastEpisodeUrl
                     )
                 )
@@ -60,7 +54,7 @@ class VideoDetailViewModel : ViewModel() {
     //更新监听的目标视频作品
     private fun updateFavTarget() {
         viewModelScope.launch(Dispatchers.IO) {
-            getAppDataBase().favoriteAnimeDao().getFavoriteAnimeLiveData(partUrl).also { liveData ->
+            getAppDataBase().favoriteDao().getFavoriteLiveData(partUrl).also { liveData ->
                 //重新绑定
                 withContext(Dispatchers.Main) {
                     rawFavData?.also {
@@ -74,7 +68,7 @@ class VideoDetailViewModel : ViewModel() {
                 //智能更新封面
                 liveData.value?.also {
                     if (it.cover != cover) {
-                        getAppDataBase().favoriteAnimeDao().updateFavoriteAnime(it.apply {
+                        getAppDataBase().favoriteDao().updateFavorite(it.apply {
                             cover = this@VideoDetailViewModel.cover
                         })
                     }

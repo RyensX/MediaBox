@@ -7,23 +7,22 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.su.mediabox.R
-import com.su.mediabox.bean.HistoryBean
+import com.su.mediabox.bean.MediaHistory
 import com.su.mediabox.databinding.ActivityHistoryBinding
 import com.su.mediabox.util.Util.getResColor
 import com.su.mediabox.util.Util.getResDrawable
-import com.su.mediabox.view.adapter.HistoryAdapter
 import com.su.mediabox.viewmodel.HistoryViewModel
 
-@Deprecated("更新2.0后删除")
+@Deprecated("需要重新实现")
 class HistoryActivity : BasePluginActivity<ActivityHistoryBinding>() {
     private lateinit var viewModel: HistoryViewModel
-    private lateinit var adapter: HistoryAdapter
+    // private lateinit var adapter: HistoryAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         viewModel = ViewModelProvider(this).get(HistoryViewModel::class.java)
-        adapter = HistoryAdapter(this, viewModel.historyList)
+        //adapter = HistoryAdapter(this, viewModel.historyList)
 
         mBinding.run {
             atbHistoryActivity.setBackButtonClickListener { finish() }
@@ -37,12 +36,12 @@ class HistoryActivity : BasePluginActivity<ActivityHistoryBinding>() {
             srlHistoryActivity.setOnRefreshListener { viewModel.getHistoryList() }
 
             rvHistoryActivity.layoutManager = LinearLayoutManager(this@HistoryActivity)
-            rvHistoryActivity.adapter = adapter
+            //rvHistoryActivity.adapter = adapter
         }
 
 
         viewModel.mldHistoryList.observe(this, Observer {
-            adapter.notifyDataSetChanged()
+            //adapter.notifyDataSetChanged()
             mBinding.srlHistoryActivity.isRefreshing = false
             if (it) {
                 if (viewModel.historyList.isEmpty()) showLoadFailedTip(
@@ -57,12 +56,12 @@ class HistoryActivity : BasePluginActivity<ActivityHistoryBinding>() {
                 getString(R.string.no_history),
                 null
             )
-            if (it >= 0) adapter.notifyItemRemoved(it)
+            //if (it >= 0) adapter.notifyItemRemoved(it)
         })
 
         viewModel.mldDeleteAllHistory.observe(this, Observer {
             showLoadFailedTip(getString(R.string.no_history), null)
-            if (it > 0) adapter.notifyItemRangeRemoved(0, it)
+            //if (it > 0) adapter.notifyItemRangeRemoved(0, it)
         })
 
         mBinding.atbHistoryActivity.run {
@@ -89,7 +88,7 @@ class HistoryActivity : BasePluginActivity<ActivityHistoryBinding>() {
         viewModel.getHistoryList()
     }
 
-    fun deleteHistory(historyBean: HistoryBean) {
+    fun deleteHistory(historyBean: MediaHistory) {
         viewModel.deleteHistory(historyBean)
     }
 

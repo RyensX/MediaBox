@@ -110,7 +110,9 @@ object CoilUtil {
         private val base64ImagePool = mutableMapOf<Int, Base64Image>()
 
         fun obtainBase64Image(base64: String) =
-            base64ImagePool.getOrInit(base64.hashCode(), Base64Image(base64))
+            base64ImagePool.getOrInit(base64.hashCode()) {
+                Base64Image(base64)
+            }
 
         class Base64Image internal constructor(val base64: String)
 

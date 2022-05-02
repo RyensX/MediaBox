@@ -136,25 +136,15 @@
             android:name=".v2.view.activity.VideoSearchActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
-            android:name=".view.activity.PlayActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode" />
-        <activity
             android:name=".v2.view.activity.VideoMediaPlayActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
-        <activity
-            android:name=".view.activity.AnimeDetailActivity"
-            android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
             android:name=".v2.view.activity.VideoDetailActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
             android:name=".view.activity.BaseActivity"
             android:configChanges="uiMode" />
-        <activity
-            android:name=".view.activity.MainActivity"
-            android:configChanges="uiMode|orientation|keyboardHidden|screenSize"
-            android:exported="true" />
         <!--
         <service
             android:name="com.su.mediabox.view.component.widget.everydayanime.EverydayAnimeService"
