@@ -16,6 +16,9 @@ object AppAction {
 
     //初始化内置动作
     fun init() {
+        HomeAction.GO = {
+            it.goActivity<HomeActivity>()
+        }
         DetailAction.GO = {
             routeToComponentPage<DetailAction, VideoDetailActivity>(it)
         }

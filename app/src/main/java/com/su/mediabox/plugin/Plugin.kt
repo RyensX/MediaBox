@@ -131,7 +131,7 @@ object PluginManager {
     fun Context.launchPlugin(pluginInfo: PluginInfo?) {
         pluginInfo?.apply {
             _currentLaunchPlugin.value = this
-            goActivity<HomeActivity>()
+            acquireComponentFactory().initAction.go(this@launchPlugin)
         }
     }
 
