@@ -30,7 +30,6 @@ import com.su.mediabox.R
 import com.su.skin.SkinManager
 import okhttp3.internal.and
 import java.io.*
-import java.lang.StringBuilder
 import java.net.HttpURLConnection
 import java.net.URL
 import java.security.MessageDigest
@@ -38,6 +37,7 @@ import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
 import java.util.*
 import java.util.jar.JarFile
+
 
 object Util {
 
@@ -534,5 +534,10 @@ object Util {
         Log.d("取值错误", e.message ?: "")
         e.printStackTrace()
         null
+    }
+
+    fun Context.openUrl(url: String) {
+        val uri = Uri.parse(url)
+        startActivity(Intent(Intent.ACTION_VIEW, uri))
     }
 }
