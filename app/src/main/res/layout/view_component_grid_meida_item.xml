@@ -4,11 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:maxWidth="105dp"
     android:layout_marginTop="7dp">
 
     <androidx.constraintlayout.utils.widget.ImageFilterView
         android:id="@+id/vc_gird_media_item_cover"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:scaleType="centerCrop"
         app:layout_constraintDimensionRatio="7:10"
