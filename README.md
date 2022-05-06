@@ -47,7 +47,7 @@
 ## ⚡下载&使用
 
 * [正式Release](https://github.com/RyensX/MediaBox/releases/latest)
-* [自动构建](https://github.com/RyensX/MediaBox/actions/workflows/Android.yml)(**不稳定**，适合体验最新功能，可与Release包共存，注意**需要登陆github**才可下载Artifacts)
+* [自动构建](https://github.com/RyensX/MediaBox/actions/workflows/android_debug.yml)(**不稳定**，适合体验最新功能，可与Release包共存，注意**需要登陆github**才可下载Artifacts)
 * [官方插件仓库](https://github.com/RyensX/MediaBoxPluginRepository)
 
 ## 🚀效果展示

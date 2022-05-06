@@ -12,11 +12,13 @@ import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import com.su.mediabox.plugin.AppAction
 import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.pluginapi.AppUtil
+import com.su.mediabox.pluginapi.util.WebUtiIns
 import com.su.mediabox.util.CrashHandler
 import com.su.mediabox.util.PushHelper
 import com.su.mediabox.util.Util.getManifestMetaValue
 import com.su.mediabox.util.Util.getResColor
 import com.su.mediabox.util.Util.getSkinResourceId
+import com.su.mediabox.util.html.WebUtilImpl
 import com.su.mediabox.util.release
 import com.su.mediabox.util.skin.SkinUtil
 import com.su.skin.core.attrs.SrlPrimaryColorAttr
@@ -40,6 +42,7 @@ class App : Application() {
 
         AppUtil.init(this)
         AppAction.init()
+        WebUtiIns = WebUtilImpl
 
         PluginManager.scanPlugin()
 

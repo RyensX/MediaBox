@@ -9,6 +9,7 @@ build_versions.target_sdk = 31
 ext.build_versions = build_versions
 
 def deps = [:]
+
 def kotlin = [:]
 kotlin.kotlin_stdlib = "org.jetbrains.kotlin:kotlin-stdlib:1.6.10"
 kotlin.core_ktx = "androidx.core:core-ktx:1.6.0"
@@ -21,6 +22,10 @@ deps.kotlinx = kotlinx
 def google = [:]
 google.flexbox = "com.google.android.flexbox:flexbox:3.0.0"
 deps.google = google
+
+def apache = [:]
+apache.commons_text = "org.apache.commons:commons-text:1.9"
+deps.apache = apache
 
 def support = [:]
 support.constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.1"

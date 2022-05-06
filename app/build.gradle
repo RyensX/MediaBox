@@ -178,6 +178,7 @@ dependencies {
     implementation deps.google.flexbox
     implementation deps.cretin.etv
     implementation deps.pref.kotpref
+    implementation deps.apache.commons_text
     implementation project(':skin')
     implementation project(':skin_blue')
     implementation project(':skin_dark')
