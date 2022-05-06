@@ -10,8 +10,8 @@ import com.su.mediabox.database.getAppDataBase
 import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.pluginapi.components.IBaseComponent
 import com.su.mediabox.pluginapi.v2.been.EpisodeData
-import com.su.mediabox.v2.view.activity.VideoDetailActivity
-import com.su.mediabox.v2.viewmodel.VideoDetailViewModel
+import com.su.mediabox.view.activity.MediaDetailActivity
+import com.su.mediabox.viewmodel.MediaDetailViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -24,7 +24,7 @@ fun bindHistoryPlayInfo(
     val detailUrl = (context as? ComponentActivity)?.let {
         when (it) {
             //TODO 使用ca内的vs
-            is VideoDetailActivity -> ViewModelProvider(it)[VideoDetailViewModel::class.java].partUrl
+            is MediaDetailActivity -> ViewModelProvider(it)[MediaDetailViewModel::class.java].partUrl
             else -> null
         }
     } ?: return

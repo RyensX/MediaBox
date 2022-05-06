@@ -17,11 +17,8 @@ import com.su.mediabox.util.CrashHandler
 import com.su.mediabox.util.PushHelper
 import com.su.mediabox.util.Util.getManifestMetaValue
 import com.su.mediabox.util.Util.getResColor
-import com.su.mediabox.util.Util.getSkinResourceId
 import com.su.mediabox.util.html.WebUtilImpl
 import com.su.mediabox.util.release
-import com.su.mediabox.util.skin.SkinUtil
-import com.su.skin.core.attrs.SrlPrimaryColorAttr
 import com.umeng.analytics.MobclickAgent
 import com.umeng.commonsdk.UMConfigure
 import com.umeng.message.PushAgent
@@ -81,9 +78,6 @@ class App : Application() {
         }
 
         FileDownloader.setup(this)
-
-        // 初始化自定义皮肤属性
-        SkinUtil.initCustomAttrIds()
     }
 
     companion object {
@@ -102,26 +96,16 @@ class App : Application() {
 
             // 全局设置默认的 Header
             SmartRefreshLayout.setDefaultRefreshHeaderCreator { context, layout -> //开始设置全局的基本参数（这里设置的属性只跟下面的MaterialHeader绑定，其他Header不会生效，能覆盖DefaultRefreshInitializer的属性和Xml设置的属性）
-                val colorSchemeResources = R.color.unchanged_main_color_2_skin
-                SrlPrimaryColorAttr.materialHeaderColorSchemeRes = colorSchemeResources
                 layout.setEnableHeaderTranslationContent(true)
                     .setHeaderHeight(70f)
                     .setDragRate(0.6f)
-                MaterialHeader(context).setColorSchemeResources(
-                    getSkinResourceId(
-                        colorSchemeResources
-                    )
-                )
+                MaterialHeader(context).setColorSchemeResources(R.color.main_color_2_skin)
                     .setShowBezierWave(true)
             }
 
             SmartRefreshLayout.setDefaultRefreshFooterCreator { context, layout ->
-                val animatingColor = R.color.foreground_main_color_2_skin
-                SrlPrimaryColorAttr.ballPulseFooterAnimatingColorRes = animatingColor
                 layout.setEnableFooterTranslationContent(true)
-                BallPulseFooter(context).setAnimatingColor(
-                    context.getResColor(animatingColor)
-                )
+                BallPulseFooter(context).setAnimatingColor(getResColor(R.color.main_color_2_skin))
             }
         }
     }

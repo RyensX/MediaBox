@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/ic_spinner_bg_1_skin_lemon" android:state_pressed="true" /><!--按下时效果-->
-    <item android:drawable="@drawable/ic_spinner_bg_1_skin_lemon" android:state_pressed="false" /><!--默认效果-->
-</selector>

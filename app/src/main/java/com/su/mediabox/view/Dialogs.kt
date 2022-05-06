@@ -9,15 +9,12 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.su.mediabox.R
 import com.su.mediabox.config.Const
 import com.su.mediabox.databinding.DialogEpisodeBottomSheetBinding
-import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.pluginapi.UI.dp
 import com.su.mediabox.pluginapi.v2.been.EpisodeData
 import com.su.mediabox.pluginapi.v2.components.IVideoPlayComponent
 import com.su.mediabox.util.createCoroutineScope
-import com.su.mediabox.util.downloadanime.AnimeDownloadHelper
 import com.su.mediabox.util.lazyAcquireComponent
 import com.su.mediabox.util.showToast
-import com.su.mediabox.util.toMD5
 import com.su.mediabox.view.adapter.type.*
 import com.su.mediabox.view.viewcomponents.VideoPlayListViewHolder
 import kotlinx.coroutines.*
@@ -106,12 +103,7 @@ fun episodeSheetDialog(
                         }) {
                             component.getVideoPlayMedia(it.url).apply {
                                 Log.d("下载", videoPlayUrl)
-                                withContext(Dispatchers.Main) {
-                                    AnimeDownloadHelper.instance.downloadAnime(
-                                        context,
-                                        videoPlayUrl, videoPlayUrl.toMD5(), "$videName/$title"
-                                    )
-                                }
+                                "缓存功能正在施工".showToast()
                             }
                         }
                     } ?: "剧集信息错误".showToast()

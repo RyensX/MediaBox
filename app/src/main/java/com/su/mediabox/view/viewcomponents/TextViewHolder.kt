@@ -4,6 +4,7 @@ import android.view.View
 import android.widget.TextView
 import com.su.mediabox.R
 import com.su.mediabox.pluginapi.v2.been.TextData
+import com.su.mediabox.util.Util
 import com.su.mediabox.view.adapter.type.TypeViewHolder
 
 abstract class TextViewHolder<T : TextData>(
@@ -13,7 +14,7 @@ abstract class TextViewHolder<T : TextData>(
     TypeViewHolder<T>(itemView) {
 
     protected var textData: T? = null
-    protected val styleColor = textView.resources.getColor(R.color.main_color_2_skin)
+    protected val styleColor = Util.getResColor(R.color.main_color_2_skin)
 
     override fun onBind(data: T) {
         super.onBind(data)

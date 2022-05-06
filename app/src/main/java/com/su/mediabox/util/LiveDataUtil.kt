@@ -37,3 +37,43 @@ abstract class WrapperLiveData<T>(val originalLiveData: MutableLiveData<*>) : Li
     override fun hasActiveObservers(): Boolean = originalLiveData.hasActiveObservers()
 
 }
+
+/**
+ * 专用于list的LiveData，可直接添加并推送到ListAdapter更新
+ */
+class MutableListLiveData<T>(data: MutableList<T> = mutableListOf()) :
+    MutableLiveData<MutableList<T>>(data) {
+
+    private var tmpList = mutableListOf<T>()
+
+    fun addData(data: T) {
+        value?.run {
+            add(data)
+            switchDataRefUpdate()
+        }
+    }
+
+    fun removeData(data: T) {
+        value?.run {
+            remove(data)
+            switchDataRefUpdate()
+        }
+    }
+
+    private fun addDataList(data: List<T>) {
+        value?.run {
+            addAll(data)
+            switchDataRefUpdate()
+        }
+    }
+
+    private fun switchDataRefUpdate() {
+        value?.let {
+            tmpList.clear()
+            tmpList.addAll(it)
+            val tmpRef = tmpList
+            tmpList = it
+            postValue(tmpRef)
+        }
+    }
+}

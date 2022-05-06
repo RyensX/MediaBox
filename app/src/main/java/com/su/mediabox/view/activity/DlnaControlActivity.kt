@@ -30,9 +30,6 @@ class DlnaControlActivity : BasePluginActivity<ActivityDlnaControlBinding>() {
     private lateinit var title: String
     private var isPlaying = false
 
-    // 此界面不换肤
-    override fun isChangeSkin(): Boolean = false
-
     companion object {
         const val TAG = "DlnaControlActivity"
         val deviceHashMap = HashMap<String, Device<*, *, *>>()

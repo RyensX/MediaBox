@@ -34,8 +34,8 @@ import com.su.mediabox.util.*
 import com.su.mediabox.util.Util.getResDrawable
 import com.su.mediabox.util.Util.getScreenBrightness
 import com.su.mediabox.util.Util.openVideoByExternalPlayer
-import com.su.mediabox.v2.view.activity.VideoMediaPlayActivity
-import com.su.mediabox.v2.viewmodel.VideoMediaPlayViewModel
+import com.su.mediabox.view.activity.VideoMediaPlayActivity
+import com.su.mediabox.viewmodel.VideoMediaPlayViewModel
 import com.su.mediabox.view.activity.DlnaActivity
 import com.su.mediabox.view.adapter.type.*
 import com.su.mediabox.view.component.ZoomView

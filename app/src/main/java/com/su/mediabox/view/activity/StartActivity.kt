@@ -15,11 +15,8 @@ import com.su.mediabox.config.Const
 import com.su.mediabox.databinding.ActivityPluginBinding
 import com.su.mediabox.util.Util
 import com.su.mediabox.util.goActivity
-import com.su.mediabox.util.showToast
 import com.su.mediabox.util.update.AppUpdateHelper
 import com.su.mediabox.util.update.AppUpdateStatus
-import com.su.mediabox.v2.view.activity.PluginInstallerActivity
-import com.su.mediabox.v2.view.activity.PluginRepositoryActivity
 import com.su.mediabox.view.adapter.type.*
 import com.su.mediabox.view.viewcomponents.ItemPluginViewHolder
 
@@ -102,7 +99,6 @@ class StartActivity : BaseActivity<ActivityPluginBinding>() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.start_menu_skin -> goActivity<SkinActivity>()
             R.id.start_menu_settings -> goActivity<SettingActivity>()
             R.id.start_menu_about -> goActivity<AboutActivity>()
         }

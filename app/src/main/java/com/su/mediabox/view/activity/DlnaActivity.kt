@@ -1,48 +1,30 @@
 package com.su.mediabox.view.activity
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.activity.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.su.mediabox.databinding.ActivityDlnaBinding
+import com.su.mediabox.databinding.ItemDlnaDevice1Binding
 import com.su.mediabox.util.Util.getRedirectUrl
 import com.su.mediabox.util.dlna.Utils.isLocalMediaAddress
 import com.su.mediabox.util.dlna.dmc.DLNACastManager
-import com.su.mediabox.util.dlna.dmc.OnDeviceRegistryListenerDsl
-import com.su.mediabox.util.dlna.dmc.registerDeviceListener
-import com.su.mediabox.util.dlna.dmc.unregisterListener
-import com.su.mediabox.util.logI
-import com.su.mediabox.view.adapter.UpnpAdapter
+import com.su.mediabox.util.goActivity
+import com.su.mediabox.util.setOnClickListener
+import com.su.mediabox.view.adapter.type.*
 import com.su.mediabox.viewmodel.UpnpViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.fourthline.cling.model.meta.Device
 
 class DlnaActivity : BasePluginActivity<ActivityDlnaBinding>() {
-    private lateinit var viewModel: UpnpViewModel
-    private lateinit var adapter: UpnpAdapter
+
+    private val viewModel by viewModels<UpnpViewModel>()
     lateinit var title: String
     lateinit var url: String
-    private val deviceRegistryListener: OnDeviceRegistryListenerDsl.() -> Unit = {
-        onDeviceRemoved { device ->
-            val index = viewModel.deviceList.indexOf(device)
-            if (index != -1) {
-                viewModel.deviceList.removeAt(index)
-                adapter.notifyItemRemoved(index)
-            }
-        }
-
-        onDeviceAdded { device ->
-            val index = viewModel.deviceList.indexOf(device)
-            if (index == -1) {
-                viewModel.deviceList.add(device)
-                adapter.notifyItemInserted(viewModel.deviceList.size - 1)
-            }
-        }
-    }
-
-    companion object {
-        const val TAG = "DlnaActivity"
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,16 +32,14 @@ class DlnaActivity : BasePluginActivity<ActivityDlnaBinding>() {
         url = intent.getStringExtra("url") ?: ""
         title = intent.getStringExtra("title") ?: ""
 
-        logI(TAG, url)
-
-        viewModel = ViewModelProvider(this).get(UpnpViewModel::class.java)
-        adapter = UpnpAdapter(this, viewModel.deviceList)
-
         mBinding.run {
             atbDlnaActivity.setBackButtonClickListener { finish() }
 
-            rvDlnaActivityDevice.layoutManager = LinearLayoutManager(this@DlnaActivity)
-            rvDlnaActivityDevice.adapter = adapter
+            rvDlnaActivityDevice.linear()
+                .initTypeList(DataViewMapList().registerDataViewMap<Device<*, *, *>, DlnaViewHolder>()) {
+                    setTag("url", url)
+                    setTag("title", title)
+                }
         }
 
         lifecycleScope.launch(Dispatchers.IO) {
@@ -67,9 +47,10 @@ class DlnaActivity : BasePluginActivity<ActivityDlnaBinding>() {
             if (!url.isLocalMediaAddress()) {
                 url = getRedirectUrl(this@DlnaActivity.url)
             }
+        }
 
-            DLNACastManager.instance.registerDeviceListener(deviceRegistryListener)
-            DLNACastManager.instance.search(DLNACastManager.DEVICE_TYPE_DMR)
+        viewModel.deviceList.observe(this) {
+            mBinding.rvDlnaActivityDevice.submitList(it)
         }
     }
 
@@ -83,10 +64,32 @@ class DlnaActivity : BasePluginActivity<ActivityDlnaBinding>() {
         super.onStop()
     }
 
-    override fun onDestroy() {
-        DLNACastManager.instance.unregisterListener(deviceRegistryListener)
-        super.onDestroy()
-    }
-
     override fun getBinding(): ActivityDlnaBinding = ActivityDlnaBinding.inflate(layoutInflater)
+
+    class DlnaViewHolder private constructor(private val binding: ItemDlnaDevice1Binding) :
+        TypeViewHolder<Device<*, *, *>>(binding.root) {
+
+        private var tmpData: Device<*, *, *>? = null
+
+        constructor(parent: ViewGroup) : this(
+            ItemDlnaDevice1Binding.inflate(LayoutInflater.from(parent.context), parent, false)
+        ) {
+            setOnClickListener(itemView) {
+                tmpData?.also {
+                    val key = System.currentTimeMillis().toString()
+                    DlnaControlActivity.deviceHashMap[key] = it
+                    itemView.context.goActivity<DlnaControlActivity>(Intent().apply {
+                        putExtra("url", bindingTypeAdapter.getTag<String>("url")!!)
+                        putExtra("title", bindingTypeAdapter.getTag<String>("title")!!)
+                        putExtra("deviceKey", key)
+                    })
+                }
+            }
+        }
+
+        override fun onBind(data: Device<*, *, *>) {
+            tmpData = data
+            binding.tvUpnpDevice1Title.text = data.details?.friendlyName
+        }
+    }
 }

@@ -6,8 +6,7 @@ import android.content.Intent
 import com.su.mediabox.pluginapi.v2.action.*
 import com.su.mediabox.util.goActivity
 import com.su.mediabox.util.putAction
-import com.su.mediabox.v2.view.activity.*
-import com.su.mediabox.view.activity.WebViewActivity
+import com.su.mediabox.view.activity.*
 
 /**
  * 内置数据动作
@@ -20,7 +19,7 @@ object AppAction {
             it.goActivity<HomeActivity>()
         }
         DetailAction.GO = {
-            routeToComponentPage<DetailAction, VideoDetailActivity>(it)
+            routeToComponentPage<DetailAction, MediaDetailActivity>(it)
         }
         PlayAction.GO = {
             routeToComponentPage<PlayAction, VideoMediaPlayActivity>(it)
@@ -29,7 +28,7 @@ object AppAction {
             routeToComponentPage<ClassifyAction, MediaClassifyActivity>(it)
         }
         SearchAction.GO = {
-            routeToComponentPage<SearchAction, VideoSearchActivity>(it)
+            routeToComponentPage<SearchAction, MediaSearchActivity>(it)
         }
         WebBrowserAction.GO = {
             routeToComponentPage<WebBrowserAction, WebViewActivity>(it)

@@ -34,10 +34,10 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_mediabox_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Anime.skin"
+        android:theme="@style/App.Theme"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".v2.view.activity.PluginInstallerActivity"
+            android:name=".view.activity.PluginInstallerActivity"
             android:excludeFromRecents="true"
             android:exported="true"
             android:label="插件安装"
@@ -69,7 +69,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".v2.view.activity.HomeActivity"
+            android:name=".view.activity.HomeActivity"
             android:exported="false" />
         <activity
             android:name=".view.activity.StartActivity"
@@ -85,10 +85,7 @@
             android:name=".view.activity.WebViewActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
-            android:name=".v2.view.activity.CustomDataActivity"
-            android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
-        <activity
-            android:name=".view.activity.SkinActivity"
+            android:name=".view.activity.CustomDataActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
             android:name=".view.activity.CrashActivity"
@@ -97,10 +94,10 @@
             android:name=".view.activity.HistoryActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
-            android:name=".v2.view.activity.VideoFavoriteActivity"
+            android:name=".view.activity.MediaFavoriteActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
-            android:name=".v2.view.activity.PluginRepositoryActivity"
+            android:name=".view.activity.PluginRepositoryActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
             android:name=".view.activity.DlnaControlActivity"
@@ -112,9 +109,6 @@
             android:name=".view.activity.SimplePlayActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode" />
         <activity
-            android:name=".view.activity.AnimeDownloadActivity"
-            android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
-        <activity
             android:name=".view.activity.LicenseActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
@@ -124,23 +118,17 @@
             android:name=".view.activity.SettingActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
-            android:name=".view.activity.MonthAnimeActivity"
+            android:name=".view.activity.MediaClassifyActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
-            android:name=".v2.view.activity.MediaClassifyActivity"
+            android:name=".view.activity.MediaSearchActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
-            android:name=".view.activity.RankActivity"
-            android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
-        <activity
-            android:name=".v2.view.activity.VideoSearchActivity"
-            android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
-        <activity
-            android:name=".v2.view.activity.VideoMediaPlayActivity"
+            android:name=".view.activity.VideoMediaPlayActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+            android:theme="@style/Theme.AppCompat.DayNight.Fullscreen" />
         <activity
-            android:name=".v2.view.activity.VideoDetailActivity"
+            android:name=".view.activity.MediaDetailActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
             android:name=".view.activity.BaseActivity"
@@ -167,13 +155,6 @@
         -->
         <service
             android:name=".util.dlna.dmc.DLNACastService"
-            android:exported="false" />
-        <service
-            android:name=".util.downloadanime.AnimeDownloadService"
-            android:enabled="true" />
-
-        <receiver
-            android:name=".util.downloadanime.AnimeDownloadNotificationReceiver"
             android:exported="false" />
 
         <provider

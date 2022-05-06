@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:color="@color/foreground_main_color_2_skin_dark" android:drawable="@drawable/ic_swap_horiz_white_24_skin_dark" android:state_checked="true" />
-    <item android:color="@color/foreground_white_skin_dark" android:drawable="@drawable/ic_swap_horiz_white_24_skin_dark" android:state_checked="false" />
-</selector>

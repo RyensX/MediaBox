@@ -27,9 +27,7 @@ class HistoryActivity : BasePluginActivity<ActivityHistoryBinding>() {
         mBinding.run {
             atbHistoryActivity.setBackButtonClickListener { finish() }
 
-            srlHistoryActivity.setColorSchemeColors(
-                this@HistoryActivity.getResColor(R.color.unchanged_main_color_2_skin)
-            )
+            srlHistoryActivity.setColorSchemeColors(getResColor(R.color.unchanged_main_color_2_skin))
             srlHistoryActivity.setColorSchemeColors(
                 getResColor(R.color.unchanged_main_color_2_skin)
             )

@@ -22,8 +22,7 @@
             android:id="@+id/media_classify_swipe"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/atb_anime_detail_activity_toolbar"
-            app:srlPrimaryColor="@color/main_color_3_skin">
+            android:layout_below="@id/atb_detail_activity_toolbar">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/media_classify_list"

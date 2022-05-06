@@ -28,4 +28,10 @@
         <item name="windowActionBar">false</item>
     </style>
 
+    <style name="Theme.AppCompat.DayNight.Fullscreen" parent="App.Theme">
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
 </resources>

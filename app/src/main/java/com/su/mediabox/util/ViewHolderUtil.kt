@@ -7,7 +7,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.su.mediabox.R
-import com.su.mediabox.view.component.bannerview.BannerView
 import com.su.mediabox.view.component.textview.TypefaceTextView
 import com.su.mediabox.view.component.FlowLayout
 import com.su.mediabox.config.Const.ViewHolderTypeInt
@@ -33,7 +32,6 @@ class ViewHolderUtil {
             ViewHolderTypeString.ANIME_EPISODE_FLOW_LAYOUT_2 -> ViewHolderTypeInt.ANIME_EPISODE_FLOW_LAYOUT_2
             ViewHolderTypeString.ANIME_DESCRIBE_1 -> ViewHolderTypeInt.ANIME_DESCRIBE_1
             ViewHolderTypeString.GRID_RECYCLER_VIEW_1 -> ViewHolderTypeInt.GRID_RECYCLER_VIEW_1
-            ViewHolderTypeString.BANNER_1 -> ViewHolderTypeInt.BANNER_1
             ViewHolderTypeString.LICENSE_HEADER_1 -> ViewHolderTypeInt.LICENSE_HEADER_1
             ViewHolderTypeString.SEARCH_HISTORY_HEADER_1 -> ViewHolderTypeInt.SEARCH_HISTORY_HEADER_1
             ViewHolderTypeString.SEARCH_HISTORY_1 -> ViewHolderTypeInt.SEARCH_HISTORY_1
@@ -63,7 +61,6 @@ class ViewHolderUtil {
                     AnimeEpisodeFlowLayout2ViewHolder(view)
                 ViewHolderTypeInt.ANIME_DESCRIBE_1 -> AnimeDescribe1ViewHolder(view)
                 ViewHolderTypeInt.GRID_RECYCLER_VIEW_1 -> GridRecyclerView1ViewHolder(view)
-                ViewHolderTypeInt.BANNER_1 -> Banner1ViewHolder(view)
                 ViewHolderTypeInt.LICENSE_HEADER_1 -> LicenseHeader1ViewHolder(view)
                 ViewHolderTypeInt.SEARCH_HISTORY_HEADER_1 -> SearchHistoryHeader1ViewHolder(view)
                 ViewHolderTypeInt.SEARCH_HISTORY_1 -> SearchHistory1ViewHolder(view)
@@ -171,10 +168,6 @@ class AnimeEpisodeFlowLayout2ViewHolder(view: View) : RecyclerView.ViewHolder(vi
 
 class AnimeDescribe1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val tvAnimeDescribe1: TextView = view.findViewById(R.id.tv_anime_describe)
-}
-
-class Banner1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val banner1: BannerView = view.findViewById(R.id.banner_1)
 }
 
 class LicenseHeader1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {

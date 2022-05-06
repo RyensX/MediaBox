@@ -84,7 +84,6 @@ interface Const {
             const val ANIME_COVER_8 = R.layout.item_anime_cover_8
             const val ANIME_COVER_9 = R.layout.item_anime_cover_9
             const val GRID_RECYCLER_VIEW_1 = R.layout.item_grid_recycler_view_1
-            const val BANNER_1 = R.layout.item_banner_1
             const val LICENSE_HEADER_1 = R.layout.item_license_header_1
             const val SEARCH_HISTORY_HEADER_1 = R.layout.item_search_history_header_1
             const val SEARCH_HISTORY_1 = R.layout.item_search_history_1

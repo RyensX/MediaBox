@@ -179,12 +179,6 @@ dependencies {
     implementation deps.cretin.etv
     implementation deps.pref.kotpref
     implementation deps.apache.commons_text
-    implementation project(':skin')
-    implementation project(':skin_blue')
-    implementation project(':skin_dark')
-    implementation project(':skin_lemon')
-    implementation project(':skin_dark_sakura')
-    implementation project(':skin_sweat_soybean')
     implementation project(':MediaBoxPluginApi')
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
 }

@@ -13,7 +13,6 @@ import com.su.mediabox.util.setOnClickListener
 import com.su.mediabox.util.setOnLongClickListener
 import com.su.mediabox.util.setOnTouchListener
 import com.su.mediabox.view.viewcomponents.*
-import com.su.skin.SkinManager
 
 typealias DataViewMapList = ArrayList<Pair<Class<Any>, Class<TypeViewHolder<Any>>>>
 
@@ -210,7 +209,6 @@ class TypeAdapter(
         }
 
     override fun onBindViewHolder(holder: TypeViewHolder<Any>, position: Int) {
-        SkinManager.applyViews(holder.itemView)
         getItem(position)?.also {
             holder.onBind(it)
         }
@@ -221,7 +219,6 @@ class TypeAdapter(
         position: Int,
         payloads: MutableList<Any>
     ) {
-        SkinManager.applyViews(holder.itemView)
         getItem(position)?.also {
             holder.onBind(it, payloads)
         }

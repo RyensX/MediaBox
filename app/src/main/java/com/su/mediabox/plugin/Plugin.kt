@@ -20,7 +20,6 @@ import com.su.mediabox.pluginapi.IComponentFactory
 import com.su.mediabox.pluginapi.components.IBaseComponent
 import com.su.mediabox.util.*
 import com.su.mediabox.util.Util.getSignatures
-import com.su.mediabox.v2.view.activity.HomeActivity
 import dalvik.system.PathClassLoader
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

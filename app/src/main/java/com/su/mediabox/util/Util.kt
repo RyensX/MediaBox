@@ -27,7 +27,6 @@ import androidx.core.content.FileProvider
 import androidx.core.graphics.drawable.DrawableCompat
 import com.su.mediabox.App
 import com.su.mediabox.R
-import com.su.skin.SkinManager
 import okhttp3.internal.and
 import java.io.*
 import java.net.HttpURLConnection
@@ -210,34 +209,14 @@ object Util {
     }
 
     /**
-     * 通过原始id获取当前皮肤的id
+     * 通过id获取颜色
      */
-    fun getSkinResourceId(@AnyRes id: Int) = SkinManager.getSkinResourceId(id)
+    fun getResColor(@ColorRes id: Int) = ContextCompat.getColor(App.context, id)
 
     /**
      * 通过id获取drawable
      */
-    fun getResDrawable(@DrawableRes id: Int) = SkinManager.getDrawableOrMipMap(id)
-
-    /**
-     * 通过id获取颜色
-     */
-    fun getColorStateList(@ColorRes id: Int) = SkinManager.getColorStateList(id)
-
-    /**
-     * 通过id获取颜色
-     */
-    fun getResColor(@ColorRes id: Int) = SkinManager.getColor(id)
-
-    /**
-     * 通过id获取颜色
-     */
-    fun Context.getResColor(@ColorRes id: Int) = SkinManager.getColor(id)
-
-    /**
-     * 通过id获取颜色，不随皮肤更改，使用默认的
-     */
-    fun Context.getDefaultResColor(@ColorRes id: Int) = ContextCompat.getColor(this, id)
+    fun getResDrawable(@DrawableRes id: Int) = ContextCompat.getDrawable(App.context, id)
 
     /**
      * 计算距今时间

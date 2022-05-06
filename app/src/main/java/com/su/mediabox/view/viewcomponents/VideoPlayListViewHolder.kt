@@ -19,7 +19,7 @@ import com.su.mediabox.pluginapi.UI.dp
 import com.su.mediabox.pluginapi.v2.action.PlayAction
 import com.su.mediabox.util.*
 import com.su.mediabox.util.Util.getResColor
-import com.su.mediabox.v2.view.activity.VideoMediaPlayActivity
+import com.su.mediabox.view.activity.VideoMediaPlayActivity
 import com.su.mediabox.view.adapter.type.*
 import com.su.mediabox.view.episodeSheetDialog
 import kotlinx.coroutines.Dispatchers
@@ -88,7 +88,7 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
         binding.ivHorizontalRecyclerView1More.apply {
             setImageDrawable(Util.getResDrawable(R.drawable.ic_keyboard_arrow_down_main_color_2_24_skin))
             imageTintList =
-                ColorStateList.valueOf(binding.root.context.getResColor(R.color.foreground_white_skin))
+                ColorStateList.valueOf(getResColor(R.color.foreground_white_skin))
         }
     }
 
@@ -172,9 +172,9 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
 
                 if (data.url == historyBean?.lastEpisodeUrl) {
                     //有对应播放记录，高亮显示并置顶
-                    setTextColor(binding.root.context.getResColor(R.color.foreground_main_color_2_skin))
+                    setTextColor(getResColor(R.color.foreground_main_color_2_skin))
                 } else {
-                    setTextColor(binding.root.context.getResColor(R.color.foreground_white_skin))
+                    setTextColor(getResColor(R.color.foreground_white_skin))
                 }
 
                 //setTextColor(binding.root.context.getResColor(R.color.foreground_white_skin))

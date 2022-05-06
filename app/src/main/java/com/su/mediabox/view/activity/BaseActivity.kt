@@ -5,21 +5,21 @@ import android.text.method.LinkMovementMethod
 import android.view.View
 import android.view.ViewStub
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.viewbinding.ViewBinding
 import com.efs.sdk.launch.LaunchManager
-import com.su.skin.core.SkinBaseActivity
+import com.su.mediabox.App
 import com.su.mediabox.R
-import com.su.mediabox.util.Util.getResColor
 import com.su.mediabox.util.Util.setColorStatusBar
 import com.su.mediabox.util.eventbus.EventBusSubscriber
 import com.su.mediabox.util.gone
 import com.su.mediabox.util.logE
 import com.su.mediabox.util.release
 import com.su.mediabox.util.visible
-import com.su.skin.core.SkinResourceProcessor
 import org.greenrobot.eventbus.EventBus
 
-abstract class BaseActivity<VB : ViewBinding> : SkinBaseActivity() {
+abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
 
     protected lateinit var mBinding: VB
     private lateinit var loadFailedTipView: View
@@ -27,23 +27,13 @@ abstract class BaseActivity<VB : ViewBinding> : SkinBaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setTheme(SkinResourceProcessor.instance.getSkinThemeId(R.style.Theme_Anime_skin))
         mBinding = getBinding()
         setContentView(mBinding.root)
-        setColorStatusBar(window, getResColor(R.color.main_color_2_skin))
+        setColorStatusBar(window, ContextCompat.getColor(App.context, R.color.main_color_2_skin))
 
         release {
             LaunchManager.onTraceApp(application, LaunchManager.APP_ON_CREATE, false)
         }
-    }
-
-    override fun onChangeSkin() {
-        super.onChangeSkin()
-        setTheme(SkinResourceProcessor.instance.getSkinThemeId(R.style.Theme_Anime_skin))
-    }
-
-    override fun onChangeStatusBarSkin() {
-        setColorStatusBar(window, getResColor(R.color.main_color_2_skin))
     }
 
     protected abstract fun getBinding(): VB
