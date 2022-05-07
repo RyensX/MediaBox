@@ -7,8 +7,8 @@ import android.widget.Toast
 import com.su.mediabox.App
 import com.su.mediabox.databinding.ActivityCustomDataBinding
 import com.su.mediabox.plugin.PluginManager
-import com.su.mediabox.pluginapi.v2.action.CustomPageAction
-import com.su.mediabox.pluginapi.v2.components.ICustomPageComponent
+import com.su.mediabox.pluginapi.action.CustomPageAction
+import com.su.mediabox.pluginapi.components.ICustomPageDataComponent
 import com.su.mediabox.util.Util
 
 class CustomDataActivity : PageLoadActivity<ActivityCustomDataBinding>() {
@@ -22,7 +22,7 @@ class CustomDataActivity : PageLoadActivity<ActivityCustomDataBinding>() {
 
     private val customPageComponent by lazy(LazyThreadSafetyMode.NONE) {
         val customComponentClazz =
-            action?.targetPageComponent as? Class<ICustomPageComponent>
+            action?.targetPageComponent as? Class<ICustomPageDataComponent>
         customComponentClazz?.let {
             Util.withoutExceptionGet {
                 PluginManager.acquireComponent(it)

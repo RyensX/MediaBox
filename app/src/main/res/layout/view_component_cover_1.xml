@@ -15,7 +15,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/vc_video_cover1_cover"
+            android:id="@+id/vc_cover1_cover"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
@@ -24,7 +24,7 @@
             tools:src="@drawable/ic_launcher_background" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/vc_video_cover1_score"
+            android:id="@+id/vc_cover1_score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/score_bg"
@@ -37,7 +37,7 @@
             tools:visibility="visible" />
 
         <com.su.mediabox.view.component.textview.TypefaceTextView
-            android:id="@+id/vc_video_cover1_score_history"
+            android:id="@+id/vc_cover1_score_history"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"

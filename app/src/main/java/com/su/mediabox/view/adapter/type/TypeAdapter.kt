@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.su.mediabox.pluginapi.v2.been.*
+import com.su.mediabox.pluginapi.data.*
 import com.su.mediabox.util.Util.withoutExceptionGet
 import com.su.mediabox.util.setOnClickListener
 import com.su.mediabox.util.setOnLongClickListener
@@ -66,13 +66,13 @@ class TypeAdapter(
             globalDataViewMap
                 .registerDataViewMap<SimpleTextData, SimpleTextViewHolder>()
                 .registerDataViewMap<TagFlowData, TagFlowViewHolder>()
-                .registerDataViewMap<VideoPlayListData, VideoPlayListViewHolder>()
-                .registerDataViewMap<VideoCover1Data, VideoCover1ViewHolder>()
+                .registerDataViewMap<EpisodeListData, VideoPlayListViewHolder>()
+                .registerDataViewMap<Cover1Data, Cover1ViewHolder>()
                 .registerDataViewMap<EpisodeData, VideoPlayListViewHolder.EpisodeViewHolder>()
-                .registerDataViewMap<VideoGridItemData, VideoGridItemViewHolder>()
+                .registerDataViewMap<MediaInfo1Data, MediaInfo1ViewHolder>()
                 .registerDataViewMap<TagData, TagViewHolder>()
                 .registerDataViewMap<LongTextData, LongTextViewHolder>()
-                .registerDataViewMap<VideoInfoItemData, VideoInfoItemViewHolder>()
+                .registerDataViewMap<MediaInfo2Data, MediaInfo2ViewHolder>()
                 .registerDataViewMap<ViewPagerData, ViewPagerViewHolder>()
                 .registerDataViewMap<BannerData, BannerViewHolder>()
                 .registerDataViewMap<HorizontalListData, HorizontalListViewHolder>()

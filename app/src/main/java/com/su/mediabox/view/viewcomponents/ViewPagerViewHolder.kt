@@ -16,10 +16,9 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.su.mediabox.databinding.FragmentViewPagerBinding
 import com.su.mediabox.databinding.ViewComponentViewPagerBinding
-import com.su.mediabox.pluginapi.v2.been.BaseData
-import com.su.mediabox.pluginapi.v2.been.ViewPagerData
+import com.su.mediabox.pluginapi.data.BaseData
+import com.su.mediabox.pluginapi.data.ViewPagerData
 import com.su.mediabox.util.PluginIO
-import com.su.mediabox.util.showToast
 import com.su.mediabox.util.toLiveData
 import com.su.mediabox.view.adapter.type.*
 import kotlinx.coroutines.Dispatchers

@@ -6,8 +6,8 @@ import com.su.mediabox.R
 import com.su.mediabox.bean.MediaFavorite
 import com.su.mediabox.bean.ResponseDataType
 import com.su.mediabox.database.getAppDataBase
-import com.su.mediabox.pluginapi.v2.been.*
-import com.su.mediabox.pluginapi.v2.components.IVideoDetailDataComponent
+import com.su.mediabox.pluginapi.data.BaseData
+import com.su.mediabox.pluginapi.components.IMediaDetailPageDataComponent
 import com.su.mediabox.util.lazyAcquireComponent
 import com.su.mediabox.util.showToast
 import kotlinx.coroutines.Dispatchers
@@ -16,7 +16,7 @@ import kotlinx.coroutines.withContext
 
 class MediaDetailViewModel : ViewModel() {
 
-    private val videoDetailModel by lazyAcquireComponent<IVideoDetailDataComponent>()
+    private val videoDetailModel by lazyAcquireComponent<IMediaDetailPageDataComponent>()
 
     var partUrl: String = ""
     var cover = ""

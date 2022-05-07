@@ -4,7 +4,7 @@ import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.su.mediabox.databinding.ViewComponentTagBinding
-import com.su.mediabox.pluginapi.v2.been.TagData
+import com.su.mediabox.pluginapi.data.TagData
 import com.su.mediabox.util.setOnClickListener
 
 class TagViewHolder private constructor(private val binding: ViewComponentTagBinding) :

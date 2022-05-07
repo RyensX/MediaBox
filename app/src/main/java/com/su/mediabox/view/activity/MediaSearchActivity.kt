@@ -13,7 +13,7 @@ import com.su.mediabox.bean.MediaSearchHistory
 import com.su.mediabox.database.getAppDataBase
 import com.su.mediabox.databinding.ActivitySearchBinding
 import com.su.mediabox.databinding.ItemSearchHistory1Binding
-import com.su.mediabox.pluginapi.v2.action.SearchAction
+import com.su.mediabox.pluginapi.action.SearchAction
 import com.su.mediabox.util.*
 import com.su.mediabox.util.Util.showKeyboard
 import com.su.mediabox.viewmodel.MediaSearchViewModel

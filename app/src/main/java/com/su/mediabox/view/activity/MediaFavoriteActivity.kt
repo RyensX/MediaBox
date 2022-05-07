@@ -9,9 +9,9 @@ import com.su.mediabox.R
 import com.su.mediabox.bean.MediaFavorite
 import com.su.mediabox.databinding.ActivityFavoriteBinding
 import com.su.mediabox.databinding.ViewComponentFavBinding
-import com.su.mediabox.pluginapi.UI.dp
-import com.su.mediabox.pluginapi.v2.action.DetailAction
-import com.su.mediabox.pluginapi.v2.action.PlayAction
+import com.su.mediabox.pluginapi.action.DetailAction
+import com.su.mediabox.pluginapi.action.PlayAction
+import com.su.mediabox.pluginapi.util.UIUtil.dp
 import com.su.mediabox.util.coil.CoilUtil.loadImage
 import com.su.mediabox.util.setOnClickListener
 import com.su.mediabox.util.setOnLongClickListener

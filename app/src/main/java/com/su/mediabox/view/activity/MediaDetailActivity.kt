@@ -9,8 +9,8 @@ import androidx.lifecycle.Observer
 import com.su.mediabox.R
 import com.su.mediabox.config.Api
 import com.su.mediabox.databinding.ActivityMediaDetailBinding
-import com.su.mediabox.pluginapi.v2.action.DetailAction
-import com.su.mediabox.pluginapi.v2.action.PlayAction
+import com.su.mediabox.pluginapi.action.DetailAction
+import com.su.mediabox.pluginapi.action.PlayAction
 import com.su.mediabox.util.Util.setTransparentStatusBar
 import com.su.mediabox.util.showToast
 import com.su.mediabox.view.fragment.ShareDialogFragment

@@ -5,14 +5,13 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.webkit.*
 import androidx.appcompat.content.res.AppCompatResources
 import com.su.mediabox.R
 import com.su.mediabox.databinding.ActivityWebViewBinding
-import com.su.mediabox.pluginapi.v2.action.WebBrowserAction
+import com.su.mediabox.pluginapi.action.WebBrowserAction
 import com.su.mediabox.util.Util.openUrl
 import com.su.mediabox.util.getAction
 

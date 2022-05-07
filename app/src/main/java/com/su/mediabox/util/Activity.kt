@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import androidx.viewbinding.ViewBinding
-import com.su.mediabox.pluginapi.v2.action.Action
+import com.su.mediabox.pluginapi.action.Action
 import com.su.mediabox.util.Util.withoutExceptionGet
 
 inline fun <reified T : Activity> Context.goActivity(intent: Intent = Intent()) {

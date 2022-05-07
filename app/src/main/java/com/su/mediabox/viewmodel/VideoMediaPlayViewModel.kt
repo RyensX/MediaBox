@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.su.mediabox.database.DatabaseOperations.insertHistoryData
 import com.su.mediabox.database.DatabaseOperations.updateFavoriteData
-import com.su.mediabox.pluginapi.v2.been.VideoPlayMedia
-import com.su.mediabox.pluginapi.v2.components.IVideoPlayComponent
+import com.su.mediabox.pluginapi.data.VideoPlayMedia
+import com.su.mediabox.pluginapi.components.IVideoPlayPageDataComponent
 import com.su.mediabox.util.PluginIO
 import com.su.mediabox.util.lazyAcquireComponent
 import kotlinx.coroutines.Dispatchers
@@ -15,7 +15,7 @@ import kotlin.properties.Delegates
 
 class VideoMediaPlayViewModel : ViewModel() {
 
-    private val playComponent by lazyAcquireComponent<IVideoPlayComponent>()
+    private val playComponent by lazyAcquireComponent<IVideoPlayPageDataComponent>()
 
     lateinit var detailPartUrl: String
     lateinit var coverUrl: String

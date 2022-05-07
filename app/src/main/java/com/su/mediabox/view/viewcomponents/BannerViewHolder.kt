@@ -2,7 +2,6 @@ package com.su.mediabox.view.viewcomponents
 
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,11 +9,10 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import com.su.mediabox.R
 import com.su.mediabox.databinding.ViewComponentBannerBinding
 import com.su.mediabox.databinding.ViewComponentBannerItemBinding
-import com.su.mediabox.pluginapi.UI.dp
-import com.su.mediabox.pluginapi.v2.been.BannerData
+import com.su.mediabox.pluginapi.util.UIUtil.dp
+import com.su.mediabox.pluginapi.data.BannerData
 import com.su.mediabox.util.coil.CoilUtil.loadImage
 import com.su.mediabox.util.setOnClickListener
-import com.su.mediabox.util.showToast
 import com.su.mediabox.view.adapter.type.DataViewMapList
 import com.su.mediabox.view.adapter.type.TypeAdapter
 import com.su.mediabox.view.adapter.type.TypeViewHolder

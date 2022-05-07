@@ -6,7 +6,7 @@ import com.su.mediabox.R
 import com.su.mediabox.bean.MediaSearchHistory
 import com.su.mediabox.config.Const.ViewComponent.DEFAULT_PAGE
 import com.su.mediabox.database.getAppDataBase
-import com.su.mediabox.pluginapi.v2.components.IVideoSearchDataComponent
+import com.su.mediabox.pluginapi.components.IMediaSearchPageDataComponent
 import com.su.mediabox.util.PluginIO
 import com.su.mediabox.util.lazyAcquireComponent
 import com.su.mediabox.util.removeAllObserver
@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 
 class MediaSearchViewModel : ViewModel() {
 
-    private val videoSearchViewModel by lazyAcquireComponent<IVideoSearchDataComponent>()
+    private val videoSearchViewModel by lazyAcquireComponent<IMediaSearchPageDataComponent>()
 
     private var page = DEFAULT_PAGE
 

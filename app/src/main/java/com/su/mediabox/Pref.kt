@@ -7,7 +7,7 @@ object Pref : KotprefModel() {
     override val kotprefName: String = "App"
 
     /**
-     * 视图组件[VideoCover1ViewHolder]是否显示历史播放
+     * 视图组件[Cover1ViewHolder]是否显示历史播放
      */
     var videoCover1ShowHistory by booleanPref()
 

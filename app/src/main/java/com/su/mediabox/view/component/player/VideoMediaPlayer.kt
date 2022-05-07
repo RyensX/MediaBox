@@ -28,8 +28,8 @@ import com.su.mediabox.R
 import com.su.mediabox.config.Const
 import com.su.mediabox.databinding.ItemPlayEpisodeBinding
 import com.su.mediabox.databinding.ItemPlayerSpeedBinding
-import com.su.mediabox.pluginapi.UI.dp
-import com.su.mediabox.pluginapi.v2.been.EpisodeData
+import com.su.mediabox.pluginapi.data.EpisodeData
+import com.su.mediabox.pluginapi.util.UIUtil.dp
 import com.su.mediabox.util.*
 import com.su.mediabox.util.Util.getResDrawable
 import com.su.mediabox.util.Util.getScreenBrightness

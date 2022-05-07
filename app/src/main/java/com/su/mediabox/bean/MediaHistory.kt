@@ -4,7 +4,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.su.mediabox.config.Const
-import com.su.mediabox.pluginapi.been.BaseBean
 import java.io.Serializable
 
 @Entity(tableName = Const.Database.AppDataBase.HISTORY_MEDIA_TABLE_NAME)

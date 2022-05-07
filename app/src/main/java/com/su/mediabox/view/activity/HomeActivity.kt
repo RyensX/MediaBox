@@ -8,15 +8,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import com.su.mediabox.databinding.ActivityHomeBinding
 import com.su.mediabox.plugin.PluginManager
-import com.su.mediabox.pluginapi.v2.been.BaseData
-import com.su.mediabox.pluginapi.v2.components.IHomeDataComponent
+import com.su.mediabox.pluginapi.data.BaseData
+import com.su.mediabox.pluginapi.components.IHomePageDataComponent
 import com.su.mediabox.util.*
 import com.su.mediabox.viewmodel.PageLoadViewModel
 import com.su.mediabox.view.adapter.type.typeAdapter
 
 class HomeActivity : PageLoadActivity<ActivityHomeBinding>(), View.OnClickListener {
 
-    private val dataComponent by lazyAcquireComponent<IHomeDataComponent>()
+    private val dataComponent by lazyAcquireComponent<IHomePageDataComponent>()
 
     override val refreshLayout: SmartRefreshLayout
         get() = mBinding.homeDataSwipe

@@ -2,8 +2,8 @@ package com.su.mediabox.view.viewcomponents
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.su.mediabox.pluginapi.v2.been.BaseData
-import com.su.mediabox.pluginapi.v2.been.HorizontalListData
+import com.su.mediabox.pluginapi.data.BaseData
+import com.su.mediabox.pluginapi.data.HorizontalListData
 import com.su.mediabox.util.setOnClickListener
 import com.su.mediabox.view.adapter.type.*
 

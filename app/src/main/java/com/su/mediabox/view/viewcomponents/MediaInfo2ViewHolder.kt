@@ -3,21 +3,24 @@ package com.su.mediabox.view.viewcomponents
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.google.android.flexbox.FlexboxLayoutManager
-import com.su.mediabox.databinding.ViewComponentVideoInfoItemBinding
-import com.su.mediabox.pluginapi.v2.been.TagData
-import com.su.mediabox.pluginapi.v2.been.VideoInfoItemData
+import com.su.mediabox.databinding.ViewComponentMediaInfo2Binding
+import com.su.mediabox.pluginapi.data.TagData
+import com.su.mediabox.pluginapi.data.MediaInfo2Data
 import com.su.mediabox.util.coil.CoilUtil.loadImage
 import com.su.mediabox.util.displayOnlyIfHasData
 import com.su.mediabox.util.setOnClickListener
 import com.su.mediabox.view.adapter.type.*
 
-class VideoInfoItemViewHolder private constructor(private val binding: ViewComponentVideoInfoItemBinding) :
-    TypeViewHolder<VideoInfoItemData>(binding.root) {
+/**
+ * 媒体信息样式2视图组件
+ */
+class MediaInfo2ViewHolder private constructor(private val binding: ViewComponentMediaInfo2Binding) :
+    TypeViewHolder<MediaInfo2Data>(binding.root) {
 
-    private var data: VideoInfoItemData? = null
+    private var dataMedia: MediaInfo2Data? = null
 
     constructor(parent: ViewGroup) : this(
-        ViewComponentVideoInfoItemBinding.inflate(
+        ViewComponentMediaInfo2Binding.inflate(
             LayoutInflater.from(parent.context),
             parent, false
         )
@@ -33,21 +36,21 @@ class VideoInfoItemViewHolder private constructor(private val binding: ViewCompo
             .initTypeList { }
 
         setOnClickListener(binding.root) { pos ->
-            data?.action?.go(itemView.context)
+            dataMedia?.action?.go(itemView.context)
         }
     }
 
-    override fun onBind(data: VideoInfoItemData) {
-        super.onBind(data)
-        this.data = data
+    override fun onBind(dataMedia: MediaInfo2Data) {
+        super.onBind(dataMedia)
+        this.dataMedia = dataMedia
         binding.apply {
-            vcVideoLinearItemCover.displayOnlyIfHasData(data.coverUrl) { loadImage(it) }
-            vcVideoLinearItemName.displayOnlyIfHasData(data.name) { text = it }
-            vcVideoLinearItemEpisode.displayOnlyIfHasData(data.episodeInfo) { text = it }
-            vcVideoLinearItemTagList.displayOnlyIfHasData(data.tagList) {
+            vcVideoLinearItemCover.displayOnlyIfHasData(dataMedia.coverUrl) { loadImage(it) }
+            vcVideoLinearItemName.displayOnlyIfHasData(dataMedia.name) { text = it }
+            vcVideoLinearItemEpisode.displayOnlyIfHasData(dataMedia.episodeInfo) { text = it }
+            vcVideoLinearItemTagList.displayOnlyIfHasData(dataMedia.tagList) {
                 typeAdapter().submitList(it)
             }
-            vcVideoLinearItemDesc.displayOnlyIfHasData(data.desc) { text = it }
+            vcVideoLinearItemDesc.displayOnlyIfHasData(dataMedia.desc) { text = it }
 
             //vcVideoLinearItemCustomData.displayOnlyIfHasData(data.customData) {
             //    typeAdapter().submitList(it)

@@ -6,7 +6,7 @@ import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
 import com.su.mediabox.databinding.ViewComponentGridBinding
-import com.su.mediabox.pluginapi.v2.been.TagFlowData
+import com.su.mediabox.pluginapi.data.TagFlowData
 import com.su.mediabox.view.adapter.type.TypeViewHolder
 import com.su.mediabox.view.adapter.type.initTypeList
 import com.su.mediabox.view.adapter.type.typeAdapter

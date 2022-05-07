@@ -2,8 +2,8 @@ package com.su.mediabox.view.adapter.type
 
 import androidx.recyclerview.widget.*
 import com.su.mediabox.pluginapi.Constant
-import com.su.mediabox.pluginapi.UI.dp
-import com.su.mediabox.pluginapi.v2.been.BaseData
+import com.su.mediabox.pluginapi.data.BaseData
+import com.su.mediabox.pluginapi.util.UIUtil.dp
 
 fun RecyclerView.typeAdapter() =
     adapter as? TypeAdapter ?: throw RuntimeException("当前绑定的适配器不是TypeAdapter")

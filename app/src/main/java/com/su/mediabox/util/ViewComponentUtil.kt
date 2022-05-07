@@ -8,8 +8,8 @@ import androidx.lifecycle.lifecycleScope
 import com.su.mediabox.bean.MediaHistory
 import com.su.mediabox.database.getAppDataBase
 import com.su.mediabox.plugin.PluginManager
-import com.su.mediabox.pluginapi.components.IBaseComponent
-import com.su.mediabox.pluginapi.v2.been.EpisodeData
+import com.su.mediabox.pluginapi.components.IBasePageDataComponent
+import com.su.mediabox.pluginapi.data.EpisodeData
 import com.su.mediabox.view.activity.MediaDetailActivity
 import com.su.mediabox.viewmodel.MediaDetailViewModel
 import kotlinx.coroutines.Dispatchers
@@ -85,6 +85,6 @@ fun getCorrectEpisodeList(list: List<EpisodeData>): List<EpisodeData> {
     return result
 }
 
-inline fun <reified T : IBaseComponent> lazyAcquireComponent() = lazy(LazyThreadSafetyMode.NONE) {
+inline fun <reified T : IBasePageDataComponent> lazyAcquireComponent() = lazy(LazyThreadSafetyMode.NONE) {
     PluginManager.acquireComponent<T>()
 }

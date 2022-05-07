@@ -1,7 +1,6 @@
 package com.su.mediabox.bean
 
 import com.google.gson.annotations.SerializedName
-import com.su.mediabox.pluginapi.been.BaseBean
 
 class UpdateBean(
     @SerializedName("tag_name")

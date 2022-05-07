@@ -11,9 +11,9 @@ import com.su.mediabox.databinding.BottomSheetMediaClassifyBinding
 import com.su.mediabox.databinding.ItemClassifyCategoryBinding
 import com.su.mediabox.databinding.ItemClassifyItemBinding
 import com.su.mediabox.pluginapi.Constant
-import com.su.mediabox.pluginapi.v2.action.ClassifyAction
-import com.su.mediabox.pluginapi.v2.been.BaseData
-import com.su.mediabox.pluginapi.v2.been.ClassifyItemData
+import com.su.mediabox.pluginapi.action.ClassifyAction
+import com.su.mediabox.pluginapi.data.BaseData
+import com.su.mediabox.pluginapi.data.ClassifyItemData
 import com.su.mediabox.view.adapter.type.*
 
 class MediaClassifyBottomSheetDialogFragment : BottomSheetDialogFragment() {

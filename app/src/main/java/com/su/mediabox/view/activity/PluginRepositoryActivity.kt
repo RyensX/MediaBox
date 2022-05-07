@@ -8,8 +8,8 @@ import com.su.mediabox.databinding.ActivityCustomDataBinding
 import com.su.mediabox.net.RetrofitManager
 import com.su.mediabox.net.service.PluginService
 import com.su.mediabox.plugin.PluginManager
-import com.su.mediabox.pluginapi.UI.dp
-import com.su.mediabox.pluginapi.v2.been.SimpleTextData
+import com.su.mediabox.pluginapi.data.SimpleTextData
+import com.su.mediabox.pluginapi.util.UIUtil.dp
 import com.su.mediabox.util.Util
 import com.su.mediabox.viewmodel.PageLoadViewModel
 import com.su.mediabox.view.adapter.type.DataViewMapList

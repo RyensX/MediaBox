@@ -6,7 +6,7 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import com.su.mediabox.App
 import com.su.mediabox.R
-import com.su.mediabox.pluginapi.v2.action.WebBrowserAction
+import com.su.mediabox.pluginapi.action.WebBrowserAction
 import com.su.mediabox.util.Util.copy2Clipboard
 
 object Share {

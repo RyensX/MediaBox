@@ -8,7 +8,7 @@ import com.su.mediabox.R
 import com.su.mediabox.bean.License
 import com.su.mediabox.databinding.ActivityLicenseBinding
 import com.su.mediabox.databinding.ViewComponentLicenseBinding
-import com.su.mediabox.pluginapi.v2.action.WebBrowserAction
+import com.su.mediabox.pluginapi.action.WebBrowserAction
 import com.su.mediabox.util.setOnClickListener
 import com.su.mediabox.view.adapter.type.*
 

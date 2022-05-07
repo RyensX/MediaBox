@@ -16,8 +16,8 @@ import com.su.mediabox.App
 import com.su.mediabox.R
 import com.su.mediabox.bean.PluginInfo
 import com.su.mediabox.pluginapi.Constant
-import com.su.mediabox.pluginapi.IComponentFactory
-import com.su.mediabox.pluginapi.components.IBaseComponent
+import com.su.mediabox.pluginapi.IPluginFactory
+import com.su.mediabox.pluginapi.components.IBasePageDataComponent
 import com.su.mediabox.util.*
 import com.su.mediabox.util.Util.getSignatures
 import dalvik.system.PathClassLoader
@@ -32,9 +32,9 @@ import java.io.File
 
 object PluginManager {
 
-    private val componentFactoryPool = mutableMapOf<String, IComponentFactory>()
+    private val pluginFactoryPool = mutableMapOf<String, IPluginFactory>()
     private val componentPool =
-        mutableMapOf<String, MutableMap<Class<out IBaseComponent>, IBaseComponent>>()
+        mutableMapOf<String, MutableMap<Class<out IBasePageDataComponent>, IBasePageDataComponent>>()
 
     /**
      * 最低支持的插件API版本
@@ -130,7 +130,7 @@ object PluginManager {
     fun Context.launchPlugin(pluginInfo: PluginInfo?) {
         pluginInfo?.apply {
             _currentLaunchPlugin.value = this
-            acquireComponentFactory().initAction.go(this@launchPlugin)
+            acquirePluginFactory().initAction.go(this@launchPlugin)
         }
     }
 
@@ -185,8 +185,8 @@ object PluginManager {
      * 获取组件工厂实例
      */
     @Throws(Exception::class)
-    fun PluginInfo.acquireComponentFactory(): IComponentFactory =
-        componentFactoryPool[sourcePath] ?: run {
+    fun PluginInfo.acquirePluginFactory(): IPluginFactory =
+        pluginFactoryPool[sourcePath] ?: run {
 
             //判定API版本
             if (apiVersion < minPluginApiVersion)
@@ -202,19 +202,23 @@ object PluginManager {
 
             try {
                 val clz = classLoader.loadClass(apiImpl)
-                (clz.newInstance() as IComponentFactory).also {
-                    componentFactoryPool[sourcePath] = it
+                (clz.newInstance() as IPluginFactory).also {
+                    pluginFactoryPool[sourcePath] = it
                 }
             } catch (e: Exception) {
                 throw RuntimeException("插件工厂载入错误，请联系插件作者检查元信息")
             }
         }
 
-    @Throws(Exception::class)
-    inline fun <reified T : IBaseComponent> acquireComponent() = acquireComponent(T::class.java)
+    fun acquirePluginFactory(): IPluginFactory =
+        currentLaunchPlugin.value?.acquirePluginFactory() ?: throw RuntimeException("当前未启动插件！")
 
     @Throws(Exception::class)
-    fun <T : IBaseComponent> acquireComponent(clazz: Class<T>) =
+    inline fun <reified T : IBasePageDataComponent> acquireComponent() =
+        acquireComponent(T::class.java)
+
+    @Throws(Exception::class)
+    fun <T : IBasePageDataComponent> acquireComponent(clazz: Class<T>) =
         currentLaunchPlugin.value?.acquireComponent(clazz)
             ?: throw RuntimeException("当前未启动插件！")
 
@@ -222,18 +226,18 @@ object PluginManager {
      * 获取组件实例
      */
     @Throws(Exception::class)
-    fun <T : IBaseComponent> PluginInfo.acquireComponent(clazz: Class<T>): T {
+    fun <T : IBasePageDataComponent> PluginInfo.acquireComponent(clazz: Class<T>): T {
         val isSingleton =
-            clazz.isAnnotationPresent(IComponentFactory.SingletonComponent::class.java)
+            clazz.isAnnotationPresent(IPluginFactory.SingletonComponent::class.java)
         if (isSingleton) {
             //被标注为单例组件，从组件池查找
             componentPool[sourcePath]?.get(clazz)?.also { return it as T }
         }
-        return acquireComponentFactory().createComponent(clazz)?.also { component ->
+        return acquirePluginFactory().createComponent(clazz)?.also { component ->
             if (isSingleton)
             //存入组件库
                 (componentPool[sourcePath]
-                    ?: mutableMapOf<Class<out IBaseComponent>, IBaseComponent>()
+                    ?: mutableMapOf<Class<out IBasePageDataComponent>, IBasePageDataComponent>()
                         .also {
                             componentPool[sourcePath] = it
                         })[clazz] = component

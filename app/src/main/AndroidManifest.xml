@@ -133,26 +133,6 @@
         <activity
             android:name=".view.activity.BaseActivity"
             android:configChanges="uiMode" />
-        <!--
-        <service
-            android:name="com.su.mediabox.view.component.widget.everydayanime.EverydayAnimeService"
-            android:exported="false"
-            android:permission="android.permission.BIND_REMOTEVIEWS" />
-        -->
-        <!--
-        <receiver
-            android:name="com.su.mediabox.view.component.widget.everydayanime.EverydayAnimeWidgetProvider"
-            android:exported="true"
-            android:label="@string/widget_everyday_anime">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/widget_everyday_anime" />
-        </receiver>
-        -->
         <service
             android:name=".util.dlna.dmc.DLNACastService"
             android:exported="false" />

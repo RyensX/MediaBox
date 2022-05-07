@@ -3,7 +3,7 @@ package com.su.mediabox.plugin
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import com.su.mediabox.pluginapi.v2.action.*
+import com.su.mediabox.pluginapi.action.*
 import com.su.mediabox.util.goActivity
 import com.su.mediabox.util.putAction
 import com.su.mediabox.view.activity.*

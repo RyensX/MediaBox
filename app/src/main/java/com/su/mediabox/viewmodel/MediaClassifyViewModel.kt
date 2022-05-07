@@ -3,10 +3,10 @@ package com.su.mediabox.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.su.mediabox.pluginapi.v2.action.ClassifyAction
-import com.su.mediabox.pluginapi.v2.been.BaseData
-import com.su.mediabox.pluginapi.v2.been.ClassifyItemData
-import com.su.mediabox.pluginapi.v2.components.IMediaClassifyDataComponent
+import com.su.mediabox.pluginapi.action.ClassifyAction
+import com.su.mediabox.pluginapi.data.BaseData
+import com.su.mediabox.pluginapi.data.ClassifyItemData
+import com.su.mediabox.pluginapi.components.IMediaClassifyPageDataComponent
 import com.su.mediabox.util.PluginIO
 import com.su.mediabox.util.toLiveData
 import com.su.mediabox.view.fragment.MediaClassifyBottomSheetDialogFragment
@@ -17,7 +17,7 @@ import com.su.mediabox.util.lazyAcquireComponent
 
 class MediaClassifyViewModel : ViewModel() {
 
-    private val component by lazyAcquireComponent<IMediaClassifyDataComponent>()
+    private val component by lazyAcquireComponent<IMediaClassifyPageDataComponent>()
 
     private var page = DEFAULT_PAGE
 

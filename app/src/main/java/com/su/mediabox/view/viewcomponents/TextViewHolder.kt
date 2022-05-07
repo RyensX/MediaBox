@@ -3,7 +3,7 @@ package com.su.mediabox.view.viewcomponents
 import android.view.View
 import android.widget.TextView
 import com.su.mediabox.R
-import com.su.mediabox.pluginapi.v2.been.TextData
+import com.su.mediabox.pluginapi.data.TextData
 import com.su.mediabox.util.Util
 import com.su.mediabox.view.adapter.type.TypeViewHolder
 

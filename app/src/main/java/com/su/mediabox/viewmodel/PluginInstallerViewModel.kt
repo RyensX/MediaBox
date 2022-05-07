@@ -13,9 +13,9 @@ import com.su.mediabox.bean.PluginInfo
 import com.su.mediabox.net.RetrofitManager
 import com.su.mediabox.net.service.PluginService
 import com.su.mediabox.plugin.PluginManager
-import com.su.mediabox.pluginapi.Text.urlDecode
-import com.su.mediabox.pluginapi.v2.been.BaseData
-import com.su.mediabox.pluginapi.v2.been.SimpleTextData
+import com.su.mediabox.pluginapi.data.BaseData
+import com.su.mediabox.pluginapi.data.SimpleTextData
+import com.su.mediabox.pluginapi.util.TextUtil.urlDecode
 import com.su.mediabox.util.FileUri
 import com.su.mediabox.util.Util
 import com.su.mediabox.util.toLiveData

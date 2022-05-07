@@ -10,8 +10,8 @@ import com.shuyu.gsyvideoplayer.player.PlayerFactory
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils
 import com.su.mediabox.databinding.ActivityVideoMediaPlayBinding
-import com.su.mediabox.pluginapi.v2.action.PlayAction
-import com.su.mediabox.pluginapi.v2.been.EpisodeData
+import com.su.mediabox.pluginapi.action.PlayAction
+import com.su.mediabox.pluginapi.data.EpisodeData
 import com.su.mediabox.util.Util.setFullScreen
 import com.su.mediabox.util.getAction
 import com.su.mediabox.util.gone

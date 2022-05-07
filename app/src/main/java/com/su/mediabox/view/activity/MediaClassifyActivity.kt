@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import com.su.mediabox.R
 import com.su.mediabox.databinding.ActivityMediaClassifyBinding
-import com.su.mediabox.pluginapi.v2.action.ClassifyAction
+import com.su.mediabox.pluginapi.action.ClassifyAction
 import com.su.mediabox.util.Text
 import com.su.mediabox.util.getAction
 import com.su.mediabox.util.showToast

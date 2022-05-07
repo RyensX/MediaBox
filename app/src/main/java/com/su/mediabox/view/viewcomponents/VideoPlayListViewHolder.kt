@@ -13,10 +13,10 @@ import com.su.mediabox.bean.MediaHistory
 import com.su.mediabox.config.Const
 import com.su.mediabox.databinding.ItemAnimeEpisode2Binding
 import com.su.mediabox.databinding.ItemHorizontalRecyclerView1Binding
-import com.su.mediabox.pluginapi.v2.been.EpisodeData
-import com.su.mediabox.pluginapi.v2.been.VideoPlayListData
-import com.su.mediabox.pluginapi.UI.dp
-import com.su.mediabox.pluginapi.v2.action.PlayAction
+import com.su.mediabox.pluginapi.data.EpisodeData
+import com.su.mediabox.pluginapi.data.EpisodeListData
+import com.su.mediabox.pluginapi.util.UIUtil.dp
+import com.su.mediabox.pluginapi.action.PlayAction
 import com.su.mediabox.util.*
 import com.su.mediabox.util.Util.getResColor
 import com.su.mediabox.view.activity.VideoMediaPlayActivity
@@ -31,7 +31,7 @@ import kotlin.math.absoluteValue
  * 播放列表视图组件
  */
 class VideoPlayListViewHolder private constructor(private val binding: ItemHorizontalRecyclerView1Binding) :
-    TypeViewHolder<VideoPlayListData>(binding.root) {
+    TypeViewHolder<EpisodeListData>(binding.root) {
 
     var episodeDataList: List<EpisodeData>? = null
     private val coroutineScope = (binding.root.context as ComponentActivity).lifecycleScope
@@ -58,7 +58,7 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
         }
     }
 
-    override fun onBind(data: VideoPlayListData) {
+    override fun onBind(data: EpisodeListData) {
         super.onBind(data)
         coroutineScope.launch(Dispatchers.Default) {
             var list = data.playList

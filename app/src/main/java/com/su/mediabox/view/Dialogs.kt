@@ -9,9 +9,10 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.su.mediabox.R
 import com.su.mediabox.config.Const
 import com.su.mediabox.databinding.DialogEpisodeBottomSheetBinding
-import com.su.mediabox.pluginapi.UI.dp
-import com.su.mediabox.pluginapi.v2.been.EpisodeData
-import com.su.mediabox.pluginapi.v2.components.IVideoPlayComponent
+import com.su.mediabox.pluginapi.data.EpisodeData
+import com.su.mediabox.pluginapi.components.IVideoPlayPageDataComponent
+import com.su.mediabox.pluginapi.util.UIUtil.dp
+import com.su.mediabox.util.Util
 import com.su.mediabox.util.createCoroutineScope
 import com.su.mediabox.util.lazyAcquireComponent
 import com.su.mediabox.util.showToast
@@ -24,8 +25,7 @@ class BottomSheetEpisodeViewHolder(
 ) :
     VideoPlayListViewHolder.EpisodeViewHolder(parent) {
 
-    private val itemColor =
-        binding.root.context.resources.getColor(R.color.foreground_main_color_2_skin)
+    private val itemColor = Util.getResColor(R.color.foreground_main_color_2_skin)
 
     init {
         binding.tvAnimeEpisode2.apply {
@@ -60,7 +60,7 @@ fun episodeSheetDialog(
 
     val bottomSheetDialog = BottomSheetDialog(context, R.style.BottomSheetDialogTheme)
     val coroutineScope by lazy { bottomSheetDialog.createCoroutineScope() }
-    val component by lazyAcquireComponent<IVideoPlayComponent>()
+    val component by lazyAcquireComponent<IVideoPlayPageDataComponent>()
     val binding = DialogEpisodeBottomSheetBinding.inflate(LayoutInflater.from(context))
 
     binding.episodeBottomSheetTitle.text =
