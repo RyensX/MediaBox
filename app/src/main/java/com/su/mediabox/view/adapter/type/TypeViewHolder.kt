@@ -24,24 +24,6 @@ abstract class TypeViewHolder<T>(view: View) : RecyclerView.ViewHolder(view) {
 
     open fun onBind(data: T) {
         if (data is BaseData) {
-            bindingTypeAdapter.getData<BaseData>(0)?.layoutConfig?.apply {
-                Log.d("检测到配置", toString())
-                //spanCount
-                val layoutManager = mOwnerRecyclerView?.layoutManager
-                if (layoutManager is GridLayoutManager && layoutManager.spanCount != spanCount)
-                    layoutManager.spanCount = spanCount
-
-                //只有存在DynamicGridItemDecoration才生效
-                mOwnerRecyclerView?.getFirstItemDecorationBy<DynamicGridItemDecoration>()
-                    ?.apply {
-                        //间距
-                        spacing = itemSpacing
-                        //边距
-                        leftEdge = listLeftEdge
-                        rightEdge = listRightEdge
-                    }
-                //边距
-            }
             //padding
             itemView.apply {
                 if (paddingLeft != data.paddingLeft ||

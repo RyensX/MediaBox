@@ -4,6 +4,7 @@ import androidx.recyclerview.widget.*
 import com.su.mediabox.pluginapi.Constant
 import com.su.mediabox.pluginapi.data.BaseData
 import com.su.mediabox.pluginapi.util.UIUtil.dp
+import com.su.mediabox.util.getFirstItemDecorationBy
 
 fun RecyclerView.typeAdapter() =
     adapter as? TypeAdapter ?: throw RuntimeException("当前绑定的适配器不是TypeAdapter")
@@ -110,7 +111,11 @@ inline fun RecyclerView.initTypeList(
                 TypeAdapter.getRecycledViewPool(dataViewMap)
         )
     }
-    return TypeAdapter(dataViewMap, diff as DiffUtil.ItemCallback<Any>).apply {
+    return TypeAdapter(
+        dataViewMap,
+        diff as DiffUtil.ItemCallback<Any>,
+        getFirstItemDecorationBy<DynamicGridItemDecoration>()?.let { this }
+    ).apply {
         block(this@initTypeList)
         adapter = this
     }

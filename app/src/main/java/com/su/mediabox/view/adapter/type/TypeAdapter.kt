@@ -5,10 +5,12 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.su.mediabox.pluginapi.data.*
 import com.su.mediabox.util.Util.withoutExceptionGet
+import com.su.mediabox.util.getFirstItemDecorationBy
 import com.su.mediabox.util.setOnClickListener
 import com.su.mediabox.util.setOnLongClickListener
 import com.su.mediabox.util.setOnTouchListener
@@ -19,6 +21,7 @@ typealias DataViewMapList = ArrayList<Pair<Class<Any>, Class<TypeViewHolder<Any>
 class TypeAdapter(
     dataViewMapList: DataViewMapList,
     diff: DiffUtil.ItemCallback<Any>,
+    private val bindingRecyclerView: RecyclerView? = null,
     var dataViewMapCache: Boolean = true
 ) :
     ListAdapter<Any, TypeViewHolder<Any>>(diff) {
@@ -160,10 +163,35 @@ class TypeAdapter(
     }
 
     override fun submitList(list: List<Any>?, commitCallback: Runnable?) {
+        //更新映射
         if (!checkDataIsSame(list)) {
             currentData = list
             if (dataViewMapCache)
                 clearDataViewPosMap()
+        }
+        //更新LayoutConfig
+        list?.get(0)?.let { data ->
+            if (data is BaseData)
+                data.layoutConfig?.apply {
+                    Log.d("检测到配置", this.toString())
+                    //spanCount
+                    val layoutManager = bindingRecyclerView?.layoutManager
+                    if (layoutManager is GridLayoutManager) {
+                        Log.d("设置", "spanCount=$spanCount")
+                        layoutManager.spanCount = spanCount
+                    }
+                    //边距
+                    bindingRecyclerView?.getFirstItemDecorationBy<DynamicGridItemDecoration>()
+                        ?.let {
+                            Log.d(
+                                "设置",
+                                "spacing=$itemSpacing listLeftEdge=$listLeftEdge listRightEdge=$listRightEdge"
+                            )
+                            it.spacing = itemSpacing
+                            it.leftEdge = listLeftEdge
+                            it.rightEdge = listRightEdge
+                        }
+                }
         }
         super.submitList(list, commitCallback)
     }
