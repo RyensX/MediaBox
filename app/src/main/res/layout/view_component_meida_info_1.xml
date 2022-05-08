@@ -1,25 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:maxWidth="105dp"
-    android:layout_marginTop="7dp">
+    android:layout_marginTop="7dp"
+    android:orientation="vertical">
 
     <androidx.constraintlayout.utils.widget.ImageFilterView
         android:id="@+id/vc_gird_media_item_cover"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:maxHeight="150dp"
         android:scaleType="centerCrop"
-        app:layout_constraintDimensionRatio="7:10"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:round="5dp"
         tools:src="@drawable/ic_launcher_background" />
 
-    <com.su.mediabox.view.component.textview.TypefaceTextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/vc_gird_media_item_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -27,28 +28,26 @@
         android:ellipsize="end"
         android:maxLines="3"
         android:textColor="@color/foreground_black_skin"
-        android:textSize="13sp"
+        android:textSize="14sp"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="@id/vc_gird_media_item_cover"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="@id/vc_gird_media_item_cover"
         app:layout_constraintTop_toBottomOf="@id/vc_gird_media_item_cover"
-        app:typeface="bPRTypeface"
         tools:text="中二病也要谈恋爱！" />
 
-    <com.su.mediabox.view.component.textview.TypefaceTextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/vc_gird_media_item_episode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
-        android:textColor="@color/main_color_skin"
+        android:textColor="@color/main_color_2_skin"
         android:textSize="12sp"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="@id/vc_gird_media_item_cover"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="@id/vc_gird_media_item_cover"
         app:layout_constraintTop_toBottomOf="@id/vc_gird_media_item_title"
-        app:typeface="bPRTypeface"
         tools:text="全12集" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

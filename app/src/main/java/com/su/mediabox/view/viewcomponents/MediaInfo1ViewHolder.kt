@@ -54,7 +54,7 @@ class MediaInfo1ViewHolder private constructor(private val binding: ViewComponen
                 gone()
             else {
                 visible()
-                setTextColor(getResColor(R.color.main_color_skin))
+                setTextColor(getResColor(R.color.main_color_2_skin))
                 text = dataMedia.other
             }
         }

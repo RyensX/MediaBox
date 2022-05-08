@@ -51,7 +51,7 @@
             app:layout_constraintTop_toTopOf="@id/et_search_activity_search"
             tools:visibility="visible" />
 
-        <com.su.mediabox.view.component.textview.TypefaceTextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_search_activity_cancel"
             android:layout_width="wrap_content"
             android:layout_height="0px"
@@ -65,11 +65,10 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/et_search_activity_search"
-            app:layout_constraintTop_toTopOf="parent"
-            app:typeface="bPRTypeface" />
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.su.mediabox.view.component.textview.TypefaceTextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_search_activity_tip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -81,8 +80,7 @@
         android:paddingHorizontal="16dp"
         android:paddingVertical="9dp"
         android:textColor="@color/foreground_main_color_2_skin"
-        android:textSize="15sp"
-        app:typeface="bPRTypeface"
+        android:textSize="14sp"
         tools:text="@string/search_activity_tip" />
 
     <com.scwang.smart.refresh.layout.SmartRefreshLayout
@@ -99,6 +97,7 @@
             android:scrollbarSize="4dp"
             android:scrollbars="vertical"
             tools:listitem="@layout/item_anime_cover_3" />
+
     </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 
     <ViewStub
