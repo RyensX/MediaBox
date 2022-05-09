@@ -170,7 +170,7 @@ class TypeAdapter(
                 clearDataViewPosMap()
         }
         //更新LayoutConfig
-        list?.get(0)?.let { data ->
+        list?.getOrNull(0)?.let { data ->
             if (data is BaseData)
                 data.layoutConfig?.apply {
                     Log.d("检测到配置", this.toString())

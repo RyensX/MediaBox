@@ -45,14 +45,14 @@ object CoilUtil {
     }
 
     fun ImageView.loadImage(
-        url: String,
+        urlOrBase64: String,
         referer: String? = null,
         @DrawableRes placeholder: Int = 0,
         @DrawableRes error: Int = R.drawable.ic_warning_main_color_3_24_skin,
         builder: ImageRequest.Builder.() -> Unit = {}
     ) = runCatching {
         // 是本地drawable
-        url.toIntOrNull()?.let { drawableResId ->
+        urlOrBase64.toIntOrNull()?.let { drawableResId ->
             load(drawableResId) {
                 builder()
                 placeholder(placeholder)
@@ -61,38 +61,49 @@ object CoilUtil {
             return@runCatching
         }
 
-        if (url.isEmpty()) {
+        if (urlOrBase64.isEmpty()) {
             logE("loadImage", "cover image url must not be null or empty")
             return@runCatching
         }
 
-        // 是网络图片
+        //base64
+        if (urlOrBase64.startsWith("data:image")) {
+            if (tag == urlOrBase64.hashCode())
+                return@runCatching
+            load(Base64FetcherFactory.obtainBase64Image(urlOrBase64)) {
+                this.fetcherFactory(Base64FetcherFactory)
+                listener { _, _ ->
+                    tag = urlOrBase64.hashCode()
+                }
+            }
+        } else {
+            //是网络图片
+            if (tag == urlOrBase64)
+                return@runCatching
 
-        if (tag == url)
-            return@runCatching
+            var amendReferer = referer ?: MAIN_URL
+            if (!amendReferer.startsWith(MAIN_URL))
+                amendReferer = MAIN_URL//"http://www.yhdm.io/"
+            if (referer == MAIN_URL || referer == MAIN_URL) amendReferer += "/"
 
-        var amendReferer = referer ?: MAIN_URL
-        if (!amendReferer.startsWith(MAIN_URL))
-            amendReferer = MAIN_URL//"http://www.yhdm.io/"
-        if (referer == MAIN_URL || referer == MAIN_URL) amendReferer += "/"
-
-        load(url) {
-            builder()
-            placeholder(placeholder)
-            error(error)
-            addHeader("Referer", referer ?: Api.refererProcessor?.processor(url) ?: "")
-            addHeader("Host", URL(url).host)
-            addHeader("Accept", "*/*")
-            addHeader("Accept-Encoding", "gzip, deflate")
-            addHeader("Connection", "keep-alive")
-            addHeader("User-Agent", Constant.Request.getRandomUserAgent())
-            listener { _, _ ->
-                tag = url
+            load(urlOrBase64) {
+                builder()
+                placeholder(placeholder)
+                error(error)
+                addHeader("Referer", referer ?: Api.refererProcessor?.processor(urlOrBase64) ?: "")
+                addHeader("Host", URL(urlOrBase64).host)
+                addHeader("Accept", "*/*")
+                addHeader("Accept-Encoding", "gzip, deflate")
+                addHeader("Connection", "keep-alive")
+                addHeader("User-Agent", Constant.Request.getRandomUserAgent())
+                listener { _, _ ->
+                    tag = urlOrBase64
+                }
             }
         }
     }.onFailure {
-        if (url.isNotBlank())
-            load(url)
+        if (urlOrBase64.isNotBlank())
+            load(urlOrBase64)
     }
 
     fun ImageView.loadGaussianBlurCover(

@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="7dp"
     android:orientation="vertical">
 
     <androidx.constraintlayout.utils.widget.ImageFilterView
@@ -16,14 +15,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:round="5dp"
+        app:round="8dp"
         tools:src="@drawable/ic_launcher_background" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/vc_gird_media_item_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="4dp"
         android:ellipsize="end"
         android:maxLines="3"
         android:textColor="@color/foreground_black_skin"

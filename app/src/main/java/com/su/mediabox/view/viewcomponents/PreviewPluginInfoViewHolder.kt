@@ -2,15 +2,13 @@ package com.su.mediabox.view.viewcomponents
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import coil.load
 import com.su.mediabox.bean.PreviewPluginInfo
 import com.su.mediabox.config.Const
 import com.su.mediabox.databinding.ViewComponentPreviewPluginInfoBinding
 import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.plugin.PluginManager.launchPlugin
-import com.su.mediabox.util.coil.CoilUtil
+import com.su.mediabox.util.coil.CoilUtil.loadImage
 import com.su.mediabox.util.setOnClickListener
-import com.su.mediabox.util.showToast
 import com.su.mediabox.view.adapter.type.TypeViewHolder
 
 class PreviewPluginInfoViewHolder private constructor(private val binding: ViewComponentPreviewPluginInfoBinding) :
@@ -47,9 +45,7 @@ class PreviewPluginInfoViewHolder private constructor(private val binding: ViewC
             data.apply {
                 vcPpName.text = name
                 vcPpVersion.text = version
-                vcPpIcon.load(CoilUtil.Base64FetcherFactory.obtainBase64Image(iconBase64)) {
-                    this.fetcherFactory(CoilUtil.Base64FetcherFactory)
-                }
+                vcPpIcon.loadImage(iconBase64)
 
                 vcPpAction.text = when (state) {
                     Const.Plugin.PLUGIN_STATE_DOWNLOADING -> "下载中"

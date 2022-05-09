@@ -58,7 +58,7 @@ class PluginRepositoryActivity : PageLoadActivity<ActivityCustomDataBinding>() {
         if (page > 1)
             return null
         val repoData =
-            Util.withoutExceptionGet { api.fetchRepositoryPluginPreviewInfo() } ?: return null
+            Util.withoutExceptionGet(true) { api.fetchRepositoryPluginPreviewInfo() } ?: return null
         val localPluginData = PluginManager.pluginLiveData.value ?: return null
         val combineData = mutableListOf<Any>()
 
