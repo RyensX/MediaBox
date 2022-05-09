@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -19,8 +19,28 @@
         tools:src="@drawable/ic_launcher_background" />
 
     <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/vc_media_info_1_other_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/shape_cover_gray_transparent_angle_90"
+        android:ellipsize="end"
+        android:maxLines="3"
+        android:padding="6dp"
+        android:textColor="@android:color/white"
+        android:textSize="11sp"
+        android:visibility="gone"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toBottomOf="@id/vc_gird_media_item_cover"
+        app:layout_constraintEnd_toEndOf="@id/vc_gird_media_item_cover"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="@id/vc_gird_media_item_cover"
+        tools:text="其他信息2"
+        tools:visibility="visible" />
+
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/vc_gird_media_item_title"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:ellipsize="end"
@@ -36,7 +56,7 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/vc_gird_media_item_episode"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:textColor="@color/main_color_2_skin"
@@ -48,4 +68,4 @@
         app:layout_constraintTop_toBottomOf="@id/vc_gird_media_item_title"
         tools:text="全12集" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
