@@ -20,7 +20,6 @@
 
     <Button
         android:id="@+id/play_error_retry"
-        style="@style/Widget.AppCompat.Button.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -99,7 +98,7 @@
             app:layout_constraintTop_toBottomOf="@id/progress"
             tools:visibility="visible" />
 
-        <com.su.mediabox.view.component.textview.TypefaceTextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/current"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -109,10 +108,9 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/iv_next"
             app:layout_constraintTop_toBottomOf="@id/progress"
-            app:typeface="bPRTypeface"
             tools:text="00:00" />
 
-        <com.su.mediabox.view.component.textview.TypefaceTextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/split"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -125,7 +123,7 @@
             app:layout_constraintStart_toEndOf="@id/current"
             app:layout_constraintTop_toBottomOf="@id/progress" />
 
-        <com.su.mediabox.view.component.textview.TypefaceTextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/total"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -134,7 +132,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/split"
             app:layout_constraintTop_toBottomOf="@id/progress"
-            app:typeface="bPRTypeface"
             tools:text="00:00" />
 
         <EditText
@@ -144,6 +141,7 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginVertical="5dp"
             android:background="@drawable/shape_fill_circle_corner_danmu_6"
+            android:gravity="center"
             android:hint="@string/send_a_danmaku"
             android:imeOptions="actionSend"
             android:paddingHorizontal="10dp"
@@ -171,7 +169,7 @@
             app:layout_constraintStart_toEndOf="@id/et_input_danmu"
             app:layout_constraintTop_toBottomOf="@id/progress" />
 
-        <com.su.mediabox.view.component.textview.TypefaceTextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_episode"
             android:layout_width="wrap_content"
             android:layout_height="0px"
@@ -183,10 +181,9 @@
             android:textSize="13sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/tv_speed"
-            app:layout_constraintTop_toBottomOf="@id/progress"
-            app:typeface="bPRTypeface" />
+            app:layout_constraintTop_toBottomOf="@id/progress" />
 
-        <com.su.mediabox.view.component.textview.TypefaceTextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_speed"
             android:layout_width="wrap_content"
             android:layout_height="0px"
@@ -198,10 +195,9 @@
             android:textSize="13sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/tv_more_scale"
-            app:layout_constraintTop_toBottomOf="@id/progress"
-            app:typeface="bPRTypeface" />
+            app:layout_constraintTop_toBottomOf="@id/progress" />
 
-        <com.su.mediabox.view.component.textview.TypefaceTextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_more_scale"
             android:layout_width="wrap_content"
             android:layout_height="0px"
@@ -214,7 +210,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/progress"
-            app:typeface="bPRTypeface"
             tools:text="4:3" />
 
         <ImageView
@@ -231,7 +226,7 @@
             tools:src="@drawable/ic_fullscreen_exit_white_24" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_restore_screen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -306,7 +301,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.su.mediabox.view.component.textview.TypefaceTextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -324,8 +319,7 @@
             app:layout_constraintEnd_toStartOf="@id/iv_setting"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toEndOf="@id/back"
-            app:layout_constraintTop_toTopOf="parent"
-            app:typeface="bPRTypeface" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/iv_setting"
@@ -350,9 +344,10 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/iv_setting"
             app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_touch_down_high_speed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -371,7 +366,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_alignParentEnd="true"
-        android:background="@color/gray_2"
+        android:background="@color/play_control_background_color"
         android:clickable="true"
         android:focusable="true"
         tools:visibility="gone">
@@ -398,7 +393,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_alignParentEnd="true"
-        android:background="@color/gray_2"
+        android:background="@color/play_control_background_color"
         android:clickable="true"
         android:focusable="true"
         tools:layout_height="wrap_content">
@@ -406,45 +401,40 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:background="@color/play_control_background_color"
             android:orientation="vertical"
-            android:paddingHorizontal="12dp"
-            android:paddingVertical="12dp">
-
-            <CheckBox
-                android:id="@+id/cb_bottom_progress"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:buttonTint="@color/foreground_main_color_2_skin"
-                android:text="@string/bottom_progress"
-                android:textColor="@color/foreground_white_skin"
-                android:textSize="12sp" />
+            android:paddingHorizontal="24dp"
+            android:paddingVertical="16dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="8dp">
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_open_by_external_player"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:background="?attr/selectableItemBackgroundBorderless"
                     android:gravity="center_horizontal"
-                    android:paddingHorizontal="16dp"
+                    android:paddingHorizontal="8dp"
                     android:paddingTop="6dp"
                     android:paddingBottom="6dp"
                     android:text="@string/open_by_external_player"
                     android:textColor="@color/foreground_white_skin"
                     android:textSize="12sp"
-                    app:drawableTopCompat="@drawable/ic_player_white_24_skin"
+                    app:drawableTopCompat="@drawable/ic_baseline_open_in_new_24"
                     app:layout_constraintEnd_toStartOf="@id/tv_dlna"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_dlna"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:background="?attr/selectableItemBackgroundBorderless"
                     android:gravity="center_horizontal"
                     android:paddingHorizontal="16dp"
                     android:paddingTop="6dp"
@@ -457,35 +447,53 @@
                     app:layout_constraintStart_toEndOf="@id/tv_open_by_external_player" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginVertical="8dp"
                 android:layout_marginTop="10dp"
-                android:text="@string/danmaku"
-                android:textColor="@color/foreground_white_skin"
+                android:text="外观"
+                android:textColor="@color/play_control_menu_title_color"
+                android:textSize="14sp" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/cb_bottom_progress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/bottom_progress"
+                android:textColor="@android:color/white"
                 android:textSize="12sp" />
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="8dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/danmaku"
+                android:textColor="@color/play_control_menu_title_color"
+                android:textSize="14sp" />
+
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_input_custom_danmaku_url"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:background="@drawable/shape_circle_corner_edge_white_ripper_5_skin"
                 android:gravity="center"
-                android:paddingVertical="7dp"
+                android:paddingVertical="8dp"
                 android:text="@string/input_custom_danmaku_url"
                 android:textColor="@color/foreground_white_skin" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
+                android:layout_height="wrap_content">
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_player_rewind_danmaku_progress"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:background="?attr/selectableItemBackgroundBorderless"
                     android:gravity="center_horizontal"
                     android:paddingHorizontal="16dp"
                     android:paddingTop="6dp"
@@ -499,11 +507,12 @@
                     app:layout_constraintStart_toStartOf="parent"
                     tools:visibility="visible" />
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_player_reset_danmaku_progress"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:background="?attr/selectableItemBackgroundBorderless"
                     android:gravity="center_horizontal"
                     android:paddingHorizontal="16dp"
                     android:paddingTop="6dp"
@@ -517,11 +526,12 @@
                     app:layout_constraintStart_toEndOf="@id/tv_player_rewind_danmaku_progress"
                     tools:visibility="visible" />
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_player_forward_danmaku_progress"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:background="?attr/selectableItemBackgroundBorderless"
                     android:gravity="center_horizontal"
                     android:paddingHorizontal="16dp"
                     android:paddingTop="6dp"
@@ -542,7 +552,7 @@
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_danmaku_text_size_scale_header"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -552,7 +562,7 @@
                     android:visibility="gone"
                     tools:visibility="visible" />
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_danmaku_text_size_scale"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -573,13 +583,14 @@
                 android:visibility="gone"
                 tools:visibility="visible" />
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginVertical="8dp"
                 android:layout_marginTop="10dp"
                 android:text="@string/player_night_screen"
-                android:textColor="@color/foreground_white_skin"
-                android:textSize="12sp" />
+                android:textColor="@color/play_control_menu_title_color"
+                android:textSize="14sp" />
 
             <SeekBar
                 android:id="@+id/sb_player_night_screen"
@@ -589,13 +600,14 @@
                 android:paddingVertical="6dp"
                 android:progress="0" />
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginVertical="8dp"
                 android:layout_marginTop="10dp"
                 android:text="@string/reverse"
-                android:textColor="@color/foreground_white_skin"
-                android:textSize="12sp" />
+                android:textColor="@color/play_control_menu_title_color"
+                android:textSize="14sp" />
 
             <RadioGroup
                 android:id="@+id/rg_reverse"

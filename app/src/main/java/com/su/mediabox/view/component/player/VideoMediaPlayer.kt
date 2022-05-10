@@ -12,6 +12,7 @@ import android.view.*
 import android.view.View.OnClickListener
 import android.widget.*
 import androidx.annotation.WorkerThread
+import androidx.appcompat.widget.SwitchCompat
 import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.children
 import androidx.core.view.isVisible
@@ -146,7 +147,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
         NO_REVERSE
 
     // 底部进度条CheckBox
-    private var cbBottomProgress: CheckBox? = null
+    private var cbBottomProgress: SwitchCompat? = null
     private var playBottomProgress: ProgressBar? = null
 
     //控制进度条
