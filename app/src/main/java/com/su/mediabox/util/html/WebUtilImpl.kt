@@ -32,34 +32,51 @@ object WebUtilImpl : WebUtil {
 
     override suspend fun getRenderedHtmlCode(
         url: String,
+        callBackRegex: String,
         encoding: String,
         userAgentString: String?,
         actionJs: String?
     ): String =
         withContext(Dispatchers.Main) {
             Log.d("开始获取源码", url)
+            val regexE = Regex(callBackRegex)
             var hasResult = false
             suspendCoroutine { con ->
+
+                fun callBack(web: WebView) {
+                    web.evaluateJavascript("${actionJs ?: ""} \n (function() { return document.documentElement.outerHTML })()") {
+                        if (it.isNullOrEmpty())
+                            con.resume("")
+                        else if (!hasResult) {
+                            hasResult = true
+                            launch(Dispatchers.Default) {
+                                val source = StringEscapeUtils.unescapeEcmaScript(it)
+                                Log.d("获取源码成功", source)
+                                con.resume(source)
+                            }
+                        }
+                    }
+                }
+
                 globalWebView.settings.apply {
                     setUserAgentString(userAgentString)
                     defaultTextEncodingName = encoding
                 }
                 globalWebView.webViewClient = object : WebViewClient() {
-                    //TODO 由于ajax存在可能不是真正完全加载
-                    override fun onPageFinished(view: WebView?, url: String?) {
+                    //由于ajax存在可能不是真正完全加载
+                    override fun onPageFinished(view: WebView, url: String?) {
                         super.onPageFinished(view, url)
-                        view?.evaluateJavascript("${actionJs ?: ""} \n (function() { return document.documentElement.outerHTML })()") {
-                            if (it.isNullOrEmpty())
-                                con.resume("")
-                            else if (!hasResult) {
-                                hasResult = true
-                                launch(Dispatchers.Default) {
-                                    val source = StringEscapeUtils.unescapeEcmaScript(it)
-                                    Log.d("获取源码成功", source)
-                                    con.resume(source)
-                                }
-                            }
+                        if (!hasResult && callBackRegex.isBlank())
+                            callBack(view)
+                    }
+
+                    override fun onLoadResource(view: WebView, url: String) {
+                        Log.d("链接", url)
+                        if (callBackRegex.isNotBlank() && !hasResult && regexE.matches(url)) {
+                            Log.d("匹配到回调", url)
+                            callBack(view)
                         }
+                        super.onLoadResource(view, url)
                     }
                 }
                 globalWebView.loadUrl(url)
@@ -87,7 +104,7 @@ object WebUtilImpl : WebUtil {
 
                     override fun onLoadResource(view: WebView?, url: String) {
                         Log.d("链接", url)
-                        if (regexE.matches(url) && !hasResult) {
+                        if (!hasResult && regexE.matches(url)) {
                             Log.d("匹配到资源", url)
                             hasResult = true
                             view?.stopLoading()

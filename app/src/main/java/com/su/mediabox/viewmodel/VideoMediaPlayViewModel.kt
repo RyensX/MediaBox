@@ -1,5 +1,6 @@
 package com.su.mediabox.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -33,6 +34,9 @@ class VideoMediaPlayViewModel : ViewModel() {
             //开始解析
             viewModelScope.launch(Dispatchers.PluginIO) {
                 playComponent.getVideoPlayMedia(episodeUrl).also {
+                    Log.d("视频解析结果", "剧集：${it.title} 链接：$${it.videoPlayUrl}")
+                    if (it.videoPlayUrl.isBlank())
+                        throw RuntimeException("播放链接解析错误")
                     // VideoPlayMedia("测试","file:///storage/emulated/0/Android/data/com.su.mediabox.debug/files/DownloadAnime/萌萌侵略者/GEfErSXSJIsA.mp4").also {
                     currentVideoPlayMedia.postValue(it)
                     //记录历史
