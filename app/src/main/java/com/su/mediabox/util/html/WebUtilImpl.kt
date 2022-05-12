@@ -7,10 +7,7 @@ import android.util.Log
 import android.webkit.*
 import com.su.mediabox.App
 import com.su.mediabox.pluginapi.util.WebUtil
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import org.apache.commons.text.StringEscapeUtils
 import java.io.ByteArrayInputStream
 import kotlin.coroutines.resume
@@ -28,7 +25,7 @@ object WebUtilImpl : WebUtil {
                 blockNetworkImage = false
                 loadsImagesAutomatically = false
                 javaScriptEnabled = true
-                javaScriptCanOpenWindowsAutomatically = false
+                javaScriptCanOpenWindowsAutomatically = true
                 allowFileAccessFromFileURLs = true
                 allowUniversalAccessFromFileURLs = true
                 domStorageEnabled = true
@@ -76,20 +73,21 @@ object WebUtilImpl : WebUtil {
         callBackRegex: String,
         encoding: String,
         userAgentString: String?,
-        actionJs: String?
+        actionJs: String?,
+        timeOut: Long
     ): String =
         withContext(Dispatchers.Main) {
-            Log.d("开始获取源码", url)
-            val regexE = Regex(callBackRegex)
-            var hasResult = false
+
             suspendCoroutine { con ->
+                Log.d("开始获取源码", url)
+                val regexE = Regex(callBackRegex)
+                var hasResult = false
+                lateinit var timeOutJob: Job
 
                 fun callBack(web: WebView) {
+                    timeOutJob.cancel()
                     hasResult = true
-                    web.apply {
-                        stopLoading()
-                        pauseTimers()
-                    }
+
                     web.evaluateJavascript("${actionJs ?: ""} \n (function() { return document.documentElement.outerHTML })()") {
                         Log.d("脚本返回", url)
                         if (it.isNullOrEmpty())
@@ -99,6 +97,12 @@ object WebUtilImpl : WebUtil {
                                 val source = StringEscapeUtils.unescapeEcmaScript(it)
                                 Log.d("获取源码成功", source)
                                 con.resume(source)
+                                withContext(Dispatchers.Main) {
+                                    web.apply {
+                                        stopLoading()
+                                        pauseTimers()
+                                    }
+                                }
                             }
                         }
                     }
@@ -109,6 +113,15 @@ object WebUtilImpl : WebUtil {
                     defaultTextEncodingName = encoding
                 }
                 globalWebView.webViewClient = object : LightweightWebViewClient() {
+
+                    override fun onPageStarted(view: WebView, url: String?, favicon: Bitmap?) {
+                        super.onPageStarted(view, url, favicon)
+                        timeOutJob = launch {
+                            delay(timeOut)
+                            if (!hasResult)
+                                callBack(view)
+                        }
+                    }
 
                     //由于ajax存在可能不是真正完全加载
                     override fun onPageFinished(view: WebView, url: String?) {
