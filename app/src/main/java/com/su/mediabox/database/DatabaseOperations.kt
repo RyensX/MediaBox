@@ -1,6 +1,6 @@
 package com.su.mediabox.database
 
-import android.util.Log
+import com.su.mediabox.util.logD
 import com.su.mediabox.bean.MediaHistory
 import com.su.mediabox.util.showToast
 import kotlinx.coroutines.CoroutineScope
@@ -41,7 +41,7 @@ object DatabaseOperations {
         episodeName: String
     ) {
         launch(Dispatchers.IO) {
-            Log.d("更新播放历史", detailPartUrl)
+            logD("更新播放历史", detailPartUrl)
             try {
                 if (coverUrl.isBlank()) {
                     "封面为空，无法记录播放历史".showToast()

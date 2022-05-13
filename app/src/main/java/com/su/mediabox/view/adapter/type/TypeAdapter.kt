@@ -1,7 +1,7 @@
 package com.su.mediabox.view.adapter.type
 
 import android.annotation.SuppressLint
-import android.util.Log
+import com.su.mediabox.util.logD
 import android.view.MotionEvent
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -56,7 +56,7 @@ class TypeAdapter(
 
         fun getRecycledViewPool(dataViewMapList: DataViewMapList): RecyclerView.RecycledViewPool {
             val key = dataViewMapList.getDataViewMapListKey()
-            Log.d("获取缓存池", "key=$key")
+            logD("获取缓存池", "key=$key")
             return recycledViewPools[key] ?: RecyclerView.RecycledViewPool()
                 .also { recycledViewPools[key] = it }
         }
@@ -173,17 +173,17 @@ class TypeAdapter(
         list?.getOrNull(0)?.let { data ->
             if (data is BaseData)
                 data.layoutConfig?.apply {
-                    Log.d("检测到配置", this.toString())
+                    logD("检测到配置", this.toString())
                     //spanCount
                     val layoutManager = bindingRecyclerView?.layoutManager
                     if (layoutManager is GridLayoutManager) {
-                        Log.d("设置", "spanCount=$spanCount")
+                        logD("设置", "spanCount=$spanCount")
                         layoutManager.spanCount = spanCount
                     }
                     //边距
                     bindingRecyclerView?.getFirstItemDecorationBy<DynamicGridItemDecoration>()
                         ?.let {
-                            Log.d(
+                            logD(
                                 "设置",
                                 "spacing=$itemSpacing listLeftEdge=$listLeftEdge listRightEdge=$listRightEdge"
                             )
@@ -202,7 +202,7 @@ class TypeAdapter(
         else {
             try {
                 val vhClass = dataViewMapList[viewType].second
-                Log.d("创建VH", "${vhClass.simpleName}")
+                logD("创建VH", "${vhClass.simpleName}")
                 vhClass.getDeclaredConstructor(ViewGroup::class.java)
                     .apply { isAccessible = true }
                     .newInstance(parent)
@@ -231,7 +231,7 @@ class TypeAdapter(
                     }
             } catch (e: Exception) {
                 e.printStackTrace()
-                Log.d("VH创建错误", e.message ?: viewType.toString())
+                logD("VH创建错误", e.message ?: viewType.toString())
                 TypeViewHolder.UnknownTypeViewHolder(parent)
             }
         }

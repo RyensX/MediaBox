@@ -4,7 +4,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import android.net.Uri
-import android.util.Log
+import com.su.mediabox.util.logD
 import android.view.Gravity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -31,7 +31,7 @@ class PluginInstallerViewModel : ViewModel() {
 
     fun load(intent: Intent?) {
         intent?.data?.apply {
-            Log.d("插件安装载入", intent.toString())
+            logD("插件安装载入", intent.toString())
             when (scheme) {
                 "file", "content" -> localLoad(this)
                 "mediabox" -> onlineLoad(this)
@@ -65,7 +65,7 @@ class PluginInstallerViewModel : ViewModel() {
                 repeat(3) {
                     path = path.urlDecode()
                 }
-                Log.d("路径", path)
+                logD("路径", path)
                 //path.showToast(Toast.LENGTH_LONG)
 
                 val info = mutableListOf<SimpleTextData>()
@@ -106,14 +106,14 @@ class PluginInstallerViewModel : ViewModel() {
             //TODO 载入在线安装预览信息
             when (data.path) {
                 "/install" -> try {
-                    Log.d("在线安装", "$data")
+                    logD("在线安装", "$data")
                     val pluginInfoUrl =
                         Util.withoutExceptionGet {
                             data.getQueryParameter("previewInfoUrl")?.urlDecode()
                         }
 
                     if (pluginInfoUrl != null) {
-                        Log.d("在线安装", "预览信息=$pluginInfoUrl")
+                        logD("在线安装", "预览信息=$pluginInfoUrl")
                         val api = RetrofitManager.get().create(PluginService::class.java)
                         api.fetchPluginPreviewInfo(pluginInfoUrl)?.apply {
                             val info = mutableListOf<SimpleTextData>()
@@ -128,7 +128,7 @@ class PluginInstallerViewModel : ViewModel() {
                                 PluginInstallState.PREVIEW(this, info)
                             )
 
-                            Log.d("预览信息", toString())
+                            logD("预览信息", toString())
                             return@launch
                         }
                     }

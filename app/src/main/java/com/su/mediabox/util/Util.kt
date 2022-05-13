@@ -12,7 +12,7 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
-import android.util.Log
+import com.su.mediabox.util.logD
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
@@ -510,7 +510,7 @@ object Util {
     inline fun <T> withoutExceptionGet(showErrToast: Boolean = false, block: () -> T?) = try {
         block()
     } catch (e: Exception) {
-        Log.d("取值错误", e.message ?: "")
+        logD("取值错误", e.message ?: "")
         if (showErrToast)
             e.message?.showToast()
         e.printStackTrace()

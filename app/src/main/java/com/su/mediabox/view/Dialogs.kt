@@ -1,7 +1,7 @@
 package com.su.mediabox.view
 
 import android.content.Context
-import android.util.Log
+import com.su.mediabox.util.logD
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
@@ -102,7 +102,7 @@ fun episodeSheetDialog(
                             }
                         }) {
                             component.getVideoPlayMedia(it.url).apply {
-                                Log.d("下载", videoPlayUrl)
+                                logD("下载", videoPlayUrl)
                                 "缓存功能正在施工".showToast()
                             }
                         }

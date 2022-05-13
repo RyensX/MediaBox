@@ -18,4 +18,9 @@ object Text {
             if (!str.isNullOrBlank())
                 append(str).append(delimiter)
     }.removeSuffix(delimiter).toString()
+
+    /**
+     * 如果此CharSequence包含指定的其他多个字符序列中的任意一个作为子字符串，则返回true 。
+     */
+    fun CharSequence.containStrs(vararg strs: CharSequence) = strs.find { contains(it) } != null
 }

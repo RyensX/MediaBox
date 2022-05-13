@@ -1,7 +1,7 @@
 package com.su.mediabox.view.adapter.type
 
 import android.graphics.Rect
-import android.util.Log
+import com.su.mediabox.util.logD
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -46,7 +46,7 @@ class DynamicGridItemDecoration(
 
             val column = spanIndex / spanSize
 
-            //Log.d(
+            //logD(
             //    "布局",
             //    "pos=$position spanIndex=$spanIndex spanSize=$spanSize spanCount=$spanCount(${layoutManager.spanCount}) column=$column"
             //)

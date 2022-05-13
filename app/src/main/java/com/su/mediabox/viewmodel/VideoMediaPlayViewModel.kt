@@ -1,6 +1,6 @@
 package com.su.mediabox.viewmodel
 
-import android.util.Log
+import com.su.mediabox.util.logD
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,6 +10,7 @@ import com.su.mediabox.pluginapi.data.VideoPlayMedia
 import com.su.mediabox.pluginapi.components.IVideoPlayPageDataComponent
 import com.su.mediabox.util.PluginIO
 import com.su.mediabox.util.lazyAcquireComponent
+import com.su.mediabox.util.toLiveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.properties.Delegates
@@ -25,8 +26,11 @@ class VideoMediaPlayViewModel : ViewModel() {
     var currentPlayEpisodeUrl by Delegates.notNull<String>()
         private set
 
-    val currentVideoPlayMedia = MutableLiveData<VideoPlayMedia>()
-    val currentDanmakuData = MutableLiveData<Pair<String, Map<String, String>?>>()
+    private val _currentVideoPlayMedia = MutableLiveData<VideoPlayMedia>()
+    private val _currentDanmakuData = MutableLiveData<Pair<String, Map<String, String>?>>()
+
+    val currentVideoPlayMedia = _currentVideoPlayMedia.toLiveData()
+    val currentDanmakuData = _currentDanmakuData.toLiveData()
 
     fun playVideoMedia(episodeUrl: String = currentPlayEpisodeUrl) {
         if (episodeUrl.isNotBlank()) {
@@ -34,11 +38,11 @@ class VideoMediaPlayViewModel : ViewModel() {
             //开始解析
             viewModelScope.launch(Dispatchers.PluginIO) {
                 playComponent.getVideoPlayMedia(episodeUrl).also {
-                    Log.d("视频解析结果", "剧集：${it.title} 链接：$${it.videoPlayUrl}")
+                    logD("视频解析结果", "剧集：${it.title} 链接：$${it.videoPlayUrl}")
                     if (it.videoPlayUrl.isBlank())
                         throw RuntimeException("播放链接解析错误")
                     // VideoPlayMedia("测试","file:///storage/emulated/0/Android/data/com.su.mediabox.debug/files/DownloadAnime/萌萌侵略者/GEfErSXSJIsA.mp4").also {
-                    currentVideoPlayMedia.postValue(it)
+                    _currentVideoPlayMedia.postValue(it)
                     //记录历史
                     viewModelScope.apply {
                         updateFavoriteData(detailPartUrl, episodeUrl, it.title)
@@ -50,10 +54,10 @@ class VideoMediaPlayViewModel : ViewModel() {
     }
 
     fun initDanmakuData() {
-        currentVideoPlayMedia.value?.run {
+        _currentVideoPlayMedia.value?.run {
             viewModelScope.launch(Dispatchers.PluginIO) {
                 playComponent.getDanmakuData(currentPlayEpisodeUrl)?.also {
-                    currentDanmakuData.postValue(it)
+                    _currentDanmakuData.postValue(it)
                 }
             }
         }

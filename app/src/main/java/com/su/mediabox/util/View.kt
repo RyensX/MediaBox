@@ -1,7 +1,7 @@
 package com.su.mediabox.util
 
 import android.annotation.SuppressLint
-import android.util.Log
+import com.su.mediabox.util.logD
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
@@ -107,7 +107,7 @@ fun RecyclerView.smartScrollToPosition(position: Int, smoothLimit: Int = 30) {
         visibilityItemPos =
             (layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
                 .coerceAtLeast(visibilityItemPos)
-    Log.d("列表跳转", "目标:$position 当前可见:$visibilityItemPos")
+    logD("列表跳转", "目标:$position 当前可见:$visibilityItemPos")
     if ((position - visibilityItemPos).absoluteValue > smoothLimit)
         scrollToPosition(position)
     else
@@ -117,12 +117,12 @@ fun RecyclerView.smartScrollToPosition(position: Int, smoothLimit: Int = 30) {
 @SuppressLint("ClickableViewAccessibility")
 fun View.setLongPress() {
     setOnLongClickListener {
-        Log.d("长按", "sdsdsd")
+        logD("长按", "sdsdsd")
         true
     }
     setOnTouchListener { _, event ->
         if (event.actionMasked == MotionEvent.ACTION_CANCEL) {
-            Log.d("释放按钮", "sdd")
+            logD("释放按钮", "sdd")
         }
         false
     }
@@ -134,13 +134,13 @@ fun View.setLongPress() {
 fun <T : RecyclerView.ItemDecoration> RecyclerView.removeItemDecorations(target: Class<T>) {
     for (i in 0 until itemDecorationCount)
         if (getItemDecorationAt(i).javaClass == target) {
-            Log.d("删除ItemDecoration", "target:${target.simpleName} rv:${toString()} index=$i")
+            logD("删除ItemDecoration", "target:${target.simpleName} rv:${toString()} index=$i")
             removeItemDecorationAt(i)
             //由于没有列表引用不能使用迭代器且重测重绘方法不公开所以只能递归删除了
             removeItemDecorations(target)
             break
         }else
-            Log.d("尝试删除","$i")
+            logD("尝试删除","$i")
 }
 
 /**

@@ -7,7 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Matrix
 import android.util.AttributeSet
-import android.util.Log
+import com.su.mediabox.util.logD
 import android.view.*
 import android.view.View.OnClickListener
 import android.widget.*
@@ -461,7 +461,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
                 //查找初始定位
                 VideoMediaPlayActivity.playList?.forEachIndexed { index, episodeData ->
                     if (episodeData.url.isNotBlank() && episodeData.url == playViewModel?.currentPlayEpisodeUrl) {
-                        Log.d("找到初始标记", index.toString())
+                        logD("找到初始标记", index.toString())
                         rvEpisode?.typeAdapter()?.setTag(index)
                         return@forEachIndexed
                     }
@@ -503,6 +503,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
 
     override fun onError(what: Int, extra: Int) {
         super.onError(what, extra)
+        logD("播放错误", "url=$mOriginUrl")
         context.getString(R.string.play_error).showToast(Toast.LENGTH_LONG)
     }
 

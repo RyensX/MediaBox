@@ -7,7 +7,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.*
-import android.util.Log
+import com.su.mediabox.util.logD
 import androidx.core.content.FileProvider
 import com.su.mediabox.App
 import java.io.*
@@ -114,7 +114,7 @@ object FileUri {
      */
     fun getPathByUri(uri: Uri?): String? {
         return uri?.run {
-            Log.i(
+            logI(
                 "getPathByUri -> ",
                 "Uri: " + uri +
                         ", Authority: " + uri.authority +
@@ -212,7 +212,7 @@ object FileUri {
                                 val path = getDataColumn(contentUri)
                                 if (!path.isNullOrBlank()) return path
                             } catch (e: Exception) {
-                                Log.e("文件", e.toString())
+                                logE("文件", e.toString())
                             }
                         }
                     } else {
@@ -296,7 +296,7 @@ object FileUri {
                 }
             }
         } catch (e: Throwable) {
-            Log.e("文件", "getDataColumn -> ${e.message}")
+            logE("文件", "getDataColumn -> ${e.message}")
         }
         return null
     }

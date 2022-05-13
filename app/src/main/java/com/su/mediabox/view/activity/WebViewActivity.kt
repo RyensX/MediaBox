@@ -6,7 +6,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
+import com.su.mediabox.util.logD
 import android.webkit.*
 import androidx.appcompat.content.res.AppCompatResources
 import com.su.mediabox.R
@@ -73,22 +73,22 @@ class WebViewActivity : BasePluginActivity<ActivityWebViewBinding>() {
                 }
             }
         }.settings.apply {
+            useWideViewPort = true
+            allowFileAccess = true
+            loadWithOverviewMode = true
+            javaScriptEnabled = true
+            javaScriptCanOpenWindowsAutomatically = true
+            allowFileAccessFromFileURLs = true
+            allowUniversalAccessFromFileURLs = true
+            domStorageEnabled = true
+            databaseEnabled = true
+            mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
+            cacheMode = WebSettings.LOAD_DEFAULT
+            useWideViewPort = true
             allowFileAccess = true
             setSupportZoom(true)
-            builtInZoomControls = true
-            useWideViewPort = true
-            setSupportMultipleWindows(false)
-            domStorageEnabled = true
-            javaScriptEnabled = true
-            setGeolocationEnabled(true)
-            loadWithOverviewMode = true
-            cacheMode = WebSettings.LOAD_NO_CACHE
-            useWideViewPort = true
-            loadWithOverviewMode = true
-            cacheMode = WebSettings.LOAD_DEFAULT
-            displayZoomControls = false
-            loadsImagesAutomatically = true
-            mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
+            allowContentAccess = true
+            setSupportMultipleWindows(true)
             //如果某些网站需要验证则推荐使用WebBrowserAction打开页面手动验证后插件通过CookieManager.getInstance()获取对应cookies
             CookieManager.getInstance()
                 .setAcceptThirdPartyCookies(mBinding.wvWeb, true)
@@ -97,7 +97,7 @@ class WebViewActivity : BasePluginActivity<ActivityWebViewBinding>() {
 
     override fun onBackPressed() {
         mBinding.wvWeb.apply {
-            Log.d("链接", "原始：$mainUrl org：$originalUrl")
+            logD("链接", "原始：$mainUrl org：$originalUrl")
             //有些网页重定向了无法有效判断
             if (canGoBack() && !(originalUrl == mainUrl || originalUrl == "$mainUrl/index"))
                 goBack()

@@ -1,6 +1,6 @@
 package com.su.mediabox.view.adapter.type
 
-import android.util.Log
+import com.su.mediabox.util.logD
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

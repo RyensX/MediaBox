@@ -1,7 +1,7 @@
 package com.su.mediabox.view.activity
 
 import android.os.Bundle
-import android.util.Log
+import com.su.mediabox.util.logD
 import android.view.View
 import androidx.lifecycle.lifecycleScope
 import com.shuyu.gsyvideoplayer.GSYVideoManager
@@ -40,7 +40,7 @@ class SimplePlayActivity : BasePluginActivity<ActivitySimplePlayBinding>() {
         url = intent.getStringExtra(URL) ?: ""
         title = intent.getStringExtra(TITLE) ?: ""
 
-        Log.d("播放本地视频", url)
+        logD("播放本地视频", url)
 
         init()
 
