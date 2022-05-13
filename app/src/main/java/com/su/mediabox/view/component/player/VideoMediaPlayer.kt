@@ -1202,7 +1202,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
                         val isAutoSeek = true
                         if (isAutoSeek) {
                             seekOnStart = it
-                            context.getString(R.string.play_auto_seek).showToast()
+                            context.getString(R.string.play_auto_seek).showToast(Toast.LENGTH_LONG)
                         } else
                             playPositionViewJob = launch(Dispatchers.Main) {
                                 tvPlayPosition?.text = positionFormat(it)

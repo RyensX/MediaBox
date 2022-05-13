@@ -116,7 +116,7 @@
     <string name="ok">确定</string>
     <string name="no_result_info">搜索结果为空</string>
     <string name="no_more_info">没有更多了</string>
-    <string name="play_auto_seek">已自动跳转到上次进度</string>
+    <string name="play_auto_seek">定位到上次进度</string>
     <string name="warning">警告</string>
     <string name="delete">删除</string>
     <string name="clean">清理</string>

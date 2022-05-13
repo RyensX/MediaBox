@@ -151,6 +151,7 @@ dependencies {
     implementation deps.material_dialogs.input
     implementation deps.room.room_runtime
     implementation deps.room.room_ktx
+    implementation 'androidx.webkit:webkit:1.4.0'
     androidTestImplementation 'junit:junit:4.12'
     kapt deps.room.room_compiler
     implementation deps.filedownloader.library
