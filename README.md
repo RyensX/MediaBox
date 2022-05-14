@@ -47,7 +47,7 @@
 ## ⚡下载&使用
 
 * [正式Release](https://github.com/RyensX/MediaBox/releases/latest)
-* [自动构建](https://github.com/RyensX/MediaBox/actions/workflows/android_debug.yml)(**不稳定**，适合体验最新功能，可与Release包共存，注意**需要登陆github**才可下载Artifacts)
+* [自动构建](https://github.com/RyensX/MediaBox/actions/workflows/android_debug.yml)(**不稳定**，适合体验最新功能，可与Release包共存，[下载指南](doc/auto_build_apk_download.md))
 * [官方插件仓库](https://github.com/RyensX/MediaBoxPluginRepository)
 
 ## 🚀效果展示
@@ -67,13 +67,13 @@
 
 ## 🔍相关项目
 
-- 本项目基于[Imomoe](https://github.com/SkyD666/Imomoe)
+- 本项目基于[Imomoe](https://github.com/SkyD666/Imomoe)大幅度魔改优化
 - [插件API](https://github.com/RyensX/MediaBoxPlugin)
 
 ## 🚗构建相关
 
 - [**secret.gradle**](doc/about_secret.gradle.md)文件
-- **notice.iml** - 使用协议等，请自行添加
+- **notice.iml** - 使用协议等，请自行添加到res/raw
 
 ## 许可证
 

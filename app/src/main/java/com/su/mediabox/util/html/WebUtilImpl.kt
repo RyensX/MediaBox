@@ -81,7 +81,7 @@ object WebUtilImpl : WebUtil {
         private val blockRes: Array<String> = arrayOf(
             ".css",
             ".mp4", ".ts",
-            "mp3", "m4a",
+            ".mp3", ".m4a",
             ".gif", ",jpg", ".png", ".webp"
         )
     ) : WebViewClient() {
