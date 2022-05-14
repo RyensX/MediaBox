@@ -45,21 +45,21 @@
                 tools:src="@drawable/ic_christmas_hat"
                 tools:visibility="visible" />
 
-            <com.su.mediabox.view.component.textview.TypefaceTextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_about_activity_name"
+                style="@style/TextAppearance.Material3.TitleMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:text="@string/app_name"
                 android:textColor="@color/foreground_main_color_2_skin"
-                android:textSize="17sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/iv_about_activity_icon"
-                app:typeface="bPRTypeface" />
+                app:layout_constraintTop_toBottomOf="@id/iv_about_activity_icon" />
 
-            <com.su.mediabox.view.component.textview.TypefaceTextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_about_activity_version"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -70,7 +70,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_about_activity_name"
-                app:typeface="bPRTypeface"
                 tools:text="version" />
 
             <RelativeLayout
@@ -85,7 +84,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_about_activity_version">
 
-                <com.su.mediabox.view.component.textview.TypefaceTextView
+                <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
@@ -93,8 +92,7 @@
                     android:layout_toStartOf="@id/iv_about_activity_github"
                     android:text="@string/github"
                     android:textColor="@color/foreground_main_color_2_skin"
-                    android:textSize="16sp"
-                    app:typeface="bPRTypeface" />
+                    android:textSize="16sp" />
 
                 <ImageView
                     android:id="@+id/iv_about_activity_github"
@@ -117,7 +115,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rl_about_activity_github">
 
-                <com.su.mediabox.view.component.textview.TypefaceTextView
+                <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
@@ -125,8 +123,7 @@
                     android:layout_toStartOf="@id/iv_about_activity_license"
                     android:text="@string/open_source_licenses"
                     android:textColor="@color/foreground_main_color_2_skin"
-                    android:textSize="16sp"
-                    app:typeface="bPRTypeface" />
+                    android:textSize="16sp" />
 
                 <ImageView
                     android:id="@+id/iv_about_activity_license"
@@ -149,7 +146,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rl_about_activity_license">
 
-                <com.su.mediabox.view.component.textview.TypefaceTextView
+                <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
@@ -157,8 +154,7 @@
                     android:layout_toStartOf="@id/iv_about_activity_user_notice"
                     android:text="@string/user_notice"
                     android:textColor="@color/foreground_main_color_2_skin"
-                    android:textSize="16sp"
-                    app:typeface="bPRTypeface" />
+                    android:textSize="16sp" />
 
                 <ImageView
                     android:id="@+id/iv_about_activity_user_notice"

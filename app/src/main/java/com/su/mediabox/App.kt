@@ -12,7 +12,7 @@ import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import com.su.mediabox.plugin.AppAction
 import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.pluginapi.util.AppUtil
-import com.su.mediabox.pluginapi.util.WebUtiIns
+import com.su.mediabox.pluginapi.util.WebUtilIns
 import com.su.mediabox.util.CrashHandler
 import com.su.mediabox.util.PushHelper
 import com.su.mediabox.util.Util.getManifestMetaValue
@@ -39,7 +39,7 @@ class App : Application() {
 
         AppUtil.init(this)
         AppAction.init()
-        WebUtiIns = WebUtilImpl
+        WebUtilIns = WebUtilImpl
 
         PluginManager.scanPlugin()
 

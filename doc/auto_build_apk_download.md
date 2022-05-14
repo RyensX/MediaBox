@@ -4,7 +4,7 @@
 
 ### 步骤1
 
-点击按钮进入Acions
+点击按钮进入Actions
 
 ![进入Actions](image/auto_build_1.png)
 

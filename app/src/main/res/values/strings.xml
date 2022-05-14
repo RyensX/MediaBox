@@ -98,6 +98,7 @@
     <string name="shortcuts_download_long">视频</string>
     <string name="shortcuts_download_short">缓存视频</string>
     <string name="attention">声明</string>
+    <string name="statement">本软件免费开源，仅可用作学习交流，因此软件产生的版权问题，软件作者概不负责！\n觉得不错欢迎去Github仓库点个Star</string>
     <string name="download_anime_delete_tip">是否删除该番剧？</string>
     <string name="update_widget">正在更新小组件</string>
     <string name="widget_everyday_anime">每日更新动漫</string>

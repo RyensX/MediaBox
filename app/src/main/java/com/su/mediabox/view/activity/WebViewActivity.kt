@@ -73,25 +73,7 @@ class WebViewActivity : BasePluginActivity<ActivityWebViewBinding>() {
                 }
             }
         }.settings.apply {
-            useWideViewPort = true
-            allowFileAccess = true
-            loadWithOverviewMode = true
             javaScriptEnabled = true
-            javaScriptCanOpenWindowsAutomatically = true
-            allowFileAccessFromFileURLs = true
-            allowUniversalAccessFromFileURLs = true
-            domStorageEnabled = true
-            databaseEnabled = true
-            mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
-            cacheMode = WebSettings.LOAD_DEFAULT
-            useWideViewPort = true
-            allowFileAccess = true
-            setSupportZoom(true)
-            allowContentAccess = true
-            setSupportMultipleWindows(true)
-            //如果某些网站需要验证则推荐使用WebBrowserAction打开页面手动验证后插件通过CookieManager.getInstance()获取对应cookies
-            CookieManager.getInstance()
-                .setAcceptThirdPartyCookies(mBinding.wvWeb, true)
         }
     }
 

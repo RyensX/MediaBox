@@ -26,7 +26,7 @@ class AboutActivity : BaseActivity<ActivityAboutBinding>() {
             atbAboutActivity.setButtonClickListener(0) {
                 MaterialDialog(this@AboutActivity).show {
                     title(res = R.string.attention)
-                    message(text = "本软件免费开源，严禁商用，支持Android 5.0+！仅在Github仓库长期发布！\n不介意的话可以给我的Github仓库点个Star")
+                    message(res = R.string.statement)
                     positiveButton(text = "去点Star") { openBrowser(Const.Common.GITHUB_URL) }
                     negativeButton(res = R.string.cancel) { dismiss() }
                 }
