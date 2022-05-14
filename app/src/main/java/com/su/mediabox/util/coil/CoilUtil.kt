@@ -21,6 +21,7 @@ import com.su.mediabox.util.debug
 import com.su.mediabox.util.logE
 import com.su.mediabox.pluginapi.Constant
 import com.su.mediabox.util.getOrInit
+import com.su.mediabox.util.logD
 import okhttp3.OkHttpClient
 import okio.buffer
 import okio.source
@@ -51,59 +52,48 @@ object CoilUtil {
         @DrawableRes error: Int = R.drawable.ic_warning_main_color_3_24_skin,
         builder: ImageRequest.Builder.() -> Unit = {}
     ) = runCatching {
-        // 是本地drawable
-        urlOrBase64.toIntOrNull()?.let { drawableResId ->
-            load(drawableResId) {
-                builder()
-                placeholder(placeholder)
-                error(error)
-            }
-            return@runCatching
-        }
 
         if (urlOrBase64.isEmpty()) {
-            logE("loadImage", "cover image url must not be null or empty")
+            logE("loadImage", "图片来源有误！")
             return@runCatching
         }
 
-        //base64
         if (urlOrBase64.startsWith("data:image")) {
+            //base64
             if (tag == urlOrBase64.hashCode())
                 return@runCatching
             load(Base64FetcherFactory.obtainBase64Image(urlOrBase64)) {
-                this.fetcherFactory(Base64FetcherFactory)
+                fetcherFactory(Base64FetcherFactory)
                 listener { _, _ ->
+                    logD("加载图片", "base64-hashCode=${urlOrBase64.hashCode()}", false)
                     tag = urlOrBase64.hashCode()
                 }
             }
-        } else {
+        } else if (urlOrBase64.startsWith("http")) {
             //是网络图片
             if (tag == urlOrBase64)
                 return@runCatching
-
-            var amendReferer = referer ?: MAIN_URL
-            if (!amendReferer.startsWith(MAIN_URL))
-                amendReferer = MAIN_URL//"http://www.yhdm.io/"
-            if (referer == MAIN_URL || referer == MAIN_URL) amendReferer += "/"
 
             load(urlOrBase64) {
                 builder()
                 placeholder(placeholder)
                 error(error)
-                addHeader("Referer", referer ?: Api.refererProcessor?.processor(urlOrBase64) ?: "")
+                (referer ?: Api.refererProcessor?.processor(urlOrBase64))?.let {
+                    addHeader("Referer", it)
+                }
                 addHeader("Host", URL(urlOrBase64).host)
                 addHeader("Accept", "*/*")
                 addHeader("Accept-Encoding", "gzip, deflate")
                 addHeader("Connection", "keep-alive")
                 addHeader("User-Agent", Constant.Request.getRandomUserAgent())
                 listener { _, _ ->
+                    logD("加载图片", "url=$urlOrBase64", false)
                     tag = urlOrBase64
                 }
             }
         }
     }.onFailure {
-        if (urlOrBase64.isNotBlank())
-            load(urlOrBase64)
+        logD("图片加载错误", "source:$urlOrBase64 msg:${it.message}")
     }
 
     fun ImageView.loadGaussianBlurCover(

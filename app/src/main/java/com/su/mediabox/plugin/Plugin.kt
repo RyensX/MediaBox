@@ -20,6 +20,7 @@ import com.su.mediabox.pluginapi.IPluginFactory
 import com.su.mediabox.pluginapi.components.IBasePageDataComponent
 import com.su.mediabox.util.*
 import com.su.mediabox.util.Util.getSignatures
+import com.su.mediabox.view.adapter.type.TypeAdapter
 import dalvik.system.PathClassLoader
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -63,7 +64,14 @@ object PluginManager {
         .flowOn(Dispatchers.Default)
         .asLiveData()
 
-    val currentLaunchPlugin = _currentLaunchPlugin.toLiveData()
+    val currentLaunchPlugin = _currentLaunchPlugin.toLiveData().apply {
+        observeForever {
+            //每次退出插件
+            if (it == null) {
+                TypeAdapter.globalTypeRecycledViewPool.clear()
+            }
+        }
+    }
 
     fun scanPlugin() {
         val packageManager = App.context.packageManager

@@ -239,7 +239,7 @@ class TypeAdapter(
     override fun onBindViewHolder(holder: TypeViewHolder<Any>, position: Int) {
         getItem(position)?.also {
             holder.onBind(it)
-        }
+        } ?: logD("无法绑定", "$holder position:$position")
     }
 
     override fun onBindViewHolder(
