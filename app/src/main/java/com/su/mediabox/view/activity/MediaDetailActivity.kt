@@ -6,18 +6,16 @@ import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.su.mediabox.R
 import com.su.mediabox.config.Api
 import com.su.mediabox.databinding.ActivityMediaDetailBinding
 import com.su.mediabox.pluginapi.action.DetailAction
 import com.su.mediabox.pluginapi.action.PlayAction
+import com.su.mediabox.util.*
 import com.su.mediabox.util.Util.setTransparentStatusBar
-import com.su.mediabox.util.showToast
 import com.su.mediabox.view.fragment.ShareDialogFragment
 import com.su.mediabox.util.coil.CoilUtil.loadGaussianBlurCover
-import com.su.mediabox.util.getAction
-import com.su.mediabox.util.getActionIns
-import com.su.mediabox.util.putAction
 import com.su.mediabox.viewmodel.MediaDetailViewModel
 import com.su.mediabox.view.adapter.type.dynamicGrid
 import com.su.mediabox.view.adapter.type.initTypeList
@@ -25,16 +23,16 @@ import com.su.mediabox.view.adapter.type.typeAdapter
 
 class MediaDetailActivity : BasePluginActivity<ActivityMediaDetailBinding>() {
 
-    private val viewModel by viewModels<MediaDetailViewModel>()
+    private lateinit var viewModel :MediaDetailViewModel
     private var isClick = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+viewModel=ViewModelProvider(this)[MediaDetailViewModel::class.java]
         setTransparentStatusBar(window, isDark = false)
 
-        //TODO 暂时兼容处理
-        viewModel.partUrl = intent.getStringExtra("partUrl") ?: ""
+        logD("获取VM", "@${viewModel}")
+
         getAction<DetailAction>()?.also {
             viewModel.partUrl = it.url
         }
@@ -115,10 +113,12 @@ class MediaDetailActivity : BasePluginActivity<ActivityMediaDetailBinding>() {
     override fun startActivity(intent: Intent?, options: Bundle?) {
         //主动向下一级路由目标提供一些信息
         intent?.apply {
-            getActionIns<PlayAction>()?.apply {
+            getAction<PlayAction>()?.apply {
                 coverUrl = viewModel.cover
                 detailPartUrl = viewModel.partUrl
                 videoName = viewModel.title
+                logD("当前播放动作", "vm(@${viewModel}) videoName=${viewModel.title}")
+                logD("传递播放动作", formatMemberField(), false)
                 putAction(this)
             }
         }

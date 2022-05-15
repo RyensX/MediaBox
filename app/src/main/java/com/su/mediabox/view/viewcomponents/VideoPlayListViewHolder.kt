@@ -143,6 +143,7 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
                 bindingTypeAdapter.getData<EpisodeData>(pos)?.also {
                     val action = it.action
                     if (action is PlayAction) {
+                        logD("开始播放动作", action.formatMemberField(),true)
                         //如果是跳转播放则填入播放列表
                         val playList =
                             bindingTypeAdapter.getTag<List<EpisodeData>>(Const.ViewComponent.EPISODE_LIST_TAG)

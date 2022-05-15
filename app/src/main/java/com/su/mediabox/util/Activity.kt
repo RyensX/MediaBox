@@ -13,12 +13,20 @@ inline fun <reified T : Activity> Context.goActivity(intent: Intent = Intent()) 
     startActivity(intent)
 }
 
-fun <T : Action> Intent.putAction(action: T) = putExtra(action.javaClass.simpleName, action)
+//<Action名称，Action实例>
+private val actionPoolMap = mutableMapOf<String, Action>()
 
-inline fun <reified T : Action> Intent.getActionIns(): T? =
-    withoutExceptionGet { getSerializableExtra(T::class.java.simpleName) as? T }
+fun <T : Action> putAction(action: T) {
+    actionPoolMap[action.javaClass.simpleName] = action
+}
 
-inline fun <reified T : Action> Activity.getAction(): T? = intent.getActionIns()
+@Suppress("UNCHECKED_CAST")
+fun <T : Action> getActionIns(actionClass: Class<T>): T? =
+    (actionPoolMap[actionClass.simpleName] as? T)?.also {
+        actionPoolMap.remove(actionClass.simpleName)
+    }
+
+inline fun <reified T : Action> getAction(): T? = getActionIns(T::class.java)
 
 fun <VB : ViewBinding> Activity.viewBind(inflater: (LayoutInflater) -> VB) =
     lazy(LazyThreadSafetyMode.NONE) {

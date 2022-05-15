@@ -40,6 +40,7 @@ object AppAction {
     }
 
     private inline fun <T : Action, reified A : Activity> T.routeToComponentPage(context: Context) {
-        context.goActivity<A>(Intent().putAction(this))
+        putAction(this)
+        context.goActivity<A>()
     }
 }

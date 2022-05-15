@@ -455,6 +455,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
         videoName: String = this.videoName,
         cacheWithPlay: Boolean = false
     ) {
+        logD("播放视频", "videName=$videoName episodeName=$episodeName \nurl=$playUrl")
         if (this.videoName.isBlank())
         //为了使下一集按钮有效，需要在第一次加载时初始化播放列表的初始定位
             playPositionMemoryStoreCoroutineScope.launch {
