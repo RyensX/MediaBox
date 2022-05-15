@@ -14,7 +14,7 @@ class TagViewHolder private constructor(private val binding: ViewComponentTagBin
         ViewComponentTagBinding.inflate(LayoutInflater.from(parent.context), parent, false)
     ) {
         setOnClickListener(binding.root) {
-            textData?.action?.go(itemView.context)
+            textData?.action?.go(bindingContext)
         }
     }
 

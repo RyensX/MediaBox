@@ -29,7 +29,7 @@ class MediaInfo1ViewHolder private constructor(private val binding: ViewComponen
     ) {
         setOnClickListener(binding.root) { pos ->
             bindingTypeAdapter.getData<MediaInfo1Data>(pos)?.also {
-                it.action?.go(itemView.context)
+                it.action?.go(bindingContext)
             }
         }
     }

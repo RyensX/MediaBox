@@ -19,7 +19,7 @@ class TagFlowViewHolder private constructor(private val binding: ViewComponentGr
         ViewComponentGridBinding.inflate(LayoutInflater.from(parent.context), parent, false)
     ) {
         binding.root.apply {
-            layoutManager = FlexboxLayoutManager(binding.root.context).apply {
+            layoutManager = FlexboxLayoutManager(bindingContext).apply {
                 flexDirection = FlexDirection.ROW
                 justifyContent = JustifyContent.CENTER
             }

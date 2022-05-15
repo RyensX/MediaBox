@@ -16,7 +16,7 @@ class LongTextViewHolder private constructor(private val binding: ViewComponentL
         ViewComponentLongTextBinding.inflate(LayoutInflater.from(parent.context), parent, false)
     ) {
         setOnClickListener(binding.root) {
-            textData?.action?.go(itemView.context)
+            textData?.action?.go(bindingContext)
         }
     }
 

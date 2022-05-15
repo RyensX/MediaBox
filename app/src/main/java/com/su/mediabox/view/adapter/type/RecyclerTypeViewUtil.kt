@@ -112,6 +112,7 @@ inline fun RecyclerView.initTypeList(
         )
     }
     return TypeAdapter(
+        context,
         dataViewMap,
         diff as DiffUtil.ItemCallback<Any>,
         getFirstItemDecorationBy<DynamicGridItemDecoration>()?.let { this }

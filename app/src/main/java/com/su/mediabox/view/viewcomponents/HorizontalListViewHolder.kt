@@ -18,7 +18,7 @@ class HorizontalListViewHolder(parent: ViewGroup) :
     init {
         list.linear(RecyclerView.HORIZONTAL).initTypeList { }
         setOnClickListener(itemView) {
-            list.typeAdapter().getData<BaseData>(it)?.action?.go(itemView.context)
+            list.typeAdapter().getData<BaseData>(it)?.action?.go(bindingContext)
         }
     }
 

@@ -38,6 +38,7 @@ class BannerViewHolder private constructor(private val binding: ViewComponentBan
     private var isPlaying = false
 
     private val vpAdapter = TypeAdapter(
+        bindingContext,
         DataViewMapList().registerDataViewMap<BannerData.BannerItemData, BannerItemViewHolder>(),
         TypeAdapter.DefaultDiff
     )
@@ -121,7 +122,7 @@ class BannerViewHolder private constructor(private val binding: ViewComponentBan
             )
         ) {
             setOnClickListener(binding.root) {
-                tmpData?.action?.go(itemView.context)
+                tmpData?.action?.go(bindingContext)
             }
         }
 

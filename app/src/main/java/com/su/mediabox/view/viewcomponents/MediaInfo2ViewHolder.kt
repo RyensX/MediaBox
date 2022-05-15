@@ -35,8 +35,8 @@ class MediaInfo2ViewHolder private constructor(private val binding: ViewComponen
             .linear()
             .initTypeList { }
 
-        setOnClickListener(binding.root) { pos ->
-            dataMedia?.action?.go(itemView.context)
+        setOnClickListener(binding.root) {
+            dataMedia?.action?.go(bindingContext)
         }
     }
 

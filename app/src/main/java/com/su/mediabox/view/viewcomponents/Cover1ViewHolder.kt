@@ -20,7 +20,7 @@ class Cover1ViewHolder private constructor(private val binding: ViewComponentCov
         ViewComponentCover1Binding.inflate(LayoutInflater.from(parent.context), parent, false)
     ) {
         setOnClickListener(binding.root) {
-            cover1Data?.action?.go(itemView.context)
+            cover1Data?.action?.go(bindingContext)
         }
     }
 

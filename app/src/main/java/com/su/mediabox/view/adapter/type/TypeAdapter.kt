@@ -1,6 +1,7 @@
 package com.su.mediabox.view.adapter.type
 
 import android.annotation.SuppressLint
+import android.content.Context
 import com.su.mediabox.util.logD
 import android.view.MotionEvent
 import android.view.ViewGroup
@@ -19,6 +20,7 @@ import com.su.mediabox.view.viewcomponents.*
 typealias DataViewMapList = ArrayList<Pair<Class<Any>, Class<TypeViewHolder<Any>>>>
 
 class TypeAdapter(
+    val bindingContext: Context,
     dataViewMapList: DataViewMapList,
     diff: DiffUtil.ItemCallback<Any>,
     private val bindingRecyclerView: RecyclerView? = null,
@@ -237,6 +239,7 @@ class TypeAdapter(
         }
 
     override fun onBindViewHolder(holder: TypeViewHolder<Any>, position: Int) {
+        holder.checkBindingContext(bindingContext)
         getItem(position)?.also {
             holder.onBind(it)
         } ?: logD("无法绑定", "$holder position:$position")
@@ -247,6 +250,7 @@ class TypeAdapter(
         position: Int,
         payloads: MutableList<Any>
     ) {
+        holder.checkBindingContext(bindingContext)
         getItem(position)?.also {
             holder.onBind(it, payloads)
         }

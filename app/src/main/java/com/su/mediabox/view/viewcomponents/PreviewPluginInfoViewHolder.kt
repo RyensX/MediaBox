@@ -31,7 +31,7 @@ class PreviewPluginInfoViewHolder private constructor(private val binding: ViewC
                         onBind(it)
                         PluginManager.downloadPlugin(it, true)
                     }
-                    Const.Plugin.PLUGIN_STATE_OPEN -> itemView.context.apply {
+                    Const.Plugin.PLUGIN_STATE_OPEN -> bindingContext.apply {
                         launchPlugin(it)
                     }
                 }

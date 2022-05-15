@@ -27,6 +27,7 @@ import kotlin.properties.Delegates
 
 /**
  * 多页面视图组件
+ * //TODO 还存在很大问题：Page和父RV间事件分发被阻塞
  */
 class ViewPagerViewHolder private constructor(private val binding: ViewComponentViewPagerBinding) :
     TypeViewHolder<ViewPagerData>(binding.root) {

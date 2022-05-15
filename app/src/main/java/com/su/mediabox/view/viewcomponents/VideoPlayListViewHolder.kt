@@ -34,7 +34,7 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
     TypeViewHolder<EpisodeListData>(binding.root) {
 
     var episodeDataList: List<EpisodeData>? = null
-    private val coroutineScope = (binding.root.context as ComponentActivity).lifecycleScope
+    private val coroutineScope by lazy(LazyThreadSafetyMode.NONE) { (bindingContext as ComponentActivity).lifecycleScope }
     private var lastEpisodeIndex: Int? = null
     private val isShowHistory = Pref.videoPlayListShowHistory
 
@@ -52,7 +52,7 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
         binding.ivHorizontalRecyclerView1More.setOnClickListener {
             episodeDataList?.also {
                 bindingTypeAdapter.getTag<String>()?.also { name ->
-                    episodeSheetDialog(binding.root.context, name, it)?.show()
+                    episodeSheetDialog(bindingContext, name, it)?.show()
                 }
             }
         }
@@ -73,7 +73,7 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
                     setTag(list, Const.ViewComponent.EPISODE_LIST_TAG)
                     //自动定位
                     if (isShowHistory)
-                        bindHistoryPlayInfo(itemView.context) {
+                        bindHistoryPlayInfo(bindingContext) {
                             setTag(it, Const.ViewComponent.HISTORY_INFO_TAG)
                             submitList(episodeDataList) {
                                 jumpEpisode(this)
@@ -143,7 +143,7 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
                 bindingTypeAdapter.getData<EpisodeData>(pos)?.also {
                     val action = it.action
                     if (action is PlayAction) {
-                        logD("开始播放动作", action.formatMemberField(),true)
+                        logD("开始播放动作", action.formatMemberField(), false)
                         //如果是跳转播放则填入播放列表
                         val playList =
                             bindingTypeAdapter.getTag<List<EpisodeData>>(Const.ViewComponent.EPISODE_LIST_TAG)
@@ -151,7 +151,7 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
                             VideoMediaPlayActivity.playList = playList
                         }
                     }
-                    action?.go(itemView.context)
+                    action?.go(bindingContext)
                 }
             }
 
@@ -178,7 +178,6 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
                     setTextColor(getResColor(R.color.foreground_white_skin))
                 }
 
-                //setTextColor(binding.root.context.getResColor(R.color.foreground_white_skin))
                 background =
                     Util.getResDrawable(R.drawable.shape_circle_corner_edge_white_ripper_5_skin)
             }
