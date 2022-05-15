@@ -6,12 +6,15 @@ import androidx.activity.viewModels
 import com.shuyu.gsyvideoplayer.GSYVideoManager
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack
 import com.shuyu.gsyvideoplayer.model.VideoOptionModel
+import com.shuyu.gsyvideoplayer.player.IPlayerManager
+import com.shuyu.gsyvideoplayer.player.IjkPlayerManager
 import com.shuyu.gsyvideoplayer.player.PlayerFactory
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils
 import com.su.mediabox.databinding.ActivityVideoMediaPlayBinding
 import com.su.mediabox.pluginapi.action.PlayAction
 import com.su.mediabox.pluginapi.data.EpisodeData
+import com.su.mediabox.util.Util
 import com.su.mediabox.util.Util.setFullScreen
 import com.su.mediabox.util.getAction
 import com.su.mediabox.util.gone
@@ -27,19 +30,9 @@ class VideoMediaPlayActivity : BasePluginActivity<ActivityVideoMediaPlayBinding>
     private lateinit var orientationUtils: OrientationUtils
     private val viewModel by viewModels<VideoMediaPlayViewModel>()
 
+    private lateinit var action: PlayAction
+
     companion object {
-        @Deprecated("全部更新V2后移除")
-        const val INTENT_EPISODE = "episodeUrl"
-
-        @Deprecated("全部更新V2后移除")
-        const val INTENT_COVER = "coverUrl"
-
-        @Deprecated("全部更新V2后移除")
-        const val INTENT_DPU = "detailPartUrl"
-
-        @Deprecated("全部更新V2后移除")
-        const val INTENT_NAME = "videoName"
-
         var playList: List<EpisodeData>? = null
     }
 
@@ -48,9 +41,10 @@ class VideoMediaPlayActivity : BasePluginActivity<ActivityVideoMediaPlayBinding>
         super.onCreate(savedInstanceState)
 
         setFullScreen(window)
-        init()
 
         getAction<PlayAction>()?.also { action ->
+            this.action = action
+            init()
             viewModel.apply {
                 detailPartUrl = action.detailPartUrl
                 coverUrl = action.coverUrl
@@ -113,7 +107,13 @@ class VideoMediaPlayActivity : BasePluginActivity<ActivityVideoMediaPlayBinding>
                 }
             })
 
-            PlayerFactory.setPlayManager(Exo2PlayerManager::class.java)
+            val playManager =
+                Util.withoutExceptionGet { action.playerManager as? Class<IPlayerManager> }
+                    ?:
+                    //自定义默认解码器
+                    IjkPlayerManager::class.java
+            PlayerFactory.setPlayManager(playManager)
+
             //TODO 硬解码开关
             GSYVideoType.enableMediaCodec()
         }
