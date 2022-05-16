@@ -3,6 +3,7 @@ package com.su.mediabox.view.viewcomponents
 import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import com.su.mediabox.App
 import com.su.mediabox.databinding.ViewComponentTagBinding
 import com.su.mediabox.pluginapi.data.TagData
 import com.su.mediabox.util.setOnClickListener
@@ -11,7 +12,7 @@ class TagViewHolder private constructor(private val binding: ViewComponentTagBin
     TextViewHolder<TagData>(binding.vcTagText, binding.root) {
 
     constructor(parent: ViewGroup) : this(
-        ViewComponentTagBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        ViewComponentTagBinding.inflate(LayoutInflater.from(App.context), parent, false)
     ) {
         setOnClickListener(binding.root) {
             textData?.action?.go(bindingContext)

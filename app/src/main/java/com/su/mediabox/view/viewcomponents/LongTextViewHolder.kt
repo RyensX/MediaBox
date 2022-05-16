@@ -2,6 +2,7 @@ package com.su.mediabox.view.viewcomponents
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import com.su.mediabox.App
 import com.su.mediabox.databinding.ViewComponentLongTextBinding
 import com.su.mediabox.pluginapi.data.LongTextData
 import com.su.mediabox.util.setOnClickListener
@@ -13,7 +14,7 @@ class LongTextViewHolder private constructor(private val binding: ViewComponentL
     TextViewHolder<LongTextData>(binding.root) {
 
     constructor(parent: ViewGroup) : this(
-        ViewComponentLongTextBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        ViewComponentLongTextBinding.inflate(LayoutInflater.from(App.context), parent, false)
     ) {
         setOnClickListener(binding.root) {
             textData?.action?.go(bindingContext)

@@ -67,9 +67,6 @@ object PluginManager {
     val currentLaunchPlugin = _currentLaunchPlugin.toLiveData().apply {
         observeForever {
             //每次退出插件
-            if (it == null) {
-                TypeAdapter.globalTypeRecycledViewPool.clear()
-            }
         }
     }
 

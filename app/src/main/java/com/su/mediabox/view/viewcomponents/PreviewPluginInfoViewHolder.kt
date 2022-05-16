@@ -2,6 +2,7 @@ package com.su.mediabox.view.viewcomponents
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import com.su.mediabox.App
 import com.su.mediabox.bean.PreviewPluginInfo
 import com.su.mediabox.config.Const
 import com.su.mediabox.databinding.ViewComponentPreviewPluginInfoBinding
@@ -18,7 +19,7 @@ class PreviewPluginInfoViewHolder private constructor(private val binding: ViewC
 
     constructor(parent: ViewGroup) : this(
         ViewComponentPreviewPluginInfoBinding.inflate(
-            LayoutInflater.from(parent.context),
+            LayoutInflater.from(App.context),
             parent,
             false
         )

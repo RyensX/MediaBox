@@ -52,45 +52,56 @@ object CoilUtil {
         @DrawableRes error: Int = R.drawable.ic_warning_main_color_3_24_skin,
         builder: ImageRequest.Builder.() -> Unit = {}
     ) = runCatching {
-
-        if (urlOrBase64.isEmpty()) {
+        if (urlOrBase64.isBlank()) {
             logE("loadImage", "图片来源有误！")
             return@runCatching
         }
-
-        if (urlOrBase64.startsWith("data:image")) {
-            //base64
-            if (tag == urlOrBase64.hashCode())
-                return@runCatching
-            load(Base64FetcherFactory.obtainBase64Image(urlOrBase64)) {
-                fetcherFactory(Base64FetcherFactory)
-                listener { _, _ ->
-                    logD("加载图片", "base64-hashCode=${urlOrBase64.hashCode()}", false)
-                    tag = urlOrBase64.hashCode()
+        val time = System.currentTimeMillis()
+        when {
+            urlOrBase64.startsWith("data:image") -> {
+                //base64
+                if (tag == urlOrBase64.hashCode()) {
+                    logD("忽略加载", "time=$time base64-hashCode=${urlOrBase64.hashCode()}", false)
+                    return@runCatching
+                }
+                logD("开始加载图片", "time=$time base64-hashCode==${urlOrBase64.hashCode()}")
+                load(Base64FetcherFactory.obtainBase64Image(urlOrBase64)) {
+                    fetcherFactory(Base64FetcherFactory)
+                    listener { _, _ ->
+                        logD(
+                            "图片加载完毕",
+                            "time=$time base64-hashCode==${urlOrBase64.hashCode()}", false
+                        )
+                        tag = urlOrBase64.hashCode()
+                    }
                 }
             }
-        } else if (urlOrBase64.startsWith("http")) {
-            //是网络图片
-            if (tag == urlOrBase64)
-                return@runCatching
-
-            load(urlOrBase64) {
-                builder()
-                placeholder(placeholder)
-                error(error)
-                (referer ?: Api.refererProcessor?.processor(urlOrBase64))?.let {
-                    addHeader("Referer", it)
+            urlOrBase64.startsWith("http") -> {
+                //是网络图片
+                if (tag == urlOrBase64) {
+                    logD("忽略加载", "time=$time base64-hashCode=${urlOrBase64.hashCode()}")
+                    return@runCatching
                 }
-                addHeader("Host", URL(urlOrBase64).host)
-                addHeader("Accept", "*/*")
-                addHeader("Accept-Encoding", "gzip, deflate")
-                addHeader("Connection", "keep-alive")
-                addHeader("User-Agent", Constant.Request.getRandomUserAgent())
-                listener { _, _ ->
-                    logD("加载图片", "url=$urlOrBase64", false)
-                    tag = urlOrBase64
+                logD("开始加载图片", "time=$time url=$urlOrBase64", false)
+                load(urlOrBase64) {
+                    builder()
+                    placeholder(placeholder)
+                    error(error)
+                    (referer ?: Api.refererProcessor?.processor(urlOrBase64))?.let {
+                        addHeader("Referer", it)
+                    }
+                    addHeader("Host", URL(urlOrBase64).host)
+                    addHeader("Accept", "*/*")
+                    addHeader("Accept-Encoding", "gzip, deflate")
+                    addHeader("Connection", "keep-alive")
+                    addHeader("User-Agent", Constant.Request.getRandomUserAgent())
+                    listener { _, _ ->
+                        logD("图片加载完毕", "time=$time url=$urlOrBase64", false)
+                        tag = urlOrBase64
+                    }
                 }
             }
+            else -> logD("loadImage", "time=$time 加载失败:$urlOrBase64")
         }
     }.onFailure {
         logD("图片加载错误", "source:$urlOrBase64 msg:${it.message}")
@@ -129,8 +140,8 @@ object CoilUtil {
                         ByteArrayInputStream(imageByteArray).source().buffer(),
                         App.context
                     ),
-                    mimeType = null,
-                    dataSource = DataSource.MEMORY
+                    mimeType = "base64",
+                    dataSource = DataSource.DISK
                 )
             }
     }

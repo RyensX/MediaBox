@@ -100,8 +100,6 @@ inline fun RecyclerView.initTypeList(
 ): TypeAdapter {
     //默认关闭
     isNestedScrollingEnabled = false
-    //默认10以应对复杂的多类型视图
-    setItemViewCacheSize(10)
     if (useSharedRecycledViewPool) {
         setRecycledViewPool(
             //如果是全局映射表则不再额外计算

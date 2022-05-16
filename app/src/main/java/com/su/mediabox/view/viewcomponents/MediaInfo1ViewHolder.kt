@@ -1,15 +1,14 @@
 package com.su.mediabox.view.viewcomponents
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import com.su.mediabox.App
 import com.su.mediabox.R
 import com.su.mediabox.databinding.ViewComponentMeidaInfo1Binding
 import com.su.mediabox.pluginapi.data.MediaInfo1Data
 import com.su.mediabox.util.*
 import com.su.mediabox.util.Util.getResColor
 import com.su.mediabox.util.coil.CoilUtil.loadImage
-import com.su.mediabox.view.activity.MediaDetailActivity
 import com.su.mediabox.view.adapter.type.TypeViewHolder
 
 /**
@@ -22,7 +21,7 @@ class MediaInfo1ViewHolder private constructor(private val binding: ViewComponen
 
     constructor(parent: ViewGroup) : this(
         ViewComponentMeidaInfo1Binding.inflate(
-            LayoutInflater.from(parent.context),
+            LayoutInflater.from(App.context),
             parent,
             false
         )

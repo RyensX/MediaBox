@@ -2,6 +2,7 @@ package com.su.mediabox.view.viewcomponents
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import com.su.mediabox.App
 import com.su.mediabox.databinding.ViewComponentCover1Binding
 import com.su.mediabox.pluginapi.data.Cover1Data
 import com.su.mediabox.util.*
@@ -17,7 +18,7 @@ class Cover1ViewHolder private constructor(private val binding: ViewComponentCov
     private var cover1Data: Cover1Data? = null
 
     constructor(parent: ViewGroup) : this(
-        ViewComponentCover1Binding.inflate(LayoutInflater.from(parent.context), parent, false)
+        ViewComponentCover1Binding.inflate(LayoutInflater.from(App.context), parent, false)
     ) {
         setOnClickListener(binding.root) {
             cover1Data?.action?.go(bindingContext)

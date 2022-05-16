@@ -3,6 +3,7 @@ package com.su.mediabox.view.viewcomponents
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.google.android.flexbox.FlexboxLayoutManager
+import com.su.mediabox.App
 import com.su.mediabox.databinding.ViewComponentMediaInfo2Binding
 import com.su.mediabox.pluginapi.data.TagData
 import com.su.mediabox.pluginapi.data.MediaInfo2Data
@@ -21,7 +22,7 @@ class MediaInfo2ViewHolder private constructor(private val binding: ViewComponen
 
     constructor(parent: ViewGroup) : this(
         ViewComponentMediaInfo2Binding.inflate(
-            LayoutInflater.from(parent.context),
+            LayoutInflater.from(App.context),
             parent, false
         )
     ) {

@@ -1,6 +1,7 @@
 package com.su.mediabox.view.adapter.type
 
 import android.content.Context
+import android.content.MutableContextWrapper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,12 +22,14 @@ abstract class TypeViewHolder<T>(view: View) : RecyclerView.ViewHolder(view) {
         get() = bindingAdapter as TypeAdapter
 
     //由于存在跨页面的全局复用池所以必须自己提供正确的context
+    private val bindingContextWrapper = MutableContextWrapper(view.context)
+
     //VH内都必须只使用这个context防止错乱
-    protected var bindingContext: Context = view.context
+    protected val bindingContext: Context = bindingContextWrapper
 
     fun checkBindingContext(context: Context) {
-        if (bindingContext != context)
-            bindingContext = context
+        if (bindingContextWrapper.baseContext != context)
+            bindingContextWrapper.baseContext = context
     }
 
     open fun onBind(data: T) {

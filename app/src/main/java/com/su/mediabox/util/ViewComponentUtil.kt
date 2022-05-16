@@ -18,10 +18,12 @@ import kotlinx.coroutines.withContext
 import java.util.*
 
 fun bindHistoryPlayInfo(
-    context: Context,
+    baseContext: Context,
     observer: Observer<MediaHistory?>
 ) {
-    val detailUrl = (context as? ComponentActivity)?.let {
+    val context = baseContext.toComponentActivity()
+    logD("绑定历史", "baseContext=$baseContext context=$context")
+    val detailUrl = context?.let {
         when (it) {
             //TODO 使用ca内的vs
             is MediaDetailActivity -> ViewModelProvider(it)[MediaDetailViewModel::class.java].partUrl
@@ -85,6 +87,7 @@ fun getCorrectEpisodeList(list: List<EpisodeData>): List<EpisodeData> {
     return result
 }
 
-inline fun <reified T : IBasePageDataComponent> lazyAcquireComponent() = lazy(LazyThreadSafetyMode.NONE) {
-    PluginManager.acquireComponent<T>()
-}
+inline fun <reified T : IBasePageDataComponent> lazyAcquireComponent() =
+    lazy(LazyThreadSafetyMode.NONE) {
+        PluginManager.acquireComponent<T>()
+    }

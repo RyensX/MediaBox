@@ -20,7 +20,7 @@ import com.su.mediabox.view.viewcomponents.*
 typealias DataViewMapList = ArrayList<Pair<Class<Any>, Class<TypeViewHolder<Any>>>>
 
 class TypeAdapter(
-    val bindingContext: Context,
+    private val bindingContext: Context,
     dataViewMapList: DataViewMapList,
     diff: DiffUtil.ItemCallback<Any>,
     private val bindingRecyclerView: RecyclerView? = null,

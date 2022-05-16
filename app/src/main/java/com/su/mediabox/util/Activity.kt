@@ -2,8 +2,10 @@ package com.su.mediabox.util
 
 import android.app.Activity
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
 import android.view.LayoutInflater
+import androidx.activity.ComponentActivity
 import androidx.viewbinding.ViewBinding
 import com.su.mediabox.pluginapi.action.Action
 import com.su.mediabox.util.Util.withoutExceptionGet
@@ -34,3 +36,9 @@ fun <VB : ViewBinding> Activity.viewBind(inflater: (LayoutInflater) -> VB) =
             setContentView(root)
         }
     }
+
+fun Context.toComponentActivity(): ComponentActivity? = when (this) {
+    is ComponentActivity -> this
+    is ContextWrapper -> baseContext.toComponentActivity()
+    else -> null
+}

@@ -14,6 +14,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.su.mediabox.App
 import com.su.mediabox.databinding.FragmentViewPagerBinding
 import com.su.mediabox.databinding.ViewComponentViewPagerBinding
 import com.su.mediabox.pluginapi.data.BaseData
@@ -46,7 +47,7 @@ class ViewPagerViewHolder private constructor(private val binding: ViewComponent
     private var currentData: ViewPagerData? = null
 
     constructor(parent: ViewGroup) : this(
-        ViewComponentViewPagerBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        ViewComponentViewPagerBinding.inflate(LayoutInflater.from(App.context), parent, false)
     ) {
         binding.apply {
             vcViewPagerTabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {

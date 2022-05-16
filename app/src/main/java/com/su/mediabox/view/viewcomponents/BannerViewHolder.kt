@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import com.su.mediabox.App
 import com.su.mediabox.R
 import com.su.mediabox.databinding.ViewComponentBannerBinding
 import com.su.mediabox.databinding.ViewComponentBannerItemBinding
@@ -44,7 +45,7 @@ class BannerViewHolder private constructor(private val binding: ViewComponentBan
     )
 
     constructor(parent: ViewGroup) : this(
-        ViewComponentBannerBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        ViewComponentBannerBinding.inflate(LayoutInflater.from(App.context), parent, false)
     ) {
         binding.vcBannerView.apply {
             adapter = vpAdapter
@@ -116,7 +117,7 @@ class BannerViewHolder private constructor(private val binding: ViewComponentBan
 
         constructor(parent: ViewGroup) : this(
             ViewComponentBannerItemBinding.inflate(
-                LayoutInflater.from(parent.context),
+                LayoutInflater.from(App.context),
                 parent,
                 false
             )

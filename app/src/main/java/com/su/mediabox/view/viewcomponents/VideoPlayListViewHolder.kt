@@ -34,7 +34,7 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
     TypeViewHolder<EpisodeListData>(binding.root) {
 
     var episodeDataList: List<EpisodeData>? = null
-    private val coroutineScope by lazy(LazyThreadSafetyMode.NONE) { (bindingContext as ComponentActivity).lifecycleScope }
+    private val coroutineScope by lazy(LazyThreadSafetyMode.NONE) { itemView.viewLifeCycleCoroutineScope }
     private var lastEpisodeIndex: Int? = null
     private val isShowHistory = Pref.videoPlayListShowHistory
 

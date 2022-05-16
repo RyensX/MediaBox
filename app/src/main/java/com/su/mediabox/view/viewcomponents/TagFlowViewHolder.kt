@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
+import com.su.mediabox.App
 import com.su.mediabox.databinding.ViewComponentGridBinding
 import com.su.mediabox.pluginapi.data.TagFlowData
 import com.su.mediabox.view.adapter.type.TypeViewHolder
@@ -16,7 +17,7 @@ class TagFlowViewHolder private constructor(private val binding: ViewComponentGr
     TypeViewHolder<TagFlowData>(binding.root) {
 
     constructor(parent: ViewGroup) : this(
-        ViewComponentGridBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        ViewComponentGridBinding.inflate(LayoutInflater.from(App.context), parent, false)
     ) {
         binding.root.apply {
             layoutManager = FlexboxLayoutManager(bindingContext).apply {
