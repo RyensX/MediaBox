@@ -29,17 +29,22 @@ class MediaClassifyViewModel : ViewModel() {
     private val _classifyItemDataList = MutableLiveData<DataState>(DataState.INIT)
     val classifyItemDataList = _classifyItemDataList.toLiveData()
 
-    private val _classifyDataList = MutableLiveData<List<BaseData>>()
+    private val _classifyDataList = MutableLiveData<DataState>()
     val classifyDataList = _classifyDataList.toLiveData()
 
-    private val vmDispatcher =
+    private val itemDataDispatcher =
         Dispatchers.IO + CoroutineExceptionHandler { _, throwable ->
             _classifyItemDataList.postValue(DataState.FAILED(throwable))
         }
 
+    private val dataDispatcher =
+        Dispatchers.IO + CoroutineExceptionHandler { _, throwable ->
+            _classifyDataList.postValue(DataState.FAILED(throwable))
+        }
+
     fun getClassifyItemData() {
         _classifyItemDataList.postValue(DataState.LOADING)
-        viewModelScope.launch(vmDispatcher) {
+        viewModelScope.launch(itemDataDispatcher) {
             //获取原始分类项数据
             val rawClassify =
                 //testData()
@@ -48,7 +53,6 @@ class MediaClassifyViewModel : ViewModel() {
                 _classifyItemDataList.postValue(DataState.FAILED(RuntimeException("分类项为空")))
                 return@launch
             }
-            DataState.SUCCESS.destroyIns(this@MediaClassifyViewModel)
             //自动分类
             val classify = mutableListOf<BaseData>()
             val classifyMap = mutableMapOf<String, MutableList<ClassifyItemData>>()
@@ -71,7 +75,7 @@ class MediaClassifyViewModel : ViewModel() {
             }
             //更新
             _classifyItemDataList.postValue(
-                DataState.SUCCESS.getIns<BaseData>(this@MediaClassifyViewModel).appendData(classify)
+                DataState.SUCCESS.getIns<BaseData>(itemDataDispatcher).putData(classify)
             )
         }
     }
@@ -79,14 +83,19 @@ class MediaClassifyViewModel : ViewModel() {
     fun getClassifyData(
         classifyAction: ClassifyAction = currentClassify.value ?: ClassifyAction.obtain()
     ) {
-        viewModelScope.launch(Dispatchers.PluginIO) {
-            val data = mutableListOf<BaseData>()
-            if (classifyAction != currentClassify.value)
-                page = DEFAULT_PAGE
-            else
-                classifyDataList.value?.also { data.addAll(it) }
-            data.addAll(component.getClassifyData(classifyAction, page++))
-            _classifyDataList.postValue(data)
+        _classifyDataList.postValue(DataState.LOADING)
+        viewModelScope.launch(dataDispatcher) {
+            _classifyDataList.postValue(
+                if (classifyAction != currentClassify.value) {
+                    page = DEFAULT_PAGE
+                    DataState.SUCCESS.getIns<BaseData>(dataDispatcher)
+                        .putData(component.getClassifyData(classifyAction, page))
+                } else {
+                    DataState.SUCCESS.getIns<BaseData>(dataDispatcher)
+                        .appendData(component.getClassifyData(classifyAction, page))
+                }
+            )
+            page++
             _currentClassify.postValue(classifyAction)
         }
     }

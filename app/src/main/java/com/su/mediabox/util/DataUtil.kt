@@ -28,6 +28,11 @@ sealed class DataState {
         var isLoadEmptyData = false
             private set
 
+        fun putData(data: List<D>?): SUCCESS<D> {
+            _data = data
+            return this
+        }
+
         fun appendData(appendData: List<D>?): SUCCESS<D> {
             isLoadEmptyData = appendData.isNullOrEmpty()
             if (appendData.isNullOrEmpty())

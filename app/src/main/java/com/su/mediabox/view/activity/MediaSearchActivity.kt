@@ -125,10 +125,8 @@ class MediaSearchActivity : BasePluginActivity<ActivitySearchBinding>() {
                     }
                 }
                 MediaSearchViewModel.ShowState.FAILED -> {
-                    mBinding.rvSearchActivity.typeAdapter().submitList(null) {
-                        mBinding.tvSearchActivityTip.gone()
-                        mBinding.layoutSearchActivityLoading.visibility = View.GONE
-                    }
+                    mBinding.srlSearchActivity.setEnableLoadMore(true)
+                    mBinding.layoutSearchActivityLoading.visibility = View.GONE
                 }
                 else -> {}
             }
