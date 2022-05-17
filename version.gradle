@@ -60,6 +60,10 @@ room.room_ktx = "androidx.room:room-ktx:2.4.0"
 room.room_compiler = "androidx.room:room-compiler:2.4.0"
 deps.room = room
 
+def greenrobot = [:]
+greenrobot.eventbus = "org.greenrobot:eventbus:3.2.0"
+deps.greenrobot = greenrobot
+
 def jsoup = [:]
 jsoup.jsoup = "org.jsoup:jsoup:1.14.3"
 deps.jsoup = jsoup

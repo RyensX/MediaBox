@@ -4,7 +4,6 @@ import com.su.mediabox.util.logD
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kuaishou.akdanmaku.data.DanmakuItemData
 import com.su.mediabox.database.DatabaseOperations.insertHistoryData
 import com.su.mediabox.database.DatabaseOperations.updateFavoriteData
 import com.su.mediabox.pluginapi.data.VideoPlayMedia
@@ -18,7 +17,7 @@ import kotlin.properties.Delegates
 
 class VideoMediaPlayViewModel : ViewModel() {
 
-    val playComponent by lazyAcquireComponent<IVideoPlayPageDataComponent>()
+    private val playComponent by lazyAcquireComponent<IVideoPlayPageDataComponent>()
 
     lateinit var detailPartUrl: String
     lateinit var coverUrl: String
@@ -28,7 +27,7 @@ class VideoMediaPlayViewModel : ViewModel() {
         private set
 
     private val _currentVideoPlayMedia = MutableLiveData<VideoPlayMedia>()
-    private val _currentDanmakuData = MutableLiveData<List<DanmakuItemData>?>()
+    private val _currentDanmakuData = MutableLiveData<Pair<String, Map<String, String>?>>()
 
     val currentVideoPlayMedia = _currentVideoPlayMedia.toLiveData()
     val currentDanmakuData = _currentDanmakuData.toLiveData()
@@ -57,10 +56,8 @@ class VideoMediaPlayViewModel : ViewModel() {
     fun initDanmakuData() {
         _currentVideoPlayMedia.value?.run {
             viewModelScope.launch(Dispatchers.PluginIO) {
-                _currentDanmakuData.value?.apply {
-                    playComponent.getDanmakuData(videoName, title, currentPlayEpisodeUrl)?.also {
-                        _currentDanmakuData.postValue(it)
-                    }
+                playComponent.getDanmakuData(currentPlayEpisodeUrl)?.also {
+                    _currentDanmakuData.postValue(it)
                 }
             }
         }

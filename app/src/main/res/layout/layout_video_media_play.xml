@@ -138,8 +138,8 @@
             android:id="@+id/et_input_danmu"
             android:layout_width="0px"
             android:layout_height="0px"
-            android:layout_marginHorizontal="24dp"
-            android:layout_marginVertical="8dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="5dp"
             android:background="@drawable/shape_fill_circle_corner_danmu_6"
             android:gravity="center"
             android:hint="@string/send_a_danmaku"
@@ -147,8 +147,8 @@
             android:paddingHorizontal="10dp"
             android:singleLine="true"
             android:textColor="@color/white_skin"
-            android:textColorHint="@color/danmaku_hint_color"
-            android:textSize="13sp"
+            android:textColorHint="#7AFFFFFF"
+            android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/iv_show_danmu"
             app:layout_constraintStart_toEndOf="@id/total"
@@ -472,6 +472,17 @@
                 android:text="@string/danmaku"
                 android:textColor="@color/play_control_menu_title_color"
                 android:textSize="14sp" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_input_custom_danmaku_url"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/shape_circle_corner_edge_white_ripper_5_skin"
+                android:gravity="center"
+                android:paddingVertical="8dp"
+                android:text="@string/input_custom_danmaku_url"
+                android:textColor="@color/foreground_white_skin" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"

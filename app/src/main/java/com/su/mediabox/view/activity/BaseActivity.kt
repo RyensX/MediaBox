@@ -12,10 +12,12 @@ import com.efs.sdk.launch.LaunchManager
 import com.su.mediabox.App
 import com.su.mediabox.R
 import com.su.mediabox.util.Util.setColorStatusBar
+import com.su.mediabox.util.eventbus.EventBusSubscriber
 import com.su.mediabox.util.gone
 import com.su.mediabox.util.logE
 import com.su.mediabox.util.release
 import com.su.mediabox.util.visible
+import org.greenrobot.eventbus.EventBus
 
 abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
 
@@ -38,6 +40,7 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
+        if (this is EventBusSubscriber) EventBus.getDefault().register(this)
         release {
             LaunchManager.onTracePage(this, LaunchManager.PAGE_ON_START, true)
         }
@@ -59,6 +62,9 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
+        if (this is EventBusSubscriber && EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().unregister(this)
+
         release {
             LaunchManager.onTracePage(this, LaunchManager.PAGE_ON_STOP, true)
         }

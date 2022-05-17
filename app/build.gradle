@@ -164,6 +164,7 @@ dependencies {
     compileOnly files('libs/cdi-api.jar')
     // DLNACastService编译需要javax.enterprise.inject.Alternative类
 //    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.4'
+    implementation deps.greenrobot.eventbus
     implementation deps.umsdk.common
     implementation deps.umsdk.asms
     implementation deps.umsdk.apm

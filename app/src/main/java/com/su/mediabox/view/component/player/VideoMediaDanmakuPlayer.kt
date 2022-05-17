@@ -1,7 +1,6 @@
 package com.su.mediabox.view.component.player
 
 import android.content.Context
-import android.graphics.Color
 import android.util.AttributeSet
 import android.view.KeyEvent
 import android.view.View
@@ -11,8 +10,10 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.TextView
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.input.input
 import com.kuaishou.akdanmaku.DanmakuConfig
-import com.kuaishou.akdanmaku.data.DanmakuItemData
+import com.kuaishou.akdanmaku.ecs.DanmakuEngine
 import com.kuaishou.akdanmaku.ecs.component.filter.*
 import com.kuaishou.akdanmaku.render.SimpleRenderer
 import com.kuaishou.akdanmaku.ui.DanmakuPlayer
@@ -20,17 +21,31 @@ import com.kuaishou.akdanmaku.ui.DanmakuView
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoView
+import com.su.mediabox.App
 import com.su.mediabox.R
+import com.su.mediabox.bean.danmaku.AnimeSendDanmakuBean
+import com.su.mediabox.net.RetrofitManager
+import com.su.mediabox.net.service.DanmakuService
 import com.su.mediabox.util.*
 import com.su.mediabox.util.Util.hideKeyboard
+import com.su.mediabox.util.Util.toEncodedUrl
 import com.su.mediabox.util.showToast
+import com.su.mediabox.util.html.SnifferVideo.AC
+import com.su.mediabox.util.html.SnifferVideo.KEY
+import com.su.mediabox.util.html.SnifferVideo.REFEREER_URL
+import com.su.mediabox.util.html.SnifferVideo.VIDEO_ID
+import com.su.mediabox.view.component.player.danmaku.Const
+import com.su.mediabox.view.component.player.danmaku.anime.AnimeDanmakuParser
+import com.su.mediabox.view.component.player.danmaku.anime.AnimeDanmakuSender
+import com.su.mediabox.view.component.player.danmaku.bili.BiliBiliDanmakuParser
 import com.su.mediabox.view.listener.dsl.setOnSeekBarChangeListener
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlin.random.Random
+import java.net.URL
+import java.util.zip.Inflater
+import java.util.zip.InflaterInputStream
 
 
 class VideoMediaDanmakuPlayer : VideoMediaPlayer {
+    private var mDanmakuUrl: String = ""
     private lateinit var mDanmakuView: DanmakuView          //弹幕view
     private lateinit var mDanmakuPlayer: DanmakuPlayer
     private val colorFilter = TextColorFilter()
@@ -45,7 +60,12 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
     // 是否在显示弹幕
     private var mDanmakuShow = true
 
-    private var mDanmakuData: List<DanmakuItemData>? = null
+    // 弹幕源类型
+    private var mDanmakuSourceType: String = Const.TAG_ANIME
+
+    // 请求弹幕相关参数
+    var mDanmakuParamMap = HashMap<String, String>()
+        private set
 
     // 弹幕输入文本框
     private var etDanmakuInput: EditText? = null
@@ -54,6 +74,9 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
     private var ivShowDanmaku: ImageView? = null
 
     private var vgDanmakuController: ViewGroup? = null
+
+    // 自定义弹幕链接
+    private var tvInputCustomDanmakuUrl: TextView? = null
 
     private var mDanmakuControllerHeight: Int = 0
 
@@ -99,6 +122,7 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
         ivShowDanmaku = findViewById(R.id.iv_show_danmu)
         etDanmakuInput = findViewById(R.id.et_input_danmu)
         vgDanmakuController = findViewById(R.id.cl_danmu_controller)
+        tvInputCustomDanmakuUrl = findViewById(R.id.tv_input_custom_danmaku_url)
         tvRewindDanmakuProgress = findViewById(R.id.tv_player_rewind_danmaku_progress)
         tvResetDanmakuProgress = findViewById(R.id.tv_player_reset_danmaku_progress)
         tvForwardDanmakuProgress = findViewById(R.id.tv_player_forward_danmaku_progress)
@@ -118,8 +142,24 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
                         mContext.resources.getString(R.string.please_input_danmaku_text).showToast()
                         return false
                     }
-                    danmakuSend(text)
+                    etDanmakuInput?.setText("")
+                    if (mDanmakuSourceType == Const.TAG_ANIME)
+                        AnimeSendDanmakuBean(
+                            "DIYgod", "rgb(255, 255, 255)",
+                            mDanmakuParamMap[VIDEO_ID] ?: "",
+                            mDanmakuParamMap[REFEREER_URL] ?: "",
+                            "27.5px", text, currentPlayer.currentPositionWhenPlaying / 1000.0,
+                            "right"
+                        ).let {
+                            AnimeDanmakuSender.send(
+                                mDanmakuPlayer,
+                                mDanmakuParamMap[AC] ?: "",
+                                mDanmakuParamMap[KEY] ?: "",
+                                it
+                            )
+                        }
                     return true
+
                 }
                 return true
             }
@@ -141,6 +181,22 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
             startDismissControlViewTimer()
             mDanmakuShow = !mDanmakuShow
             resolveDanmakuShow()
+        }
+
+        tvInputCustomDanmakuUrl?.setOnClickListener {
+            MaterialDialog(mContext).input(hintRes = R.string.input_danmaku_url) { dialog, text ->
+                try {
+                    val url = URL(text.toString()).toString()
+//                        val url = URL("http://api.bilibili.com/x/v1/dm/list.so?oid=431625080").toString()
+                    if (url.contains("bili", true)) {
+                        setDanmakuUrl(url, null, Const.TAG_BILIBILI)
+                    }
+                } catch (e: Exception) {
+                    App.context.resources.getString(R.string.website_format_error).showToast()
+                    e.printStackTrace()
+                }
+            }.positiveButton(R.string.ok).show()
+            vgSettingContainer?.invisible()
         }
 
         tvRewindDanmakuProgress?.setOnClickListener {
@@ -176,30 +232,6 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
         }
     }
 
-    private fun danmakuSend(danmakuText: String) =
-        viewLifeCycleCoroutineScope.launch(Dispatchers.IO) {
-            (playViewModel?.playComponent?.putDanmaku(danmakuText) == true).also {
-                if (it) {
-                    val time = mDanmakuPlayer.getCurrentTimeMs() + 500
-                    val danmaku = DanmakuItemData(
-                        Random.nextLong(),
-                        time,
-                        danmakuText,
-                        DanmakuItemData.DANMAKU_MODE_ROLLING,
-                        (0.28f * 27F).toInt(),
-                        //TODO 自定义
-                        Color.WHITE,
-                        DanmakuItemData.DANMAKU_STYLE_ICON_UP
-                    )
-                    val item = mDanmakuPlayer.obtainItem(danmaku)
-                    mDanmakuPlayer.send(item)
-                    etDanmakuInput?.setText("")
-                    "弹幕发送成功".showToast()
-                } else
-                    "弹幕发送失败".showToast()
-            }
-        }
-
     override fun onCompletion() {
         super.onCompletion()
         stopDanmaku()
@@ -217,7 +249,6 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
 
     override fun onPrepared() {
         super.onPrepared()
-        onPrepareDanmaku()
         seekDanmaku(0L)
 //        playDanmaku()
     }
@@ -296,6 +327,12 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
 
         player.mDanmakuShow = mDanmakuShow
         player.resolveDanmakuShow()
+        if (player.mDanmakuUrl != mDanmakuUrl) {
+            player.setDanmakuUrl(
+                mDanmakuUrl, mDanmakuParamMap, mDanmakuSourceType,
+                mCurrentState == GSYVideoView.CURRENT_STATE_PLAYING
+            )
+        }
         player.seekDanmaku(currentPositionWhenPlaying.toLong())
         pauseDanmaku()
 
@@ -324,6 +361,14 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
 
             mDanmakuShow = player.mDanmakuShow
             resolveDanmakuShow()
+            if (mDanmakuUrl != player.mDanmakuUrl) {
+                setDanmakuUrl(
+                    player.mDanmakuUrl,
+                    player.mDanmakuParamMap,
+                    player.mDanmakuSourceType,
+                    player.mCurrentState == GSYVideoView.CURRENT_STATE_PLAYING
+                )
+            }
             seekDanmaku(player.currentPositionWhenPlaying.toLong())
             player.pauseDanmaku()
         }
@@ -337,22 +382,67 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
         return vgDanmakuController?.height ?: 0
     }
 
-    fun setDanmakuData(
-        danmakuData: List<DanmakuItemData>,
+    fun setDanmakuUrl(
+        url: String,
+        paramMap: Map<String, String>? = null,
+        danmakuSourceType: String = Const.TAG_ANIME,
         autoPlayIfVideoIsPlaying: Boolean = true    // 调用此方法后若视频在播放，则自动播放弹幕
     ) {
-        if (danmakuData.isEmpty()) {
-            "弹幕数据为空".showToast()
-            return
+        mDanmakuParamMap.clear()
+        if (paramMap != null) {
+            mDanmakuParamMap.putAll(paramMap)
         }
+        mDanmakuSourceType = danmakuSourceType
+        mDanmakuUrl = url
 
-        mDanmakuData = danmakuData
-        mDanmakuPlayer.apply {
-            updateData(danmakuData)
-            seekDanmaku(currentPlayer.currentPositionWhenPlaying.toLong())
-            if (autoPlayIfVideoIsPlaying && mCurrentState == GSYVideoView.CURRENT_STATE_PLAYING)
-                playDanmaku()
-        }
+        Thread {
+            when (danmakuSourceType) {
+                Const.TAG_ANIME -> {
+                    logD(DanmakuEngine.TAG, "[ANIME] 开始加载数据")
+                    val danmakuString = RetrofitManager.get().create(DanmakuService::class.java)
+                        .getDanmaku(url.toEncodedUrl()).execute().body()?.string()
+                    if (danmakuString.isNullOrBlank()) {
+                        logE(DanmakuEngine.TAG, "danmaku data is null or blank!")
+                        mContext.getString(R.string.danmaku_data_is_null_or_blank).showToast()
+                        return@Thread
+                    }
+                    val dataList = AnimeDanmakuParser(danmakuString).parse()
+                    mDanmakuPlayer.updateData(dataList)
+                    mDanmakuView.post {
+                        if (autoPlayIfVideoIsPlaying && mCurrentState == GSYVideoView.CURRENT_STATE_PLAYING) {
+                            seekDanmaku(currentPlayer.currentPositionWhenPlaying.toLong())
+                            playDanmaku()
+                        }
+                        logD(DanmakuEngine.TAG, "[ANIME] 数据已加载(count = ${dataList.size})")
+                    }
+                }
+                Const.TAG_BILIBILI -> {
+                    logD(DanmakuEngine.TAG, "[BILIBILI] 开始加载数据")
+                    val originalInputStream =
+                        RetrofitManager.get().create(DanmakuService::class.java)
+                            .getDanmaku(url.toEncodedUrl()).execute().body()?.byteStream()
+                    if (originalInputStream == null) {
+                        logE(DanmakuEngine.TAG, "original input stream is null!")
+                        mContext.getString(R.string.danmaku_input_stream_is_null).showToast()
+                        return@Thread
+                    }
+                    val inputStream = InflaterInputStream(originalInputStream, Inflater(true))
+                    val dataList = BiliBiliDanmakuParser(inputStream.string()).parse()
+                    mDanmakuPlayer.updateData(dataList)
+                    mDanmakuView.post {
+                        if (autoPlayIfVideoIsPlaying && mCurrentState == GSYVideoView.CURRENT_STATE_PLAYING) {
+                            seekDanmaku(currentPlayer.currentPositionWhenPlaying.toLong())
+                            playDanmaku()
+                        }
+                        logD(DanmakuEngine.TAG, "[BILIBILI] 数据已加载(count = ${dataList.size})")
+                    }
+                }
+                else -> {
+                    logD(DanmakuEngine.TAG, "找不到合适的弹幕解析器！")
+                }
+            }
+
+        }.start()
     }
 
     /**
@@ -387,12 +477,10 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
         sbDanmakuTextScale?.visible()
         tvDanmakuTextScaleHeader?.visible()
         tvDanmakuTextScale?.visible()
-        if (!mDanmakuData.isNullOrEmpty()) {
+        if (mDanmakuParamMap.size > 0) {
             etDanmakuInput?.enable()
-            ivShowDanmaku?.enable()
             etDanmakuInput?.hint = mContext.getString(R.string.send_a_danmaku)
         } else {
-            ivShowDanmaku?.disable()
             etDanmakuInput?.disable()
             etDanmakuInput?.hint = mContext.getString(R.string.send_a_danmaku_is_disabled)
         }
@@ -403,7 +491,7 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
      * 播放弹幕，要保证只在次方法内调用mDanmakuPlayer.start(config)
      */
     protected open fun playDanmaku() {
-        if (mDanmakuData.isNullOrEmpty()) return
+        if (mDanmakuUrl.isBlank()) return
         // 若不加下面的if，则切换横竖屏后不管是否暂停，弹幕都会自动播放
         mDanmakuPlayer.start(config)
         onPrepareDanmaku()

@@ -15,6 +15,9 @@ interface Api {
         // github
         const val CHECK_UPDATE_URL = "https://api.github.com/repos/RyensX/MediaBox/releases/latest"
 
+        // 弹幕url
+        const val DANMU_URL = "https://yuan.cuan.la/barrage/api"
+
         // DoH
         const val DOH_URL = "https://1.0.0.1/dns-query"
     }

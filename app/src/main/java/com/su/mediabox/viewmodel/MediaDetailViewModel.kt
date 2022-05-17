@@ -78,7 +78,7 @@ class MediaDetailViewModel : ViewModel() {
     fun getMediaDetailData() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                videoDetailModel.getMediaDetailData(partUrl).apply {
+                videoDetailModel.getAnimeDetailData(partUrl).apply {
                     cover = first
                     title = second
                     _videoData.postValue(Pair(ResponseDataType.REFRESH, third))

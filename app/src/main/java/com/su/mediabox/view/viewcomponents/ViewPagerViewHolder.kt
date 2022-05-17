@@ -47,7 +47,7 @@ class ViewPagerViewHolder private constructor(private val binding: ViewComponent
     private var currentData: ViewPagerData? = null
 
     constructor(parent: ViewGroup) : this(
-        ViewComponentViewPagerBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        ViewComponentViewPagerBinding.inflate(LayoutInflater.from(App.context), parent, false)
     ) {
         binding.apply {
             vcViewPagerTabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
