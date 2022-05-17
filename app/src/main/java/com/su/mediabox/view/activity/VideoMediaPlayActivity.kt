@@ -58,7 +58,7 @@ class VideoMediaPlayActivity : BasePluginActivity<ActivityVideoMediaPlayBinding>
                 }
                 //弹幕
                 currentDanmakuData.observe(this@VideoMediaPlayActivity) {
-                    mBinding.vmPlay.setDanmakuUrl(it.first, it.second)
+                    it?.also { mBinding.vmPlay.setDanmakuData(it) }
                 }
             }
 
