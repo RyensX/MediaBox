@@ -23,12 +23,11 @@ import com.su.mediabox.view.adapter.type.typeAdapter
 
 class MediaDetailActivity : BasePluginActivity<ActivityMediaDetailBinding>() {
 
-    private lateinit var viewModel :MediaDetailViewModel
+    private val viewModel by viewModels<MediaDetailViewModel>()
     private var isClick = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-viewModel=ViewModelProvider(this)[MediaDetailViewModel::class.java]
         setTransparentStatusBar(window, isDark = false)
 
         logD("获取VM", "@${viewModel}")

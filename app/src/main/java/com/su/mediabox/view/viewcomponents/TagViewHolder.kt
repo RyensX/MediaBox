@@ -12,7 +12,7 @@ class TagViewHolder private constructor(private val binding: ViewComponentTagBin
     TextViewHolder<TagData>(binding.vcTagText, binding.root) {
 
     constructor(parent: ViewGroup) : this(
-        ViewComponentTagBinding.inflate(LayoutInflater.from(App.context), parent, false)
+        ViewComponentTagBinding.inflate(LayoutInflater.from(parent.context), parent, false)
     ) {
         setOnClickListener(binding.root) {
             textData?.action?.go(bindingContext)

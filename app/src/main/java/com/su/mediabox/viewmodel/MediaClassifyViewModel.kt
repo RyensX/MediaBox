@@ -13,7 +13,9 @@ import com.su.mediabox.view.fragment.MediaClassifyBottomSheetDialogFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import com.su.mediabox.config.Const.ViewComponent.DEFAULT_PAGE
+import com.su.mediabox.util.DataState
 import com.su.mediabox.util.lazyAcquireComponent
+import kotlinx.coroutines.CoroutineExceptionHandler
 
 class MediaClassifyViewModel : ViewModel() {
 
@@ -24,22 +26,29 @@ class MediaClassifyViewModel : ViewModel() {
     private var _currentClassify = MutableLiveData<ClassifyAction>()
     val currentClassify = _currentClassify.toLiveData()
 
-    private val _classifyItemDataList = MutableLiveData<List<BaseData>>()
+    private val _classifyItemDataList = MutableLiveData<DataState>(DataState.INIT)
     val classifyItemDataList = _classifyItemDataList.toLiveData()
 
     private val _classifyDataList = MutableLiveData<List<BaseData>>()
     val classifyDataList = _classifyDataList.toLiveData()
 
+    private val vmDispatcher =
+        Dispatchers.IO + CoroutineExceptionHandler { _, throwable ->
+            _classifyItemDataList.postValue(DataState.FAILED(throwable))
+        }
+
     fun getClassifyItemData() {
-        viewModelScope.launch(Dispatchers.PluginIO) {
+        _classifyItemDataList.postValue(DataState.LOADING)
+        viewModelScope.launch(vmDispatcher) {
             //获取原始分类项数据
             val rawClassify =
                 //testData()
                 component.getClassifyItemData()
             if (rawClassify.isEmpty()) {
-                _classifyItemDataList.postValue(rawClassify)
+                _classifyItemDataList.postValue(DataState.FAILED(RuntimeException("分类项为空")))
                 return@launch
             }
+            DataState.SUCCESS.destroyIns(this@MediaClassifyViewModel)
             //自动分类
             val classify = mutableListOf<BaseData>()
             val classifyMap = mutableMapOf<String, MutableList<ClassifyItemData>>()
@@ -61,7 +70,9 @@ class MediaClassifyViewModel : ViewModel() {
                 entry.value.forEach { classify.add(it) }
             }
             //更新
-            _classifyItemDataList.postValue(classify)
+            _classifyItemDataList.postValue(
+                DataState.SUCCESS.getIns<BaseData>(this@MediaClassifyViewModel).appendData(classify)
+            )
         }
     }
 

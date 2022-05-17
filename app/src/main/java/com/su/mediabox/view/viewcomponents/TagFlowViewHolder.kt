@@ -17,7 +17,7 @@ class TagFlowViewHolder private constructor(private val binding: ViewComponentGr
     TypeViewHolder<TagFlowData>(binding.root) {
 
     constructor(parent: ViewGroup) : this(
-        ViewComponentGridBinding.inflate(LayoutInflater.from(App.context), parent, false)
+        ViewComponentGridBinding.inflate(LayoutInflater.from(parent.context), parent, false)
     ) {
         binding.root.apply {
             layoutManager = FlexboxLayoutManager(bindingContext).apply {

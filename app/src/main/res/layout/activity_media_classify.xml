@@ -31,6 +31,15 @@
 
         </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 
+        <androidx.core.widget.ContentLoadingProgressBar
+            android:id="@+id/media_classify_fab_progress"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="84dp"
+            android:layout_height="84dp"
+            android:progressTint="@color/main_color_2_skin"
+            app:layout_behavior="com.su.mediabox.view.component.behavior.CenterAlignedBehavior"
+            app:alignTargetView="@id/media_classify_fab" />
+
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/media_classify_fab"
             android:layout_width="wrap_content"

@@ -19,7 +19,7 @@ class PreviewPluginInfoViewHolder private constructor(private val binding: ViewC
 
     constructor(parent: ViewGroup) : this(
         ViewComponentPreviewPluginInfoBinding.inflate(
-            LayoutInflater.from(App.context),
+            LayoutInflater.from(parent.context),
             parent,
             false
         )
