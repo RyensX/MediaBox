@@ -106,6 +106,7 @@
     <string name="vertical_reverse">上下镜像</string>
     <string name="horizontal_reverse">左右镜像</string>
     <string name="play_error_retry">点击重试</string>
+    <string name="play_parse_error_retry">重新解析</string>
     <string name="play_error">播放错误，网络错误或目标资源已失效</string>
     <string name="reverse">镜像</string>
     <string name="no_reverse">正常</string>
@@ -235,4 +236,5 @@
     <string name="plugin_repo_title_template_updatable">可更新(%d)</string>
     <string name="plugin_repo_title_template_downloadable">可下载(%d)</string>
     <string name="player_loading_hint_cache">缓冲中..</string>
+    <string name="player_loading_hint_parse">视频解析中..</string>
 </resources>

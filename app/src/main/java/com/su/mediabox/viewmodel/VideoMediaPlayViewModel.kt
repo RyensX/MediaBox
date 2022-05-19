@@ -1,6 +1,5 @@
 package com.su.mediabox.viewmodel
 
-import com.su.mediabox.util.logD
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,9 +8,8 @@ import com.su.mediabox.database.DatabaseOperations.insertHistoryData
 import com.su.mediabox.database.DatabaseOperations.updateFavoriteData
 import com.su.mediabox.pluginapi.data.VideoPlayMedia
 import com.su.mediabox.pluginapi.components.IVideoPlayPageDataComponent
-import com.su.mediabox.util.PluginIO
-import com.su.mediabox.util.lazyAcquireComponent
-import com.su.mediabox.util.toLiveData
+import com.su.mediabox.util.*
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.properties.Delegates
@@ -27,23 +25,29 @@ class VideoMediaPlayViewModel : ViewModel() {
     var currentPlayEpisodeUrl by Delegates.notNull<String>()
         private set
 
-    private val _currentVideoPlayMedia = MutableLiveData<VideoPlayMedia>()
+    private val _currentVideoPlayMedia = MutableLiveData<DataState<VideoPlayMedia>>()
     private val _currentDanmakuData = MutableLiveData<List<DanmakuItemData>?>()
 
     val currentVideoPlayMedia = _currentVideoPlayMedia.toLiveData()
     val currentDanmakuData = _currentDanmakuData.toLiveData()
 
+    private val videoPlayMediaDispatcher =
+        Dispatchers.PluginIO + CoroutineExceptionHandler { _, throwable ->
+            _currentVideoPlayMedia.postValue(DataState.Failed(throwable))
+        }
+
     fun playVideoMedia(episodeUrl: String = currentPlayEpisodeUrl) {
         if (episodeUrl.isNotBlank()) {
+            _currentVideoPlayMedia.postValue(DataState.Loading)
             currentPlayEpisodeUrl = episodeUrl
             //开始解析
-            viewModelScope.launch(Dispatchers.PluginIO) {
+            viewModelScope.launch(videoPlayMediaDispatcher) {
                 playComponent.getVideoPlayMedia(episodeUrl).also {
                     logD("视频解析结果", "剧集：${it.title} 链接：$${it.videoPlayUrl}")
                     if (it.videoPlayUrl.isBlank())
-                        throw RuntimeException("播放链接解析错误")
+                        throw RuntimeException("无法解析出有效播放链接")
                     // VideoPlayMedia("测试","file:///storage/emulated/0/Android/data/com.su.mediabox.debug/files/DownloadAnime/萌萌侵略者/GEfErSXSJIsA.mp4").also {
-                    _currentVideoPlayMedia.postValue(it)
+                    _currentVideoPlayMedia.postValue(DataState.SingleSuccess(it))
                     //记录历史
                     viewModelScope.apply {
                         updateFavoriteData(detailPartUrl, episodeUrl, it.title)
@@ -57,14 +61,20 @@ class VideoMediaPlayViewModel : ViewModel() {
     suspend fun putDanmaku(danmaku: String): Boolean = playComponent.putDanmaku(danmaku)
 
     fun initDanmakuData() {
-        _currentVideoPlayMedia.value?.run {
-            viewModelScope.launch(Dispatchers.PluginIO) {
-                _currentDanmakuData.value?.apply {
-                    playComponent.getDanmakuData(videoName, title, currentPlayEpisodeUrl)?.also {
-                        _currentDanmakuData.postValue(it)
+        when (val dataState = currentVideoPlayMedia.value) {
+            is DataState.SingleSuccess -> {
+                _currentVideoPlayMedia.value?.run {
+                    viewModelScope.launch(Dispatchers.PluginIO) {
+                        dataState.data?.apply {
+                            playComponent.getDanmakuData(videoName, title, currentPlayEpisodeUrl)
+                                ?.also {
+                                    _currentDanmakuData.postValue(it)
+                                }
+                        }
                     }
                 }
             }
+            else -> logD("加载弹幕失败", "当前无播放媒体")
         }
     }
 }

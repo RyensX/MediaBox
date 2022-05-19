@@ -6,12 +6,12 @@ sealed class DataState<out D> {
 
     object Loading : DataState<Nothing>()
 
-    class SingleSuccess<D>(val data: D) : DataState<Nothing>()
+    class SingleSuccess<D>(val data: D? = null) : DataState<D>()
 
     /**
      * 内部data为可append的集合
      */
-    class AppendableListDataSuccess<D> private constructor() : DataState<D>() {
+    class AppendableListDataSuccess<D> : DataState<D>() {
 
         companion object {
 
