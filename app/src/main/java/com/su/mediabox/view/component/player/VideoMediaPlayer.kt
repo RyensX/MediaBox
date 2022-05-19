@@ -45,6 +45,7 @@ import com.su.mediabox.view.listener.dsl.setOnSeekBarChangeListener
 import kotlinx.coroutines.*
 import java.io.File
 import kotlin.math.abs
+import kotlin.properties.Delegates
 
 //TODO 太乱了，需要后续整理重写
 open class VideoMediaPlayer : StandardGSYVideoPlayer {
@@ -68,8 +69,6 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
             CoroutineScope(Dispatchers.Default)
         }
 
-        var playViewModel: VideoMediaPlayViewModel? = null
-
     }
 
     /**
@@ -79,6 +78,8 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
 
     var playPositionMemoryStore: PlayPositionMemoryDataStore? = null
     private var playPositionViewJob: Job? = null
+
+    var playOperatingProxy: PlayOperatingProxy? = null
 
     // 预跳转进度
     private var preSeekPlayPosition: Long? = null
@@ -170,6 +171,9 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
     //播放错误重试
     private var playErrorRetry: Button? = null
 
+    //加载提示
+    private var loadingHint: TextView? = null
+
     // 还原屏幕
     private var tvRestoreScreen: TextView? = null
 
@@ -219,7 +223,6 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
         tvSpeed = findViewById(R.id.tv_speed)
         vgRightContainer = findViewById(R.id.layout_right)
         rvSpeed = findViewById(R.id.rv_speed)
-        tvEpisode = findViewById(R.id.tv_episode)
         rvEpisode = findViewById(R.id.rv_episode)
         ivNextEpisode = findViewById(R.id.iv_next)
         ivSetting = findViewById(R.id.iv_setting)
@@ -241,6 +244,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
         tvPlayPosition = findViewById(R.id.tv_play_position_time)
         ivClosePlayPositionTip = findViewById(R.id.iv_close_play_position_tip)
         playErrorRetry = findViewById(R.id.play_error_retry)
+        loadingHint = findViewById(R.id.loading_hint)
 
         vgRightContainer?.gone()
         vgSettingContainer?.gone()
@@ -352,40 +356,6 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
             )
         }
 
-        //播放列表
-        tvEpisode?.apply {
-            //只有存在选集数据和VM才显示选集
-            if (VideoMediaPlayActivity.playList == null || playViewModel == null) {
-                gone()
-                return@apply
-            }
-            rvEpisode
-                ?.grid(4)
-                ?.initTypeList(DataViewMapList().registerDataViewMap<EpisodeData, PlayerEpisodeViewHolder>()) {
-                    addViewHolderClickListener<PlayerEpisodeViewHolder> { pos ->
-                        val adapter = bindingTypeAdapter
-                        adapter.getData<EpisodeData>(pos)?.also { episodeData ->
-                            //更新上次选项
-                            adapter.getTag<Int>()?.also {
-                                adapter.notifyItemChanged(it)
-                            }
-                            //更新当前选项
-                            adapter.notifyItemChanged(pos)
-                            //标记当前选集pos
-                            adapter.setTag(pos)
-                            playViewModel?.playVideoMedia(episodeData.url)
-                        }
-                    }
-                }
-            setOnClickListener(this@VideoMediaPlayer)
-            //下一集
-            ivNextEpisode?.apply {
-                setOnClickListener {
-                    playNextEpisode()
-                }
-            }
-        }
-
         //播放速度
         tvSpeed?.apply {
             rvSpeed
@@ -449,19 +419,63 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
         playErrorRetry?.setOnClickListener(this)
     }
 
+    /**
+     * 第一次播放才进行初始化
+     */
+    private fun initEpisodeList() {
+        if (tvEpisode != null)
+            return
+        tvEpisode = findViewById(R.id.tv_episode)
+        //播放列表
+        tvEpisode?.apply {
+            //只有存在选集数据和VM才显示选集
+            if (VideoMediaPlayActivity.playList == null || playOperatingProxy == null) {
+                gone()
+                return@apply
+            }
+            visible()
+            rvEpisode
+                ?.grid(if (VideoMediaPlayActivity.playList!!.size > 8) 4 else 1)
+                ?.initTypeList(DataViewMapList().registerDataViewMap<EpisodeData, PlayerEpisodeViewHolder>()) {
+                    addViewHolderClickListener<PlayerEpisodeViewHolder> { pos ->
+                        val adapter = bindingTypeAdapter
+                        adapter.getData<EpisodeData>(pos)?.also { episodeData ->
+                            //更新上次选项
+                            adapter.getTag<Int>()?.also {
+                                adapter.notifyItemChanged(it)
+                            }
+                            //更新当前选项
+                            adapter.notifyItemChanged(pos)
+                            //标记当前选集pos
+                            adapter.setTag(pos)
+                            playOperatingProxy?.playVideoMedia(episodeData.url)
+                        }
+                    }
+                }
+            setOnClickListener(this@VideoMediaPlayer)
+            //下一集
+            ivNextEpisode?.apply {
+                setOnClickListener {
+                    playNextEpisode()
+                }
+            }
+        }
+    }
+
     fun playVideo(
         playUrl: String,
         episodeName: String,
         videoName: String = this.videoName,
         cacheWithPlay: Boolean = false
     ) {
+        initEpisodeList()
         logD("播放视频", "videName=$videoName episodeName=$episodeName \nurl=$playUrl")
         if (this.videoName.isBlank())
         //为了使下一集按钮有效，需要在第一次加载时初始化播放列表的初始定位
             playPositionMemoryStoreCoroutineScope.launch {
                 //查找初始定位
                 VideoMediaPlayActivity.playList?.forEachIndexed { index, episodeData ->
-                    if (episodeData.url.isNotBlank() && episodeData.url == playViewModel?.currentPlayEpisodeUrl) {
+                    if (episodeData.url.isNotBlank() && episodeData.url == playOperatingProxy?.currentPlayEpisodeUrl) {
                         logD("找到初始标记", index.toString())
                         rvEpisode?.typeAdapter()?.setTag(index)
                         return@forEachIndexed
@@ -491,7 +505,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
                         //更新标记
                         episodeAdapter.setTag(pos + 1)
                     }
-                    playViewModel?.playVideoMedia(it)
+                    playOperatingProxy?.playVideoMedia(it)
                     return true
                 }
             else {
@@ -881,6 +895,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
             ivNextEpisode?.gone()
 
         playErrorRetry?.gone()
+        loadingHint?.visible()
     }
 
     //播放中
@@ -898,6 +913,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
             ivNextEpisode?.visible()
 
         ivSetting?.visible()
+        loadingHint?.gone()
     }
 
     //自动播放结束
@@ -921,6 +937,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
         //不隐藏顶栏以提醒是哪集错误
         mTopContainer?.visible()
         playErrorRetry?.visible()
+        loadingHint?.gone()
         ivSetting?.gone()
     }
 
@@ -942,6 +959,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
     override fun changeUiToPlayingBufferingShow() {
         super.changeUiToPlayingBufferingShow()
         viewTopContainerShadow?.visible()
+        loadingHint?.visible()
     }
 
     override fun onVideoPause() {
@@ -1224,6 +1242,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
      */
     override fun onDetachedFromWindow() {
         storePlayPosition()
+        playOperatingProxy = null
         super.onDetachedFromWindow()
     }
 
@@ -1301,5 +1320,15 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
         suspend fun deletePlayPosition(url: String)
 
         fun positionFormat(position: Long): String
+    }
+
+    interface PlayOperatingProxy {
+        val currentPlayEpisodeUrl: String
+
+        /**
+         * 一般为解析后调用player播放
+         */
+        fun playVideoMedia(episodeUrl: String)
+        suspend fun putDanmaku(danmaku: String): Boolean
     }
 }

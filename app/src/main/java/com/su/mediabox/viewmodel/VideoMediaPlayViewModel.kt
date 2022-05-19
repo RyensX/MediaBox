@@ -18,7 +18,7 @@ import kotlin.properties.Delegates
 
 class VideoMediaPlayViewModel : ViewModel() {
 
-    val playComponent by lazyAcquireComponent<IVideoPlayPageDataComponent>()
+    private val playComponent by lazyAcquireComponent<IVideoPlayPageDataComponent>()
 
     lateinit var detailPartUrl: String
     lateinit var coverUrl: String
@@ -53,6 +53,8 @@ class VideoMediaPlayViewModel : ViewModel() {
             }
         }
     }
+
+    suspend fun putDanmaku(danmaku: String): Boolean = playComponent.putDanmaku(danmaku)
 
     fun initDanmakuData() {
         _currentVideoPlayMedia.value?.run {

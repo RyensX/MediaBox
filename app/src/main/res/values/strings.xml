@@ -234,4 +234,5 @@
     <string name="plugin_repo_title_template_installed">已安装(%d)</string>
     <string name="plugin_repo_title_template_updatable">可更新(%d)</string>
     <string name="plugin_repo_title_template_downloadable">可下载(%d)</string>
+    <string name="player_loading_hint_cache">缓冲中..</string>
 </resources>

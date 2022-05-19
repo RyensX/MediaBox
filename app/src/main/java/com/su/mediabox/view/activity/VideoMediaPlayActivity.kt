@@ -25,19 +25,23 @@ import com.su.mediabox.view.component.player.VideoPositionMemoryDbStore
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
 import tv.danmaku.ijk.media.player.IjkMediaPlayer
 
-class VideoMediaPlayActivity : BasePluginActivity<ActivityVideoMediaPlayBinding>() {
+class VideoMediaPlayActivity : BasePluginActivity<ActivityVideoMediaPlayBinding>(),
+    VideoMediaPlayer.PlayOperatingProxy {
+
+    companion object {
+        var playList: List<EpisodeData>? = null
+    }
 
     private lateinit var orientationUtils: OrientationUtils
     private val viewModel by viewModels<VideoMediaPlayViewModel>()
 
     private lateinit var action: PlayAction
 
-    companion object {
-        var playList: List<EpisodeData>? = null
-    }
+    override val currentPlayEpisodeUrl: String get() = viewModel.currentPlayEpisodeUrl
+    override fun playVideoMedia(episodeUrl: String) = viewModel.playVideoMedia(episodeUrl)
+    override suspend fun putDanmaku(danmaku: String) = viewModel.putDanmaku(danmaku)
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        VideoMediaPlayer.playViewModel = viewModel
         super.onCreate(savedInstanceState)
 
         setFullScreen(window)
@@ -74,6 +78,7 @@ class VideoMediaPlayActivity : BasePluginActivity<ActivityVideoMediaPlayBinding>
 
     private fun init() {
         mBinding.vmPlay.run {
+            playOperatingProxy = this@VideoMediaPlayActivity
             //进度记忆
             playPositionMemoryStore = VideoPositionMemoryDbStore
             //设置旋转
@@ -111,7 +116,7 @@ class VideoMediaPlayActivity : BasePluginActivity<ActivityVideoMediaPlayBinding>
                 Util.withoutExceptionGet { action.playerManager as? Class<IPlayerManager> }
                     ?:
                     //自定义默认解码器
-                    IjkPlayerManager::class.java
+                    Exo2PlayerManager::class.java
             PlayerFactory.setPlayManager(playManager)
 
             //TODO 硬解码开关
@@ -143,6 +148,5 @@ class VideoMediaPlayActivity : BasePluginActivity<ActivityVideoMediaPlayBinding>
         orientationUtils.releaseListener()
         //释放播放列表
         playList = null
-        VideoMediaPlayer.playViewModel = null
     }
 }

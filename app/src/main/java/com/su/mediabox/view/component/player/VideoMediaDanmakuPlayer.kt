@@ -178,7 +178,7 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
 
     private fun danmakuSend(danmakuText: String) =
         viewLifeCycleCoroutineScope.launch(Dispatchers.IO) {
-            (playViewModel?.playComponent?.putDanmaku(danmakuText) == true).also {
+            (playOperatingProxy?.putDanmaku(danmakuText) == true).also {
                 if (it) {
                     val time = mDanmakuPlayer.getCurrentTimeMs() + 500
                     val danmaku = DanmakuItemData(

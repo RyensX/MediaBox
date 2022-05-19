@@ -179,9 +179,11 @@
             android:text="@string/choose_episode"
             android:textColor="@color/foreground_white_skin"
             android:textSize="13sp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/tv_speed"
-            app:layout_constraintTop_toBottomOf="@id/progress" />
+            app:layout_constraintTop_toBottomOf="@id/progress"
+            tools:visibility="visible" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_speed"
@@ -268,7 +270,21 @@
         android:indeterminate="true"
         android:indeterminateTint="@color/main_color_skin"
         android:indeterminateTintMode="src_atop"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        tools:visibility="visible" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/loading_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/loading"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="6dp"
+        android:text="@string/player_loading_hint_cache"
+        android:textColor="@color/play_control_menu_title_color"
+        android:visibility="gone"
+        tools:visibility="visible" />
 
     <ImageView
         android:id="@+id/lock_screen"
