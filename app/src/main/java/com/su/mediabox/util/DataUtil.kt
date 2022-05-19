@@ -1,49 +1,53 @@
 package com.su.mediabox.util
 
+sealed class DataState<out D> {
 
-sealed class DataState {
+    object Init : DataState<Nothing>()
 
-    object INIT : DataState()
+    object Loading : DataState<Nothing>()
 
-    object LOADING : DataState()
+    class SingleSuccess<D>(val data: D) : DataState<Nothing>()
 
-    class SUCCESS<D> private constructor() : DataState() {
+    /**
+     * 内部data为可append的集合
+     */
+    class AppendableListDataSuccess<D> private constructor() : DataState<D>() {
 
         companion object {
 
-            private val insMap = mutableMapOf<Any, SUCCESS<*>>()
+            private val insMap = mutableMapOf<Any, AppendableListDataSuccess<*>>()
 
-            fun destroyIns(obj: Any) {
-                insMap.remove(obj)
-            }
+            fun destroyIns(obj: Any) = insMap.remove(obj)
 
-            fun <D> getIns(obj: Any): SUCCESS<D> {
-                return (insMap[obj] ?: SUCCESS<D>().also { insMap[obj] = it }) as SUCCESS<D>
+            fun <D> getIns(obj: Any): AppendableListDataSuccess<D> {
+                return (insMap[obj] ?: AppendableListDataSuccess<D>().also {
+                    insMap[obj] = it
+                }) as AppendableListDataSuccess<D>
             }
         }
 
-        private var _data: List<D>? = null
-        fun <D> getData(): List<D>? = Util.withoutExceptionGet { _data as List<D> }
+        var data: List<D>? = null
+            private set
 
         var isLoadEmptyData = false
             private set
 
-        fun putData(data: List<D>?): SUCCESS<D> {
-            _data = data
+        fun putData(data: List<D>?): AppendableListDataSuccess<D> {
+            this.data = data
             return this
         }
 
-        fun appendData(appendData: List<D>?): SUCCESS<D> {
+        fun appendData(appendData: List<D>?): AppendableListDataSuccess<D> {
             isLoadEmptyData = appendData.isNullOrEmpty()
             if (appendData.isNullOrEmpty())
                 return this
             val list = mutableListOf<D>()
-            _data?.also { list.addAll(it) }
+            data?.also { list.addAll(it) }
             list.addAll(appendData)
-            _data = list
+            data = list
             return this
         }
     }
 
-    class FAILED(val throwable: Throwable?) : DataState()
+    class Failed(val throwable: Throwable?) : DataState<Nothing>()
 }

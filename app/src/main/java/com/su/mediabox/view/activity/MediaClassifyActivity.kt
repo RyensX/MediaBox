@@ -65,26 +65,26 @@ class MediaClassifyActivity : BasePluginActivity<ActivityMediaClassifyBinding>()
         //分类项数据
         viewModel.classifyItemDataList.observe(this) {
             when (it) {
-                is DataState.INIT -> {
+                is DataState.Init -> {
                     mBinding.mediaClassifyFabProgress.invisible()
                     if (mediaClassify.currentClassifyAction != null)
                         mBinding.mediaClassifyFabProgress.visible()
                 }
-                is DataState.LOADING -> {
+                is DataState.Loading -> {
                     mBinding.apply {
                         mediaClassifyFab.disable()
                         mediaClassifyFabProgress.visible()
                     }
                 }
-                is DataState.SUCCESS<*> -> {
+                is DataState.AppendableListDataSuccess -> {
                     mBinding.apply {
                         mediaClassifyFab.enable()
                         mediaClassifyFabProgress.hide()
                     }
-                    mediaClassify.data = it.getData()
+                    mediaClassify.data = it.data
                     mediaClassify.show(supportFragmentManager)
                 }
-                is DataState.FAILED -> {
+                is DataState.Failed -> {
                     mBinding.apply {
                         mediaClassifyFab.enable()
                         mediaClassifyFabProgress.invisible()
@@ -99,14 +99,14 @@ class MediaClassifyActivity : BasePluginActivity<ActivityMediaClassifyBinding>()
             mBinding.mediaClassifySwipe.finishLoadMore()
 
             when (it) {
-                is DataState.LOADING -> {
+                is DataState.Loading -> {
                     mBinding.mediaClassifySwipe.setEnableLoadMore(false)
                     if (mBinding.mediaClassifyFab.isVisible)
                         mBinding.mediaClassifyFabProgress.visible()
                 }
-                is DataState.SUCCESS<*> -> {
+                is DataState.AppendableListDataSuccess -> {
                     mBinding.mediaClassifyFabProgress.invisible()
-                    val data = it.getData<BaseData>()
+                    val data = it.data
                     if (it.isLoadEmptyData) {
                         getString(R.string.no_more_info).showToast()
                     } else
@@ -116,7 +116,7 @@ class MediaClassifyActivity : BasePluginActivity<ActivityMediaClassifyBinding>()
                             mBinding.mediaClassifySwipe.setEnableLoadMore(true)
                         }
                 }
-                is DataState.FAILED -> {
+                is DataState.Failed -> {
                     mBinding.mediaClassifySwipe.setEnableLoadMore(true)
                     mBinding.mediaClassifyFabProgress.invisible()
                     "加载分类错误：${it.throwable?.message}".showToast()

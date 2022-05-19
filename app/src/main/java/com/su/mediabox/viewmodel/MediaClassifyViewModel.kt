@@ -26,31 +26,31 @@ class MediaClassifyViewModel : ViewModel() {
     private var _currentClassify = MutableLiveData<ClassifyAction>()
     val currentClassify = _currentClassify.toLiveData()
 
-    private val _classifyItemDataList = MutableLiveData<DataState>(DataState.INIT)
+    private val _classifyItemDataList = MutableLiveData<DataState<BaseData>>(DataState.Init)
     val classifyItemDataList = _classifyItemDataList.toLiveData()
 
-    private val _classifyDataList = MutableLiveData<DataState>()
+    private val _classifyDataList = MutableLiveData<DataState<BaseData>>()
     val classifyDataList = _classifyDataList.toLiveData()
 
     private val itemDataDispatcher =
         Dispatchers.IO + CoroutineExceptionHandler { _, throwable ->
-            _classifyItemDataList.postValue(DataState.FAILED(throwable))
+            _classifyItemDataList.postValue(DataState.Failed(throwable))
         }
 
     private val dataDispatcher =
         Dispatchers.IO + CoroutineExceptionHandler { _, throwable ->
-            _classifyDataList.postValue(DataState.FAILED(throwable))
+            _classifyDataList.postValue(DataState.Failed(throwable))
         }
 
     fun getClassifyItemData() {
-        _classifyItemDataList.postValue(DataState.LOADING)
+        _classifyItemDataList.postValue(DataState.Loading)
         viewModelScope.launch(itemDataDispatcher) {
             //获取原始分类项数据
             val rawClassify =
                 //testData()
                 component.getClassifyItemData()
             if (rawClassify.isEmpty()) {
-                _classifyItemDataList.postValue(DataState.FAILED(RuntimeException("分类项为空")))
+                _classifyItemDataList.postValue(DataState.Failed(RuntimeException("分类项为空")))
                 return@launch
             }
             //自动分类
@@ -75,7 +75,8 @@ class MediaClassifyViewModel : ViewModel() {
             }
             //更新
             _classifyItemDataList.postValue(
-                DataState.SUCCESS.getIns<BaseData>(itemDataDispatcher).putData(classify)
+                DataState.AppendableListDataSuccess.getIns<BaseData>(itemDataDispatcher)
+                    .putData(classify)
             )
         }
     }
@@ -83,20 +84,28 @@ class MediaClassifyViewModel : ViewModel() {
     fun getClassifyData(
         classifyAction: ClassifyAction = currentClassify.value ?: ClassifyAction.obtain()
     ) {
-        _classifyDataList.postValue(DataState.LOADING)
+        _classifyDataList.postValue(DataState.Loading)
         viewModelScope.launch(dataDispatcher) {
             _classifyDataList.postValue(
                 if (classifyAction != currentClassify.value) {
                     page = DEFAULT_PAGE
-                    DataState.SUCCESS.getIns<BaseData>(dataDispatcher)
+                    DataState.AppendableListDataSuccess.getIns<BaseData>(dataDispatcher)
                         .putData(component.getClassifyData(classifyAction, page))
                 } else {
-                    DataState.SUCCESS.getIns<BaseData>(dataDispatcher)
+                    DataState.AppendableListDataSuccess.getIns<BaseData>(dataDispatcher)
                         .appendData(component.getClassifyData(classifyAction, page))
                 }
             )
             page++
             _currentClassify.postValue(classifyAction)
         }
+    }
+
+    override fun onCleared() {
+        DataState.AppendableListDataSuccess.apply {
+            destroyIns(itemDataDispatcher)
+            destroyIns(dataDispatcher)
+        }
+        super.onCleared()
     }
 }
