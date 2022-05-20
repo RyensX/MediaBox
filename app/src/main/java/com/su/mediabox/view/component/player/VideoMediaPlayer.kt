@@ -448,7 +448,11 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
                             adapter.notifyItemChanged(pos)
                             //标记当前选集pos
                             adapter.setTag(pos)
+                            //暂停播放
+                            gsyVideoManager.pause()
+                            //开始解析
                             playOperatingProxy?.playVideoMedia(episodeData.url)
+                            //TODO 在解析失败后当前剧集Tag并不会更新
                         }
                     }
                 }

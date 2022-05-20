@@ -13,6 +13,7 @@ import com.shuyu.gsyvideoplayer.player.IjkPlayerManager
 import com.shuyu.gsyvideoplayer.player.PlayerFactory
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils
+import com.shuyu.gsyvideoplayer.video.base.GSYVideoView
 import com.su.mediabox.databinding.ActivityVideoMediaPlayBinding
 import com.su.mediabox.pluginapi.action.PlayAction
 import com.su.mediabox.pluginapi.data.EpisodeData
@@ -75,13 +76,15 @@ class VideoMediaPlayActivity : BasePluginActivity<ActivityVideoMediaPlayBinding>
                             mBinding.vmLoadingLayer.gone()
                             mBinding.vmErrorRetry.gone()
                         }
-                        is DataState.Failed ->
+                        is DataState.Failed -> {
+                            dataState.throwable?.message?.showToast()
                             mBinding.vmLoadingLayer.apply {
                                 forEach {
                                     it.isVisible = it == mBinding.vmErrorRetry
                                 }
                                 visible()
                             }
+                        }
                         else -> Unit
                     }
                 }
@@ -97,6 +100,17 @@ class VideoMediaPlayActivity : BasePluginActivity<ActivityVideoMediaPlayBinding>
             finish()
         }
 
+    }
+
+    override fun onBackPressed() {
+        if (viewModel.currentVideoPlayMedia.value is DataState.Failed && mBinding.vmLoadingLayer.isVisible)
+            when (mBinding.vmPlay.currentState) {
+                //在已有正常播放时解析失败返回则只是关闭解析提示层
+                GSYVideoView.CURRENT_STATE_PLAYING, GSYVideoView.CURRENT_STATE_PAUSE -> mBinding.vmLoadingLayer.gone()
+                else -> super.onBackPressed()
+            }
+        else
+            super.onBackPressed()
     }
 
     override fun getBinding() = ActivityVideoMediaPlayBinding.inflate(layoutInflater)

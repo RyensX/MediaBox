@@ -11,7 +11,7 @@ sealed class DataState<out D> {
     /**
      * 内部data为可append的集合
      */
-    class AppendableListDataSuccess<D> : DataState<D>() {
+    class AppendableListDataSuccess<D> private constructor() : DataState<D>() {
 
         companion object {
 

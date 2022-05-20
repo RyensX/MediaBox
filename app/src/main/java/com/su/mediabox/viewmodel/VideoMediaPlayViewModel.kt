@@ -12,7 +12,6 @@ import com.su.mediabox.util.*
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlin.properties.Delegates
 
 class VideoMediaPlayViewModel : ViewModel() {
 
@@ -22,7 +21,7 @@ class VideoMediaPlayViewModel : ViewModel() {
     lateinit var coverUrl: String
     lateinit var videoName: String
 
-    var currentPlayEpisodeUrl by Delegates.notNull<String>()
+    var currentPlayEpisodeUrl = ""
         private set
 
     private val _currentVideoPlayMedia = MutableLiveData<DataState<VideoPlayMedia>>()
@@ -32,7 +31,7 @@ class VideoMediaPlayViewModel : ViewModel() {
     val currentDanmakuData = _currentDanmakuData.toLiveData()
 
     private val videoPlayMediaDispatcher =
-        Dispatchers.PluginIO + CoroutineExceptionHandler { _, throwable ->
+        Dispatchers.IO + CoroutineExceptionHandler { _, throwable ->
             _currentVideoPlayMedia.postValue(DataState.Failed(throwable))
         }
 
@@ -63,14 +62,12 @@ class VideoMediaPlayViewModel : ViewModel() {
     fun initDanmakuData() {
         when (val dataState = currentVideoPlayMedia.value) {
             is DataState.SingleSuccess -> {
-                _currentVideoPlayMedia.value?.run {
+                dataState.data?.apply {
                     viewModelScope.launch(Dispatchers.PluginIO) {
-                        dataState.data?.apply {
-                            playComponent.getDanmakuData(videoName, title, currentPlayEpisodeUrl)
-                                ?.also {
-                                    _currentDanmakuData.postValue(it)
-                                }
-                        }
+                        playComponent.getDanmakuData(videoName, title, currentPlayEpisodeUrl)
+                            ?.also {
+                                _currentDanmakuData.postValue(it)
+                            }
                     }
                 }
             }
