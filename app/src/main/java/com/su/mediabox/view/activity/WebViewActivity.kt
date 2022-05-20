@@ -14,10 +14,11 @@ import com.su.mediabox.databinding.ActivityWebViewBinding
 import com.su.mediabox.pluginapi.action.WebBrowserAction
 import com.su.mediabox.util.Util.openUrl
 import com.su.mediabox.util.getAction
+import com.su.mediabox.util.viewBind
 
+class WebViewActivity : BasePluginActivity() {
 
-class WebViewActivity : BasePluginActivity<ActivityWebViewBinding>() {
-
+    private val mBinding by viewBind(ActivityWebViewBinding::inflate)
     private lateinit var mainUrl: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,6 +89,4 @@ class WebViewActivity : BasePluginActivity<ActivityWebViewBinding>() {
         }
     }
 
-    override fun getBinding(): ActivityWebViewBinding =
-        ActivityWebViewBinding.inflate(layoutInflater)
 }

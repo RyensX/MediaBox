@@ -22,7 +22,9 @@ import com.su.mediabox.view.listener.dsl.setOnSeekBarChangeListener
 import org.fourthline.cling.model.meta.Device
 import kotlin.collections.HashMap
 
-class DlnaControlActivity : BasePluginActivity<ActivityDlnaControlBinding>() {
+class DlnaControlActivity : BaseActivity() {
+
+    private val mBinding by viewBind(ActivityDlnaControlBinding::inflate)
     private lateinit var layoutDlnaControlActivityLoading: RelativeLayout
     private var mediaServer: MediaServer? = null
     private lateinit var deviceKey: String
@@ -192,9 +194,6 @@ class DlnaControlActivity : BasePluginActivity<ActivityDlnaControlBinding>() {
             )
         }
     }
-
-    override fun getBinding(): ActivityDlnaControlBinding =
-        ActivityDlnaControlBinding.inflate(layoutInflater)
 
     private fun play() {
         layoutDlnaControlActivityLoading.visible()

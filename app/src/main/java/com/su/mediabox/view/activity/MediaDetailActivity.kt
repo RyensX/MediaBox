@@ -21,8 +21,9 @@ import com.su.mediabox.view.adapter.type.dynamicGrid
 import com.su.mediabox.view.adapter.type.initTypeList
 import com.su.mediabox.view.adapter.type.typeAdapter
 
-class MediaDetailActivity : BasePluginActivity<ActivityMediaDetailBinding>() {
+class MediaDetailActivity : BasePluginActivity() {
 
+    private val mBinding by viewBind(ActivityMediaDetailBinding::inflate)
     private val viewModel by viewModels<MediaDetailViewModel>()
     private var isClick = false
 
@@ -100,8 +101,6 @@ class MediaDetailActivity : BasePluginActivity<ActivityMediaDetailBinding>() {
         mBinding.srlDetailActivity.isRefreshing = true
         viewModel.getMediaDetailData()
     }
-
-    override fun getBinding() = ActivityMediaDetailBinding.inflate(layoutInflater)
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onConfigurationChanged(newConfig: Configuration) {

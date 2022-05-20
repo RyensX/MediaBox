@@ -17,10 +17,13 @@ import com.su.mediabox.util.Util
 import com.su.mediabox.util.goActivity
 import com.su.mediabox.util.update.AppUpdateHelper
 import com.su.mediabox.util.update.AppUpdateStatus
+import com.su.mediabox.util.viewBind
 import com.su.mediabox.view.adapter.type.*
 import com.su.mediabox.view.viewcomponents.ItemPluginViewHolder
 
-class StartActivity : BaseActivity<ActivityPluginBinding>() {
+class StartActivity : BaseActivity() {
+
+    private val mBinding by viewBind(ActivityPluginBinding::inflate)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,8 +92,6 @@ class StartActivity : BaseActivity<ActivityPluginBinding>() {
         unregisterReceiver(installBroadcastReceiver)
         super.onDestroy()
     }
-
-    override fun getBinding() = ActivityPluginBinding.inflate(layoutInflater)
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.start_menu, menu)

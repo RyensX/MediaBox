@@ -37,15 +37,20 @@
         android:theme="@style/App.Theme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".view.activity.MainActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.activity.PluginInstallerActivity"
             android:excludeFromRecents="true"
             android:exported="true"
             android:label="插件安装"
             android:launchMode="singleTop"
             android:theme="@style/PluginInstallerStyle">
-            <!--本地安装-->
+
+            <!-- 本地安装 -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data
@@ -55,7 +60,7 @@
                     android:mimeType="*/*"
                     android:scheme="content" />
             </intent-filter>
-            <!--在线安装-->
+            <!-- 在线安装 -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -133,6 +138,7 @@
         <activity
             android:name=".view.activity.BaseActivity"
             android:configChanges="uiMode" />
+
         <service
             android:name=".util.dlna.dmc.DLNACastService"
             android:exported="false" />

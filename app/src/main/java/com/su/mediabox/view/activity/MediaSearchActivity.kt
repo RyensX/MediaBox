@@ -22,7 +22,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class MediaSearchActivity : BasePluginActivity<ActivitySearchBinding>() {
+class MediaSearchActivity : BasePluginActivity() {
 
     companion object {
         private val searchDataViewMapList = DataViewMapList().apply {
@@ -31,6 +31,7 @@ class MediaSearchActivity : BasePluginActivity<ActivitySearchBinding>() {
         }
     }
 
+    private val mBinding by viewBind(ActivitySearchBinding::inflate)
     private val viewModel by viewModels<MediaSearchViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -136,8 +137,6 @@ class MediaSearchActivity : BasePluginActivity<ActivitySearchBinding>() {
             viewModel.getSearchData(it.keyWork)
         }
     }
-
-    override fun getBinding(): ActivitySearchBinding = ActivitySearchBinding.inflate(layoutInflater)
 
     override fun finish() {
         super.finish()

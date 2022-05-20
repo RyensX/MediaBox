@@ -25,12 +25,14 @@ import com.su.mediabox.view.component.player.VideoPositionMemoryDbStore
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
 import tv.danmaku.ijk.media.player.IjkMediaPlayer
 
-class VideoMediaPlayActivity : BasePluginActivity<ActivityVideoMediaPlayBinding>(),
+class VideoMediaPlayActivity : BasePluginActivity(),
     VideoMediaPlayer.PlayOperatingProxy {
 
     companion object {
         var playList: List<EpisodeData>? = null
     }
+
+    private val mBinding by viewBind(ActivityVideoMediaPlayBinding::inflate)
 
     private lateinit var orientationUtils: OrientationUtils
     private val viewModel by viewModels<VideoMediaPlayViewModel>()
@@ -112,8 +114,6 @@ class VideoMediaPlayActivity : BasePluginActivity<ActivityVideoMediaPlayBinding>
         else
             super.onBackPressed()
     }
-
-    override fun getBinding() = ActivityVideoMediaPlayBinding.inflate(layoutInflater)
 
     private fun init() {
         mBinding.vmPlay.run {

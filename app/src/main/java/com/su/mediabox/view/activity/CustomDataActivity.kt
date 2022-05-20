@@ -10,8 +10,11 @@ import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.pluginapi.action.CustomPageAction
 import com.su.mediabox.pluginapi.components.ICustomPageDataComponent
 import com.su.mediabox.util.Util
+import com.su.mediabox.util.viewBind
 
-class CustomDataActivity : PageLoadActivity<ActivityCustomDataBinding>() {
+class CustomDataActivity : PageLoadActivity() {
+
+    private val mBinding by viewBind(ActivityCustomDataBinding::inflate)
 
     override val refreshLayout get() = mBinding.customDataSwipe
     override val dataListView get() = mBinding.customDataList
@@ -69,8 +72,6 @@ class CustomDataActivity : PageLoadActivity<ActivityCustomDataBinding>() {
         }
         return super.onOptionsItemSelected(item)
     }
-
-    override fun getBinding() = ActivityCustomDataBinding.inflate(layoutInflater)
 
     override fun onDestroy() {
         action = null

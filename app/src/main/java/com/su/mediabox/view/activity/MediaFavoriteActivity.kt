@@ -15,11 +15,13 @@ import com.su.mediabox.pluginapi.util.UIUtil.dp
 import com.su.mediabox.util.coil.CoilUtil.loadImage
 import com.su.mediabox.util.setOnClickListener
 import com.su.mediabox.util.setOnLongClickListener
+import com.su.mediabox.util.viewBind
 import com.su.mediabox.viewmodel.MediaFavoriteViewModel
 import com.su.mediabox.view.adapter.type.*
 
-class MediaFavoriteActivity : BasePluginActivity<ActivityFavoriteBinding>() {
+class MediaFavoriteActivity : BasePluginActivity() {
 
+    private val mBinding by viewBind(ActivityFavoriteBinding::inflate)
     private val viewModel by viewModels<MediaFavoriteViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,9 +50,6 @@ class MediaFavoriteActivity : BasePluginActivity<ActivityFavoriteBinding>() {
         }
 
     }
-
-    override fun getBinding(): ActivityFavoriteBinding =
-        ActivityFavoriteBinding.inflate(layoutInflater)
 
     override fun getLoadFailedTipView() = mBinding.layoutFavoriteActivityNoFavorite
 

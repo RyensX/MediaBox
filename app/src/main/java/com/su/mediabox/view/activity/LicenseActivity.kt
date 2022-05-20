@@ -10,9 +10,12 @@ import com.su.mediabox.databinding.ActivityLicenseBinding
 import com.su.mediabox.databinding.ViewComponentLicenseBinding
 import com.su.mediabox.pluginapi.action.WebBrowserAction
 import com.su.mediabox.util.setOnClickListener
+import com.su.mediabox.util.viewBind
 import com.su.mediabox.view.adapter.type.*
 
-class LicenseActivity : BaseActivity<ActivityLicenseBinding>() {
+class LicenseActivity : BaseActivity() {
+
+    private val mBinding by viewBind(ActivityLicenseBinding::inflate)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -149,9 +152,6 @@ class LicenseActivity : BaseActivity<ActivityLicenseBinding>() {
         }
 
     }
-
-    override fun getBinding(): ActivityLicenseBinding =
-        ActivityLicenseBinding.inflate(layoutInflater)
 
     class LicenseViewHolder private constructor(private val binding: ViewComponentLicenseBinding) :
         TypeViewHolder<License>(binding.root) {

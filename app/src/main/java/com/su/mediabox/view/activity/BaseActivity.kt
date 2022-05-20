@@ -17,24 +17,17 @@ import com.su.mediabox.util.logE
 import com.su.mediabox.util.release
 import com.su.mediabox.util.visible
 
-abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
+abstract class BaseActivity : AppCompatActivity() {
 
-    protected lateinit var mBinding: VB
     private lateinit var loadFailedTipView: View
     private lateinit var tvImageTextTip1: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding = getBinding()
-        setContentView(mBinding.root)
-        setColorStatusBar(window, ContextCompat.getColor(App.context, R.color.main_color_2_skin))
-
         release {
             LaunchManager.onTraceApp(application, LaunchManager.APP_ON_CREATE, false)
         }
     }
-
-    protected abstract fun getBinding(): VB
 
     override fun onStart() {
         super.onStart()

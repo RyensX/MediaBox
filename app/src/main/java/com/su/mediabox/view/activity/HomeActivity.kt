@@ -14,7 +14,9 @@ import com.su.mediabox.util.*
 import com.su.mediabox.viewmodel.PageLoadViewModel
 import com.su.mediabox.view.adapter.type.typeAdapter
 
-class HomeActivity : PageLoadActivity<ActivityHomeBinding>(), View.OnClickListener {
+class HomeActivity : PageLoadActivity(), View.OnClickListener {
+
+    private val mBinding by viewBind(ActivityHomeBinding::inflate)
 
     private val dataComponent by lazyAcquireComponent<IHomePageDataComponent>()
 
@@ -84,7 +86,5 @@ class HomeActivity : PageLoadActivity<ActivityHomeBinding>(), View.OnClickListen
     }
 
     override suspend fun load(page: Int): List<BaseData>? = dataComponent.getData(page)
-
-    override fun getBinding() = ActivityHomeBinding.inflate(layoutInflater)
 
 }

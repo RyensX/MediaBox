@@ -14,7 +14,7 @@ import com.su.mediabox.view.adapter.type.dynamicGrid
 import com.su.mediabox.view.adapter.type.initTypeList
 import com.su.mediabox.view.adapter.type.submitList
 
-class PluginInstallerActivity : AppCompatActivity(), View.OnClickListener {
+class PluginInstallerActivity : BaseActivity(), View.OnClickListener {
 
     private val viewModel by viewModels<PluginInstallerViewModel>()
     private lateinit var mBinding: ActivityPluginInstallerBinding

@@ -14,8 +14,9 @@ import com.su.mediabox.view.adapter.type.initTypeList
 import com.su.mediabox.view.adapter.type.typeAdapter
 import com.su.mediabox.view.fragment.MediaClassifyBottomSheetDialogFragment
 
-class MediaClassifyActivity : BasePluginActivity<ActivityMediaClassifyBinding>() {
+class MediaClassifyActivity : BasePluginActivity() {
 
+    private val mBinding by viewBind(ActivityMediaClassifyBinding::inflate)
     private val viewModel by viewModels<MediaClassifyViewModel>()
     private val mediaClassify = MediaClassifyBottomSheetDialogFragment()
 
@@ -130,7 +131,5 @@ class MediaClassifyActivity : BasePluginActivity<ActivityMediaClassifyBinding>()
             viewModel.getClassifyData(it)
         } ?: viewModel.getClassifyItemData()
     }
-
-    override fun getBinding() = ActivityMediaClassifyBinding.inflate(layoutInflater)
 
 }

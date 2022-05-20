@@ -11,10 +11,13 @@ import com.su.mediabox.bean.MediaHistory
 import com.su.mediabox.databinding.ActivityHistoryBinding
 import com.su.mediabox.util.Util.getResColor
 import com.su.mediabox.util.Util.getResDrawable
+import com.su.mediabox.util.viewBind
 import com.su.mediabox.viewmodel.HistoryViewModel
 
 @Deprecated("需要重新实现")
-class HistoryActivity : BasePluginActivity<ActivityHistoryBinding>() {
+class HistoryActivity : BasePluginActivity() {
+
+    private val mBinding by viewBind(ActivityHistoryBinding::inflate)
     private lateinit var viewModel: HistoryViewModel
     // private lateinit var adapter: HistoryAdapter
 
@@ -75,9 +78,6 @@ class HistoryActivity : BasePluginActivity<ActivityHistoryBinding>() {
             }
         }
     }
-
-    override fun getBinding(): ActivityHistoryBinding =
-        ActivityHistoryBinding.inflate(layoutInflater)
 
     override fun onResume() {
         super.onResume()

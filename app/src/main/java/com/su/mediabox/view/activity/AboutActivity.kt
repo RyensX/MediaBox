@@ -12,10 +12,13 @@ import com.su.mediabox.util.Util
 import com.su.mediabox.util.Util.getAppVersionCode
 import com.su.mediabox.util.Util.getAppVersionName
 import com.su.mediabox.util.Util.openBrowser
+import com.su.mediabox.util.viewBind
 import com.su.mediabox.util.visible
 import java.util.*
 
-class AboutActivity : BaseActivity<ActivityAboutBinding>() {
+class AboutActivity : BaseActivity() {
+
+    private val mBinding by viewBind(ActivityAboutBinding::inflate)
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -106,5 +109,4 @@ class AboutActivity : BaseActivity<ActivityAboutBinding>() {
         }
     }
 
-    override fun getBinding(): ActivityAboutBinding = ActivityAboutBinding.inflate(layoutInflater)
 }

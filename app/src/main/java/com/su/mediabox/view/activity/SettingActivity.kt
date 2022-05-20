@@ -17,12 +17,15 @@ import com.su.mediabox.util.gone
 import com.su.mediabox.util.showToast
 import com.su.mediabox.util.update.AppUpdateHelper
 import com.su.mediabox.util.update.AppUpdateStatus
+import com.su.mediabox.util.viewBind
 import com.su.mediabox.util.visible
 import com.su.mediabox.viewmodel.SettingViewModel
 import kotlinx.coroutines.*
 
 @Deprecated("需要重新设计")
-class SettingActivity : BaseActivity<ActivitySettingBinding>() {
+class SettingActivity : BaseActivity() {
+
+    private val mBinding by viewBind(ActivitySettingBinding::inflate)
     private val viewModel: SettingViewModel by lazy(LazyThreadSafetyMode.NONE) { ViewModelProvider(this).get(SettingViewModel::class.java) }
     private var selfUpdateCheck = false
 
@@ -153,6 +156,4 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
 
     }
 
-    override fun getBinding(): ActivitySettingBinding =
-        ActivitySettingBinding.inflate(layoutInflater)
 }

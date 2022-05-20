@@ -14,14 +14,16 @@ import com.su.mediabox.util.dlna.Utils.isLocalMediaAddress
 import com.su.mediabox.util.dlna.dmc.DLNACastManager
 import com.su.mediabox.util.goActivity
 import com.su.mediabox.util.setOnClickListener
+import com.su.mediabox.util.viewBind
 import com.su.mediabox.view.adapter.type.*
 import com.su.mediabox.viewmodel.UpnpViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.fourthline.cling.model.meta.Device
 
-class DlnaActivity : BasePluginActivity<ActivityDlnaBinding>() {
+class DlnaActivity : BaseActivity() {
 
+    private val mBinding by viewBind(ActivityDlnaBinding::inflate)
     private val viewModel by viewModels<UpnpViewModel>()
     lateinit var title: String
     lateinit var url: String
@@ -63,8 +65,6 @@ class DlnaActivity : BasePluginActivity<ActivityDlnaBinding>() {
         DLNACastManager.instance.bindCastService(this)
         super.onStop()
     }
-
-    override fun getBinding(): ActivityDlnaBinding = ActivityDlnaBinding.inflate(layoutInflater)
 
     class DlnaViewHolder private constructor(private val binding: ItemDlnaDevice1Binding) :
         TypeViewHolder<Device<*, *, *>>(binding.root) {

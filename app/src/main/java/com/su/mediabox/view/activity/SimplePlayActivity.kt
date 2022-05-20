@@ -15,6 +15,7 @@ import com.su.mediabox.databinding.ActivitySimplePlayBinding
 import com.su.mediabox.util.Util.setFullScreen
 import com.su.mediabox.util.gone
 import com.su.mediabox.util.toMD5
+import com.su.mediabox.util.viewBind
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
@@ -22,7 +23,7 @@ import tv.danmaku.ijk.media.player.IjkMediaPlayer
 import java.io.File
 
 @Deprecated("在新播放器完善后弃用", replaceWith = ReplaceWith("VideoMediaDanmakuPlayer"))
-class SimplePlayActivity : BasePluginActivity<ActivitySimplePlayBinding>() {
+class SimplePlayActivity : BasePluginActivity() {
     private var url = ""
     private var title = ""
     private lateinit var orientationUtils: OrientationUtils
@@ -31,6 +32,8 @@ class SimplePlayActivity : BasePluginActivity<ActivitySimplePlayBinding>() {
         val URL = this::class.java.name + "url"
         val TITLE = this::class.java.name + "title"
     }
+
+    private val mBinding by viewBind(ActivitySimplePlayBinding::inflate)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,9 +75,6 @@ class SimplePlayActivity : BasePluginActivity<ActivitySimplePlayBinding>() {
             VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "enable-accurate-seek", 1)
         GSYVideoManager.instance().optionModelList = listOf(videoOptionModel)
     }
-
-    override fun getBinding(): ActivitySimplePlayBinding =
-        ActivitySimplePlayBinding.inflate(layoutInflater)
 
     private fun init() {
         mBinding.avpSimplePlayActivity.run {

@@ -11,6 +11,7 @@ import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.pluginapi.data.SimpleTextData
 import com.su.mediabox.pluginapi.util.UIUtil.dp
 import com.su.mediabox.util.Util
+import com.su.mediabox.util.viewBind
 import com.su.mediabox.viewmodel.PageLoadViewModel
 import com.su.mediabox.view.adapter.type.DataViewMapList
 import com.su.mediabox.view.adapter.type.initTypeList
@@ -19,7 +20,9 @@ import com.su.mediabox.view.adapter.type.registerDataViewMap
 import com.su.mediabox.view.viewcomponents.PreviewPluginInfoViewHolder
 import com.su.mediabox.view.viewcomponents.SimpleTextViewHolder
 
-class PluginRepositoryActivity : PageLoadActivity<ActivityCustomDataBinding>() {
+class PluginRepositoryActivity : PageLoadActivity() {
+
+    private val mBinding by viewBind(ActivityCustomDataBinding::inflate)
 
     override val refreshLayout get() = mBinding.customDataSwipe
     override val dataListView get() = mBinding.customDataList
@@ -48,8 +51,6 @@ class PluginRepositoryActivity : PageLoadActivity<ActivityCustomDataBinding>() {
                 ) { }
         }
     }
-
-    override fun getBinding() = ActivityCustomDataBinding.inflate(layoutInflater)
 
     //TODO 待重新实现进而分离出Activity
     //混合本地插件信息分类为 已安装/可更新/可下载

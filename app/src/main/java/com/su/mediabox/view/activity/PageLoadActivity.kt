@@ -5,7 +5,6 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.CallSuper
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewbinding.ViewBinding
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import com.su.mediabox.R
 import com.su.mediabox.util.showToast
@@ -14,7 +13,7 @@ import com.su.mediabox.view.adapter.type.dynamicGrid
 import com.su.mediabox.view.adapter.type.initTypeList
 import com.su.mediabox.view.adapter.type.typeAdapter
 
-abstract class PageLoadActivity<VB : ViewBinding> : BasePluginActivity<VB>(),
+abstract class PageLoadActivity : BasePluginActivity(),
     PageLoadViewModel.LoadData {
 
     protected val pageLoadViewModel by viewModels<PageLoadViewModel>()
