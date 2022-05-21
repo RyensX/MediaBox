@@ -9,6 +9,8 @@ import android.view.ViewStub
 import android.view.animation.AlphaAnimation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlin.math.absoluteValue
 
 fun View.enable() {
@@ -139,8 +141,8 @@ fun <T : RecyclerView.ItemDecoration> RecyclerView.removeItemDecorations(target:
             //由于没有列表引用不能使用迭代器且重测重绘方法不公开所以只能递归删除了
             removeItemDecorations(target)
             break
-        }else
-            logD("尝试删除","$i")
+        } else
+            logD("尝试删除", "$i")
 }
 
 /**
@@ -155,4 +157,30 @@ inline fun <reified T : RecyclerView.ItemDecoration> RecyclerView.getFirstItemDe
             return itemDecoration as T
     }
     return null
+}
+
+/**
+ * 把VP2和BottomNavigationView绑定
+ */
+fun ViewPager2.bindBottomNavigationView(bottomBav: BottomNavigationView) {
+    //索引-ID映射
+    val idMap = mutableListOf<Int>()
+    for (i in 0 until bottomBav.menu.size())
+        idMap.add(bottomBav.menu.getItem(i).itemId)
+    //绑定页面滑动
+    registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+        override fun onPageSelected(position: Int) {
+            super.onPageSelected(position)
+            if (position < idMap.size)
+                bottomBav.selectedItemId = idMap[position]
+        }
+    })
+    //绑定底栏切换
+    bottomBav.setOnNavigationItemSelectedListener { item ->
+        idMap.indexOf(item.itemId).also {
+            if (it != -1)
+                currentItem = it
+        }
+        true
+    }
 }

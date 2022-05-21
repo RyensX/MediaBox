@@ -177,8 +177,9 @@ dependencies {
     implementation deps.jakewharton.disklrucache
     implementation deps.google.flexbox
     implementation deps.cretin.etv
-    implementation deps.pref.kotpref
     implementation deps.apache.commons_text
+    implementation deps.settings.pref
+    implementation deps.settings.data_store
     implementation project(':MediaBoxPluginApi')
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
 }

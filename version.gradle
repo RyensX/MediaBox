@@ -15,6 +15,11 @@ kotlin.kotlin_stdlib = "org.jetbrains.kotlin:kotlin-stdlib:1.6.10"
 kotlin.core_ktx = "androidx.core:core-ktx:1.6.0"
 deps.kotlin = kotlin
 
+def settings = [:]
+settings.pref = "androidx.preference:preference-ktx:1.1.1"
+settings.data_store = "androidx.datastore:datastore-preferences:1.0.0"
+deps.settings = settings
+
 def kotlinx = [:]
 kotlinx.kotlinx_coroutines_android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.1"
 deps.kotlinx = kotlinx
@@ -125,9 +130,5 @@ deps.jakewharton = jakewharton
 def cretin = [:]
 cretin.etv = "com.github.MZCretin:ExpandableTextView:v1.6.1-x"
 deps.cretin = cretin
-
-def pref = [:]
-pref.kotpref = "com.chibatching.kotpref:kotpref:2.13.1"
-deps.pref = pref
 
 ext.deps = deps

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_plugin_repo_submit"
+        android:icon="@drawable/ic_github"
+        android:title="@string/menu_plugin_repo_submit" />
+
+</menu>

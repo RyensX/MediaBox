@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="App.Theme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/main_color_skin</item>
+        <item name="colorPrimary">@color/main_color_2_skin</item>
         <item name="colorPrimaryVariant">@color/foreground_main_color_2_skin</item>
         <item name="colorOnPrimary">@color/foreground_white_skin</item>
         <!-- Secondary brand color. -->

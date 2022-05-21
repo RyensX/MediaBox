@@ -4,10 +4,7 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.activity.ComponentActivity
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
-import com.su.mediabox.Pref
 import com.su.mediabox.R
 import com.su.mediabox.bean.MediaHistory
 import com.su.mediabox.config.Const
@@ -36,7 +33,8 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
     var episodeDataList: List<EpisodeData>? = null
     private val coroutineScope by lazy(LazyThreadSafetyMode.NONE) { itemView.viewLifeCycleCoroutineScope }
     private var lastEpisodeIndex: Int? = null
-    private val isShowHistory = Pref.videoPlayListShowHistory
+    //TODO 接入设置
+    private val isShowHistory = true
 
     constructor(parent: ViewGroup) : this(
         ItemHorizontalRecyclerView1Binding.inflate(

@@ -38,7 +38,13 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".view.activity.MainActivity"
-            android:exported="false" />
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".view.activity.PluginInstallerActivity"
             android:excludeFromRecents="true"
@@ -76,15 +82,6 @@
         <activity
             android:name=".view.activity.HomeActivity"
             android:exported="false" />
-        <activity
-            android:name=".view.activity.StartActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <activity android:name=".view.activity.NoticeActivity" />
         <activity
             android:name=".view.activity.WebViewActivity"
@@ -100,9 +97,6 @@
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
             android:name=".view.activity.MediaFavoriteActivity"
-            android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
-        <activity
-            android:name=".view.activity.PluginRepositoryActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
             android:name=".view.activity.DlnaControlActivity"

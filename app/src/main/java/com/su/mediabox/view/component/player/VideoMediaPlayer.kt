@@ -25,12 +25,14 @@ import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoView
 import com.su.mediabox.App
+import com.su.mediabox.Pref
 import com.su.mediabox.R
 import com.su.mediabox.config.Const
 import com.su.mediabox.databinding.ItemPlayEpisodeBinding
 import com.su.mediabox.databinding.ItemPlayerSpeedBinding
 import com.su.mediabox.pluginapi.data.EpisodeData
 import com.su.mediabox.pluginapi.util.UIUtil.dp
+import com.su.mediabox.saveData
 import com.su.mediabox.util.*
 import com.su.mediabox.util.Util.getResDrawable
 import com.su.mediabox.util.Util.getScreenBrightness
@@ -282,7 +284,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
         mReverseValue = rgReverse?.getChildAt(0)?.id
         rgReverse?.children?.forEach {
             (it as RadioButton).apply {
-                setOnCheckedChangeListener { buttonView, isChecked ->
+                setOnCheckedChangeListener { _, isChecked ->
                     if (!isChecked) return@setOnCheckedChangeListener
                     mReverseValue = id
                     when (id) {
@@ -295,11 +297,11 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
         }
 
         //全屏时的底部进度条
-        context?.sharedPreferences()?.getBoolean(Const.Setting.SHOW_PLAY_BOTTOM_BAR, true)?.also {
+        Pref.isShowPlayerBottomProgressBar.value?.also {
             cbBottomProgress?.isChecked = it
             updateBottomProgressBar(it)
         }
-        cbBottomProgress?.setOnCheckedChangeListener { buttonView, isChecked ->
+        cbBottomProgress?.setOnCheckedChangeListener { _, isChecked ->
             updateBottomProgressBar(isChecked)
         }
 
@@ -839,11 +841,10 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
         }
     }
 
-    fun updateBottomProgressBar(isChecked: Boolean) {
+    private fun updateBottomProgressBar(isChecked: Boolean) {
         playBottomProgress?.isVisible = isChecked
-        context?.sharedPreferences()?.editor {
-            putBoolean(Const.Setting.SHOW_PLAY_BOTTOM_BAR, isChecked)
-        }
+        playPositionMemoryStoreCoroutineScope
+            .saveData(Const.Setting.SHOW_PLAY_BOTTOM_BAR, isChecked)
         mBottomProgressBar = if (isChecked) playBottomProgress else null
     }
 

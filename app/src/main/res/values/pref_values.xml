@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="net_category_title">网络</string>
+    <string name="net_proxy_title">仓库代理</string>
+    <string name="net_proxy_summary">在访问插件仓库时使用代理</string>
+    <string name="player_category_title">播放</string>
+    <string name="player_bottom_progress_title">底部进度条</string>
+    <string name="player_bottom_progress_summary">在播放视频时底部显示进度条</string>
+    <string name="player_default_core_title">默认播放内核</string>
+    <string name="player_default_core_summary">播放器在Action没有主动设置内核时使用的内核</string>
+    <string name="about_category_title">关于</string>
+    <string name="version_title">%s(%d) %s</string>
+    <string name="version_summary">点击检查更新</string>
+    <string name="open_source_title">项目地址</string>
+    <string name="open_source_licenses_summary">共%d个许可证，点击查看</string>
+    <string name="open_source_star">Star以支持开发</string>
+    <string name="open_source_watch">Watch关注开发进度</string>
+</resources>
