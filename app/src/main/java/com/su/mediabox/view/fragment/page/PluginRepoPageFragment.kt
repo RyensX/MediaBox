@@ -75,6 +75,11 @@ class PluginRepoPageFragment : BaseFragment<PagePluginRepoBinding>(),
 
         if (pageLoadViewModel.loadState.value !is PageLoadViewModel.LoadState.SUCCESS)
             pageLoadViewModel.reLoadData()
+
+        PluginManager.pluginLiveData.observe(this) {
+            if (pageLoadViewModel.loadState.value !is PageLoadViewModel.LoadState.LOADING)
+                pageLoadViewModel.reLoadData()
+        }
     }
 
 

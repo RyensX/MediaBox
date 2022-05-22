@@ -19,6 +19,7 @@ import com.su.mediabox.pluginapi.Constant
 import com.su.mediabox.pluginapi.IPluginFactory
 import com.su.mediabox.pluginapi.components.IBasePageDataComponent
 import com.su.mediabox.util.*
+import com.su.mediabox.util.Text.githubProxy
 import com.su.mediabox.util.Util.getSignatures
 import com.su.mediabox.view.adapter.type.TypeAdapter
 import dalvik.system.PathClassLoader
@@ -167,7 +168,7 @@ object PluginManager {
         val downloadManager =
             App.context.getSystemService(AppCompatActivity.DOWNLOAD_SERVICE) as DownloadManager
         val uri: Uri = Uri
-            .parse(pluginInfo.sourcePath)
+            .parse(pluginInfo.sourcePath.githubProxy)
         val request = DownloadManager.Request(uri).apply {
             val fileName = "${pluginInfo.name}_${pluginInfo.packageName}_${pluginInfo.version}.mpp"
             if (directInstall) {

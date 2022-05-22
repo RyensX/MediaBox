@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="net_category_title">网络</string>
-    <string name="net_proxy_title">仓库代理</string>
-    <string name="net_proxy_summary">在访问插件仓库时使用代理</string>
+    <string name="net_proxy_title">Github代理</string>
+    <string name="net_proxy_summary">访问插件仓库和更新时GhProxy代理</string>
     <string name="player_category_title">播放</string>
     <string name="player_bottom_progress_title">底部进度条</string>
     <string name="player_bottom_progress_summary">在播放视频时底部显示进度条</string>

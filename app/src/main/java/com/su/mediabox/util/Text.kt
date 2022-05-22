@@ -1,5 +1,7 @@
 package com.su.mediabox.util
 
+import com.su.mediabox.Pref
+
 object Text {
     /**
      * 屏蔽带有某些关键字的弹幕
@@ -23,4 +25,9 @@ object Text {
      * 如果此CharSequence包含指定的其他多个字符序列中的任意一个作为子字符串，则返回true 。
      */
     fun CharSequence.containStrs(vararg strs: CharSequence) = strs.find { contains(it) } != null
+
+    /**
+     * Github代理
+     */
+    val String.githubProxy: String get() = if (contains("github") && Pref.isProxyPluginRepo.value) "https://ghproxy.com/$this" else this
 }
