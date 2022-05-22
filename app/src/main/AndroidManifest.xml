@@ -111,9 +111,6 @@
             android:name=".view.activity.LicenseActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
-            android:name=".view.activity.AboutActivity"
-            android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
-        <activity
             android:name=".view.activity.SettingActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity

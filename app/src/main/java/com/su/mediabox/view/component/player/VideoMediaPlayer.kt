@@ -297,7 +297,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
         }
 
         //全屏时的底部进度条
-        Pref.isShowPlayerBottomProgressBar.value?.also {
+        Pref.isShowPlayerBottomProgressBar.value.also {
             cbBottomProgress?.isChecked = it
             updateBottomProgressBar(it)
         }
@@ -843,8 +843,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
 
     private fun updateBottomProgressBar(isChecked: Boolean) {
         playBottomProgress?.isVisible = isChecked
-        playPositionMemoryStoreCoroutineScope
-            .saveData(Const.Setting.SHOW_PLAY_BOTTOM_BAR, isChecked)
+        Pref.isShowPlayerBottomProgressBar.saveData(isChecked)
         mBottomProgressBar = if (isChecked) playBottomProgress else null
     }
 

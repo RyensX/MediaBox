@@ -1,10 +1,17 @@
 package com.su.mediabox.view.fragment.page
 
 import android.os.Bundle
+import android.text.Html
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import com.afollestad.materialdialogs.MaterialDialog
 import com.su.mediabox.*
 import com.su.mediabox.config.Const
 import com.su.mediabox.util.*
@@ -12,9 +19,15 @@ import com.su.mediabox.util.update.AppUpdateHelper
 import com.su.mediabox.util.update.AppUpdateStatus
 import com.su.mediabox.view.activity.LicenseActivity
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreferenceClickListener {
+
+    override fun onResume() {
+        super.onResume()
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         preferenceManager.preferenceDataStore = DataStorePreference(fragment = this)
@@ -29,8 +42,6 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
                     setIcon(R.drawable.ic_language_main_color_2_24_skin)
                     titleRes(R.string.net_proxy_title)
                     summaryRes(R.string.net_proxy_summary)
-                    //TODO
-                    isEnabled = false
                 }
             }
 
@@ -43,7 +54,7 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
                     titleRes(R.string.player_bottom_progress_title)
                     summaryRes(R.string.player_bottom_progress_summary)
 
-                    Pref.isShowPlayerBottomProgressBar.observe(this@SettingsPageFragment) {
+                    lifecycleCollect(Pref.isShowPlayerBottomProgressBar){
                         isChecked = it
                     }
                 }
@@ -109,14 +120,37 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
                 }
 
                 preference {
+                    titleRes(R.string.user_notice)
+                    summaryRes(R.string.user_notice_summary)
+                    setOnPreferenceClickListener {
+                        MaterialDialog(requireContext()).show {
+                            title(res = R.string.user_notice)
+                            message(text = Html.fromHtml(Util.getUserNoticeContent()))
+                            cancelable(false)
+                            positiveButton(res = R.string.ok) {
+                                Util.setReadUserNoticeVersion(Const.Common.USER_NOTICE_VERSION)
+                            }
+                        }
+                        true
+                    }
+                }
+            }
+
+            preferenceCategory {
+
+                titleRes(R.string.support_title)
+
+                preference {
                     setIcon(R.drawable.ic_github_star)
-                    titleRes(R.string.open_source_star)
+                    title = "Star"
+                    summaryRes(R.string.open_source_star)
                     onPreferenceClickListener = this@SettingsPageFragment
                 }
 
                 preference {
                     setIcon(R.drawable.ic_baseline_eye_24)
-                    titleRes(R.string.open_source_watch)
+                    title = "Watch"
+                    summaryRes(R.string.open_source_watch)
                     onPreferenceClickListener = this@SettingsPageFragment
                 }
             }
@@ -126,5 +160,23 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
     override fun onPreferenceClick(preference: Preference?): Boolean {
         Util.openBrowser(Const.Common.GITHUB_URL)
         return true
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        menu.add("").apply {
+            setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+            setIcon(R.drawable.ic_info_white_24)
+        }
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        MaterialDialog(requireContext()).show {
+            title(res = R.string.attention)
+            message(res = R.string.statement)
+            positiveButton(text = "Star") { Util.openBrowser(Const.Common.GITHUB_URL) }
+            negativeButton(res = R.string.cancel) { dismiss() }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

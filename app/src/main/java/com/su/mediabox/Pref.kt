@@ -1,6 +1,8 @@
 package com.su.mediabox
 
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
@@ -9,10 +11,13 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceDataStore
 import com.su.mediabox.config.Const
+import com.su.mediabox.util.JavaBoxClass
+import com.su.mediabox.util.getRawClass
+import com.su.mediabox.util.logD
+import com.su.mediabox.util.unsafeLazy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.lang.RuntimeException
@@ -44,18 +49,21 @@ class DataStorePreference(
 
 val Context.appDataStore: DataStore<Preferences> by preferencesDataStore(name = "${App.context.packageName}_pref")
 
-val keyMap: MutableMap<String, Preferences.Key<*>> by lazy { mutableMapOf() }
+private val keyMap: MutableMap<String, Preferences.Key<*>> by lazy { mutableMapOf() }
 
 @Suppress("UNCHECKED_CAST")
-inline fun <reified T> key(key: String): Preferences.Key<T> =
-    (keyMap[key] ?: when (T::class) {
-        Int::class -> intPreferencesKey(key)
-        Long::class -> longPreferencesKey(key)
-        Float::class -> floatPreferencesKey(key)
-        Double::class -> doublePreferencesKey(key)
-        String::class -> stringPreferencesKey(key)
-        Boolean::class -> booleanPreferencesKey(key)
-        else -> throw RuntimeException("不支持的类型")
+inline fun <reified T> key(key: String): Preferences.Key<T> = key(key, T::class.java)
+
+@Suppress("UNCHECKED_CAST")
+fun <T> key(key: String, typeClass: Class<T>): Preferences.Key<T> =
+    (keyMap[key] ?: when (typeClass) {
+        JavaBoxClass.Integer, Int::class.java -> intPreferencesKey(key)
+        JavaBoxClass.Long, Long::class.java -> longPreferencesKey(key)
+        JavaBoxClass.Float, Float::class.java -> floatPreferencesKey(key)
+        JavaBoxClass.Double, Double::class.java -> doublePreferencesKey(key)
+        String::class.java -> stringPreferencesKey(key)
+        JavaBoxClass.Boolean, Boolean::class.java -> booleanPreferencesKey(key)
+        else -> throw RuntimeException("不支持的类型：${typeClass.name}")
     }.also { keyMap[key] = it }) as Preferences.Key<T>
 
 inline fun <reified T> CoroutineScope.saveData(key: String, value: T) {
@@ -76,19 +84,42 @@ fun CoroutineScope.updateData(transform: suspend Preferences.() -> Unit) {
     }
 }
 
-inline fun <reified T> keyFlow(key: String, defaultValue: T) = App.context.appDataStore.data
+private val prefDataStoreCoroutineScope = CoroutineScope(Dispatchers.IO)
+
+inline fun <reified T> keyFlow(key: String, defaultValue: T) = App.context
+    .appDataStore.data
     .map {
         it[key(key)] ?: defaultValue
     }
 
-private inline fun <reified T> lazyKeyLiveData(key: String, defaultValue: T) =
-    lazy(LazyThreadSafetyMode.NONE) {
-        keyFlow(key, defaultValue).asLiveData().apply {
-            //一直保持激活方便外部直接读取值
-            observeForever {}
+class DataStoreStateFlowWrapper<T>(key: String, private val targetStateFlow: StateFlow<T>) :
+    StateFlow<T> by targetStateFlow {
+
+    @Suppress("UNCHECKED_CAST")
+    val key by unsafeLazy {
+        key(key, value.getRawClass() as Class<T>).also {
+            logD("获取key", it.toString())
         }
     }
 
+    fun saveData(value: T) = prefDataStoreCoroutineScope.launch(Dispatchers.IO) {
+        App.context.appDataStore.edit {
+            it[key] = value
+        }
+    }
+}
+
+private inline fun <reified T> lazyDataStoreStateFlow(key: String, defaultValue: T) = unsafeLazy {
+    runBlocking {
+        DataStoreStateFlowWrapper(
+            key, keyFlow(key, defaultValue).stateIn(prefDataStoreCoroutineScope)
+        )
+    }
+}
+
 object Pref {
-    val isShowPlayerBottomProgressBar by lazyKeyLiveData(Const.Setting.SHOW_PLAY_BOTTOM_BAR, false)
+    val isProxyPluginRepo by lazyDataStoreStateFlow(Const.Setting.NET_REPO_PROXY, true)
+    val isShowPlayerBottomProgressBar by lazyDataStoreStateFlow(
+        Const.Setting.SHOW_PLAY_BOTTOM_BAR, false
+    )
 }
