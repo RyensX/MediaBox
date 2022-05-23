@@ -70,7 +70,7 @@ class VideoMediaPlayActivity : BasePluginActivity(),
                                 }
                                 visible()
                             }
-                        is DataState.SingleSuccess -> dataState.data?.also {
+                        is DataState.Success -> dataState.data?.also {
                             mBinding.vmPlay.playVideo(
                                 it.videoPlayUrl,
                                 it.title, viewModel.videoName

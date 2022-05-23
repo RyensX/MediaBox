@@ -46,7 +46,7 @@ class VideoMediaPlayViewModel : ViewModel() {
                     if (it.videoPlayUrl.isBlank())
                         throw RuntimeException("无法解析出有效播放链接")
                     // VideoPlayMedia("测试","file:///storage/emulated/0/Android/data/com.su.mediabox.debug/files/DownloadAnime/萌萌侵略者/GEfErSXSJIsA.mp4").also {
-                    _currentVideoPlayMedia.postValue(DataState.SingleSuccess(it))
+                    _currentVideoPlayMedia.postValue(DataState.Success(it))
                     //记录历史
                     viewModelScope.apply {
                         updateFavoriteData(detailPartUrl, episodeUrl, it.title)
@@ -61,7 +61,7 @@ class VideoMediaPlayViewModel : ViewModel() {
 
     fun initDanmakuData() {
         when (val dataState = currentVideoPlayMedia.value) {
-            is DataState.SingleSuccess -> {
+            is DataState.Success -> {
                 dataState.data?.apply {
                     viewModelScope.launch(Dispatchers.PluginIO) {
                         playComponent.getDanmakuData(videoName, title, currentPlayEpisodeUrl)

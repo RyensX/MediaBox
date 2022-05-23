@@ -7,15 +7,16 @@ import com.su.mediabox.pluginapi.action.ClassifyAction
 import com.su.mediabox.pluginapi.data.BaseData
 import com.su.mediabox.pluginapi.data.ClassifyItemData
 import com.su.mediabox.pluginapi.components.IMediaClassifyPageDataComponent
-import com.su.mediabox.util.PluginIO
-import com.su.mediabox.util.toLiveData
 import com.su.mediabox.view.fragment.MediaClassifyBottomSheetDialogFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import com.su.mediabox.config.Const.ViewComponent.DEFAULT_PAGE
-import com.su.mediabox.util.DataState
-import com.su.mediabox.util.lazyAcquireComponent
+import com.su.mediabox.util.*
+import com.su.mediabox.util.DataState.Success.Companion.destroySuccessIns
+import com.su.mediabox.util.DataState.Success.Companion.successIns
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 class MediaClassifyViewModel : ViewModel() {
 
@@ -26,31 +27,36 @@ class MediaClassifyViewModel : ViewModel() {
     private var _currentClassify = MutableLiveData<ClassifyAction>()
     val currentClassify = _currentClassify.toLiveData()
 
-    private val _classifyItemDataList = MutableLiveData<DataState<BaseData>>(DataState.Init)
-    val classifyItemDataList = _classifyItemDataList.toLiveData()
 
-    private val _classifyDataList = MutableLiveData<DataState<BaseData>>()
-    val classifyDataList = _classifyDataList.toLiveData()
+    private val _classifyItemDataList =
+        MutableStateFlow<DataState<MutableDynamicReferenceListData<BaseData>>>(DataState.Init)
+    val classifyItemDataList: StateFlow<DataState<DynamicReferenceListData<BaseData>>> =
+        _classifyItemDataList
+
+    private val _classifyDataList =
+        MutableStateFlow<DataState<MutableDynamicReferenceListData<BaseData>>>(DataState.Init)
+    val classifyDataList: StateFlow<DataState<DynamicReferenceListData<BaseData>>> =
+        _classifyDataList
 
     private val itemDataDispatcher =
         Dispatchers.IO + CoroutineExceptionHandler { _, throwable ->
-            _classifyItemDataList.postValue(DataState.Failed(throwable))
+            _classifyItemDataList.value = DataState.Failed(throwable)
         }
 
     private val dataDispatcher =
         Dispatchers.IO + CoroutineExceptionHandler { _, throwable ->
-            _classifyDataList.postValue(DataState.Failed(throwable))
+            _classifyDataList.value = DataState.Failed(throwable)
         }
 
     fun getClassifyItemData() {
-        _classifyItemDataList.postValue(DataState.Loading)
+        _classifyItemDataList.value = DataState.Loading
         viewModelScope.launch(itemDataDispatcher) {
             //获取原始分类项数据
             val rawClassify =
                 //testData()
                 component.getClassifyItemData()
             if (rawClassify.isEmpty()) {
-                _classifyItemDataList.postValue(DataState.Failed(RuntimeException("分类项为空")))
+                _classifyItemDataList.value = DataState.Failed(RuntimeException("分类项为空"))
                 return@launch
             }
             //自动分类
@@ -74,38 +80,44 @@ class MediaClassifyViewModel : ViewModel() {
                 entry.value.forEach { classify.add(it) }
             }
             //更新
-            _classifyItemDataList.postValue(
-                DataState.AppendableListDataSuccess.getIns<BaseData>(itemDataDispatcher)
-                    .putData(classify)
-            )
+            _classifyItemDataList.value =
+                itemDataDispatcher.successIns<MutableDynamicReferenceListData<BaseData>>().apply {
+                    val dyData = (data ?: MutableDynamicReferenceListData<BaseData>().also {
+                        data = it
+                    })
+                    dyData.putData(classify)
+                }
         }
     }
 
     fun getClassifyData(
         classifyAction: ClassifyAction = currentClassify.value ?: ClassifyAction.obtain()
     ) {
-        _classifyDataList.postValue(DataState.Loading)
+        _classifyDataList.value = DataState.Loading
         viewModelScope.launch(dataDispatcher) {
-            _classifyDataList.postValue(
-                if (classifyAction != currentClassify.value) {
-                    page = DEFAULT_PAGE
-                    DataState.AppendableListDataSuccess.getIns<BaseData>(dataDispatcher)
-                        .putData(component.getClassifyData(classifyAction, page))
-                } else {
-                    DataState.AppendableListDataSuccess.getIns<BaseData>(dataDispatcher)
-                        .appendData(component.getClassifyData(classifyAction, page))
+            _classifyDataList.value =
+                dataDispatcher.successIns<MutableDynamicReferenceListData<BaseData>>().apply {
+                    val dyData = (data ?: MutableDynamicReferenceListData<BaseData>().also {
+                        data = it
+                    })
+                    if (classifyAction != currentClassify.value) {
+                        page = DEFAULT_PAGE
+                        dyData.putData(component.getClassifyData(classifyAction, page))
+                        logD("测试加载","获取数据1")
+                    } else {
+                        dyData.appendData(component.getClassifyData(classifyAction, page))
+                        logD("测试加载","获取数据2")
+                    }
                 }
-            )
+            logD("测试加载","更新数据3")
             page++
             _currentClassify.postValue(classifyAction)
         }
     }
 
     override fun onCleared() {
-        DataState.AppendableListDataSuccess.apply {
-            destroyIns(itemDataDispatcher)
-            destroyIns(dataDispatcher)
-        }
+        itemDataDispatcher.destroySuccessIns()
+        dataDispatcher.destroySuccessIns()
         super.onCleared()
     }
 }

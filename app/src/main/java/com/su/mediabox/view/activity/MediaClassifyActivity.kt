@@ -3,8 +3,10 @@ package com.su.mediabox.view.activity
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.su.mediabox.R
 import com.su.mediabox.databinding.ActivityMediaClassifyBinding
+import com.su.mediabox.lifecycleCollect
 import com.su.mediabox.pluginapi.action.ClassifyAction
 import com.su.mediabox.pluginapi.data.BaseData
 import com.su.mediabox.util.*
@@ -64,54 +66,56 @@ class MediaClassifyActivity : BasePluginActivity() {
         }
 
         //分类项数据
-        viewModel.classifyItemDataList.observe(this) {
-            when (it) {
-                is DataState.Init -> {
-                    mBinding.mediaClassifyFabProgress.invisible()
-                    if (mediaClassify.currentClassifyAction != null)
-                        mBinding.mediaClassifyFabProgress.visible()
-                }
-                is DataState.Loading -> {
-                    mBinding.apply {
-                        mediaClassifyFab.disable()
-                        mediaClassifyFabProgress.visible()
+        lifecycleScope.launchWhenResumed {
+            viewModel.classifyItemDataList.collect {
+                when (it) {
+                    is DataState.Init -> {
+                        mBinding.mediaClassifyFabProgress.invisible()
+                        if (mediaClassify.currentClassifyAction != null)
+                            mBinding.mediaClassifyFabProgress.visible()
                     }
-                }
-                is DataState.AppendableListDataSuccess -> {
-                    mBinding.apply {
-                        mediaClassifyFab.enable()
-                        mediaClassifyFabProgress.hide()
+                    is DataState.Loading -> {
+                        mBinding.apply {
+                            mediaClassifyFab.disable()
+                            mediaClassifyFabProgress.visible()
+                        }
                     }
-                    mediaClassify.data = it.data
-                    mediaClassify.show(supportFragmentManager)
-                }
-                is DataState.Failed -> {
-                    mBinding.apply {
-                        mediaClassifyFab.enable()
-                        mediaClassifyFabProgress.invisible()
+                    is DataState.Success -> {
+                        mBinding.apply {
+                            mediaClassifyFab.enable()
+                            mediaClassifyFabProgress.hide()
+                        }
+                        mediaClassify.data = it.data?.data
+                        mediaClassify.show(supportFragmentManager)
                     }
-                    "加载分类项错误：${it.throwable?.message}".showToast()
+                    is DataState.Failed -> {
+                        mBinding.mediaClassifySwipe.finishLoadMore()
+                        mBinding.apply {
+                            mediaClassifyFab.enable()
+                            mediaClassifyFabProgress.invisible()
+                        }
+                        "加载分类项错误：${it.throwable?.message}".showToast()
+                    }
                 }
             }
         }
 
         //分类数据
-        viewModel.classifyDataList.observe(this) {
+        lifecycleCollect(viewModel.classifyDataList) {
             mBinding.mediaClassifySwipe.finishLoadMore()
-
+            logD("测试加载", "显示数据 线程：${Thread.currentThread()}")
             when (it) {
                 is DataState.Loading -> {
                     mBinding.mediaClassifySwipe.setEnableLoadMore(false)
                     if (mBinding.mediaClassifyFab.isVisible)
                         mBinding.mediaClassifyFabProgress.visible()
                 }
-                is DataState.AppendableListDataSuccess -> {
+                is DataState.Success -> {
                     mBinding.mediaClassifyFabProgress.invisible()
-                    val data = it.data
-                    if (it.isLoadEmptyData) {
+                    if (it.data?.lastLoad == 0) {
                         getString(R.string.no_more_info).showToast()
                     } else
-                        mBinding.mediaClassifyList.typeAdapter().submitList(data) {
+                        mBinding.mediaClassifyList.typeAdapter().submitList(it.data?.data) {
                             if (mediaClassify.dialog?.isShowing == true)
                                 mediaClassify.dismiss()
                             mBinding.mediaClassifySwipe.setEnableLoadMore(true)
