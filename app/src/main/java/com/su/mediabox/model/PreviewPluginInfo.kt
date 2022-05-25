@@ -1,9 +1,9 @@
-package com.su.mediabox.bean
+package com.su.mediabox.model
 
-import android.graphics.drawable.Drawable
 import androidx.appcompat.content.res.AppCompatResources
 import com.su.mediabox.App
 import com.su.mediabox.R
+import com.su.mediabox.model.PluginInfo
 
 class PreviewPluginInfo :
     PluginInfo(

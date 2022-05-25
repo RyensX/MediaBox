@@ -8,6 +8,7 @@ import com.su.mediabox.App
 import com.su.mediabox.bean.*
 import com.su.mediabox.config.Const
 import com.su.mediabox.database.dao.*
+import com.su.mediabox.model.PluginInfo
 import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.util.getOrInit
 

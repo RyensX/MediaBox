@@ -13,7 +13,7 @@ sealed class DataState<out D> {
     class Success<D>(var data: D? = null) : DataState<D>() {
 
         /**
-         * 可单例使用也可哟
+         * 也可以绑定某个生命周期单例使用
          */
         companion object {
 
@@ -33,7 +33,13 @@ sealed class DataState<out D> {
 }
 
 /**
- * 动态引用列表数据
+ * 自动装入一个[MutableDynamicReferenceListData]并返回
+ */
+fun <T> DataState.Success<MutableDynamicReferenceListData<T>>.data() =
+    data ?: MutableDynamicReferenceListData<T>().also { data = it }
+
+/**
+ * 动态引用列表数据/
  *
  * 每次修改的数据得到的data引用都不同，因此可触发[RecyclerView]异步更新
  */
@@ -53,75 +59,69 @@ class MutableDynamicReferenceListData<T> : DynamicReferenceListData<T>() {
     private var dataRef = mutableListOf<T>()
     private var tmpDataRef = mutableListOf<T>()
 
-    private var action: DataAction? = null
-
-    @Suppress("UNCHECKED_CAST")
-    private suspend fun apply(): List<T> = action?.let {
-        withContext(Dispatchers.Default) {
+    suspend fun putData(data: List<T>): List<T> =
+        if (data.isEmpty()) dataRef
+        else withContext(Dispatchers.Default) {
             tmpDataRef.clear()
-            when (it) {
-                is DataAction.PUT -> {
-                    tmpDataRef.addAll(it.newData as List<T>)
-                    lastLoad = it.newData.size
-                }
-                is DataAction.APPEND -> {
-                    tmpDataRef.addAll(dataRef)
-                    if (it.startIndex == -1)
-                        tmpDataRef.addAll(it.appendData as List<T>)
-                    else
-                        tmpDataRef.addAll(it.startIndex, it.appendData as List<T>)
-                    lastLoad = it.appendData.size
-                }
-                is DataAction.REMOVE -> {
-                    tmpDataRef.addAll(dataRef)
-                    val a = tmpDataRef.iterator()
-                    val endIndex = it.startIndex + it.size
-                    var index = 0
-                    while (a.hasNext()) {
-                        if (index >= it.startIndex) {
-                            if (index < endIndex)
-                                a.remove()
-                            else
-                                break
-                        }
-                        index++
-                    }
-                }
-            }
-            //注意，在被Rv异步更新时原dataRef是不能修改的，否则会触发 ava.lang.IndexOutOfBoundsException: Inconsistency detected. Invalid view holder adapter
+            tmpDataRef.addAll(data)
+            lastLoad = data.size
             val tmp = dataRef
             dataRef = tmpDataRef
             tmpDataRef = tmp
             dataRef
         }
-    } ?: dataRef
-
-    suspend fun putData(data: List<T>): List<T> {
-        action = DataAction.PUT(data)
-        return apply()
-    }
 
     /**
      * @param startIndex -1则表示添加在末尾
      */
-    suspend fun appendData(data: List<T>, startIndex: Int = -1): List<T> {
-        action = DataAction.APPEND(data, startIndex)
-        return apply()
+    suspend fun appendData(data: List<T>, startIndex: Int = -1): List<T> =
+        if (data.isEmpty()) dataRef
+        else withContext(Dispatchers.Default) {
+            tmpDataRef.clear()
+            tmpDataRef.addAll(dataRef)
+            if (startIndex == -1)
+                tmpDataRef.addAll(data)
+            else
+                tmpDataRef.addAll(startIndex, data)
+            lastLoad = data.size
+            val tmp = dataRef
+            dataRef = tmpDataRef
+            tmpDataRef = tmp
+            dataRef
+        }
+
+    suspend fun removeData(startIndex: Int, size: Int): List<T> =
+        if (data.isEmpty() || size == 0) dataRef
+        else withContext(Dispatchers.Default) {
+            tmpDataRef.clear()
+            tmpDataRef.addAll(dataRef)
+            val a = tmpDataRef.iterator()
+            val endIndex = startIndex + size
+            var index = 0
+            while (a.hasNext()) {
+                a.next()
+                if (index >= startIndex) {
+                    if (index < endIndex)
+                        a.remove()
+                    else
+                        break
+                }
+                index++
+            }
+            val tmp = dataRef
+            dataRef = tmpDataRef
+            tmpDataRef = tmp
+            dataRef
+        }
+
+    fun replaceData(index: Int, data: T) {
+        if (index in dataRef.indices)
+            dataRef[index] = data
     }
 
-    suspend fun removeData(startIndex: Int, size: Int): List<T> {
-        action = DataAction.REMOVE(startIndex, size)
-        return apply()
-    }
+    suspend fun removeData(data: T): List<T> =
+        withContext(Dispatchers.Default) {
+            removeData(dataRef.indexOf(data), 1)
+        }
 
-    suspend fun removeData(data: T): List<T> {
-        action = DataAction.REMOVE(dataRef.indexOf(data), 1)
-        return apply()
-    }
-
-    private sealed class DataAction {
-        class PUT(val newData: Any) : DataAction()
-        class APPEND(val appendData: Any, val startIndex: Int) : DataAction()
-        class REMOVE(val startIndex: Int, val size: Int) : DataAction()
-    }
 }

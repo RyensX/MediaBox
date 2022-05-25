@@ -14,17 +14,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
 import com.su.mediabox.App
 import com.su.mediabox.R
-import com.su.mediabox.bean.PluginInfo
+import com.su.mediabox.model.PluginInfo
 import com.su.mediabox.pluginapi.Constant
 import com.su.mediabox.pluginapi.IPluginFactory
 import com.su.mediabox.pluginapi.components.IBasePageDataComponent
 import com.su.mediabox.util.*
 import com.su.mediabox.util.Text.githubProxy
 import com.su.mediabox.util.Util.getSignatures
-import com.su.mediabox.view.adapter.type.TypeAdapter
 import dalvik.system.PathClassLoader
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
@@ -58,12 +58,13 @@ object PluginManager {
     private val pluginIntent = Intent(Constant.PLUGIN_DEBUG_ACTION)
     private val pluginWorkScope: CoroutineScope = CoroutineScope(Dispatchers.IO)
 
-    val pluginLiveData: LiveData<List<PluginInfo>> = pluginDataFlow
+    val pluginFlow: Flow<List<PluginInfo>> = pluginDataFlow
         .map {
             it.values.toList()
         }
         .flowOn(Dispatchers.Default)
-        .asLiveData()
+
+    val pluginLiveData: LiveData<List<PluginInfo>> = pluginFlow.asLiveData()
 
     val currentLaunchPlugin = _currentLaunchPlugin.toLiveData().apply {
         observeForever {
@@ -133,10 +134,11 @@ object PluginManager {
         )
     }
 
-    fun Context.launchPlugin(pluginInfo: PluginInfo?) {
+    fun Context.launchPlugin(pluginInfo: PluginInfo?, isLaunchInitAction: Boolean = true) {
         pluginInfo?.apply {
             _currentLaunchPlugin.value = this
-            acquirePluginFactory().initAction.go(this@launchPlugin)
+            if (isLaunchInitAction)
+                acquirePluginFactory().initAction.go(this@launchPlugin)
         }
     }
 

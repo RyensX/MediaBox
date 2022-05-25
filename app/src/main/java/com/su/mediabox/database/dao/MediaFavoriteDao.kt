@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.su.mediabox.bean.MediaFavorite
 import com.su.mediabox.config.Const.Database.AppDataBase.FAVORITE_MEDIA_TABLE_NAME
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface MediaFavoriteDao {
@@ -17,6 +18,10 @@ interface MediaFavoriteDao {
     //按照时间戳顺序，从大到小。最后搜索的元组在最上方（下标0）显示
     @Query(value = "SELECT * FROM $FAVORITE_MEDIA_TABLE_NAME ORDER BY lastViewTime DESC")
     fun getFavoriteListLiveData(): LiveData<List<MediaFavorite>>
+
+    //按照时间戳顺序，从大到小。最后搜索的元组在最上方（下标0）显示
+    @Query(value = "SELECT * FROM $FAVORITE_MEDIA_TABLE_NAME ORDER BY lastViewTime DESC")
+    fun getFavoriteListFlow(): Flow<List<MediaFavorite>>
 
     @Query(value = "SELECT * FROM $FAVORITE_MEDIA_TABLE_NAME WHERE mediaUrl = :mediaUrl")
     suspend fun getFavorite(mediaUrl: String): MediaFavorite?

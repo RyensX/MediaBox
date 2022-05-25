@@ -17,11 +17,8 @@ import com.su.mediabox.R
 import com.su.mediabox.config.Api
 import com.su.mediabox.config.Api.Companion.MAIN_URL
 import com.su.mediabox.net.okhttpClient
-import com.su.mediabox.util.debug
-import com.su.mediabox.util.logE
 import com.su.mediabox.pluginapi.Constant
-import com.su.mediabox.util.getOrInit
-import com.su.mediabox.util.logD
+import com.su.mediabox.util.*
 import okhttp3.OkHttpClient
 import okio.buffer
 import okio.source
@@ -87,9 +84,12 @@ object CoilUtil {
                     builder()
                     placeholder(placeholder)
                     error(error)
-                    (referer ?: Api.refererProcessor?.processor(urlOrBase64))?.let {
-                        addHeader("Referer", it)
-                    }
+                    (referer
+                        ?: Util.withoutExceptionGet(showErrMsg = false) { Api.refererProcessor }
+                            ?.processor(urlOrBase64))
+                        ?.let {
+                            addHeader("Referer", it)
+                        }
                     addHeader("Host", URL(urlOrBase64).host)
                     addHeader("Accept", "*/*")
                     addHeader("Accept-Encoding", "gzip, deflate")

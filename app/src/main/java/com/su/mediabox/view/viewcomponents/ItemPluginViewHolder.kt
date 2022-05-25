@@ -2,7 +2,7 @@ package com.su.mediabox.view.viewcomponents
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.su.mediabox.bean.PluginInfo
+import com.su.mediabox.model.PluginInfo
 import com.su.mediabox.databinding.ItemPluginBinding
 import com.su.mediabox.plugin.PluginManager.launchPlugin
 import com.su.mediabox.util.setOnClickListener

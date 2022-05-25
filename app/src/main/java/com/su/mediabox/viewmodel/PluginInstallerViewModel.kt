@@ -9,7 +9,7 @@ import android.view.Gravity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.su.mediabox.bean.PluginInfo
+import com.su.mediabox.model.PluginInfo
 import com.su.mediabox.net.RetrofitManager
 import com.su.mediabox.net.service.PluginService
 import com.su.mediabox.plugin.PluginManager

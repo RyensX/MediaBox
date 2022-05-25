@@ -4,7 +4,7 @@ import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import com.su.mediabox.R
-import com.su.mediabox.bean.PreviewPluginInfo
+import com.su.mediabox.model.PreviewPluginInfo
 import com.su.mediabox.config.Const
 import com.su.mediabox.databinding.PagePluginRepoBinding
 import com.su.mediabox.net.RetrofitManager

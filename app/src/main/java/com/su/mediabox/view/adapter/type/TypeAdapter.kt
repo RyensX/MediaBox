@@ -2,7 +2,6 @@ package com.su.mediabox.view.adapter.type
 
 import android.annotation.SuppressLint
 import android.content.Context
-import com.su.mediabox.util.logD
 import android.view.MotionEvent
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -10,11 +9,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.su.mediabox.pluginapi.data.*
+import com.su.mediabox.util.*
 import com.su.mediabox.util.Util.withoutExceptionGet
-import com.su.mediabox.util.getFirstItemDecorationBy
-import com.su.mediabox.util.setOnClickListener
-import com.su.mediabox.util.setOnLongClickListener
-import com.su.mediabox.util.setOnTouchListener
 import com.su.mediabox.view.viewcomponents.*
 
 typealias DataViewMapList = ArrayList<Pair<Class<Any>, Class<TypeViewHolder<Any>>>>
@@ -122,9 +118,9 @@ class TypeAdapter(
         withoutExceptionGet { tags[key] as? T }
 
     //<VH的Class,对应Listener>
-    val clickListeners by lazy(LazyThreadSafetyMode.NONE) { mutableMapOf<Class<*>, TypeViewHolder<*>.(Int) -> Unit>() }
-    val longClickListeners by lazy(LazyThreadSafetyMode.NONE) { mutableMapOf<Class<*>, TypeViewHolder<*>.(Int) -> Boolean>() }
-    val touchListeners by lazy(LazyThreadSafetyMode.NONE) { mutableMapOf<Class<*>, TypeViewHolder<*>.(MotionEvent, Int) -> Boolean>() }
+    val clickListeners by unsafeLazy { mutableMapOf<Class<*>, TypeViewHolder<*>.(Int) -> Unit>() }
+    val longClickListeners by unsafeLazy { mutableMapOf<Class<*>, TypeViewHolder<*>.(Int) -> Boolean>() }
+    val touchListeners by unsafeLazy { mutableMapOf<Class<*>, TypeViewHolder<*>.(MotionEvent, Int) -> Boolean>() }
 
     /**
      * 为某种VH的itemView添加点击监听，重复添加会覆盖
@@ -204,7 +200,7 @@ class TypeAdapter(
         else {
             try {
                 val vhClass = dataViewMapList[viewType].second
-                logD("创建VH", "${vhClass.simpleName}")
+                logD("创建VH", vhClass.simpleName)
                 vhClass.getDeclaredConstructor(ViewGroup::class.java)
                     .apply { isAccessible = true }
                     .newInstance(parent)

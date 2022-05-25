@@ -16,7 +16,7 @@ import com.su.mediabox.util.geMemberOrNull
 abstract class TypeViewHolder<T>(view: View) : RecyclerView.ViewHolder(view) {
 
     //因为复用问题，这两项都不能缓存
-    protected val mOwnerRecyclerView: RecyclerView?
+    val mOwnerRecyclerView: RecyclerView?
         get() = RecyclerView.ViewHolder::class.java.geMemberOrNull("mOwnerRecyclerView", this)
     val bindingTypeAdapter: TypeAdapter
         get() = bindingAdapter as TypeAdapter
@@ -25,7 +25,7 @@ abstract class TypeViewHolder<T>(view: View) : RecyclerView.ViewHolder(view) {
     private val bindingContextWrapper = MutableContextWrapper(view.context)
 
     //VH内都必须只使用这个context防止错乱
-    protected val bindingContext: Context = bindingContextWrapper
+    val bindingContext: Context = bindingContextWrapper
 
     fun checkBindingContext(context: Context) {
         if (bindingContextWrapper.baseContext != context)

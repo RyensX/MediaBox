@@ -507,13 +507,19 @@ object Util {
     /**
      * 异常则返回null
      */
-    inline fun <T> withoutExceptionGet(showErrToast: Boolean = false, block: () -> T?) = try {
+    inline fun <T> withoutExceptionGet(
+        showErrToast: Boolean = false,
+        showErrMsg: Boolean = true,
+        block: () -> T?
+    ) = try {
         block()
     } catch (e: Exception) {
-        logD("取值错误", e.message ?: "")
+        if (showErrMsg) {
+            logD("取值错误", e.message ?: "")
+            e.printStackTrace()
+        }
         if (showErrToast)
             e.message?.showToast()
-        e.printStackTrace()
         null
     }
 

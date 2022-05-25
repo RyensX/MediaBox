@@ -1,6 +1,6 @@
 package com.su.mediabox.net.service
 
-import com.su.mediabox.bean.PreviewPluginInfo
+import com.su.mediabox.model.PreviewPluginInfo
 import com.su.mediabox.config.Const
 import com.su.mediabox.util.Text.githubProxy
 import retrofit2.http.GET

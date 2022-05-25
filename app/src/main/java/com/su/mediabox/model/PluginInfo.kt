@@ -1,4 +1,4 @@
-package com.su.mediabox.bean
+package com.su.mediabox.model
 
 import android.graphics.drawable.Drawable
 

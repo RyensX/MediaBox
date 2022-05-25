@@ -82,10 +82,7 @@ class MediaClassifyViewModel : ViewModel() {
             //更新
             _classifyItemDataList.value =
                 itemDataDispatcher.successIns<MutableDynamicReferenceListData<BaseData>>().apply {
-                    val dyData = (data ?: MutableDynamicReferenceListData<BaseData>().also {
-                        data = it
-                    })
-                    dyData.putData(classify)
+                    data().putData(classify)
                 }
         }
     }
@@ -97,19 +94,16 @@ class MediaClassifyViewModel : ViewModel() {
         viewModelScope.launch(dataDispatcher) {
             _classifyDataList.value =
                 dataDispatcher.successIns<MutableDynamicReferenceListData<BaseData>>().apply {
-                    val dyData = (data ?: MutableDynamicReferenceListData<BaseData>().also {
-                        data = it
-                    })
                     if (classifyAction != currentClassify.value) {
                         page = DEFAULT_PAGE
-                        dyData.putData(component.getClassifyData(classifyAction, page))
-                        logD("测试加载","获取数据1")
+                        data().putData(component.getClassifyData(classifyAction, page))
+                        logD("测试加载", "获取数据1")
                     } else {
-                        dyData.appendData(component.getClassifyData(classifyAction, page))
-                        logD("测试加载","获取数据2")
+                        data().appendData(component.getClassifyData(classifyAction, page))
+                        logD("测试加载", "获取数据2")
                     }
                 }
-            logD("测试加载","更新数据3")
+            logD("测试加载", "更新数据3")
             page++
             _currentClassify.postValue(classifyAction)
         }
