@@ -14,6 +14,7 @@ import com.su.mediabox.pluginapi.Constant
 import com.su.mediabox.pluginapi.action.ClassifyAction
 import com.su.mediabox.pluginapi.data.BaseData
 import com.su.mediabox.pluginapi.data.ClassifyItemData
+import com.su.mediabox.util.setOnClickListener
 import com.su.mediabox.view.adapter.type.*
 
 class MediaClassifyBottomSheetDialogFragment : BottomSheetDialogFragment() {
@@ -62,10 +63,12 @@ class MediaClassifyBottomSheetDialogFragment : BottomSheetDialogFragment() {
                     .registerDataViewMap<ClassifyCategoryData, ClassifyCategoryViewHolder>()
                     .registerDataViewMap<ClassifyItemData, ClassifyItemViewHolder>()
             ) {
-                addViewHolderClickListener<ClassifyItemViewHolder> { pos ->
-                    bindingTypeAdapter.getData<ClassifyItemData>(pos)?.action?.also {
-                        if (it is ClassifyAction)
-                            loadClassify?.invoke(it)
+                vHCreateDSL<ClassifyItemViewHolder> {
+                    setOnClickListener(itemView) { pos ->
+                        bindingTypeAdapter.getData<ClassifyItemData>(pos)?.action?.also {
+                            if (it is ClassifyAction)
+                                loadClassify?.invoke(it)
+                        }
                     }
                 }
             }

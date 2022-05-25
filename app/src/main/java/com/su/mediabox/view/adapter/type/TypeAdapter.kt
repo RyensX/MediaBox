@@ -117,36 +117,15 @@ class TypeAdapter(
     inline fun <reified T> getTag(key: String = T::class.java.simpleName): T? =
         withoutExceptionGet { tags[key] as? T }
 
-    //<VH的Class,对应Listener>
-    val clickListeners by unsafeLazy { mutableMapOf<Class<*>, TypeViewHolder<*>.(Int) -> Unit>() }
-    val longClickListeners by unsafeLazy { mutableMapOf<Class<*>, TypeViewHolder<*>.(Int) -> Boolean>() }
-    val touchListeners by unsafeLazy { mutableMapOf<Class<*>, TypeViewHolder<*>.(MotionEvent, Int) -> Boolean>() }
+    val vhCreateDsLs by unsafeLazy { mutableMapOf<Class<*>, TypeViewHolder<*>.() -> Unit>() }
 
     /**
-     * 为某种VH的itemView添加点击监听，重复添加会覆盖
+     * 添加某种VH创建时调用的DSL，可用于添加点击、长按、触摸等，重复添加会覆盖
      * @param V VH类型
      */
     @Suppress("UNCHECKED_CAST")
-    inline fun <reified V : TypeViewHolder<*>> addViewHolderClickListener(noinline onClick: V.(position: Int) -> Unit) {
-        clickListeners[V::class.java] = onClick as TypeViewHolder<*>.(Int) -> Unit
-    }
-
-    /**
-     * 为某种VH的itemView添加长按监听，重复添加会覆盖
-     * @param V VH类型
-     */
-    @Suppress("UNCHECKED_CAST")
-    inline fun <reified V : TypeViewHolder<*>> addViewHolderLongClickListener(noinline onClick: V.(position: Int) -> Boolean) {
-        longClickListeners[V::class.java] = onClick as TypeViewHolder<*>.(Int) -> Boolean
-    }
-
-    /**
-     * 为某种VH的itemView添加触摸监听，重复添加会覆盖
-     * @param V VH类型
-     */
-    @Suppress("UNCHECKED_CAST")
-    inline fun <reified V : TypeViewHolder<*>> addViewHolderTouchListener(noinline onTouch: V.(event: MotionEvent, position: Int) -> Boolean) {
-        touchListeners[V::class.java] = onTouch as TypeViewHolder<*>.(MotionEvent, Int) -> Boolean
+    inline fun <reified V : TypeViewHolder<*>> vHCreateDSL(noinline dsl: V.() -> Unit) {
+        vhCreateDsLs[V::class.java] = dsl as TypeViewHolder<*>.() -> Unit
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -205,27 +184,7 @@ class TypeAdapter(
                     .apply { isAccessible = true }
                     .newInstance(parent)
                     .apply {
-                        //点击
-                        if (clickListeners[vhClass] != null)
-                            setOnClickListener(itemView) { pos ->
-                                (this as TypeViewHolder<*>).bindingTypeAdapter.clickListeners[vhClass]?.also {
-                                    it(pos)
-                                }
-                            }
-                        //长按
-                        if (longClickListeners[vhClass] != null)
-                            setOnLongClickListener(itemView) { pos ->
-                                (this as TypeViewHolder<*>).bindingTypeAdapter.longClickListeners[vhClass]?.let {
-                                    it(pos)
-                                } ?: true
-                            }
-                        //触摸
-                        if (touchListeners[vhClass] != null)
-                            setOnTouchListener(itemView) { event, pos ->
-                                (this as TypeViewHolder<*>).bindingTypeAdapter.touchListeners[vhClass]?.let {
-                                    it(event, pos)
-                                } ?: true
-                            }
+                        vhCreateDsLs[vhClass]?.invoke(this)
                     }
             } catch (e: Exception) {
                 e.printStackTrace()

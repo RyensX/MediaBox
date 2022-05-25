@@ -72,6 +72,7 @@ class ExploreViewModel : ViewModel() {
                 .flowOn(Dispatchers.Default)
                 .collect {
                     //TODO 根据折叠状态进行增删子数据
+                    //TODO 根据最新查看日期排序
                     _exploreData.value =
                         successIns<MutableDynamicReferenceListData<Any>>().apply {
                             data().putData(it)

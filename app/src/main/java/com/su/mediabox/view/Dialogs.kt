@@ -1,7 +1,6 @@
 package com.su.mediabox.view
 
 import android.content.Context
-import com.su.mediabox.util.logD
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
@@ -12,10 +11,7 @@ import com.su.mediabox.databinding.DialogEpisodeBottomSheetBinding
 import com.su.mediabox.pluginapi.data.EpisodeData
 import com.su.mediabox.pluginapi.components.IVideoPlayPageDataComponent
 import com.su.mediabox.pluginapi.util.UIUtil.dp
-import com.su.mediabox.util.Util
-import com.su.mediabox.util.createCoroutineScope
-import com.su.mediabox.util.lazyAcquireComponent
-import com.su.mediabox.util.showToast
+import com.su.mediabox.util.*
 import com.su.mediabox.view.adapter.type.*
 import com.su.mediabox.view.viewcomponents.VideoPlayListViewHolder
 import kotlinx.coroutines.*
@@ -90,24 +86,26 @@ fun episodeSheetDialog(
                 .registerDataViewMap<EpisodeData, BottomSheetEpisodeViewHolder>()
         ) {
             setTag(episodeDataList, Const.ViewComponent.EPISODE_LIST_TAG)
-            //长按缓存视频
-            addViewHolderLongClickListener<BottomSheetEpisodeViewHolder> { pos ->
-                if (context is AppCompatActivity)
-                    bindingTypeAdapter.getData<EpisodeData>(pos)?.also {
-                        "开始解析 ${it.name}，请勿关闭...".showToast()
-                        coroutineScope.launch(Dispatchers.IO + SupervisorJob() + CoroutineExceptionHandler { _, e ->
-                            coroutineScope.launch(Dispatchers.Main) {
-                                e.printStackTrace()
-                                "缓存错误:${e.message}".showToast()
+            vHCreateDSL<BottomSheetEpisodeViewHolder> {
+                //长按缓存视频
+                setOnLongClickListener(itemView) { pos ->
+                    if (context is AppCompatActivity)
+                        bindingTypeAdapter.getData<EpisodeData>(pos)?.also {
+                            "开始解析 ${it.name}，请勿关闭...".showToast()
+                            coroutineScope.launch(Dispatchers.IO + SupervisorJob() + CoroutineExceptionHandler { _, e ->
+                                coroutineScope.launch(Dispatchers.Main) {
+                                    e.printStackTrace()
+                                    "缓存错误:${e.message}".showToast()
+                                }
+                            }) {
+                                component.getVideoPlayMedia(it.url).apply {
+                                    logD("下载", videoPlayUrl)
+                                    "缓存功能正在施工".showToast()
+                                }
                             }
-                        }) {
-                            component.getVideoPlayMedia(it.url).apply {
-                                logD("下载", videoPlayUrl)
-                                "缓存功能正在施工".showToast()
-                            }
-                        }
-                    } ?: "剧集信息错误".showToast()
-                true
+                        } ?: "剧集信息错误".showToast()
+                    true
+                }
             }
             submitList(data)
         }

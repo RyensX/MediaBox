@@ -68,13 +68,16 @@ class ExplorePageFragment : BaseFragment<PageExploreBinding>() {
                 ) {
                     (it.layoutManager as GridLayoutManager).spanSizeLookup =
                         ExploreSpanLookup(this::getItem)
-                    addViewHolderClickListener<ItemPluginManageViewHolder> {
-                        viewModel.switchGroupState(it)
-                    }
-                    //TODO 暂时应急
-                    addViewHolderLongClickListener<ItemPluginManageViewHolder> {
-                        bindingContext.launchPlugin(getData<PluginManageModel>(it)?.pluginInfo)
-                        true
+
+                    vHCreateDSL<ItemPluginManageViewHolder> {
+                        //切换分组状态
+                        setOnClickListener(binding.pluginManageMedia) { pos ->
+                            viewModel.switchGroupState(pos)
+                        }
+                        //启动插件
+                        setOnClickListener(itemView) { pos ->
+                            bindingContext.launchPlugin(getData<PluginManageModel>(pos)?.pluginInfo)
+                        }
                     }
                 }
         }
@@ -114,7 +117,7 @@ class ExplorePageFragment : BaseFragment<PageExploreBinding>() {
         }, intentFilter)
     }
 
-    class ItemPluginManageViewHolder private constructor(private val binding: ItemPluginManageBinding) :
+    class ItemPluginManageViewHolder private constructor(val binding: ItemPluginManageBinding) :
         TypeViewHolder<PluginManageModel>(binding.root) {
 
         constructor(parent: ViewGroup) : this(

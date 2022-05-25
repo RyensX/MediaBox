@@ -42,15 +42,17 @@ class MediaSearchActivity : BasePluginActivity() {
             rvSearchActivity
                 .dynamicGrid()
                 .initTypeList(searchDataViewMapList) {
-                    addViewHolderClickListener<SearchHistoryViewHolder> { pos ->
-                        getData<MediaSearchHistory>(pos)?.also {
-                            val keyWork = it.title.trim()
-                            mBinding.etSearchActivitySearch.apply {
-                                setText(keyWork)
-                                setSelection(keyWork.length)
+                    vHCreateDSL<SearchHistoryViewHolder> {
+                        setOnClickListener(itemView) { pos ->
+                            getData<MediaSearchHistory>(pos)?.also {
+                                val keyWork = it.title.trim()
+                                mBinding.etSearchActivitySearch.apply {
+                                    setText(keyWork)
+                                    setSelection(keyWork.length)
+                                }
+                                showLoading()
+                                viewModel.getSearchData(keyWork)
                             }
-                            showLoading()
-                            viewModel.getSearchData(keyWork)
                         }
                     }
                 }

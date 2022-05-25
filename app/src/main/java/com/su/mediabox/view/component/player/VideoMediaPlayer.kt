@@ -363,55 +363,60 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
             rvSpeed
                 ?.linear()
                 ?.initTypeList(DataViewMapList().registerDataViewMap<Float, PlaySpeedViewHolder>()) {
-                    //切换倍速
-                    addViewHolderClickListener<PlaySpeedViewHolder> { pos ->
-                        val adapter = bindingTypeAdapter
-                        adapter.getData<Float>(pos)?.also { speed ->
-                            setSpeed(speed, true)
-                            text = if (speed != 1F) "${speed}X"
-                            else App.context.getString(R.string.play_speed)
+                    vHCreateDSL<PlaySpeedViewHolder> {
+                        //切换倍速
+                        setOnClickListener(itemView) { pos ->
+                            val adapter = bindingTypeAdapter
+                            adapter.getData<Float>(pos)?.also { speed ->
+                                setSpeed(speed, true)
+                                text = if (speed != 1F) "${speed}X"
+                                else App.context.getString(R.string.play_speed)
 
-                            vgRightContainer?.gone()
-                            tvTouchDownHighSpeed?.gone()
-                            startDismissControlViewTimer()
+                                vgRightContainer?.gone()
+                                tvTouchDownHighSpeed?.gone()
+                                startDismissControlViewTimer()
 
-                            //更新当前选项
-                            adapter.notifyItemChanged(pos)
-                            //更新上次选项
-                            adapter.getTag<Int>()?.also {
-                                adapter.notifyItemChanged(it)
-                            }
-
-                            //tag标记当前速度的pos
-                            adapter.setTag(pos)
-                        }
-                    }
-                    //临时倍速
-                    addViewHolderLongClickListener<PlaySpeedViewHolder> { pos ->
-                        getData<Float>(pos)?.also {
-                            if (speed != it) {
-                                //记录原本倍速
-                                bindingTypeAdapter.setTag(speed, Const.ViewComponent.PLAY_SPEED_TAG)
-                                setSpeed(it, true)
-                                showSpeed(it)
-                                "临时生效${it}X倍速".showToast()
-                            }
-                        }
-                        true
-                    }
-                    addViewHolderTouchListener<PlaySpeedViewHolder> { event, _ ->
-                        if (event.actionMasked == MotionEvent.ACTION_CANCEL) {
-                            //释放则恢复原本倍速
-                            bindingTypeAdapter.getTag<Float>(Const.ViewComponent.PLAY_SPEED_TAG)
-                                ?.also {
-                                    if (speed != it) {
-                                        setSpeed(it, true)
-                                        tvTouchDownHighSpeed?.gone()
-                                        "恢复${it}X倍速".showToast()
-                                    }
+                                //更新当前选项
+                                adapter.notifyItemChanged(pos)
+                                //更新上次选项
+                                adapter.getTag<Int>()?.also {
+                                    adapter.notifyItemChanged(it)
                                 }
+
+                                //tag标记当前速度的pos
+                                adapter.setTag(pos)
+                            }
                         }
-                        false
+                        //临时倍速
+                        setOnLongClickListener(itemView) { pos ->
+                            getData<Float>(pos)?.also {
+                                if (speed != it) {
+                                    //记录原本倍速
+                                    bindingTypeAdapter.setTag(
+                                        speed,
+                                        Const.ViewComponent.PLAY_SPEED_TAG
+                                    )
+                                    setSpeed(it, true)
+                                    showSpeed(it)
+                                    "临时生效${it}X倍速".showToast()
+                                }
+                            }
+                            true
+                        }
+                        setOnTouchListener(itemView) { event, _ ->
+                            if (event.actionMasked == MotionEvent.ACTION_CANCEL) {
+                                //释放则恢复原本倍速
+                                bindingTypeAdapter.getTag<Float>(Const.ViewComponent.PLAY_SPEED_TAG)
+                                    ?.also {
+                                        if (speed != it) {
+                                            setSpeed(it, true)
+                                            tvTouchDownHighSpeed?.gone()
+                                            "恢复${it}X倍速".showToast()
+                                        }
+                                    }
+                            }
+                            false
+                        }
                     }
                 }
             setOnClickListener(this@VideoMediaPlayer)
@@ -439,22 +444,24 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
             rvEpisode
                 ?.grid(if (VideoMediaPlayActivity.playList!!.size > 8) 4 else 1)
                 ?.initTypeList(DataViewMapList().registerDataViewMap<EpisodeData, PlayerEpisodeViewHolder>()) {
-                    addViewHolderClickListener<PlayerEpisodeViewHolder> { pos ->
-                        val adapter = bindingTypeAdapter
-                        adapter.getData<EpisodeData>(pos)?.also { episodeData ->
-                            //更新上次选项
-                            adapter.getTag<Int>()?.also {
-                                adapter.notifyItemChanged(it)
+                    vHCreateDSL<PlayerEpisodeViewHolder> {
+                        setOnClickListener(itemView) { pos ->
+                            val adapter = bindingTypeAdapter
+                            adapter.getData<EpisodeData>(pos)?.also { episodeData ->
+                                //更新上次选项
+                                adapter.getTag<Int>()?.also {
+                                    adapter.notifyItemChanged(it)
+                                }
+                                //更新当前选项
+                                adapter.notifyItemChanged(pos)
+                                //标记当前选集pos
+                                adapter.setTag(pos)
+                                //暂停播放
+                                gsyVideoManager.pause()
+                                //开始解析
+                                playOperatingProxy?.playVideoMedia(episodeData.url)
+                                //TODO 在解析失败后当前剧集Tag并不会更新
                             }
-                            //更新当前选项
-                            adapter.notifyItemChanged(pos)
-                            //标记当前选集pos
-                            adapter.setTag(pos)
-                            //暂停播放
-                            gsyVideoManager.pause()
-                            //开始解析
-                            playOperatingProxy?.playVideoMedia(episodeData.url)
-                            //TODO 在解析失败后当前剧集Tag并不会更新
                         }
                     }
                 }
