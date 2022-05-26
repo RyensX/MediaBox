@@ -80,14 +80,18 @@ object PluginManager {
             pluginDir.listFiles()?.apply {
                 logD("内部插件数量", "$size")
             }?.forEach { pluginPackage ->
-                parsePluginInfo(pluginPackage)?.also { plugins[it.packageName] = it }
+                val path = pluginPackage.absolutePath
+                logD("内部插件", path)
+                parsePluginInfo(path)?.also { plugins[it.packageName] = it }
             }
             //扫描已安装的，只在debug模式下有效以方便调试
             debug {
                 packageManager.queryIntentActivities(pluginIntent, 0).apply {
                     logD("外部插件数量", "$size")
                 }.forEach { info ->
-                    parsePluginInfo(File(info.activityInfo.applicationInfo.sourceDir))?.also {
+                    val path = info.activityInfo.applicationInfo.sourceDir
+                    logD("外部插件", path)
+                    parsePluginInfo(path)?.also {
                         it.isExternalPlugin = true
                         plugins[it.packageName] = it
                     }
@@ -100,11 +104,18 @@ object PluginManager {
 
     fun getPluginInfo(packageName: String) = pluginDataFlow.value[packageName]
 
-    fun parsePluginInfo(pluginPackage: File): PluginInfo? {
+    fun parsePluginInfo(pluginPackagePath: String): PluginInfo? {
         App.context.packageManager.getPackageArchiveInfo(
-            pluginPackage.absolutePath,
+            pluginPackagePath,
             PackageManager.GET_META_DATA or PackageManager.GET_SIGNATURES
         )?.apply {
+            //部分系统（尤其是低版本）上存在加载资源失败的bug
+            applicationInfo.apply {
+                if (publicSourceDir.isNullOrEmpty())
+                    publicSourceDir = pluginPackagePath
+                if (sourceDir.isNullOrEmpty())
+                    sourceDir = pluginPackagePath
+            }
             return parsePluginInfo(this)
         }
         return null
@@ -272,7 +283,7 @@ object PluginManager {
                             pluginWorkScope.launch {
                                 logD("安装插件缓存", path)
                                 try {
-                                    parsePluginInfo(this@apply)?.also {
+                                    parsePluginInfo(this@apply.absolutePath)?.also {
                                         FileUri.getUriByFile(this@apply, true)
                                             ?.let { it1 -> installPlugin(it1, it) }
                                     }

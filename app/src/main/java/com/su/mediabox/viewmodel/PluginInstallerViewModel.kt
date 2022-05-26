@@ -70,7 +70,7 @@ class PluginInstallerViewModel : ViewModel() {
 
                 val info = mutableListOf<SimpleTextData>()
 
-                PluginManager.parsePluginInfo(File(path))?.apply {
+                PluginManager.parsePluginInfo(path)?.apply {
                     info.addAll(buildInfoPair("来源", sourcePath))
                     info.addAll(buildInfoPair("名称", name))
                     info.addAll(buildInfoPair("包名", packageName))

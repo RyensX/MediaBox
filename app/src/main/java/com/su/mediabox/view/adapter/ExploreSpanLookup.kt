@@ -12,7 +12,7 @@ class ExploreSpanLookup(val getData: (Int) -> Any?) : GridLayoutManager.SpanSize
 
     override fun getSpanSize(position: Int): Int = when (getData(position)) {
         is PluginManageModel -> SPAN_COUNT
-        is MediaFavorite -> SPAN_COUNT / 3
+        is MediaFavorite -> SPAN_COUNT / 4
         else -> SPAN_COUNT
     }
 }

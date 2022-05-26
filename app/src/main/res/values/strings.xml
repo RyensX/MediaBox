@@ -239,7 +239,7 @@
     <string name="player_loading_hint_parse">视频解析中..</string>
     <string name="plugin_list_empty">😮没有扫描到插件！\n\n💡如何获取插件：\n 1.左滑访问官方插件仓库\n 2.从外部下载或在线安装插件</string>
     <string name="plugin_list_loading">😮正在扫描中..</string>
-    <string name="plugin_repo_load_error">😥插件信息拉取失败！\n\n💡解决办法：\n 1.检查网络\n 2.打开代理\n 3.下拉刷新</string>
+    <string name="plugin_repo_load_error">😥插件信息拉取失败！\n\n💡解决办法：\n 1.检查网络\n 2.右下角设置打开代理\n 3.下拉刷新数据</string>
     <string name="menu_plugin_repo_submit">提交插件</string>
     <string name="app_no_update_hint">已是最新版本</string>
     <string name="plugin_manage_media_count_format">收藏：%d</string>

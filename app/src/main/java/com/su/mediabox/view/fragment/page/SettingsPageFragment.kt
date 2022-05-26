@@ -39,6 +39,7 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
 
                 checkPreference {
                     key = Const.Setting.NET_REPO_PROXY
+                    setDefaultValue(true)
                     setIcon(R.drawable.ic_language_main_color_2_24_skin)
                     titleRes(R.string.net_proxy_title)
                     summaryRes(R.string.net_proxy_summary)
@@ -54,7 +55,7 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
                     titleRes(R.string.player_bottom_progress_title)
                     summaryRes(R.string.player_bottom_progress_summary)
 
-                    lifecycleCollect(Pref.isShowPlayerBottomProgressBar){
+                    lifecycleCollect(Pref.isShowPlayerBottomProgressBar) {
                         isChecked = it
                     }
                 }
