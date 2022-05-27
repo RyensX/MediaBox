@@ -160,13 +160,8 @@ class TypeAdapter(
                     //边距
                     bindingRecyclerView?.getFirstItemDecorationBy<DynamicGridItemDecoration>()
                         ?.let {
-                            logD(
-                                "设置",
-                                "spacing=$itemSpacing listLeftEdge=$listLeftEdge listRightEdge=$listRightEdge"
-                            )
-                            it.spacing = itemSpacing
-                            it.leftEdge = listLeftEdge
-                            it.rightEdge = listRightEdge
+                            logD("设置", "spacing=$itemSpacing")
+                            it.itemSpacing = itemSpacing
                         }
                 }
         }

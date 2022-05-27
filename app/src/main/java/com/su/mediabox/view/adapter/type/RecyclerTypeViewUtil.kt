@@ -53,14 +53,12 @@ fun RecyclerView.grid(
 fun RecyclerView.dynamicGrid(
     @RecyclerView.Orientation orientation: Int = RecyclerView.VERTICAL,
     spacing: Int = 8.dp,
-    leftEdge: Int = 8.dp,
-    rightEdge: Int = 8.dp,
     reverseLayout: Boolean = false
 ): RecyclerView {
     layoutManager =
         GridLayoutManager(context, Constant.DEFAULT_SPAN_COUNT, orientation, reverseLayout).apply {
             if (spacing != 0)
-                addItemDecoration(DynamicGridItemDecoration(spacing, leftEdge, rightEdge))
+                addItemDecoration(DynamicGridItemDecoration(spacing))
             //动态spanSize
             spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                 override fun getSpanSize(position: Int) =

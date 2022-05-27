@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
@@ -14,24 +13,20 @@ import com.su.mediabox.bean.MediaFavorite
 import com.su.mediabox.databinding.ItemPluginManageBinding
 import com.su.mediabox.model.PluginInfo
 import com.su.mediabox.databinding.PageExploreBinding
-import com.su.mediabox.databinding.ViewComponentTagBinding
 import com.su.mediabox.lifecycleCollect
 import com.su.mediabox.model.PluginManageModel
 import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.plugin.PluginManager.launchPlugin
 import com.su.mediabox.pluginapi.Constant
 import com.su.mediabox.pluginapi.data.SimpleTextData
-import com.su.mediabox.pluginapi.data.TagData
 import com.su.mediabox.pluginapi.util.UIUtil.dp
 import com.su.mediabox.util.*
 import com.su.mediabox.view.activity.MediaFavoriteActivity
-import com.su.mediabox.view.adapter.ExploreSpanLookup
-import com.su.mediabox.view.adapter.PluginManageDiff
+import com.su.mediabox.view.adapter.*
 import com.su.mediabox.view.adapter.type.*
 import com.su.mediabox.view.fragment.BaseFragment
 import com.su.mediabox.view.viewcomponents.ItemPluginViewHolder
 import com.su.mediabox.view.viewcomponents.SimpleTextViewHolder
-import com.su.mediabox.view.viewcomponents.TextViewHolder
 import com.su.mediabox.viewmodel.ExploreViewModel
 
 //TODO 要重新设计为插件管理合并数据显示
@@ -68,6 +63,8 @@ class ExplorePageFragment : BaseFragment<PageExploreBinding>() {
                 ) {
                     (it.layoutManager as GridLayoutManager).spanSizeLookup =
                         ExploreSpanLookup(this::getItem)
+
+                    it.addItemDecoration(DynamicGridItemDecoration(8.dp))
 
                     vHCreateDSL<ItemPluginManageViewHolder> {
                         //切换分组状态
