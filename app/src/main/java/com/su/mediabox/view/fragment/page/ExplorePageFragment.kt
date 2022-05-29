@@ -96,22 +96,6 @@ class ExplorePageFragment : BaseFragment<PageExploreBinding>() {
                 }
             }
         }
-        //自动刷新
-        listenInstallBroadcasts()
-    }
-
-    private fun listenInstallBroadcasts() {
-        val intentFilter = IntentFilter().apply {
-            addAction(Intent.ACTION_PACKAGE_ADDED)
-            addAction(Intent.ACTION_PACKAGE_REPLACED)
-            addAction(Intent.ACTION_PACKAGE_REMOVED)
-            addDataScheme("package")
-        }
-        context?.registerReceiver(object : BroadcastReceiver() {
-            override fun onReceive(context: Context?, intent: Intent?) {
-                PluginManager.scanPlugin()
-            }
-        }, intentFilter)
     }
 
     class ItemPluginManageViewHolder private constructor(val binding: ItemPluginManageBinding) :

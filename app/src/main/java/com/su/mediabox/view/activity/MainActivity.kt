@@ -1,5 +1,9 @@
 package com.su.mediabox.view.activity
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.text.Html
 import androidx.fragment.app.Fragment
@@ -9,6 +13,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.su.mediabox.R
 import com.su.mediabox.config.Const
 import com.su.mediabox.databinding.ActivityMainBinding
+import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.util.Util
 import com.su.mediabox.util.bindBottomNavigationView
 import com.su.mediabox.util.update.AppUpdateHelper
@@ -29,6 +34,17 @@ class MainActivity : BaseActivity() {
         DownloadPageFragment(),
         SettingsPageFragment()
     )
+
+    private val installBroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            PluginManager.scanPlugin()
+        }
+    }
+
+    override fun onResume() {
+        PluginManager.initPluginEnv()
+        super.onResume()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,6 +73,24 @@ class MainActivity : BaseActivity() {
                 }
             }
         }
+
+        //自动刷新
+        listenInstallBroadcasts()
+    }
+
+    private fun listenInstallBroadcasts() {
+        val intentFilter = IntentFilter().apply {
+            addAction(Intent.ACTION_PACKAGE_ADDED)
+            addAction(Intent.ACTION_PACKAGE_REPLACED)
+            addAction(Intent.ACTION_PACKAGE_REMOVED)
+            addDataScheme("package")
+        }
+        registerReceiver(installBroadcastReceiver, intentFilter)
+    }
+
+    override fun onDestroy() {
+        unregisterReceiver(installBroadcastReceiver)
+        super.onDestroy()
     }
 
     private inner class PageAdapter : FragmentStateAdapter(this) {

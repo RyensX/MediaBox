@@ -66,6 +66,10 @@ class ExploreViewModel : ViewModel() {
                     //}
                     .toList()
             }
+                .map { models ->
+                    //按照最后查看日期倒序
+                    models.sortedByDescending { it.childData?.firstOrNull()?.lastViewTime ?: -1 }
+                }
                 .catch {
                     _exploreData.value = DataState.Failed(it)
                 }
