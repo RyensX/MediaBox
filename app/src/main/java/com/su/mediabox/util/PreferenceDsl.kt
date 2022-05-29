@@ -4,7 +4,7 @@ import androidx.annotation.StringRes
 import androidx.preference.*
 
 inline fun PreferenceFragmentCompat.preferenceScreen(screenDsl: PreferenceScreen.() -> Unit): PreferenceScreen =
-    preferenceManager.createPreferenceScreen(context).apply { screenDsl() }
+    preferenceManager.createPreferenceScreen(requireContext()).apply { screenDsl() }
 
 fun Preference.titleRes(@StringRes id: Int, vararg args: Any) {
     title = context.getString(id, *args)

@@ -158,7 +158,7 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
         }
     }
 
-    override fun onPreferenceClick(preference: Preference?): Boolean {
+    override fun onPreferenceClick(preference: Preference): Boolean {
         Util.openBrowser(Const.Common.GITHUB_URL)
         return true
     }

@@ -16,12 +16,12 @@ kotlin.core_ktx = "androidx.core:core-ktx:1.6.0"
 deps.kotlin = kotlin
 
 def settings = [:]
-settings.pref = "androidx.preference:preference-ktx:1.1.1"
+settings.pref = "androidx.preference:preference-ktx:1.2.0"
 settings.data_store = "androidx.datastore:datastore-preferences:1.0.0"
 deps.settings = settings
 
 def kotlinx = [:]
-kotlinx.kotlinx_coroutines_android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.1"
+kotlinx.kotlinx_coroutines_android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1"
 deps.kotlinx = kotlinx
 
 def google = [:]

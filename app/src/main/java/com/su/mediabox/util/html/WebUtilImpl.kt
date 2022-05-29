@@ -95,7 +95,6 @@ object WebUtilImpl : WebUtil {
             handler: SslErrorHandler?,
             error: SslError?
         ) {
-            super.onReceivedSslError(view, handler, error)
             handler?.proceed()
         }
 
