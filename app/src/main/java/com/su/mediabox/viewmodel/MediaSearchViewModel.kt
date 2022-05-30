@@ -7,6 +7,7 @@ import com.su.mediabox.bean.MediaSearchHistory
 import com.su.mediabox.config.Const.ViewComponent.DEFAULT_PAGE
 import com.su.mediabox.database.getAppDataBase
 import com.su.mediabox.pluginapi.components.IMediaSearchPageDataComponent
+import com.su.mediabox.pluginapi.data.BaseData
 import com.su.mediabox.util.PluginIO
 import com.su.mediabox.util.lazyAcquireComponent
 import com.su.mediabox.util.removeAllObserver
@@ -54,7 +55,7 @@ class MediaSearchViewModel : ViewModel() {
     private var _resultData: MutableList<Any>? = null
 
     /**
-     * 结果数据，可为搜索历史[MediaSearchHistory]或搜索结果[VideoLinearItemData]
+     * 结果数据，可为搜索历史[MediaSearchHistory]或搜索结果[BaseData]
      */
     val resultData: List<Any>?
         get() = _resultData

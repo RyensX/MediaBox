@@ -118,6 +118,7 @@
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
             android:name=".view.activity.MediaSearchActivity"
+            android:theme="@style/Search.Theme"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
             android:name=".view.activity.VideoMediaPlayActivity"

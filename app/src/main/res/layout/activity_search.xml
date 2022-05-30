@@ -9,63 +9,27 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_search_activity_header"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/main_color_2_skin">
+        android:layout_height="58dp"
+        android:background="@color/main_color_2_skin"
+        android:paddingHorizontal="8dp"
+        android:paddingBottom="2dp">
 
-        <EditText
+        <com.su.mediabox.view.component.SearchBarView
             android:id="@+id/et_search_activity_search"
-            android:layout_width="0px"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:background="@drawable/shape_circle_corner_white_50_skin"
-            android:drawableStart="@drawable/ic_search_main_color_24_skin"
-            android:drawablePadding="5dp"
-            android:gravity="center_vertical"
-            android:hint="@string/home_fragment_header_search"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="4dp"
             android:imeOptions="actionSearch"
-            android:inputType="text"
-            android:paddingStart="15dp"
-            android:paddingTop="5dp"
-            android:paddingEnd="40dp"
-            android:paddingBottom="5dp"
-            android:singleLine="true"
-            android:textColor="@color/foreground_main_color_2_skin"
-            android:textColorHint="@color/main_color_skin"
-            android:textSize="15sp"
+            android:transitionName="@string/search_transition_name"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/tv_search_activity_cancel"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/iv_search_activity_clear_key_words"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:paddingVertical="15dp"
-            android:paddingStart="7dp"
-            android:paddingEnd="10dp"
-            android:src="@drawable/ic_clear_main_color_24_skin"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@id/et_search_activity_search"
-            app:layout_constraintEnd_toEndOf="@id/et_search_activity_search"
-            app:layout_constraintTop_toTopOf="@id/et_search_activity_search"
-            tools:visibility="visible" />
+        <!--TODO-->
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_search_activity_cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="0px"
-            android:background="?android:selectableItemBackground"
-            android:gravity="center"
-            android:paddingStart="15dp"
-            android:paddingEnd="16dp"
-            android:text="@string/search_activity_cancel"
-            android:textColor="@color/foreground_white_skin"
-            android:textSize="15sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/et_search_activity_search"
-            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.textview.MaterialTextView

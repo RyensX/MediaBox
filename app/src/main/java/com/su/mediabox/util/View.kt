@@ -48,18 +48,18 @@ fun View.clickScale(scale: Float = 0.75f, duration: Long = 100) {
         }.start()
 }
 
-inline fun RecyclerView.ViewHolder.setOnClickListener(
+inline fun <VH : RecyclerView.ViewHolder> VH.setOnClickListener(
     target: View,
-    crossinline onClick: RecyclerView.ViewHolder.(position: Int) -> Unit
+    crossinline onClick: VH.(position: Int) -> Unit
 ) {
     target.setOnClickListener {
         onClick(bindingAdapterPosition)
     }
 }
 
-inline fun RecyclerView.ViewHolder.setOnLongClickListener(
+inline fun <VH : RecyclerView.ViewHolder> VH.setOnLongClickListener(
     target: View,
-    crossinline onLongClick: RecyclerView.ViewHolder.(position: Int) -> Boolean
+    crossinline onLongClick: VH.(position: Int) -> Boolean
 ) {
     target.setOnLongClickListener {
         onLongClick(bindingAdapterPosition)
@@ -67,9 +67,9 @@ inline fun RecyclerView.ViewHolder.setOnLongClickListener(
 }
 
 @SuppressLint("ClickableViewAccessibility")
-inline fun RecyclerView.ViewHolder.setOnTouchListener(
+inline fun <VH : RecyclerView.ViewHolder> VH.setOnTouchListener(
     target: View,
-    crossinline onTouch: RecyclerView.ViewHolder.(event: MotionEvent, position: Int) -> Boolean
+    crossinline onTouch: VH.(event: MotionEvent, position: Int) -> Boolean
 ) {
     target.setOnTouchListener { _, e ->
         onTouch(e, bindingAdapterPosition)

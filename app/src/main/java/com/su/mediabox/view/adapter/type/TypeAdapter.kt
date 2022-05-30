@@ -179,6 +179,7 @@ class TypeAdapter(
                     .apply { isAccessible = true }
                     .newInstance(parent)
                     .apply {
+                        //TODO 在复用时可能会出现问题
                         vhCreateDsLs[vhClass]?.invoke(this)
                     }
             } catch (e: Exception) {

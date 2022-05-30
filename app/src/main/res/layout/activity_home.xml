@@ -9,35 +9,27 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/home_header"
         android:layout_width="match_parent"
-        android:layout_height="54dp"
+        android:layout_height="58dp"
         android:background="@color/main_color_2_skin"
         android:elevation="5dp"
-        android:paddingHorizontal="7dp"
+        android:paddingHorizontal="8dp"
+        android:paddingBottom="2dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.su.mediabox.view.component.textview.TypefaceTextView
+        <com.su.mediabox.view.component.SearchBarView
             android:id="@+id/home_header_search"
-            android:layout_width="0px"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="7dp"
-            android:background="@drawable/shape_circle_corner_white_50_skin"
-            android:drawableStart="@drawable/ic_search_main_color_24_skin"
-            android:drawablePadding="5dp"
-            android:gravity="center_vertical"
-            android:paddingStart="15dp"
-            android:paddingTop="4dp"
-            android:paddingEnd="15dp"
-            android:paddingBottom="4dp"
-            android:text="@string/home_fragment_header_search"
-            android:textColor="@color/main_color_skin"
-            android:textSize="15sp"
-            app:layout_constraintBottom_toBottomOf="@id/home_header"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="4dp"
+            android:transitionName="@string/search_transition_name"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/home_header_classify"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/home_header"
-            app:typeface="bPRTypeface" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/home_header_classify"
@@ -46,20 +38,8 @@
             android:padding="7dp"
             android:src="@drawable/ic_format_list_bulleted_white_24_skin"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/home_header_download"
-            app:layout_constraintStart_toEndOf="@id/home_header_search"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/home_header_download"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:paddingHorizontal="7dp"
-            android:paddingVertical="7dp"
-            android:src="@drawable/ic_arrow_circle_down_white_24_skin"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/home_header_favorite"
-            app:layout_constraintStart_toEndOf="@id/home_header_classify"
+            app:layout_constraintStart_toEndOf="@id/home_header_search"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
@@ -70,7 +50,7 @@
             android:src="@drawable/ic_star_white_24_skin"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/home_header_download"
+            app:layout_constraintStart_toEndOf="@id/home_header_classify"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,7 +10,7 @@
         <item name="colorSecondaryVariant">@color/foreground_main_color_2_skin</item>
         <item name="colorOnSecondary">@color/foreground_black_skin</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor" >?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
 
         <!-- MaterialDialogs -->
@@ -19,5 +19,10 @@
         <item name="md_color_button_text">@color/foreground_main_color_2_skin</item>
         <item name="md_background_color">@color/white_skin</item>
         <item name="md_corner_radius">7dp</item>
+    </style>
+
+    <style name="Search.Theme" parent="App.Theme">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentTransitions">true</item>
     </style>
 </resources>

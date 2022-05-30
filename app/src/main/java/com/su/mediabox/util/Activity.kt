@@ -4,15 +4,19 @@ import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
+import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.activity.ComponentActivity
 import androidx.viewbinding.ViewBinding
 import com.su.mediabox.pluginapi.action.Action
 import com.su.mediabox.util.Util.withoutExceptionGet
 
-inline fun <reified T : Activity> Context.goActivity(intent: Intent = Intent()) {
+inline fun <reified T : Activity> Context.goActivity(
+    intent: Intent = Intent(),
+    options: Bundle? = null
+) {
     intent.setClass(this, T::class.java)
-    startActivity(intent)
+    startActivity(intent, options)
 }
 
 //<Action名称，Action实例>
