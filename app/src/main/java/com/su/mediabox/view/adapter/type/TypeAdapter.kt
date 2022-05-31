@@ -120,8 +120,20 @@ class TypeAdapter(
     val vhCreateDsLs by unsafeLazy { mutableMapOf<Class<*>, TypeViewHolder<*>.() -> Unit>() }
 
     /**
-     * 添加某种VH创建时调用的DSL，可用于添加点击、长按、触摸等，重复添加会覆盖
-     * @param V VH类型
+     * 添加某种VH创建时调用的DSL，可用于添加点击、长按、触摸等，重复添加会覆盖。
+     *
+     * 注意复用问题，不要在Listener之类内部直接调用外部的对象，并且尽量使用[TypeViewHolder.bindingContext]和[TypeViewHolder.bindingTypeAdapter]
+     *
+     * @param V VH类型，[TypeViewHolder]则表示全部VH
+     *
+     * 举例:
+     * ```
+     * vHCreateDSL<TypeViewHolder<Any>> {
+     *      itemView.setOnClickListener {
+     *          "任意VH点击".showToast()
+     *      }
+     * }
+     * ```
      */
     @Suppress("UNCHECKED_CAST")
     inline fun <reified V : TypeViewHolder<*>> vHCreateDSL(noinline dsl: V.() -> Unit) {
@@ -180,7 +192,11 @@ class TypeAdapter(
                     .newInstance(parent)
                     .apply {
                         //TODO 在复用时可能会出现问题
-                        vhCreateDsLs[vhClass]?.invoke(this)
+                        (vhCreateDsLs[vhClass]
+                        //没有具体的则使用全局的
+                            ?: vhCreateDsLs[TypeViewHolder::class.java])?.invoke(
+                            this
+                        )
                     }
             } catch (e: Exception) {
                 e.printStackTrace()

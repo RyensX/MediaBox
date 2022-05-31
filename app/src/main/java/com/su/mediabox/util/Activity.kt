@@ -41,8 +41,11 @@ fun <VB : ViewBinding> Activity.viewBind(inflater: (LayoutInflater) -> VB) =
         }
     }
 
-fun Context.toComponentActivity(): ComponentActivity? = when (this) {
-    is ComponentActivity -> this
+fun Context.toComponentActivity(): ComponentActivity? =
+    withoutExceptionGet { toActivity() as ComponentActivity }
+
+fun Context.toActivity(): Activity? = when (this) {
+    is Activity -> this
     is ContextWrapper -> baseContext.toComponentActivity()
     else -> null
 }
