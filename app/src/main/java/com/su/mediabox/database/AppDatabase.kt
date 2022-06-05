@@ -30,21 +30,29 @@ abstract class AppDatabase : RoomDatabase() {
 
         private val instances by lazy(LazyThreadSafetyMode.NONE) { mutableMapOf<String, AppDatabase>() }
 
-        fun getInstance(context: Context, id: String): AppDatabase {
-            val name = String.format(Const.Database.AppDataBase.MEDIA_DB_FILE_NAME_TEMPLATE, id)
-            return instances.getOrInit(name) {
+        fun getInstance(context: Context, dbFile: String): AppDatabase {
+            return instances.getOrInit(dbFile) {
                 Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
-                    name
+                    dbFile
                 ).build()
             }
+        }
+
+        fun destroyInstance(dbFile: String) {
+            instances.remove(dbFile)
         }
     }
 
 }
 
+fun PluginInfo.getAppDataBaseFileName() =
+    String.format(Const.Database.AppDataBase.MEDIA_DB_FILE_NAME_TEMPLATE, id)
+
 fun getAppDataBase() = PluginManager.currentLaunchPlugin.value?.run { getAppDataBase() }
     ?: throw RuntimeException("获取当前插件信息错误！")
 
-fun PluginInfo.getAppDataBase() = AppDatabase.getInstance(App.context, id)
+fun PluginInfo.getAppDataBase() = AppDatabase.getInstance(App.context, getAppDataBaseFileName())
+
+fun PluginInfo.destroyInstance() = AppDatabase.destroyInstance(getAppDataBaseFileName())

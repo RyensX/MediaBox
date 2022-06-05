@@ -6,7 +6,6 @@ import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.su.mediabox.R
 import com.su.mediabox.config.Api
 import com.su.mediabox.databinding.ActivityMediaDetailBinding
@@ -14,7 +13,7 @@ import com.su.mediabox.pluginapi.action.DetailAction
 import com.su.mediabox.pluginapi.action.PlayAction
 import com.su.mediabox.util.*
 import com.su.mediabox.util.Util.setTransparentStatusBar
-import com.su.mediabox.view.fragment.ShareDialogFragment
+import com.su.mediabox.view.dialog.ShareDialogFragment
 import com.su.mediabox.util.coil.CoilUtil.loadGaussianBlurCover
 import com.su.mediabox.viewmodel.MediaDetailViewModel
 import com.su.mediabox.view.adapter.type.dynamicGrid

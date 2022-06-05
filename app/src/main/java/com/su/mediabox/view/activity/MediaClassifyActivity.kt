@@ -8,13 +8,12 @@ import com.su.mediabox.R
 import com.su.mediabox.databinding.ActivityMediaClassifyBinding
 import com.su.mediabox.lifecycleCollect
 import com.su.mediabox.pluginapi.action.ClassifyAction
-import com.su.mediabox.pluginapi.data.BaseData
 import com.su.mediabox.util.*
 import com.su.mediabox.viewmodel.MediaClassifyViewModel
 import com.su.mediabox.view.adapter.type.dynamicGrid
 import com.su.mediabox.view.adapter.type.initTypeList
 import com.su.mediabox.view.adapter.type.typeAdapter
-import com.su.mediabox.view.fragment.MediaClassifyBottomSheetDialogFragment
+import com.su.mediabox.view.dialog.MediaClassifyBottomSheetDialogFragment
 
 class MediaClassifyActivity : BasePluginActivity() {
 

@@ -24,6 +24,7 @@ import com.su.mediabox.util.*
 import com.su.mediabox.view.activity.MediaFavoriteActivity
 import com.su.mediabox.view.adapter.*
 import com.su.mediabox.view.adapter.type.*
+import com.su.mediabox.view.dialog.PluginManageBottomSheetDialogFragment
 import com.su.mediabox.view.fragment.BaseFragment
 import com.su.mediabox.view.viewcomponents.ItemPluginViewHolder
 import com.su.mediabox.view.viewcomponents.SimpleTextViewHolder
@@ -74,6 +75,14 @@ class ExplorePageFragment : BaseFragment<PageExploreBinding>() {
                         //启动插件
                         setOnClickListener(itemView) { pos ->
                             bindingContext.launchPlugin(getData<PluginManageModel>(pos)?.pluginInfo)
+                        }
+                        //管理插件
+                        setOnLongClickListener(itemView) { pos ->
+                            bindingTypeAdapter.getData<PluginManageModel>(pos)?.let { pm ->
+                                PluginManageBottomSheetDialogFragment.create(pm.pluginInfo.packageName)
+                                    .show(requireActivity())
+                            }
+                            true
                         }
                     }
                 }

@@ -1,4 +1,4 @@
-package com.su.mediabox.view.fragment
+package com.su.mediabox.view.dialog
 
 import android.os.Bundle
 import android.view.LayoutInflater

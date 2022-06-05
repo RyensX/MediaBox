@@ -7,7 +7,7 @@ import com.su.mediabox.pluginapi.action.ClassifyAction
 import com.su.mediabox.pluginapi.data.BaseData
 import com.su.mediabox.pluginapi.data.ClassifyItemData
 import com.su.mediabox.pluginapi.components.IMediaClassifyPageDataComponent
-import com.su.mediabox.view.fragment.MediaClassifyBottomSheetDialogFragment
+import com.su.mediabox.view.dialog.MediaClassifyBottomSheetDialogFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import com.su.mediabox.config.Const.ViewComponent.DEFAULT_PAGE

@@ -8,12 +8,18 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Environment
 import android.os.FileObserver
+import android.text.Html
 import com.su.mediabox.util.logD
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
+import com.afollestad.materialdialogs.MaterialDialog
 import com.su.mediabox.App
 import com.su.mediabox.R
+import com.su.mediabox.config.Const
+import com.su.mediabox.database.destroyInstance
+import com.su.mediabox.database.getAppDataBase
+import com.su.mediabox.database.getAppDataBaseFileName
 import com.su.mediabox.model.PluginInfo
 import com.su.mediabox.pluginapi.Constant
 import com.su.mediabox.pluginapi.IPluginFactory
@@ -71,6 +77,8 @@ object PluginManager {
             //每次退出插件
         }
     }
+
+    fun queryPluginInfo(packageName: String) = pluginDataFlow.value[packageName]
 
     fun scanPlugin() {
         val packageManager = App.context.packageManager
@@ -170,6 +178,44 @@ object PluginManager {
                         .showToast(Toast.LENGTH_LONG)
                 }
         }
+
+    /**
+     * @param confirmContext 如果提供则有确认
+     */
+    fun uninstallPlugin(
+        pluginInfo: PluginInfo,
+        confirmContext: Context? = null,
+        onComplete: (() -> Unit)? = null
+    ) {
+        if (confirmContext != null)
+            MaterialDialog(confirmContext).show {
+                title(res = R.string.plugin_manage_media_uninstall_title)
+                message(res = R.string.plugin_manage_media_uninstall_msg)
+                negativeButton(res = R.string.cancel) { }
+                positiveButton(res = R.string.ok) {
+                    uninstallPlugin(pluginInfo, onComplete = onComplete)
+                }
+            } else {
+            pluginWorkScope.launch(Dispatchers.IO) {
+                //删除数据
+                val dbFile = App.context.getDatabasePath(pluginInfo.getAppDataBaseFileName())
+                logD("数据库", dbFile.absolutePath)
+                dbFile.parentFile?.listFiles()?.forEach {
+                    if (it.name.startsWith(dbFile.name))
+                        it.delete()
+                }
+                pluginInfo.destroyInstance()
+                //删除插件包
+                pluginDir.listFiles()?.forEach {
+                    if (it.name.contains(pluginInfo.packageName)) {
+                        it.delete()
+                        return@launch
+                    }
+                }
+            }
+            onComplete?.invoke()
+        }
+    }
 
     /**
      * 调用系统下载器下载插件

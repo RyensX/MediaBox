@@ -243,4 +243,9 @@
     <string name="menu_plugin_repo_submit">提交插件</string>
     <string name="app_no_update_hint">已是最新版本</string>
     <string name="plugin_manage_media_count_format">收藏：%d</string>
+    <string name="plugin_manage_media_uninstall">卸载</string>
+    <string name="plugin_manage_media_package_label">包名</string>
+    <string name="plugin_manage_media_version_label">版本</string>
+    <string name="plugin_manage_media_uninstall_title">确认卸载？</string>
+    <string name="plugin_manage_media_uninstall_msg">注意：卸载后数据也会删除，并且无法恢复</string>
 </resources>
