@@ -18,6 +18,7 @@ import com.su.mediabox.model.PluginManageModel
 import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.plugin.PluginManager.launchPlugin
 import com.su.mediabox.pluginapi.Constant
+import com.su.mediabox.pluginapi.action.DetailAction
 import com.su.mediabox.pluginapi.data.SimpleTextData
 import com.su.mediabox.pluginapi.util.UIUtil.dp
 import com.su.mediabox.util.*
@@ -61,11 +62,11 @@ class ExplorePageFragment : BaseFragment<PageExploreBinding>() {
                         //TODO 暂时不能直接启动对于插件打开详情页
                         .registerDataViewMap<MediaFavorite, MediaFavoriteActivity.FavoriteViewHolder>(),
                     PluginManageDiff
-                ) {
-                    (it.layoutManager as GridLayoutManager).spanSizeLookup =
+                ) { rv ->
+                    (rv.layoutManager as GridLayoutManager).spanSizeLookup =
                         ExploreSpanLookup(this::getItem)
 
-                    it.addItemDecoration(DynamicGridItemDecoration(8.dp))
+                    rv.addItemDecoration(DynamicGridItemDecoration(8.dp))
 
                     vHCreateDSL<ItemPluginManageViewHolder> {
                         //切换分组状态
@@ -83,6 +84,21 @@ class ExplorePageFragment : BaseFragment<PageExploreBinding>() {
                                     .show(requireActivity())
                             }
                             true
+                        }
+                    }
+
+                    vHCreateDSL<MediaFavoriteActivity.FavoriteViewHolder> {
+                        setOnClickListener(itemView) { pos ->
+                            //向上查找所属插件的信息
+                            bindingTypeAdapter.findTypeData<PluginManageModel>(pos, -1)?.also {
+                                //提取目标媒体信息
+                                bindingTypeAdapter.getData<MediaFavorite>(pos)?.run {
+                                    //静默启动插件
+                                    bindingContext.launchPlugin(it.pluginInfo, false)
+                                    //路由到目标页面
+                                    DetailAction.obtain(mediaUrl).go(bindingContext)
+                                }
+                            }
                         }
                     }
                 }

@@ -133,3 +133,20 @@ inline fun <reified D : Any, reified V : TypeViewHolder<D>> DataViewMapList.regi
     )
     return this
 }
+
+/**
+ * 查询特定类型第一个符合条件的数据
+ * @param startIndex 起始index
+ * @param step 步长，可用于控制速度和方向，如-1则向前查找
+ */
+inline fun <reified T> TypeAdapter.findTypeData(startIndex: Int = 0, step: Int = 1): T? {
+    var start = startIndex
+    while (start in 0 until itemCount) {
+        getItem(start).let {
+            if (it is T)
+                return it
+        }
+        start += step
+    }
+    return null
+}
