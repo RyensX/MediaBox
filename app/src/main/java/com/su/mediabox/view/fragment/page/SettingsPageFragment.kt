@@ -65,6 +65,7 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
                     setIcon(R.drawable.ic_baseline_core_24)
                     titleRes(R.string.player_default_core_title)
                     summaryRes(R.string.player_default_core_summary)
+                    isEnabled = false
                 }
             }
 
