@@ -1,9 +1,5 @@
 package com.su.mediabox.view.fragment.page
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
@@ -15,7 +11,6 @@ import com.su.mediabox.model.PluginInfo
 import com.su.mediabox.databinding.PageExploreBinding
 import com.su.mediabox.lifecycleCollect
 import com.su.mediabox.model.PluginManageModel
-import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.plugin.PluginManager.launchPlugin
 import com.su.mediabox.pluginapi.Constant
 import com.su.mediabox.pluginapi.action.DetailAction
@@ -27,8 +22,9 @@ import com.su.mediabox.view.adapter.*
 import com.su.mediabox.view.adapter.type.*
 import com.su.mediabox.view.dialog.PluginManageBottomSheetDialogFragment
 import com.su.mediabox.view.fragment.BaseFragment
-import com.su.mediabox.view.viewcomponents.ItemPluginViewHolder
+import com.su.mediabox.view.viewcomponents.inner.ItemPluginViewHolder
 import com.su.mediabox.view.viewcomponents.SimpleTextViewHolder
+import com.su.mediabox.view.viewcomponents.inner.MediaMoreViewHolder
 import com.su.mediabox.viewmodel.ExploreViewModel
 
 //TODO 要重新设计为插件管理合并数据显示
@@ -59,6 +55,7 @@ class ExplorePageFragment : BaseFragment<PageExploreBinding>() {
                         .registerDataViewMap<PluginInfo, ItemPluginViewHolder>()
                         .registerDataViewMap<SimpleTextData, SimpleTextViewHolder>()
                         .registerDataViewMap<PluginManageModel, ItemPluginManageViewHolder>()
+                        .registerDataViewMap<MediaMoreViewHolder.DataStub, MediaMoreViewHolder>()
                         //TODO 暂时不能直接启动对于插件打开详情页
                         .registerDataViewMap<MediaFavorite, MediaFavoriteActivity.FavoriteViewHolder>(),
                     PluginManageDiff
@@ -98,6 +95,16 @@ class ExplorePageFragment : BaseFragment<PageExploreBinding>() {
                                     //路由到目标页面
                                     DetailAction.obtain(mediaUrl).go(bindingContext)
                                 }
+                            }
+                        }
+                    }
+
+                    vHCreateDSL<MediaMoreViewHolder> {
+                        setOnClickListener(itemView) { pos ->
+                            //向上查找所属插件的信息
+                            bindingTypeAdapter.findTypeData<PluginManageModel>(pos, -1)?.also {
+                                bindingContext.launchPlugin(it.pluginInfo, false)
+                                requireActivity().goActivity<MediaFavoriteActivity>()
                             }
                         }
                     }

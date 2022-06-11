@@ -248,4 +248,5 @@
     <string name="plugin_manage_media_version_label">版本</string>
     <string name="plugin_manage_media_uninstall_title">确认卸载？</string>
     <string name="plugin_manage_media_uninstall_msg">注意：卸载后数据也会删除，并且无法恢复</string>
+    <string name="media_more">仅预览最多4个，点击查看完整收藏列表</string>
 </resources>

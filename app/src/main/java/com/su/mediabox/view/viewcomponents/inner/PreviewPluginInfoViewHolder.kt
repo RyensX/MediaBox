@@ -1,4 +1,4 @@
-package com.su.mediabox.view.viewcomponents
+package com.su.mediabox.view.viewcomponents.inner
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
