@@ -34,15 +34,21 @@ class ExploreViewModel : ViewModel() {
         //观测插件信息并绑定插件收藏数据库
         viewModelScope.launch {
             PluginManager.pluginFlow.collect { plugins ->
-                _exploreData.value = DataState.Loading
-                plugins.map { plugin ->
-                    logD("插件管理数据", "生成数据:${plugin.id}")
-                    //绑定信息
-                    plugin.getAppDataBase().favoriteDao().getFavoriteListFlow().map {
-                        PluginManageModel(plugin, it)
+                if (plugins.isEmpty())
+                    _exploreData.value = successIns<MutableDynamicReferenceListData<Any>>().apply {
+                        data()
                     }
-                }.also {
-                    collectFlowManageData(it)
+                else {
+                    _exploreData.value = DataState.Loading
+                    plugins.map { plugin ->
+                        logD("插件管理数据", "生成数据:${plugin.id}")
+                        //绑定信息
+                        plugin.getAppDataBase().favoriteDao().getFavoriteListFlow().map {
+                            PluginManageModel(plugin, it)
+                        }
+                    }.also {
+                        collectFlowManageData(it)
+                    }
                 }
             }
         }
@@ -79,7 +85,6 @@ class ExploreViewModel : ViewModel() {
                 .flowOn(Dispatchers.Default)
                 .collect {
                     //TODO 根据折叠状态进行增删子数据
-                    //TODO 根据最新查看日期排序
                     _exploreData.value =
                         successIns<MutableDynamicReferenceListData<Any>>().apply {
                             data().putData(it)

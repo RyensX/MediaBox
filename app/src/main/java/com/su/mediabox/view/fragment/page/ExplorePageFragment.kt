@@ -111,20 +111,20 @@ class ExplorePageFragment : BaseFragment<PageExploreBinding>() {
                 }
         }
 
-        lifecycleCollect(viewModel.exploreData) {
-            when (it) {
+        lifecycleCollect(viewModel.exploreData) { dataState ->
+            when (dataState) {
                 DataState.Init -> {
                     logD("插件管理数据", "初始化")
                 }
                 is DataState.Success -> {
-                    logD("插件管理数据", "数据数量=${it.data?.data?.size} 引用=${it.data?.data?.hashCode()}")
-                    mBinding.pluginList.submitList(it.data?.data ?: emptyView)
+                    logD("插件管理数据", "数据数量=${dataState.data?.data?.size} 引用=${dataState.data?.data?.hashCode()}")
+                    mBinding.pluginList.submitList(dataState.data?.data.let { if (it.isNullOrEmpty()) emptyView else it })
                 }
                 DataState.Loading -> {
                     logD("插件管理数据", "加载中")
                 }
                 is DataState.Failed -> {
-                    it.throwable?.message?.showToast()
+                    dataState.throwable?.message?.showToast()
                 }
             }
         }

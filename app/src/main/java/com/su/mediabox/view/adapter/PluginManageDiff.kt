@@ -15,7 +15,7 @@ object PluginManageDiff : DiffUtil.ItemCallback<Any>() {
         is MediaFavorite -> (newItem as MediaFavorite).run {
             oldItem.mediaUrl == mediaUrl
         }
-        else -> false
+        else -> true
     }
 
     override fun areContentsTheSame(
@@ -28,6 +28,6 @@ object PluginManageDiff : DiffUtil.ItemCallback<Any>() {
         is MediaFavorite -> (newItem as MediaFavorite).run {
             oldItem.cover == cover && oldItem.mediaTitle == mediaTitle && oldItem.lastEpisodeTitle == lastEpisodeTitle && oldItem.lastViewTime == lastViewTime
         }
-        else -> false
+        else -> true
     }
 }
