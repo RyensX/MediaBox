@@ -144,7 +144,7 @@ class ExplorePageFragment : BaseFragment<PageExploreBinding>() {
             binding.apply {
                 pluginManageIcon.setImageDrawable(data.pluginInfo.icon)
                 pluginManageName.text = data.pluginInfo.name
-                pluginManageMediaCount.text = bindingContext.getString(
+                pluginManageMediaInfo.text = bindingContext.getString(
                     R.string.plugin_manage_media_count_format,
                     data.childData?.size ?: 0
                 )
