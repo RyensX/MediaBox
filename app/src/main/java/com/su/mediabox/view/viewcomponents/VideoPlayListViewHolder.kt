@@ -33,6 +33,7 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
     var episodeDataList: List<EpisodeData>? = null
     private val coroutineScope by lazy(LazyThreadSafetyMode.NONE) { itemView.viewLifeCycleCoroutineScope }
     private var lastEpisodeIndex: Int? = null
+
     //TODO 接入设置
     private val isShowHistory = true
 
@@ -101,7 +102,10 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
                 episodeDataList?.forEachIndexed { index, data ->
                     //必须要保证EpisodeData.url有正确链接才支持自动定位和收藏
                     if (data.url == target.lastEpisodeUrl) {
-                        val jumpLength = (index - (lastEpisodeIndex ?: 0)).absoluteValue
+                        //实际跳转的index应该前或者后一位（靠前前一位，靠后后一位），方便查看
+                        val jumpIndex = if (index == 0 || index == adapter.itemCount) index
+                        else index + if (index > adapter.itemCount - index) 1 else -1
+                        val jumpLength = (jumpIndex - (lastEpisodeIndex ?: 0)).absoluteValue
                         launch(Dispatchers.Main) {
                             //更新新位置
                             adapter.notifyItemChanged(index)
@@ -110,10 +114,10 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
                                 adapter.notifyItemChanged(it)
                             }
                             if (jumpLength <= 30)
-                                smoothScrollToPosition(index)
+                                smoothScrollToPosition(jumpIndex)
                             else
                             //过长直接跳转
-                                scrollToPosition(index)
+                                scrollToPosition(jumpIndex)
 
                             lastEpisodeIndex = index
                         }
