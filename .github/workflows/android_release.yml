@@ -3,7 +3,7 @@ name: Android Release CI
 on:
   push:
     tags:
-      - "*"
+      - '**'
       
 env:
   FILE_REPO: ${{ secrets.FILE_REPO }}
