@@ -28,6 +28,8 @@ interface Const {
             const val GITHUB_URL = "https://github.com/RyensX/MediaBox"
             const val GITHUB_NEW_ISSUE_URL = "https://github.com/RyensX/MediaBox/issues/new"
             const val GITHUB_PLUGIN_REPO_URL = "https://github.com/RyensX/MediaBoxPluginRepository"
+            const val GITHUB_PLUGIN_REPO_OFFICE_URL =
+                "https://ryensx.github.io/MediaBoxPluginRepository/"
             const val USER_NOTICE_VERSION = 2
 
             val licenses = listOf(

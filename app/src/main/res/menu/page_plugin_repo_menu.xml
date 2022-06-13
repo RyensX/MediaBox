@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menu_plugin_repo_submit"
+        android:id="@+id/menu_plugin_repo_help"
+        android:icon="@drawable/ic_baseline_help_outline_24"
+        android:title="@string/menu_plugin_repo_help"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menu_plugin_repo"
         android:icon="@drawable/ic_github"
-        android:title="@string/menu_plugin_repo_submit" />
+        android:title="@string/menu_plugin_repo" />
 
 </menu>

@@ -3,6 +3,7 @@ package com.su.mediabox.view.fragment.page
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import com.afollestad.materialdialogs.MaterialDialog
 import com.su.mediabox.R
 import com.su.mediabox.model.PreviewPluginInfo
 import com.su.mediabox.config.Const
@@ -209,7 +210,14 @@ class PluginRepoPageFragment : BaseFragment<PagePluginRepoBinding>(),
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menu_plugin_repo_submit -> Util.openBrowser(Const.Common.GITHUB_PLUGIN_REPO_URL)
+            R.id.menu_plugin_repo_help ->
+                MaterialDialog(requireContext()).show {
+                    title(res = R.string.menu_plugin_repo_help)
+                    message(res = R.string.menu_plugin_repo_help_hint)
+                    positiveButton(res = R.string.menu_plugin_repo_office) { Util.openBrowser(Const.Common.GITHUB_PLUGIN_REPO_OFFICE_URL) }
+                    negativeButton(res = R.string.cancel) { dismiss() }
+                }
+            R.id.menu_plugin_repo -> Util.openBrowser(Const.Common.GITHUB_PLUGIN_REPO_URL)
         }
         return super.onOptionsItemSelected(item)
     }

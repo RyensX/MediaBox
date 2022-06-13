@@ -12,7 +12,6 @@ local.properties
 /.idea/dbnavigator.xml
 /.idea/encodings.xml
 /.idea/statistic.xml
-/app/schemas
 /app/release
 *.jks
 *.apk
