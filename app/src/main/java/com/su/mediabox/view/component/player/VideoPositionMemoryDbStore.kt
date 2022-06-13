@@ -6,7 +6,7 @@ import com.su.mediabox.R
 import com.su.mediabox.database.entity.PlayRecordEntity
 import com.su.mediabox.database.getOfflineDatabase
 
-object VideoPositionMemoryDbStore : AnimeVideoPlayer.PlayPositionMemoryDataStore {
+object VideoPositionMemoryDbStore : VideoMediaPlayer.PlayPositionMemoryDataStore {
 
     private val dao = getOfflineDatabase().playRecordDao()
 

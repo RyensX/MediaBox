@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/black"
-    tools:context=".view.component.player.AnimeVideoPlayer">
+    android:background="@android:color/black">
 
     <FrameLayout
         android:id="@+id/bigger_surface"
@@ -468,7 +467,7 @@
                     android:textColor="@color/foreground_white_skin"
                     android:textSize="12sp"
                     android:visibility="gone"
-                    app:drawableTopCompat="@drawable/ic_fast_rewind_white_24_skin_dark"
+                    app:drawableTopCompat="@drawable/ic_fast_rewind_white_24_skin"
                     app:layout_constraintEnd_toStartOf="@id/tv_player_reset_danmaku_progress"
                     app:layout_constraintStart_toStartOf="parent"
                     tools:visibility="visible" />
@@ -486,7 +485,7 @@
                     android:textColor="@color/foreground_white_skin"
                     android:textSize="12sp"
                     android:visibility="gone"
-                    app:drawableTopCompat="@drawable/ic_restore_white_24_skin_dark"
+                    app:drawableTopCompat="@drawable/ic_restore_white_24_skin"
                     app:layout_constraintEnd_toStartOf="@id/tv_player_forward_danmaku_progress"
                     app:layout_constraintStart_toEndOf="@id/tv_player_rewind_danmaku_progress"
                     tools:visibility="visible" />

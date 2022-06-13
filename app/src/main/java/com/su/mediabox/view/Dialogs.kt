@@ -1,7 +1,6 @@
 package com.su.mediabox.view
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
@@ -9,15 +8,10 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.su.mediabox.R
 import com.su.mediabox.config.Const
 import com.su.mediabox.databinding.DialogEpisodeBottomSheetBinding
-import com.su.mediabox.plugin.AppRouteProcessor
-import com.su.mediabox.plugin.PluginManager
-import com.su.mediabox.pluginapi.UI.dp
-import com.su.mediabox.pluginapi.v2.been.EpisodeData
-import com.su.mediabox.pluginapi.v2.components.IVideoPlayComponent
-import com.su.mediabox.util.createCoroutineScope
-import com.su.mediabox.util.downloadanime.AnimeDownloadHelper
-import com.su.mediabox.util.showToast
-import com.su.mediabox.util.toMD5
+import com.su.mediabox.pluginapi.data.EpisodeData
+import com.su.mediabox.pluginapi.components.IVideoPlayPageDataComponent
+import com.su.mediabox.pluginapi.util.UIUtil.dp
+import com.su.mediabox.util.*
 import com.su.mediabox.view.adapter.type.*
 import com.su.mediabox.view.viewcomponents.VideoPlayListViewHolder
 import kotlinx.coroutines.*
@@ -27,8 +21,7 @@ class BottomSheetEpisodeViewHolder(
 ) :
     VideoPlayListViewHolder.EpisodeViewHolder(parent) {
 
-    private val itemColor =
-        binding.root.context.resources.getColor(R.color.foreground_main_color_2_skin)
+    private val itemColor = Util.getResColor(R.color.foreground_main_color_2_skin)
 
     init {
         binding.tvAnimeEpisode2.apply {
@@ -63,7 +56,7 @@ fun episodeSheetDialog(
 
     val bottomSheetDialog = BottomSheetDialog(context, R.style.BottomSheetDialogTheme)
     val coroutineScope by lazy { bottomSheetDialog.createCoroutineScope() }
-    val component by lazy { PluginManager.acquireComponent(IVideoPlayComponent::class.java) }
+    val component by lazyAcquireComponent<IVideoPlayPageDataComponent>()
     val binding = DialogEpisodeBottomSheetBinding.inflate(LayoutInflater.from(context))
 
     binding.episodeBottomSheetTitle.text =
@@ -93,28 +86,26 @@ fun episodeSheetDialog(
                 .registerDataViewMap<EpisodeData, BottomSheetEpisodeViewHolder>()
         ) {
             setTag(episodeDataList, Const.ViewComponent.EPISODE_LIST_TAG)
-            //长按缓存视频
-            addViewHolderLongClickListener<BottomSheetEpisodeViewHolder> { pos ->
-                bindingTypeAdapter.getData<EpisodeData>(pos)?.also {
-                    "开始解析 ${it.name}，请勿关闭...".showToast()
-                    coroutineScope.launch(Dispatchers.IO + SupervisorJob() + CoroutineExceptionHandler { _, e ->
-                        coroutineScope.launch(Dispatchers.Main) {
-                            e.printStackTrace()
-                            "缓存错误:${e.message}".showToast()
-                        }
-                    }) {
-                        component.getVideoPlayMedia(it.url).apply {
-                            Log.d("下载", videoPlayUrl)
-                            withContext(Dispatchers.Main) {
-                                AnimeDownloadHelper.instance.downloadAnime(
-                                    AppRouteProcessor.currentActivity!!.get()!! as AppCompatActivity,
-                                    videoPlayUrl, videoPlayUrl.toMD5(), "$videName/$title"
-                                )
+            vHCreateDSL<BottomSheetEpisodeViewHolder> {
+                //长按缓存视频
+                setOnLongClickListener(itemView) { pos ->
+                    if (context is AppCompatActivity)
+                        bindingTypeAdapter.getData<EpisodeData>(pos)?.also {
+                            "开始解析 ${it.name}，请勿关闭...".showToast()
+                            coroutineScope.launch(Dispatchers.IO + SupervisorJob() + CoroutineExceptionHandler { _, e ->
+                                coroutineScope.launch(Dispatchers.Main) {
+                                    e.printStackTrace()
+                                    "缓存错误:${e.message}".showToast()
+                                }
+                            }) {
+                                component.getVideoPlayMedia(it.url).apply {
+                                    logD("下载", videoPlayUrl)
+                                    "缓存功能正在施工".showToast()
+                                }
                             }
-                        }
-                    }
-                } ?: "剧集信息错误".showToast()
-                true
+                        } ?: "剧集信息错误".showToast()
+                    true
+                }
             }
             submitList(data)
         }

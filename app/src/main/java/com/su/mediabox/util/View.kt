@@ -1,11 +1,16 @@
 package com.su.mediabox.util
 
-import android.util.Log
+import android.annotation.SuppressLint
+import com.su.mediabox.util.logD
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewStub
 import android.view.animation.AlphaAnimation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlin.math.absoluteValue
 
 fun View.enable() {
@@ -43,21 +48,31 @@ fun View.clickScale(scale: Float = 0.75f, duration: Long = 100) {
         }.start()
 }
 
-inline fun RecyclerView.ViewHolder.setOnClickListener(
+inline fun <VH : RecyclerView.ViewHolder> VH.setOnClickListener(
     target: View,
-    crossinline onClick: RecyclerView.ViewHolder.(position: Int) -> Unit
+    crossinline onClick: VH.(position: Int) -> Unit
 ) {
     target.setOnClickListener {
         onClick(bindingAdapterPosition)
     }
 }
 
-inline fun RecyclerView.ViewHolder.setOnLongClickListener(
+inline fun <VH : RecyclerView.ViewHolder> VH.setOnLongClickListener(
     target: View,
-    crossinline onLongClick: RecyclerView.ViewHolder.(position: Int) -> Boolean
+    crossinline onLongClick: VH.(position: Int) -> Boolean
 ) {
     target.setOnLongClickListener {
         onLongClick(bindingAdapterPosition)
+    }
+}
+
+@SuppressLint("ClickableViewAccessibility")
+inline fun <VH : RecyclerView.ViewHolder> VH.setOnTouchListener(
+    target: View,
+    crossinline onTouch: VH.(event: MotionEvent, position: Int) -> Boolean
+) {
+    target.setOnTouchListener { _, e ->
+        onTouch(e, bindingAdapterPosition)
     }
 }
 
@@ -94,9 +109,78 @@ fun RecyclerView.smartScrollToPosition(position: Int, smoothLimit: Int = 30) {
         visibilityItemPos =
             (layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
                 .coerceAtLeast(visibilityItemPos)
-    Log.d("列表跳转", "目标:$position 当前可见:$visibilityItemPos")
+    logD("列表跳转", "目标:$position 当前可见:$visibilityItemPos")
     if ((position - visibilityItemPos).absoluteValue > smoothLimit)
         scrollToPosition(position)
     else
         smoothScrollToPosition(position)
+}
+
+@SuppressLint("ClickableViewAccessibility")
+fun View.setLongPress() {
+    setOnLongClickListener {
+        logD("长按", "sdsdsd")
+        true
+    }
+    setOnTouchListener { _, event ->
+        if (event.actionMasked == MotionEvent.ACTION_CANCEL) {
+            logD("释放按钮", "sdd")
+        }
+        false
+    }
+}
+
+/**
+ * 根据类型删除ItemDecoration
+ */
+fun <T : RecyclerView.ItemDecoration> RecyclerView.removeItemDecorations(target: Class<T>) {
+    for (i in 0 until itemDecorationCount)
+        if (getItemDecorationAt(i).javaClass == target) {
+            logD("删除ItemDecoration", "target:${target.simpleName} rv:${toString()} index=$i")
+            removeItemDecorationAt(i)
+            //由于没有列表引用不能使用迭代器且重测重绘方法不公开所以只能递归删除了
+            removeItemDecorations(target)
+            break
+        } else
+            logD("尝试删除", "$i")
+}
+
+/**
+ * 根据类型返回第一个ItemDecoration
+ *
+ * @return 找不得则返回null
+ */
+inline fun <reified T : RecyclerView.ItemDecoration> RecyclerView.getFirstItemDecorationBy(): T? {
+    for (i in 0 until itemDecorationCount) {
+        val itemDecoration = getItemDecorationAt(i)
+        if (itemDecoration.javaClass == T::class.java)
+            return itemDecoration as T
+    }
+    return null
+}
+
+/**
+ * 把VP2和BottomNavigationView绑定
+ */
+fun ViewPager2.bindBottomNavigationView(bottomBav: BottomNavigationView) {
+    //索引-ID映射
+    val idMap = mutableListOf<Int>()
+    for (i in 0 until bottomBav.menu.size())
+        idMap.add(bottomBav.menu.getItem(i).itemId)
+    //绑定页面滑动
+    registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+        override fun onPageSelected(position: Int) {
+            super.onPageSelected(position)
+            if (position < idMap.size)
+                bottomBav.selectedItemId = idMap[position]
+        }
+    })
+    //绑定底栏切换
+    bottomBav.setOnNavigationItemSelectedListener { item ->
+        idMap.indexOf(item.itemId).also {
+            if (it != -1)
+                currentItem = it
+        }
+        true
+    }
 }

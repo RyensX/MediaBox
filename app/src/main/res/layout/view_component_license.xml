@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:selectableItemBackground"
+    android:orientation="horizontal"
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="10dp">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/vc_license_name"
+        android:layout_width="0px"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textColor="@color/foreground_main_color_2_skin"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        tools:text="名称" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/vc_license_license"
+        android:layout_width="0px"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textColor="@color/foreground_main_color_2_skin"
+        android:textSize="15sp"
+        tools:text="许可证" />
+</LinearLayout>

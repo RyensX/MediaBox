@@ -10,7 +10,7 @@ import android.renderscript.RenderScript
 import android.renderscript.ScriptIntrinsicBlur
 import androidx.annotation.RequiresApi
 import androidx.core.graphics.applyCanvas
-import coil.bitmap.BitmapPool
+import androidx.core.graphics.createBitmap
 import coil.size.Size
 
 /**
@@ -35,14 +35,14 @@ class DarkBlurTransformation @JvmOverloads constructor(
         require(dark > 0) { "dark must be > 0." }
     }
 
-    override fun key(): String = "${DarkBlurTransformation::class.java.name}-$radius-$sampling"
+    override val cacheKey: String = "${DarkBlurTransformation::class.java.name}-$radius-$sampling"
 
-    override suspend fun transform(pool: BitmapPool, input: Bitmap, size: Size): Bitmap {
+    override suspend fun transform(input: Bitmap, size: Size): Bitmap {
         val paint = Paint(Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG)
 
         val scaledWidth = (input.width / sampling).toInt()
         val scaledHeight = (input.height / sampling).toInt()
-        val output = pool.get(scaledWidth, scaledHeight, input.safeConfig)
+        val output = createBitmap(scaledWidth, scaledHeight, input.safeConfig)
         output.applyCanvas {
             scale(1 / sampling, 1 / sampling)
             val f = ColorMatrixColorFilter(ColorMatrix().apply {

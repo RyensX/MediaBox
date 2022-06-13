@@ -12,9 +12,6 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:orientation="horizontal"
-        android:paddingVertical="3dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="0px"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
     <ImageView

@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:color="@color/bottom_bar_color" android:drawable="@drawable/ic_home_main_color_2_24_skin_dark_sakura" android:state_selected="true" />
-    <item android:color="@color/unused_color" android:drawable="@drawable/ic_home_main_color_24_skin_dark_sakura" android:state_selected="false" />
-</selector>

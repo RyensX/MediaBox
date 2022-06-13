@@ -38,4 +38,8 @@
         <attr name="backTint" format="color" />
         <attr name="typeface" />
     </declare-styleable>
+
+    <declare-styleable name="CoordinatorLayout_Layout">
+        <attr name="alignTargetView" format="reference" />
+    </declare-styleable>
 </resources>

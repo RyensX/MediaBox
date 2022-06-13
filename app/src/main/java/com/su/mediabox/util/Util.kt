@@ -6,15 +6,13 @@ import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
-import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.Point
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
-import android.util.Log
-import android.util.TypedValue
+import com.su.mediabox.util.logD
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
@@ -29,10 +27,8 @@ import androidx.core.content.FileProvider
 import androidx.core.graphics.drawable.DrawableCompat
 import com.su.mediabox.App
 import com.su.mediabox.R
-import com.su.skin.SkinManager
 import okhttp3.internal.and
 import java.io.*
-import java.lang.StringBuilder
 import java.net.HttpURLConnection
 import java.net.URL
 import java.security.MessageDigest
@@ -85,7 +81,12 @@ object Util {
     fun getUserNoticeContent(): String {
         val sb = StringBuffer()
         try {
-            val inputStream = App.context.resources.openRawResource(R.raw.notice)
+            val context = App.context
+            //不直接引用以方便CI构建Debug Artifact
+            val noticeResId = context.resources.getIdentifier("notice", "raw", context.packageName)
+            if (noticeResId == 0)
+                return ""
+            val inputStream = context.resources.openRawResource(noticeResId)
             val reader = BufferedReader(InputStreamReader(inputStream, "UTF-8"))
             var out: String?
             while (reader.readLine().also { out = it } != null) {
@@ -208,34 +209,14 @@ object Util {
     }
 
     /**
-     * 通过原始id获取当前皮肤的id
+     * 通过id获取颜色
      */
-    fun getSkinResourceId(@AnyRes id: Int) = SkinManager.getSkinResourceId(id)
+    fun getResColor(@ColorRes id: Int) = ContextCompat.getColor(App.context, id)
 
     /**
      * 通过id获取drawable
      */
-    fun getResDrawable(@DrawableRes id: Int) = SkinManager.getDrawableOrMipMap(id)
-
-    /**
-     * 通过id获取颜色
-     */
-    fun getColorStateList(@ColorRes id: Int) = SkinManager.getColorStateList(id)
-
-    /**
-     * 通过id获取颜色
-     */
-    fun getResColor(@ColorRes id: Int) = SkinManager.getColor(id)
-
-    /**
-     * 通过id获取颜色
-     */
-    fun Context.getResColor(@ColorRes id: Int) = SkinManager.getColor(id)
-
-    /**
-     * 通过id获取颜色，不随皮肤更改，使用默认的
-     */
-    fun Context.getDefaultResColor(@ColorRes id: Int) = ContextCompat.getColor(this, id)
+    fun getResDrawable(@DrawableRes id: Int) = ContextCompat.getDrawable(App.context, id)
 
     /**
      * 计算距今时间
@@ -494,13 +475,10 @@ object Util {
         return arrayOf(subjectDN, issuerDN, serial, notBefore, notAfter)
     }
 
-    fun PackageManager.getSignatures(packageName: String): String {
+    fun getSignatures(packageInfo: PackageInfo): String {
         return try {
             //获取签名信息
-            val cert: ByteArray = getPackageInfo(
-                packageName,
-                PackageManager.GET_SIGNATURES
-            ).signatures[0].toByteArray()
+            val cert: ByteArray = packageInfo.signatures[0].toByteArray()
             //将签名转换为字节数组流
             val input: InputStream = ByteArrayInputStream(cert)
             //证书工厂类，这个类实现了出厂合格证算法的功能
@@ -529,11 +507,24 @@ object Util {
     /**
      * 异常则返回null
      */
-    inline fun <T> withoutExceptionGet(block: () -> T) = try {
+    inline fun <T> withoutExceptionGet(
+        showErrToast: Boolean = false,
+        showErrMsg: Boolean = true,
+        block: () -> T?
+    ) = try {
         block()
     } catch (e: Exception) {
-        Log.d("取值错误", e.message ?: "")
-        e.printStackTrace()
+        if (showErrMsg) {
+            logD("取值错误", e.message ?: "")
+            e.printStackTrace()
+        }
+        if (showErrToast)
+            e.message?.showToast()
         null
+    }
+
+    fun Context.openUrl(url: String) {
+        val uri = Uri.parse(url)
+        startActivity(Intent(Intent.ACTION_VIEW, uri))
     }
 }

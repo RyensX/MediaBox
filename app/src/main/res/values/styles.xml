@@ -19,4 +19,19 @@
         <item name="colorControlNormal">@color/foreground_white_skin</item>
     </style>
 
+    <style name="PluginInstallerStyle" parent="Theme.MaterialComponents.Light.Dialog">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowCloseOnTouchOutside">false</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="windowActionBar">false</item>
+    </style>
+
+    <style name="Theme.AppCompat.DayNight.Fullscreen" parent="App.Theme">
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
 </resources>

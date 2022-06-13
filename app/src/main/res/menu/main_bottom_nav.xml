@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/ic_baseline_explore_24"
+        android:title="浏览" />
+
+    <item
+        android:id="@+id/navigation_time_line"
+        android:icon="@drawable/ic_dns_main_color_2_24_skin"
+        android:title="插件仓库" />
+
+    <item
+        android:id="@+id/navigation_repository"
+        android:icon="@drawable/ic_baseline_archive_24"
+        android:title="缓存媒体" />
+
+    <item
+        android:id="@+id/navigation_rule_manager"
+        android:icon="@drawable/ic_settings_white_24"
+        android:title="设置" />
+
+</menu>

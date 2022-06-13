@@ -2,81 +2,50 @@ package com.su.mediabox.view.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.view.ViewStub
-import android.widget.TextView
+import androidx.annotation.CallSuper
+import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
-import com.su.mediabox.R
-import com.su.mediabox.util.eventbus.EventBusSubscriber
-import com.su.mediabox.util.gone
-import com.su.mediabox.util.logE
-import com.su.mediabox.util.visible
-import com.su.skin.core.SkinBaseFragment
-import org.greenrobot.eventbus.EventBus
 
+abstract class BaseFragment<VB : ViewBinding> : Fragment() {
 
-abstract class BaseFragment<VB : ViewBinding> : SkinBaseFragment() {
-    protected var isFirstLoadData = true
-    private var binding: VB? = null
-    protected val mBinding get() = binding!!
-    private lateinit var loadFailedTipView: View
-    private lateinit var tvImageTextTip1: TextView
+    /**
+     * 必须要在[onCreateView]后才能调用
+     */
+    protected lateinit var mBinding: VB
 
+    @CallSuper
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val binding = getBinding(inflater, container)
-        this.binding = binding
-        return binding.root
-    }
+    ) = buildViewBinding(inflater, container).apply { mBinding = this }.root
 
-    protected abstract fun getBinding(inflater: LayoutInflater, container: ViewGroup?): VB
+    abstract fun buildViewBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): VB
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        binding = null
-    }
+    private var isFirstPagerInit = true
 
-    override fun onStart() {
-        super.onStart()
-        if (this is EventBusSubscriber) EventBus.getDefault().register(this)
-    }
+    /**
+     * 第一次选中显示时调用
+     */
+    open fun pagerInit() {}
 
-    override fun onStop() {
-        super.onStop()
-        if (this is EventBusSubscriber && EventBus.getDefault().isRegistered(this))
-            EventBus.getDefault().unregister(this)
-    }
+    /**
+     * 每次被选中显示时调用
+     */
+    open fun pageSelected() {}
 
-    protected open fun getLoadFailedTipView(): ViewStub? = null
-
-    protected open fun showLoadFailedTip(text: String, onClickListener: View.OnClickListener?) {
-        val loadFailedTipViewStub = getLoadFailedTipView() ?: return
-        if (loadFailedTipViewStub.parent != null) {
-            loadFailedTipView = loadFailedTipViewStub.inflate()
-            tvImageTextTip1 = loadFailedTipView.findViewById(R.id.tv_image_text_tip_1)
-            tvImageTextTip1.text = text
-            if (onClickListener != null) loadFailedTipView.setOnClickListener(onClickListener)
-        } else {
-            if (this::loadFailedTipView.isInitialized) {
-                loadFailedTipView.visible()
-            } else {
-                logE("showLoadFailedTip", "layout_image_text_tip_1 isn't initialized")
-            }
+    @CallSuper
+    override fun onResume() {
+        super.onResume()
+        if (isFirstPagerInit) {
+            pagerInit()
+            isFirstPagerInit = false
         }
+        pageSelected()
     }
 
-    protected open fun hideLoadFailedTip() {
-        val loadFailedTipViewStub = getLoadFailedTipView() ?: return
-        if (loadFailedTipViewStub.parent == null) {
-            if (this::loadFailedTipView.isInitialized) {
-                loadFailedTipView.gone()
-            } else {
-                logE("showLoadFailedTip", "layout_image_text_tip_1 isn't initialized")
-            }
-        }
-    }
 }

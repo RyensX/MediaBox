@@ -14,23 +14,21 @@ import androidx.lifecycle.viewModelScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.su.mediabox.App
 import com.su.mediabox.databinding.FragmentViewPagerBinding
 import com.su.mediabox.databinding.ViewComponentViewPagerBinding
-import com.su.mediabox.pluginapi.v2.been.BaseData
-import com.su.mediabox.pluginapi.v2.been.ViewPagerData
+import com.su.mediabox.pluginapi.data.BaseData
+import com.su.mediabox.pluginapi.data.ViewPagerData
 import com.su.mediabox.util.PluginIO
-import com.su.mediabox.util.showToast
 import com.su.mediabox.util.toLiveData
-import com.su.mediabox.view.adapter.type.TypeViewHolder
-import com.su.mediabox.view.adapter.type.initTypeList
-import com.su.mediabox.view.adapter.type.linear
-import com.su.mediabox.view.adapter.type.submitList
+import com.su.mediabox.view.adapter.type.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.properties.Delegates
 
 /**
  * 多页面视图组件
+ * //TODO 还存在很大问题：Page和父RV间事件分发被阻塞
  */
 class ViewPagerViewHolder private constructor(private val binding: ViewComponentViewPagerBinding) :
     TypeViewHolder<ViewPagerData>(binding.root) {
@@ -67,6 +65,7 @@ class ViewPagerViewHolder private constructor(private val binding: ViewComponent
     }
 
     override fun onBind(data: ViewPagerData) {
+        super.onBind(data)
         currentData = data
         binding.vcViewPagerPages.apply {
             setOffscreenPageLimit(data.pageLoaders.size)
@@ -135,7 +134,7 @@ class ViewPagerViewHolder private constructor(private val binding: ViewComponent
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             super.onViewCreated(view, savedInstanceState)
             binding.apply {
-                root.linear().initTypeList { }
+                root.dynamicGrid().initTypeList { }
 
                 vm.pageDataLiveData.observe(viewLifecycleOwner) {
                     root.submitList(it)

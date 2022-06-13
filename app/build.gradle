@@ -1,3 +1,5 @@
+import java.lang.reflect.Field
+
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
@@ -71,7 +73,11 @@ android {
 
     applicationVariants.all { variant ->
         variant.outputs.all {
-            outputFileName = "app_release_${variant.productFlavors[0].name.toLowerCase()}_${variant.versionName}.apk"
+            def buildType = variant.buildType.name.toString()
+            if (buildType != "debug")
+                outputFileName = "MediaBox_release_${variant.productFlavors[0].name.toLowerCase()}_${variant.versionName}_${variant.versionCode}.apk"
+            else
+                outputFileName = "app_debug.apk"
         }
     }
 
@@ -134,6 +140,7 @@ dependencies {
     implementation deps.lifecycle.lifecycle_activity_ktx
     implementation deps.lifecycle.lifecycle_fragment_ktx
     implementation deps.support.viewpager2
+    implementation deps.support.viewpager2_indicator
     implementation deps.okhttp3.okhttp
     implementation deps.shuyu.GSYVideoPlayer
     implementation deps.retrofit2.retrofit
@@ -144,6 +151,7 @@ dependencies {
     implementation deps.material_dialogs.input
     implementation deps.room.room_runtime
     implementation deps.room.room_ktx
+    implementation 'androidx.webkit:webkit:1.4.0'
     androidTestImplementation 'junit:junit:4.12'
     kapt deps.room.room_compiler
     implementation deps.filedownloader.library
@@ -156,7 +164,6 @@ dependencies {
     compileOnly files('libs/cdi-api.jar')
     // DLNACastService编译需要javax.enterprise.inject.Alternative类
 //    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.4'
-    implementation deps.greenrobot.eventbus
     implementation deps.umsdk.common
     implementation deps.umsdk.asms
     implementation deps.umsdk.apm
@@ -170,14 +177,11 @@ dependencies {
     implementation deps.jakewharton.disklrucache
     implementation deps.google.flexbox
     implementation deps.cretin.etv
-    implementation deps.pref.kotpref
-    implementation project(':skin')
-    implementation project(':skin_blue')
-    implementation project(':skin_dark')
-    implementation project(':skin_lemon')
-    implementation project(':skin_dark_sakura')
-    implementation project(':skin_sweat_soybean')
+    implementation deps.apache.commons_text
+    implementation deps.settings.pref
+    implementation deps.settings.data_store
     implementation project(':MediaBoxPluginApi')
+    //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
 }
 
 try {

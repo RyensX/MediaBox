@@ -17,13 +17,15 @@ import com.su.mediabox.util.gone
 import com.su.mediabox.util.showToast
 import com.su.mediabox.util.update.AppUpdateHelper
 import com.su.mediabox.util.update.AppUpdateStatus
+import com.su.mediabox.util.viewBind
 import com.su.mediabox.util.visible
 import com.su.mediabox.viewmodel.SettingViewModel
-import com.su.skin.SkinManager
 import kotlinx.coroutines.*
 
+@Deprecated("需要重新设计")
+class SettingActivity : BaseActivity() {
 
-class SettingActivity : BaseActivity<ActivitySettingBinding>() {
+    private val mBinding by viewBind(ActivitySettingBinding::inflate)
     private val viewModel: SettingViewModel by lazy(LazyThreadSafetyMode.NONE) { ViewModelProvider(this).get(SettingViewModel::class.java) }
     private var selfUpdateCheck = false
 
@@ -152,58 +154,6 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
 
         mBinding.rlSettingActivityDoh.setOnClickListener { selectDnsServer() }
 
-        initNightMode()
     }
 
-    private fun initNightMode() {
-        mBinding.run {
-            when (SkinManager.getDarkMode()) {
-                SkinManager.DARK_MODE_YES -> {
-                    switchSettingActivityNightMode.isChecked = true
-                    cbSettingActivityNightModeFollowSystem.isChecked = false
-                    tvSettingActivityNightModeInfo.text = getString(R.string.dark)
-                }
-                SkinManager.DARK_MODE_NO -> {
-                    switchSettingActivityNightMode.isChecked = false
-                    cbSettingActivityNightModeFollowSystem.isChecked = false
-                    tvSettingActivityNightModeInfo.text = getString(R.string.light)
-                }
-                SkinManager.DARK_FOLLOW_SYSTEM -> {
-                    switchSettingActivityNightMode.isEnabled = false
-                    cbSettingActivityNightModeFollowSystem.isChecked = true
-                    tvSettingActivityNightModeInfo.text = getString(R.string.follow_system)
-                }
-            }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                cbSettingActivityNightModeFollowSystem.isEnabled = true
-                cbSettingActivityNightModeFollowSystem.setOnCheckedChangeListener { buttonView, isChecked ->
-                    switchSettingActivityNightMode.isEnabled = !isChecked
-                    if (isChecked) {
-                        switchSettingActivityNightMode.isChecked = false
-                        SkinManager.setDarkMode(SkinManager.DARK_FOLLOW_SYSTEM)
-                        tvSettingActivityNightModeInfo.text = getString(R.string.follow_system)
-                    } else {
-                        SkinManager.setDarkMode(SkinManager.DARK_MODE_NO)
-                        tvSettingActivityNightModeInfo.text = getString(R.string.light)
-                    }
-                }
-            } else {
-                cbSettingActivityNightModeFollowSystem.gone()
-                cbSettingActivityNightModeFollowSystem.isEnabled = false
-            }
-
-            switchSettingActivityNightMode.setOnCheckedChangeListener { buttonView, isChecked ->
-                if (isChecked) {
-                    SkinManager.setDarkMode(SkinManager.DARK_MODE_YES)
-                    tvSettingActivityNightModeInfo.text = getString(R.string.dark)
-                } else {
-                    SkinManager.setDarkMode(SkinManager.DARK_MODE_NO)
-                    tvSettingActivityNightModeInfo.text = getString(R.string.light)
-                }
-            }
-        }
-    }
-
-    override fun getBinding(): ActivitySettingBinding =
-        ActivitySettingBinding.inflate(layoutInflater)
 }

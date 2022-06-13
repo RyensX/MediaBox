@@ -7,84 +7,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.su.mediabox.R
-import com.su.mediabox.view.component.bannerview.BannerView
 import com.su.mediabox.view.component.textview.TypefaceTextView
 import com.su.mediabox.view.component.FlowLayout
-import com.su.mediabox.config.Const.ViewHolderTypeInt
-import com.su.mediabox.pluginapi.Constant.ViewHolderTypeString
-import com.su.mediabox.pluginapi.been.BaseBean
 
-//UP_TODO 2022/1/22 12:31 0 ViewHolder直接使用ViewBinding
+@Deprecated("2.0后删除")
 class ViewHolderUtil {
-    companion object {
 
-        fun getItemViewType(item: BaseBean): Int = when (item.type) {
-            ViewHolderTypeString.HEADER_1 -> ViewHolderTypeInt.HEADER_1
-            ViewHolderTypeString.ANIME_COVER_1 -> ViewHolderTypeInt.ANIME_COVER_1
-            ViewHolderTypeString.ANIME_COVER_2 -> ViewHolderTypeInt.ANIME_COVER_2
-            ViewHolderTypeString.ANIME_COVER_3 -> ViewHolderTypeInt.ANIME_COVER_3
-            ViewHolderTypeString.ANIME_COVER_4 -> ViewHolderTypeInt.ANIME_COVER_4
-            ViewHolderTypeString.ANIME_COVER_5 -> ViewHolderTypeInt.ANIME_COVER_5
-            ViewHolderTypeString.ANIME_COVER_6 -> ViewHolderTypeInt.ANIME_COVER_6
-            ViewHolderTypeString.ANIME_COVER_7 -> ViewHolderTypeInt.ANIME_COVER_7
-            ViewHolderTypeString.ANIME_COVER_8 -> ViewHolderTypeInt.ANIME_COVER_8
-            ViewHolderTypeString.ANIME_COVER_9 -> ViewHolderTypeInt.ANIME_COVER_9
-            ViewHolderTypeString.ANIME_EPISODE_2 -> ViewHolderTypeInt.ANIME_EPISODE_2
-            ViewHolderTypeString.ANIME_EPISODE_FLOW_LAYOUT_1 -> ViewHolderTypeInt.ANIME_EPISODE_FLOW_LAYOUT_1
-            ViewHolderTypeString.ANIME_EPISODE_FLOW_LAYOUT_2 -> ViewHolderTypeInt.ANIME_EPISODE_FLOW_LAYOUT_2
-            ViewHolderTypeString.ANIME_DESCRIBE_1 -> ViewHolderTypeInt.ANIME_DESCRIBE_1
-            ViewHolderTypeString.GRID_RECYCLER_VIEW_1 -> ViewHolderTypeInt.GRID_RECYCLER_VIEW_1
-            ViewHolderTypeString.BANNER_1 -> ViewHolderTypeInt.BANNER_1
-            ViewHolderTypeString.LICENSE_HEADER_1 -> ViewHolderTypeInt.LICENSE_HEADER_1
-            ViewHolderTypeString.LICENSE_1 -> ViewHolderTypeInt.LICENSE_1
-            ViewHolderTypeString.SEARCH_HISTORY_HEADER_1 -> ViewHolderTypeInt.SEARCH_HISTORY_HEADER_1
-            ViewHolderTypeString.SEARCH_HISTORY_1 -> ViewHolderTypeInt.SEARCH_HISTORY_1
-            ViewHolderTypeString.ANIME_INFO_1 -> ViewHolderTypeInt.ANIME_INFO_1
-            ViewHolderTypeString.HORIZONTAL_RECYCLER_VIEW_1 -> ViewHolderTypeInt.HORIZONTAL_RECYCLER_VIEW_1
-            ViewHolderTypeString.UPNP_DEVICE_1 -> ViewHolderTypeInt.UPNP_DEVICE_1
-            ViewHolderTypeString.MORE_1 -> ViewHolderTypeInt.MORE_1
-            ViewHolderTypeString.SKIN_COVER_1 -> ViewHolderTypeInt.SKIN_COVER_1
-            ViewHolderTypeString.DATA_SOURCE_1 -> ViewHolderTypeInt.DATA_SOURCE_1
-            else -> ViewHolderTypeInt.UNKNOWN
-        }
-
-        fun getViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-            val view = if (viewType == ViewHolderTypeInt.UNKNOWN) View(parent.context)
-            else LayoutInflater.from(parent.context).inflate(viewType, parent, false)
-            return when (viewType) {
-                ViewHolderTypeInt.HEADER_1 -> Header1ViewHolder(view)
-                ViewHolderTypeInt.ANIME_COVER_1 -> AnimeCover1ViewHolder(view)
-                ViewHolderTypeInt.ANIME_COVER_2 -> AnimeCover2ViewHolder(view)
-                ViewHolderTypeInt.ANIME_COVER_3 -> AnimeCover3ViewHolder(view)
-                ViewHolderTypeInt.ANIME_COVER_4 -> AnimeCover4ViewHolder(view)
-                ViewHolderTypeInt.ANIME_COVER_5 -> AnimeCover5ViewHolder(view)
-                ViewHolderTypeInt.ANIME_COVER_6 -> AnimeCover6ViewHolder(view)
-                ViewHolderTypeInt.ANIME_COVER_7 -> AnimeCover7ViewHolder(view)
-                ViewHolderTypeInt.ANIME_EPISODE_FLOW_LAYOUT_1 ->
-                    AnimeEpisodeFlowLayout1ViewHolder(view)
-                ViewHolderTypeInt.ANIME_EPISODE_FLOW_LAYOUT_2 ->
-                    AnimeEpisodeFlowLayout2ViewHolder(view)
-                ViewHolderTypeInt.ANIME_DESCRIBE_1 -> AnimeDescribe1ViewHolder(view)
-                ViewHolderTypeInt.GRID_RECYCLER_VIEW_1 -> GridRecyclerView1ViewHolder(view)
-                ViewHolderTypeInt.BANNER_1 -> Banner1ViewHolder(view)
-                ViewHolderTypeInt.LICENSE_HEADER_1 -> LicenseHeader1ViewHolder(view)
-                ViewHolderTypeInt.LICENSE_1 -> License1ViewHolder(view)
-                ViewHolderTypeInt.SEARCH_HISTORY_HEADER_1 -> SearchHistoryHeader1ViewHolder(view)
-                ViewHolderTypeInt.SEARCH_HISTORY_1 -> SearchHistory1ViewHolder(view)
-                ViewHolderTypeInt.ANIME_INFO_1 -> AnimeInfo1ViewHolder(view)
-                ViewHolderTypeInt.HORIZONTAL_RECYCLER_VIEW_1 ->
-                    HorizontalRecyclerView1ViewHolder(view)
-                ViewHolderTypeInt.ANIME_EPISODE_2 -> AnimeEpisode2ViewHolder(view)
-                ViewHolderTypeInt.UPNP_DEVICE_1 -> UpnpDevice1ViewHolder(view)
-                ViewHolderTypeInt.MORE_1 -> More1ViewHolder(view)
-                ViewHolderTypeInt.ANIME_COVER_8 -> AnimeCover8ViewHolder(view)
-                ViewHolderTypeInt.ANIME_COVER_9 -> AnimeCover9ViewHolder(view)
-                ViewHolderTypeInt.SKIN_COVER_1 -> SkinCover1ViewHolder(view)
-                ViewHolderTypeInt.DATA_SOURCE_1 -> DataSource1ViewHolder(view)
-                else -> EmptyViewHolder(view)
-            }
-        }
-    }
 }
 
 class EmptyViewHolder(view: View) : RecyclerView.ViewHolder(view)
@@ -97,10 +25,6 @@ class DataSource1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
 class GridRecyclerView1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val rvGridRecyclerView1: RecyclerView = view.findViewById(R.id.rv_grid_recycler_view_1)
-}
-
-class Header1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val tvHeader1Title: TextView = view.findViewById(R.id.tv_header_1_title)
 }
 
 class AnimeCover1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -181,18 +105,9 @@ class AnimeDescribe1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val tvAnimeDescribe1: TextView = view.findViewById(R.id.tv_anime_describe)
 }
 
-class Banner1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val banner1: BannerView = view.findViewById(R.id.banner_1)
-}
-
 class LicenseHeader1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val tvLicenseHeader1Name: TextView = view.findViewById(R.id.tv_license_header_1_name)
     val tvLicenseHeader1License: TextView = view.findViewById(R.id.tv_license_header_1_license)
-}
-
-class License1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val tvLicense1Name: TextView = view.findViewById(R.id.tv_license_1_name)
-    val tvLicense1License: TextView = view.findViewById(R.id.tv_license_1_license)
 }
 
 class SearchHistoryHeader1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {

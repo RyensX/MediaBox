@@ -1,7 +1,7 @@
 package com.su.mediabox.view.activity
 
 import android.os.Bundle
-import android.util.Log
+import com.su.mediabox.util.logD
 import android.view.View
 import androidx.lifecycle.lifecycleScope
 import com.shuyu.gsyvideoplayer.GSYVideoManager
@@ -15,14 +15,15 @@ import com.su.mediabox.databinding.ActivitySimplePlayBinding
 import com.su.mediabox.util.Util.setFullScreen
 import com.su.mediabox.util.gone
 import com.su.mediabox.util.toMD5
+import com.su.mediabox.util.viewBind
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
 import tv.danmaku.ijk.media.player.IjkMediaPlayer
 import java.io.File
 
-@Deprecated("在新播放器完善后弃用")
-class SimplePlayActivity : BasePluginActivity<ActivitySimplePlayBinding>() {
+@Deprecated("在新播放器完善后弃用", replaceWith = ReplaceWith("VideoMediaDanmakuPlayer"))
+class SimplePlayActivity : BasePluginActivity() {
     private var url = ""
     private var title = ""
     private lateinit var orientationUtils: OrientationUtils
@@ -32,6 +33,8 @@ class SimplePlayActivity : BasePluginActivity<ActivitySimplePlayBinding>() {
         val TITLE = this::class.java.name + "title"
     }
 
+    private val mBinding by viewBind(ActivitySimplePlayBinding::inflate)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -40,7 +43,7 @@ class SimplePlayActivity : BasePluginActivity<ActivitySimplePlayBinding>() {
         url = intent.getStringExtra(URL) ?: ""
         title = intent.getStringExtra(TITLE) ?: ""
 
-        Log.d("播放本地视频", url)
+        logD("播放本地视频", url)
 
         init()
 
@@ -55,6 +58,7 @@ class SimplePlayActivity : BasePluginActivity<ActivitySimplePlayBinding>() {
                 statusBar = true
             )
 
+            /**
             lifecycleScope.launch(Dispatchers.IO) {
                 val title = getAppDataBase().animeDownloadDao()
                     .getAnimeDownloadTitleByMd5(File(url.replaceFirst("file://", "")).toMD5() ?: "")
@@ -64,6 +68,7 @@ class SimplePlayActivity : BasePluginActivity<ActivitySimplePlayBinding>() {
                     avpSimplePlayActivity.fullWindowPlayer?.titleTextView?.text = title
                 }
             }
+            */
         }
 
         val videoOptionModel =
@@ -71,15 +76,10 @@ class SimplePlayActivity : BasePluginActivity<ActivitySimplePlayBinding>() {
         GSYVideoManager.instance().optionModelList = listOf(videoOptionModel)
     }
 
-    override fun getBinding(): ActivitySimplePlayBinding =
-        ActivitySimplePlayBinding.inflate(layoutInflater)
-
     private fun init() {
         mBinding.avpSimplePlayActivity.run {
             //设置旋转
             orientationUtils = OrientationUtils(this@SimplePlayActivity, this)
-            getDownloadButton()?.gone()
-            setEpisodeButtonVisibility(View.GONE)
             fullscreenButton.gone()
             //是否开启自动旋转
             isRotateViewAuto = false

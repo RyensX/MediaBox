@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:color="@color/foreground_main_color_2_skin_lemon" android:drawable="@drawable/ic_beans_main_color_2_24_skin_lemon" android:state_selected="true" />
-    <item android:color="@color/main_color_skin_lemon" android:drawable="@drawable/ic_beans_main_color_24_skin_lemon" android:state_selected="false" />
-</selector>

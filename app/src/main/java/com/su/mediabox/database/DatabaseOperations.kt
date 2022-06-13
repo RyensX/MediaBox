@@ -1,8 +1,7 @@
 package com.su.mediabox.database
 
-import android.util.Log
-import com.su.mediabox.bean.HistoryBean
-import com.su.mediabox.pluginapi.Constant
+import com.su.mediabox.util.logD
+import com.su.mediabox.bean.MediaHistory
 import com.su.mediabox.util.showToast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -10,22 +9,22 @@ import kotlinx.coroutines.launch
 
 object DatabaseOperations {
 
-    // 更新追番集数数据
+    // 更新媒体剧集数据
     fun CoroutineScope.updateFavoriteData(
         detailPartUrl: String,
         lastEpisodeUrl: String,
-        lastEpisode: String,
-        time: Long = System.currentTimeMillis()
+        lastEpisodeTitle: String,
+        lastViewTime: Long = System.currentTimeMillis()
     ) {
         launch(Dispatchers.IO) {
             try {
-                val favoriteAnimeDao = getAppDataBase().favoriteAnimeDao()
-                val favoriteAnimeBean = favoriteAnimeDao.getFavoriteAnime(detailPartUrl)
-                if (favoriteAnimeBean != null) {
-                    favoriteAnimeBean.lastEpisode = lastEpisode
-                    favoriteAnimeBean.lastEpisodeUrl = lastEpisodeUrl
-                    favoriteAnimeBean.time = time
-                    favoriteAnimeDao.updateFavoriteAnime(favoriteAnimeBean)
+                val favoriteDao = getAppDataBase().favoriteDao()
+                val favorite = favoriteDao.getFavorite(detailPartUrl)
+                if (favorite != null) {
+                    favorite.lastEpisodeUrl = lastEpisodeUrl
+                    favorite.lastEpisodeTitle = lastEpisodeTitle
+                    favorite.lastViewTime = lastViewTime
+                    favoriteDao.updateFavorite(favorite)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -33,28 +32,25 @@ object DatabaseOperations {
         }
     }
 
-    // 插入观看历史记录
+    //更新媒体播放记录
     fun CoroutineScope.insertHistoryData(
         detailPartUrl: String,
-        episodeUrl: String,
+        lastEpisodeUrl: String,
         coverUrl: String,
-        videoName: String,
+        lastEpisodeTitle: String,
         episodeName: String
     ) {
         launch(Dispatchers.IO) {
-            Log.d("更新播放历史", detailPartUrl)
+            logD("更新播放历史", detailPartUrl)
             try {
                 if (coverUrl.isBlank()) {
                     "封面为空，无法记录播放历史".showToast()
                 } else {
                     getAppDataBase().historyDao().insertHistory(
-                        HistoryBean(
-                            Constant.ViewHolderTypeString.ANIME_COVER_9, "", detailPartUrl,
-                            videoName,
+                        MediaHistory(
+                            detailPartUrl, lastEpisodeTitle,
                             System.currentTimeMillis(),
-                            coverUrl,
-                            episodeUrl,
-                            episodeName
+                            coverUrl, lastEpisodeUrl, episodeName
                         )
                     )
                 }

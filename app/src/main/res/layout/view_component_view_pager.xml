@@ -9,13 +9,16 @@
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/vc_view_pager_tabs"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:background="@color/white_skin"
+        android:backgroundTint="@color/main_color_2_skin"
         android:elevation="5dp"
-        app:tabIndicatorColor="@color/foreground_main_color_2_skin"
+        app:tabBackground="@color/main_color_2_skin"
+        app:tabIndicatorColor="@android:color/white"
+        app:tabRippleColor="@color/main_color_2_skin"
         app:tabIndicatorFullWidth="false"
         app:tabMode="scrollable"
-        app:tabTextColor="@color/foreground_main_color_2_skin" />
+        app:tabTextColor="@android:color/white" />
 
     <com.su.mediabox.view.component.ViewPager2View
         android:id="@+id/vc_view_pager_pages"

@@ -1,11 +1,12 @@
 package com.su.mediabox.util
 
 import android.app.Dialog
-import android.util.Log
+import com.su.mediabox.util.logD
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.su.mediabox.R
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.ContinuationInterceptor
 import kotlin.coroutines.CoroutineContext
@@ -53,7 +54,7 @@ private class ViewCoroutineInterceptor(
 
         //在Recyclerview上使用LinearLayoutManager可能并不会调用，取决于mRecycleChildrenOnDetach，因此必须手动调用setRecycleChildrenOnDetach(true)
         override fun onViewDetachedFromWindow(v: View?) {
-            Log.d("View协程", "分离视图->取消")
+            logD("View协程", "分离视图->取消")
             view.removeOnAttachStateChangeListener(this)
             job.cancel()
         }

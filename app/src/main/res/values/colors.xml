@@ -27,4 +27,12 @@
     <color name="widget_everyday_anime_title_color">#FFFFFF</color>
     <color name="widget_everyday_anime_item_text_color">#FC719B</color>
 
+    <color name="banner_indicator_select">#fff</color>
+    <color name="banner_indicator_unselect">#70ffffff</color>
+
+    <color name="play_control_menu_title_color">#FF999999</color>
+    <color name="play_control_background_color">#90000000</color>
+
+    <color name="danmaku_hint_color">#AA999999</color>
+
 </resources>

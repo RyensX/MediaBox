@@ -3,147 +3,105 @@ package com.su.mediabox.view.activity
 import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
-import android.os.Build
+import android.net.http.SslError
 import android.os.Bundle
+import com.su.mediabox.util.logD
 import android.webkit.*
+import androidx.appcompat.content.res.AppCompatResources
+import com.su.mediabox.R
 import com.su.mediabox.databinding.ActivityWebViewBinding
+import com.su.mediabox.pluginapi.action.WebBrowserAction
+import com.su.mediabox.util.Util.openUrl
+import com.su.mediabox.util.getAction
+import com.su.mediabox.util.viewBind
 
+class WebViewActivity : BasePluginActivity() {
 
-class WebViewActivity : BasePluginActivity<ActivityWebViewBinding>() {
-    private lateinit var url: String
-    private lateinit var headers: HashMap<String, String>
+    private val mBinding by viewBind(ActivityWebViewBinding::inflate)
+    private lateinit var mainUrl: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        url = intent.getStringExtra("url") ?: ""
-        intent.getSerializableExtra("headers").let {
-            headers = if (it == null) {
-                HashMap()
-            } else {
-                it as HashMap<String, String>
-            }
+        mainUrl = getAction<WebBrowserAction>()?.url ?: run {
+            finish()
+            return
         }
-        mBinding.atbWebViewActivityToolbar.setBackButtonClickListener { finish() }
-        mBinding.wvWebViewActivity.webViewClient = object : WebViewClient() {
-            override fun onPageFinished(view: WebView?, url: String?) {
-                super.onPageFinished(view, url)
-            }
 
-            override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-                if (url.startsWith("https") || url.startsWith("http")) {
-                    view.loadUrl(url)
-                } else {
-                    try {
+        initWebView()
+
+        mBinding.atbWebViewActivityToolbar.apply {
+
+            AppCompatResources.getDrawable(this@WebViewActivity, R.drawable.ic_baseline_open_in_new)
+                ?.apply {
+                    setTint(Color.WHITE)
+                    addButton(this)
+                    setButtonClickListener(0) {
+                        openUrl(mainUrl)
+                    }
+                }
+
+            setBackButtonClickListener { finish() }
+        }
+
+        mBinding.wvWeb.loadUrl(mainUrl)
+    }
+
+    @SuppressLint("SetJavaScriptEnabled")
+    private fun initWebView() {
+        mBinding.wvWeb.apply {
+            scrollBarStyle = WebView.SCROLLBARS_INSIDE_OVERLAY
+            isHorizontalScrollBarEnabled = false
+            isHorizontalFadingEdgeEnabled = false
+            isVerticalFadingEdgeEnabled = false
+            webChromeClient = object : WebChromeClient() {
+                override fun onReceivedTitle(view: WebView?, title: String?) {
+                    super.onReceivedTitle(view, title)
+                    mBinding.atbWebViewActivityToolbar.titleText = title
+                }
+            }
+            webViewClient = object : WebViewClient() {
+
+                override fun shouldOverrideUrlLoading(
+                    view: WebView,
+                    request: WebResourceRequest?
+                ): Boolean {
+                    val url = request?.url?.toString() ?: ""
+                    if (url.startsWith("https") || url.startsWith("http"))
+                        view.loadUrl(url)
+                    else try {
                         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
                     } catch (e: ActivityNotFoundException) {
                         e.printStackTrace()
                     }
+                    return super.shouldOverrideUrlLoading(view, request)
                 }
-                return true
+
+                @SuppressLint("WebViewClientOnReceivedSslError")
+                override fun onReceivedSslError(
+                    view: WebView?,
+                    handler: SslErrorHandler?,
+                    error: SslError?
+                ) {
+                    handler?.proceed()
+                }
             }
-        }
-        initSettings()
-
-        mBinding.wvWebViewActivity.loadUrl(url, headers)
-    }
-
-    @SuppressLint("SetJavaScriptEnabled")
-    private fun initSettings() {
-        mBinding.wvWebViewActivity.settings.run {
-            setAllowFileAccess(true)
-            setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS)
-            setSupportZoom(true)
-            setBuiltInZoomControls(true)
-            setUseWideViewPort(true)
-            setSupportMultipleWindows(false)
-            setAppCacheEnabled(true)
-            setDomStorageEnabled(true)
-            setJavaScriptEnabled(true)
-            setGeolocationEnabled(true)
-            setAppCacheMaxSize(Long.MAX_VALUE)
-            setAppCachePath(getDir("appcache", 0).path)
-            setDatabasePath(getDir("databases", 0).path)
-            setGeolocationDatabasePath(
-                getDir("geolocation", 0)
-                    .path
-            )
-            setPluginState(WebSettings.PluginState.ON_DEMAND)
-            setLoadWithOverviewMode(true)
-            setCacheMode(WebSettings.LOAD_NO_CACHE)
-            val mUserAgent: String = getUserAgentString()
-            setUserAgentString("$mUserAgent App/AppName")
-            syncCookie()
-            setUseWideViewPort(true)
-            setLoadWithOverviewMode(true)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK)
-            } else {
-                setCacheMode(WebSettings.LOAD_DEFAULT)
-            }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                setDisplayZoomControls(false)
-            }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                setLoadsImagesAutomatically(true)
-            } else {
-                setLoadsImagesAutomatically(false)
-            }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW)
-            }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) CookieManager.getInstance()
-                .setAcceptThirdPartyCookies(mBinding.wvWebViewActivity, true)
-
-            mBinding.wvWebViewActivity.setScrollBarStyle(WebView.SCROLLBARS_INSIDE_OVERLAY)
-            mBinding.wvWebViewActivity.setHorizontalScrollBarEnabled(false)
-            mBinding.wvWebViewActivity.setHorizontalFadingEdgeEnabled(false)
-            mBinding.wvWebViewActivity.setVerticalFadingEdgeEnabled(false)
-
-            mBinding.wvWebViewActivity.requestFocus()
-//            defaultTextEncodingName = "utf-8"
-//            cacheMode = WebSettings.LOAD_DEFAULT
-//            useWideViewPort = true
-//            allowFileAccess = true
-//            setSupportZoom(true)
-//            allowContentAccess = true
-//            javaScriptEnabled = true
-//            domStorageEnabled = true
-//            pluginState = WebSettings.PluginState.ON// 可以使用插件
-//            setSupportMultipleWindows(true)
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                mixedContentMode = 0
-//            }
-//            mediaPlaybackRequiresUserGesture = true
-//            allowFileAccessFromFileURLs = true
-//            allowUniversalAccessFromFileURLs = true
-//            javaScriptCanOpenWindowsAutomatically = true
-//            loadsImagesAutomatically = true
-//            setAppCacheEnabled(true)
-//            setAppCachePath(cacheDir.absolutePath)
-//            databaseEnabled = true
-//            setAppCachePath(getDir("appCache", 0).path)
-//            setGeolocationDatabasePath(getDir("database", 0).path)
-//            setGeolocationDatabasePath(getDir("geolocation", 0).path)
-//            setGeolocationEnabled(true)
-//            val instance = CookieManager.getInstance()
-//            instance.setAcceptCookie(true)
-//            if (Build.VERSION.SDK_INT >= 21) {
-//                instance.setAcceptThirdPartyCookies(mBinding.wvWebViewActivity, true)
-//            }
-
-
+        }.settings.apply {
+            javaScriptEnabled = true
         }
     }
 
-    private fun syncCookie() {
-        CookieSyncManager.createInstance(this)
-        val cookieManager = CookieManager.getInstance()
-        cookieManager.setAcceptCookie(true)
-        CookieSyncManager.getInstance().sync()
+    override fun onBackPressed() {
+        mBinding.wvWeb.apply {
+            logD("链接", "原始：$mainUrl org：$originalUrl")
+            //有些网页重定向了无法有效判断
+            if (canGoBack() && !(originalUrl == mainUrl || originalUrl == "$mainUrl/index"))
+                goBack()
+            else
+                super.onBackPressed()
+        }
     }
 
-    override fun getBinding(): ActivityWebViewBinding =
-        ActivityWebViewBinding.inflate(layoutInflater)
 }

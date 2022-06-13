@@ -15,7 +15,7 @@
         app:toolBarBackground="@color/main_color_2_skin" />
 
     <WebView
-        android:id="@+id/wv_web_view_activity"
+        android:id="@+id/wv_web"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </LinearLayout>

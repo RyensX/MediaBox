@@ -1,26 +1,38 @@
 package com.su.mediabox.view.adapter.type
 
 import android.annotation.SuppressLint
-import android.util.Log
+import android.content.Context
+import android.view.MotionEvent
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.su.mediabox.pluginapi.v2.been.*
+import com.su.mediabox.pluginapi.data.*
+import com.su.mediabox.util.*
 import com.su.mediabox.util.Util.withoutExceptionGet
-import com.su.mediabox.util.setOnClickListener
-import com.su.mediabox.util.setOnLongClickListener
 import com.su.mediabox.view.viewcomponents.*
-import com.su.skin.SkinManager
 
 typealias DataViewMapList = ArrayList<Pair<Class<Any>, Class<TypeViewHolder<Any>>>>
 
 class TypeAdapter(
+    private val bindingContext: Context,
     dataViewMapList: DataViewMapList,
     diff: DiffUtil.ItemCallback<Any>,
+    private val bindingRecyclerView: RecyclerView? = null,
     var dataViewMapCache: Boolean = true
 ) :
     ListAdapter<Any, TypeViewHolder<Any>>(diff) {
+
+    private var currentData: List<Any>? = null
+
+    override fun onViewAttachedToWindow(holder: TypeViewHolder<Any>) {
+        holder.onViewAttachedToWindow()
+    }
+
+    override fun onViewDetachedFromWindow(holder: TypeViewHolder<Any>) {
+        holder.onViewAttachedToWindow()
+    }
 
     companion object {
         const val UNKNOWN_TYPE = -1
@@ -42,6 +54,7 @@ class TypeAdapter(
 
         fun getRecycledViewPool(dataViewMapList: DataViewMapList): RecyclerView.RecycledViewPool {
             val key = dataViewMapList.getDataViewMapListKey()
+            logD("获取缓存池", "key=$key")
             return recycledViewPools[key] ?: RecyclerView.RecycledViewPool()
                 .also { recycledViewPools[key] = it }
         }
@@ -51,20 +64,22 @@ class TypeAdapter(
 
         init {
             //初始化全局数据视图对照表
-            Thread {
-                globalDataViewMap
-                    .registerDataViewMap<TextData, TextViewHolder>()
-                    .registerDataViewMap<TagFlowData, TagFlowViewHolder>()
-                    .registerDataViewMap<VideoPlayListData, VideoPlayListViewHolder>()
-                    .registerDataViewMap<VideoCover1Data, VideoCover1ViewHolder>()
-                    .registerDataViewMap<EpisodeData, VideoPlayListViewHolder.EpisodeViewHolder>()
-                    .registerDataViewMap<VideoGridItemData, VideoGridItemViewHolder>()
-                    .registerDataViewMap<GridData, GridViewHolder>()
-                    .registerDataViewMap<TagData, TagViewHolder>()
-                    .registerDataViewMap<LongTextData, LongTextViewHolder>()
-                    .registerDataViewMap<VideoInfoItemData, VideoInfoItemViewHolder>()
-                    .registerDataViewMap<ViewPagerData, ViewPagerViewHolder>()
-            }.start()
+            globalDataViewMap
+                .registerDataViewMap<SimpleTextData, SimpleTextViewHolder>()
+                .registerDataViewMap<TagFlowData, TagFlowViewHolder>()
+                .registerDataViewMap<EpisodeListData, VideoPlayListViewHolder>()
+                .registerDataViewMap<Cover1Data, Cover1ViewHolder>()
+                .registerDataViewMap<EpisodeData, VideoPlayListViewHolder.EpisodeViewHolder>()
+                .registerDataViewMap<MediaInfo1Data, MediaInfo1ViewHolder>()
+                .registerDataViewMap<TagData, TagViewHolder>()
+                .registerDataViewMap<LongTextData, LongTextViewHolder>()
+                .registerDataViewMap<MediaInfo2Data, MediaInfo2ViewHolder>()
+                .registerDataViewMap<ViewPagerData, ViewPagerViewHolder>()
+                .registerDataViewMap<BannerData, BannerViewHolder>()
+                .registerDataViewMap<HorizontalListData, HorizontalListViewHolder>()
+            for (viewType in globalDataViewMap.indices)
+            //全局Pool提供15个槽位
+                globalTypeRecycledViewPool.setMaxRecycledViews(viewType, 15)
         }
     }
 
@@ -102,41 +117,65 @@ class TypeAdapter(
     inline fun <reified T> getTag(key: String = T::class.java.simpleName): T? =
         withoutExceptionGet { tags[key] as? T }
 
-    //<VH的Class,对应Listener>
-    val clickListeners = mutableMapOf<Class<*>, TypeViewHolder<*>.(position: Int) -> Unit>()
-    val longClickListeners = mutableMapOf<Class<*>, TypeViewHolder<*>.(position: Int) -> Boolean>()
+    val vhCreateDsLs by unsafeLazy { mutableMapOf<Class<*>, TypeViewHolder<*>.() -> Unit>() }
 
     /**
-     * 为某种VH的itemView添加点击监听，重复添加会覆盖
-     * @param V VH类型
+     * 添加某种VH创建时调用的DSL，可用于添加点击、长按、触摸等，重复添加会覆盖。
+     *
+     * 注意复用问题，不要在Listener之类内部直接调用外部的对象，并且尽量使用[TypeViewHolder.bindingContext]和[TypeViewHolder.bindingTypeAdapter]
+     *
+     * @param V VH类型，[TypeViewHolder]则表示全部VH
+     *
+     * 举例:
+     * ```
+     * vHCreateDSL<TypeViewHolder<Any>> {
+     *      itemView.setOnClickListener {
+     *          "任意VH点击".showToast()
+     *      }
+     * }
+     * ```
      */
     @Suppress("UNCHECKED_CAST")
-    inline fun <reified V : TypeViewHolder<*>> addViewHolderClickListener(noinline onClick: V.(position: Int) -> Unit) {
-        clickListeners[V::class.java] = onClick as TypeViewHolder<*>.(Int) -> Unit
-    }
-
-    /**
-     * 为某种VH的itemView添加长按监听，重复添加会覆盖
-     * @param V VH类型
-     */
-    @Suppress("UNCHECKED_CAST")
-    inline fun <reified V : TypeViewHolder<*>> addViewHolderLongClickListener(noinline onClick: V.(position: Int) -> Boolean) {
-        longClickListeners[V::class.java] = onClick as TypeViewHolder<*>.(Int) -> Boolean
+    inline fun <reified V : TypeViewHolder<*>> vHCreateDSL(noinline dsl: V.() -> Unit) {
+        vhCreateDsLs[V::class.java] = dsl as TypeViewHolder<*>.() -> Unit
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun <T> getData(position: Int) = withoutExceptionGet { getItem(position) as? T }
+    inline fun <reified T> getData(position: Int) = withoutExceptionGet { getItem(position) as T }
+
+    public override fun getItem(position: Int) = withoutExceptionGet { super.getItem(position) }
+
+    fun checkDataIsSame(list: List<Any>?) = list === currentData
 
     override fun submitList(list: List<Any>?) {
-        if (dataViewMapCache && (list == null || list != currentList)) {
-            clearDataViewPosMap()
-        }
-        super.submitList(list)
+        submitList(list, null)
     }
 
     override fun submitList(list: List<Any>?, commitCallback: Runnable?) {
-        if (dataViewMapCache && (list == null || list != currentList)) {
-            clearDataViewPosMap()
+        //更新映射
+        if (!checkDataIsSame(list)) {
+            currentData = list
+            if (dataViewMapCache)
+                clearDataViewPosMap()
+        }
+        //更新LayoutConfig
+        list?.getOrNull(0)?.let { data ->
+            if (data is BaseData)
+                data.layoutConfig?.apply {
+                    logD("检测到配置", this.toString())
+                    //spanCount
+                    val layoutManager = bindingRecyclerView?.layoutManager
+                    if (layoutManager is GridLayoutManager) {
+                        logD("设置", "spanCount=$spanCount")
+                        layoutManager.spanCount = spanCount
+                    }
+                    //边距
+                    bindingRecyclerView?.getFirstItemDecorationBy<DynamicGridItemDecoration>()
+                        ?.let {
+                            logD("设置", "spacing=$itemSpacing")
+                            it.itemSpacing = itemSpacing
+                        }
+                }
         }
         super.submitList(list, commitCallback)
     }
@@ -147,37 +186,30 @@ class TypeAdapter(
         else {
             try {
                 val vhClass = dataViewMapList[viewType].second
+                logD("创建VH", vhClass.simpleName)
                 vhClass.getDeclaredConstructor(ViewGroup::class.java)
                     .apply { isAccessible = true }
                     .newInstance(parent)
                     .apply {
-                        //点击
-                        if (clickListeners[vhClass] != null)
-                            setOnClickListener(itemView) { pos ->
-                                (this as TypeViewHolder<*>).bindingTypeAdapter.clickListeners[vhClass]?.also {
-                                    it(pos)
-                                }
-                            }
-                        //长按
-                        if (longClickListeners[vhClass] != null)
-                            setOnLongClickListener(itemView) { pos ->
-                                (this as TypeViewHolder<*>).bindingTypeAdapter.longClickListeners[vhClass]?.let {
-                                    it(pos)
-                                } ?: true
-                            }
+                        //TODO 在复用时可能会出现问题
+                        (vhCreateDsLs[vhClass]
+                        //没有具体的则使用全局的
+                            ?: vhCreateDsLs[TypeViewHolder::class.java])?.invoke(
+                            this
+                        )
                     }
             } catch (e: Exception) {
                 e.printStackTrace()
-                Log.d("VH创建错误", e.message ?: viewType.toString())
+                logD("VH创建错误", e.message ?: viewType.toString())
                 TypeViewHolder.UnknownTypeViewHolder(parent)
             }
         }
 
     override fun onBindViewHolder(holder: TypeViewHolder<Any>, position: Int) {
-        SkinManager.applyViews(holder.itemView)
+        holder.checkBindingContext(bindingContext)
         getItem(position)?.also {
             holder.onBind(it)
-        }
+        } ?: logD("无法绑定", "$holder position:$position")
     }
 
     override fun onBindViewHolder(
@@ -185,7 +217,7 @@ class TypeAdapter(
         position: Int,
         payloads: MutableList<Any>
     ) {
-        SkinManager.applyViews(holder.itemView)
+        holder.checkBindingContext(bindingContext)
         getItem(position)?.also {
             holder.onBind(it, payloads)
         }
@@ -212,8 +244,11 @@ class TypeAdapter(
 
     object DefaultDiff : DiffUtil.ItemCallback<Any>() {
 
+        /**
+         * 对于大多数typeData来说并没有主键确定他们为同一个目标且不会被更改，内容相同就行
+         */
         override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean =
-            oldItem === newItem
+            oldItem == newItem
 
         /**
          * 对比内容，建议使用data class，会自动实现内容equals

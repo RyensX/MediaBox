@@ -1,35 +1,31 @@
 package com.su.mediabox.view.viewcomponents
 
+import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.recyclerview.widget.RecyclerView
-import com.su.mediabox.databinding.ItemAnimeType1Binding
-import com.su.mediabox.databinding.ViewComponentTagFlowBinding
-import com.su.mediabox.plugin.AppRouteProcessor
-import com.su.mediabox.pluginapi.v2.been.TagData
-import com.su.mediabox.pluginapi.v2.been.TagFlowData
-import com.su.mediabox.pluginapi.UI.dp
-import com.su.mediabox.pluginapi.v2.been.TextData
+import com.su.mediabox.App
+import com.su.mediabox.databinding.ViewComponentTagBinding
+import com.su.mediabox.pluginapi.data.TagData
 import com.su.mediabox.util.setOnClickListener
-import com.su.mediabox.view.adapter.type.TypeViewHolder
-import com.su.mediabox.view.adapter.type.typeAdapter
 
-class TagViewHolder private constructor(private val binding: ItemAnimeType1Binding) :
-    TypeViewHolder<TagData>(binding.root) {
-
-    private var data: TagData? = null
+class TagViewHolder private constructor(private val binding: ViewComponentTagBinding) :
+    TextViewHolder<TagData>(binding.vcTagText, binding.root) {
 
     constructor(parent: ViewGroup) : this(
-        ItemAnimeType1Binding.inflate(LayoutInflater.from(parent.context), parent, false)
+        ViewComponentTagBinding.inflate(LayoutInflater.from(parent.context), parent, false)
     ) {
-        setOnClickListener(binding.root) { pos ->
-            data?.action?.go()
+        setOnClickListener(binding.root) {
+            textData?.action?.go(bindingContext)
         }
     }
 
     override fun onBind(data: TagData) {
-        this.data = data
-        binding.tvAnimeType1.text = data.name
+        super.onBind(data)
+        binding.vcTagText.apply {
+            //标签颜色,null则使用主题色
+            backgroundTintList = ColorStateList.valueOf(data.tagColor ?: styleColor)
+
+            text = data.name
+        }
     }
 }

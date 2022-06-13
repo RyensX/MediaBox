@@ -10,14 +10,13 @@
         android:id="@+id/iv_search_history_1_icon"
         android:layout_width="wrap_content"
         android:layout_height="0px"
-        android:layout_marginStart="16dp"
-        android:paddingVertical="7dp"
+        android:paddingStart="8dp"
         android:src="@drawable/ic_access_time_main_color_24_skin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.su.mediabox.view.component.textview.TypefaceTextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_search_history_1_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -34,7 +33,6 @@
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toEndOf="@id/iv_search_history_1_icon"
         app:layout_constraintTop_toTopOf="parent"
-        app:typeface="bPRTypeface"
         tools:text="轻音" />
 
     <ImageView
@@ -42,11 +40,13 @@
         android:layout_width="wrap_content"
         android:layout_height="0px"
         android:layout_gravity="end"
-        android:paddingVertical="7dp"
+        android:background="?android:selectableItemBackgroundBorderless"
+
         android:paddingStart="3dp"
-        android:paddingEnd="16dp"
+        android:paddingEnd="8dp"
         android:src="@drawable/ic_clear_main_color_24_skin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

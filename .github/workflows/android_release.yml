@@ -1,0 +1,65 @@
+name: Android Release CI
+
+on:
+  push:
+    tags:
+      - '**'
+      
+env:
+  FILE_REPO: ${{ secrets.FILE_REPO }}
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out repository
+      if: ${{ env.FILE_REPO != "" }}
+      uses: actions/checkout@v3
+      with:
+        submodules: true
+        
+    - name: Prepare Files
+      if: ${{ env.FILE_REPO != "" }}
+      uses: actions/checkout@v3
+      with:
+        repository: ${{ env.FILE_REPO }}
+        token: ${{ secrets.GH_PAT }}
+        path: secrets
+        
+    - name: Release Files
+      if: ${{ env.FILE_REPO != "" }}
+      run:  |
+        cd secrets
+        cp key.jks ..
+        cp secret.gradle ..
+        cp notice.iml ../app/src/main/res/raw/
+        
+    - name: Set up JDK 11
+      if: ${{ env.FILE_REPO != "" }}
+      uses: actions/setup-java@v2
+      with:
+        distribution: "adopt"
+        java-version: "11"
+        
+    - name: Grant execute permission for gradlew
+      if: ${{ env.FILE_REPO != "" }}
+      run: chmod +x ./gradlew
+    - name: Build with Gradle
+      run: ./gradlew assembleGithub
+      
+    - name: Find Apk File Name
+      if: ${{ env.FILE_REPO != "" }}
+      run:  |
+        cd app/build/outputs/apk/Github/release
+        echo "file_name=$(ls *.apk)" >> $GITHUB_ENV
+      
+    - name: Upload Release
+      if: ${{ env.FILE_REPO != "" }}
+      uses: softprops/action-gh-release@v1
+      with:
+        draft:  true
+        tag_name: ${{ github.ref_name }}
+        files: "app/build/outputs/apk/Github/release/${{ env.file_name }}"
+        retention-days: 10

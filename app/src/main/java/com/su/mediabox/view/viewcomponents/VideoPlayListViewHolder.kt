@@ -2,29 +2,21 @@ package com.su.mediabox.view.viewcomponents
 
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.activity.ComponentActivity
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
-import com.su.mediabox.Pref
 import com.su.mediabox.R
-import com.su.mediabox.bean.HistoryBean
+import com.su.mediabox.bean.MediaHistory
 import com.su.mediabox.config.Const
 import com.su.mediabox.databinding.ItemAnimeEpisode2Binding
 import com.su.mediabox.databinding.ItemHorizontalRecyclerView1Binding
-import com.su.mediabox.plugin.AppRouteProcessor
-import com.su.mediabox.pluginapi.v2.been.EpisodeData
-import com.su.mediabox.pluginapi.v2.been.VideoPlayListData
-import com.su.mediabox.util.Util
-import com.su.mediabox.pluginapi.UI.dp
-import com.su.mediabox.pluginapi.v2.action.PlayAction
-import com.su.mediabox.util.Text.getNum
+import com.su.mediabox.pluginapi.data.EpisodeData
+import com.su.mediabox.pluginapi.data.EpisodeListData
+import com.su.mediabox.pluginapi.util.UIUtil.dp
+import com.su.mediabox.pluginapi.action.PlayAction
+import com.su.mediabox.util.*
 import com.su.mediabox.util.Util.getResColor
-import com.su.mediabox.util.bindHistoryPlayInfo
-import com.su.mediabox.util.setOnClickListener
-import com.su.mediabox.v2.view.activity.VideoMediaPlayActivity
+import com.su.mediabox.view.activity.VideoMediaPlayActivity
 import com.su.mediabox.view.adapter.type.*
 import com.su.mediabox.view.episodeSheetDialog
 import kotlinx.coroutines.Dispatchers
@@ -36,12 +28,14 @@ import kotlin.math.absoluteValue
  * 播放列表视图组件
  */
 class VideoPlayListViewHolder private constructor(private val binding: ItemHorizontalRecyclerView1Binding) :
-    TypeViewHolder<VideoPlayListData>(binding.root) {
+    TypeViewHolder<EpisodeListData>(binding.root) {
 
     var episodeDataList: List<EpisodeData>? = null
-    private val coroutineScope = (binding.root.context as ComponentActivity).lifecycleScope
+    private val coroutineScope by lazy(LazyThreadSafetyMode.NONE) { itemView.viewLifeCycleCoroutineScope }
     private var lastEpisodeIndex: Int? = null
-    private val isShowHistory = Pref.videoPlayListShowHistory
+
+    //TODO 接入设置
+    private val isShowHistory = true
 
     constructor(parent: ViewGroup) : this(
         ItemHorizontalRecyclerView1Binding.inflate(
@@ -57,21 +51,19 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
         binding.ivHorizontalRecyclerView1More.setOnClickListener {
             episodeDataList?.also {
                 bindingTypeAdapter.getTag<String>()?.also { name ->
-                    episodeSheetDialog(binding.root.context, name, it)?.show()
+                    episodeSheetDialog(bindingContext, name, it)?.show()
                 }
             }
         }
     }
 
-    override fun onBind(data: VideoPlayListData) {
+    override fun onBind(data: EpisodeListData) {
+        super.onBind(data)
         coroutineScope.launch(Dispatchers.Default) {
             var list = data.playList
             runCatching {
-                if (list.size > 1) {
-                    //尝试自动排序为集数顺序
-                    if (list[0].name.getNum() > list[1].name.getNum() || list[list.size - 2].name.getNum() > list[list.size - 1].name.getNum())
-                        list = list.asReversed()
-                }
+                //尝试自动排序为集数顺序
+                list = getCorrectEpisodeList(list)
             }
             episodeDataList = list
 
@@ -80,7 +72,7 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
                     setTag(list, Const.ViewComponent.EPISODE_LIST_TAG)
                     //自动定位
                     if (isShowHistory)
-                        bindHistoryPlayInfo {
+                        bindHistoryPlayInfo(bindingContext) {
                             setTag(it, Const.ViewComponent.HISTORY_INFO_TAG)
                             submitList(episodeDataList) {
                                 jumpEpisode(this)
@@ -95,7 +87,7 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
         binding.ivHorizontalRecyclerView1More.apply {
             setImageDrawable(Util.getResDrawable(R.drawable.ic_keyboard_arrow_down_main_color_2_24_skin))
             imageTintList =
-                ColorStateList.valueOf(binding.root.context.getResColor(R.color.foreground_white_skin))
+                ColorStateList.valueOf(getResColor(R.color.foreground_white_skin))
         }
     }
 
@@ -104,11 +96,16 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
      */
     private fun jumpEpisode(adapter: TypeAdapter) {
         binding.rvHorizontalRecyclerView1.apply {
-            val target = adapter.getTag<HistoryBean>(Const.ViewComponent.HISTORY_INFO_TAG) ?: return
+            val target =
+                adapter.getTag<MediaHistory>(Const.ViewComponent.HISTORY_INFO_TAG) ?: return
             coroutineScope.launch {
                 episodeDataList?.forEachIndexed { index, data ->
+                    //必须要保证EpisodeData.url有正确链接才支持自动定位和收藏
                     if (data.url == target.lastEpisodeUrl) {
-                        val jumpLength = (index - (lastEpisodeIndex ?: 0)).absoluteValue
+                        //实际跳转的index应该前或者后一位（靠前前一位，靠后后一位），方便查看
+                        val jumpIndex = if (index == 0 || index == adapter.itemCount) index
+                        else index + if (index > adapter.itemCount - index) 1 else -1
+                        val jumpLength = (jumpIndex - (lastEpisodeIndex ?: 0)).absoluteValue
                         launch(Dispatchers.Main) {
                             //更新新位置
                             adapter.notifyItemChanged(index)
@@ -117,10 +114,10 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
                                 adapter.notifyItemChanged(it)
                             }
                             if (jumpLength <= 30)
-                                smoothScrollToPosition(index)
+                                smoothScrollToPosition(jumpIndex)
                             else
                             //过长直接跳转
-                                scrollToPosition(index)
+                                scrollToPosition(jumpIndex)
 
                             lastEpisodeIndex = index
                         }
@@ -148,6 +145,7 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
                 bindingTypeAdapter.getData<EpisodeData>(pos)?.also {
                     val action = it.action
                     if (action is PlayAction) {
+                        logD("开始播放动作", action.formatMemberField(), false)
                         //如果是跳转播放则填入播放列表
                         val playList =
                             bindingTypeAdapter.getTag<List<EpisodeData>>(Const.ViewComponent.EPISODE_LIST_TAG)
@@ -155,7 +153,7 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
                             VideoMediaPlayActivity.playList = playList
                         }
                     }
-                    action?.go()
+                    action?.go(bindingContext)
                 }
             }
 
@@ -163,7 +161,7 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
 
         override fun onBind(data: EpisodeData) {
             val historyBean =
-                bindingTypeAdapter.getTag<HistoryBean>(Const.ViewComponent.HISTORY_INFO_TAG)
+                bindingTypeAdapter.getTag<MediaHistory>(Const.ViewComponent.HISTORY_INFO_TAG)
 
             binding.tvAnimeEpisode2.apply {
                 setTextColor(Color.WHITE)
@@ -172,17 +170,16 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
             binding.root.apply {
                 layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
                 if (layoutParams is ViewGroup.MarginLayoutParams) {
-                    (layoutParams as ViewGroup.MarginLayoutParams).setMargins(0, 4.dp, 8.dp, 4.dp)
+                    (layoutParams as ViewGroup.MarginLayoutParams).setMargins(0, 6.dp, 8.dp, 6.dp)
                 }
 
                 if (data.url == historyBean?.lastEpisodeUrl) {
                     //有对应播放记录，高亮显示并置顶
-                    setTextColor(binding.root.context.getResColor(R.color.foreground_main_color_2_skin))
+                    setTextColor(getResColor(R.color.foreground_main_color_2_skin))
                 } else {
-                    setTextColor(binding.root.context.getResColor(R.color.foreground_white_skin))
+                    setTextColor(getResColor(R.color.foreground_white_skin))
                 }
 
-                //setTextColor(binding.root.context.getResColor(R.color.foreground_white_skin))
                 background =
                     Util.getResDrawable(R.drawable.shape_circle_corner_edge_white_ripper_5_skin)
             }

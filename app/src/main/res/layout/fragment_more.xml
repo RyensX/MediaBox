@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".view.fragment.MoreFragment">
+    android:orientation="vertical">
 
     <com.su.mediabox.view.component.AnimeToolbar
         android:id="@+id/atb_more_fragment_header"

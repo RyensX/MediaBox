@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="plugin_installer_install">安装</string>
+    <string name="plugin_installer_launch">启动</string>
+    <string name="plugin_installer_download">下载</string>
+    <string name="plugin_installer_cancel">关闭</string>
+    <string name="plugin_installer_loading">载入中...</string>
+</resources>

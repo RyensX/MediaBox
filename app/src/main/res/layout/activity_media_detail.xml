@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black">
+
+    <ImageView
+        android:id="@+id/iv_detail_activity_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        tools:src="@drawable/ic_launcher_background" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent_skin" />
+
+    <com.su.mediabox.view.component.AnimeToolbar
+        android:id="@+id/atb_detail_activity_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        app:buttonDrawable1="@drawable/ic_share_white_24"
+        app:titleColor="@color/foreground_white_skin"
+        app:toolBarBackground="@color/foreground_transparent_skin" />
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/srl_detail_activity"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/atb_detail_activity_toolbar"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        app:srlPrimaryColor="@color/main_color_3_skin">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_detail_activity_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</RelativeLayout>

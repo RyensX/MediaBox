@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white_skin"
-    android:orientation="vertical"
-    tools:context=".view.activity.ClassifyActivity">
+    android:orientation="vertical">
 
     <com.su.mediabox.view.component.AnimeToolbar
         android:id="@+id/atb_classify_activity_toolbar"

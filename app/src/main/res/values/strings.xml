@@ -83,7 +83,7 @@
     <string name="clear_cache_succeed">清空缓存成功！</string>
     <string name="clear_cache_failed">清空缓存失败！</string>
     <string name="detail_page">详情页</string>
-    <string name="load_data_failed_click_to_retry">加载数据失败，点击重试</string>
+    <string name="load_data_failed_click_to_retry">加载数据失败，请重试</string>
     <string name="choose_episode">选集</string>
     <string name="test_device">测试设备</string>
     <string name="app_icon_describe">APP图标修改自动漫《日常》</string>
@@ -98,6 +98,7 @@
     <string name="shortcuts_download_long">视频</string>
     <string name="shortcuts_download_short">缓存视频</string>
     <string name="attention">声明</string>
+    <string name="statement">本软件免费开源，仅可用作学习交流！\n因此软件产生的版权问题，软件作者概不负责！\n如果用起来还不错欢迎去Github仓库点个Star</string>
     <string name="download_anime_delete_tip">是否删除该番剧？</string>
     <string name="update_widget">正在更新小组件</string>
     <string name="widget_everyday_anime">每日更新动漫</string>
@@ -105,6 +106,7 @@
     <string name="vertical_reverse">上下镜像</string>
     <string name="horizontal_reverse">左右镜像</string>
     <string name="play_error_retry">点击重试</string>
+    <string name="play_parse_error_retry">重新解析</string>
     <string name="play_error">播放错误，网络错误或目标资源已失效</string>
     <string name="reverse">镜像</string>
     <string name="no_reverse">正常</string>
@@ -116,7 +118,7 @@
     <string name="ok">确定</string>
     <string name="no_result_info">搜索结果为空</string>
     <string name="no_more_info">没有更多了</string>
-    <string name="play_auto_seek">已自动跳转到上次进度</string>
+    <string name="play_auto_seek">定位到上次进度</string>
     <string name="warning">警告</string>
     <string name="delete">删除</string>
     <string name="clean">清理</string>
@@ -135,7 +137,7 @@
     <string name="old_path">旧</string>
     <string name="do_not_finish_the_page_when_parse_download_data">缓存失败，解析缓存数据时请勿关闭页面</string>
     <string name="restore_screen">还原屏幕</string>
-    <string name="touch_down_high_speed"><![CDATA[>> %s倍播放]]></string>
+    <string name="touch_down_high_speed"><![CDATA[>> %sX倍速播放]]></string>
     <string name="play_position_tip">上次看到：</string>
     <string name="will_you_try_to_sniffer_video">是否尝试嗅探视频？</string>
     <string name="getting_complex_video_failed">获取视频链接失败，%s</string>
@@ -150,7 +152,7 @@
     <string name="loading_danmaku">加载弹幕中…</string>
     <string name="the_video_has_danmaku">此视频含弹幕</string>
     <string name="send_a_danmaku">发个弹幕见证当下</string>
-    <string name="send_a_danmaku_is_disabled">发送弹幕功能不可用</string>
+    <string name="send_a_danmaku_is_disabled">弹幕功能不可用</string>
     <string name="send_danmaku_failed">发送弹幕失败，%s</string>
     <string name="please_input_danmaku_text">请输入弹幕内容！</string>
     <string name="danmaku_exist_shield_content">存在被屏蔽文字，发送失败！</string>
@@ -223,4 +225,31 @@
     <string name="all_history_count">%d条</string>
     <string name="item_unknown_type">未知类型</string>
     <string name="classify_title">媒体分类</string>
+    <string name="plugin_installer_install">安装</string>
+    <string name="plugin_installer_launch">启动</string>
+    <string name="plugin_installer_download">下载</string>
+    <string name="plugin_installer_cancel">关闭</string>
+    <string name="plugin_installer_loading">载入中...</string>
+    <string name="plugin_installer_hint_format">插件 %s 安装成功</string>
+    <string name="plugin_repo_title">插件仓库</string>
+    <string name="plugin_repo_title_template_installed">已安装(%d)</string>
+    <string name="plugin_repo_title_template_updatable">可更新(%d)</string>
+    <string name="plugin_repo_title_template_downloadable">可下载(%d)</string>
+    <string name="player_loading_hint_cache">缓冲中..</string>
+    <string name="player_loading_hint_parse">视频解析中..</string>
+    <string name="plugin_list_empty">😮没有扫描到插件！\n\n💡如何获取插件：\n 1.左滑访问官方插件仓库\n 2.从外部下载或在线安装插件</string>
+    <string name="plugin_list_loading">😮正在扫描中..</string>
+    <string name="plugin_repo_load_error">😥插件信息拉取失败！\n\n💡解决办法：\n 1.检查网络\n 2.右下角设置打开代理\n 3.下拉刷新数据</string>
+    <string name="menu_plugin_repo">插件仓库</string>
+    <string name="menu_plugin_repo_office">插件官网</string>
+    <string name="menu_plugin_repo_help">插件帮助</string>
+    <string name="menu_plugin_repo_help_hint">如果遇到无法正常调用系统下载器下载安装插件，可以手动打开插件官网下载插件包再选择本应用打开安装</string>
+    <string name="app_no_update_hint">已是最新版本</string>
+    <string name="plugin_manage_media_count_format">收藏：%d</string>
+    <string name="plugin_manage_media_uninstall">卸载</string>
+    <string name="plugin_manage_media_package_label">包名</string>
+    <string name="plugin_manage_media_version_label">版本</string>
+    <string name="plugin_manage_media_uninstall_title">确认卸载？</string>
+    <string name="plugin_manage_media_uninstall_msg">注意：卸载后数据也会删除，并且无法恢复</string>
+    <string name="media_more">仅预览最多4个，点击查看完整收藏列表</string>
 </resources>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/vc_banner_view_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="8dp"
+        tools:layout_height="300dp">
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vc_banner_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
+    </androidx.cardview.widget.CardView>
+
+    <com.zhpan.indicator.IndicatorView
+        android:id="@+id/vc_banner_indicator_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/vc_banner_view_card"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="12dp" />
+
+</RelativeLayout>

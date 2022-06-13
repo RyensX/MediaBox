@@ -8,6 +8,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.WhichButton
 import com.afollestad.materialdialogs.actions.getActionButton
 import com.su.mediabox.model.AppUpdateModel
+import com.su.mediabox.util.Text.githubProxy
 import com.su.mediabox.util.Util.openBrowser
 import com.su.mediabox.util.formatSize
 import kotlinx.coroutines.delay
@@ -16,6 +17,7 @@ import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 
+//TODO 需要重新设计，尤其是硬编码更新日志
 class AppUpdateHelper private constructor() {
     companion object {
         const val UPDATE_SERVER_SP_KEY = "updateServer"
@@ -36,7 +38,6 @@ class AppUpdateHelper private constructor() {
     fun getUpdateStatus(): LiveData<AppUpdateStatus> = AppUpdateModel.status
 
     fun checkUpdate() {
-        //TODO 如果插件是在github开源的可以提供地址被宿主主动检查更新
         AppUpdateModel.checkUpdate()
     }
 
@@ -87,7 +88,7 @@ class AppUpdateHelper private constructor() {
                 val t = "下载更新"
                 positiveButton(text = t) {
                     openBrowser(
-                        AppUpdateModel.updateBean?.assets?.get(0)?.browserDownloadUrl
+                        AppUpdateModel.updateBean?.assets?.get(0)?.browserDownloadUrl?.githubProxy
                             ?: return@positiveButton
                     )
                 }

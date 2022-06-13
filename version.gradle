@@ -1,5 +1,5 @@
-ext.version_code = 36
-ext.version_name = "1.4"
+ext.version_code = 37
+ext.version_name = "2.0"
 
 def build_versions = [:]
 build_versions.compile_sdk = 31
@@ -9,25 +9,36 @@ build_versions.target_sdk = 31
 ext.build_versions = build_versions
 
 def deps = [:]
+
 def kotlin = [:]
-kotlin.kotlin_stdlib = "org.jetbrains.kotlin:kotlin-stdlib:1.4.32"
+kotlin.kotlin_stdlib = "org.jetbrains.kotlin:kotlin-stdlib:1.6.10"
 kotlin.core_ktx = "androidx.core:core-ktx:1.6.0"
 deps.kotlin = kotlin
 
+def settings = [:]
+settings.pref = "androidx.preference:preference-ktx:1.2.0"
+settings.data_store = "androidx.datastore:datastore-preferences:1.0.0"
+deps.settings = settings
+
 def kotlinx = [:]
-kotlinx.kotlinx_coroutines_android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.1"
+kotlinx.kotlinx_coroutines_android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1"
 deps.kotlinx = kotlinx
 
 def google = [:]
 google.flexbox = "com.google.android.flexbox:flexbox:3.0.0"
 deps.google = google
 
+def apache = [:]
+apache.commons_text = "org.apache.commons:commons-text:1.9"
+deps.apache = apache
+
 def support = [:]
 support.constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.1"
-support.material = "com.google.android.material:material:1.4.0"
+support.material = "com.google.android.material:material:1.6.0-beta01"
 support.appcompat = "androidx.appcompat:appcompat:1.3.1"
 support.swiperefreshlayout = "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 support.viewpager2 = "androidx.viewpager2:viewpager2:1.0.0"
+support.viewpager2_indicator = "com.github.zhpanvip:viewpagerindicator:1.2.1"
 deps.support = support
 
 def retrofit2 = [:]
@@ -38,7 +49,7 @@ deps.retrofit2 = retrofit2
 def lifecycle = [:]
 lifecycle.lifecycle_livedata_ktx = "androidx.lifecycle:lifecycle-livedata-ktx:2.3.1"
 lifecycle.lifecycle_viewmodel_ktx = "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
-lifecycle.lifecycle_runtime_ktx = "androidx.lifecycle:lifecycle-runtime-ktx:2.3.1"
+lifecycle.lifecycle_runtime_ktx = "androidx.lifecycle:lifecycle-runtime-ktx:2.4.1"
 lifecycle.lifecycle_activity_ktx = "androidx.activity:activity-ktx:1.4.0"
 lifecycle.lifecycle_fragment_ktx = "androidx.fragment:fragment-ktx:1.4.0"
 deps.lifecycle = lifecycle
@@ -49,14 +60,10 @@ okhttp3.okhttp_dnsoverhttps = "com.squareup.okhttp3:okhttp-dnsoverhttps:4.9.0"
 deps.okhttp3 = okhttp3
 
 def room = [:]
-room.room_runtime = "androidx.room:room-runtime:2.4.0"
-room.room_ktx = "androidx.room:room-ktx:2.4.0"
-room.room_compiler = "androidx.room:room-compiler:2.4.0"
+room.room_runtime = "androidx.room:room-runtime:2.4.2"
+room.room_ktx = "androidx.room:room-ktx:2.4.2"
+room.room_compiler = "androidx.room:room-compiler:2.4.2"
 deps.room = room
-
-def greenrobot = [:]
-greenrobot.eventbus = "org.greenrobot:eventbus:3.2.0"
-deps.greenrobot = greenrobot
 
 def jsoup = [:]
 jsoup.jsoup = "org.jsoup:jsoup:1.14.3"
@@ -96,7 +103,7 @@ nanohttpd.nanohttpd = "org.nanohttpd:nanohttpd:2.3.1"
 deps.nanohttpd = nanohttpd
 
 def coil_kt = [:]
-coil_kt.coil = "io.coil-kt:coil:1.4.0"
+coil_kt.coil = "io.coil-kt:coil:2.0.0"
 deps.coil_kt = coil_kt
 
 def smart = [:]
@@ -123,9 +130,5 @@ deps.jakewharton = jakewharton
 def cretin = [:]
 cretin.etv = "com.github.MZCretin:ExpandableTextView:v1.6.1-x"
 deps.cretin = cretin
-
-def pref = [:]
-pref.kotpref = "com.chibatching.kotpref:kotpref:2.13.1"
-deps.pref = pref
 
 ext.deps = deps

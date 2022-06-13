@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.su.mediabox.view.component.textview.ExpandableTypefaceTextView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.ctetin.expandabletextviewlibrary.ExpandableTextView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:lineSpacingExtra="4dp"
-    android:paddingHorizontal="16dp"
     android:textColor="@color/foreground_main_color_2_skin"
     android:textSize="14sp"
     app:ep_expand_color="@color/foreground_main_color_2_skin"
@@ -15,5 +14,4 @@
     app:ep_need_animation="true"
     app:ep_need_contract="true"
     app:ep_need_mention="true"
-    app:typeface="bPRTypeface"
     tools:text="文本视图组件" />

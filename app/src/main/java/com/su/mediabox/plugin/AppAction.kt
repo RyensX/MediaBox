@@ -1,15 +1,12 @@
 package com.su.mediabox.plugin
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
-import com.su.mediabox.pluginapi.v2.action.*
+import com.su.mediabox.pluginapi.action.*
 import com.su.mediabox.util.goActivity
 import com.su.mediabox.util.putAction
-import com.su.mediabox.v2.view.activity.MediaClassifyActivity
-import com.su.mediabox.v2.view.activity.VideoDetailActivity
-import com.su.mediabox.v2.view.activity.VideoMediaPlayActivity
-import com.su.mediabox.v2.view.activity.VideoSearchActivity
-import com.su.mediabox.view.activity.WebViewActivity
+import com.su.mediabox.view.activity.*
 
 /**
  * 内置数据动作
@@ -18,25 +15,32 @@ object AppAction {
 
     //初始化内置动作
     fun init() {
+        HomeAction.GO = {
+            it.goActivity<HomeActivity>()
+        }
         DetailAction.GO = {
-            routeToComponentPage<DetailAction, VideoDetailActivity>()
+            routeToComponentPage<DetailAction, MediaDetailActivity>(it)
         }
         PlayAction.GO = {
-            routeToComponentPage<PlayAction, VideoMediaPlayActivity>()
+            routeToComponentPage<PlayAction, VideoMediaPlayActivity>(it)
         }
         ClassifyAction.GO = {
-            routeToComponentPage<ClassifyAction, MediaClassifyActivity>()
+            routeToComponentPage<ClassifyAction, MediaClassifyActivity>(it)
         }
         SearchAction.GO = {
-            routeToComponentPage<SearchAction, VideoSearchActivity>()
+            routeToComponentPage<SearchAction, MediaSearchActivity>(it)
         }
         WebBrowserAction.GO = {
-            routeToComponentPage<WebBrowserAction, WebViewActivity>()
+            routeToComponentPage<WebBrowserAction, WebViewActivity>(it)
+        }
+        CustomPageAction.GO = {
+            CustomDataActivity.action = this
+            it.goActivity<CustomDataActivity>()
         }
     }
 
-    private inline fun <T : Action, reified A : Activity> T.routeToComponentPage() {
-        AppRouteProcessor.currentActivity?.get()
-            ?.goActivity<A>(Intent().putAction(this))
+    private inline fun <T : Action, reified A : Activity> T.routeToComponentPage(context: Context) {
+        putAction(this)
+        context.goActivity<A>()
     }
 }

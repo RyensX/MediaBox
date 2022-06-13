@@ -1,73 +1,62 @@
 package com.su.mediabox.database
 
 import android.content.Context
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
-import androidx.room.migration.Migration
-import androidx.sqlite.db.SupportSQLiteDatabase
 import com.su.mediabox.App
-import com.su.mediabox.plugin.AppRouteProcessor
-import com.su.mediabox.plugin.PluginManager.getPluginInfo
-import com.su.mediabox.bean.SearchHistoryBean
-import com.su.mediabox.database.converter.AnimeDownloadStatusConverter
-import com.su.mediabox.database.entity.AnimeDownloadEntity
-import com.su.mediabox.bean.FavoriteAnimeBean
-import com.su.mediabox.bean.HistoryBean
+import com.su.mediabox.bean.*
 import com.su.mediabox.config.Const
-import com.su.mediabox.config.Const.Database.AppDataBase.APP_DATA_BASE_FILE_NAME
 import com.su.mediabox.database.dao.*
+import com.su.mediabox.model.PluginInfo
+import com.su.mediabox.plugin.PluginManager
+import com.su.mediabox.util.getOrInit
 
 @Database(
+    version = 2,
     entities = [
-        SearchHistoryBean::class,
-        AnimeDownloadEntity::class,
-        FavoriteAnimeBean::class,
-        HistoryBean::class],
-    version = 4
-)
-@TypeConverters(
-    value = [AnimeDownloadStatusConverter::class]
+        MediaSearchHistory::class,
+        MediaFavorite::class,
+        MediaHistory::class
+    ],
+    autoMigrations = [
+        AutoMigration(from = 1, to = 2)
+    ]
 )
 abstract class AppDatabase : RoomDatabase() {
 
-    abstract fun searchHistoryDao(): SearchHistoryDao
-    abstract fun animeDownloadDao(): AnimeDownloadDao
-    abstract fun favoriteAnimeDao(): FavoriteAnimeDao
-    abstract fun historyDao(): HistoryDao
+    abstract fun searchDao(): MediaSearchHistoryDao
+    abstract fun favoriteDao(): MediaFavoriteDao
+    abstract fun historyDao(): MediaHistoryDao
 
     companion object {
 
         private val instances by lazy(LazyThreadSafetyMode.NONE) { mutableMapOf<String, AppDatabase>() }
 
-        fun getInstance(context: Context, packageName: String, signature: String): AppDatabase {
-            val name = String.format(APP_DATA_BASE_FILE_NAME, packageName, signature)
-            return instances[name] ?: synchronized(this) {
-                instances[name] ?: Room.databaseBuilder(
+        fun getInstance(context: Context, dbFile: String): AppDatabase {
+            return instances.getOrInit(dbFile) {
+                Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
-                    name
-                )
-                    .addMigrations(version3to4)
-                    .build()
-            }.also { instances[name] = it }
+                    dbFile
+                ).build()
+            }
+        }
+
+        fun destroyInstance(dbFile: String) {
+            instances.remove(dbFile)
         }
     }
 
 }
 
-fun getAppDataBase() = AppRouteProcessor.currentActivity?.get()?.getPluginInfo()
-    ?.let { AppDatabase.getInstance(App.context, it.packageName, it.signature) }
+fun PluginInfo.getAppDataBaseFileName() =
+    String.format(Const.Database.AppDataBase.MEDIA_DB_FILE_NAME_TEMPLATE, id)
+
+fun getAppDataBase() = PluginManager.currentLaunchPlugin.value?.run { getAppDataBase() }
     ?: throw RuntimeException("获取当前插件信息错误！")
 
-private val version3to4 = object : Migration(3, 4) {
-    override fun migrate(database: SupportSQLiteDatabase) {
-        val table = Const.Database.AppDataBase.SEARCH_HISTORY_TABLE_NAME
-        //删除旧的搜索历史表
-        database.execSQL("DROP TABLE $table")
-        //建立新表
-        database.execSQL("CREATE TABLE IF NOT EXISTS $table (`title` TEXT NOT NULL, `timeStamp` INTEGER NOT NULL, PRIMARY KEY(`title`))")
-    }
+fun PluginInfo.getAppDataBase() = AppDatabase.getInstance(App.context, getAppDataBaseFileName())
 
-}
+fun PluginInfo.destroyInstance() = AppDatabase.destroyInstance(getAppDataBaseFileName())

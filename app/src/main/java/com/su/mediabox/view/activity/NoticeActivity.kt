@@ -3,10 +3,11 @@ package com.su.mediabox.view.activity
 import android.os.Bundle
 import android.text.Html
 import com.su.mediabox.databinding.ActivityNoticeBinding
+import com.su.mediabox.util.viewBind
 import java.io.UnsupportedEncodingException
 import java.net.URLDecoder
 
-class NoticeActivity : BasePluginActivity<ActivityNoticeBinding>() {
+class NoticeActivity : BasePluginActivity() {
     companion object {
         const val PARAM = "param"
         const val TOOLBAR_TITLE = "toolbarTitle"
@@ -14,6 +15,7 @@ class NoticeActivity : BasePluginActivity<ActivityNoticeBinding>() {
         const val CONTENT = "content"
     }
 
+    private val mBinding by viewBind(ActivityNoticeBinding::inflate)
     private val paramMap: HashMap<String, String> = HashMap()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,5 +43,4 @@ class NoticeActivity : BasePluginActivity<ActivityNoticeBinding>() {
         }
     }
 
-    override fun getBinding(): ActivityNoticeBinding = ActivityNoticeBinding.inflate(layoutInflater)
 }
