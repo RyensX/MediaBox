@@ -2,6 +2,7 @@ package com.su.mediabox.view.activity
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.view.KeyEvent
 import androidx.activity.viewModels
 import androidx.core.view.forEach
 import androidx.core.view.isVisible
@@ -165,6 +166,71 @@ class VideoMediaPlayActivity : BasePluginActivity(),
         val videoOptionModel =
             VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "enable-accurate-seek", 1)
         GSYVideoManager.instance().optionModelList = listOf(videoOptionModel)
+    }
+
+    /**
+     *space-暂停/播放
+     *left-回退15s
+     *right-快进15s
+     *m-静音(mute)
+     *s/shift+left-慢放
+     *f/shift+right-快放
+     **/
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        //暂停/继续
+        if (keyCode == KeyEvent.KEYCODE_SPACE ||
+            keyCode == KeyEvent.KEYCODE_BREAK ||
+            keyCode == KeyEvent.KEYCODE_MEDIA_PLAY ||
+            keyCode == KeyEvent.KEYCODE_MEDIA_PAUSE ||
+            keyCode == KeyEvent.KEYCODE_MEDIA_STOP
+        ) {
+            if (mBinding.vmPlay.currentState == GSYVideoView.CURRENT_STATE_PLAYING) {
+                mBinding.vmPlay.onVideoPause()
+            } else {
+                mBinding.vmPlay.onVideoResume()
+            }
+        }
+        //后退
+        if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT ||
+            keyCode == KeyEvent.KEYCODE_MEDIA_STEP_BACKWARD
+        ) {
+            if (mBinding.vmPlay.currentPositionWhenPlaying < 15000) {
+                mBinding.vmPlay.seekTo(0)
+            } else {
+                mBinding.vmPlay.seekTo((mBinding.vmPlay.currentPositionWhenPlaying - 15000).toLong())
+            }
+        }
+        //前进
+        if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT ||
+            keyCode == KeyEvent.KEYCODE_MEDIA_STEP_FORWARD
+        ) {
+            if (mBinding.vmPlay.currentPositionWhenPlaying + 15000 > mBinding.vmPlay.duration) {
+                mBinding.vmPlay.seekTo(mBinding.vmPlay.duration.toLong())
+            } else {
+                mBinding.vmPlay.seekTo((mBinding.vmPlay.currentPositionWhenPlaying + 15000).toLong())
+            }
+        }
+        //todo 添加UI提示
+        //静音
+        if (keyCode == KeyEvent.KEYCODE_M) {
+            GSYVideoManager.instance().isNeedMute = !GSYVideoManager.instance().isNeedMute
+        }
+        if (event != null) {
+            //快进
+            if ((event.isShiftPressed && keyCode == KeyEvent.KEYCODE_DPAD_LEFT) ||
+                keyCode == KeyEvent.KEYCODE_S ||
+                keyCode == KeyEvent.KEYCODE_MEDIA_FAST_FORWARD
+            ) {
+                mBinding.vmPlay.speed = 0.5f
+            }
+            //慢速
+            else if ((event.isShiftPressed && keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) ||
+                keyCode == KeyEvent.KEYCODE_F
+            ) {
+                mBinding.vmPlay.speed = 1.5f
+            }
+        }
+        return super.onKeyDown(keyCode, event)
     }
 
     override fun onPause() {
