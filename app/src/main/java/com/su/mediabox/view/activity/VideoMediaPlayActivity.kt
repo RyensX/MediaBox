@@ -15,6 +15,7 @@ import com.shuyu.gsyvideoplayer.player.PlayerFactory
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoView
+import com.su.mediabox.R
 import com.su.mediabox.databinding.ActivityVideoMediaPlayBinding
 import com.su.mediabox.pluginapi.action.PlayAction
 import com.su.mediabox.pluginapi.data.EpisodeData
@@ -25,12 +26,15 @@ import com.su.mediabox.view.component.player.VideoMediaPlayer
 import com.su.mediabox.view.component.player.VideoPositionMemoryDbStore
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
 import tv.danmaku.ijk.media.player.IjkMediaPlayer
+import java.lang.Long.max
+import java.lang.Long.min
 
 class VideoMediaPlayActivity : BasePluginActivity(),
     VideoMediaPlayer.PlayOperatingProxy {
 
     companion object {
         var playList: List<EpisodeData>? = null
+        private const val DEFAULT_SEEK_LENGTH = 15000L
     }
 
     private val mBinding by viewBind(ActivityVideoMediaPlayBinding::inflate)
@@ -169,65 +173,47 @@ class VideoMediaPlayActivity : BasePluginActivity(),
     }
 
     /**
-     *space-暂停/播放
-     *left-回退15s
-     *right-快进15s
-     *m-静音(mute)
-     *s/shift+left-慢放
-     *f/shift+right-快放
-     **/
+     * 空格/回车/P - 暂停/播放
+     * Left - 后退
+     * Right - 前进
+     * Shift+Left - 减速0.5
+     * Shift+Right - 加速0.5
+     * M - 静音
+     */
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        //暂停/继续
-        if (keyCode == KeyEvent.KEYCODE_SPACE ||
-            keyCode == KeyEvent.KEYCODE_BREAK ||
-            keyCode == KeyEvent.KEYCODE_MEDIA_PLAY ||
-            keyCode == KeyEvent.KEYCODE_MEDIA_PAUSE ||
-            keyCode == KeyEvent.KEYCODE_MEDIA_STOP
-        ) {
-            if (mBinding.vmPlay.currentState == GSYVideoView.CURRENT_STATE_PLAYING) {
-                mBinding.vmPlay.onVideoPause()
-            } else {
-                mBinding.vmPlay.onVideoResume()
-            }
-        }
-        //后退
-        if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT ||
-            keyCode == KeyEvent.KEYCODE_MEDIA_STEP_BACKWARD
-        ) {
-            if (mBinding.vmPlay.currentPositionWhenPlaying < 15000) {
-                mBinding.vmPlay.seekTo(0)
-            } else {
-                mBinding.vmPlay.seekTo((mBinding.vmPlay.currentPositionWhenPlaying - 15000).toLong())
-            }
-        }
-        //前进
-        if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT ||
-            keyCode == KeyEvent.KEYCODE_MEDIA_STEP_FORWARD
-        ) {
-            if (mBinding.vmPlay.currentPositionWhenPlaying + 15000 > mBinding.vmPlay.duration) {
-                mBinding.vmPlay.seekTo(mBinding.vmPlay.duration.toLong())
-            } else {
-                mBinding.vmPlay.seekTo((mBinding.vmPlay.currentPositionWhenPlaying + 15000).toLong())
-            }
-        }
-        //todo 添加UI提示
-        //静音
-        if (keyCode == KeyEvent.KEYCODE_M) {
-            GSYVideoManager.instance().isNeedMute = !GSYVideoManager.instance().isNeedMute
-        }
-        if (event != null) {
-            //快进
-            if ((event.isShiftPressed && keyCode == KeyEvent.KEYCODE_DPAD_LEFT) ||
-                keyCode == KeyEvent.KEYCODE_S ||
-                keyCode == KeyEvent.KEYCODE_MEDIA_FAST_FORWARD
-            ) {
-                mBinding.vmPlay.speed = 0.5f
-            }
-            //慢速
-            else if ((event.isShiftPressed && keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) ||
-                keyCode == KeyEvent.KEYCODE_F
-            ) {
-                mBinding.vmPlay.speed = 1.5f
+        mBinding.vmPlay.apply {
+            when (keyCode) {
+                //播放/暂停
+                KeyEvent.KEYCODE_SPACE, KeyEvent.KEYCODE_MEDIA_PLAY, KeyEvent.KEYCODE_ENTER,
+                    //在部分机器，比如WSA空格和回车键被占用
+                KeyEvent.KEYCODE_P,
+                KeyEvent.KEYCODE_MEDIA_PAUSE, KeyEvent.KEYCODE_MEDIA_STOP -> gsyVideoManager.apply {
+                    if (isPlaying) {
+                        onVideoPause()
+                    } else {
+                        onVideoResume()
+                    }
+                }
+                KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_MEDIA_STEP_BACKWARD ->
+                    //减速
+                    if (event?.isShiftPressed == true) {
+                        speed -= 0.5F
+                    }
+                    //后退
+                    else seekTo(max(DEFAULT_SEEK_LENGTH, currentPositionWhenPlaying - DEFAULT_SEEK_LENGTH))
+
+                KeyEvent.KEYCODE_DPAD_RIGHT, KeyEvent.KEYCODE_MEDIA_STEP_FORWARD ->
+                    //加速
+                    if (event?.isShiftPressed == true) {
+                        speed += 0.5F
+                    }
+                    //前进
+                    else seekTo(min(duration.toLong(), currentPositionWhenPlaying + DEFAULT_SEEK_LENGTH))
+                //静音
+                KeyEvent.KEYCODE_M ->
+                    GSYVideoManager.instance().apply {
+                        isNeedMute = !isNeedMute
+                    }
             }
         }
         return super.onKeyDown(keyCode, event)
