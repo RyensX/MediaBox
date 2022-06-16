@@ -71,6 +71,7 @@ interface Setting {
     companion object {
         const val NET_REPO_PROXY = "net_repo_proxy"
         const val SHOW_PLAY_BOTTOM_BAR = "show_play_bottom_bar"
+        const val APP_LAUNCH_COUNT = "app_launch_count"
     }
 }
 

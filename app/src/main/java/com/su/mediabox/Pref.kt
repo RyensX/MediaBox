@@ -122,4 +122,5 @@ object Pref {
     val isShowPlayerBottomProgressBar by lazyDataStoreStateFlow(
         Const.Setting.SHOW_PLAY_BOTTOM_BAR, false
     )
+    val appLaunchCount by lazyDataStoreStateFlow(Const.Setting.APP_LAUNCH_COUNT, 0)
 }

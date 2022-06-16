@@ -42,6 +42,10 @@ class App : Application() {
 
         PluginManager.scanPlugin()
 
+        Pref.appLaunchCount.apply {
+            saveData(value + 1)
+        }
+
         release {
             // Crash提示
             CrashHandler.getInstance(this)
