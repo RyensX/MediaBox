@@ -72,6 +72,7 @@ interface Setting {
         const val NET_REPO_PROXY = "net_repo_proxy"
         const val SHOW_PLAY_BOTTOM_BAR = "show_play_bottom_bar"
         const val APP_LAUNCH_COUNT = "app_launch_count"
+        const val PLAY_ACTION_DEFAULT_CORE = "play_action_default_core"
     }
 }
 

@@ -12,6 +12,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.afollestad.materialdialogs.MaterialDialog
+import com.shuyu.gsyvideoplayer.player.IjkPlayerManager
 import com.su.mediabox.*
 import com.su.mediabox.config.Const
 import com.su.mediabox.util.*
@@ -21,6 +22,7 @@ import com.su.mediabox.view.activity.LicenseActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
 
 class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreferenceClickListener {
 
@@ -60,12 +62,18 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
                     }
                 }
 
-                //TODO 实现单选Preference
-                preference {
+                singleSelectListPreference {
+                    dataTextListRes(R.array.play_action_core_text)
+                    dataList(
+                        arrayOf(
+                            Exo2PlayerManager::class.java.name,
+                            IjkPlayerManager::class.java.name
+                        )
+                    )
+                    key = Const.Setting.PLAY_ACTION_DEFAULT_CORE
+                    setDefaultValue(Pref.playDefaultCore.value)
                     setIcon(R.drawable.ic_baseline_core_24)
                     titleRes(R.string.player_default_core_title)
-                    summaryRes(R.string.player_default_core_summary)
-                    isEnabled = false
                 }
             }
 

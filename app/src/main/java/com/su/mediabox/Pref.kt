@@ -20,6 +20,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
 import java.lang.RuntimeException
 
 class DataStorePreference(
@@ -123,4 +124,8 @@ object Pref {
         Const.Setting.SHOW_PLAY_BOTTOM_BAR, false
     )
     val appLaunchCount by lazyDataStoreStateFlow(Const.Setting.APP_LAUNCH_COUNT, 0)
+    val playDefaultCore by lazyDataStoreStateFlow(
+        Const.Setting.PLAY_ACTION_DEFAULT_CORE,
+        Exo2PlayerManager::class.java.name
+    )
 }

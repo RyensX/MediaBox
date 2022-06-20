@@ -17,4 +17,9 @@
     <string name="open_source_star">鼓励开发者</string>
     <string name="open_source_watch">关注开发进度</string>
     <string name="user_notice_summary">点击查看</string>
+
+    <string-array name="play_action_core_text">
+        <item>Exo2Player内核</item>
+        <item>IjkPlayer内核</item>
+    </string-array>
 </resources>
