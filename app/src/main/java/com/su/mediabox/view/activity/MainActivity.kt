@@ -14,13 +14,10 @@ import com.su.mediabox.Pref
 import com.su.mediabox.R
 import com.su.mediabox.config.Const
 import com.su.mediabox.databinding.ActivityMainBinding
-import com.su.mediabox.lifecycleCollect
 import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.util.Util
 import com.su.mediabox.util.bindBottomNavigationView
-import com.su.mediabox.util.showToast
 import com.su.mediabox.util.update.AppUpdateHelper
-import com.su.mediabox.util.update.AppUpdateStatus
 import com.su.mediabox.util.viewBind
 import com.su.mediabox.view.fragment.page.DownloadPageFragment
 import com.su.mediabox.view.fragment.page.ExplorePageFragment

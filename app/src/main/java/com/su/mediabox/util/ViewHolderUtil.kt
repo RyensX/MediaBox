@@ -90,7 +90,6 @@ class AnimeCover9ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val tvAnimeCover9DetailPage: TypefaceTextView =
         view.findViewById(R.id.tv_anime_cover_9_detail_page)
     val ivAnimeCover9Cover: ImageView = view.findViewById(R.id.iv_anime_cover_9_cover)
-    val ivAnimeCover9Delete: ImageView = view.findViewById(R.id.iv_anime_cover_9_delete)
 }
 
 class AnimeEpisodeFlowLayout1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {

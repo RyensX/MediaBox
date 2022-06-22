@@ -93,7 +93,7 @@
         android:textColor="@color/foreground_white_skin"
         android:textSize="13sp"
         app:layout_constrainedWidth="true"
-        app:layout_constraintEnd_toStartOf="@id/iv_anime_cover_9_delete"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toEndOf="@id/cv_anime_cover_9_cover"
         app:layout_constraintTop_toBottomOf="@id/tv_anime_cover_9_title"
@@ -112,7 +112,7 @@
         android:textSize="13sp"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/iv_anime_cover_9_delete"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toEndOf="@id/cv_anime_cover_9_cover"
         app:layout_constraintTop_toBottomOf="@id/tv_anime_cover_9_episode"
@@ -120,25 +120,5 @@
         app:typeface="bPRTypeface"
         tools:text="上次观看：2021.03.08" />
 
-    <ImageView
-        android:id="@+id/iv_anime_cover_9_delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="10dp"
-        android:background="?android:selectableItemBackground"
-        android:padding="3dp"
-        android:src="@drawable/ic_delete_main_color_2_24_skin"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_anime_cover_9_title"
-        app:layout_constraintVertical_bias="1"
-        app:tint="@color/main_color_skin" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:layout_marginHorizontal="16dp"
-        android:background="@color/main_color_skin"
-        app:layout_constraintBottom_toBottomOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

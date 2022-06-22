@@ -1,60 +1,53 @@
-package com.su.mediabox.view.activity
+package com.su.mediabox.view.fragment.page
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import androidx.activity.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
 import com.su.mediabox.R
 import com.su.mediabox.bean.MediaFavorite
-import com.su.mediabox.databinding.ActivityFavoriteBinding
 import com.su.mediabox.databinding.ViewComponentFavBinding
-import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.pluginapi.action.DetailAction
-import com.su.mediabox.pluginapi.action.PlayAction
 import com.su.mediabox.pluginapi.util.UIUtil.dp
 import com.su.mediabox.util.coil.CoilUtil.loadImage
 import com.su.mediabox.util.setOnClickListener
-import com.su.mediabox.util.setOnLongClickListener
-import com.su.mediabox.util.viewBind
-import com.su.mediabox.viewmodel.MediaFavoriteViewModel
 import com.su.mediabox.view.adapter.type.*
+import com.su.mediabox.view.fragment.BaseFragment
+import com.su.mediabox.viewmodel.MediaDataViewModel
 
-class MediaFavoriteActivity : BasePluginActivity() {
+class MediaFavoriteDataPageFragment : BaseFragment() {
 
-    private val mBinding by viewBind(ActivityFavoriteBinding::inflate)
-    private val viewModel by viewModels<MediaFavoriteViewModel>()
+    private lateinit var dataList: RecyclerView
+    private val viewModel by activityViewModels<MediaDataViewModel>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View = RecyclerView(inflater.context).also { dataList = it }
 
-        mBinding.run {
-            atbFavoriteActivity.setBackButtonClickListener { finish() }
-
-            rvFavoriteGrid
-                .grid(3)
-                .apply {
-                    addItemDecoration(DynamicGridItemDecoration(12.dp))
-                }
-                .initTypeList(
-                    DataViewMapList().registerDataViewMap<MediaFavorite, FavoriteViewHolder>(),
-                    FavoriteDiff
-                ) {}
-
-            viewModel.favorite.observe(this@MediaFavoriteActivity) {
-                rvFavoriteGrid.typeAdapter().submitList(it) {
-                    if (it.isEmpty()) {
-                        showLoadFailedTip(getString(R.string.no_favorite), null)
+    override fun pagerInit() {
+        dataList
+            .grid(3)
+            .apply {
+                addItemDecoration(DynamicGridItemDecoration(10.dp))
+            }
+            .initTypeList(
+                DataViewMapList().registerDataViewMap<MediaFavorite, FavoriteViewHolder>(),
+                FavoriteDiff
+            ) {
+                viewModel.favorite.observe(this@MediaFavoriteDataPageFragment) {
+                    submitList(it) {
+                        //TODO
                     }
                 }
             }
-        }
-
     }
 
-    override fun getLoadFailedTipView() = mBinding.layoutFavoriteActivityNoFavorite
-
-    public class FavoriteViewHolder private constructor(private val binding: ViewComponentFavBinding) :
+    class FavoriteViewHolder private constructor(private val binding: ViewComponentFavBinding) :
         TypeViewHolder<MediaFavorite>(binding.root) {
 
         private var data: MediaFavorite? = null
@@ -64,7 +57,7 @@ class MediaFavoriteActivity : BasePluginActivity() {
         ) {
             setOnClickListener(binding.root) {
                 data?.apply {
-                    DetailAction.obtain(mediaUrl).go(itemView.context)
+                    DetailAction.obtain(mediaUrl).go(bindingContext)
                 }
             }
         }
@@ -95,5 +88,5 @@ class MediaFavoriteActivity : BasePluginActivity() {
                 oldItem.lastEpisodeTitle == newItem.lastEpisodeTitle &&
                 oldItem.lastEpisodeUrl == newItem.lastEpisodeUrl
     }
-}
 
+}

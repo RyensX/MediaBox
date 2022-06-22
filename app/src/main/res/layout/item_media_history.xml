@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:selectableItemBackground">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/vc_video_linear_item_cover_card"
+        android:layout_width="90dp"
+        android:layout_height="120dp"
+        app:cardCornerRadius="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0">
+
+        <ImageView
+            android:id="@+id/vc_video_linear_item_cover"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            tools:src="@drawable/ic_launcher_background" />
+
+    </androidx.cardview.widget.CardView>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/vc_video_linear_item_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="4dp"
+        android:textColor="@color/foreground_black_skin"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@id/vc_video_linear_item_cover_card"
+        app:layout_constraintTop_toTopOf="parent"
+
+        tools:text="中二病也要谈恋爱！" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/vc_video_linear_item_last_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/main_color_2_skin"
+        android:textSize="13sp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        tools:text="上次观看：2022.6.22 18:40" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/vc_video_linear_item_episode_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginVertical="8dp"
+        android:background="@drawable/shape_fill_circle_corner_main_color_2_50_skin"
+        android:backgroundTint="@color/main_color_2_skin"
+        android:gravity="center"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="4dp"
+        android:textColor="@color/foreground_white_skin"
+        android:textSize="11sp"
+        app:layout_constraintStart_toStartOf="@id/vc_video_linear_item_name"
+        app:layout_constraintTop_toBottomOf="@id/vc_video_linear_item_name"
+        tools:text="第1集" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

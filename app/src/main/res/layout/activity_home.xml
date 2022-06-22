@@ -38,20 +38,22 @@
             android:padding="7dp"
             android:src="@drawable/ic_format_list_bulleted_white_24_skin"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/home_header_favorite"
+            app:layout_constraintEnd_toStartOf="@id/home_header_data"
             app:layout_constraintStart_toEndOf="@id/home_header_search"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/home_header_favorite"
+            android:id="@+id/home_header_data"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:paddingHorizontal="6dp"
-            android:src="@drawable/ic_star_white_24_skin"
+            android:paddingVertical="8dp"
+            android:src="@drawable/ic_dns_main_color_2_24_skin"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/home_header_classify"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@android:color/white" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

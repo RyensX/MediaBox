@@ -13,7 +13,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:title="@string/my_favorite"
+        app:title="@string/media_data"
         app:titleColor="@color/foreground_white_skin"
         app:toolBarBackground="@color/main_color_2_skin" />
 

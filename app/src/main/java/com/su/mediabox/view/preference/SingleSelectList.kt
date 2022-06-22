@@ -22,11 +22,11 @@ class SingleSelectListPreference(context: Context) :
     private lateinit var dataList: Array<String>
     private lateinit var dataTextList: Array<String>
     internal var selectIndex = 0
-    internal var currentValueText: String = getPersistedString("111")
+    internal var currentValueText: String = getPersistedString("")
         private set
 
     init {
-        summaryProvider = SelectableListSummaryProvider
+        summaryProvider = SingleSelectListSummaryProvider
     }
 
     private fun updateSummary(value: Any? = getPersistedString("")) {
@@ -37,7 +37,7 @@ class SingleSelectListPreference(context: Context) :
                     return
                 currentValueText = it
                 popListWindow.setAdapter(
-                    SelectableListAdapter(
+                    SingleSelectListAdapter(
                         this@SingleSelectListPreference,
                         dataTextList
                     ).apply {
@@ -111,7 +111,7 @@ class SingleSelectListPreference(context: Context) :
     }
 }
 
-private class SelectableListAdapter(
+private class SingleSelectListAdapter(
     private val preference: SingleSelectListPreference,
     private val list: Array<String>
 ) : BaseAdapter() {
@@ -156,7 +156,7 @@ private class SelectableListAdapter(
 
 }
 
-private object SelectableListSummaryProvider :
+private object SingleSelectListSummaryProvider :
     Preference.SummaryProvider<SingleSelectListPreference> {
 
     override fun provideSummary(preference: SingleSelectListPreference) =

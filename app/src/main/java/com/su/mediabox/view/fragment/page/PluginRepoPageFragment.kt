@@ -18,12 +18,12 @@ import com.su.mediabox.util.Util
 import com.su.mediabox.util.getFirstItemDecorationBy
 import com.su.mediabox.util.showToast
 import com.su.mediabox.view.adapter.type.*
-import com.su.mediabox.view.fragment.BaseFragment
+import com.su.mediabox.view.fragment.BaseViewBindingFragment
 import com.su.mediabox.view.viewcomponents.inner.PreviewPluginInfoViewHolder
 import com.su.mediabox.view.viewcomponents.SimpleTextViewHolder
 import com.su.mediabox.viewmodel.PageLoadViewModel
 
-class PluginRepoPageFragment : BaseFragment<PagePluginRepoBinding>(),
+class PluginRepoPageFragment : BaseViewBindingFragment<PagePluginRepoBinding>(),
     PageLoadViewModel.LoadData {
 
     private val emptyView by lazy(LazyThreadSafetyMode.NONE) {
