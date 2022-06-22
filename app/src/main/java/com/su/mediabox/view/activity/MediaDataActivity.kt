@@ -36,7 +36,8 @@ class MediaDataActivity : BasePluginActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding.mediaDataBack.setBackButtonClickListener { finish() }
+        setSupportActionBar(mBinding.mediaDataBack)
+        mBinding.mediaDataBack.setNavigationOnClickListener { finish() }
         mBinding.mediaDataPages.setAdapter(ViewPageAdapter(this, pages))
         tlm.apply { if (!isAttached) attach() }
     }

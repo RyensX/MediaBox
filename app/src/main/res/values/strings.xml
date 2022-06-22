@@ -255,5 +255,8 @@
     <string name="app_recommend">用起来感觉还不错？\n欢迎到Github点Star支持开发者！</string>
     <string name="media_data_page_favorite">收藏</string>
     <string name="media_data_page_history">历史</string>
-    <string name="media_data_history_last_time_format">上次观看：yyyy年MM月dd日 hh:mm</string>
+    <string name="media_data_history_last_time_format">上次观看：yyyy年MM月dd日 HH:mm</string>
+    <string name="media_data_page_history_clear">清空历史</string>
+    <string name="media_data_page_history_clear_title">确认清空历史？</string>
+    <string name="media_data_page_history_clea_desc">历史记录不会云端备份，删除后无法恢复，请谨慎操作</string>
 </resources>

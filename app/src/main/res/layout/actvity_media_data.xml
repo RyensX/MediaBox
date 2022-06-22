@@ -6,13 +6,15 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <com.su.mediabox.view.component.AnimeToolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/media_data_back"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:background="@color/main_color_2_skin"
+        app:navigationIcon="@drawable/md_nav_back"
+        app:theme="@style/SkinToolBar"
         app:title="@string/media_data"
-        app:titleColor="@color/foreground_white_skin"
-        app:toolBarBackground="@color/main_color_2_skin" />
+        app:titleTextColor="@color/foreground_white_skin" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/media_data_pager_tabs"
