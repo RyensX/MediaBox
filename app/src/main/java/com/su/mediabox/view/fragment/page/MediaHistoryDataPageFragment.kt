@@ -2,6 +2,7 @@ package com.su.mediabox.view.fragment.page
 
 import android.os.Bundle
 import android.view.*
+import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DiffUtil
@@ -14,9 +15,11 @@ import com.su.mediabox.database.getAppDataBase
 import com.su.mediabox.databinding.ItemMediaHistoryBinding
 import com.su.mediabox.pluginapi.action.DetailAction
 import com.su.mediabox.pluginapi.util.UIUtil.dp
+import com.su.mediabox.util.appCoroutineScope
 import com.su.mediabox.util.coil.CoilUtil.loadImage
 import com.su.mediabox.util.displayOnlyIfHasData
 import com.su.mediabox.util.setOnClickListener
+import com.su.mediabox.util.setOnLongClickListener
 import com.su.mediabox.view.adapter.type.*
 import com.su.mediabox.view.fragment.BaseFragment
 import com.su.mediabox.viewmodel.MediaDataViewModel
@@ -74,7 +77,7 @@ class MediaHistoryDataPageFragment : BaseFragment() {
                                 })
                         )
                         positiveButton(res = R.string.ok) {
-                            lifecycleScope.launch(Dispatchers.IO) {
+                            appCoroutineScope.launch(Dispatchers.IO) {
                                 getAppDataBase().historyDao().deleteAllHistory()
                             }
                         }
@@ -108,6 +111,21 @@ class MediaHistoryDataPageFragment : BaseFragment() {
                 dataMedia?.apply {
                     DetailAction.obtain(mediaUrl).go(bindingContext)
                 }
+            }
+            setOnLongClickListener(binding.root) {
+                dataMedia?.apply {
+                    PopupMenu(bindingContext, binding.vcVideoLinearItemLastTime).apply {
+                        menu.add(R.string.delete)
+                        setOnMenuItemClickListener {
+                            appCoroutineScope.launch {
+                                getAppDataBase().historyDao().deleteHistory(mediaUrl)
+                            }
+                            true
+                        }
+                        show()
+                    }
+                }
+                true
             }
         }
 

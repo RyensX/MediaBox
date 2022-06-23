@@ -29,6 +29,8 @@ val pluginExceptionHandler = CoroutineExceptionHandler { _, e ->
     }
 }
 
+val appCoroutineScope = CoroutineScope(Dispatchers.IO)
+
 private val pluginIO = Dispatchers.IO + SupervisorJob() + pluginExceptionHandler
 val Dispatchers.PluginIO
     get() = pluginIO

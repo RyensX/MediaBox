@@ -4,19 +4,24 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.su.mediabox.R
 import com.su.mediabox.bean.MediaFavorite
+import com.su.mediabox.database.getAppDataBase
 import com.su.mediabox.databinding.ViewComponentFavBinding
 import com.su.mediabox.pluginapi.action.DetailAction
 import com.su.mediabox.pluginapi.util.UIUtil.dp
+import com.su.mediabox.util.appCoroutineScope
 import com.su.mediabox.util.coil.CoilUtil.loadImage
 import com.su.mediabox.util.setOnClickListener
+import com.su.mediabox.util.setOnLongClickListener
 import com.su.mediabox.view.adapter.type.*
 import com.su.mediabox.view.fragment.BaseFragment
 import com.su.mediabox.viewmodel.MediaDataViewModel
+import kotlinx.coroutines.launch
 
 class MediaFavoriteDataPageFragment : BaseFragment() {
 
@@ -39,6 +44,23 @@ class MediaFavoriteDataPageFragment : BaseFragment() {
                 DataViewMapList().registerDataViewMap<MediaFavorite, FavoriteViewHolder>(),
                 FavoriteDiff
             ) {
+                vHCreateDSL<FavoriteViewHolder> {
+                    setOnLongClickListener(itemView) {
+                        getData<MediaFavorite>(it)?.let { data ->
+                            PopupMenu(bindingContext, itemView).apply {
+                                menu.add(R.string.delete)
+                                setOnMenuItemClickListener {
+                                    appCoroutineScope.launch {
+                                        getAppDataBase().favoriteDao().deleteFavorite(data.mediaUrl)
+                                    }
+                                    true
+                                }
+                                show()
+                            }
+                        }
+                        true
+                    }
+                }
                 viewModel.favorite.observe(this@MediaFavoriteDataPageFragment) {
                     submitList(it) {
                         //TODO
