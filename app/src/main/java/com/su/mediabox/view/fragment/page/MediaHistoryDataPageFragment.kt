@@ -22,6 +22,7 @@ import com.su.mediabox.view.fragment.BaseFragment
 import com.su.mediabox.viewmodel.MediaDataViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.*
 
 class MediaHistoryDataPageFragment : BaseFragment() {
@@ -63,15 +64,22 @@ class MediaHistoryDataPageFragment : BaseFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_media_history_clear ->
-                MaterialDialog(requireContext()).show {
-                    title(res = R.string.media_data_page_history_clear_title)
-                    message(res = R.string.media_data_page_history_clea_desc)
-                    positiveButton(res = R.string.ok) {
-                        lifecycleScope.launch(Dispatchers.IO) {
-                            getAppDataBase().historyDao().deleteAllHistory()
+                lifecycleScope.launch(Dispatchers.Main) {
+                    MaterialDialog(requireContext()).show {
+                        title(res = R.string.media_data_page_history_clear_title)
+                        message(
+                            text = getString(R.string.media_data_page_history_clea_desc,
+                                withContext(Dispatchers.IO) {
+                                    getAppDataBase().historyDao().getHistoryCount()
+                                })
+                        )
+                        positiveButton(res = R.string.ok) {
+                            lifecycleScope.launch(Dispatchers.IO) {
+                                getAppDataBase().historyDao().deleteAllHistory()
+                            }
                         }
+                        negativeButton(res = R.string.cancel) { dismiss() }
                     }
-                    negativeButton(res = R.string.cancel) { dismiss() }
                 }
         }
         return super.onOptionsItemSelected(item)

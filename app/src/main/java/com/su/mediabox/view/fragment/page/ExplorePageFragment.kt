@@ -63,7 +63,7 @@ class ExplorePageFragment : BaseViewBindingFragment<PageExploreBinding>() {
                     (rv.layoutManager as GridLayoutManager).spanSizeLookup =
                         ExploreSpanLookup(this::getItem)
 
-                    rv.addItemDecoration(DynamicGridItemDecoration(8.dp))
+                    rv.addItemDecoration(DynamicGridItemDecoration(4.dp))
 
                     vHCreateDSL<ItemPluginManageViewHolder> {
                         //切换分组状态
@@ -117,7 +117,10 @@ class ExplorePageFragment : BaseViewBindingFragment<PageExploreBinding>() {
                     logD("插件管理数据", "初始化")
                 }
                 is DataState.Success -> {
-                    logD("插件管理数据", "数据数量=${dataState.data?.data?.size} 引用=${dataState.data?.data?.hashCode()}")
+                    logD(
+                        "插件管理数据",
+                        "数据数量=${dataState.data?.data?.size} 引用=${dataState.data?.data?.hashCode()}"
+                    )
                     mBinding.pluginList.submitList(dataState.data?.data.let { if (it.isNullOrEmpty()) emptyView else it })
                 }
                 DataState.Loading -> {
