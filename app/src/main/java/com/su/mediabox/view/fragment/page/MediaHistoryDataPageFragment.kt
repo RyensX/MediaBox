@@ -147,16 +147,17 @@ class MediaHistoryDataPageFragment : BaseFragment() {
 
     }
 
-    object HistoryDiff : DiffUtil.ItemCallback<MediaHistory>() {
+    object HistoryDiff : DiffUtil.ItemCallback<Any>() {
         override fun areItemsTheSame(
-            oldItem: MediaHistory,
-            newItem: MediaHistory
-        ) = oldItem.mediaUrl == newItem.mediaUrl
+            oldItem: Any,
+            newItem: Any
+        ) =
+            oldItem is MediaHistory && newItem is MediaHistory && oldItem.mediaUrl == newItem.mediaUrl
 
         override fun areContentsTheSame(
-            oldItem: MediaHistory,
-            newItem: MediaHistory
-        ) = oldItem.cover == newItem.cover &&
+            oldItem: Any,
+            newItem: Any
+        ) = oldItem is MediaHistory && newItem is MediaHistory && oldItem.cover == newItem.cover &&
                 oldItem.mediaTitle == newItem.mediaTitle &&
                 oldItem.lastEpisodeTitle == newItem.lastEpisodeTitle &&
                 oldItem.lastEpisodeUrl == newItem.lastEpisodeUrl

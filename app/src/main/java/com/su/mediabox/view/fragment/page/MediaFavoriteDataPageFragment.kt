@@ -7,9 +7,12 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.su.mediabox.R
+import com.su.mediabox.bean.DefaultEmpty
 import com.su.mediabox.bean.MediaFavorite
+import com.su.mediabox.bean.MediaHistory
 import com.su.mediabox.database.getAppDataBase
 import com.su.mediabox.databinding.ViewComponentFavBinding
 import com.su.mediabox.pluginapi.action.DetailAction
@@ -39,6 +42,11 @@ class MediaFavoriteDataPageFragment : BaseFragment() {
             .grid(3)
             .apply {
                 addItemDecoration(DynamicGridItemDecoration(10.dp))
+                (layoutManager as GridLayoutManager).spanSizeLookup =
+                    object : GridLayoutManager.SpanSizeLookup() {
+                        override fun getSpanSize(position: Int) =
+                            if (typeAdapter().getItem(position) is DefaultEmpty) 3 else 1
+                    }
             }
             .initTypeList(
                 DataViewMapList().registerDataViewMap<MediaFavorite, FavoriteViewHolder>(),
@@ -96,19 +104,21 @@ class MediaFavoriteDataPageFragment : BaseFragment() {
         }
     }
 
-    object FavoriteDiff : DiffUtil.ItemCallback<MediaFavorite>() {
+    object FavoriteDiff : DiffUtil.ItemCallback<Any>() {
         override fun areItemsTheSame(
-            oldItem: MediaFavorite,
-            newItem: MediaFavorite
-        ) = oldItem.mediaUrl == newItem.mediaUrl
+            oldItem: Any,
+            newItem: Any
+        ) =
+            oldItem is MediaFavorite && newItem is MediaFavorite && oldItem.mediaUrl == newItem.mediaUrl
 
         override fun areContentsTheSame(
-            oldItem: MediaFavorite,
-            newItem: MediaFavorite
-        ) = oldItem.cover == newItem.cover &&
-                oldItem.mediaTitle == newItem.mediaTitle &&
-                oldItem.lastEpisodeTitle == newItem.lastEpisodeTitle &&
-                oldItem.lastEpisodeUrl == newItem.lastEpisodeUrl
+            oldItem: Any,
+            newItem: Any
+        ) =
+            oldItem is MediaFavorite && newItem is MediaFavorite && oldItem.cover == newItem.cover &&
+                    oldItem.mediaTitle == newItem.mediaTitle &&
+                    oldItem.lastEpisodeTitle == newItem.lastEpisodeTitle &&
+                    oldItem.lastEpisodeUrl == newItem.lastEpisodeUrl
     }
 
 }

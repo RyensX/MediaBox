@@ -33,14 +33,14 @@ class ExplorePageFragment : BaseViewBindingFragment<PageExploreBinding>() {
     private val viewModel by activityViewModels<ExploreViewModel>()
 
     private val emptyView by unsafeLazy {
-        listOf(SimpleTextData(requireContext().getString(R.string.plugin_list_empty)).apply {
+        SimpleTextData(requireContext().getString(R.string.plugin_list_empty)).apply {
             val padding = 8.dp
             paddingLeft = padding
             paddingTop = padding
             paddingRight = padding
             paddingBottom = padding
             spanSize = Constant.DEFAULT_SPAN_COUNT
-        })
+        }
     }
 
     override fun buildViewBinding(inflater: LayoutInflater, container: ViewGroup?) =
@@ -64,6 +64,8 @@ class ExplorePageFragment : BaseViewBindingFragment<PageExploreBinding>() {
                         ExploreSpanLookup(this::getItem)
 
                     rv.addItemDecoration(DynamicGridItemDecoration(4.dp))
+
+                    emptyData = emptyView
 
                     vHCreateDSL<ItemPluginManageViewHolder> {
                         //切换分组状态
@@ -121,7 +123,7 @@ class ExplorePageFragment : BaseViewBindingFragment<PageExploreBinding>() {
                         "插件管理数据",
                         "数据数量=${dataState.data?.data?.size} 引用=${dataState.data?.data?.hashCode()}"
                     )
-                    mBinding.pluginList.submitList(dataState.data?.data.let { if (it.isNullOrEmpty()) emptyView else it })
+                    mBinding.pluginList.submitList(dataState.data?.data)
                 }
                 DataState.Loading -> {
                     logD("插件管理数据", "加载中")

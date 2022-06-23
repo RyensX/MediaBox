@@ -8,10 +8,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.su.mediabox.bean.DefaultEmpty
 import com.su.mediabox.pluginapi.data.*
 import com.su.mediabox.util.*
 import com.su.mediabox.util.Util.withoutExceptionGet
 import com.su.mediabox.view.viewcomponents.*
+import com.su.mediabox.view.viewcomponents.inner.DefaultEmptyViewHolder
 
 typealias DataViewMapList = ArrayList<Pair<Class<Any>, Class<TypeViewHolder<Any>>>>
 
@@ -102,6 +104,26 @@ class TypeAdapter(
         }
 
     /**
+     * 空视图，如果自定义(不是[DefaultEmpty])则需要自行注册视图组件
+     *
+     * 使用GridLayoutManager需要注意span
+     */
+    var emptyData: Any? = null
+        set(value) {
+            if (value !is DefaultEmpty)
+                dataViewMapList.find { it.first == DefaultEmpty::class.java }?.let {
+                    dataViewMapList.remove(it)
+                }
+            else
+                dataViewMapList.registerDataViewMap<DefaultEmpty, DefaultEmptyViewHolder>()
+            field = value
+        }
+
+    init {
+        emptyData = DefaultEmpty()
+    }
+
+    /**
      * 用于父子VH交换信息
      */
     val tags by lazy { mutableMapOf<String, Any?>() }
@@ -152,14 +174,16 @@ class TypeAdapter(
     }
 
     override fun submitList(list: List<Any>?, commitCallback: Runnable?) {
+        //支持空视图
+        val submit = if (emptyData != null && list.isNullOrEmpty()) listOf(emptyData!!) else list
         //更新映射
-        if (!checkDataIsSame(list)) {
-            currentData = list
+        if (!checkDataIsSame(submit)) {
+            currentData = submit
             if (dataViewMapCache)
                 clearDataViewPosMap()
         }
         //更新LayoutConfig
-        list?.getOrNull(0)?.let { data ->
+        submit?.getOrNull(0)?.let { data ->
             if (data is BaseData)
                 data.layoutConfig?.apply {
                     logD("检测到配置", this.toString())
@@ -177,7 +201,7 @@ class TypeAdapter(
                         }
                 }
         }
-        super.submitList(list, commitCallback)
+        super.submitList(submit, commitCallback)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TypeViewHolder<Any> =

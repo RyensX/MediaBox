@@ -259,4 +259,5 @@
     <string name="media_data_page_history_clear">清空历史</string>
     <string name="media_data_page_history_clear_title">确认清空历史？</string>
     <string name="media_data_page_history_clea_desc">历史记录不会云端备份，共%d条，删除后无法恢复，请谨慎操作</string>
+    <string name="empty_default_msg">空空如也</string>
 </resources>

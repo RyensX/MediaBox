@@ -27,14 +27,14 @@ class PluginRepoPageFragment : BaseViewBindingFragment<PagePluginRepoBinding>(),
     PageLoadViewModel.LoadData {
 
     private val emptyView by lazy(LazyThreadSafetyMode.NONE) {
-        listOf(SimpleTextData(requireContext().getString(R.string.plugin_repo_load_error)).apply {
+        SimpleTextData(requireContext().getString(R.string.plugin_repo_load_error)).apply {
             val padding = 8.dp
             paddingLeft = padding
             paddingTop = padding
             paddingRight = padding
             paddingBottom = padding
             spanSize = Constant.DEFAULT_SPAN_COUNT
-        })
+        }
     }
 
     private val api = RetrofitManager.get().create(PluginService::class.java)
@@ -49,7 +49,9 @@ class PluginRepoPageFragment : BaseViewBindingFragment<PagePluginRepoBinding>(),
             DataViewMapList()
                 .registerDataViewMap<PreviewPluginInfo, PreviewPluginInfoViewHolder>()
                 .registerDataViewMap<SimpleTextData, SimpleTextViewHolder>()
-        ) { }
+        ) {
+            emptyData = emptyView
+        }
 
         pageLoadViewModel.loadDataFun = this
 
@@ -89,19 +91,16 @@ class PluginRepoPageFragment : BaseViewBindingFragment<PagePluginRepoBinding>(),
     private fun loadSuccess(loadState: PageLoadViewModel.LoadState.SUCCESS) {
         mBinding.customDataList.apply {
             val dy = getFirstItemDecorationBy<DynamicGridItemDecoration>()
-            typeAdapter().submitList(
-                if (loadState.data.isNullOrEmpty()) {
-                    if (dy == null || layoutManager == null)
-                        dynamicGrid()
-                    emptyView
-                } else {
-                    if (dy != null)
-                        removeItemDecoration(dy)
-                    if (layoutManager == null)
-                        linear()
-                    loadState.data!!
-                }
-            ) {
+            if (loadState.data.isNullOrEmpty()) {
+                if (dy == null || layoutManager == null)
+                    dynamicGrid()
+            } else {
+                if (dy != null)
+                    removeItemDecoration(dy)
+                if (layoutManager == null)
+                    linear()
+            }
+            typeAdapter().submitList(loadState.data) {
                 if (!loadState.data.isNullOrEmpty() && loadState.isLoadEmptyData) {
                     getString(R.string.no_more_info).showToast()
                 }
