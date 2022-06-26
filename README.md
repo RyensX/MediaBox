@@ -26,29 +26,32 @@
 
 ---
 
-## 功能
+## 概述
 
 作为**插件容器**提供数据展示视图
 
-插件简单实现[插件API](https://github.com/RyensX/MediaBoxPlugin)的组件解析数据即可得到一个完整APP
+插件简单实现[插件API](https://github.com/RyensX/MediaBoxPlugin)的组件解析数据即可得到一个完整APP（支持记录收藏、历史、云端备份、提供数据视图、播放器等）
 
 如一个看视频的APP、一个看漫画的APP，并且多个插件内容可聚合
-[MediaBox示例插件-樱花动漫第三方客户端](https://github.com/RyensX/SakuraAnime2Plugin)
+
+- 示例 [MediaBox示例插件-樱花动漫第三方客户端](https://github.com/RyensX/SakuraAnime2Plugin)
+
+## 截图
+
+<img src="doc/image/main.jpg" title="" width="143"><img title="" src="doc/image/home.jpg" width="143"><img title="" src="doc/image/search.jpg" alt="" width="143"><img title="" src="doc/image/detial.jpg" alt="" width="143"><img title="" src="doc/image/data.jpg" alt="" width="143">
 
 ## 下载&使用
 
-* [正式Release包](https://github.com/RyensX/MediaBox/releases/latest)
-* [自动构建Debug包](https://github.com/RyensX/MediaBox/actions/workflows/android_debug.yml)(**不稳定**，适合体验最新功能，可与Release包共存，[下载指南](doc/auto_build_apk_download.md))
-* [官方插件仓库](https://github.com/RyensX/MediaBoxPluginRepository)
+* [正式版](https://github.com/RyensX/MediaBox/releases/latest)
+* [测试版(云端自动构建)](https://github.com/RyensX/MediaBox/actions/workflows/android_debug.yml)(**不稳定**，适合体验最新功能，可与正式版共存，[下载指南](doc/auto_build_apk_download.md))
+* [官方插件仓库](https://github.com/RyensX/MediaBoxPluginRepository)下载插件(也可APP内自动下载安装)
 
 ## 支持开发
 
-* #### ⭐Star鼓励开发者
+* #### ⭐**Star**鼓励开发者
 * #### 👁️Watch关注开发进度
 * #### PR(**请尽量贴合项目的源码和commit风格**)
-* #### 加入[群组](https://t.me/MediaBoxGithub)讨论
-
-
+* #### 加入[群组](https://t.me/MediaBoxGithub)讨论反馈
 
 ## 安全说明
 
