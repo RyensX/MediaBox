@@ -182,6 +182,8 @@ dependencies {
     implementation deps.settings.data_store
     implementation project(':MediaBoxPluginApi')
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
+    implementation deps.appAnalytics.analytics
+    implementation deps.appAnalytics.crashes
 }
 
 try {

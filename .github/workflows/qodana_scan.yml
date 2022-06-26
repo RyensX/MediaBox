@@ -15,9 +15,9 @@ jobs:
           path: |
             build
             app/build
-          key: ${{ runner.os }}-gradle-${{ hashFiles('*.gradle*', 'gradle/wrapper/gradle-wrapper.properties') }}
+          key: ${{ runner.os }}-gradle-qodana-${{ hashFiles('*.gradle*', 'gradle/wrapper/gradle-wrapper.properties') }}
           restore-keys: |
-            ${{ runner.os }}-gradle-
+            ${{ runner.os }}-gradle-qodana-
       - name: 'Qodana Scan'
         uses: JetBrains/qodana-action@v4.2.2
         with:

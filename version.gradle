@@ -131,4 +131,10 @@ def cretin = [:]
 cretin.etv = "com.github.MZCretin:ExpandableTextView:v1.6.1-x"
 deps.cretin = cretin
 
+def appCenterSdkVersion = '4.3.1'
+def appAnalytics = [:]
+appAnalytics.analytics = "com.microsoft.appcenter:appcenter-analytics:${appCenterSdkVersion}"
+appAnalytics.crashes = "com.microsoft.appcenter:appcenter-crashes:${appCenterSdkVersion}"
+deps.appAnalytics = appAnalytics
+
 ext.deps = deps
