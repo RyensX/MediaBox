@@ -24,6 +24,15 @@ jobs:
         java-version: '11'
     - name: Grant execute permission for gradlew
       run: chmod +x ./gradlew
+    - name: Set Cache
+      uses: actions/cache@v3
+      with:
+        path: |
+          build
+          app/build
+        key: ${{ runner.os }}-gradle-${{ hashFiles('*.gradle*', 'gradle/wrapper/gradle-wrapper.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
     - name: Build with Gradle
       run: ./gradlew assembleDebug
     - name: Upload Debug Artifact

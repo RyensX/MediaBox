@@ -235,6 +235,6 @@ public static final int *;
 -keep class com.su.mediabox.plugin.** {*;}
 -keep class com.su.mediabox.view.adapter.type.TypeViewHolder
 -keep class * extends com.su.mediabox.view.adapter.type.TypeViewHolder {*;}
-
--keep class com.su.mediabox.model.PluginInfo
+#model也不混淆
+-keep class com.su.mediabox.model.** {*;}
 #-----------------------------

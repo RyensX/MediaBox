@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.afollestad.materialdialogs.MaterialDialog
+import com.su.mediabox.Pref
 import com.su.mediabox.R
 import com.su.mediabox.config.Const
 import com.su.mediabox.databinding.ActivityMainBinding
@@ -17,7 +18,6 @@ import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.util.Util
 import com.su.mediabox.util.bindBottomNavigationView
 import com.su.mediabox.util.update.AppUpdateHelper
-import com.su.mediabox.util.update.AppUpdateStatus
 import com.su.mediabox.util.viewBind
 import com.su.mediabox.view.fragment.page.DownloadPageFragment
 import com.su.mediabox.view.fragment.page.ExplorePageFragment
@@ -71,6 +71,20 @@ class MainActivity : BaseActivity() {
                 positiveButton(res = R.string.ok) {
                     Util.setReadUserNoticeVersion(Const.Common.USER_NOTICE_VERSION)
                 }
+            }
+        }
+
+        //支持开发
+        Pref.appLaunchCount.apply {
+            if (value == 15) {
+                MaterialDialog(this@MainActivity).show {
+                    title(res = R.string.support_title)
+                    message(res = R.string.app_recommend)
+                    cancelable(false)
+                    positiveButton(text = "Github") { Util.openBrowser(Const.Common.GITHUB_URL) }
+                    negativeButton(res = R.string.cancel) { dismiss() }
+                }
+                saveData(value + 1)
             }
         }
 

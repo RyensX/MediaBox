@@ -2,6 +2,7 @@ package com.su.mediabox.view.activity
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.view.KeyEvent
 import androidx.activity.viewModels
 import androidx.core.view.forEach
 import androidx.core.view.isVisible
@@ -14,6 +15,8 @@ import com.shuyu.gsyvideoplayer.player.PlayerFactory
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoView
+import com.su.mediabox.Pref
+import com.su.mediabox.R
 import com.su.mediabox.databinding.ActivityVideoMediaPlayBinding
 import com.su.mediabox.pluginapi.action.PlayAction
 import com.su.mediabox.pluginapi.data.EpisodeData
@@ -24,12 +27,15 @@ import com.su.mediabox.view.component.player.VideoMediaPlayer
 import com.su.mediabox.view.component.player.VideoPositionMemoryDbStore
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
 import tv.danmaku.ijk.media.player.IjkMediaPlayer
+import java.lang.Long.max
+import java.lang.Long.min
 
 class VideoMediaPlayActivity : BasePluginActivity(),
     VideoMediaPlayer.PlayOperatingProxy {
 
     companion object {
         var playList: List<EpisodeData>? = null
+        private const val DEFAULT_SEEK_LENGTH = 15000L
     }
 
     private val mBinding by viewBind(ActivityVideoMediaPlayBinding::inflate)
@@ -151,11 +157,11 @@ class VideoMediaPlayActivity : BasePluginActivity(),
                 }
             })
 
-            val playManager =
+            val playManager: Class<IPlayerManager> =
                 Util.withoutExceptionGet { action.playerManager as? Class<IPlayerManager> }
                     ?:
                     //自定义默认解码器
-                    Exo2PlayerManager::class.java
+                    Class.forName(Pref.playDefaultCore.value) as Class<IPlayerManager>
             PlayerFactory.setPlayManager(playManager)
 
             //TODO 硬解码开关
@@ -165,6 +171,63 @@ class VideoMediaPlayActivity : BasePluginActivity(),
         val videoOptionModel =
             VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "enable-accurate-seek", 1)
         GSYVideoManager.instance().optionModelList = listOf(videoOptionModel)
+    }
+
+    /**
+     * 空格/回车/P - 暂停/播放
+     * Left - 后退
+     * Right - 前进
+     * Shift+Left - 减速0.5
+     * Shift+Right - 加速0.5
+     * M - 静音
+     */
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        mBinding.vmPlay.apply {
+            when (keyCode) {
+                //播放/暂停
+                KeyEvent.KEYCODE_SPACE, KeyEvent.KEYCODE_MEDIA_PLAY, KeyEvent.KEYCODE_ENTER,
+                    //在部分机器，比如WSA空格和回车键被占用
+                KeyEvent.KEYCODE_P,
+                KeyEvent.KEYCODE_MEDIA_PAUSE, KeyEvent.KEYCODE_MEDIA_STOP -> gsyVideoManager.apply {
+                    if (isPlaying) {
+                        onVideoPause()
+                    } else {
+                        onVideoResume()
+                    }
+                }
+                KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_MEDIA_STEP_BACKWARD ->
+                    //减速
+                    if (event?.isShiftPressed == true) {
+                        speed -= 0.5F
+                    }
+                    //后退
+                    else seekTo(
+                        max(
+                            DEFAULT_SEEK_LENGTH,
+                            currentPositionWhenPlaying - DEFAULT_SEEK_LENGTH
+                        )
+                    )
+
+                KeyEvent.KEYCODE_DPAD_RIGHT, KeyEvent.KEYCODE_MEDIA_STEP_FORWARD ->
+                    //加速
+                    if (event?.isShiftPressed == true) {
+                        speed += 0.5F
+                    }
+                    //前进
+                    else seekTo(
+                        min(
+                            duration.toLong(),
+                            currentPositionWhenPlaying + DEFAULT_SEEK_LENGTH
+                        )
+                    )
+                //静音
+                KeyEvent.KEYCODE_M ->
+                    GSYVideoManager.instance().apply {
+                        isNeedMute = !isNeedMute
+                    }
+            }
+        }
+        return super.onKeyDown(keyCode, event)
     }
 
     override fun onPause() {

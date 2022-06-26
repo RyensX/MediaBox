@@ -102,10 +102,12 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
                 episodeDataList?.forEachIndexed { index, data ->
                     //必须要保证EpisodeData.url有正确链接才支持自动定位和收藏
                     if (data.url == target.lastEpisodeUrl) {
+                        logD("定位链接", target.lastEpisodeUrl ?: "")
                         //实际跳转的index应该前或者后一位（靠前前一位，靠后后一位），方便查看
                         val jumpIndex = if (index == 0 || index == adapter.itemCount) index
                         else index + if (index > adapter.itemCount - index) 1 else -1
                         val jumpLength = (jumpIndex - (lastEpisodeIndex ?: 0)).absoluteValue
+                        logD("定位跳转", "index=$jumpIndex")
                         launch(Dispatchers.Main) {
                             //更新新位置
                             adapter.notifyItemChanged(index)

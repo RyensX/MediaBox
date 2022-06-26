@@ -1,6 +1,7 @@
 package com.su.mediabox.util
 
 import android.content.Context
+import com.microsoft.appcenter.crashes.Crashes
 import com.su.mediabox.view.activity.CrashActivity
 import java.io.PrintWriter
 import java.io.StringWriter
@@ -16,6 +17,7 @@ class CrashHandler private constructor(val context: Context) : Thread.UncaughtEx
      */
     override fun uncaughtException(thread: Thread, ex: Throwable) {
         try {
+            Crashes.trackError(ex)
             val stringWriter = StringWriter()
             val printWriter = PrintWriter(stringWriter)
             ex.printStackTrace(printWriter)

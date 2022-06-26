@@ -2,6 +2,7 @@ package com.su.mediabox.util
 
 import androidx.annotation.StringRes
 import androidx.preference.*
+import com.su.mediabox.view.preference.SingleSelectListPreference
 
 inline fun PreferenceFragmentCompat.preferenceScreen(screenDsl: PreferenceScreen.() -> Unit): PreferenceScreen =
     preferenceManager.createPreferenceScreen(requireContext()).apply { screenDsl() }
@@ -15,6 +16,7 @@ fun Preference.keyRes(@StringRes id: Int, vararg args: Any) {
 }
 
 fun Preference.summaryRes(@StringRes id: Int, vararg args: Any) {
+    summaryProvider = null
     summary = context.getString(id, *args)
 }
 
@@ -43,3 +45,7 @@ inline fun PreferenceGroup.checkPreference(
 inline fun PreferenceGroup.preference(
     prefDsl: Preference.() -> Unit
 ) = dsl(Preference(context), prefDsl)
+
+inline fun PreferenceGroup.singleSelectListPreference(
+    prefDsl: SingleSelectListPreference.() -> Unit
+) = dsl(SingleSelectListPreference(context), prefDsl)

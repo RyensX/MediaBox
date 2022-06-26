@@ -1,5 +1,5 @@
-ext.version_code = 37
-ext.version_name = "2.0"
+ext.version_code = 40
+ext.version_name = "2.1"
 
 def build_versions = [:]
 build_versions.compile_sdk = 31
@@ -130,5 +130,11 @@ deps.jakewharton = jakewharton
 def cretin = [:]
 cretin.etv = "com.github.MZCretin:ExpandableTextView:v1.6.1-x"
 deps.cretin = cretin
+
+def appCenterSdkVersion = '4.3.1'
+def appAnalytics = [:]
+appAnalytics.analytics = "com.microsoft.appcenter:appcenter-analytics:${appCenterSdkVersion}"
+appAnalytics.crashes = "com.microsoft.appcenter:appcenter-crashes:${appCenterSdkVersion}"
+deps.appAnalytics = appAnalytics
 
 ext.deps = deps

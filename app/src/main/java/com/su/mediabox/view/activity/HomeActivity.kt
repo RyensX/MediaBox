@@ -2,7 +2,6 @@ package com.su.mediabox.view.activity
 
 import android.app.ActivityManager
 import android.app.ActivityOptions
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.core.graphics.drawable.toBitmap
@@ -11,7 +10,6 @@ import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import com.su.mediabox.R
 import com.su.mediabox.databinding.ActivityHomeBinding
 import com.su.mediabox.plugin.PluginManager
-import com.su.mediabox.pluginapi.action.SearchAction
 import com.su.mediabox.pluginapi.data.BaseData
 import com.su.mediabox.pluginapi.components.IHomePageDataComponent
 import com.su.mediabox.util.*
@@ -42,7 +40,7 @@ class HomeActivity : PageLoadActivity(), View.OnClickListener {
             setViewsOnClickListener(
                 homeHeaderSearch,
                 homeHeaderClassify,
-                homeHeaderFavorite
+                homeHeaderData
             )
         }
     }
@@ -61,9 +59,9 @@ class HomeActivity : PageLoadActivity(), View.OnClickListener {
                     v.clickScale(0.8f, 70)
                     goActivity<MediaClassifyActivity>()
                 }
-                homeHeaderFavorite -> {
+                homeHeaderData -> {
                     v.clickScale(0.8f, 70)
-                    goActivity<MediaFavoriteActivity>()
+                    goActivity<MediaDataActivity>()
                 }
             }
         }

@@ -17,30 +17,30 @@ import com.su.mediabox.pluginapi.action.DetailAction
 import com.su.mediabox.pluginapi.data.SimpleTextData
 import com.su.mediabox.pluginapi.util.UIUtil.dp
 import com.su.mediabox.util.*
-import com.su.mediabox.view.activity.MediaFavoriteActivity
+import com.su.mediabox.view.activity.MediaDataActivity
 import com.su.mediabox.view.adapter.*
 import com.su.mediabox.view.adapter.type.*
 import com.su.mediabox.view.dialog.PluginManageBottomSheetDialogFragment
-import com.su.mediabox.view.fragment.BaseFragment
+import com.su.mediabox.view.fragment.BaseViewBindingFragment
 import com.su.mediabox.view.viewcomponents.inner.ItemPluginViewHolder
 import com.su.mediabox.view.viewcomponents.SimpleTextViewHolder
 import com.su.mediabox.view.viewcomponents.inner.MediaMoreViewHolder
 import com.su.mediabox.viewmodel.ExploreViewModel
 
 //TODO 要重新设计为插件管理合并数据显示
-class ExplorePageFragment : BaseFragment<PageExploreBinding>() {
+class ExplorePageFragment : BaseViewBindingFragment<PageExploreBinding>() {
 
     private val viewModel by activityViewModels<ExploreViewModel>()
 
     private val emptyView by unsafeLazy {
-        listOf(SimpleTextData(requireContext().getString(R.string.plugin_list_empty)).apply {
+        SimpleTextData(requireContext().getString(R.string.plugin_list_empty)).apply {
             val padding = 8.dp
             paddingLeft = padding
             paddingTop = padding
             paddingRight = padding
             paddingBottom = padding
             spanSize = Constant.DEFAULT_SPAN_COUNT
-        })
+        }
     }
 
     override fun buildViewBinding(inflater: LayoutInflater, container: ViewGroup?) =
@@ -57,13 +57,15 @@ class ExplorePageFragment : BaseFragment<PageExploreBinding>() {
                         .registerDataViewMap<PluginManageModel, ItemPluginManageViewHolder>()
                         .registerDataViewMap<MediaMoreViewHolder.DataStub, MediaMoreViewHolder>()
                         //TODO 暂时不能直接启动对于插件打开详情页
-                        .registerDataViewMap<MediaFavorite, MediaFavoriteActivity.FavoriteViewHolder>(),
+                        .registerDataViewMap<MediaFavorite, MediaFavoriteDataPageFragment.FavoriteViewHolder>(),
                     PluginManageDiff
                 ) { rv ->
                     (rv.layoutManager as GridLayoutManager).spanSizeLookup =
                         ExploreSpanLookup(this::getItem)
 
-                    rv.addItemDecoration(DynamicGridItemDecoration(8.dp))
+                    rv.addItemDecoration(DynamicGridItemDecoration(4.dp))
+
+                    emptyData = emptyView
 
                     vHCreateDSL<ItemPluginManageViewHolder> {
                         //切换分组状态
@@ -84,7 +86,7 @@ class ExplorePageFragment : BaseFragment<PageExploreBinding>() {
                         }
                     }
 
-                    vHCreateDSL<MediaFavoriteActivity.FavoriteViewHolder> {
+                    vHCreateDSL<MediaFavoriteDataPageFragment.FavoriteViewHolder> {
                         setOnClickListener(itemView) { pos ->
                             //向上查找所属插件的信息
                             bindingTypeAdapter.findTypeData<PluginManageModel>(pos, -1)?.also {
@@ -104,7 +106,7 @@ class ExplorePageFragment : BaseFragment<PageExploreBinding>() {
                             //向上查找所属插件的信息
                             bindingTypeAdapter.findTypeData<PluginManageModel>(pos, -1)?.also {
                                 bindingContext.launchPlugin(it.pluginInfo, false)
-                                requireActivity().goActivity<MediaFavoriteActivity>()
+                                requireActivity().goActivity<MediaDataActivity>()
                             }
                         }
                     }
@@ -117,8 +119,11 @@ class ExplorePageFragment : BaseFragment<PageExploreBinding>() {
                     logD("插件管理数据", "初始化")
                 }
                 is DataState.Success -> {
-                    logD("插件管理数据", "数据数量=${dataState.data?.data?.size} 引用=${dataState.data?.data?.hashCode()}")
-                    mBinding.pluginList.submitList(dataState.data?.data.let { if (it.isNullOrEmpty()) emptyView else it })
+                    logD(
+                        "插件管理数据",
+                        "数据数量=${dataState.data?.data?.size} 引用=${dataState.data?.data?.hashCode()}"
+                    )
+                    mBinding.pluginList.submitList(dataState.data?.data)
                 }
                 DataState.Loading -> {
                     logD("插件管理数据", "加载中")

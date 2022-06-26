@@ -118,7 +118,7 @@ inline fun RecyclerView.initTypeList(
     }
 }
 
-fun RecyclerView.submitList(list: List<Any>) = typeAdapter().submitList(list)
+fun RecyclerView.submitList(list: List<Any>?) = typeAdapter().submitList(list)
 
 /**
  * 注册一个数据与视图关系到全局映射

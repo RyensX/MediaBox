@@ -16,25 +16,26 @@ import com.su.mediabox.pluginapi.data.SimpleTextData
 import com.su.mediabox.pluginapi.util.UIUtil.dp
 import com.su.mediabox.util.Util
 import com.su.mediabox.util.getFirstItemDecorationBy
+import com.su.mediabox.util.logD
 import com.su.mediabox.util.showToast
 import com.su.mediabox.view.adapter.type.*
-import com.su.mediabox.view.fragment.BaseFragment
+import com.su.mediabox.view.fragment.BaseViewBindingFragment
 import com.su.mediabox.view.viewcomponents.inner.PreviewPluginInfoViewHolder
 import com.su.mediabox.view.viewcomponents.SimpleTextViewHolder
 import com.su.mediabox.viewmodel.PageLoadViewModel
 
-class PluginRepoPageFragment : BaseFragment<PagePluginRepoBinding>(),
+class PluginRepoPageFragment : BaseViewBindingFragment<PagePluginRepoBinding>(),
     PageLoadViewModel.LoadData {
 
     private val emptyView by lazy(LazyThreadSafetyMode.NONE) {
-        listOf(SimpleTextData(requireContext().getString(R.string.plugin_repo_load_error)).apply {
+        SimpleTextData(requireContext().getString(R.string.plugin_repo_load_error)).apply {
             val padding = 8.dp
             paddingLeft = padding
             paddingTop = padding
             paddingRight = padding
             paddingBottom = padding
             spanSize = Constant.DEFAULT_SPAN_COUNT
-        })
+        }
     }
 
     private val api = RetrofitManager.get().create(PluginService::class.java)
@@ -49,7 +50,9 @@ class PluginRepoPageFragment : BaseFragment<PagePluginRepoBinding>(),
             DataViewMapList()
                 .registerDataViewMap<PreviewPluginInfo, PreviewPluginInfoViewHolder>()
                 .registerDataViewMap<SimpleTextData, SimpleTextViewHolder>()
-        ) { }
+        ) {
+            emptyData = emptyView
+        }
 
         pageLoadViewModel.loadDataFun = this
 
@@ -74,9 +77,6 @@ class PluginRepoPageFragment : BaseFragment<PagePluginRepoBinding>(),
             }
         }
 
-        if (pageLoadViewModel.loadState.value !is PageLoadViewModel.LoadState.SUCCESS)
-            pageLoadViewModel.reLoadData()
-
         PluginManager.pluginLiveData.observe(this) {
             if (pageLoadViewModel.loadState.value !is PageLoadViewModel.LoadState.LOADING)
                 pageLoadViewModel.reLoadData()
@@ -89,19 +89,16 @@ class PluginRepoPageFragment : BaseFragment<PagePluginRepoBinding>(),
     private fun loadSuccess(loadState: PageLoadViewModel.LoadState.SUCCESS) {
         mBinding.customDataList.apply {
             val dy = getFirstItemDecorationBy<DynamicGridItemDecoration>()
-            typeAdapter().submitList(
-                if (loadState.data.isNullOrEmpty()) {
-                    if (dy == null || layoutManager == null)
-                        dynamicGrid()
-                    emptyView
-                } else {
-                    if (dy != null)
-                        removeItemDecoration(dy)
-                    if (layoutManager == null)
-                        linear()
-                    loadState.data!!
-                }
-            ) {
+            if (loadState.data.isNullOrEmpty()) {
+                if (dy == null || layoutManager == null)
+                    dynamicGrid()
+            } else {
+                if (dy != null)
+                    removeItemDecoration(dy)
+                if (layoutManager == null)
+                    linear()
+            }
+            typeAdapter().submitList(loadState.data) {
                 if (!loadState.data.isNullOrEmpty() && loadState.isLoadEmptyData) {
                     getString(R.string.no_more_info).showToast()
                 }

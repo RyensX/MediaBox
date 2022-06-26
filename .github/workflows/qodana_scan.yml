@@ -9,6 +9,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Set Cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            build
+            app/build
+          key: ${{ runner.os }}-gradle-qodana-${{ hashFiles('*.gradle*', 'gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-qodana-
       - name: 'Qodana Scan'
         uses: JetBrains/qodana-action@v4.2.2
         with:

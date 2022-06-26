@@ -7,6 +7,7 @@ import androidx.lifecycle.lifecycleScope
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.WhichButton
 import com.afollestad.materialdialogs.actions.getActionButton
+import com.su.mediabox.R
 import com.su.mediabox.model.AppUpdateModel
 import com.su.mediabox.util.Text.githubProxy
 import com.su.mediabox.util.Util.openBrowser
@@ -49,7 +50,8 @@ class AppUpdateHelper private constructor() {
         MaterialDialog(activity)
             .cancelable(!isImportantUpdate)
             .show {
-                title(text = "发现${if (isImportantUpdate) "重要" else ""}新版本\n版本名：${name}\n版本代号：${updateBean.tagName}")
+                icon(R.mipmap.ic_mediabox)
+                title(text = "发现${if (isImportantUpdate) "重要" else ""}新版本:${name}(${updateBean.tagName})")
                 StringBuffer().apply {
                     val size = updateBean.assets[0].size
                     if (size > 0) {
