@@ -16,6 +16,7 @@ import com.su.mediabox.pluginapi.data.SimpleTextData
 import com.su.mediabox.pluginapi.util.UIUtil.dp
 import com.su.mediabox.util.Util
 import com.su.mediabox.util.getFirstItemDecorationBy
+import com.su.mediabox.util.logD
 import com.su.mediabox.util.showToast
 import com.su.mediabox.view.adapter.type.*
 import com.su.mediabox.view.fragment.BaseViewBindingFragment
@@ -75,9 +76,6 @@ class PluginRepoPageFragment : BaseViewBindingFragment<PagePluginRepoBinding>(),
                     pageLoadViewModel.loadData()
             }
         }
-
-        if (pageLoadViewModel.loadState.value !is PageLoadViewModel.LoadState.SUCCESS)
-            pageLoadViewModel.reLoadData()
 
         PluginManager.pluginLiveData.observe(this) {
             if (pageLoadViewModel.loadState.value !is PageLoadViewModel.LoadState.LOADING)
