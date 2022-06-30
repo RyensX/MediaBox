@@ -179,8 +179,9 @@ class TypeAdapter(
         //更新映射
         if (!checkDataIsSame(submit)) {
             currentData = submit
-            if (dataViewMapCache)
+            if (dataViewMapCache) {
                 clearDataViewPosMap()
+            }
         }
         //更新LayoutConfig
         submit?.getOrNull(0)?.let { data ->
@@ -231,9 +232,17 @@ class TypeAdapter(
 
     override fun onBindViewHolder(holder: TypeViewHolder<Any>, position: Int) {
         holder.checkBindingContext(bindingContext)
-        getItem(position)?.also {
-            holder.onBind(it)
-        } ?: logD("无法绑定", "$holder position:$position")
+        runCatching {
+            getItem(position)?.also {
+                holder.onBind(it)
+            } ?: logD("无法绑定", "$holder 找不到数据 position:$position")
+        }
+            .onSuccess { holder.itemView.visible()}
+            .onFailure {
+                it.printStackTrace()
+                logE("VH绑定失败",it.message?:"")
+                holder.itemView.gone()
+            }
     }
 
     override fun onBindViewHolder(
@@ -242,9 +251,17 @@ class TypeAdapter(
         payloads: MutableList<Any>
     ) {
         holder.checkBindingContext(bindingContext)
-        getItem(position)?.also {
-            holder.onBind(it, payloads)
+        runCatching {
+            getItem(position)?.also {
+                holder.onBind(it, payloads)
+            } ?: logD("无法绑定", "$holder 找不到数据 position:$position")
         }
+            .onSuccess { holder.itemView.visible()}
+            .onFailure {
+                it.printStackTrace()
+                logE("VH绑定失败",it.message?:"")
+                holder.itemView.gone()
+            }
     }
 
     /**
