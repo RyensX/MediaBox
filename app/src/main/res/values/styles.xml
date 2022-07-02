@@ -34,4 +34,18 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
+    <style name="AppCrash" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <item name="windowNoTitle">false</item>
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/main_color_2_skin</item>
+        <item name="colorPrimaryVariant">@color/foreground_main_color_2_skin</item>
+        <item name="colorOnPrimary">@color/foreground_white_skin</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/foreground_main_color_2_skin</item>
+        <item name="colorSecondaryVariant">@color/foreground_main_color_2_skin</item>
+        <item name="colorOnSecondary">@color/foreground_black_skin</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+    </style>
+
 </resources>

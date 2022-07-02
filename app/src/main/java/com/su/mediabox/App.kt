@@ -11,11 +11,11 @@ import com.microsoft.appcenter.crashes.Crashes
 import com.scwang.smart.refresh.footer.BallPulseFooter
 import com.scwang.smart.refresh.header.MaterialHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
+import com.su.appcrashhandler.AppCatchException
 import com.su.mediabox.plugin.AppAction
 import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.pluginapi.util.AppUtil
 import com.su.mediabox.pluginapi.util.WebUtilIns
-import com.su.mediabox.util.CrashHandler
 import com.su.mediabox.util.Util.getResColor
 import com.su.mediabox.util.html.WebUtilImpl
 import com.su.mediabox.util.release
@@ -37,15 +37,18 @@ class App : Application() {
             saveData(value + 1)
         }
 
+        //AppCenter分析
         AppCenter.start(
             this, "6ec214bc-e6df-48d8-85e1-d2ee3b5d8522",
             Analytics::class.java, Crashes::class.java
         )
         AppCenter.setLogLevel(Log.DEBUG)
 
+        Analytics.trackEvent("应用启动")
+
         release {
             // Crash提示
-            CrashHandler.getInstance(this)
+            AppCatchException.bindCrashHandler(this)
         }
 
         FileDownloader.setup(this)
