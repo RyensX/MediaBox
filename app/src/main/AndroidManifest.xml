@@ -145,16 +145,6 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <meta-data
-            android:name="UMENG_APPKEY"
-            android:value="${UMENG_APPKEY_VALUE}" />
-        <meta-data
-            android:name="UMENG_CHANNEL"
-            android:value="${UMENG_CHANNEL_VALUE}" /> <!-- U-PUSH 移除关联启动能力 -->
-        <meta-data
-            android:name="UMENG_MESSAGE_SECRET"
-            android:value="${UMENG_MESSAGE_SECRET}" />
-
         <service
             android:name="com.taobao.accs.ChannelService"
             android:exported="false"

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import android.util.Log
-import com.efs.sdk.launch.LaunchManager
 import com.liulishuo.filedownloader.FileDownloader
 import com.microsoft.appcenter.AppCenter
 import com.microsoft.appcenter.analytics.Analytics
@@ -17,25 +16,12 @@ import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.pluginapi.util.AppUtil
 import com.su.mediabox.pluginapi.util.WebUtilIns
 import com.su.mediabox.util.CrashHandler
-import com.su.mediabox.util.PushHelper
-import com.su.mediabox.util.Util.getManifestMetaValue
 import com.su.mediabox.util.Util.getResColor
 import com.su.mediabox.util.html.WebUtilImpl
 import com.su.mediabox.util.release
-import com.umeng.analytics.MobclickAgent
-import com.umeng.commonsdk.UMConfigure
-import com.umeng.message.PushAgent
-import com.umeng.message.UmengNotificationClickHandler
-import com.umeng.message.entity.UMessage
 
 
 class App : Application() {
-
-    override fun attachBaseContext(base: Context?) {
-        LaunchManager.onTraceApp(this, LaunchManager.APP_ATTACH_BASE_CONTEXT, true)
-        super.attachBaseContext(base)
-        LaunchManager.onTraceApp(this, LaunchManager.APP_ATTACH_BASE_CONTEXT, false)
-    }
 
     override fun onCreate() {
         super.onCreate()
@@ -60,33 +46,6 @@ class App : Application() {
         release {
             // Crash提示
             CrashHandler.getInstance(this)
-
-            //TODO 满足工信部相关合规要求preInit
-            // 友盟
-            // 初始化组件化基础库, 所有友盟业务SDK都必须调用此初始化接口。
-            UMConfigure.init(
-                this,
-                getManifestMetaValue("UMENG_APPKEY"),
-                getManifestMetaValue("UMENG_CHANNEL"),
-                UMConfigure.DEVICE_TYPE_PHONE,
-                getManifestMetaValue("UMENG_MESSAGE_SECRET")
-            )
-            UMConfigure.setLogEnabled(BuildConfig.DEBUG)
-
-            // 选择AUTO页面采集模式，统计SDK基础指标无需手动埋点可自动采集。
-            MobclickAgent.setPageCollectionMode(MobclickAgent.PageMode.AUTO)
-
-            PushAgent.getInstance(context).apply {
-                resourcePackageName = BuildConfig.APPLICATION_ID
-                notificationClickHandler = object : UmengNotificationClickHandler() {
-                    override fun dealWithCustomAction(context: Context, msg: UMessage) {
-                        super.dealWithCustomAction(context, msg)
-                        //TODO
-                    }
-                }
-            }
-            PushHelper.init(applicationContext)
-            Thread { PushHelper.init(applicationContext) }.start()
         }
 
         FileDownloader.setup(this)
