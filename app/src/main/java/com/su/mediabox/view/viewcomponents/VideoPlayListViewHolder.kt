@@ -104,10 +104,14 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
                     if (data.url == target.lastEpisodeUrl) {
                         logD("定位链接", target.lastEpisodeUrl ?: "")
                         //实际跳转的index应该前或者后一位（靠前前一位，靠后后一位），方便查看
-                        val jumpIndex = if (index == 0 || index == adapter.itemCount) index
-                        else index + if (index > adapter.itemCount - index) 1 else -1
+                        val size = episodeDataList?.size ?: 0
+                        val jumpIndex =
+                            //在两端则直接跳转
+                            if (index == 0 || index == size - 1) index
+                            //在中间则根据情况向右偏移跳转方便查看集数
+                            else index + 1
                         val jumpLength = (jumpIndex - (lastEpisodeIndex ?: 0)).absoluteValue
-                        logD("定位跳转", "index=$jumpIndex")
+                        logD("定位跳转", "index=$index jumpIndex=$jumpIndex size=$size")
                         launch(Dispatchers.Main) {
                             //更新新位置
                             adapter.notifyItemChanged(index)
@@ -124,7 +128,7 @@ class VideoPlayListViewHolder private constructor(private val binding: ItemHoriz
                             lastEpisodeIndex = index
                         }
 
-                        return@forEachIndexed
+                        return@launch
                     }
                 }
             }

@@ -38,7 +38,7 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".view.activity.MainActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -90,8 +90,9 @@
             android:name=".view.activity.CustomDataActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
-            android:name=".view.activity.CrashActivity"
-            android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
+            android:name=".util.crash.CrashActivity"
+            android:configChanges="uiMode|orientation|keyboardHidden|screenSize"
+            android:theme="@style/AppCrash" />
         <activity
             android:name=".view.activity.HistoryActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
@@ -118,8 +119,8 @@
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity
             android:name=".view.activity.MediaSearchActivity"
-            android:theme="@style/Search.Theme"
-            android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
+            android:configChanges="uiMode|orientation|keyboardHidden|screenSize"
+            android:theme="@style/Search.Theme" />
         <activity
             android:name=".view.activity.VideoMediaPlayActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
@@ -144,16 +145,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
-        <meta-data
-            android:name="UMENG_APPKEY"
-            android:value="${UMENG_APPKEY_VALUE}" />
-        <meta-data
-            android:name="UMENG_CHANNEL"
-            android:value="${UMENG_CHANNEL_VALUE}" /> <!-- U-PUSH 移除关联启动能力 -->
-        <meta-data
-            android:name="UMENG_MESSAGE_SECRET"
-            android:value="${UMENG_MESSAGE_SECRET}" />
 
         <service
             android:name="com.taobao.accs.ChannelService"

@@ -1218,6 +1218,8 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
         mInnerHandler.postDelayed({ backToNormal() }, delay.toLong())
     }
 
+    private val PLAY_POS_TAG = "播放进度"
+
     /**
      * 准备好视频，开始查找进度
      */
@@ -1225,12 +1227,15 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
         playPositionViewJob?.cancel()
         playPositionMemoryStore?.apply {
             playPositionMemoryStoreCoroutineScope.launch {
+                logD(PLAY_POS_TAG, "开始查找进度：$mOriginUrl")
                 getPlayPosition(mOriginUrl)?.also {
+                    logD(PLAY_POS_TAG, "查询到进度：$it")
                     preSeekPlayPosition = it
                     if (it > 0L) {
                         //TODO 自动跳转开关
                         val isAutoSeek = true
                         if (isAutoSeek) {
+                            logD(PLAY_POS_TAG, "跳转进度：$it")
                             seekOnStart = it
                             context.getString(R.string.play_auto_seek).showToast(Toast.LENGTH_LONG)
                         } else
@@ -1246,6 +1251,18 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
             }
         }
         super.onPrepared()
+    }
+
+    override fun startAfterPrepared() {
+        super.startAfterPrepared()
+        logD(PLAY_POS_TAG, "开始播放，当前进度：pos=${gsyVideoManager.currentPosition} url=$mOriginUrl")
+        //有时候跳转不成功
+        preSeekPlayPosition?.also {
+            if (gsyVideoManager.currentPosition < it) {
+                logD(PLAY_POS_TAG, "检测到预跳转进度失败，重试：pos=$it url=$mOriginUrl")
+                gsyVideoManager.seekTo(it)
+            }
+        }
     }
 
     /**
@@ -1290,15 +1307,17 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
         val url = mOriginUrl
         val duration = gsyVideoManager.duration
         // 进度为负（已经播放完） 或 当前进度大于最小限制且小于最大限制（播放完时不记录），则记录
-        if (position < 0 || (position > playPositionMemoryTimeLimit && duration > 0
-                    && abs(position - duration) > 2000L)
+        if (position < 0 ||
+            (position > playPositionMemoryTimeLimit && duration > 0 && abs(position - duration) > 2000L)
         ) {
+            logD(PLAY_POS_TAG, "记录进度：pos=$position target=$url")
             playPositionMemoryStore?.apply {
                 playPositionMemoryStoreCoroutineScope.launch {
                     putPlayPosition(url, position)
                 }
             }
-        }
+        } else
+            logD(PLAY_POS_TAG, "放弃记录进度：pos=$position target=$url")
     }
 
     override fun onAutoCompletion() {

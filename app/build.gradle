@@ -1,5 +1,3 @@
-import java.lang.reflect.Field
-
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
@@ -66,9 +64,7 @@ android {
     }
 
     productFlavors {
-        Github {
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "Github"]
-        }
+        Github {}
     }
 
     applicationVariants.all { variant ->
@@ -126,7 +122,6 @@ android {
 }
 
 dependencies {
-
     implementation deps.kotlin.kotlin_stdlib
     implementation deps.kotlin.core_ktx
     implementation deps.support.appcompat
@@ -164,10 +159,6 @@ dependencies {
     compileOnly files('libs/cdi-api.jar')
     // DLNACastService编译需要javax.enterprise.inject.Alternative类
 //    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.4'
-    implementation deps.umsdk.common
-    implementation deps.umsdk.asms
-    implementation deps.umsdk.apm
-    implementation deps.umsdk.push
     implementation deps.smart.refresh_layout_kernel
     implementation deps.smart.refresh_header_material
     implementation deps.smart.refresh_footer_ball

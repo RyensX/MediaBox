@@ -260,4 +260,11 @@
     <string name="media_data_page_history_clear_title">确认清空历史？</string>
     <string name="media_data_page_history_clea_desc">历史记录不会云端备份，共%d条，删除后无法恢复，请谨慎操作</string>
     <string name="empty_default_msg">空空如也</string>
+    <string name="crash_title">应用崩溃</string>
+    <string name="crash_msg">日志已上传分析，建议去github提交issue加快处理</string>
+    <string name="crash_open_issue">复制信息并打开Github</string>
+    <string name="crash_close">重启</string>
+    <string name="crash_version">版本</string>
+    <string name="crash_error">崩溃信息</string>
+    <string name="crash_info">系统信息</string>
 </resources>

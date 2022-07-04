@@ -22,6 +22,8 @@ class WebViewActivity : BasePluginActivity() {
     private val mBinding by viewBind(ActivityWebViewBinding::inflate)
     private lateinit var mainUrl: String
 
+    private val TAG = "网页浏览"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -71,12 +73,11 @@ class WebViewActivity : BasePluginActivity() {
                     val url = request?.url?.toString() ?: ""
                     if (url.startsWith("https") || url.startsWith("http"))
                         view.loadUrl(url)
-                    else try {
-                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
-                    } catch (e: ActivityNotFoundException) {
-                        e.printStackTrace()
+                    else {
+                        logD(TAG, "拦截：$url")
+                        return true
                     }
-                    return super.shouldOverrideUrlLoading(view, request)
+                    return false
                 }
 
                 @SuppressLint("WebViewClientOnReceivedSslError")

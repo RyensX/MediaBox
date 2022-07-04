@@ -20,6 +20,7 @@ import com.su.mediabox.viewmodel.UpnpViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.fourthline.cling.model.meta.Device
+import org.fourthline.cling.model.meta.RemoteDevice
 
 class DlnaActivity : BaseActivity() {
 
@@ -38,9 +39,9 @@ class DlnaActivity : BaseActivity() {
             atbDlnaActivity.setBackButtonClickListener { finish() }
 
             rvDlnaActivityDevice.linear()
-                .initTypeList(DataViewMapList().registerDataViewMap<Device<*, *, *>, DlnaViewHolder>()) {
-                    setTag("url", url)
-                    setTag("title", title)
+                .initTypeList(DataViewMapList().registerDataViewMap<RemoteDevice, DlnaViewHolder>()) {
+                    setTag(url, "url")
+                    setTag(title, "title")
                 }
         }
 
@@ -67,9 +68,9 @@ class DlnaActivity : BaseActivity() {
     }
 
     class DlnaViewHolder private constructor(private val binding: ItemDlnaDevice1Binding) :
-        TypeViewHolder<Device<*, *, *>>(binding.root) {
+        TypeViewHolder<RemoteDevice>(binding.root) {
 
-        private var tmpData: Device<*, *, *>? = null
+        private var tmpData: RemoteDevice? = null
 
         constructor(parent: ViewGroup) : this(
             ItemDlnaDevice1Binding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -78,7 +79,7 @@ class DlnaActivity : BaseActivity() {
                 tmpData?.also {
                     val key = System.currentTimeMillis().toString()
                     DlnaControlActivity.deviceHashMap[key] = it
-                    itemView.context.goActivity<DlnaControlActivity>(Intent().apply {
+                    bindingContext.goActivity<DlnaControlActivity>(Intent().apply {
                         putExtra("url", bindingTypeAdapter.getTag<String>("url")!!)
                         putExtra("title", bindingTypeAdapter.getTag<String>("title")!!)
                         putExtra("deviceKey", key)
@@ -87,7 +88,7 @@ class DlnaActivity : BaseActivity() {
             }
         }
 
-        override fun onBind(data: Device<*, *, *>) {
+        override fun onBind(data: RemoteDevice) {
             tmpData = data
             binding.tvUpnpDevice1Title.text = data.details?.friendlyName
         }
