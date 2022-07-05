@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.su.mediabox.model.PreviewPluginInfo
 import com.su.mediabox.config.Const
-import com.su.mediabox.databinding.CardBinding
 import com.su.mediabox.databinding.ViewComponentPreviewPluginInfoBinding
 import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.plugin.PluginManager.launchPlugin
@@ -13,13 +12,13 @@ import com.su.mediabox.util.coil.CoilUtil.loadImage
 import com.su.mediabox.util.setOnClickListener
 import com.su.mediabox.view.adapter.type.TypeViewHolder
 
-class PreviewPluginInfoViewHolder private constructor(private val binding: CardBinding) :
+class PreviewPluginInfoViewHolder private constructor(private val binding: ViewComponentPreviewPluginInfoBinding) :
     TypeViewHolder<PreviewPluginInfo>(binding.root) {
 
     private var tmpData: PreviewPluginInfo? = null
 
     constructor(parent: ViewGroup) : this(
-        CardBinding.inflate(
+        ViewComponentPreviewPluginInfoBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false

@@ -35,6 +35,7 @@
 如一个看视频的APP、一个看漫画的APP，并且多个插件内容可聚合
 
 - 示例 [MediaBox示例插件-樱花动漫第三方客户端](https://github.com/RyensX/SakuraAnime2Plugin)
+- [**插件开发指南**](https://github.com/RyensX/MediaBox/wiki)
 
 ## 截图
 
