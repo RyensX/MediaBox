@@ -267,4 +267,5 @@
     <string name="crash_version">版本</string>
     <string name="crash_error">崩溃信息</string>
     <string name="crash_info">系统信息</string>
+    <string name="plugin_repo">仓库</string>
 </resources>

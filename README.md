@@ -38,7 +38,8 @@
 
 ## 截图
 
-<img src="doc/image/main.jpg" title="" width="143"><img title="" src="doc/image/home.jpg" width="143"><img title="" src="doc/image/search.jpg" alt="" width="143"><img title="" src="doc/image/detial.jpg" alt="" width="143"><img title="" src="doc/image/data.jpg" alt="" width="143">
+<img src="doc/image/main.jpg"  width="143"> <img  src="doc/image/home.jpg" width="143"> <img  src="doc/image/search.jpg"  width="143"> <img  src="doc/image/detial.jpg"  width="143"> <img src="doc/image/data.jpg"  width="143">
+<img src="doc/image/todayhot_zhihu.jpg"  width="143"> <img src="doc/image/todayhot_weibo.jpg"  width="143"> <img src="doc/image/plugin.jpg"  width="143">
 
 ## 下载&使用
 
