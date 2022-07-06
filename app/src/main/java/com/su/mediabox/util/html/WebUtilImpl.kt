@@ -25,7 +25,7 @@ object WebUtilImpl : WebUtil {
         let origin = window.URL.createObjectURL
         window.URL.createObjectURL = function (t) {
             let blobUrl = origin(t)
-            var xhr = new XMLHttpRequest()
+            let xhr = new XMLHttpRequest()
             xhr.onload = function () {
                  window.blobHook.handleWrapper(xhr.responseText)
             }
