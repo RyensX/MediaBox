@@ -3,22 +3,19 @@ package com.su.mediabox.plugin
 import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Environment
 import android.os.FileObserver
-import android.text.Html
-import com.su.mediabox.util.logD
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
 import com.afollestad.materialdialogs.MaterialDialog
 import com.su.mediabox.App
 import com.su.mediabox.R
-import com.su.mediabox.config.Const
 import com.su.mediabox.database.destroyInstance
-import com.su.mediabox.database.getAppDataBase
 import com.su.mediabox.database.getAppDataBaseFileName
 import com.su.mediabox.model.PluginInfo
 import com.su.mediabox.pluginapi.Constant
@@ -38,7 +35,17 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 
+
 object PluginManager {
+
+    private val appApiVersion by unsafeLazy {
+        val appInfo: ApplicationInfo = App.context.packageManager
+            .getApplicationInfo(
+                App.context.packageName,
+                PackageManager.GET_META_DATA
+            )
+        appInfo.metaData.getInt("media_plugin_api_version") ?: -1
+    }
 
     private val pluginFactoryPool = mutableMapOf<String, IPluginFactory>()
     private val componentPool =
@@ -253,14 +260,30 @@ object PluginManager {
     fun PluginInfo.acquirePluginFactory(): IPluginFactory =
         pluginFactoryPool[sourcePath] ?: run {
 
-            //判定API版本
+            logD("载入插件工厂", "最低支持：$minPluginApiVersion 当前插件API版本：$apiVersion")
+
+            //API版本兼容检查
             if (apiVersion < minPluginApiVersion)
-                throw RuntimeException("插件API版本过低，请联系插件作者升级")
+            //插件API版本过低
+                throw RuntimeException(
+                    App.context.getString(
+                        R.string.plugin_api_version_too_low, apiVersion,
+                        minPluginApiVersion
+                    )
+                )
+            else if (apiVersion > appApiVersion)
+            //插件API版本过高
+                throw RuntimeException(
+                    App.context.getString(
+                        R.string.plugin_api_version_too_high, apiVersion,
+                        minPluginApiVersion
+                    )
+                )
 
             val pluginFile = File(sourcePath)
                 .apply {
                     if (!exists() || !isFile)
-                        throw RuntimeException("插件不存在")
+                        throw RuntimeException(App.context.getString(R.string.plugin_not_exist))
                 }
 
             val classLoader = PathClassLoader(pluginFile.path, App.context.classLoader)
@@ -271,12 +294,13 @@ object PluginManager {
                     pluginFactoryPool[sourcePath] = it
                 }
             } catch (e: Exception) {
-                throw RuntimeException("插件工厂载入错误，请联系插件作者检查元信息")
+                throw RuntimeException(App.context.getString(R.string.plugin_init_error))
             }
         }
 
     fun acquirePluginFactory(): IPluginFactory =
-        currentLaunchPlugin.value?.acquirePluginFactory() ?: throw RuntimeException("当前未启动插件！")
+        currentLaunchPlugin.value?.acquirePluginFactory()
+            ?: throw RuntimeException(App.context.getString(R.string.plugin_run_error))
 
     @Throws(Exception::class)
     inline fun <reified T : IBasePageDataComponent> acquireComponent() =
@@ -285,7 +309,7 @@ object PluginManager {
     @Throws(Exception::class)
     fun <T : IBasePageDataComponent> acquireComponent(clazz: Class<T>) =
         currentLaunchPlugin.value?.acquireComponent(clazz)
-            ?: throw RuntimeException("当前未启动插件！")
+            ?: throw RuntimeException(App.context.getString(R.string.plugin_run_error))
 
     /**
      * 获取组件实例
@@ -307,7 +331,12 @@ object PluginManager {
                             componentPool[sourcePath] = it
                         })[clazz] = component
         }
-            ?: throw RuntimeException("当前插件未提供该组件")
+            ?: throw RuntimeException(
+                App.context.getString(
+                    R.string.plugin_component_error,
+                    clazz.simpleName
+                )
+            )
     }
 
     private fun PluginInfo.installedPluginName() = "mediabox_plugin_${id}.mpp"
@@ -315,7 +344,7 @@ object PluginManager {
     /**
      * 插件包(安装/卸载)监听
      */
-    object PluginPackageObserver : FileObserver(
+    private object PluginPackageObserver : FileObserver(
         pluginDir.absolutePath,
         MODIFY or CLOSE_WRITE or MOVED_FROM or MOVED_TO or DELETE or DELETE_SELF or MOVE_SELF
     ) {

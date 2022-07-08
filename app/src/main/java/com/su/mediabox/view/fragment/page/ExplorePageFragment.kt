@@ -2,6 +2,7 @@ package com.su.mediabox.view.fragment.page
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.su.mediabox.R
@@ -74,7 +75,11 @@ class ExplorePageFragment : BaseViewBindingFragment<PageExploreBinding>() {
                         }
                         //启动插件
                         setOnClickListener(itemView) { pos ->
-                            bindingContext.launchPlugin(getData<PluginManageModel>(pos)?.pluginInfo)
+                            runCatching {
+                                bindingContext.launchPlugin(getData<PluginManageModel>(pos)?.pluginInfo)
+                            }.onFailure {
+                                it.message?.showToast(Toast.LENGTH_LONG)
+                            }
                         }
                         //管理插件
                         setOnLongClickListener(itemView) { pos ->
