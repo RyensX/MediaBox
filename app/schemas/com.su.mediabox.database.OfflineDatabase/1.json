@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "e0b0d6a0baa5a4c11261853dafa8d5e6",
+    "identityHash": "ef4a5b464b4553e5a3c7b3d443a3a92b",
     "entities": [
       {
         "tableName": "playRecord",
@@ -29,12 +29,50 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "mediaUpdateRecord",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`time` INTEGER NOT NULL, `targetMedia` TEXT NOT NULL, `oldTag` TEXT NOT NULL, `newTag` TEXT NOT NULL, PRIMARY KEY(`time`))",
+        "fields": [
+          {
+            "fieldPath": "time",
+            "columnName": "time",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "targetMedia",
+            "columnName": "targetMedia",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "oldTag",
+            "columnName": "oldTag",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "newTag",
+            "columnName": "newTag",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "time"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e0b0d6a0baa5a4c11261853dafa8d5e6')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ef4a5b464b4553e5a3c7b3d443a3a92b')"
     ]
   }
 }

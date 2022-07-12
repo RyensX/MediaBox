@@ -79,14 +79,15 @@ interface Setting {
 interface Database {
     object AppDataBase {
         const val MEDIA_DB_FILE_NAME_TEMPLATE = "media_plugin_data_%s.db"
+        const val MEDIA_OFFLINE_DB_FILE_NAME_TEMPLATE = "media_plugin_offline_data_%s.db"
         const val FAVORITE_MEDIA_TABLE_NAME = "favorite"
         const val HISTORY_MEDIA_TABLE_NAME = "history"
         const val SEARCH_MEDIA_TABLE_NAME = "search"
     }
 
     object OfflineDataBase {
-        const val OFFLINE_DATA_BASE_FILE_NAME = "offline_data.db"
         const val PLAY_RECORD_TABLE_NAME = "playRecord"
+        const val UPDATE_RECORD_TABLE_NAME = "mediaUpdateRecord"
     }
 }
 
