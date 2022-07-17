@@ -131,7 +131,11 @@ class VideoMediaPlayActivity : BasePluginActivity(),
                 isRotateWithSystem = false
                 if (screenType != ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
                     resolveByClick()
+                setLockClickListener { _, lock ->
+                    isRotateWithSystem = lock
+                }
             }
+
             ivDownloadButton?.gone()
             fullscreenButton.gone()
             //是否开启自动旋转

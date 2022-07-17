@@ -1,59 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/selectableItemBackground"
-    android:clickable="true"
-    android:focusable="true"
-    android:padding="12dp">
+    android:layout_marginHorizontal="12dp"
+    android:layout_marginVertical="8dp"
+    app:cardElevation="3dp">
 
-    <ImageView
-        android:id="@+id/vc_pp_icon"
-        android:layout_width="42dp"
-        android:layout_height="42dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_baseline_android_24" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/vc_pp_name"
-        style="@style/TextAppearance.Material3.TitleMedium"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toTopOf="@id/vc_pp_version"
-        app:layout_constraintStart_toEndOf="@id/vc_pp_icon"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="测试插件" />
+        <ImageView
+            android:id="@+id/vc_pp_icon"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_margin="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_baseline_android_24" />
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/vc_pp_version"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@id/vc_pp_name"
-        app:layout_constraintTop_toBottomOf="@id/vc_pp_name"
-        tools:text="1.0" />
+        <LinearLayout
+            android:id="@+id/vc_info_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            app:layout_constraintEnd_toStartOf="@id/vc_pp_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/vc_pp_action"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginRight="4dp"
-        android:background="@drawable/shape_fill_circle_corner_main_color_2_50_skin"
-        android:backgroundTint="@color/main_color_2_skin"
-        android:gravity="center"
-        android:paddingHorizontal="8dp"
-        android:paddingVertical="4dp"
-        android:textColor="@color/foreground_white_skin"
-        android:textSize="11sp"
-        app:layout_constraintBottom_toBottomOf="@id/vc_pp_icon"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/vc_pp_icon"
-        tools:text="下载" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/vc_pp_name"
+                style="@style/TextAppearance.Material3.TitleMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="名称"
+                tools:textSize="17sp"
+                tools:textStyle="bold" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/vc_pp_version"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:ellipsize="end"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/vc_pp_name"
+                app:layout_constraintStart_toStartOf="@id/vc_pp_name"
+                app:layout_constraintTop_toBottomOf="@id/vc_pp_name"
+                tools:text="1.0"
+                tools:textSize="12sp" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/vc_pp_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                tools:text="介绍"
+                tools:textAppearance="?attr/textAppearanceBody2"
+                tools:textColor="?android:attr/textColorSecondary" />
+        </LinearLayout>
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="14dp"
+            app:constraint_referenced_ids="vc_pp_author,vc_pp_repo"
+            app:flow_horizontalGap="8dp"
+            app:layout_constraintBottom_toBottomOf="@id/vc_pp_action"
+            app:layout_constraintEnd_toStartOf="@id/vc_pp_action"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/vc_pp_action" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/vc_pp_author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            app:chipIcon="@drawable/ic_baseline_person_24"
+            app:chipIconSize="20dp"
+            app:chipIconTint="?colorPrimary"
+            tools:text="RyensX" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/vc_pp_repo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/plugin_repo"
+            android:textSize="12sp"
+            app:chipIcon="@drawable/ic_github"
+            app:chipIconSize="20dp" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/vc_pp_action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="8dp"
+            android:textColor="@android:color/white"
+            app:chipBackgroundColor="?colorPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/vc_info_container"
+            tools:text="下载" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</com.google.android.material.card.MaterialCardView>

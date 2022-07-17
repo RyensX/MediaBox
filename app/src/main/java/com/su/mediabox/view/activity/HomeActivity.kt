@@ -29,13 +29,6 @@ class HomeActivity : PageLoadActivity(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        PluginManager.currentLaunchPlugin.observe(this) {
-            it ?: return@observe
-            val description = ActivityManager.TaskDescription(it.name, it.icon.toBitmap())
-            setTaskDescription(description)
-        }
-
         mBinding.apply {
             setViewsOnClickListener(
                 homeHeaderSearch,

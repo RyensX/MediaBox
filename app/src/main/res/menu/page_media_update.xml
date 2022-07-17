@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_media_update_all_confirmed"
+        android:title="@string/media_data_page_update_all_confirmed" />
+    <item
+        android:id="@+id/menu_media_update_clear"
+        android:title="@string/media_data_page_update_clear" />
+
+</menu>

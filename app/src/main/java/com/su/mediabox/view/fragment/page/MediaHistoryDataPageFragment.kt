@@ -69,9 +69,9 @@ class MediaHistoryDataPageFragment : BaseFragment() {
             R.id.menu_media_history_clear ->
                 lifecycleScope.launch(Dispatchers.Main) {
                     MaterialDialog(requireContext()).show {
-                        title(res = R.string.media_data_page_history_clear_title)
+                        title(res = R.string.media_data_page_clear_title)
                         message(
-                            text = getString(R.string.media_data_page_history_clea_desc,
+                            text = getString(R.string.media_data_page_clear_desc,
                                 withContext(Dispatchers.IO) {
                                     getAppDataBase().historyDao().getHistoryCount()
                                 })

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/vc_update_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/vc_update_point"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="更新媒体名称" />
+
+    <TextView
+        android:id="@+id/vc_update_tag"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textColor="@android:color/black"
+        app:layout_constraintBottom_toTopOf="@id/vc_update_time"
+        app:layout_constraintEnd_toEndOf="@id/vc_update_name"
+        app:layout_constraintStart_toStartOf="@id/vc_update_name"
+        app:layout_constraintTop_toBottomOf="@id/vc_update_name"
+        tools:text="标志1 -> 标志2" />
+
+    <TextView
+        android:id="@+id/vc_update_time"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textSize="11sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/vc_update_name"
+        app:layout_constraintStart_toStartOf="@id/vc_update_name"
+        app:layout_constraintTop_toBottomOf="@id/vc_update_tag"
+        tools:text="时间" />
+
+    <com.su.mediabox.view.component.PointView
+        android:id="@+id/vc_update_point"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/vc_update_name"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

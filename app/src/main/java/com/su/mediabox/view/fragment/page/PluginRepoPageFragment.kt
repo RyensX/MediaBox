@@ -160,16 +160,6 @@ class PluginRepoPageFragment : BaseViewBindingFragment<PagePluginRepoBinding>(),
         }
 
         combineData.apply {
-            if (installed.isNotEmpty()) {
-                add(
-                    getPluginCategoryText(
-                        getString(
-                            R.string.plugin_repo_title_template_installed, installed.size
-                        )
-                    )
-                )
-                addAll(installed)
-            }
             if (updatable.isNotEmpty()) {
                 add(
                     getPluginCategoryText(
@@ -179,6 +169,16 @@ class PluginRepoPageFragment : BaseViewBindingFragment<PagePluginRepoBinding>(),
                     )
                 )
                 addAll(updatable)
+            }
+            if (installed.isNotEmpty()) {
+                add(
+                    getPluginCategoryText(
+                        getString(
+                            R.string.plugin_repo_title_template_installed, installed.size
+                        )
+                    )
+                )
+                addAll(installed)
             }
             if (downloadable.isNotEmpty()) {
                 add(
@@ -198,6 +198,7 @@ class PluginRepoPageFragment : BaseViewBindingFragment<PagePluginRepoBinding>(),
     private fun getPluginCategoryText(text: String) = SimpleTextData(text).apply {
         paddingLeft = 14.dp
         paddingTop = 16.dp
+        paddingBottom = 6.dp
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

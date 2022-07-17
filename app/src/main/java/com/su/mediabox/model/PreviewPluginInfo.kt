@@ -14,6 +14,7 @@ class PreviewPluginInfo :
     val iconBase64 = ""
     val repoUrl = ""
     val repoDesc = ""
+    val author = ""
 
     var state: Int = 0
 

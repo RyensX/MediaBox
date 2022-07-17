@@ -1,5 +1,5 @@
-ext.version_code = 41
-ext.version_name = "2.2"
+ext.version_code = 42
+ext.version_name = "2.3"
 
 def build_versions = [:]
 build_versions.compile_sdk = 31
@@ -21,7 +21,7 @@ settings.data_store = "androidx.datastore:datastore-preferences:1.0.0"
 deps.settings = settings
 
 def kotlinx = [:]
-kotlinx.kotlinx_coroutines_android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1"
+kotlinx.kotlinx_coroutines_android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4"
 deps.kotlinx = kotlinx
 
 def google = [:]

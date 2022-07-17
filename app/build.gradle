@@ -81,18 +81,18 @@ android {
         debug {
             minifyEnabled false
             zipAlignEnabled false
-            shrinkResources false           // 使用keep.xml，keep住皮肤文件
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            applicationIdSuffix '.debug'    // 一台手机debug release共存
+            applicationIdSuffix '.debug'    //debug release共存
             ndk {
                 abiFilters 'armeabi', 'x86', 'x86_64', 'arm64-v8a'
             }
         }
         release {
-            signingConfig signingConfigs.release    //签名
+            signingConfig signingConfigs.release
             minifyEnabled true
             zipAlignEnabled true
-            shrinkResources true       // 使用keep.xml，keep住皮肤文件
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             ndk {
                 abiFilters 'armeabi', 'arm64-v8a'

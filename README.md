@@ -34,11 +34,15 @@
 
 如一个看视频的APP、一个看漫画的APP，并且多个插件内容可聚合
 
-- 示例 [MediaBox示例插件-樱花动漫第三方客户端](https://github.com/RyensX/SakuraAnime2Plugin)
+- 示例 [樱花动漫第三方客户端](https://github.com/RyensX/SakuraAnime2Plugin)
+- 示例 [今热-无跟踪实时热榜聚合](https://github.com/RyensX/TodayHot)
+
+### [**插件开发指南**](https://github.com/RyensX/MediaBox/wiki)
 
 ## 截图
 
-<img src="doc/image/main.jpg" title="" width="143"><img title="" src="doc/image/home.jpg" width="143"><img title="" src="doc/image/search.jpg" alt="" width="143"><img title="" src="doc/image/detial.jpg" alt="" width="143"><img title="" src="doc/image/data.jpg" alt="" width="143">
+<img src="doc/image/main.jpg"  width="143"> <img  src="doc/image/home.jpg" width="143"> <img  src="doc/image/search.jpg"  width="143"> <img  src="doc/image/detial.jpg"  width="143"> <img src="doc/image/data.jpg"  width="143">
+<img src="doc/image/todayhot_zhihu.jpg"  width="143"> <img src="doc/image/todayhot_weibo.jpg"  width="143"> <img src="doc/image/plugin.jpg"  width="143">
 
 ## 下载&使用
 
@@ -50,8 +54,8 @@
 
 * #### ⭐**Star**鼓励开发者
 * #### 👁️Watch关注开发进度
-* #### PR(**请尽量贴合项目的源码和commit风格**)
-* #### 加入[群组](https://t.me/MediaBoxGithub)讨论反馈
+* #### 📇Pull requests(**请尽量贴合项目的源码和commit风格**)
+* #### 💡加入[群组](https://t.me/MediaBoxGithub)讨论反馈
 
 ## 安全说明
 

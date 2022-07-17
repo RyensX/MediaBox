@@ -94,9 +94,6 @@
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize"
             android:theme="@style/AppCrash" />
         <activity
-            android:name=".view.activity.HistoryActivity"
-            android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
-        <activity
             android:name=".view.activity.MediaDataActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
         <activity

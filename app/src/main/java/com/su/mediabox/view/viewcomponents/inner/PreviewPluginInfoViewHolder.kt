@@ -7,6 +7,7 @@ import com.su.mediabox.config.Const
 import com.su.mediabox.databinding.ViewComponentPreviewPluginInfoBinding
 import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.plugin.PluginManager.launchPlugin
+import com.su.mediabox.util.Util
 import com.su.mediabox.util.coil.CoilUtil.loadImage
 import com.su.mediabox.util.setOnClickListener
 import com.su.mediabox.view.adapter.type.TypeViewHolder
@@ -23,6 +24,11 @@ class PreviewPluginInfoViewHolder private constructor(private val binding: ViewC
             false
         )
     ) {
+        setOnClickListener(binding.vcPpRepo) {
+            tmpData?.also {
+                Util.openBrowser(it.repoUrl)
+            }
+        }
         setOnClickListener(binding.vcPpAction) {
             tmpData?.also {
                 when (it.state) {
@@ -44,6 +50,8 @@ class PreviewPluginInfoViewHolder private constructor(private val binding: ViewC
         binding.apply {
             data.apply {
                 vcPpName.text = name
+                vcPpDesc.text = repoDesc
+                vcPpAuthor.text = author
                 vcPpVersion.text = version
                 vcPpIcon.loadImage(iconBase64)
 

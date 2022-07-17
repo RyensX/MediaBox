@@ -70,9 +70,9 @@ class MediaFavoriteDataPageFragment : BaseFragment() {
                     }
                 }
                 viewModel.favorite.observe(this@MediaFavoriteDataPageFragment) {
-                    submitList(it) {
-                        //TODO
-                    }
+                    if (currentList.isEmpty())
+                        viewModel.checkMediaUpdate()
+                    submitList(it)
                 }
             }
     }
