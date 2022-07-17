@@ -9,6 +9,8 @@ data class MediaUpdateRecord(
     @PrimaryKey
     val time: Long,
     val targetMedia: String,
-    val oldTag: String,
-    val newTag: String
+    val targetMediaLabel: String,
+    val oldTag: String?,
+    val newTag: String,
+    var confirmed: Boolean = false
 )

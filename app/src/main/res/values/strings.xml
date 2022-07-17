@@ -255,10 +255,13 @@
     <string name="app_recommend">用起来感觉还不错？\n欢迎到Github点Star支持开发者！</string>
     <string name="media_data_page_favorite">收藏</string>
     <string name="media_data_page_history">历史</string>
+    <string name="media_data_page_update">更新</string>
     <string name="media_data_history_last_time_format">上次观看：yyyy年MM月dd日 HH:mm</string>
-    <string name="media_data_page_history_clear">清空历史</string>
-    <string name="media_data_page_history_clear_title">确认清空历史？</string>
-    <string name="media_data_page_history_clea_desc">历史记录不会云端备份，共%d条，删除后无法恢复，请谨慎操作</string>
+    <string name="media_data_page_history_clear">清空历史记录</string>
+    <string name="media_data_page_update_clear">清空更新记录</string>
+    <string name="media_data_page_update_all_confirmed">一键已读</string>
+    <string name="media_data_page_clear_title">确认清空？</string>
+    <string name="media_data_page_clear_desc">该记录不会云端备份，共%d条，删除后无法恢复，请谨慎操作</string>
     <string name="empty_default_msg">空空如也</string>
     <string name="crash_title">应用崩溃</string>
     <string name="crash_msg">日志已上传分析，建议去github提交issue加快处理</string>
@@ -274,4 +277,15 @@
     <string name="plugin_init_error">插件工厂载入错误，请联系插件作者检查元信息</string>
     <string name="plugin_run_error">当前未启动插件！</string>
     <string name="plugin_component_error">当前插件未提供组件:%s</string>
+    <string name="media_update_desc">由 %s 更新到 %s</string>
+    <string name="media_update_toast">发现%d个媒体内容有更新</string>
+    <!--时间格式化-->
+    <string name="time_format_now">刚刚</string>
+    <string name="time_format_minutes">%d分钟前</string>
+    <string name="time_format_hour">%d小时前</string>
+    <string name="time_format_yesterday">昨天H:m</string>
+    <string name="time_format_yesterday_yesterday">前天H:m</string>
+    <string name="time_format_in_month">%d天前</string>
+    <string name="time_format_in_year">M月d日</string>
+    <string name="time_format_out_year">yyyy年M月d日</string>
 </resources>

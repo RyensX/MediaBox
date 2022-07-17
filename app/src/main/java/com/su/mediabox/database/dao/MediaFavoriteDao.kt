@@ -32,6 +32,16 @@ interface MediaFavoriteDao {
     @Update(onConflict = OnConflictStrategy.REPLACE)
     fun updateFavorite(favorite: MediaFavorite)
 
+    @Query("UPDATE $FAVORITE_MEDIA_TABLE_NAME SET updateTag = :updateTag WHERE mediaUrl = :mediaUrl")
+    fun updateFavoriteUpdateTag(mediaUrl: String, updateTag: String)
+
+    @Transaction
+    fun updateFavoriteUpdateTags(updateMap: Map<String, String>) {
+        updateMap.forEach {
+            updateFavoriteUpdateTag(it.key, it.value)
+        }
+    }
+
     @Query(value = "DELETE FROM $FAVORITE_MEDIA_TABLE_NAME WHERE mediaUrl = :mediaUrl")
     fun deleteFavorite(mediaUrl: String)
 }

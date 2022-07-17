@@ -1,10 +1,9 @@
 package com.su.mediabox.util
 
 import android.annotation.SuppressLint
-import com.su.mediabox.util.logD
-import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
+import android.view.View.MeasureSpec
 import android.view.ViewStub
 import android.view.animation.AlphaAnimation
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlin.math.absoluteValue
+
 
 fun View.enable() {
     if (isEnabled) return
@@ -182,5 +182,15 @@ fun ViewPager2.bindBottomNavigationView(bottomBav: BottomNavigationView) {
                 currentItem = it
         }
         true
+    }
+}
+
+fun getSpecSize(defaultSize: Int, measureSpec: Int): Int {
+    val mode = MeasureSpec.getMode(measureSpec)
+    val size = MeasureSpec.getSize(measureSpec)
+    return when (mode) {
+        MeasureSpec.UNSPECIFIED -> defaultSize
+        MeasureSpec.AT_MOST, MeasureSpec.EXACTLY -> size
+        else -> defaultSize
     }
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,9 +8,12 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/media_data_back"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="50dp"
         android:background="@color/main_color_2_skin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/md_nav_back"
         app:theme="@style/SkinToolBar"
         app:title="@string/media_data"
@@ -18,11 +21,13 @@
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/media_data_pager_tabs"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="40dp"
         android:background="@color/white_skin"
         android:backgroundTint="@color/main_color_2_skin"
-
+        app:layout_constraintEnd_toStartOf="@id/media_data_pager_update"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/media_data_back"
         app:tabBackground="@color/main_color_2_skin"
         app:tabIndicatorColor="@android:color/white"
         app:tabIndicatorFullWidth="false"
@@ -30,9 +35,25 @@
         app:tabRippleColor="@color/main_color_2_skin"
         app:tabTextColor="@android:color/white" />
 
+    <ProgressBar
+        android:id="@+id/media_data_pager_update"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:background="?attr/colorPrimary"
+        android:indeterminateTint="@android:color/white"
+        android:padding="8dp"
+        app:layout_constraintBottom_toBottomOf="@id/media_data_pager_tabs"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/media_data_pager_tabs"
+        app:layout_constraintTop_toTopOf="@id/media_data_pager_tabs" />
+
     <com.su.mediabox.view.component.ViewPager2View
         android:id="@+id/media_data_pages"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/media_data_pager_tabs" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
