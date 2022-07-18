@@ -70,28 +70,31 @@ class MediaDataViewModel : ViewModel() {
                 //并发检查
                 flow {
                     val record = Util.withoutExceptionGet {
-                        mediaUpdateDataComponent.getUpdateTag(media.mediaUrl)?.let {
-                            _updateCount.apply { value -= 1 }
-                            if (it.isNotBlank()) {
-                                logD(
-                                    TAG,
-                                    "成功获取更新 target=${media.mediaTitle}(${media.mediaUrl}) oldUpdateTag=${media.updateTag} newUpdateTag=${it}"
-                                )
-                                if (media.updateTag.isNullOrEmpty()) {
-                                    //没有初始化过有效更新标志则只更新标志
-                                    mediaDao.updateFavorite(media.apply {
-                                        updateTag = it
-                                    })
-                                    null
-                                } else if (it != media.updateTag) {
-                                    MediaUpdateRecord(
-                                        System.currentTimeMillis(),
-                                        media.mediaUrl, media.mediaTitle,
-                                        media.updateTag, it
+                        //每个媒体检查更新限制30s
+                        withTimeoutOrNull(30 * 1000) {
+                            mediaUpdateDataComponent.getUpdateTag(media.mediaUrl)?.let {
+                                _updateCount.apply { value -= 1 }
+                                if (it.isNotBlank()) {
+                                    logD(
+                                        TAG,
+                                        "成功获取更新 target=${media.mediaTitle}(${media.mediaUrl}) oldUpdateTag=${media.updateTag} newUpdateTag=${it}"
                                     )
-                                } else null
+                                    if (media.updateTag.isNullOrEmpty()) {
+                                        //没有初始化过有效更新标志则只更新标志
+                                        mediaDao.updateFavorite(media.apply {
+                                            updateTag = it
+                                        })
+                                        null
+                                    } else if (it != media.updateTag) {
+                                        MediaUpdateRecord(
+                                            System.currentTimeMillis(),
+                                            media.mediaUrl, media.mediaTitle,
+                                            media.updateTag, it
+                                        )
+                                    } else null
 
-                            } else null
+                                } else null
+                            }
                         }
 
                     }
