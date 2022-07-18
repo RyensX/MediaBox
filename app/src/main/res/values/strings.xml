@@ -258,7 +258,7 @@
     <string name="media_data_page_update">更新</string>
     <string name="media_data_history_last_time_format">上次观看：yyyy年MM月dd日 HH:mm</string>
     <string name="media_data_page_history_clear">清空历史记录</string>
-    <string name="media_data_page_update_clear">清空更新记录</string>
+    <string name="media_data_page_confirmed_update_clear">清除已看记录</string>
     <string name="media_data_page_update_all_confirmed">一键已读</string>
     <string name="media_data_page_clear_title">确认清空？</string>
     <string name="media_data_page_clear_desc">该记录不会云端备份，共%d条，删除后无法恢复，请谨慎操作</string>

@@ -24,11 +24,14 @@ interface MediaUpdateRecordDao {
     @Query("DELETE FROM $UPDATE_RECORD_TABLE_NAME WHERE time = :time")
     suspend fun delete(time: Long)
 
-    @Query("DELETE FROM $UPDATE_RECORD_TABLE_NAME")
-    suspend fun deleteAll()
+    @Query("DELETE FROM $UPDATE_RECORD_TABLE_NAME  WHERE confirmed = 1")
+    suspend fun deleteAllConfirmed()
 
     @Query("SELECT COUNT(1) FROM $UPDATE_RECORD_TABLE_NAME")
     suspend fun getMediaUpdateRecordCount(): Long
+
+    @Query("SELECT COUNT(1) FROM $UPDATE_RECORD_TABLE_NAME WHERE confirmed = 1")
+    suspend fun getConfirmedMediaUpdateRecordCount(): Long
 
     @Query("SELECT COUNT(1) FROM $UPDATE_RECORD_TABLE_NAME WHERE confirmed = 0")
     fun getUnConfirmedMediaUpdateRecordCountLiveData(): LiveData<Long>
