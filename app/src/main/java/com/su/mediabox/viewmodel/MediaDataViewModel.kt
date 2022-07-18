@@ -64,7 +64,7 @@ class MediaDataViewModel : ViewModel() {
             }.flatMapConcat { media ->
                 //并发检查
                 flow {
-                    emit(Util.withoutExceptionGet {
+                    val record = Util.withoutExceptionGet {
                         mediaUpdateDataComponent.getUpdateTag(media.mediaUrl)?.let {
                             if (it.isNotBlank()) {
                                 logD(
@@ -87,7 +87,10 @@ class MediaDataViewModel : ViewModel() {
 
                             } else null
                         }
-                    })
+                    }
+                    if (record == null)
+                        logW(TAG, "target=${media.mediaTitle}(${media.mediaUrl}) 无更新")
+                    emit(record)
                 }
             }
                 .filter { it != null }
@@ -109,10 +112,11 @@ class MediaDataViewModel : ViewModel() {
                     //插入更新记录
                     runCatching { updateDao.insert(*data.toTypedArray()) }.onFailure { it.printStackTrace() }
 
-                    launch(Dispatchers.Main) {
-                        App.context.getString(R.string.media_update_toast, data.size)
-                            .showToast(Toast.LENGTH_LONG)
-                    }
+                    if (data.isNotEmpty())
+                        launch(Dispatchers.Main) {
+                            App.context.getString(R.string.media_update_toast, data.size)
+                                .showToast(Toast.LENGTH_LONG)
+                        }
                 }
         }
     }

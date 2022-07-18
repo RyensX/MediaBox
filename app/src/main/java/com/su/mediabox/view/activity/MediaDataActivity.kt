@@ -1,15 +1,19 @@
 package com.su.mediabox.view.activity
 
 import android.os.Bundle
+import android.widget.Button
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.asLiveData
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.su.mediabox.App
 import com.su.mediabox.R
+import com.su.mediabox.database.getOfflineDatabase
 import com.su.mediabox.databinding.ActvityMediaDataBinding
+import com.su.mediabox.databinding.TabMediaDataUpdateBinding
 import com.su.mediabox.util.unsafeLazy
 import com.su.mediabox.util.viewBind
 import com.su.mediabox.viewmodel.MediaDataViewModel
@@ -44,6 +48,7 @@ class MediaDataActivity : BasePluginActivity() {
         setSupportActionBar(mBinding.mediaDataBack)
         mBinding.mediaDataBack.setNavigationOnClickListener { finish() }
 
+        //只有存在媒体更新组件才显示
         viewModel.mediaUpdateDataComponent?.also {
             pages.add(
                 Pair(getString(R.string.media_data_page_update), MediaUpdateDataPageFragment())
@@ -55,6 +60,22 @@ class MediaDataActivity : BasePluginActivity() {
         viewModel.updateState.observe(this) {
             mBinding.mediaDataPagerUpdate.isVisible = it
         }
+
+
+        mBinding.mediaDataPagerTabs.run { getTabAt(tabCount - 1) }?.apply {
+            if (text == getString(R.string.media_data_page_update)) {
+                val tabBinding = TabMediaDataUpdateBinding.inflate(layoutInflater)
+
+                tabBinding.tabUpdateTitle.text = text
+                customView = tabBinding.root
+
+                getOfflineDatabase().mediaUpdateDao().getUnConfirmedMediaUpdateRecordCountLiveData()
+                    .observe(this@MediaDataActivity) {
+                        tabBinding.tabUpdateCount.text = it.toString()
+                    }
+            }
+        }
+
     }
 
     private class ViewPageAdapter(

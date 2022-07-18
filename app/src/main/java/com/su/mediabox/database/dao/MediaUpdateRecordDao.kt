@@ -1,5 +1,6 @@
 package com.su.mediabox.database.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.su.mediabox.config.Const.Database.OfflineDataBase.UPDATE_RECORD_TABLE_NAME
 import com.su.mediabox.database.entity.MediaUpdateRecord
@@ -26,9 +27,11 @@ interface MediaUpdateRecordDao {
     @Query("DELETE FROM $UPDATE_RECORD_TABLE_NAME")
     suspend fun deleteAll()
 
-    // 获取记录条数
     @Query("SELECT COUNT(1) FROM $UPDATE_RECORD_TABLE_NAME")
     suspend fun getMediaUpdateRecordCount(): Long
+
+    @Query("SELECT COUNT(1) FROM $UPDATE_RECORD_TABLE_NAME WHERE confirmed = 0")
+    fun getUnConfirmedMediaUpdateRecordCountLiveData(): LiveData<Long>
 
     //TODO 取消收藏番剧时删除相关更新记录
 }
