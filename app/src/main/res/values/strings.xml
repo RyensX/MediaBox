@@ -260,6 +260,7 @@
     <string name="media_data_page_history_clear">清空历史记录</string>
     <string name="media_data_page_confirmed_update_clear">清除已看记录</string>
     <string name="media_data_page_update_all_confirmed">一键已读</string>
+    <string name="media_data_page_update_check_hint_format">检查更新：%d</string>
     <string name="media_data_page_clear_title">确认清空？</string>
     <string name="media_data_page_clear_desc">该记录不会云端备份，共%d条，删除后无法恢复，请谨慎操作</string>
     <string name="empty_default_msg">空空如也</string>

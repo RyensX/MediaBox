@@ -3,6 +3,7 @@ package com.su.mediabox.viewmodel
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.su.mediabox.App
 import com.su.mediabox.R
@@ -16,6 +17,7 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
 
 class MediaDataViewModel : ViewModel() {
 
@@ -34,13 +36,13 @@ class MediaDataViewModel : ViewModel() {
 
     private val updateDispatcher =
         Dispatchers.IO + CoroutineExceptionHandler { _, _ ->
-            _updateState.value = false
+            _updateCount.value = 0
         }
 
     val update = getOfflineDatabase().mediaUpdateDao().getAllUpdateRecordFlow()
-    private val _updateState = MutableLiveData(mediaUpdateDataComponent != null)
-    val updateState = _updateState.toLiveData()
 
+    private val _updateCount = MutableStateFlow(0)
+    val updateCount = _updateCount.asLiveData()
 
     fun checkMediaUpdate() {
         mediaUpdateDataComponent ?: return
@@ -58,14 +60,16 @@ class MediaDataViewModel : ViewModel() {
                         "${it.mediaTitle}(${it.mediaUrl}) -> updateTag=${it.updateTag} 是否检查:$check"
                     )
                     if (check) {
+                        _updateCount.apply { value += 1 }
                         emit(it)
                     }
                 }
-            }.flatMapConcat { media ->
+            }.flatMapMerge { media ->
                 //并发检查
                 flow {
                     val record = Util.withoutExceptionGet {
                         mediaUpdateDataComponent.getUpdateTag(media.mediaUrl)?.let {
+                            _updateCount.apply { value -= 1 }
                             if (it.isNotBlank()) {
                                 logD(
                                     TAG,
@@ -77,16 +81,17 @@ class MediaDataViewModel : ViewModel() {
                                         updateTag = it
                                     })
                                     null
-                                } else if (it != media.updateTag)
+                                } else if (it != media.updateTag) {
                                     MediaUpdateRecord(
                                         System.currentTimeMillis(),
                                         media.mediaUrl, media.mediaTitle,
                                         media.updateTag, it
                                     )
-                                else null
+                                } else null
 
                             } else null
                         }
+
                     }
                     if (record == null)
                         logW(TAG, "target=${media.mediaTitle}(${media.mediaUrl}) 无更新")
@@ -99,7 +104,6 @@ class MediaDataViewModel : ViewModel() {
                 }
                 .toList().also { data ->
                     logD(TAG, "更新${data.size}条记录")
-                    _updateState.postValue(false)
                     //更新标志
                     runCatching {
                         val map = mutableMapOf<String, String>()
@@ -117,6 +121,8 @@ class MediaDataViewModel : ViewModel() {
                             App.context.getString(R.string.media_update_toast, data.size)
                                 .showToast(Toast.LENGTH_LONG)
                         }
+
+                    _updateCount.value = 0
                 }
         }
     }

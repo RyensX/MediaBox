@@ -57,8 +57,14 @@ class MediaDataActivity : BasePluginActivity() {
         mBinding.mediaDataPages.setAdapter(ViewPageAdapter(this, pages))
         tlm.apply { if (!isAttached) attach() }
 
-        viewModel.updateState.observe(this) {
-            mBinding.mediaDataPagerUpdate.isVisible = it
+        viewModel.updateCount.observe(this) {
+            mBinding.apply {
+                mediaDataPagerUpdate.isVisible = it > 0
+                mediaDataPagerUpdateHint.apply {
+                    isVisible = it > 0
+                    text = getString(R.string.media_data_page_update_check_hint_format, it)
+                }
+            }
         }
 
 
