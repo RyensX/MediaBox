@@ -46,6 +46,8 @@ class MediaDataViewModel : ViewModel() {
 
     fun checkMediaUpdate() {
         mediaUpdateDataComponent ?: return
+        if (_updateCount.value != 0) return
+
         viewModelScope.launch(updateDispatcher) {
             val mediaDao = getAppDataBase().favoriteDao()
             val updateDao = getOfflineDatabase().mediaUpdateDao()

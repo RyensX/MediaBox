@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.asLiveData
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.su.mediabox.App
 import com.su.mediabox.R
@@ -79,6 +80,15 @@ class MediaDataActivity : BasePluginActivity() {
                     .observe(this@MediaDataActivity) {
                         tabBinding.tabUpdateCount.text = it.toString()
                     }
+                mBinding.mediaDataPagerTabs.addOnTabSelectedListener(object :
+                    TabLayout.OnTabSelectedListener {
+                    override fun onTabSelected(tab: TabLayout.Tab?) {}
+                    override fun onTabUnselected(tab: TabLayout.Tab?) {}
+                    override fun onTabReselected(tab: TabLayout.Tab?) {
+                        if (tab == this@apply)
+                            viewModel.checkMediaUpdate()
+                    }
+                })
             }
         }
 
