@@ -7,6 +7,8 @@ import android.view.View.MeasureSpec
 import android.view.ViewStub
 import android.view.animation.AlphaAnimation
 import android.widget.TextView
+import androidx.annotation.Px
+import androidx.core.view.setPadding
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
@@ -199,6 +201,7 @@ fun getSpecSize(defaultSize: Int, measureSpec: Int): Int {
     }
 }
 
+//为底栏添加提示徽章
 fun BottomNavigationView.addBadge(position: Int): TextView? {
     val menus = getChildAt(0)
     if (menus is BottomNavigationMenuView) {
@@ -214,4 +217,12 @@ fun BottomNavigationView.addBadge(position: Int): TextView? {
         }
     }
     return null
+}
+
+fun View.setPaddingVertical(@Px size: Int) {
+    setPadding(paddingLeft, size, paddingRight, size)
+}
+
+fun View.setPaddingHorizontal(@Px size: Int) {
+    setPadding(size, paddingTop, size, paddingBottom)
 }
