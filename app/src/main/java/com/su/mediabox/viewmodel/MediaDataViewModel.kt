@@ -1,7 +1,6 @@
 package com.su.mediabox.viewmodel
 
 import android.widget.Toast
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
@@ -13,11 +12,8 @@ import com.su.mediabox.database.getOfflineDatabase
 import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.pluginapi.components.IMediaUpdateDataComponent
 import com.su.mediabox.util.*
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withTimeoutOrNull
 
 class MediaDataViewModel : ViewModel() {
 
@@ -44,6 +40,7 @@ class MediaDataViewModel : ViewModel() {
     private val _updateCount = MutableStateFlow(0)
     val updateCount = _updateCount.asLiveData()
 
+    @FlowPreview
     fun checkMediaUpdate() {
         mediaUpdateDataComponent ?: return
         if (_updateCount.value != 0) return
