@@ -12,6 +12,8 @@ import com.su.mediabox.database.entity.MediaUpdateRecord
 import com.su.mediabox.database.entity.PlayRecordEntity
 import com.su.mediabox.model.PluginInfo
 import com.su.mediabox.plugin.PluginManager
+import com.su.mediabox.util.getOrInit
+import com.su.mediabox.util.logD
 
 // 本地数据库，不参与WebDAV备份
 @Database(entities = [PlayRecordEntity::class, MediaUpdateRecord::class], version = 1)
@@ -22,21 +24,22 @@ abstract class OfflineDatabase : RoomDatabase() {
     abstract fun mediaUpdateDao(): MediaUpdateRecordDao
 
     companion object {
-        @Volatile
-        private var INSTANCE: OfflineDatabase? = null
 
-        fun getInstance(
-            context: Context,
-            dbName: String
-        ): OfflineDatabase =
-            INSTANCE ?: synchronized(this) {
-                INSTANCE ?: Room.databaseBuilder(
-                    context,
+        private val instances by lazy(LazyThreadSafetyMode.NONE) { mutableMapOf<String, OfflineDatabase>() }
+
+        fun getInstance(context: Context, dbFile: String): OfflineDatabase {
+            return instances.getOrInit(dbFile) {
+                Room.databaseBuilder(
+                    context.applicationContext,
                     OfflineDatabase::class.java,
-                    dbName
-                )
-                    .build().also { INSTANCE = it }
+                    dbFile
+                ).build()
             }
+        }
+
+        fun destroyInstance(dbFile: String) {
+            instances.remove(dbFile)
+        }
     }
 }
 

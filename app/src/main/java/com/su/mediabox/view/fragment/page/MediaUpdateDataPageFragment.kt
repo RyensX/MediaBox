@@ -45,7 +45,7 @@ class MediaUpdateDataPageFragment : BaseFragment() {
                 DataViewMapList().registerDataViewMap<MediaUpdateRecord, MediaUpdateRecordViewHolder>()
             ) {
                 viewModel.update.asLiveData().observe(this@MediaUpdateDataPageFragment) {
-                    logD("媒体更新记录", "数量:${it.size}")
+                    logD("媒体更新记录", "hashCode:${it.hashCode()} 数量:${it.size}")
                     submitList(it)
                 }
             }
