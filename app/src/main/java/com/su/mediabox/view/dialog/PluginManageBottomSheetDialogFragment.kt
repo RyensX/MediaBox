@@ -15,9 +15,11 @@ import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.pluginapi.data.SimpleTextData
 import com.su.mediabox.pluginapi.util.UIUtil.dp
 import com.su.mediabox.util.showToast
+import com.su.mediabox.util.transaction
 import com.su.mediabox.util.unsafeLazy
 import com.su.mediabox.view.adapter.type.dynamicGrid
 import com.su.mediabox.view.adapter.type.initTypeList
+import com.su.mediabox.view.fragment.PluginPrefVisualFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -27,7 +29,7 @@ class PluginManageBottomSheetDialogFragment private constructor() : BottomSheetD
 
     companion object {
 
-        private const val PLUGIN_PACKAGE_NAME = "ppn"
+        const val PLUGIN_PACKAGE_NAME = "ppn"
 
         fun create(packageName: String) =
             PluginManageBottomSheetDialogFragment().apply {
@@ -38,8 +40,9 @@ class PluginManageBottomSheetDialogFragment private constructor() : BottomSheetD
     }
 
     private lateinit var binding: DialogPluginManageBottomSheetBinding
+    private val pluginName by unsafeLazy{ arguments?.getString(PLUGIN_PACKAGE_NAME) }
     private val pluginInfo by unsafeLazy {
-        arguments?.getString(PLUGIN_PACKAGE_NAME)?.let { PluginManager.queryPluginInfo(it) }
+        pluginName?.let { PluginManager.queryPluginInfo(it) }
     }
     private val pluginMenu by unsafeLazy {
         PopupMenu(
@@ -91,6 +94,15 @@ class PluginManageBottomSheetDialogFragment private constructor() : BottomSheetD
                             infos.addAll(buildInfoPair("API", "${pi.apiVersion}"))
                             infos
                         })
+                    }
+                }
+                //键对可视化
+                pluginName?.also {
+                    transaction {
+                        replace(
+                            R.id.pm_info_plugin_pref_visual,
+                            PluginPrefVisualFragment.create(it)
+                        )
                     }
                 }
             }

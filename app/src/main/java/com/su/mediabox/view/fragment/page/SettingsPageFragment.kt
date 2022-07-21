@@ -32,7 +32,8 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        preferenceManager.preferenceDataStore = DataStorePreference(fragment = this)
+        preferenceManager.preferenceDataStore =
+            DataStorePreference(prefCoroutineScope = lifecycleScope)
         preferenceScreen = preferenceScreen {
 
             preferenceCategory {
