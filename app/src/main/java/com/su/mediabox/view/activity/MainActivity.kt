@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.afollestad.materialdialogs.MaterialDialog
+import com.microsoft.appcenter.analytics.Analytics
 import com.su.mediabox.Pref
 import com.su.mediabox.R
 import com.su.mediabox.config.Const
@@ -121,6 +122,7 @@ class MainActivity : BaseActivity() {
 
     override fun onDestroy() {
         unregisterReceiver(installBroadcastReceiver)
+        Analytics.trackEvent("应用关闭")
         super.onDestroy()
     }
 
