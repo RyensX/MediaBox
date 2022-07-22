@@ -120,9 +120,13 @@ class MainActivity : BaseActivity() {
         registerReceiver(installBroadcastReceiver, intentFilter)
     }
 
+    override fun onStop() {
+        Analytics.trackEvent("主界面停止")
+        super.onStop()
+    }
+
     override fun onDestroy() {
         unregisterReceiver(installBroadcastReceiver)
-        Analytics.trackEvent("应用关闭")
         super.onDestroy()
     }
 

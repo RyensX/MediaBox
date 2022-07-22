@@ -130,4 +130,9 @@ appAnalytics.analytics = "com.microsoft.appcenter:appcenter-analytics:${appCente
 appAnalytics.crashes = "com.microsoft.appcenter:appcenter-crashes:${appCenterSdkVersion}"
 deps.appAnalytics = appAnalytics
 
+def work = [:]
+work.runtime = "androidx.work:work-runtime-ktx:2.7.1"
+work.test = "androidx.work:work-testing:2.5.0"
+deps.work = work
+
 ext.deps = deps

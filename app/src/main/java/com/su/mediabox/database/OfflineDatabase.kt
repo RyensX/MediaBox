@@ -27,6 +27,7 @@ abstract class OfflineDatabase : RoomDatabase() {
 
         private val instances by lazy(LazyThreadSafetyMode.NONE) { mutableMapOf<String, OfflineDatabase>() }
 
+        @Synchronized
         fun getInstance(context: Context, dbFile: String): OfflineDatabase {
             return instances.getOrInit(dbFile) {
                 Room.databaseBuilder(
@@ -37,6 +38,7 @@ abstract class OfflineDatabase : RoomDatabase() {
             }
         }
 
+        @Synchronized
         fun destroyInstance(dbFile: String) {
             instances.remove(dbFile)
         }

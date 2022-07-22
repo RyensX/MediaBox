@@ -6,9 +6,9 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.su.mediabox.App
 import com.su.mediabox.R
-import com.su.mediabox.database.entity.MediaUpdateRecord
 import com.su.mediabox.database.getAppDataBase
 import com.su.mediabox.database.getOfflineDatabase
+import com.su.mediabox.plugin.MediaUpdateCheck
 import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.pluginapi.components.IMediaUpdateDataComponent
 import com.su.mediabox.util.*
@@ -16,8 +16,6 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
 class MediaDataViewModel : ViewModel() {
-
-    private val TAG = "媒体检查更新"
 
     val favorite = getAppDataBase().favoriteDao().getFavoriteListLiveData()
     val history = getAppDataBase().historyDao().getHistoryListLiveData()
@@ -45,87 +43,23 @@ class MediaDataViewModel : ViewModel() {
         mediaUpdateDataComponent ?: return
         if (_updateCount.value != 0) return
 
-        viewModelScope.launch(updateDispatcher) {
-            val mediaDao = getAppDataBase().favoriteDao()
-            val updateDao = getOfflineDatabase().mediaUpdateDao()
-            logD(TAG, "开始检查更新 收藏数:${favorite.value?.size ?: -1}")
-            flow {
-                favorite.value?.forEach {
-                    val check =
-                        Util.withoutExceptionGet { mediaUpdateDataComponent.enableUpdateCheck(it.updateTag) }
-                            ?: false
-                    logD(
-                        TAG,
-                        "${it.mediaTitle}(${it.mediaUrl}) -> updateTag=${it.updateTag} 是否检查:$check"
-                    )
-                    if (check) {
+        favorite.value?.also {
+            PluginManager.currentLaunchPlugin.value?.also { plugin ->
+                viewModelScope.launch(updateDispatcher) {
+                    MediaUpdateCheck.checkMediaUpdate(it, plugin, mediaUpdateDataComponent, {
                         _updateCount.apply { value += 1 }
-                        emit(it)
-                    }
-                }
-            }.flatMapMerge { media ->
-                //并发检查
-                flow {
-                    val record = Util.withoutExceptionGet {
-                        //每个媒体检查更新限制30s
-                        withTimeoutOrNull(30 * 1000) {
-                            mediaUpdateDataComponent.getUpdateTag(media.mediaUrl)?.let {
-                                _updateCount.apply { value -= 1 }
-                                if (it.isNotBlank()) {
-                                    logD(
-                                        TAG,
-                                        "成功获取更新 target=${media.mediaTitle}(${media.mediaUrl}) oldUpdateTag=${media.updateTag} newUpdateTag=${it}"
-                                    )
-                                    if (media.updateTag.isNullOrEmpty()) {
-                                        //没有初始化过有效更新标志则只更新标志
-                                        mediaDao.updateFavorite(media.apply {
-                                            updateTag = it
-                                        })
-                                        null
-                                    } else if (it != media.updateTag) {
-                                        MediaUpdateRecord(
-                                            System.currentTimeMillis(),
-                                            media.mediaUrl, media.mediaTitle,
-                                            media.updateTag, it
-                                        )
-                                    } else null
-
-                                } else null
+                    }, {
+                        _updateCount.apply { value -= 1 }
+                    }) {
+                        if (it.isNotEmpty())
+                            launch(Dispatchers.Main) {
+                                App.context.getString(R.string.media_update_toast, it.size)
+                                    .showToast(Toast.LENGTH_LONG)
                             }
-                        }
-
+                        _updateCount.value = 0
                     }
-                    if (record == null)
-                        logW(TAG, "target=${media.mediaTitle}(${media.mediaUrl}) 无更新")
-                    emit(record)
                 }
             }
-                .filter { it != null }
-                .catch {
-                    it.printStackTrace()
-                }
-                .toList().also { data ->
-                    logD(TAG, "更新${data.size}条记录")
-                    //更新标志
-                    runCatching {
-                        val map = mutableMapOf<String, String>()
-                        data.forEach {
-                            if (it != null)
-                                map[it.targetMedia] = it.newTag
-                        }
-                        mediaDao.updateFavoriteUpdateTags(map)
-                    }.onFailure { it.printStackTrace() }
-                    //插入更新记录
-                    runCatching { updateDao.insert(*data.toTypedArray()) }.onFailure { it.printStackTrace() }
-
-                    if (data.isNotEmpty())
-                        launch(Dispatchers.Main) {
-                            App.context.getString(R.string.media_update_toast, data.size)
-                                .showToast(Toast.LENGTH_LONG)
-                        }
-
-                    _updateCount.value = 0
-                }
         }
     }
 }

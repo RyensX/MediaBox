@@ -19,6 +19,8 @@ import com.su.mediabox.util.*
 import com.su.mediabox.util.update.AppUpdateHelper
 import com.su.mediabox.util.update.AppUpdateStatus
 import com.su.mediabox.view.activity.LicenseActivity
+import com.su.mediabox.work.launchMediaUpdateCheckWorkerNow
+import com.su.mediabox.work.mediaUpdateCheckWorkerIsRunning
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -38,6 +40,25 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
 
             preferenceCategory {
 
+                titleRes(R.string.support_title)
+
+                preference {
+                    setIcon(R.drawable.ic_github_star)
+                    title = "Star"
+                    summaryRes(R.string.open_source_star)
+                    onPreferenceClickListener = this@SettingsPageFragment
+                }
+
+                preference {
+                    setIcon(R.drawable.ic_baseline_eye_24)
+                    title = "Watch"
+                    summaryRes(R.string.open_source_watch)
+                    onPreferenceClickListener = this@SettingsPageFragment
+                }
+            }
+
+            preferenceCategory {
+
                 titleRes(R.string.net_category_title)
 
                 checkPreference {
@@ -46,6 +67,28 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
                     setIcon(R.drawable.ic_language_main_color_2_24_skin)
                     titleRes(R.string.net_proxy_title)
                     summaryRes(R.string.net_proxy_summary)
+                }
+            }
+
+            preferenceCategory {
+                title = "媒体"
+                checkPreference {
+                    isEnabled = false
+                    titleRes(R.string.media_update_check_name)
+                    summaryRes(R.string.media_update_check_desc)
+                }
+                preference {
+                    //TODO 开启时启动周期，关闭时取消
+                    titleRes(R.string.media_update_check_pref_now_name)
+                    mediaUpdateCheckWorkerIsRunning.observe(this@SettingsPageFragment) {
+                        isEnabled = !it
+                        summary = if (it)
+                            App.context.getString(R.string.media_update_check_pref_now_summary) else ""
+                    }
+                    setOnPreferenceClickListener {
+                        launchMediaUpdateCheckWorkerNow()
+                        true
+                    }
                 }
             }
 
@@ -144,25 +187,6 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
                         }
                         true
                     }
-                }
-            }
-
-            preferenceCategory {
-
-                titleRes(R.string.support_title)
-
-                preference {
-                    setIcon(R.drawable.ic_github_star)
-                    title = "Star"
-                    summaryRes(R.string.open_source_star)
-                    onPreferenceClickListener = this@SettingsPageFragment
-                }
-
-                preference {
-                    setIcon(R.drawable.ic_baseline_eye_24)
-                    title = "Watch"
-                    summaryRes(R.string.open_source_watch)
-                    onPreferenceClickListener = this@SettingsPageFragment
                 }
             }
         }
