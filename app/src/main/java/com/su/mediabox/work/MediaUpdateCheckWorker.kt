@@ -106,14 +106,14 @@ internal class MediaUpdateCheckWorker(context: Context, workerParameters: Worker
                     logD(TAG, "共计检查${result.size}，发现${validData.size}个插件的媒体有更新")
 
                     validData.forEach {
-                        val updateList = StringBuilder()
-                        it.second.forEachIndexed { index, media ->
+                        val updateList = NotificationCompat.InboxStyle()
+                        it.second.take(5).forEachIndexed { index, media ->
                             media?.apply {
-                                if (index != 0)
-                                    updateList.append("\n")
-                                updateList.append("$targetMediaLabel : $newTag")
+                                updateList.addLine("${index + 1}.$targetMediaLabel : $newTag")
                             }
                         }
+                        if (it.second.size > 5)
+                            updateList.addLine("...")
 
                         val pluginMediaUpdateNofBuilder =
                             NotificationCompat.Builder(applicationContext, mediaUpdateNofChannelId)
@@ -130,10 +130,7 @@ internal class MediaUpdateCheckWorker(context: Context, workerParameters: Worker
                                         it.second.size
                                     )
                                 )
-                                .setStyle(
-                                    NotificationCompat.BigTextStyle()
-                                        .bigText(updateList.toString())
-                                )
+                                .setStyle(updateList)
                                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                                 .setGroup(mediaUpdateNofChannelId)
 
@@ -204,7 +201,7 @@ fun launchMediaUpdateCheckWorker() {
     val request = PeriodicWorkRequestBuilder<MediaUpdateCheckWorker>(24, TimeUnit.HOURS)
         .addTag(MEDIA_UPDATE_CHECK_WORKER_TAG)
         .setConstraints(constraints)
-            //TODO 差异延迟+定时
+        //TODO 差异延迟+定时
         .setBackoffCriteria(
             BackoffPolicy.LINEAR,
             OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
