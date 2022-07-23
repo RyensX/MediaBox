@@ -134,4 +134,5 @@ object Pref {
         Const.Setting.PLAY_ACTION_DEFAULT_CORE,
         Exo2PlayerManager::class.java.name
     )
+    val mediaUpdateCheck by lazyDataStoreStateFlow(Const.Setting.MEDIA_UPDATE_CHECK, true)
 }

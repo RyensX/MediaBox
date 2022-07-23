@@ -20,7 +20,14 @@ import com.su.mediabox.pluginapi.util.PluginPreferenceIns
 import com.su.mediabox.pluginapi.util.WebUtilIns
 import com.su.mediabox.util.Util.getResColor
 import com.su.mediabox.plugin.WebUtilImpl
+import com.su.mediabox.util.appCoroutineScope
+import com.su.mediabox.util.logD
 import com.su.mediabox.util.release
+import com.su.mediabox.util.showToast
+import com.su.mediabox.work.launchMediaUpdateCheckWorker
+import com.su.mediabox.work.stopMediaUpdateCheckWorker
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class App : Application() {
@@ -28,6 +35,11 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         context = this
+
+        release {
+            // Crash提示
+            AppCatchException.bindCrashHandler(this)
+        }
 
         //插件工具初始化
         AppUtil.init(this)
@@ -50,9 +62,15 @@ class App : Application() {
 
         Analytics.trackEvent("应用启动")
 
-        release {
-            // Crash提示
-            AppCatchException.bindCrashHandler(this)
+        //媒体检查更新服务
+        appCoroutineScope.launch(Dispatchers.Default) {
+            Pref.mediaUpdateCheck.collect {
+                logD("媒体检查更新", "状态:$it")
+                if (it)
+                    launchMediaUpdateCheckWorker()
+                else
+                    stopMediaUpdateCheckWorker()
+            }
         }
 
         FileDownloader.setup(this)

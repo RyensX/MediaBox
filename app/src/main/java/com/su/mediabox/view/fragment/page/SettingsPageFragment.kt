@@ -71,24 +71,30 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
             }
 
             preferenceCategory {
-                title = "媒体"
-                checkPreference {
-                    isEnabled = false
+                titleRes(R.string.media_update_check_category)
+                val auto = switchPreference {
+                    setDefaultValue(Pref.mediaUpdateCheck.value)
+                    key = Const.Setting.MEDIA_UPDATE_CHECK
+                    setIcon(R.drawable.ic_update_main_color_2_24_skin)
                     titleRes(R.string.media_update_check_name)
                     summaryRes(R.string.media_update_check_desc)
                 }
                 preference {
-                    //TODO 开启时启动周期，关闭时取消
+                    summaryRes(R.string.media_update_check_alert)
+                }
+                val now = preference {
                     titleRes(R.string.media_update_check_pref_now_name)
-                    mediaUpdateCheckWorkerIsRunning.observe(this@SettingsPageFragment) {
-                        isEnabled = !it
-                        summary = if (it)
-                            App.context.getString(R.string.media_update_check_pref_now_summary) else ""
-                    }
                     setOnPreferenceClickListener {
                         launchMediaUpdateCheckWorkerNow()
                         true
                     }
+                }
+
+                mediaUpdateCheckWorkerIsRunning.observe(this@SettingsPageFragment) {
+                    auto.isEnabled = !it
+                    now.isEnabled = !it
+                    now.summary = if (it)
+                        App.context.getString(R.string.media_update_check_pref_now_summary) else ""
                 }
             }
 

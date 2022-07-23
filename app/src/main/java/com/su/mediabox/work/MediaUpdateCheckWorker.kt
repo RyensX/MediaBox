@@ -68,11 +68,15 @@ internal class MediaUpdateCheckWorker(context: Context, workerParameters: Worker
         return ForegroundInfo(2, notification)
     }
 
+    override suspend fun getForegroundInfo(): ForegroundInfo = createForegroundInfo()
+
     @FlowPreview
     override suspend fun doWork(): Result {
         if (mediaUpdateCheckWorkerIsRunning.value == true)
             return Result.failure()
-        setForeground(createForegroundInfo())
+        runCatching {
+            setForeground(createForegroundInfo())
+        }
         withContext(Dispatchers.IO + CoroutineExceptionHandler { _, throwable ->
             throwable.printStackTrace()
             logD(TAG, "发生错误:${throwable.message}")
@@ -198,10 +202,10 @@ fun launchMediaUpdateCheckWorker() {
         .setRequiresBatteryNotLow(true)//电量充足才检查
         .build()
 
-    val request = PeriodicWorkRequestBuilder<MediaUpdateCheckWorker>(24, TimeUnit.HOURS)
+    //TODO 自定义间隔
+    val request = PeriodicWorkRequestBuilder<MediaUpdateCheckWorker>(2, TimeUnit.HOURS)
         .addTag(MEDIA_UPDATE_CHECK_WORKER_TAG)
         .setConstraints(constraints)
-        //TODO 差异延迟+定时
         .setBackoffCriteria(
             BackoffPolicy.LINEAR,
             OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
@@ -215,6 +219,10 @@ fun launchMediaUpdateCheckWorker() {
         ExistingPeriodicWorkPolicy.KEEP,
         request
     )
+}
+
+fun stopMediaUpdateCheckWorker() {
+    WorkManager.getInstance(App.context).cancelUniqueWork(MEDIA_UPDATE_CHECK_WORKER_ID)
 }
 
 fun launchMediaUpdateCheckWorkerNow() {

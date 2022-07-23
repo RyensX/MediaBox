@@ -18,12 +18,14 @@
     <string name="open_source_watch">关注开发进度</string>
     <string name="user_notice_summary">点击查看</string>
     <!--媒体检查更新-->
+    <string name="media_update_check_category">媒体</string>
     <string name="media_update_check_name">媒体自动检查更新</string>
     <string name="media_update_check_result">共计检查%d个插件，发现%d项的媒体有更新</string>
     <string name="media_update_check_hint">如果希望不自动检查，可以打开设置全局关闭或长按插件单独关闭</string>
     <string name="media_update_check_desc">定时检查所有实现了媒体更新数据组件的插件的媒体更新</string>
+    <string name="media_update_check_alert">注意：在一些系统上可能无法在应用关闭后继续保持定时执行，建议为应用关闭电池优化和保持后台运行。</string>
     <string name="media_update_check_pref_now_name">立即检查所有媒体更新</string>
-    <string name="media_update_check_pref_now_summary">正在检查中</string>
+    <string name="media_update_check_pref_now_summary">正在检查中…</string>
     <string name="media_update_check_plugin_result">发现%d个媒体有更新</string>
 
     <string-array name="play_action_core_text">
