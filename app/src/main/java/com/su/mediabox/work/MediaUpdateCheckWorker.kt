@@ -5,16 +5,19 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ShortcutManager
 import android.graphics.BitmapFactory
-import android.graphics.drawable.Icon
+import android.net.Uri
 import android.os.Build
-import androidx.annotation.RequiresApi
+import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.getSystemService
+import androidx.core.content.pm.ShortcutInfoCompat
+import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.graphics.drawable.toBitmap
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.asLiveData
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.map
 import androidx.work.*
 import com.su.mediabox.App
@@ -23,24 +26,29 @@ import com.su.mediabox.plugin.MediaUpdateCheck
 import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.plugin.PluginManager.acquireComponent
 import com.su.mediabox.pluginapi.components.IMediaUpdateDataComponent
+import com.su.mediabox.util.IntentProcessor
 import com.su.mediabox.util.Util
 import com.su.mediabox.util.logD
+import com.su.mediabox.view.activity.MainActivity
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import java.util.*
 import java.util.concurrent.TimeUnit
 import com.su.mediabox.R
-import com.su.mediabox.util.getDataFormat
-import com.su.mediabox.util.toLiveData
-import com.su.mediabox.view.activity.MainActivity
-import java.util.*
+import com.su.mediabox.util.appCoroutineScope
+
 
 const val MEDIA_UPDATE_CHECK_WORKER_ID = "MEDIA_UPDATE_CHECK_WORKER_ID"
 const val MEDIA_UPDATE_CHECK_WORKER_TAG = "MEDIA_UPDATE_CHECK_WORKER_TAG"
+
 val mediaUpdateCheckWorkerIsRunning = WorkManager.getInstance(App.context)
     .getWorkInfosByTagLiveData(MEDIA_UPDATE_CHECK_WORKER_TAG)
+    .asFlow()
     .map { list ->
         list.find { it.state == WorkInfo.State.RUNNING } != null
     }
+    .flowOn(Dispatchers.Default)
+    .stateIn(appCoroutineScope, SharingStarted.WhileSubscribed(), false)
 
 internal class MediaUpdateCheckWorker(context: Context, workerParameters: WorkerParameters) :
     CoroutineWorker(context, workerParameters) {
@@ -72,8 +80,10 @@ internal class MediaUpdateCheckWorker(context: Context, workerParameters: Worker
 
     @FlowPreview
     override suspend fun doWork(): Result {
-        if (mediaUpdateCheckWorkerIsRunning.value == true)
+        if (mediaUpdateCheckWorkerIsRunning.value) {
+            logD(TAG, "当前任务已在运行:${mediaUpdateCheckWorkerIsRunning.value}")
             return Result.failure()
+        }
         runCatching {
             setForeground(createForegroundInfo())
         }
@@ -81,7 +91,9 @@ internal class MediaUpdateCheckWorker(context: Context, workerParameters: Worker
             throwable.printStackTrace()
             logD(TAG, "发生错误:${throwable.message}")
         }) {
-            PluginManager.pluginFlow.first().asFlow()
+            PluginManager.pluginFlow.first().apply {
+                logD(TAG, "准备检查${size}个插件的媒体更新")
+            }.asFlow()
                 //TODO 检查插件私有存储配置决定是否参与更新
                 //TODO ？定时1小时更新，插件可通过私有键对存储配置参与的更新时段
                 .flatMapMerge { plugin ->
@@ -228,18 +240,42 @@ fun stopMediaUpdateCheckWorker() {
 fun launchMediaUpdateCheckWorkerNow() {
     val request = OneTimeWorkRequestBuilder<MediaUpdateCheckWorker>()
         .addTag(MEDIA_UPDATE_CHECK_WORKER_TAG)
-        .setBackoffCriteria(
-            BackoffPolicy.LINEAR,
-            OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
-            TimeUnit.MILLISECONDS
-        )
         .build()
 
-    WorkManager.getInstance(App.context)
-        .enqueueUniqueWork(
-            MediaUpdateCheckWorker::class.java.name,
-            ExistingWorkPolicy.KEEP,
+    val uniName = MediaUpdateCheckWorker::class.java.name
+
+    WorkManager.getInstance(App.context).apply {
+        cancelUniqueWork(uniName)
+        enqueueUniqueWork(
+            uniName,
+            ExistingWorkPolicy.REPLACE,
             request
         )
+    }
 
+}
+
+fun registerMediaUpdateCheckShortcut() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+
+        val intent = IntentProcessor.processorIntent(MEDIA_UPDATE_CHECK_WORKER_ID) {
+            launchMediaUpdateCheckWorkerNow()
+        }
+
+        val name = App.context.getString(R.string.media_update_check_pref_now_name)
+
+        val shortcut = ShortcutInfoCompat.Builder(App.context, MEDIA_UPDATE_CHECK_WORKER_ID)
+            .setShortLabel(name)
+            .setLongLabel(name)
+            .setIcon(
+                IconCompat.createWithResource(
+                    App.context,
+                    R.drawable.ic_update_main_color_2_24_skin
+                )
+            )
+            .setIntent(intent)
+            .build()
+
+        ShortcutManagerCompat.setDynamicShortcuts(App.context, listOf(shortcut))
+    }
 }

@@ -18,11 +18,8 @@ import com.su.mediabox.R
 import com.su.mediabox.config.Const
 import com.su.mediabox.databinding.ActivityMainBinding
 import com.su.mediabox.plugin.PluginManager
-import com.su.mediabox.util.Util
-import com.su.mediabox.util.addBadge
-import com.su.mediabox.util.bindBottomNavigationView
+import com.su.mediabox.util.*
 import com.su.mediabox.util.update.AppUpdateHelper
-import com.su.mediabox.util.viewBind
 import com.su.mediabox.view.fragment.page.DownloadPageFragment
 import com.su.mediabox.view.fragment.page.ExplorePageFragment
 import com.su.mediabox.view.fragment.page.PluginRepoPageFragment
@@ -108,6 +105,8 @@ class MainActivity : BaseActivity() {
 
         //自动刷新
         listenInstallBroadcasts()
+
+        logD("创建","界面")
     }
 
     private fun listenInstallBroadcasts() {
@@ -126,6 +125,7 @@ class MainActivity : BaseActivity() {
     }
 
     override fun onDestroy() {
+        logD("销毁","界面")
         unregisterReceiver(installBroadcastReceiver)
         super.onDestroy()
     }

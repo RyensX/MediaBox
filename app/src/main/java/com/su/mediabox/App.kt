@@ -25,6 +25,7 @@ import com.su.mediabox.util.logD
 import com.su.mediabox.util.release
 import com.su.mediabox.util.showToast
 import com.su.mediabox.work.launchMediaUpdateCheckWorker
+import com.su.mediabox.work.registerMediaUpdateCheckShortcut
 import com.su.mediabox.work.stopMediaUpdateCheckWorker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -64,6 +65,7 @@ class App : Application() {
 
         //媒体检查更新服务
         appCoroutineScope.launch(Dispatchers.Default) {
+            registerMediaUpdateCheckShortcut()
             Pref.mediaUpdateCheck.collect {
                 logD("媒体检查更新", "状态:$it")
                 if (it)

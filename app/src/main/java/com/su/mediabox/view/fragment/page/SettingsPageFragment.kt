@@ -90,7 +90,7 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
                     }
                 }
 
-                mediaUpdateCheckWorkerIsRunning.observe(this@SettingsPageFragment) {
+                lifecycleCollect(mediaUpdateCheckWorkerIsRunning) {
                     auto.isEnabled = !it
                     now.isEnabled = !it
                     now.summary = if (it)

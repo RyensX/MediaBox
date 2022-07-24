@@ -38,7 +38,8 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".view.activity.MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -161,15 +162,15 @@
             android:exported="false"
             tools:replace="android:exported" />
 
-        <service
-            android:name="com.umeng.message.XiaomiIntentService"
-            android:exported="false"
-            tools:replace="android:exported" />
-
         <receiver
             android:name="com.taobao.agoo.AgooCommondReceiver"
             android:exported="false"
             tools:replace="android:exported" />
+
+        <activity
+            android:name=".util.IntentProcessor"
+            android:exported="true"
+            android:theme="@android:style/Theme.NoDisplay" />
     </application>
 
 </manifest>
