@@ -135,4 +135,8 @@ object Pref {
         Exo2PlayerManager::class.java.name
     )
     val mediaUpdateCheck by lazyDataStoreStateFlow(Const.Setting.MEDIA_UPDATE_CHECK, true)
+    val mediaUpdateCheckInterval by lazyDataStoreStateFlow(
+        Const.Setting.MEDIA_UPDATE_CHECK_INTERVAL,
+        "2_HOURS"
+    )
 }

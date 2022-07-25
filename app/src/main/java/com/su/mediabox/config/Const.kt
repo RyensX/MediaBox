@@ -74,6 +74,7 @@ interface Setting {
         const val APP_LAUNCH_COUNT = "app_launch_count"
         const val PLAY_ACTION_DEFAULT_CORE = "play_action_default_core"
         const val MEDIA_UPDATE_CHECK = "media_update_check"
+        const val MEDIA_UPDATE_CHECK_INTERVAL = "media_update_check_interval"
     }
 }
 

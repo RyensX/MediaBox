@@ -1,4 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="search_transition_name">search_transition_name</string>
+
+    <string-array name="media_update_check_interval_text">
+        <item>15分钟(用于测试)</item>
+        <item>2小时</item>
+        <item>4小时</item>
+        <item>8小时</item>
+        <item>12小时</item>
+        <item>24小时</item>
+    </string-array>
+    <string-array name="media_update_check_interval_value">
+        <item>15_MINUTES</item>
+        <item>2_HOURS</item>
+        <item>4_HOURS</item>
+        <item>8_HOURS</item>
+        <item>12_HOURS</item>
+        <item>24_HOURS</item>
+    </string-array>
 </resources>

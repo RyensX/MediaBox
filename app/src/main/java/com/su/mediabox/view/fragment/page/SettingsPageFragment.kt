@@ -5,12 +5,18 @@ import android.text.Html
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.WorkManager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.shuyu.gsyvideoplayer.player.IjkPlayerManager
 import com.su.mediabox.*
@@ -19,9 +25,7 @@ import com.su.mediabox.util.*
 import com.su.mediabox.util.update.AppUpdateHelper
 import com.su.mediabox.util.update.AppUpdateStatus
 import com.su.mediabox.view.activity.LicenseActivity
-import com.su.mediabox.work.launchMediaUpdateCheckWorkerNow
-import com.su.mediabox.work.mediaUpdateCheckWorkerIsRunning
-import com.su.mediabox.work.mediaUpdateCheckWorkerLastCompleteTime
+import com.su.mediabox.work.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -80,9 +84,32 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
                     titleRes(R.string.media_update_check_name)
                     summaryRes(R.string.media_update_check_desc)
                 }
+
+                val interval = singleSelectListPreference {
+                    dataTextListRes(R.array.media_update_check_interval_text)
+                    dataListRes(R.array.media_update_check_interval_value)
+                    key = Const.Setting.MEDIA_UPDATE_CHECK_INTERVAL
+                    setDefaultValue(Pref.mediaUpdateCheck.value)
+                    titleRes(R.string.media_update_check_pref_interval)
+
+                    setOnPreferenceChangeListener { _, _ ->
+                        //TODO 这个即使设置了ExistingPeriodicWorkPolicy.REPLACE但还是会导致Worker立刻开始运行一次
+                        //launchMediaUpdateCheckWorker(ExistingPeriodicWorkPolicy.REPLACE)
+                        WorkManager.getInstance(App.context)
+                            .cancelUniqueWork(MEDIA_UPDATE_CHECK_WORKER_ID)
+                        auto.isChecked = false
+                        true
+                    }
+                }
+
                 preference {
                     summaryRes(R.string.media_update_check_alert)
+                    icon = ResourceUtil.getDrawable(
+                        R.drawable.ic_info_white_24,
+                        R.color.main_color_2_skin
+                    )
                 }
+
                 val now = preference {
                     titleRes(R.string.media_update_check_pref_now_name)
                     setOnPreferenceClickListener {
@@ -92,6 +119,7 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
                     val running =
                         App.context.getString(R.string.media_update_check_pref_now_summary)
                     lifecycleCollect(mediaUpdateCheckWorkerLastCompleteTime) {
+                        //TODO 刷新触发可能还存在一些问题
                         summary =
                             if (mediaUpdateCheckWorkerIsRunning.value) running
                             else it?.run {
@@ -105,6 +133,7 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
 
                 lifecycleCollect(mediaUpdateCheckWorkerIsRunning) {
                     auto.isEnabled = !it
+                    interval.isEnabled = !it
                     now.isEnabled = !it
                 }
             }

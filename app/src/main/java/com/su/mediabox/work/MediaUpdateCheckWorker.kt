@@ -21,22 +21,19 @@ import androidx.lifecycle.asFlow
 import androidx.lifecycle.map
 import androidx.work.*
 import com.su.mediabox.App
+import com.su.mediabox.Pref
 import com.su.mediabox.database.getAppDataBase
 import com.su.mediabox.plugin.MediaUpdateCheck
 import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.plugin.PluginManager.acquireComponent
 import com.su.mediabox.pluginapi.components.IMediaUpdateDataComponent
-import com.su.mediabox.util.IntentProcessor
-import com.su.mediabox.util.Util
-import com.su.mediabox.util.logD
 import com.su.mediabox.view.activity.MainActivity
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import java.util.*
 import java.util.concurrent.TimeUnit
 import com.su.mediabox.R
-import com.su.mediabox.util.appCoroutineScope
-
+import com.su.mediabox.util.*
 
 const val MEDIA_UPDATE_CHECK_WORKER_ID = "MEDIA_UPDATE_CHECK_WORKER_ID"
 const val MEDIA_UPDATE_CHECK_WORKER_TAG = "MEDIA_UPDATE_CHECK_WORKER_TAG"
@@ -55,6 +52,8 @@ val mediaUpdateCheckWorkerLastCompleteTime = mediaUpdateCheckWorkerInfo
         list.forEach {
             //无论是自动还是手动，取得最近的一次
             val time = it.outputData.getLong(MEDIA_UPDATE_CHECK_COMPLETE_DATA_KEY, -1)
+            //TODO 这里PeriodicWork是无法获取OutputData的（一直为空）
+            logE("完成时间", it.toString())
             if (lastTime == null && time != -1L)
                 lastTime = time
             else if (lastTime != null && time > lastTime!!)
@@ -108,7 +107,7 @@ internal class MediaUpdateCheckWorker(context: Context, workerParameters: Worker
     override suspend fun doWork(): Result {
         if (mediaUpdateCheckWorkerIsRunning.value) {
             logD(TAG, "当前任务已在运行:${mediaUpdateCheckWorkerIsRunning.value}")
-            return Result.failure()
+            return Result.success()
         }
         runCatching {
             setForeground(createForegroundInfo())
@@ -239,15 +238,16 @@ internal class MediaUpdateCheckWorker(context: Context, workerParameters: Worker
 
 }
 
-fun launchMediaUpdateCheckWorker() {
+fun launchMediaUpdateCheckWorker(existingPeriodicWorkPolicy: ExistingPeriodicWorkPolicy = ExistingPeriodicWorkPolicy.KEEP) {
     val constraints = Constraints.Builder()
         .setRequiresBatteryNotLow(true)//电量充足才检查
         .build()
 
-    //TODO 自定义间隔
+    val timePair = getTimePairByTimeFormat(Pref.mediaUpdateCheckInterval.value)!!
+    logD("媒体定时自动检查", Pref.mediaUpdateCheckInterval.value)
     val request =
-        PeriodicWorkRequestBuilder<MediaUpdateCheckWorker>(2, TimeUnit.HOURS)
-        //PeriodicWorkRequestBuilder<MediaUpdateCheckWorker>(15, TimeUnit.MILLISECONDS)
+        PeriodicWorkRequestBuilder<MediaUpdateCheckWorker>(timePair.first, timePair.second)
+            //PeriodicWorkRequestBuilder<MediaUpdateCheckWorker>(15, TimeUnit.MILLISECONDS)
             .addTag(MEDIA_UPDATE_CHECK_WORKER_TAG)
             .setConstraints(constraints)
             .setBackoffCriteria(
@@ -260,7 +260,7 @@ fun launchMediaUpdateCheckWorker() {
 
     WorkManager.getInstance(App.context).enqueueUniquePeriodicWork(
         MEDIA_UPDATE_CHECK_WORKER_ID,
-        ExistingPeriodicWorkPolicy.KEEP,
+        existingPeriodicWorkPolicy,
         request
     )
 }

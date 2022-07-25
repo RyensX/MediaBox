@@ -4,6 +4,7 @@ import com.su.mediabox.App
 import com.su.mediabox.R
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 private val timeFormatPool by unsafeLazy { mutableMapOf<String, SimpleDateFormat>() }
 
@@ -44,4 +45,20 @@ fun friendlyTime(timestamp: Long): String {
                 getDataFormat(App.context.getString(R.string.time_format_out_year)).format(timestamp)
         }
     }
+}
+
+/**
+ * @param timeFormat 类似：15_minute
+ */
+fun getTimePairByTimeFormat(timeFormat: String) = timeFormat.split("_").run {
+    if (size != 2)
+        return@run null
+    val time = Util.withoutExceptionGet { get(0).toLong() } ?: return@run null
+    val unit = when (get(1)) {
+        "MICROSECONDS" -> TimeUnit.MICROSECONDS
+        "MINUTES" -> TimeUnit.MINUTES
+        "HOURS" -> TimeUnit.HOURS
+        else -> null
+    }
+    return@run unit?.let { Pair(time, it) }
 }
