@@ -40,9 +40,35 @@ import com.su.mediabox.util.appCoroutineScope
 
 const val MEDIA_UPDATE_CHECK_WORKER_ID = "MEDIA_UPDATE_CHECK_WORKER_ID"
 const val MEDIA_UPDATE_CHECK_WORKER_TAG = "MEDIA_UPDATE_CHECK_WORKER_TAG"
+const val MEDIA_UPDATE_CHECK_COMPLETE_DATA_KEY = "MEDIA_UPDATE_CHECK_COMPLETE_DATA_KEY"
 
-val mediaUpdateCheckWorkerIsRunning = WorkManager.getInstance(App.context)
+private val mediaUpdateCheckWorkerInfo = WorkManager.getInstance(App.context)
     .getWorkInfosByTagLiveData(MEDIA_UPDATE_CHECK_WORKER_TAG)
+
+/**
+ * 媒体检查更新服务上次运行时间，包括自动和手动
+ */
+val mediaUpdateCheckWorkerLastCompleteTime = mediaUpdateCheckWorkerInfo
+    .asFlow()
+    .map { list ->
+        var lastTime: Long? = null
+        list.forEach {
+            //无论是自动还是手动，取得最近的一次
+            val time = it.outputData.getLong(MEDIA_UPDATE_CHECK_COMPLETE_DATA_KEY, -1)
+            if (lastTime == null && time != -1L)
+                lastTime = time
+            else if (lastTime != null && time > lastTime!!)
+                lastTime = time
+        }
+        lastTime
+    }
+    .flowOn(Dispatchers.Default)
+    .stateIn(appCoroutineScope, SharingStarted.WhileSubscribed(), null)
+
+/**
+ * 媒体检查更新服务当前运行状态，包括自动和手动
+ */
+val mediaUpdateCheckWorkerIsRunning = mediaUpdateCheckWorkerInfo
     .asFlow()
     .map { list ->
         list.find { it.state == WorkInfo.State.RUNNING } != null
@@ -192,7 +218,11 @@ internal class MediaUpdateCheckWorker(context: Context, workerParameters: Worker
                 }
 
         }
-        return Result.success()
+        val data = Data.Builder()
+            //上次完成时间
+            .putLong(MEDIA_UPDATE_CHECK_COMPLETE_DATA_KEY, System.currentTimeMillis())
+            .build()
+        return Result.success(data)
     }
 
     private fun createNotificationChannel() {
@@ -215,16 +245,18 @@ fun launchMediaUpdateCheckWorker() {
         .build()
 
     //TODO 自定义间隔
-    val request = PeriodicWorkRequestBuilder<MediaUpdateCheckWorker>(2, TimeUnit.HOURS)
-        .addTag(MEDIA_UPDATE_CHECK_WORKER_TAG)
-        .setConstraints(constraints)
-        .setBackoffCriteria(
-            BackoffPolicy.LINEAR,
-            OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
-            TimeUnit.MILLISECONDS
-        )
-        //.setInitialDelay(1, TimeUnit.HOURS)
-        .build()
+    val request =
+        PeriodicWorkRequestBuilder<MediaUpdateCheckWorker>(2, TimeUnit.HOURS)
+        //PeriodicWorkRequestBuilder<MediaUpdateCheckWorker>(15, TimeUnit.MILLISECONDS)
+            .addTag(MEDIA_UPDATE_CHECK_WORKER_TAG)
+            .setConstraints(constraints)
+            .setBackoffCriteria(
+                BackoffPolicy.LINEAR,
+                OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
+                TimeUnit.MILLISECONDS
+            )
+            //.setInitialDelay(1, TimeUnit.HOURS)
+            .build()
 
     WorkManager.getInstance(App.context).enqueueUniquePeriodicWork(
         MEDIA_UPDATE_CHECK_WORKER_ID,
@@ -245,7 +277,6 @@ fun launchMediaUpdateCheckWorkerNow() {
     val uniName = MediaUpdateCheckWorker::class.java.name
 
     WorkManager.getInstance(App.context).apply {
-        cancelUniqueWork(uniName)
         enqueueUniqueWork(
             uniName,
             ExistingWorkPolicy.REPLACE,

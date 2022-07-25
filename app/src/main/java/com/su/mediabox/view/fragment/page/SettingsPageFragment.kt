@@ -21,6 +21,7 @@ import com.su.mediabox.util.update.AppUpdateStatus
 import com.su.mediabox.view.activity.LicenseActivity
 import com.su.mediabox.work.launchMediaUpdateCheckWorkerNow
 import com.su.mediabox.work.mediaUpdateCheckWorkerIsRunning
+import com.su.mediabox.work.mediaUpdateCheckWorkerLastCompleteTime
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -88,13 +89,23 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
                         launchMediaUpdateCheckWorkerNow()
                         true
                     }
+                    val running =
+                        App.context.getString(R.string.media_update_check_pref_now_summary)
+                    lifecycleCollect(mediaUpdateCheckWorkerLastCompleteTime) {
+                        summary =
+                            if (mediaUpdateCheckWorkerIsRunning.value) running
+                            else it?.run {
+                                App.context.getString(
+                                    R.string.media_update_check_pref_last_check_complete_time,
+                                    friendlyTime(this)
+                                )
+                            } ?: running
+                    }
                 }
 
                 lifecycleCollect(mediaUpdateCheckWorkerIsRunning) {
                     auto.isEnabled = !it
                     now.isEnabled = !it
-                    now.summary = if (it)
-                        App.context.getString(R.string.media_update_check_pref_now_summary) else ""
                 }
             }
 
