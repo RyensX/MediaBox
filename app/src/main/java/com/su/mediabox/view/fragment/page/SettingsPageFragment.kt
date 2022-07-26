@@ -33,9 +33,26 @@ import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
 
 class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreferenceClickListener {
 
+    private lateinit var nowCheckMediaUpdatePreference: Preference
+
     override fun onResume() {
         super.onResume()
         setHasOptionsMenu(true)
+        updateMediaUpdateCheckLastTime()
+    }
+
+    private fun updateMediaUpdateCheckLastTime() {
+        if (this::nowCheckMediaUpdatePreference.isInitialized) {
+            nowCheckMediaUpdatePreference.summary =
+                if (mediaUpdateCheckWorkerIsRunning.value) App.context.getString(R.string.media_update_check_pref_now_summary)
+                else Pref.mediaUpdateCheckLastTime.value.let {
+                    if (it == -1L) ""
+                    else App.context.getString(
+                        R.string.media_update_check_pref_last_check_complete_time,
+                        friendlyTime(it)
+                    )
+                }
+        }
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -110,31 +127,19 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
                     )
                 }
 
-                val now = preference {
+                nowCheckMediaUpdatePreference = preference {
                     titleRes(R.string.media_update_check_pref_now_name)
                     setOnPreferenceClickListener {
                         launchMediaUpdateCheckWorkerNow()
                         true
                     }
-                    val running =
-                        App.context.getString(R.string.media_update_check_pref_now_summary)
-                    lifecycleCollect(mediaUpdateCheckWorkerLastCompleteTime) {
-                        //TODO 刷新触发可能还存在一些问题
-                        summary =
-                            if (mediaUpdateCheckWorkerIsRunning.value) running
-                            else it?.run {
-                                App.context.getString(
-                                    R.string.media_update_check_pref_last_check_complete_time,
-                                    friendlyTime(this)
-                                )
-                            } ?: running
-                    }
                 }
 
-                lifecycleCollect(mediaUpdateCheckWorkerIsRunning) {
-                    auto.isEnabled = !it
-                    interval.isEnabled = !it
-                    now.isEnabled = !it
+                lifecycleCollect(mediaUpdateCheckWorkerIsRunning) { isRunning ->
+                    auto.isEnabled = !isRunning
+                    interval.isEnabled = !isRunning
+                    nowCheckMediaUpdatePreference.isEnabled = !isRunning
+                    updateMediaUpdateCheckLastTime()
                 }
             }
 

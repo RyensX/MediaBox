@@ -43,28 +43,6 @@ private val mediaUpdateCheckWorkerInfo = WorkManager.getInstance(App.context)
     .getWorkInfosByTagLiveData(MEDIA_UPDATE_CHECK_WORKER_TAG)
 
 /**
- * 媒体检查更新服务上次运行时间，包括自动和手动
- */
-val mediaUpdateCheckWorkerLastCompleteTime = mediaUpdateCheckWorkerInfo
-    .asFlow()
-    .map { list ->
-        var lastTime: Long? = null
-        list.forEach {
-            //无论是自动还是手动，取得最近的一次
-            val time = it.outputData.getLong(MEDIA_UPDATE_CHECK_COMPLETE_DATA_KEY, -1)
-            //TODO 这里PeriodicWork是无法获取OutputData的（一直为空）
-            logE("完成时间", it.toString())
-            if (lastTime == null && time != -1L)
-                lastTime = time
-            else if (lastTime != null && time > lastTime!!)
-                lastTime = time
-        }
-        lastTime
-    }
-    .flowOn(Dispatchers.Default)
-    .stateIn(appCoroutineScope, SharingStarted.WhileSubscribed(), null)
-
-/**
  * 媒体检查更新服务当前运行状态，包括自动和手动
  */
 val mediaUpdateCheckWorkerIsRunning = mediaUpdateCheckWorkerInfo
@@ -225,11 +203,8 @@ internal class MediaUpdateCheckWorker(context: Context, workerParameters: Worker
                 }
 
         }
-        val data = Data.Builder()
-            //上次完成时间
-            .putLong(MEDIA_UPDATE_CHECK_COMPLETE_DATA_KEY, System.currentTimeMillis())
-            .build()
-        return Result.success(data)
+        Pref.mediaUpdateCheckLastTime.saveData(System.currentTimeMillis())
+        return Result.success()
     }
 
     private fun createNotificationChannel() {

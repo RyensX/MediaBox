@@ -75,6 +75,7 @@ interface Setting {
         const val PLAY_ACTION_DEFAULT_CORE = "play_action_default_core"
         const val MEDIA_UPDATE_CHECK = "media_update_check"
         const val MEDIA_UPDATE_CHECK_INTERVAL = "media_update_check_interval"
+        const val MEDIA_UPDATE_CHECK_LAST_TIME = "media_update_check_last_time"
     }
 }
 
