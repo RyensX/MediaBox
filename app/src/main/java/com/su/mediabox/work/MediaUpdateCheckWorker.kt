@@ -82,9 +82,16 @@ internal class MediaUpdateCheckWorker(context: Context, workerParameters: Worker
     private val TAG = "媒体检查更新Worker"
 
     private fun createForegroundInfo(): ForegroundInfo {
-        val cancel = applicationContext.getString(R.string.cancel)
-        val intent = WorkManager.getInstance(applicationContext)
-            .createCancelPendingIntent(id)
+//        val cancel = applicationContext.getString(R.string.cancel)
+//        val intent = WorkManager.getInstance(applicationContext)
+//            .createCancelPendingIntent(id)
+
+        val notifyIntent = Intent(applicationContext, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        val notifyPendingIntent = PendingIntent.getActivity(
+            applicationContext, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT
+        )
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createNotificationChannel()
@@ -95,7 +102,8 @@ internal class MediaUpdateCheckWorker(context: Context, workerParameters: Worker
             .setContentText(applicationContext.getString(R.string.media_update_check_pref_now_summary))
             .setSmallIcon(R.mipmap.ic_mediabox)
             .setOngoing(true)
-            .addAction(android.R.drawable.ic_delete, cancel, intent)
+            .setContentIntent(notifyPendingIntent)
+            //.addAction(android.R.drawable.ic_delete, cancel, intent)
             .build()
 
         return ForegroundInfo(2, notification)
