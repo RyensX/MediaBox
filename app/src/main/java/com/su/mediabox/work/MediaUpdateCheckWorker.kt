@@ -34,10 +34,11 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import com.su.mediabox.R
 import com.su.mediabox.util.*
+import com.su.mediabox.view.activity.MediaDataActivity
 
 const val MEDIA_UPDATE_CHECK_WORKER_ID = "MEDIA_UPDATE_CHECK_WORKER_ID"
 const val MEDIA_UPDATE_CHECK_WORKER_TAG = "MEDIA_UPDATE_CHECK_WORKER_TAG"
-const val MEDIA_UPDATE_CHECK_COMPLETE_DATA_KEY = "MEDIA_UPDATE_CHECK_COMPLETE_DATA_KEY"
+const val MEDIA_UPDATE_CHECK_TARGET_PLUGIN = "MEDIA_UPDATE_CHECK_TARGET_PLUGIN"
 
 private val mediaUpdateCheckWorkerInfo = WorkManager.getInstance(App.context)
     .getWorkInfosByTagLiveData(MEDIA_UPDATE_CHECK_WORKER_TAG)
@@ -132,7 +133,8 @@ internal class MediaUpdateCheckWorker(context: Context, workerParameters: Worker
                     createNotificationChannel()
                     logD(TAG, "共计检查${result.size}，发现${validData.size}个插件的媒体有更新")
 
-                    validData.forEach {
+                    validData.forEachIndexed { index, it ->
+                        //每个插件媒体更新的通知
                         val updateList = NotificationCompat.InboxStyle()
                         it.second.take(5).forEachIndexed { index, media ->
                             media?.apply {
@@ -141,6 +143,19 @@ internal class MediaUpdateCheckWorker(context: Context, workerParameters: Worker
                         }
                         if (it.second.size > 5)
                             updateList.addLine("...")
+
+                        val pluginMediaDataManageIntent =
+                            Intent(applicationContext, MediaDataActivity::class.java).apply {
+                                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                                //目标插件
+                                putExtra(MEDIA_UPDATE_CHECK_TARGET_PLUGIN, it.first.packageName)
+                                //TODO 这里还要有个小问题：在已打开特定插件后还能通过插件打开另一个插件，改变了当前插件的上下文，会出现非预期效果
+                            }
+
+                        val pluginMediaDataManageNotifyPendingIntent = PendingIntent.getActivity(
+                            applicationContext, index,
+                            pluginMediaDataManageIntent, PendingIntent.FLAG_UPDATE_CURRENT
+                        )
 
                         val pluginMediaUpdateNofBuilder =
                             NotificationCompat.Builder(applicationContext, mediaUpdateNofChannelId)
@@ -157,6 +172,8 @@ internal class MediaUpdateCheckWorker(context: Context, workerParameters: Worker
                                         it.second.size
                                     )
                                 )
+                                .setContentIntent(pluginMediaDataManageNotifyPendingIntent)
+                                .setAutoCancel(true)
                                 .setStyle(updateList)
                                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                                 .setGroup(mediaUpdateNofChannelId)
@@ -166,6 +183,7 @@ internal class MediaUpdateCheckWorker(context: Context, workerParameters: Worker
                         }
                     }
 
+                    //媒体检查更新统计信息通知
                     val notifyIntent = Intent(applicationContext, MainActivity::class.java).apply {
                         flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     }

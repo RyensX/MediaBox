@@ -75,7 +75,7 @@ class PluginInstallerViewModel : ViewModel() {
                     info.addAll(buildInfoPair("名称", name))
                     info.addAll(buildInfoPair("包名", packageName))
                     info.addAll(buildInfoPair("API", "$apiVersion"))
-                    PluginManager.getPluginInfo(packageName)?.also {
+                    PluginManager.queryPluginInfo(packageName)?.also {
                         //已安装检测
                         info.addAll(buildInfoPair("版本", "升级 ${it.version} -> $version", Color.RED))
                         //安全检测

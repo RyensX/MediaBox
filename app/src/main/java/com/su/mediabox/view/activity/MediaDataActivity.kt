@@ -7,6 +7,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -15,6 +16,10 @@ import com.su.mediabox.R
 import com.su.mediabox.database.getOfflineDatabase
 import com.su.mediabox.databinding.ActvityMediaDataBinding
 import com.su.mediabox.databinding.TabMediaDataUpdateBinding
+import com.su.mediabox.plugin.PluginManager
+import com.su.mediabox.plugin.PluginManager.launchPlugin
+import com.su.mediabox.util.goActivity
+import com.su.mediabox.util.logI
 import com.su.mediabox.util.unsafeLazy
 import com.su.mediabox.util.viewBind
 import com.su.mediabox.viewmodel.MediaDataViewModel
@@ -22,6 +27,10 @@ import com.su.mediabox.view.fragment.BaseFragment
 import com.su.mediabox.view.fragment.page.MediaFavoriteDataPageFragment
 import com.su.mediabox.view.fragment.page.MediaHistoryDataPageFragment
 import com.su.mediabox.view.fragment.page.MediaUpdateDataPageFragment
+import com.su.mediabox.work.MEDIA_UPDATE_CHECK_TARGET_PLUGIN
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 class MediaDataActivity : BasePluginActivity() {
 
@@ -49,6 +58,22 @@ class MediaDataActivity : BasePluginActivity() {
         setSupportActionBar(mBinding.mediaDataBack)
         mBinding.mediaDataBack.setNavigationOnClickListener { finish() }
 
+        //从更新通知中启动
+        intent.getStringExtra(MEDIA_UPDATE_CHECK_TARGET_PLUGIN)?.also { pluginPackageName ->
+            lifecycleScope.launch(Dispatchers.IO) {
+                logI("更新通知打开", pluginPackageName)
+                //由于可能是冷启动，所以需要等待插件扫描完毕
+                PluginManager.pluginFlow.first()
+                PluginManager.queryPluginInfo(pluginPackageName)?.also {
+                    launchPlugin(it, false)
+                }
+                launch(Dispatchers.Main) { initUI() }
+            }
+        } ?: initUI()
+
+    }
+
+    private fun initUI() {
         //只有存在媒体更新组件才显示
         viewModel.mediaUpdateDataComponent?.also {
             pages.add(
@@ -91,7 +116,6 @@ class MediaDataActivity : BasePluginActivity() {
                 })
             }
         }
-
     }
 
     private class ViewPageAdapter(
