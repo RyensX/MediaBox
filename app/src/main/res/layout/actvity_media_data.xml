@@ -17,7 +17,21 @@
         app:navigationIcon="@drawable/md_nav_back"
         app:theme="@style/SkinToolBar"
         app:title="@string/media_data"
-        app:titleTextColor="@color/foreground_white_skin" />
+        app:titleTextColor="@color/foreground_white_skin">
+
+        <TextView
+            android:id="@+id/media_data_plugin_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_tab_update_count_skin"
+            android:gravity="center"
+            android:paddingHorizontal="6dp"
+            android:paddingVertical="2.5dp"
+            android:textColor="?colorPrimary"
+            android:textSize="10sp"
+            tools:text="插件" />
+
+    </androidx.appcompat.widget.Toolbar>
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/media_data_pager_tabs"

@@ -18,10 +18,7 @@ import com.su.mediabox.databinding.ActvityMediaDataBinding
 import com.su.mediabox.databinding.TabMediaDataUpdateBinding
 import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.plugin.PluginManager.launchPlugin
-import com.su.mediabox.util.goActivity
-import com.su.mediabox.util.logI
-import com.su.mediabox.util.unsafeLazy
-import com.su.mediabox.util.viewBind
+import com.su.mediabox.util.*
 import com.su.mediabox.viewmodel.MediaDataViewModel
 import com.su.mediabox.view.fragment.BaseFragment
 import com.su.mediabox.view.fragment.page.MediaFavoriteDataPageFragment
@@ -74,6 +71,10 @@ class MediaDataActivity : BasePluginActivity() {
     }
 
     private fun initUI() {
+        mBinding.mediaDataPluginName.displayOnlyIfHasData(PluginManager.currentLaunchPlugin.value?.name) {
+            text = it
+        }
+
         //只有存在媒体更新组件才显示
         viewModel.mediaUpdateDataComponent?.also {
             pages.add(
