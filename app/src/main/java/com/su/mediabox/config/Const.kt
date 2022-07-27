@@ -76,6 +76,7 @@ interface Setting {
         const val MEDIA_UPDATE_CHECK = "media_update_check"
         const val MEDIA_UPDATE_CHECK_INTERVAL = "media_update_check_interval"
         const val MEDIA_UPDATE_CHECK_LAST_TIME = "media_update_check_last_time"
+        const val MEDIA_UPDATE_CHECK_ON_METERED_NET = "media_update_check_on_metered_net"
     }
 }
 

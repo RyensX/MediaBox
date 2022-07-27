@@ -83,7 +83,7 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
 
                 titleRes(R.string.net_category_title)
 
-                checkPreference {
+                switchPreference {
                     key = Const.Setting.NET_REPO_PROXY
                     setDefaultValue(true)
                     setIcon(R.drawable.ic_language_main_color_2_24_skin)
@@ -98,7 +98,7 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
                     setDefaultValue(Pref.mediaUpdateCheck.value)
                     key = Const.Setting.MEDIA_UPDATE_CHECK
                     setIcon(R.drawable.ic_update_main_color_2_24_skin)
-                    titleRes(R.string.media_update_check_name)
+                    titleRes(R.string.media_update_check_title)
                     summaryRes(R.string.media_update_check_desc)
                 }
 
@@ -119,6 +119,17 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
                     }
                 }
 
+                val onMeteredNet = checkPreference {
+                    key = Const.Setting.MEDIA_UPDATE_CHECK_ON_METERED_NET
+                    setDefaultValue(Pref.mediaUpdateOnMeteredNet.value)
+                    titleRes(R.string.media_update_check_pref_on_metered_net_title)
+                    summaryRes(R.string.media_update_check_pref_on_metered_net_summary)
+                    setOnPreferenceClickListener {
+                        auto.isChecked = false
+                        true
+                    }
+                }
+
                 preference {
                     summaryRes(R.string.media_update_check_alert)
                     icon = ResourceUtil.getDrawable(
@@ -128,7 +139,7 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
                 }
 
                 nowCheckMediaUpdatePreference = preference {
-                    titleRes(R.string.media_update_check_pref_now_name)
+                    titleRes(R.string.media_update_check_pref_now_title)
                     setOnPreferenceClickListener {
                         launchMediaUpdateCheckWorkerNow()
                         true
@@ -138,6 +149,7 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
                 lifecycleCollect(mediaUpdateCheckWorkerIsRunning) { isRunning ->
                     auto.isEnabled = !isRunning
                     interval.isEnabled = !isRunning
+                    onMeteredNet.isEnabled = !isRunning
                     nowCheckMediaUpdatePreference.isEnabled = !isRunning
                     updateMediaUpdateCheckLastTime()
                 }

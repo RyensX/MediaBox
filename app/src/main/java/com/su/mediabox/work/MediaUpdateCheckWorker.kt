@@ -76,7 +76,7 @@ internal class MediaUpdateCheckWorker(context: Context, workerParameters: Worker
         }
 
         val notification = NotificationCompat.Builder(applicationContext, mediaUpdateNofChannelId)
-            .setContentTitle(applicationContext.getString(R.string.media_update_check_name))
+            .setContentTitle(applicationContext.getString(R.string.media_update_check_title))
             .setContentText(applicationContext.getString(R.string.media_update_check_pref_now_summary))
             .setSmallIcon(R.mipmap.ic_mediabox)
             .setOngoing(true)
@@ -182,7 +182,7 @@ internal class MediaUpdateCheckWorker(context: Context, workerParameters: Worker
                                 )
                             )
                             .setSmallIcon(R.mipmap.ic_mediabox)
-                            .setContentTitle(applicationContext.getString(R.string.media_update_check_name))
+                            .setContentTitle(applicationContext.getString(R.string.media_update_check_title))
                             .setContentText(
                                 applicationContext.getString(
                                     R.string.media_update_check_result,
@@ -209,7 +209,7 @@ internal class MediaUpdateCheckWorker(context: Context, workerParameters: Worker
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = applicationContext.getString(R.string.media_update_check_name)
+            val name = applicationContext.getString(R.string.media_update_check_title)
             val descriptionText = applicationContext.getString(R.string.media_update_check_desc)
             val importance = NotificationManager.IMPORTANCE_DEFAULT
             val channel = NotificationChannel(mediaUpdateNofChannelId, name, importance).apply {
@@ -223,6 +223,7 @@ internal class MediaUpdateCheckWorker(context: Context, workerParameters: Worker
 
 fun launchMediaUpdateCheckWorker(existingPeriodicWorkPolicy: ExistingPeriodicWorkPolicy = ExistingPeriodicWorkPolicy.KEEP) {
     val constraints = Constraints.Builder()
+        .setRequiredNetworkType(if (Pref.mediaUpdateOnMeteredNet.value) NetworkType.NOT_REQUIRED else NetworkType.UNMETERED)
         .setRequiresBatteryNotLow(true)//电量充足才检查
         .build()
 
@@ -276,7 +277,7 @@ fun registerMediaUpdateCheckShortcut() {
             launchMediaUpdateCheckWorkerNow()
         }
 
-        val name = App.context.getString(R.string.media_update_check_pref_now_name)
+        val name = App.context.getString(R.string.media_update_check_pref_now_title)
 
         val shortcut = ShortcutInfoCompat.Builder(App.context, MEDIA_UPDATE_CHECK_WORKER_ID)
             .setShortLabel(name)
