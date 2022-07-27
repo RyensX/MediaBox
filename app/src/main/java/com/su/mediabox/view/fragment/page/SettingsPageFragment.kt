@@ -77,6 +77,16 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
                     summaryRes(R.string.open_source_watch)
                     onPreferenceClickListener = this@SettingsPageFragment
                 }
+
+                preference {
+                    setIcon(R.drawable.ic_telegram)
+                    title = "加入群组"
+                    summary = "参与讨论与反馈"
+                    onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                        Util.openBrowser(Const.Common.TG_URL)
+                        true
+                    }
+                }
             }
 
             preferenceCategory {
