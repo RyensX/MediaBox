@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.afollestad.materialdialogs.MaterialDialog
+import com.microsoft.appcenter.analytics.Analytics
 import com.su.mediabox.R
 import com.su.mediabox.model.PreviewPluginInfo
 import com.su.mediabox.config.Const
@@ -94,6 +95,7 @@ class PluginRepoPageFragment : BaseViewBindingFragment<PagePluginRepoBinding>(),
     private val pageLoadViewModel by viewModels<PageLoadViewModel>()
 
     private fun loadSuccess(loadState: PageLoadViewModel.LoadState.SUCCESS) {
+        Analytics.trackEvent("功能：插件仓库")
         mBinding.customDataList.apply {
             val dy = getFirstItemDecorationBy<DynamicGridItemDecoration>()
             if (loadState.data.isNullOrEmpty()) {

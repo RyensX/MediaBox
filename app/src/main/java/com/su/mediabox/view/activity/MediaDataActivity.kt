@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.microsoft.appcenter.analytics.Analytics
 import com.su.mediabox.App
 import com.su.mediabox.R
 import com.su.mediabox.database.getOfflineDatabase
@@ -52,6 +53,9 @@ class MediaDataActivity : BasePluginActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        Analytics.trackEvent("功能：媒体记录管理")
+
         setSupportActionBar(mBinding.mediaDataBack)
         mBinding.mediaDataBack.setNavigationOnClickListener { finish() }
 

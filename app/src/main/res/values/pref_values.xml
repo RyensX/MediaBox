@@ -11,6 +11,7 @@
     <string name="about_category_title">关于</string>
     <string name="version_title">%s(%d) %s</string>
     <string name="version_summary">点击检查更新</string>
+    <string name="plugin_api_compatibility">插件API兼容性</string>
     <string name="open_source_title">项目地址</string>
     <string name="open_source_licenses_summary">共%d个许可证，点击查看</string>
     <string name="support_title">支持开发</string>

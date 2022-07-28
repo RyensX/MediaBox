@@ -20,6 +20,7 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.map
 import androidx.work.*
+import com.microsoft.appcenter.analytics.Analytics
 import com.su.mediabox.App
 import com.su.mediabox.Pref
 import com.su.mediabox.database.getAppDataBase
@@ -112,6 +113,7 @@ internal class MediaUpdateCheckWorker(context: Context, workerParameters: Worker
             logD(TAG, "当前任务已在运行:${mediaUpdateCheckWorkerIsRunning.value}")
             return Result.success()
         }
+        Analytics.trackEvent("功能：媒体自动检查更新")
         runCatching {
             setForeground(createForegroundInfo())
         }

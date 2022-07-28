@@ -14,6 +14,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.shuyu.gsyvideoplayer.player.IjkPlayerManager
 import com.su.mediabox.*
 import com.su.mediabox.config.Const
+import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.util.*
 import com.su.mediabox.util.update.AppUpdateHelper
 import com.su.mediabox.util.update.AppUpdateStatus
@@ -219,6 +220,12 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
                             true
                         }
                     }
+                }
+
+                preference {
+                    titleRes(R.string.plugin_api_compatibility)
+                    summary =
+                        "API ${PluginManager.minPluginApiVersion} ~ API ${PluginManager.appApiVersion}"
                 }
 
                 preference {

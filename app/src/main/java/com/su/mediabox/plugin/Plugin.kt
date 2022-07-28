@@ -39,7 +39,7 @@ import java.io.File
 
 object PluginManager {
 
-    private val appApiVersion by unsafeLazy {
+    val appApiVersion by unsafeLazy {
         val appInfo: ApplicationInfo = App.context.packageManager
             .getApplicationInfo(
                 App.context.packageName,
@@ -55,7 +55,7 @@ object PluginManager {
     /**
      * 最低支持的插件API版本
      */
-    private const val minPluginApiVersion = 1
+    const val minPluginApiVersion = 1
 
     const val PLUGIN_DIR_NAME = "plugins"
     val pluginDir = App.context.getExternalFilesDir(PLUGIN_DIR_NAME)!!
