@@ -18,9 +18,13 @@ import com.su.mediabox.R
 import com.su.mediabox.database.destroyInstance
 import com.su.mediabox.database.getAppDataBaseFileName
 import com.su.mediabox.model.PluginInfo
+import com.su.mediabox.plugin.PluginPreferenceImpl.checkKeyExist
+import com.su.mediabox.plugin.PluginPreferenceImpl.get
+import com.su.mediabox.plugin.PluginPreferenceImpl.set
 import com.su.mediabox.pluginapi.Constant
 import com.su.mediabox.pluginapi.IPluginFactory
 import com.su.mediabox.pluginapi.components.IBasePageDataComponent
+import com.su.mediabox.pluginapi.components.IMediaUpdateDataComponent
 import com.su.mediabox.util.*
 import com.su.mediabox.util.Text.githubProxy
 import com.su.mediabox.util.Util.getSignatures

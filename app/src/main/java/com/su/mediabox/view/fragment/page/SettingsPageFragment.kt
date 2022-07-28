@@ -5,17 +5,10 @@ import android.text.Html
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.DrawableCompat
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
-import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.WorkManager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.shuyu.gsyvideoplayer.player.IjkPlayerManager
@@ -27,7 +20,6 @@ import com.su.mediabox.util.update.AppUpdateStatus
 import com.su.mediabox.view.activity.LicenseActivity
 import com.su.mediabox.work.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
 
@@ -80,8 +72,8 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
 
                 preference {
                     setIcon(R.drawable.ic_telegram)
-                    title = "加入群组"
-                    summary = "参与讨论与反馈"
+                    titleRes(R.string.chat_group_title)
+                    summaryRes(R.string.chat_group_summary)
                     onPreferenceClickListener = Preference.OnPreferenceClickListener {
                         Util.openBrowser(Const.Common.TG_URL)
                         true
@@ -92,7 +84,6 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
             preferenceCategory {
 
                 titleRes(R.string.net_category_title)
-
                 switchPreference {
                     key = Const.Setting.NET_REPO_PROXY
                     setDefaultValue(true)

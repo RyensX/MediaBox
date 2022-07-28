@@ -3,6 +3,7 @@ package com.su.mediabox.util
 import android.graphics.drawable.Drawable
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
@@ -18,4 +19,6 @@ object ResourceUtil {
         }
         return icon
     }
+
+    fun getString(@StringRes id: Int, vararg args: Any) = App.context.getString(id, *args)
 }

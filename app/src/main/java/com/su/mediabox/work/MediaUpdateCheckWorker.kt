@@ -33,6 +33,11 @@ import kotlinx.coroutines.flow.*
 import java.util.*
 import java.util.concurrent.TimeUnit
 import com.su.mediabox.R
+import com.su.mediabox.model.PluginInfo
+import com.su.mediabox.plugin.PluginPreferenceImpl
+import com.su.mediabox.plugin.PluginPreferenceImpl.checkKeyExist
+import com.su.mediabox.plugin.PluginPreferenceImpl.get
+import com.su.mediabox.plugin.PluginPreferenceImpl.set
 import com.su.mediabox.util.*
 import com.su.mediabox.view.activity.MediaDataActivity
 
@@ -59,6 +64,7 @@ internal class MediaUpdateCheckWorker(context: Context, workerParameters: Worker
 
     private val mediaUpdateNofChannelId = "media_update_check"
     private val TAG = "媒体检查更新Worker"
+    private val key = ResourceUtil.getString(R.string.media_update_check_title)
 
     private fun createForegroundInfo(): ForegroundInfo {
 //        val cancel = applicationContext.getString(R.string.cancel)
@@ -90,6 +96,16 @@ internal class MediaUpdateCheckWorker(context: Context, workerParameters: Worker
 
     override suspend fun getForegroundInfo(): ForegroundInfo = createForegroundInfo()
 
+    private suspend fun PluginInfo.checkPluginConfig() = Util.withoutExceptionGet {
+        val ds = PluginPreferenceImpl.getPluginDataStore(this)
+        val has = ds.checkKeyExist(key, String::class.java, true)
+        if (!has) {
+            ds.set(key, value = true, isVisual = true)
+            true
+        } else
+            ds.get(key, defaultValue = true, isVisual = true)
+    } ?: false
+
     @FlowPreview
     override suspend fun doWork(): Result {
         if (mediaUpdateCheckWorkerIsRunning.value) {
@@ -120,9 +136,12 @@ internal class MediaUpdateCheckWorker(context: Context, workerParameters: Worker
 //                                    getDataFormat("H:m").format(System.currentTimeMillis())
 //                            }
                         }?.also { component ->
-                            val favorites = plugin.getAppDataBase().favoriteDao().getFavoriteList()
-                            MediaUpdateCheck.checkMediaUpdate(favorites, plugin, component) {
-                                emit(Pair(plugin, it))
+                            if (plugin.checkPluginConfig()) {
+                                val favorites =
+                                    plugin.getAppDataBase().favoriteDao().getFavoriteList()
+                                MediaUpdateCheck.checkMediaUpdate(favorites, plugin, component) {
+                                    emit(Pair(plugin, it))
+                                }
                             }
                         }
                     }
@@ -184,39 +203,43 @@ internal class MediaUpdateCheckWorker(context: Context, workerParameters: Worker
                     }
 
                     //媒体检查更新统计信息通知
-                    val notifyIntent = Intent(applicationContext, MainActivity::class.java).apply {
-                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    }
-                    val notifyPendingIntent = PendingIntent.getActivity(
-                        applicationContext, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT
-                    )
+                    if (result.isNotEmpty()) {
+                        val notifyIntent =
+                            Intent(applicationContext, MainActivity::class.java).apply {
+                                flags =
+                                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            }
+                        val notifyPendingIntent = PendingIntent.getActivity(
+                            applicationContext, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT
+                        )
 
-                    val mediaUpdateCheckNofBuilder =
-                        NotificationCompat.Builder(applicationContext, mediaUpdateNofChannelId)
-                            .setLargeIcon(
-                                BitmapFactory.decodeResource(
-                                    applicationContext.resources,
-                                    R.mipmap.ic_mediabox
+                        val mediaUpdateCheckNofBuilder =
+                            NotificationCompat.Builder(applicationContext, mediaUpdateNofChannelId)
+                                .setLargeIcon(
+                                    BitmapFactory.decodeResource(
+                                        applicationContext.resources,
+                                        R.mipmap.ic_mediabox
+                                    )
                                 )
-                            )
-                            .setSmallIcon(R.mipmap.ic_mediabox)
-                            .setContentTitle(applicationContext.getString(R.string.media_update_check_title))
-                            .setContentText(
-                                applicationContext.getString(
-                                    R.string.media_update_check_result,
-                                    result.size, validData.size
+                                .setSmallIcon(R.mipmap.ic_mediabox)
+                                .setContentTitle(applicationContext.getString(R.string.media_update_check_title))
+                                .setContentText(
+                                    applicationContext.getString(
+                                        R.string.media_update_check_result,
+                                        result.size, validData.size
+                                    )
                                 )
-                            )
-                            .setContentIntent(notifyPendingIntent)
-                            .setStyle(
-                                NotificationCompat.BigTextStyle()
-                                    .bigText(applicationContext.getString(R.string.media_update_check_hint))
-                            )
-                            .setAutoCancel(true)
-                            .setPriority(NotificationCompat.PRIORITY_HIGH)
+                                .setContentIntent(notifyPendingIntent)
+                                .setStyle(
+                                    NotificationCompat.BigTextStyle()
+                                        .bigText(applicationContext.getString(R.string.media_update_check_hint))
+                                )
+                                .setAutoCancel(true)
+                                .setPriority(NotificationCompat.PRIORITY_HIGH)
 
-                    with(NotificationManagerCompat.from(applicationContext)) {
-                        notify(1, mediaUpdateCheckNofBuilder.build())
+                        with(NotificationManagerCompat.from(applicationContext)) {
+                            notify(1, mediaUpdateCheckNofBuilder.build())
+                        }
                     }
                 }
 

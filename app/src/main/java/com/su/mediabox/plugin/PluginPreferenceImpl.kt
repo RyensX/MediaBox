@@ -41,28 +41,49 @@ object PluginPreferenceImpl : PluginPreference {
     private fun getKey(key: String, isVisual: Boolean) =
         "${if (isVisual) VISUAL_PLUGIN_PREF_PREFIX else PLUGIN_PREF_PREFIX}$key"
 
-    override suspend fun <T> get(
+    suspend fun <T> DataStore<Preferences>?.get(
         key: String,
         defaultValue: T,
         isVisual: Boolean
-    ): T =
-        getPluginDataStore()?.run {
-            defaultValue.getRawClass()?.let { type ->
-                data.first()[key(getKey(key, isVisual), type, false)]
-            }
-        } ?: defaultValue
+    ): T = defaultValue.getRawClass()?.let { type ->
+        this?.data?.first()?.get(key(getKey(key, isVisual), type, false))
+    } ?: defaultValue
 
-    override suspend fun <T> set(
+    suspend fun <T> DataStore<Preferences>?.set(
         key: String,
         value: T,
         isVisual: Boolean
     ): Boolean {
         value.getRawClass()?.let { type ->
-            getPluginDataStore()?.edit {
+            this?.edit {
                 it[key((getKey(key, isVisual)), type, false)] = value
             } ?: return false
             return true
         } ?: return false
     }
+
+    suspend fun DataStore<Preferences>?.checkKeyExist(
+        key: String,
+        type: Class<*>,
+        isVisual: Boolean
+    ): Boolean {
+        var result: Any? = null
+        this?.edit {
+            result = it[key(getKey(key, isVisual), type, false)]
+        }
+        return result != null
+    }
+
+    override suspend fun <T> get(
+        key: String,
+        defaultValue: T,
+        isVisual: Boolean
+    ): T = getPluginDataStore().get(key, defaultValue, isVisual)
+
+    override suspend fun <T> set(
+        key: String,
+        value: T,
+        isVisual: Boolean
+    ): Boolean = getPluginDataStore().set(key, value, isVisual)
 
 }
