@@ -95,6 +95,10 @@ object PluginManager {
     fun scanPlugin() {
         val packageManager = App.context.packageManager
         pluginWorkScope.launch {
+            //首先清空所有组件缓存
+            pluginFactoryPool.clear()
+            componentPool.clear()
+
             val plugins = mutableMapOf<String, PluginInfo>()
             //内部安装的插件，如果有外部相同包名的则会被覆盖以方便调试
             pluginDir.listFiles()?.apply {
