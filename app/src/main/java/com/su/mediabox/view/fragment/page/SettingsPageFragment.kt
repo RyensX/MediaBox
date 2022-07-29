@@ -11,6 +11,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.work.WorkManager
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.WhichButton
 import com.shuyu.gsyvideoplayer.player.IjkPlayerManager
 import com.su.mediabox.*
 import com.su.mediabox.config.Const
@@ -102,6 +103,11 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
                     setIcon(R.drawable.ic_update_main_color_2_24_skin)
                     titleRes(R.string.media_update_check_title)
                     summaryRes(R.string.media_update_check_desc)
+                    setOnPreferenceChangeListener { _, newValue ->
+                        if (newValue == true)
+                            requireContext().checkBatteryOptimizations(true)
+                        true
+                    }
                 }
 
                 val interval = singleSelectListPreference {
@@ -255,6 +261,7 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
                             positiveButton(res = R.string.ok) {
                                 Util.setReadUserNoticeVersion(Const.Common.USER_NOTICE_VERSION)
                             }
+                            countdownActionButton(durationSeconds = 20)
                         }
                         true
                     }

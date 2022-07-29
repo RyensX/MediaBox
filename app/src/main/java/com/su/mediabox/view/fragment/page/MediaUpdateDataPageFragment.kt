@@ -13,6 +13,7 @@ import com.su.mediabox.database.getAppDataBase
 import com.su.mediabox.database.getOfflineDatabase
 import com.su.mediabox.pluginapi.util.UIUtil.dp
 import com.su.mediabox.util.appCoroutineScope
+import com.su.mediabox.util.countdownActionButton
 import com.su.mediabox.util.logD
 import com.su.mediabox.view.adapter.type.*
 import com.su.mediabox.view.fragment.BaseFragment
@@ -78,6 +79,7 @@ class MediaUpdateDataPageFragment : BaseFragment() {
                                 getOfflineDatabase().mediaUpdateDao().deleteAllConfirmed()
                             }
                         }
+                        countdownActionButton(durationSeconds = 5)
                         negativeButton(res = R.string.cancel) { dismiss() }
                     }
                 }

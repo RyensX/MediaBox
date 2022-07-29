@@ -15,9 +15,11 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+
     <uses-permission
         android:name="android.permission.READ_LOGS"
-        tools:ignore="ProtectedPermissions" /> <!-- U-PUSH 移除自启动能力 -->
+        tools:ignore="ProtectedPermissions" />
     <uses-permission
         android:name="android.permission.RECEIVE_BOOT_COMPLETED"
         tools:node="remove" />

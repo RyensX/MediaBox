@@ -21,7 +21,7 @@
     <string name="chat_group_summary">参与讨论与反馈</string>
     <string name="user_notice_summary">点击查看</string>
     <!--媒体检查更新-->
-    <string name="media_update_check_category">媒体</string>
+    <string name="media_update_check_category">媒体(Beta)</string>
     <string name="media_update_check_title">媒体自动检查更新</string>
     <string name="media_update_check_result">共计检查%d个插件，发现%d项的媒体有更新</string>
     <string name="media_update_check_hint">如果希望不自动检查，可以打开设置全局关闭或长按插件单独关闭</string>

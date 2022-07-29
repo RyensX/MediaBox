@@ -15,11 +15,8 @@ import com.su.mediabox.database.getAppDataBase
 import com.su.mediabox.databinding.ItemMediaHistoryBinding
 import com.su.mediabox.pluginapi.action.DetailAction
 import com.su.mediabox.pluginapi.util.UIUtil.dp
-import com.su.mediabox.util.appCoroutineScope
+import com.su.mediabox.util.*
 import com.su.mediabox.util.coil.CoilUtil.loadImage
-import com.su.mediabox.util.displayOnlyIfHasData
-import com.su.mediabox.util.setOnClickListener
-import com.su.mediabox.util.setOnLongClickListener
 import com.su.mediabox.view.adapter.type.*
 import com.su.mediabox.view.fragment.BaseFragment
 import com.su.mediabox.viewmodel.MediaDataViewModel
@@ -81,6 +78,7 @@ class MediaHistoryDataPageFragment : BaseFragment() {
                                 getAppDataBase().historyDao().deleteAllHistory()
                             }
                         }
+                        countdownActionButton(durationSeconds = 5)
                         negativeButton(res = R.string.cancel) { dismiss() }
                     }
                 }

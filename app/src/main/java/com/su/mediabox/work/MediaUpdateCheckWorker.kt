@@ -1,15 +1,16 @@
 package com.su.mediabox.work
 
+import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.content.pm.ShortcutManager
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
-import android.widget.Toast
+import android.os.PowerManager
+import android.provider.Settings
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.getSystemService
@@ -18,8 +19,9 @@ import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.asFlow
-import androidx.lifecycle.map
 import androidx.work.*
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.WhichButton
 import com.microsoft.appcenter.analytics.Analytics
 import com.su.mediabox.App
 import com.su.mediabox.Pref
@@ -31,7 +33,6 @@ import com.su.mediabox.pluginapi.components.IMediaUpdateDataComponent
 import com.su.mediabox.view.activity.MainActivity
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import java.util.*
 import java.util.concurrent.TimeUnit
 import com.su.mediabox.R
 import com.su.mediabox.model.PluginInfo
@@ -335,5 +336,27 @@ fun registerMediaUpdateCheckShortcut() {
             .build()
 
         ShortcutManagerCompat.setDynamicShortcuts(App.context, listOf(shortcut))
+    }
+}
+
+@SuppressLint("BatteryLife")
+fun Context.checkBatteryOptimizations(state: Boolean = Pref.mediaUpdateCheck.value) {
+    if (state &&
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
+        getSystemService<PowerManager>()?.isIgnoringBatteryOptimizations(packageName) != true
+    ) {
+        MaterialDialog(this).show {
+            title(res = R.string.media_update_check_title)
+            message(res = R.string.media_update_check_alert)
+            cancelable(false)
+            negativeButton(res = R.string.cancel) { dismiss() }
+            positiveButton(res = R.string.media_update_battery_optimization) {
+                val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS)
+                intent.data = Uri.parse("package:$packageName")
+                if (intent.resolveActivity(packageManager) != null)
+                    startActivity(intent)
+            }
+            countdownActionButton(WhichButton.NEGATIVE)
+        }
     }
 }

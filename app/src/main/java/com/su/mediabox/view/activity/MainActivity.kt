@@ -25,6 +25,8 @@ import com.su.mediabox.view.fragment.page.ExplorePageFragment
 import com.su.mediabox.view.fragment.page.PluginRepoPageFragment
 import com.su.mediabox.view.fragment.page.SettingsPageFragment
 import com.su.mediabox.viewmodel.PluginUpdateViewModel
+import com.su.mediabox.work.checkBatteryOptimizations
+
 
 class MainActivity : BaseActivity() {
 
@@ -106,7 +108,7 @@ class MainActivity : BaseActivity() {
         //自动刷新
         listenInstallBroadcasts()
 
-        logD("创建","界面")
+        checkBatteryOptimizations()
     }
 
     private fun listenInstallBroadcasts() {
@@ -119,13 +121,13 @@ class MainActivity : BaseActivity() {
         registerReceiver(installBroadcastReceiver, intentFilter)
     }
 
+
     override fun onStop() {
         Analytics.trackEvent("主界面停止")
         super.onStop()
     }
 
     override fun onDestroy() {
-        logD("销毁","界面")
         unregisterReceiver(installBroadcastReceiver)
         super.onDestroy()
     }
