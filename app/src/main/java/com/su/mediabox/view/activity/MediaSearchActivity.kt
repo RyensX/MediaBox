@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.activity.viewModels
+import com.microsoft.appcenter.analytics.Analytics
 import com.su.mediabox.R
 import com.su.mediabox.bean.MediaSearchHistory
 import com.su.mediabox.database.getAppDataBase
@@ -37,6 +38,8 @@ class MediaSearchActivity : BasePluginActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        Analytics.trackEvent("功能：媒体搜索")
 
         mBinding.run {
             //列表

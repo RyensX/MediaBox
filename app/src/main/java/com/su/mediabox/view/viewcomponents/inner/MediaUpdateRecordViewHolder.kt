@@ -1,8 +1,11 @@
 package com.su.mediabox.view.viewcomponents.inner
 
+import android.graphics.Typeface
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
+import android.text.style.UnderlineSpan
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
@@ -62,14 +65,31 @@ class MediaUpdateRecordViewHolder private constructor(private val binding: ViewC
         val rawText = bindingContext.getString(R.string.media_update_desc, oldTag, newTag)
         val style = SpannableStringBuilder(rawText)
         val oldIndex = rawText.indexOf(oldTag)
+        //旧标志
         style.setSpan(
             ForegroundColorSpan(styleColor),
             oldIndex, oldIndex + oldTag.length,
             Spannable.SPAN_EXCLUSIVE_INCLUSIVE
         )
+        style.setSpan(
+            UnderlineSpan(),
+            oldIndex, oldIndex + oldTag.length,
+            Spannable.SPAN_EXCLUSIVE_INCLUSIVE
+        )
+        //新标志
         val newIndex = rawText.indexOf(newTag)
         style.setSpan(
             ForegroundColorSpan(styleColor),
+            newIndex, newIndex + newTag.length,
+            Spannable.SPAN_EXCLUSIVE_INCLUSIVE
+        )
+        style.setSpan(
+            StyleSpan(Typeface.BOLD),
+            newIndex, newIndex + newTag.length,
+            Spannable.SPAN_EXCLUSIVE_INCLUSIVE
+        )
+        style.setSpan(
+            UnderlineSpan(),
             newIndex, newIndex + newTag.length,
             Spannable.SPAN_EXCLUSIVE_INCLUSIVE
         )

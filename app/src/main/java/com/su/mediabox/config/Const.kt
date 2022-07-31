@@ -31,6 +31,7 @@ interface Const {
             const val GITHUB_PLUGIN_REPO_OFFICE_URL =
                 "https://ryensx.github.io/MediaBoxPluginRepository/"
             const val USER_NOTICE_VERSION = 2
+            const val TG_URL = "https://t.me/MediaBoxGithub"
 
             val licenses = listOf(
                 License("", "名称", "许可证", true),
@@ -73,6 +74,10 @@ interface Setting {
         const val SHOW_PLAY_BOTTOM_BAR = "show_play_bottom_bar"
         const val APP_LAUNCH_COUNT = "app_launch_count"
         const val PLAY_ACTION_DEFAULT_CORE = "play_action_default_core"
+        const val MEDIA_UPDATE_CHECK = "media_update_check"
+        const val MEDIA_UPDATE_CHECK_INTERVAL = "media_update_check_interval"
+        const val MEDIA_UPDATE_CHECK_LAST_TIME = "media_update_check_last_time"
+        const val MEDIA_UPDATE_CHECK_ON_METERED_NET = "media_update_check_on_metered_net"
     }
 }
 

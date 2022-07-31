@@ -2,7 +2,7 @@
 <resources>
     <string name="net_category_title">网络</string>
     <string name="net_proxy_title">Github代理</string>
-    <string name="net_proxy_summary">访问插件仓库和更新时GhProxy代理</string>
+    <string name="net_proxy_summary">访问插件仓库和更新时自动代理</string>
     <string name="player_category_title">播放</string>
     <string name="player_bottom_progress_title">底部进度条</string>
     <string name="player_bottom_progress_summary">在播放视频时底部显示进度条</string>
@@ -11,12 +11,29 @@
     <string name="about_category_title">关于</string>
     <string name="version_title">%s(%d) %s</string>
     <string name="version_summary">点击检查更新</string>
+    <string name="plugin_api_compatibility">插件API兼容性</string>
     <string name="open_source_title">项目地址</string>
     <string name="open_source_licenses_summary">共%d个许可证，点击查看</string>
     <string name="support_title">支持开发</string>
     <string name="open_source_star">鼓励开发者</string>
     <string name="open_source_watch">关注开发进度</string>
+    <string name="chat_group_title">加入群组</string>
+    <string name="chat_group_summary">参与讨论与反馈</string>
     <string name="user_notice_summary">点击查看</string>
+    <!--媒体检查更新-->
+    <string name="media_update_check_category">媒体(Beta)</string>
+    <string name="media_update_check_title">媒体自动检查更新</string>
+    <string name="media_update_check_result">共计检查%d个插件，发现%d项的媒体有更新</string>
+    <string name="media_update_check_hint">如果希望不自动检查，可以打开设置全局关闭或长按插件单独关闭</string>
+    <string name="media_update_check_desc">定时检查所有实现了媒体更新数据组件的插件的媒体更新(电量不足则推延)</string>
+    <string name="media_update_check_alert">注意：在一些系统(如MIUI)上可能无法在应用关闭后继续保持定时执行，建议为应用关闭电池优化和锁定后台运行。</string>
+    <string name="media_update_check_pref_now_title">立即检查所有媒体更新</string>
+    <string name="media_update_check_pref_now_summary">正在检查中…</string>
+    <string name="media_update_check_pref_interval">自动检查间隔</string>
+    <string name="media_update_check_pref_on_metered_net_title">使用移动网络</string>
+    <string name="media_update_check_pref_on_metered_net_summary">移动网络下自动检查，注意流量消耗</string>
+    <string name="media_update_check_pref_last_check_complete_time">上次检查：%s</string>
+    <string name="media_update_check_plugin_result">发现%d个媒体有更新</string>
 
     <string-array name="play_action_core_text">
         <item>Exo2Player内核</item>

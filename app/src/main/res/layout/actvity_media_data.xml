@@ -17,7 +17,21 @@
         app:navigationIcon="@drawable/md_nav_back"
         app:theme="@style/SkinToolBar"
         app:title="@string/media_data"
-        app:titleTextColor="@color/foreground_white_skin" />
+        app:titleTextColor="@color/foreground_white_skin">
+
+        <TextView
+            android:id="@+id/media_data_plugin_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_tab_update_count_skin"
+            android:gravity="center"
+            android:paddingHorizontal="6dp"
+            android:paddingVertical="2.5dp"
+            android:textColor="?colorPrimary"
+            android:textSize="10sp"
+            tools:text="插件" />
+
+    </androidx.appcompat.widget.Toolbar>
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/media_data_pager_tabs"
@@ -25,7 +39,7 @@
         android:layout_height="40dp"
         android:background="@color/white_skin"
         android:backgroundTint="@color/main_color_2_skin"
-        app:layout_constraintEnd_toStartOf="@id/media_data_pager_update"
+        app:layout_constraintEnd_toStartOf="@id/media_data_pager_update_hint"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/media_data_back"
         app:tabBackground="@color/main_color_2_skin"
@@ -34,6 +48,19 @@
         app:tabMode="scrollable"
         app:tabRippleColor="@color/main_color_2_skin"
         app:tabTextColor="@android:color/white" />
+
+    <TextView
+        android:id="@+id/media_data_pager_update_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:background="?colorPrimary"
+        android:gravity="center"
+        android:text="检查更新:3"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="@id/media_data_pager_update"
+        app:layout_constraintEnd_toStartOf="@id/media_data_pager_update"
+        app:layout_constraintStart_toEndOf="@id/media_data_pager_tabs"
+        app:layout_constraintTop_toTopOf="@id/media_data_pager_update" />
 
     <ProgressBar
         android:id="@+id/media_data_pager_update"
@@ -44,7 +71,7 @@
         android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="@id/media_data_pager_tabs"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/media_data_pager_tabs"
+        app:layout_constraintStart_toEndOf="@id/media_data_pager_update_hint"
         app:layout_constraintTop_toTopOf="@id/media_data_pager_tabs" />
 
     <com.su.mediabox.view.component.ViewPager2View

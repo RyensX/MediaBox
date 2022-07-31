@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.activity.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.microsoft.appcenter.analytics.Analytics
 import com.su.mediabox.databinding.ActivityDlnaBinding
 import com.su.mediabox.databinding.ItemDlnaDevice1Binding
 import com.su.mediabox.util.Util.getRedirectUrl
@@ -31,6 +32,8 @@ class DlnaActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        Analytics.trackEvent("功能：DLNA投屏")
 
         url = intent.getStringExtra("url") ?: ""
         title = intent.getStringExtra("title") ?: ""

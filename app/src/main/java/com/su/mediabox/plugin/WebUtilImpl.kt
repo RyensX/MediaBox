@@ -1,4 +1,4 @@
-package com.su.mediabox.util.html
+package com.su.mediabox.plugin
 
 import android.annotation.SuppressLint
 import android.graphics.Bitmap

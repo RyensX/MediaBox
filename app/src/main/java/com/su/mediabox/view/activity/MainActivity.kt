@@ -6,27 +6,33 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.text.Html
+import androidx.activity.viewModels
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.afollestad.materialdialogs.MaterialDialog
+import com.microsoft.appcenter.analytics.Analytics
 import com.su.mediabox.Pref
 import com.su.mediabox.R
 import com.su.mediabox.config.Const
 import com.su.mediabox.databinding.ActivityMainBinding
 import com.su.mediabox.plugin.PluginManager
-import com.su.mediabox.util.Util
-import com.su.mediabox.util.bindBottomNavigationView
+import com.su.mediabox.util.*
 import com.su.mediabox.util.update.AppUpdateHelper
-import com.su.mediabox.util.viewBind
 import com.su.mediabox.view.fragment.page.DownloadPageFragment
 import com.su.mediabox.view.fragment.page.ExplorePageFragment
 import com.su.mediabox.view.fragment.page.PluginRepoPageFragment
 import com.su.mediabox.view.fragment.page.SettingsPageFragment
+import com.su.mediabox.viewmodel.PluginUpdateViewModel
+import com.su.mediabox.work.checkBatteryOptimizations
+
 
 class MainActivity : BaseActivity() {
 
     private val viewBinding by viewBind(ActivityMainBinding::inflate)
+
+    private val pluginUpdateVM by viewModels<PluginUpdateViewModel>()
 
     private val pages = listOf(
         ExplorePageFragment(),
@@ -57,6 +63,17 @@ class MainActivity : BaseActivity() {
                 orientation = ViewPager2.ORIENTATION_HORIZONTAL
                 bindBottomNavigationView(mainBottomNav)
             }
+
+            //为插件仓库注入小红点提示
+            pages.find { it.javaClass == PluginRepoPageFragment::class.java }
+                ?.let { pages.indexOf(it) }?.also { pos ->
+                    mainBottomNav.addBadge(pos)?.also { badge ->
+                        pluginUpdateVM.updateCount.observe(this@MainActivity) {
+                            badge.isVisible = it > 0
+                            badge.text = it.toString()
+                        }
+                    }
+                }
         }
 
         //检测更新
@@ -90,6 +107,8 @@ class MainActivity : BaseActivity() {
 
         //自动刷新
         listenInstallBroadcasts()
+
+        checkBatteryOptimizations()
     }
 
     private fun listenInstallBroadcasts() {
@@ -100,6 +119,12 @@ class MainActivity : BaseActivity() {
             addDataScheme("package")
         }
         registerReceiver(installBroadcastReceiver, intentFilter)
+    }
+
+
+    override fun onStop() {
+        Analytics.trackEvent("主界面停止")
+        super.onStop()
     }
 
     override fun onDestroy() {

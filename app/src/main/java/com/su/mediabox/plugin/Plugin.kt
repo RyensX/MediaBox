@@ -18,19 +18,20 @@ import com.su.mediabox.R
 import com.su.mediabox.database.destroyInstance
 import com.su.mediabox.database.getAppDataBaseFileName
 import com.su.mediabox.model.PluginInfo
+import com.su.mediabox.plugin.PluginPreferenceImpl.checkKeyExist
+import com.su.mediabox.plugin.PluginPreferenceImpl.get
+import com.su.mediabox.plugin.PluginPreferenceImpl.set
 import com.su.mediabox.pluginapi.Constant
 import com.su.mediabox.pluginapi.IPluginFactory
 import com.su.mediabox.pluginapi.components.IBasePageDataComponent
+import com.su.mediabox.pluginapi.components.IMediaUpdateDataComponent
 import com.su.mediabox.util.*
 import com.su.mediabox.util.Text.githubProxy
 import com.su.mediabox.util.Util.getSignatures
 import dalvik.system.PathClassLoader
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -38,7 +39,7 @@ import java.io.File
 
 object PluginManager {
 
-    private val appApiVersion by unsafeLazy {
+    val appApiVersion by unsafeLazy {
         val appInfo: ApplicationInfo = App.context.packageManager
             .getApplicationInfo(
                 App.context.packageName,
@@ -54,7 +55,7 @@ object PluginManager {
     /**
      * 最低支持的插件API版本
      */
-    private const val minPluginApiVersion = 1
+    const val minPluginApiVersion = 1
 
     const val PLUGIN_DIR_NAME = "plugins"
     val pluginDir = App.context.getExternalFilesDir(PLUGIN_DIR_NAME)!!
@@ -66,14 +67,18 @@ object PluginManager {
     /**
      * Map<packageName,[PluginInfo]>
      */
-    private val pluginDataFlow = MutableStateFlow(mutableMapOf<String, PluginInfo>())
+    private val pluginDataFlow = MutableStateFlow<Map<String, PluginInfo>?>(null)
     private val _currentLaunchPlugin = MutableLiveData<PluginInfo?>()
     private val pluginIntent = Intent(Constant.PLUGIN_DEBUG_ACTION)
     private val pluginWorkScope: CoroutineScope = CoroutineScope(Dispatchers.IO)
 
     val pluginFlow: Flow<List<PluginInfo>> = pluginDataFlow
+        //等待插件扫描完毕(null表示还没扫描完)
+        .filter {
+            it != null
+        }
         .map {
-            it.values.toList()
+            it!!.values.toList()
         }
         .flowOn(Dispatchers.Default)
 
@@ -85,11 +90,15 @@ object PluginManager {
         }
     }
 
-    fun queryPluginInfo(packageName: String) = pluginDataFlow.value[packageName]
+    fun queryPluginInfo(packageName: String) = pluginDataFlow.value?.get(packageName)
 
     fun scanPlugin() {
         val packageManager = App.context.packageManager
         pluginWorkScope.launch {
+            //首先清空所有组件缓存
+            pluginFactoryPool.clear()
+            componentPool.clear()
+
             val plugins = mutableMapOf<String, PluginInfo>()
             //内部安装的插件，如果有外部相同包名的则会被覆盖以方便调试
             pluginDir.listFiles()?.apply {
@@ -112,12 +121,10 @@ object PluginManager {
                     }
                 }
             }
-            logD("插件扫描完毕", "数量:${plugins.size}")
+            logI("插件扫描完毕", "数量:${plugins.size}")
             pluginDataFlow.value = plugins
         }
     }
-
-    fun getPluginInfo(packageName: String) = pluginDataFlow.value[packageName]
 
     fun parsePluginInfo(pluginPackagePath: String): PluginInfo? {
         App.context.packageManager.getPackageArchiveInfo(
@@ -162,7 +169,7 @@ object PluginManager {
 
     fun Context.launchPlugin(pluginInfo: PluginInfo?, isLaunchInitAction: Boolean = true) {
         pluginInfo?.apply {
-            _currentLaunchPlugin.value = this
+            _currentLaunchPlugin.postValue(this)
             if (isLaunchInitAction)
                 acquirePluginFactory().initAction.go(this@launchPlugin)
         }

@@ -241,7 +241,7 @@
     <string name="plugin_list_loading">😮正在扫描中..</string>
     <string name="plugin_repo_load_error">😥插件信息拉取失败！\n\n💡解决办法：\n 1.检查网络\n 2.右下角设置打开代理\n 3.下拉刷新数据</string>
     <string name="menu_plugin_repo">插件仓库</string>
-    <string name="menu_plugin_repo_office">插件官网</string>
+    <string name="menu_plugin_repo_office">官方网站</string>
     <string name="menu_plugin_repo_help">插件帮助</string>
     <string name="menu_plugin_repo_help_hint">如果遇到无法正常调用系统下载器下载安装插件，可以手动打开插件官网下载插件包再选择本应用打开安装</string>
     <string name="app_no_update_hint">已是最新版本</string>
@@ -258,8 +258,9 @@
     <string name="media_data_page_update">更新</string>
     <string name="media_data_history_last_time_format">上次观看：yyyy年MM月dd日 HH:mm</string>
     <string name="media_data_page_history_clear">清空历史记录</string>
-    <string name="media_data_page_update_clear">清空更新记录</string>
+    <string name="media_data_page_confirmed_update_clear">清除已看记录</string>
     <string name="media_data_page_update_all_confirmed">一键已读</string>
+    <string name="media_data_page_update_check_hint_format">检查更新：%d</string>
     <string name="media_data_page_clear_title">确认清空？</string>
     <string name="media_data_page_clear_desc">该记录不会云端备份，共%d条，删除后无法恢复，请谨慎操作</string>
     <string name="empty_default_msg">空空如也</string>
@@ -271,6 +272,7 @@
     <string name="crash_error">崩溃信息</string>
     <string name="crash_info">系统信息</string>
     <string name="plugin_repo">仓库</string>
+    <string name="plugin_official_tag">官方</string>
     <string name="plugin_api_version_too_low">该插件API版本过低(%d &lt; %d)，请升级插件</string>
     <string name="plugin_api_version_too_high">该插件API版本过高(%d &gt; %d)，请升级APP</string>
     <string name="plugin_not_exist">该插件根文件不存在！</string>
@@ -279,6 +281,7 @@
     <string name="plugin_component_error">当前插件未提供组件:%s</string>
     <string name="media_update_desc">由 %s 更新到 %s</string>
     <string name="media_update_toast">发现%d个媒体内容有更新</string>
+    <string name="media_update_battery_optimization">去设置</string>
     <!--时间格式化-->
     <string name="time_format_now">刚刚</string>
     <string name="time_format_minutes">%d分钟前</string>

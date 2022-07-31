@@ -1,9 +1,12 @@
 package com.su.mediabox.view.fragment.page
 
+import android.os.Bundle
 import android.view.*
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.afollestad.materialdialogs.MaterialDialog
+import com.microsoft.appcenter.analytics.Analytics
 import com.su.mediabox.R
 import com.su.mediabox.model.PreviewPluginInfo
 import com.su.mediabox.config.Const
@@ -23,6 +26,7 @@ import com.su.mediabox.view.fragment.BaseViewBindingFragment
 import com.su.mediabox.view.viewcomponents.inner.PreviewPluginInfoViewHolder
 import com.su.mediabox.view.viewcomponents.SimpleTextViewHolder
 import com.su.mediabox.viewmodel.PageLoadViewModel
+import com.su.mediabox.viewmodel.PluginUpdateViewModel
 
 class PluginRepoPageFragment : BaseViewBindingFragment<PagePluginRepoBinding>(),
     PageLoadViewModel.LoadData {
@@ -39,9 +43,20 @@ class PluginRepoPageFragment : BaseViewBindingFragment<PagePluginRepoBinding>(),
     }
 
     private val api = RetrofitManager.get().create(PluginService::class.java)
+    private val pluginUpdateVM by activityViewModels<PluginUpdateViewModel>()
 
     override fun buildViewBinding(inflater: LayoutInflater, container: ViewGroup?) =
         PagePluginRepoBinding.inflate(inflater)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        pageLoadViewModel.loadDataFun = this
+        //预先加载检查更新
+        PluginManager.pluginLiveData.observe(this) {
+            if (pageLoadViewModel.loadState.value !is PageLoadViewModel.LoadState.LOADING)
+                pageLoadViewModel.reLoadData()
+        }
+    }
 
     override fun pagerInit() {
         setHasOptionsMenu(true)
@@ -53,8 +68,6 @@ class PluginRepoPageFragment : BaseViewBindingFragment<PagePluginRepoBinding>(),
         ) {
             emptyData = emptyView
         }
-
-        pageLoadViewModel.loadDataFun = this
 
         pageLoadViewModel.loadState.observe(this) {
             when (it) {
@@ -76,17 +89,13 @@ class PluginRepoPageFragment : BaseViewBindingFragment<PagePluginRepoBinding>(),
                     pageLoadViewModel.loadData()
             }
         }
-
-        PluginManager.pluginLiveData.observe(this) {
-            if (pageLoadViewModel.loadState.value !is PageLoadViewModel.LoadState.LOADING)
-                pageLoadViewModel.reLoadData()
-        }
     }
 
 
     private val pageLoadViewModel by viewModels<PageLoadViewModel>()
 
     private fun loadSuccess(loadState: PageLoadViewModel.LoadState.SUCCESS) {
+        Analytics.trackEvent("功能：插件仓库")
         mBinding.customDataList.apply {
             val dy = getFirstItemDecorationBy<DynamicGridItemDecoration>()
             if (loadState.data.isNullOrEmpty()) {
@@ -160,6 +169,7 @@ class PluginRepoPageFragment : BaseViewBindingFragment<PagePluginRepoBinding>(),
         }
 
         combineData.apply {
+            pluginUpdateVM.updateCount.postValue(updatable.size)
             if (updatable.isNotEmpty()) {
                 add(
                     getPluginCategoryText(
@@ -191,7 +201,7 @@ class PluginRepoPageFragment : BaseViewBindingFragment<PagePluginRepoBinding>(),
                 addAll(downloadable)
             }
         }
-
+        logD("拉取插件仓库数据", "更新:${updatable.size} 已安装:${installed.size} 可下载:${downloadable.size}")
         return combineData
     }
 

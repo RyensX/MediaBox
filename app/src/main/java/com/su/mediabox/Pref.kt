@@ -11,10 +11,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceDataStore
 import com.su.mediabox.config.Const
-import com.su.mediabox.util.JavaBoxClass
-import com.su.mediabox.util.getRawClass
-import com.su.mediabox.util.logD
-import com.su.mediabox.util.unsafeLazy
+import com.su.mediabox.util.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -25,21 +22,25 @@ import java.lang.RuntimeException
 
 class DataStorePreference(
     private val dataStore: DataStore<Preferences> = App.context.appDataStore,
-    val fragment: Fragment
+    private val prefCoroutineScope: CoroutineScope
 ) :
     PreferenceDataStore() {
+
+    private fun edit(block: suspend (MutablePreferences) -> Unit) {
+        prefCoroutineScope.launch { dataStore.edit(block) }
+    }
 
     private inline fun <reified T> getData(key: String, defValue: T) =
         runBlocking { dataStore.data.first()[key(key)] } ?: defValue
 
     override fun putString(key: String, value: String?) =
-        fragment.lifecycleScope.saveData(key, value)
+        edit { it[stringPreferencesKey(key)] = value ?: "" }
 
-    override fun putInt(key: String, value: Int) = fragment.lifecycleScope.saveData(key, value)
-    override fun putLong(key: String, value: Long) = fragment.lifecycleScope.saveData(key, value)
-    override fun putFloat(key: String, value: Float) = fragment.lifecycleScope.saveData(key, value)
+    override fun putInt(key: String, value: Int) = edit { it[intPreferencesKey(key)] = value }
+    override fun putLong(key: String, value: Long) = edit { it[longPreferencesKey(key)] = value }
+    override fun putFloat(key: String, value: Float) = edit { it[floatPreferencesKey(key)] = value }
     override fun putBoolean(key: String, value: Boolean) =
-        fragment.lifecycleScope.saveData(key, value)
+        edit { it[booleanPreferencesKey(key)] = value }
 
     override fun getString(key: String, defValue: String?) = getData(key, defValue)
     override fun getInt(key: String, defValue: Int) = getData(key, defValue)
@@ -53,10 +54,11 @@ val Context.appDataStore: DataStore<Preferences> by preferencesDataStore(name = 
 private val keyMap: MutableMap<String, Preferences.Key<*>> by lazy { mutableMapOf() }
 
 @Suppress("UNCHECKED_CAST")
-inline fun <reified T> key(key: String): Preferences.Key<T> = key(key, T::class.java)
+inline fun <reified T> key(key: String, isCache: Boolean = true): Preferences.Key<T> =
+    key(key, T::class.java, isCache)
 
 @Suppress("UNCHECKED_CAST")
-fun <T> key(key: String, typeClass: Class<T>): Preferences.Key<T> =
+fun <T> key(key: String, typeClass: Class<T>, isCache: Boolean = true): Preferences.Key<T> =
     (keyMap[key] ?: when (typeClass) {
         JavaBoxClass.Integer, Int::class.java -> intPreferencesKey(key)
         JavaBoxClass.Long, Long::class.java -> longPreferencesKey(key)
@@ -65,9 +67,13 @@ fun <T> key(key: String, typeClass: Class<T>): Preferences.Key<T> =
         String::class.java -> stringPreferencesKey(key)
         JavaBoxClass.Boolean, Boolean::class.java -> booleanPreferencesKey(key)
         else -> throw RuntimeException("不支持的类型：${typeClass.name}")
-    }.also { keyMap[key] = it }) as Preferences.Key<T>
+    }.also {
+        if (isCache)
+            keyMap[key] = it
+    }) as Preferences.Key<T>
 
 inline fun <reified T> CoroutineScope.saveData(key: String, value: T) {
+    logD("保存键对", "key=$key value=$value")
     launch(Dispatchers.IO) {
         App.context.appDataStore.edit {
             it[key(key)] = value
@@ -127,5 +133,17 @@ object Pref {
     val playDefaultCore by lazyDataStoreStateFlow(
         Const.Setting.PLAY_ACTION_DEFAULT_CORE,
         Exo2PlayerManager::class.java.name
+    )
+    val mediaUpdateCheck by lazyDataStoreStateFlow(Const.Setting.MEDIA_UPDATE_CHECK, true)
+    val mediaUpdateCheckInterval by lazyDataStoreStateFlow(
+        Const.Setting.MEDIA_UPDATE_CHECK_INTERVAL, "2_HOURS"
+    )
+    val mediaUpdateCheckLastTime by lazyDataStoreStateFlow(
+        Const.Setting.MEDIA_UPDATE_CHECK_LAST_TIME,
+        -1L
+    )
+    val mediaUpdateOnMeteredNet by lazyDataStoreStateFlow(
+        Const.Setting.MEDIA_UPDATE_CHECK_ON_METERED_NET,
+        false
     )
 }

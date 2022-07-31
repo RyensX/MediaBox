@@ -1,5 +1,5 @@
-ext.version_code = 42
-ext.version_name = "2.3"
+ext.version_code = 43
+ext.version_name = "2.4"
 
 def build_versions = [:]
 build_versions.compile_sdk = 31
@@ -129,5 +129,10 @@ def appAnalytics = [:]
 appAnalytics.analytics = "com.microsoft.appcenter:appcenter-analytics:${appCenterSdkVersion}"
 appAnalytics.crashes = "com.microsoft.appcenter:appcenter-crashes:${appCenterSdkVersion}"
 deps.appAnalytics = appAnalytics
+
+def work = [:]
+work.runtime = "androidx.work:work-runtime-ktx:2.7.1"
+work.test = "androidx.work:work-testing:2.5.0"
+deps.work = work
 
 ext.deps = deps

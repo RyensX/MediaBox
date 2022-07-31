@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
+import com.microsoft.appcenter.analytics.Analytics
 import com.su.mediabox.R
 import com.su.mediabox.databinding.ActivityMediaClassifyBinding
 import com.su.mediabox.lifecycleCollect
@@ -23,6 +24,8 @@ class MediaClassifyActivity : BasePluginActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        Analytics.trackEvent("功能：媒体分类")
 
         mBinding.apply {
             mediaClassifyToolbar.apply {

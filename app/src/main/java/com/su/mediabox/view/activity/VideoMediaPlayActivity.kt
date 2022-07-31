@@ -6,6 +6,7 @@ import android.view.KeyEvent
 import androidx.activity.viewModels
 import androidx.core.view.forEach
 import androidx.core.view.isVisible
+import com.microsoft.appcenter.analytics.Analytics
 import com.shuyu.gsyvideoplayer.GSYVideoManager
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack
 import com.shuyu.gsyvideoplayer.model.VideoOptionModel
@@ -51,6 +52,8 @@ class VideoMediaPlayActivity : BasePluginActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        Analytics.trackEvent("功能：视频播放")
 
         setFullScreen(window)
 

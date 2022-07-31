@@ -2,6 +2,7 @@ package com.su.mediabox.view.viewcomponents.inner
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import com.su.mediabox.model.PreviewPluginInfo
 import com.su.mediabox.config.Const
 import com.su.mediabox.databinding.ViewComponentPreviewPluginInfoBinding
@@ -24,6 +25,11 @@ class PreviewPluginInfoViewHolder private constructor(private val binding: ViewC
             false
         )
     ) {
+        setOnClickListener(binding.vcPpAuthor) {
+            tmpData?.also {
+                Util.openBrowser("https://github.com/${it.author}")
+            }
+        }
         setOnClickListener(binding.vcPpRepo) {
             tmpData?.also {
                 Util.openBrowser(it.repoUrl)
@@ -54,7 +60,9 @@ class PreviewPluginInfoViewHolder private constructor(private val binding: ViewC
                 vcPpAuthor.text = author
                 vcPpVersion.text = version
                 vcPpIcon.loadImage(iconBase64)
+                vcPpOfficialTag.isVisible = author == "RyensX"
 
+                //TODO 重新设计
                 vcPpAction.text = when (state) {
                     Const.Plugin.PLUGIN_STATE_DOWNLOADING -> "下载中"
                     Const.Plugin.PLUGIN_STATE_UPDATABLE -> "更新"

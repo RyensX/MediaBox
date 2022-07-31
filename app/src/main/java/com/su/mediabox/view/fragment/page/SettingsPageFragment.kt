@@ -6,45 +6,160 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import androidx.work.WorkManager
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.WhichButton
 import com.shuyu.gsyvideoplayer.player.IjkPlayerManager
 import com.su.mediabox.*
 import com.su.mediabox.config.Const
+import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.util.*
 import com.su.mediabox.util.update.AppUpdateHelper
 import com.su.mediabox.util.update.AppUpdateStatus
 import com.su.mediabox.view.activity.LicenseActivity
+import com.su.mediabox.work.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
 
 class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreferenceClickListener {
 
+    private lateinit var nowCheckMediaUpdatePreference: Preference
+
     override fun onResume() {
         super.onResume()
         setHasOptionsMenu(true)
+        updateMediaUpdateCheckLastTime()
+    }
+
+    private fun updateMediaUpdateCheckLastTime() {
+        if (this::nowCheckMediaUpdatePreference.isInitialized) {
+            nowCheckMediaUpdatePreference.summary =
+                if (mediaUpdateCheckWorkerIsRunning.value) App.context.getString(R.string.media_update_check_pref_now_summary)
+                else Pref.mediaUpdateCheckLastTime.value.let {
+                    if (it == -1L) ""
+                    else App.context.getString(
+                        R.string.media_update_check_pref_last_check_complete_time,
+                        friendlyTime(it)
+                    )
+                }
+        }
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        preferenceManager.preferenceDataStore = DataStorePreference(fragment = this)
+        preferenceManager.preferenceDataStore =
+            DataStorePreference(prefCoroutineScope = lifecycleScope)
         preferenceScreen = preferenceScreen {
 
             preferenceCategory {
 
-                titleRes(R.string.net_category_title)
+                titleRes(R.string.support_title)
 
-                checkPreference {
+                preference {
+                    setIcon(R.drawable.ic_github_star)
+                    title = "Star"
+                    summaryRes(R.string.open_source_star)
+                    onPreferenceClickListener = this@SettingsPageFragment
+                }
+
+                preference {
+                    setIcon(R.drawable.ic_baseline_eye_24)
+                    title = "Watch"
+                    summaryRes(R.string.open_source_watch)
+                    onPreferenceClickListener = this@SettingsPageFragment
+                }
+
+                preference {
+                    setIcon(R.drawable.ic_telegram)
+                    titleRes(R.string.chat_group_title)
+                    summaryRes(R.string.chat_group_summary)
+                    onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                        Util.openBrowser(Const.Common.TG_URL)
+                        true
+                    }
+                }
+            }
+
+            preferenceCategory {
+
+                titleRes(R.string.net_category_title)
+                switchPreference {
                     key = Const.Setting.NET_REPO_PROXY
                     setDefaultValue(true)
                     setIcon(R.drawable.ic_language_main_color_2_24_skin)
                     titleRes(R.string.net_proxy_title)
                     summaryRes(R.string.net_proxy_summary)
+                }
+            }
+
+            preferenceCategory {
+                titleRes(R.string.media_update_check_category)
+                val auto = switchPreference {
+                    setDefaultValue(Pref.mediaUpdateCheck.value)
+                    key = Const.Setting.MEDIA_UPDATE_CHECK
+                    setIcon(R.drawable.ic_update_main_color_2_24_skin)
+                    titleRes(R.string.media_update_check_title)
+                    summaryRes(R.string.media_update_check_desc)
+                    setOnPreferenceChangeListener { _, newValue ->
+                        if (newValue == true)
+                            requireContext().checkBatteryOptimizations(true)
+                        true
+                    }
+                }
+
+                val interval = singleSelectListPreference {
+                    dataTextListRes(R.array.media_update_check_interval_text)
+                    dataListRes(R.array.media_update_check_interval_value)
+                    setDefaultValue(Pref.mediaUpdateCheckInterval.value)
+                    key = Const.Setting.MEDIA_UPDATE_CHECK_INTERVAL
+                    titleRes(R.string.media_update_check_pref_interval)
+
+                    setOnPreferenceChangeListener { _, _ ->
+                        //TODO 这个即使设置了ExistingPeriodicWorkPolicy.REPLACE但还是会导致Worker立刻开始运行一次
+                        //launchMediaUpdateCheckWorker(ExistingPeriodicWorkPolicy.REPLACE)
+                        WorkManager.getInstance(App.context)
+                            .cancelUniqueWork(MEDIA_UPDATE_CHECK_WORKER_ID)
+                        auto.isChecked = false
+                        true
+                    }
+                }
+
+                val onMeteredNet = checkPreference {
+                    key = Const.Setting.MEDIA_UPDATE_CHECK_ON_METERED_NET
+                    setDefaultValue(Pref.mediaUpdateOnMeteredNet.value)
+                    titleRes(R.string.media_update_check_pref_on_metered_net_title)
+                    summaryRes(R.string.media_update_check_pref_on_metered_net_summary)
+                    setOnPreferenceClickListener {
+                        auto.isChecked = false
+                        true
+                    }
+                }
+
+                preference {
+                    summaryRes(R.string.media_update_check_alert)
+                    icon = ResourceUtil.getDrawable(
+                        R.drawable.ic_info_white_24,
+                        R.color.main_color_2_skin
+                    )
+                }
+
+                nowCheckMediaUpdatePreference = preference {
+                    titleRes(R.string.media_update_check_pref_now_title)
+                    setOnPreferenceClickListener {
+                        launchMediaUpdateCheckWorkerNow()
+                        true
+                    }
+                }
+
+                lifecycleCollect(mediaUpdateCheckWorkerIsRunning) { isRunning ->
+                    auto.isEnabled = !isRunning
+                    interval.isEnabled = !isRunning
+                    onMeteredNet.isEnabled = !isRunning
+                    nowCheckMediaUpdatePreference.isEnabled = !isRunning
+                    updateMediaUpdateCheckLastTime()
                 }
             }
 
@@ -114,10 +229,25 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
                 }
 
                 preference {
+                    titleRes(R.string.plugin_api_compatibility)
+                    summary =
+                        "API ${PluginManager.minPluginApiVersion} ~ API ${PluginManager.appApiVersion}"
+                }
+
+                preference {
                     setIcon(R.drawable.ic_github)
                     titleRes(R.string.open_source_title)
                     summary = Const.Common.GITHUB_URL
                     onPreferenceClickListener = this@SettingsPageFragment
+                }
+
+                preference {
+                    titleRes(R.string.menu_plugin_repo_office)
+                    summaryRes(R.string.user_notice_summary)
+                    onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                        Util.openBrowser(Const.Common.GITHUB_PLUGIN_REPO_OFFICE_URL)
+                        true
+                    }
                 }
 
                 preference {
@@ -140,28 +270,10 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
                             positiveButton(res = R.string.ok) {
                                 Util.setReadUserNoticeVersion(Const.Common.USER_NOTICE_VERSION)
                             }
+                            countdownActionButton(durationSeconds = 20)
                         }
                         true
                     }
-                }
-            }
-
-            preferenceCategory {
-
-                titleRes(R.string.support_title)
-
-                preference {
-                    setIcon(R.drawable.ic_github_star)
-                    title = "Star"
-                    summaryRes(R.string.open_source_star)
-                    onPreferenceClickListener = this@SettingsPageFragment
-                }
-
-                preference {
-                    setIcon(R.drawable.ic_baseline_eye_24)
-                    title = "Watch"
-                    summaryRes(R.string.open_source_watch)
-                    onPreferenceClickListener = this@SettingsPageFragment
                 }
             }
         }

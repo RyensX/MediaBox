@@ -6,10 +6,16 @@ import android.view.View
 import android.view.View.MeasureSpec
 import android.view.ViewStub
 import android.view.animation.AlphaAnimation
+import android.widget.TextView
+import androidx.annotation.Px
+import androidx.core.view.setPadding
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.bottomnavigation.BottomNavigationItemView
+import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.su.mediabox.R
 import kotlin.math.absoluteValue
 
 
@@ -193,4 +199,30 @@ fun getSpecSize(defaultSize: Int, measureSpec: Int): Int {
         MeasureSpec.AT_MOST, MeasureSpec.EXACTLY -> size
         else -> defaultSize
     }
+}
+
+//为底栏添加提示徽章
+fun BottomNavigationView.addBadge(position: Int): TextView? {
+    val menus = getChildAt(0)
+    if (menus is BottomNavigationMenuView) {
+        val menu = menus.getChildAt(position)
+        if (menu is BottomNavigationItemView) {
+            val badgeView = context.layoutInflater.inflate(
+                R.layout.bottom_nav_menu_item_badge,
+                menus,
+                false
+            )
+            menu.addView(badgeView)
+            return badgeView.findViewById(R.id.badge_value)
+        }
+    }
+    return null
+}
+
+fun View.setPaddingVertical(@Px size: Int) {
+    setPadding(paddingLeft, size, paddingRight, size)
+}
+
+fun View.setPaddingHorizontal(@Px size: Int) {
+    setPadding(size, paddingTop, size, paddingBottom)
 }

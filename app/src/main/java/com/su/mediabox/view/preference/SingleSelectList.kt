@@ -80,8 +80,11 @@ class SingleSelectListPreference(context: Context) :
     private val popListWindow by unsafeLazy {
         ListPopupWindow(context).apply {
             setOnItemClickListener { _, _, position, _ ->
+                if (currentValueText != dataTextList[position]) {
+                    callChangeListener(dataTextList[position])
+                    currentValueText = dataTextList[position]
+                }
                 selectIndex = position
-                currentValueText = dataTextList[position]
                 persistString(dataList[selectIndex])
                 notifyChanged()
                 dismiss()

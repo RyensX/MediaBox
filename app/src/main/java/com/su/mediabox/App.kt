@@ -14,11 +14,18 @@ import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import com.su.appcrashhandler.AppCatchException
 import com.su.mediabox.plugin.AppAction
 import com.su.mediabox.plugin.PluginManager
+import com.su.mediabox.plugin.PluginPreferenceImpl
 import com.su.mediabox.pluginapi.util.AppUtil
+import com.su.mediabox.pluginapi.util.PluginPreferenceIns
 import com.su.mediabox.pluginapi.util.WebUtilIns
 import com.su.mediabox.util.Util.getResColor
-import com.su.mediabox.util.html.WebUtilImpl
-import com.su.mediabox.util.release
+import com.su.mediabox.plugin.WebUtilImpl
+import com.su.mediabox.util.*
+import com.su.mediabox.work.launchMediaUpdateCheckWorker
+import com.su.mediabox.work.registerMediaUpdateCheckShortcut
+import com.su.mediabox.work.stopMediaUpdateCheckWorker
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class App : Application() {
@@ -27,9 +34,16 @@ class App : Application() {
         super.onCreate()
         context = this
 
+        release {
+            // Crash提示
+            AppCatchException.bindCrashHandler(this)
+        }
+
+        //插件工具初始化
         AppUtil.init(this)
         AppAction.init()
         WebUtilIns = WebUtilImpl
+        PluginPreferenceIns = PluginPreferenceImpl
 
         PluginManager.scanPlugin()
 
@@ -46,9 +60,18 @@ class App : Application() {
 
         Analytics.trackEvent("应用启动")
 
-        release {
-            // Crash提示
-            AppCatchException.bindCrashHandler(this)
+        debug { Analytics.trackEvent("debug版启动") }
+
+        //媒体检查更新服务
+        appCoroutineScope.launch(Dispatchers.Default) {
+            registerMediaUpdateCheckShortcut()
+            Pref.mediaUpdateCheck.collect {
+                logD("媒体检查更新", "状态:$it")
+                if (it)
+                    launchMediaUpdateCheckWorker()
+                else
+                    stopMediaUpdateCheckWorker()
+            }
         }
 
         FileDownloader.setup(this)
