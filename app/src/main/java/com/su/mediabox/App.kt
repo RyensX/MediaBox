@@ -20,10 +20,7 @@ import com.su.mediabox.pluginapi.util.PluginPreferenceIns
 import com.su.mediabox.pluginapi.util.WebUtilIns
 import com.su.mediabox.util.Util.getResColor
 import com.su.mediabox.plugin.WebUtilImpl
-import com.su.mediabox.util.appCoroutineScope
-import com.su.mediabox.util.logD
-import com.su.mediabox.util.release
-import com.su.mediabox.util.showToast
+import com.su.mediabox.util.*
 import com.su.mediabox.work.launchMediaUpdateCheckWorker
 import com.su.mediabox.work.registerMediaUpdateCheckShortcut
 import com.su.mediabox.work.stopMediaUpdateCheckWorker
@@ -62,6 +59,8 @@ class App : Application() {
         AppCenter.setLogLevel(Log.DEBUG)
 
         Analytics.trackEvent("应用启动")
+
+        debug { Analytics.trackEvent("debug版启动") }
 
         //媒体检查更新服务
         appCoroutineScope.launch(Dispatchers.Default) {

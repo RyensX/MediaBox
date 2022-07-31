@@ -224,6 +224,11 @@ internal class MediaUpdateCheckWorker(context: Context, workerParameters: Worker
                                         R.mipmap.ic_mediabox
                                     )
                                 )
+                                .apply {
+                                    //如果无有效通知，则5分钟后自动关闭通知
+                                    if (validData.isEmpty())
+                                        setTimeoutAfter(5 * 60 * 1000)
+                                }
                                 .setSmallIcon(R.mipmap.ic_mediabox)
                                 .setContentTitle(applicationContext.getString(R.string.media_update_check_title))
                                 .setContentText(

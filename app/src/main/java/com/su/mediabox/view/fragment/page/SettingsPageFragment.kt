@@ -242,6 +242,15 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
                 }
 
                 preference {
+                    titleRes(R.string.menu_plugin_repo_office)
+                    summaryRes(R.string.user_notice_summary)
+                    onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                        Util.openBrowser(Const.Common.GITHUB_PLUGIN_REPO_OFFICE_URL)
+                        true
+                    }
+                }
+
+                preference {
                     titleRes(R.string.open_source_licenses)
                     summaryRes(R.string.open_source_licenses_summary, Const.Common.licenses.size)
                     setOnPreferenceClickListener {
