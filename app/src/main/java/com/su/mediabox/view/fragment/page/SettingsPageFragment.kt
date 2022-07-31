@@ -113,8 +113,8 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
                 val interval = singleSelectListPreference {
                     dataTextListRes(R.array.media_update_check_interval_text)
                     dataListRes(R.array.media_update_check_interval_value)
+                    setDefaultValue(Pref.mediaUpdateCheckInterval.value)
                     key = Const.Setting.MEDIA_UPDATE_CHECK_INTERVAL
-                    setDefaultValue(Pref.mediaUpdateCheck.value)
                     titleRes(R.string.media_update_check_pref_interval)
 
                     setOnPreferenceChangeListener { _, _ ->

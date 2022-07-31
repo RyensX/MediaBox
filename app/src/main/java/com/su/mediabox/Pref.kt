@@ -136,8 +136,7 @@ object Pref {
     )
     val mediaUpdateCheck by lazyDataStoreStateFlow(Const.Setting.MEDIA_UPDATE_CHECK, true)
     val mediaUpdateCheckInterval by lazyDataStoreStateFlow(
-        Const.Setting.MEDIA_UPDATE_CHECK_INTERVAL,
-        "2_HOURS"
+        Const.Setting.MEDIA_UPDATE_CHECK_INTERVAL, "2_HOURS"
     )
     val mediaUpdateCheckLastTime by lazyDataStoreStateFlow(
         Const.Setting.MEDIA_UPDATE_CHECK_LAST_TIME,
