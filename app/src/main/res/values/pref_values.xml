@@ -28,7 +28,6 @@
     <string name="media_update_check_desc">定时检查所有实现了媒体更新数据组件的插件的媒体更新(电量不足则推延)</string>
     <string name="media_update_check_alert">注意：在一些系统(如MIUI)上可能无法在应用关闭后继续保持定时执行，建议为应用关闭电池优化和锁定后台运行。</string>
     <string name="media_update_check_pref_now_title">立即检查所有媒体更新</string>
-    <string name="media_update_check_pref_now_summary">正在检查中…</string>
     <string name="media_update_check_pref_interval">自动检查间隔</string>
     <string name="media_update_check_pref_on_metered_net_title">使用移动网络</string>
     <string name="media_update_check_pref_on_metered_net_summary">移动网络下自动检查，注意流量消耗</string>

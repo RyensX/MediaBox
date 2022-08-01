@@ -8,8 +8,12 @@ import androidx.activity.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.microsoft.appcenter.analytics.Analytics
+import com.su.mediabox.R
+import com.su.mediabox.bean.DefaultEmpty
 import com.su.mediabox.databinding.ActivityDlnaBinding
 import com.su.mediabox.databinding.ItemDlnaDevice1Binding
+import com.su.mediabox.pluginapi.data.SimpleTextData
+import com.su.mediabox.pluginapi.util.UIUtil.dp
 import com.su.mediabox.util.Util.getRedirectUrl
 import com.su.mediabox.util.dlna.Utils.isLocalMediaAddress
 import com.su.mediabox.util.dlna.dmc.DLNACastManager
@@ -17,6 +21,7 @@ import com.su.mediabox.util.goActivity
 import com.su.mediabox.util.setOnClickListener
 import com.su.mediabox.util.viewBind
 import com.su.mediabox.view.adapter.type.*
+import com.su.mediabox.view.viewcomponents.SimpleTextViewHolder
 import com.su.mediabox.viewmodel.UpnpViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -42,7 +47,16 @@ class DlnaActivity : BaseActivity() {
             atbDlnaActivity.setBackButtonClickListener { finish() }
 
             rvDlnaActivityDevice.linear()
-                .initTypeList(DataViewMapList().registerDataViewMap<RemoteDevice, DlnaViewHolder>()) {
+                .initTypeList(
+                    DataViewMapList()
+                        .registerDataViewMap<RemoteDevice, DlnaViewHolder>()
+                        .registerDataViewMap<SimpleTextData, SimpleTextViewHolder>()
+                ) {
+                    emptyData = SimpleTextData(getString(R.string.checking)).apply {
+                        paddingLeft = 16.dp
+                        paddingTop = 4.dp
+                        paddingBottom = 4.dp
+                    }
                     setTag(url, "url")
                     setTag(title, "title")
                 }
@@ -66,7 +80,7 @@ class DlnaActivity : BaseActivity() {
     }
 
     override fun onStop() {
-        DLNACastManager.instance.bindCastService(this)
+        DLNACastManager.instance.unbindCastService(this)
         super.onStop()
     }
 

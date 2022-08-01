@@ -341,12 +341,23 @@
             android:id="@+id/iv_setting"
             android:layout_width="28dp"
             android:layout_height="28dp"
-            android:paddingStart="0px"
-            android:paddingEnd="10dp"
+            android:layout_marginEnd="10dp"
             android:scaleType="centerInside"
             android:src="@drawable/ic_settings_white_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_dlna"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginEnd="8dp"
+            android:contentDescription="@string/play_on_tv"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_baseline_cast_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/iv_setting"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextClock
@@ -358,7 +369,7 @@
             android:textColor="@color/foreground_white_skin"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/iv_setting"
+            app:layout_constraintEnd_toStartOf="@id/iv_dlna"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -441,26 +452,9 @@
                     android:textColor="@color/foreground_white_skin"
                     android:textSize="12sp"
                     app:drawableTopCompat="@drawable/ic_baseline_open_in_new_24"
-                    app:layout_constraintEnd_toStartOf="@id/tv_dlna"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tv_dlna"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:gravity="center_horizontal"
-                    android:paddingHorizontal="16dp"
-                    android:paddingTop="6dp"
-                    android:paddingBottom="6dp"
-                    android:text="@string/play_on_tv"
-                    android:textColor="@color/foreground_white_skin"
-                    android:textSize="12sp"
-                    app:drawableTopCompat="@drawable/ic_live_tv_white_24_skin"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/tv_open_by_external_player" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <com.google.android.material.textview.MaterialTextView

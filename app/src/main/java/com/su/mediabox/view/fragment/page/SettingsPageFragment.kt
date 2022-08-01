@@ -38,7 +38,7 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
     private fun updateMediaUpdateCheckLastTime() {
         if (this::nowCheckMediaUpdatePreference.isInitialized) {
             nowCheckMediaUpdatePreference.summary =
-                if (mediaUpdateCheckWorkerIsRunning.value) App.context.getString(R.string.media_update_check_pref_now_summary)
+                if (mediaUpdateCheckWorkerIsRunning.value) App.context.getString(R.string.checking)
                 else Pref.mediaUpdateCheckLastTime.value.let {
                     if (it == -1L) ""
                     else App.context.getString(

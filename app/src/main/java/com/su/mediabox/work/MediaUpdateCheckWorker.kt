@@ -86,7 +86,7 @@ internal class MediaUpdateCheckWorker(context: Context, workerParameters: Worker
 
         val notification = NotificationCompat.Builder(applicationContext, mediaUpdateNofChannelId)
             .setContentTitle(applicationContext.getString(R.string.media_update_check_title))
-            .setContentText(applicationContext.getString(R.string.media_update_check_pref_now_summary))
+            .setContentText(applicationContext.getString(R.string.checking))
             .setSmallIcon(R.mipmap.ic_mediabox)
             .setOngoing(true)
             .setContentIntent(notifyPendingIntent)

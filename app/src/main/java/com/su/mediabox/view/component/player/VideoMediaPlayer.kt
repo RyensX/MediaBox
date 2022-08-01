@@ -180,7 +180,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
     private var tvRestoreScreen: TextView? = null
 
     // 投屏
-    private var tvDlna: TextView? = null
+    private var ivDlna: ImageView? = null
 
     // 屏幕已经双指放大移动了
     private var mDoublePointerZoomMoved: Boolean = false
@@ -241,7 +241,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
         viewTopContainerShadow = findViewById(R.id.view_top_container_shadow)
         viewNightScreen = findViewById(R.id.view_player_night_screen)
         sbNightScreen = findViewById(R.id.sb_player_night_screen)
-        tvDlna = findViewById(R.id.tv_dlna)
+        ivDlna = findViewById(R.id.iv_dlna)
         vgPlayPosition = findViewById(R.id.ll_play_position_view)
         tvPlayPosition = findViewById(R.id.tv_play_position_time)
         ivClosePlayPositionTip = findViewById(R.id.iv_close_play_position_tip)
@@ -345,7 +345,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
         }
 
         //投屏
-        tvDlna?.setOnClickListener {
+        ivDlna?.setOnClickListener {
             val url = getUrl()
             if (url == null) {
                 mContext.getString(R.string.please_wait_video_loaded).showToast()

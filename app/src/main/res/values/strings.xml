@@ -28,7 +28,7 @@
     <string name="check_update">检查更新</string>
     <string name="current_version">当前版本 %s</string>
     <string name="check_update_failed">检查更新失败</string>
-    <string name="checking_update">正在检查更新…</string>
+    <string name="checking">正在检查中…</string>
     <string name="find_new_version">发现新版本</string>
     <string name="is_latest_version">已是最新版本</string>
     <string name="start_download">开始下载，通知栏显示下载进度</string>
@@ -291,4 +291,5 @@
     <string name="time_format_in_month">%d天前</string>
     <string name="time_format_in_year">M月d日</string>
     <string name="time_format_out_year">yyyy年M月d日</string>
+    <string name="dlna_desc">1. 确保电视和手机在同一WiFi下，打开支持投屏的电视。\n2. 点击上方搜索到的设备进行投屏。\n3. 注意，部分未知格式的视频可能无法投屏。</string>
 </resources>
