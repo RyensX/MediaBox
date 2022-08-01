@@ -28,6 +28,7 @@ import com.su.mediabox.pluginapi.components.IMediaUpdateDataComponent
 import com.su.mediabox.util.*
 import com.su.mediabox.util.Text.githubProxy
 import com.su.mediabox.util.Util.getSignatures
+import com.su.mediabox.view.adapter.type.TypeAdapter
 import dalvik.system.PathClassLoader
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -87,6 +88,7 @@ object PluginManager {
     val currentLaunchPlugin = _currentLaunchPlugin.toLiveData().apply {
         observeForever {
             //每次退出插件
+            TypeAdapter.globalTypeRecycledViewPool.clear()
         }
     }
 
