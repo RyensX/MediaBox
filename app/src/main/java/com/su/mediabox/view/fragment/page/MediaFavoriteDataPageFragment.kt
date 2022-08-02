@@ -60,7 +60,8 @@ class MediaFavoriteDataPageFragment : BaseFragment() {
                                 menu.add(R.string.delete)
                                 setOnMenuItemClickListener {
                                     appCoroutineScope.launch {
-                                        getAppDataBase().favoriteDao().deleteFavorite(data.mediaUrl)
+                                        getAppDataBase().favoriteDao()
+                                            .deleteFavoritesAndUpdateRecords(data.mediaUrl)
                                     }
                                     true
                                 }
