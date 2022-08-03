@@ -41,3 +41,12 @@ jobs:
         name: "auto_built_snapshot_${{ github.sha }}"
         path: app/build/outputs/apk/Github/debug/app_debug.apk
         retention-days: 10
+
+    - name: Upload Pre-Release
+      uses: softprops/action-gh-release@v1
+      with:
+        prerelease: true
+        generate_release_notes: true
+        name: '测试版'
+        tag_name: ${{ github.ref_name }}
+        files: 'app/build/outputs/apk/Github/release/*.apk'
