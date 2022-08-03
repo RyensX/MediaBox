@@ -7,6 +7,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.afollestad.materialdialogs.MaterialDialog
 import com.microsoft.appcenter.analytics.Analytics
+import com.su.mediabox.Pref
 import com.su.mediabox.R
 import com.su.mediabox.model.PreviewPluginInfo
 import com.su.mediabox.config.Const
@@ -89,8 +90,10 @@ class PluginRepoPageFragment : BaseViewBindingFragment<PagePluginRepoBinding>(),
                     pageLoadViewModel.loadData()
             }
         }
-    }
 
+        if (Pref.appLaunchCount.value == 1)
+            help()
+    }
 
     private val pageLoadViewModel by viewModels<PageLoadViewModel>()
 
@@ -218,15 +221,19 @@ class PluginRepoPageFragment : BaseViewBindingFragment<PagePluginRepoBinding>(),
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menu_plugin_repo_help ->
-                MaterialDialog(requireContext()).show {
-                    title(res = R.string.menu_plugin_repo_help)
-                    message(res = R.string.menu_plugin_repo_help_hint)
-                    positiveButton(res = R.string.menu_plugin_repo_office) { Util.openBrowser(Const.Common.GITHUB_PLUGIN_REPO_OFFICE_URL) }
-                    negativeButton(res = R.string.cancel) { dismiss() }
-                }
+            R.id.menu_plugin_repo_help -> help()
             R.id.menu_plugin_repo -> Util.openBrowser(Const.Common.GITHUB_PLUGIN_REPO_URL)
+            R.id.menu_plugin_dev_doc -> Util.openBrowser(Const.Common.GITHUB_PLUGIN_REPO_DEV_DOC_URL)
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun help() {
+        MaterialDialog(requireContext()).show {
+            title(res = R.string.menu_plugin_repo_help)
+            message(res = R.string.menu_plugin_repo_help_hint)
+            positiveButton(res = R.string.menu_plugin_repo_office) { Util.openBrowser(Const.Common.GITHUB_PLUGIN_REPO_OFFICE_URL) }
+            negativeButton(res = R.string.cancel) { dismiss() }
+        }
     }
 }

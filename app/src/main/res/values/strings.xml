@@ -46,7 +46,7 @@
     <string name="no_download_video">没有缓存视频</string>
     <string name="read_download_data_file">正在读取缓存文件…</string>
     <string name="play_list">播放列表</string>
-    <string name="episode_bottom_sheet_format">共%d集（长按缓存）</string>
+    <string name="episode_bottom_sheet_format">共%d集</string>
     <string name="check_update_server">检查更新服务器</string>
     <string name="play_speed">倍速</string>
     <string name="device_list">设备列表</string>
@@ -242,8 +242,9 @@
     <string name="plugin_repo_load_error">😥插件信息拉取失败！\n\n💡解决办法：\n 1.检查网络\n 2.右下角设置打开代理\n 3.下拉刷新数据</string>
     <string name="menu_plugin_repo">插件仓库</string>
     <string name="menu_plugin_repo_office">官方网站</string>
+    <string name="menu_plugin_repo_dev_doc">插件开发指南</string>
     <string name="menu_plugin_repo_help">插件帮助</string>
-    <string name="menu_plugin_repo_help_hint">如果遇到无法正常调用系统下载器下载安装插件，可以手动打开插件官网下载插件包再选择本应用打开安装</string>
+    <string name="menu_plugin_repo_help_hint">如果遇到无法正常调用系统下载器下载安装插件，可以手动打开插件官网下载插件包再选择本应用打开安装。\n\n如果有任何想法，欢迎贡献插件到官网插件仓库，具体见右上角菜单。</string>
     <string name="app_no_update_hint">已是最新版本</string>
     <string name="plugin_manage_media_count_format">收藏：%d</string>
     <string name="plugin_manage_media_uninstall">卸载</string>

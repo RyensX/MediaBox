@@ -30,6 +30,7 @@ interface Const {
             const val GITHUB_PLUGIN_REPO_URL = "https://github.com/RyensX/MediaBoxPluginRepository"
             const val GITHUB_PLUGIN_REPO_OFFICE_URL =
                 "https://ryensx.github.io/MediaBoxPluginRepository/"
+            const val GITHUB_PLUGIN_REPO_DEV_DOC_URL = "https://github.com/RyensX/MediaBox/wiki"
             const val USER_NOTICE_VERSION = 2
             const val TG_URL = "https://t.me/MediaBoxGithub"
 

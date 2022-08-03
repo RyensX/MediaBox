@@ -352,7 +352,7 @@ fun Context.checkBatteryOptimizations(state: Boolean = Pref.mediaUpdateCheck.val
     ) {
         MaterialDialog(this).show {
             title(res = R.string.media_update_check_title)
-            message(res = R.string.media_update_check_alert)
+            message(res = R.string.media_update_check_permission_alert)
             cancelable(false)
             negativeButton(res = R.string.cancel) { dismiss() }
             positiveButton(res = R.string.media_update_battery_optimization) {
@@ -361,7 +361,7 @@ fun Context.checkBatteryOptimizations(state: Boolean = Pref.mediaUpdateCheck.val
                 if (intent.resolveActivity(packageManager) != null)
                     startActivity(intent)
             }
-            countdownActionButton(WhichButton.NEGATIVE)
+            countdownActionButton(WhichButton.NEGATIVE, durationSeconds = 5)
         }
     }
 }
