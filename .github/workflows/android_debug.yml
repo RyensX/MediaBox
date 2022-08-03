@@ -5,7 +5,6 @@ on:
     paths-ignore:
     # 构建无关文件不触发
       - '**.md'
-      - '**.yml'
 
 jobs:
   build:
@@ -47,6 +46,6 @@ jobs:
       with:
         prerelease: true
         generate_release_notes: true
-        name: '测试版'
+        name: 'Debug'
         tag_name: ${{ github.ref_name }}
-        files: 'app/build/outputs/apk/Github/release/*.apk'
+        files: 'app/build/outputs/apk/Github/debug/*.apk'
