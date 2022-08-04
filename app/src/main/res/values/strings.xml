@@ -293,4 +293,18 @@
     <string name="time_format_in_year">M月d日</string>
     <string name="time_format_out_year">yyyy年M月d日</string>
     <string name="dlna_desc">1. 确保电视和手机在同一WiFi下，打开支持投屏的电视。\n2. 点击上方搜索到的设备进行投屏。\n3. 注意，部分未知格式的视频可能无法投屏。</string>
+    <!--插件安装-->
+    <string name="plugin_install_source">来源</string>
+    <string name="plugin_install_name">名称</string>
+    <string name="plugin_install_package_name">包名</string>
+    <string name="plugin_install_version">版本</string>
+    <string name="plugin_install_version_desc">升级 %s -> %s</string>
+    <string name="plugin_install_error">错误</string>
+    <string name="plugin_install_error_not_a_plugin">该文件不是插件包</string>
+    <string name="plugin_install_error_read_error">无法读取插件包</string>
+    <string name="plugin_install_error_install_error">请检查读写权限</string>
+    <string name="plugin_install_error_scheme_error">请尝试更换文件管理器打开</string>
+    <string name="plugin_install_error_online_preview_error">在线安装预览信息加载错误</string>
+    <string name="plugin_install_warning">警告</string>
+    <string name="plugin_install_warning_security">当前插件包与已安装插件签名不一致，请确认来源是否安全</string>
 </resources>

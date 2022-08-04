@@ -9,6 +9,7 @@ import android.view.Gravity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.su.mediabox.R
 import com.su.mediabox.model.PluginInfo
 import com.su.mediabox.net.RetrofitManager
 import com.su.mediabox.net.service.PluginService
@@ -21,7 +22,7 @@ import com.su.mediabox.util.Util
 import com.su.mediabox.util.toLiveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.io.File
+import com.su.mediabox.util.ResourceUtil.getString
 
 class PluginInstallerViewModel : ViewModel() {
 
@@ -36,7 +37,13 @@ class PluginInstallerViewModel : ViewModel() {
                 "file", "content" -> localLoad(this)
                 "mediabox" -> onlineLoad(this)
                 else -> _pluginInstallState.value =
-                    PluginInstallState.ERROR(buildInfoPair("Uri错误", "请尝试更换文件管理器打开", Color.RED))
+                    PluginInstallState.ERROR(
+                        buildInfoPair(
+                            getString(R.string.plugin_install_error),
+                            getString(R.string.plugin_install_error_scheme_error),
+                            Color.RED
+                        )
+                    )
             }
         }
     }
@@ -50,7 +57,12 @@ class PluginInstallerViewModel : ViewModel() {
                             if (exists())
                                 PluginInstallState.SUCCESS(data.pluginInfo)
                             else
-                                PluginInstallState.ERROR(buildInfoPair("安装错误", "请检查读写权限"))
+                                PluginInstallState.ERROR(
+                                    buildInfoPair(
+                                        getString(R.string.plugin_install_error),
+                                        getString(R.string.plugin_install_error_install_error)
+                                    )
+                                )
                         )
                     }
                 }
@@ -71,32 +83,75 @@ class PluginInstallerViewModel : ViewModel() {
                 val info = mutableListOf<SimpleTextData>()
 
                 PluginManager.parsePluginInfo(path)?.apply {
-                    info.addAll(buildInfoPair("来源", sourcePath))
-                    info.addAll(buildInfoPair("名称", name))
-                    info.addAll(buildInfoPair("包名", packageName))
+                    info.addAll(
+                        buildInfoPair(
+                            getString(R.string.plugin_install_source),
+                            sourcePath
+                        )
+                    )
+                    info.addAll(buildInfoPair(getString(R.string.plugin_install_name), name))
+                    info.addAll(
+                        buildInfoPair(
+                            getString(R.string.plugin_install_package_name),
+                            packageName
+                        )
+                    )
                     info.addAll(buildInfoPair("API", "$apiVersion"))
                     PluginManager.queryPluginInfo(packageName)?.also {
                         //已安装检测
-                        info.addAll(buildInfoPair("版本", "升级 ${it.version} -> $version", Color.RED))
+                        info.addAll(
+                            buildInfoPair(
+                                getString(R.string.plugin_install_version),
+                                getString(
+                                    R.string.plugin_install_version_desc,
+                                    it.version,
+                                    version
+                                ),
+                                Color.RED
+                            )
+                        )
                         //安全检测
                         if (signature != it.signature) {
                             info.addAll(
-                                buildInfoPair("警告", "当前插件包与已安装插件签名不一致，请确认来源是否安全", Color.RED)
+                                buildInfoPair(
+                                    getString(R.string.plugin_install_warning),
+                                    getString(R.string.plugin_install_warning_security),
+                                    Color.RED
+                                )
                             )
                             _pluginInstallState.postValue(
                                 PluginInstallState.ERROR(info)
                             )
                             return@launch
                         }
-                    } ?: info.addAll(buildInfoPair("版本", version))
+                    } ?: info.addAll(
+                        buildInfoPair(
+                            getString(R.string.plugin_install_version),
+                            version
+                        )
+                    )
                     _pluginInstallState.postValue(PluginInstallState.READY(data, this, info))
                 } ?: run {
                     _pluginInstallState.postValue(
                         PluginInstallState.ERROR(
-                            buildInfoPair("错误", "该文件不是插件包", Color.RED)
+                            buildInfoPair(
+                                getString(R.string.plugin_install_error),
+                                getString(R.string.plugin_install_error_not_a_plugin),
+                                Color.RED
+                            )
                         )
                     )
                 }
+            } ?: run {
+                _pluginInstallState.postValue(
+                    PluginInstallState.ERROR(
+                        buildInfoPair(
+                            getString(R.string.plugin_install_error),
+                            getString(R.string.plugin_install_error_read_error),
+                            Color.RED
+                        )
+                    )
+                )
             }
         }
     }
@@ -118,10 +173,30 @@ class PluginInstallerViewModel : ViewModel() {
                         api.fetchPluginPreviewInfo(pluginInfoUrl)?.apply {
                             val info = mutableListOf<SimpleTextData>()
 
-                            info.addAll(buildInfoPair("来源", pluginInfoUrl))
-                            info.addAll(buildInfoPair("下载", sourcePath))
-                            info.addAll(buildInfoPair("名称", name))
-                            info.addAll(buildInfoPair("包名", packageName))
+                            info.addAll(
+                                buildInfoPair(
+                                    getString(R.string.plugin_install_source),
+                                    pluginInfoUrl
+                                )
+                            )
+                            info.addAll(
+                                buildInfoPair(
+                                    getString(R.string.plugin_install_source),
+                                    sourcePath
+                                )
+                            )
+                            info.addAll(
+                                buildInfoPair(
+                                    getString(R.string.plugin_install_name),
+                                    name
+                                )
+                            )
+                            info.addAll(
+                                buildInfoPair(
+                                    getString(R.string.plugin_install_package_name),
+                                    packageName
+                                )
+                            )
                             info.addAll(buildInfoPair("API", "$apiVersion"))
 
                             _pluginInstallState.postValue(
@@ -133,11 +208,19 @@ class PluginInstallerViewModel : ViewModel() {
                         }
                     }
                     PluginInstallState.ERROR(
-                        buildInfoPair("错误", "加载预览信息失败", Color.RED)
+                        buildInfoPair(
+                            getString(R.string.plugin_install_error),
+                            getString(R.string.plugin_install_error_online_preview_error),
+                            Color.RED
+                        )
                     )
                 } catch (e: Exception) {
                     PluginInstallState.ERROR(
-                        buildInfoPair("错误", "在线安装预览信息加载错误", Color.RED)
+                        buildInfoPair(
+                            getString(R.string.plugin_install_error),
+                            getString(R.string.plugin_install_error_online_preview_error),
+                            Color.RED
+                        )
                     )
                 }
             }
