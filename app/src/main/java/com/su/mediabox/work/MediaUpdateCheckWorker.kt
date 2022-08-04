@@ -142,9 +142,12 @@ internal class MediaUpdateCheckWorker(context: Context, workerParameters: Worker
                             if (plugin.checkPluginConfig()) {
                                 val favorites =
                                     plugin.getAppDataBase().favoriteDao().getFavoriteList()
-                                MediaUpdateCheck.checkMediaUpdate(favorites, plugin, component) {
-                                    emit(Pair(plugin, it))
-                                }
+                                if (favorites.isNotEmpty())
+                                    MediaUpdateCheck.checkMediaUpdate(
+                                        favorites, plugin, component
+                                    ) {
+                                        emit(Pair(plugin, it))
+                                    }
                             }
                         }
                     }
