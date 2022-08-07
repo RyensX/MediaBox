@@ -1,6 +1,7 @@
 package com.su.mediabox.view.activity
 
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
@@ -9,6 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.microsoft.appcenter.analytics.Analytics
@@ -120,6 +122,19 @@ class MediaDataActivity : BasePluginActivity() {
                     }
                 })
             }
+        }
+
+        if (intent.getStringExtra(MEDIA_UPDATE_CHECK_TARGET_PLUGIN) == null) {
+            if (viewModel.mediaUpdateDataComponent != null)
+                Snackbar.make(mBinding.root, R.string.media_update_check, Snackbar.LENGTH_LONG)
+                    .setAction(R.string.media_data_page_update) {
+                        viewModel.checkMediaUpdate()
+                    }
+                    .show()
+        } else {
+            if (viewModel.mediaUpdateDataComponent != null)
+                mBinding.mediaDataPages.getViewPager().currentItem =
+                    mBinding.mediaDataPagerTabs.tabCount - 1
         }
     }
 

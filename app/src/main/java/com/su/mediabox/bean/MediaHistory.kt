@@ -13,6 +13,7 @@ open class MediaHistory(
     var mediaUrl: String,
     @ColumnInfo(name = "mediaTitle")
     var mediaTitle: String,
+    //TODO 更新记录时也更新这里
     @ColumnInfo(name = "lastViewTime")
     var lastViewTime: Long,
     @ColumnInfo(name = "cover")

@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.su.mediabox.R
 import com.su.mediabox.bean.DefaultEmpty
 import com.su.mediabox.bean.MediaFavorite
-import com.su.mediabox.bean.MediaHistory
 import com.su.mediabox.database.getAppDataBase
 import com.su.mediabox.databinding.ViewComponentFavBinding
 import com.su.mediabox.pluginapi.action.DetailAction
@@ -24,7 +23,6 @@ import com.su.mediabox.util.setOnLongClickListener
 import com.su.mediabox.view.adapter.type.*
 import com.su.mediabox.view.fragment.BaseFragment
 import com.su.mediabox.viewmodel.MediaDataViewModel
-import com.su.mediabox.work.MEDIA_UPDATE_CHECK_TARGET_PLUGIN
 import kotlinx.coroutines.launch
 
 class MediaFavoriteDataPageFragment : BaseFragment() {
@@ -72,10 +70,6 @@ class MediaFavoriteDataPageFragment : BaseFragment() {
                     }
                 }
                 viewModel.favorite.observe(this@MediaFavoriteDataPageFragment) {
-                    if (currentList.isEmpty() &&
-                        requireActivity().intent.getStringExtra(MEDIA_UPDATE_CHECK_TARGET_PLUGIN) == null
-                    )
-                        viewModel.checkMediaUpdate()
                     submitList(it)
                 }
             }

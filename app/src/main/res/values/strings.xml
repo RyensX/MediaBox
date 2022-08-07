@@ -284,6 +284,7 @@
     <string name="media_update_desc">由 %s 更新到 %s</string>
     <string name="media_update_toast">发现%d个媒体内容有更新</string>
     <string name="media_update_battery_optimization">去设置</string>
+    <string name="media_update_check">媒体检查更新</string>
     <!--时间格式化-->
     <string name="time_format_now">刚刚</string>
     <string name="time_format_minutes">%d分钟前</string>
