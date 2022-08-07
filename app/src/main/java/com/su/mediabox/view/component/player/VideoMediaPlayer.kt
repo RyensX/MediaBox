@@ -387,35 +387,15 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
                                 adapter.setTag(pos)
                             }
                         }
-                        //临时倍速
+                        //设置常用倍速
                         setOnLongClickListener(itemView) { pos ->
                             getData<Float>(pos)?.also {
-                                if (speed != it) {
-                                    //记录原本倍速
-                                    bindingTypeAdapter.setTag(
-                                        speed,
-                                        Const.ViewComponent.PLAY_SPEED_TAG
-                                    )
-                                    setSpeed(it, true)
-                                    showSpeed(it)
-                                    "临时生效${it}X倍速".showToast()
-                                }
+                                Pref.commonlyUsedVideoSpeed.saveData(it)
+                                ResourceUtil.getString(R.string.play_common_speed, it)
+                                    .showToast()
+                                //TODO 功能介绍提
                             }
                             true
-                        }
-                        setOnTouchListener(itemView) { event, _ ->
-                            if (event.actionMasked == MotionEvent.ACTION_CANCEL) {
-                                //释放则恢复原本倍速
-                                bindingTypeAdapter.getTag<Float>(Const.ViewComponent.PLAY_SPEED_TAG)
-                                    ?.also {
-                                        if (speed != it) {
-                                            setSpeed(it, true)
-                                            tvTouchDownHighSpeed?.gone()
-                                            "恢复${it}X倍速".showToast()
-                                        }
-                                    }
-                            }
-                            false
                         }
                     }
                 }
@@ -597,14 +577,6 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
 //                else GSYVideoType.disableMediaCodec()
 //                startPlayLogic()
 //            }
-        }
-    }
-
-    private fun showSpeed(speed: Float) {
-        tvTouchDownHighSpeed?.apply {
-            text =
-                mContext.getString(R.string.touch_down_high_speed, speed.toString())
-            visible()
         }
     }
 
@@ -1049,7 +1021,8 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
                 val adapter = rvSpeed?.typeAdapter()
                 if (adapter?.currentList.isNullOrEmpty()) {
                     adapter?.setTag(2)
-                    adapter?.submitList(listOf(0.5F, 0.75F, 1F, 1.25F, 1.5F, 2F, 4F, 8F))
+                    //倍速列表
+                    adapter?.submitList(listOf(0.5F, 0.75F, 1F, 1.5F, 2F, 3F, 4F, 8F))
                 }
                 adapter?.getTag<Int>()?.also {
                     rvSpeed?.smartScrollToPosition(it)
@@ -1068,6 +1041,25 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
                             smartScrollToPosition(it)
                         }
                     }
+                }
+            }
+        }
+    }
+
+    override fun touchLongPress(e: MotionEvent?) {
+        if (e?.pointerCount == 1) {
+            // 长按加速
+            if (!mLongPressing && e.action == MotionEvent.ACTION_DOWN && !doublePointerZoomingMoving) {
+                mLongPressing = true
+                mPlaySpeed = mSpeed
+                val speed = Pref.commonlyUsedVideoSpeed.value
+                setSpeed(speed, true)
+                tvTouchDownHighSpeed?.text =
+                    mContext.getString(R.string.touch_down_high_speed, speed)
+                tvTouchDownHighSpeed?.visible()
+                viewLifeCycleCoroutineScope.launch(Dispatchers.Main) {
+                    delay(2000)
+                    tvTouchDownHighSpeed?.gone()
                 }
             }
         }
@@ -1110,7 +1102,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
     override fun onTouch(v: View?, event: MotionEvent): Boolean {
         // ---长按逻辑开始
         if (event.pointerCount == 1) {
-            if (event.action == MotionEvent.ACTION_UP) {
+            if (event.action == MotionEvent.ACTION_UP || event.action == MotionEvent.ACTION_CANCEL) {
                 // 如果刚才在长按，则取消长按
                 if (mLongPressing) {
                     mLongPressing = false

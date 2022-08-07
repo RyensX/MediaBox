@@ -139,11 +139,12 @@ object Pref {
         Const.Setting.MEDIA_UPDATE_CHECK_INTERVAL, "2_HOURS"
     )
     val mediaUpdateCheckLastTime by lazyDataStoreStateFlow(
-        Const.Setting.MEDIA_UPDATE_CHECK_LAST_TIME,
-        -1L
+        Const.Setting.MEDIA_UPDATE_CHECK_LAST_TIME, -1L
     )
     val mediaUpdateOnMeteredNet by lazyDataStoreStateFlow(
-        Const.Setting.MEDIA_UPDATE_CHECK_ON_METERED_NET,
-        false
+        Const.Setting.MEDIA_UPDATE_CHECK_ON_METERED_NET, false
+    )
+    val commonlyUsedVideoSpeed by lazyDataStoreStateFlow(
+        Const.Setting.COMMONLY_USED_VIDEO_SPEED, 2.0f
     )
 }

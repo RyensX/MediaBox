@@ -51,6 +51,7 @@
     <string name="play_speed">倍速</string>
     <string name="device_list">设备列表</string>
     <string name="play_on_tv">投屏</string>
+    <string name="play_common_speed">常用倍速设置为%.1fX</string>
     <string name="sending_data_please_wait">正在发送数据，请稍候…</string>
     <string name="dark_mode">深色模式</string>
     <string name="license">许可证</string>
@@ -137,7 +138,7 @@
     <string name="old_path">旧</string>
     <string name="do_not_finish_the_page_when_parse_download_data">缓存失败，解析缓存数据时请勿关闭页面</string>
     <string name="restore_screen">还原屏幕</string>
-    <string name="touch_down_high_speed"><![CDATA[>> %sX倍速播放]]></string>
+    <string name="touch_down_high_speed"><![CDATA[>> %.1fX倍速播放]]></string>
     <string name="play_position_tip">上次看到：</string>
     <string name="will_you_try_to_sniffer_video">是否尝试嗅探视频？</string>
     <string name="getting_complex_video_failed">获取视频链接失败，%s</string>
