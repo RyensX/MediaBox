@@ -1,5 +1,6 @@
 package com.su.mediabox.util
 
+import android.content.res.Resources
 import android.graphics.drawable.Drawable
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
@@ -10,6 +11,8 @@ import androidx.core.graphics.drawable.DrawableCompat
 import com.su.mediabox.App
 
 object ResourceUtil {
+
+    val resources: Resources get() = App.context.resources
 
     fun getDrawable(@DrawableRes id: Int, @ColorRes tintColor: Int? = null): Drawable? {
         val icon = AppCompatResources
