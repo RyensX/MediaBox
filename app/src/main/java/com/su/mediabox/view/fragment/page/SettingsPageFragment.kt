@@ -38,7 +38,7 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
     private fun updateMediaUpdateCheckLastTime() {
         if (this::nowCheckMediaUpdatePreference.isInitialized) {
             nowCheckMediaUpdatePreference.summary =
-                if (mediaUpdateCheckWorkerIsRunning.value) App.context.getString(R.string.media_update_check_pref_now_summary)
+                if (mediaUpdateCheckWorkerIsRunning.value) App.context.getString(R.string.checking)
                 else Pref.mediaUpdateCheckLastTime.value.let {
                     if (it == -1L) ""
                     else App.context.getString(
@@ -111,8 +111,17 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
                 }
 
                 val interval = singleSelectListPreference {
-                    dataTextListRes(R.array.media_update_check_interval_text)
-                    dataListRes(R.array.media_update_check_interval_value)
+                    var dataText =
+                        ResourceUtil.resources.getStringArray(R.array.media_update_check_interval_text)
+                    var data =
+                        ResourceUtil.resources.getStringArray(R.array.media_update_check_interval_value)
+                    release {
+                        //15分钟仅用于测试
+                        dataText = dataText.run { sliceArray(1 until size) }
+                        data = data.run { sliceArray(1 until size) }
+                    }
+                    dataTextList(dataText)
+                    dataList(data)
                     setDefaultValue(Pref.mediaUpdateCheckInterval.value)
                     key = Const.Setting.MEDIA_UPDATE_CHECK_INTERVAL
                     titleRes(R.string.media_update_check_pref_interval)

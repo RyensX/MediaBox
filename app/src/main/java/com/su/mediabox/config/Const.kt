@@ -15,7 +15,6 @@ interface Const {
         const val HISTORY_INFO_TAG = "history_info_tag"
         const val EPISODE_LIST_TAG = "episode_list_tag"
         const val DEFAULT_PAGE = 1
-        const val PLAY_SPEED_TAG = "play_speed_tag"
     }
 
     object Player {
@@ -30,6 +29,7 @@ interface Const {
             const val GITHUB_PLUGIN_REPO_URL = "https://github.com/RyensX/MediaBoxPluginRepository"
             const val GITHUB_PLUGIN_REPO_OFFICE_URL =
                 "https://ryensx.github.io/MediaBoxPluginRepository/"
+            const val GITHUB_PLUGIN_REPO_DEV_DOC_URL = "https://github.com/RyensX/MediaBox/wiki"
             const val USER_NOTICE_VERSION = 2
             const val TG_URL = "https://t.me/MediaBoxGithub"
 
@@ -78,6 +78,7 @@ interface Setting {
         const val MEDIA_UPDATE_CHECK_INTERVAL = "media_update_check_interval"
         const val MEDIA_UPDATE_CHECK_LAST_TIME = "media_update_check_last_time"
         const val MEDIA_UPDATE_CHECK_ON_METERED_NET = "media_update_check_on_metered_net"
+        const val COMMONLY_USED_VIDEO_SPEED = "commonly_used_video_speed"
     }
 }
 

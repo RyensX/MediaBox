@@ -46,9 +46,7 @@
 
 ## 下载&使用
 
-* [正式版](https://github.com/RyensX/MediaBox/releases/latest)
-* [测试版(云端自动构建)](https://github.com/RyensX/MediaBox/actions/workflows/android_debug.yml)(**不稳定**，适合体验最新功能，可与正式版共存，[下载指南](doc/auto_build_apk_download.md))
-* [官方插件仓库](https://github.com/RyensX/MediaBoxPluginRepository)下载插件(也可APP内一键下载安装)
+见[官网网站](https://ryensx.github.io/MediaBoxPluginRepository/)
 
 ## 支持开发
 
@@ -72,6 +70,7 @@
 
 - [Imomoe](https://github.com/SkyD666/Imomoe)
 - [插件API](https://github.com/RyensX/MediaBoxPlugin)
+- [官方插件仓库](https://github.com/RyensX/MediaBoxPluginRepository)
 
 ## 构建相关
 

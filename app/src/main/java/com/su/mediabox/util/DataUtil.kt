@@ -57,17 +57,14 @@ class MutableDynamicReferenceListData<T> : DynamicReferenceListData<T>() {
     override val data: List<T> get() = dataRef
 
     private var dataRef = mutableListOf<T>()
-    private var tmpDataRef = mutableListOf<T>()
 
     suspend fun putData(data: List<T>): List<T> =
         if (data.isEmpty()) dataRef
         else withContext(Dispatchers.Default) {
-            tmpDataRef.clear()
+            val tmpDataRef = mutableListOf<T>()
             tmpDataRef.addAll(data)
             lastLoad = data.size
-            val tmp = dataRef
             dataRef = tmpDataRef
-            tmpDataRef = tmp
             dataRef
         }
 
@@ -77,23 +74,21 @@ class MutableDynamicReferenceListData<T> : DynamicReferenceListData<T>() {
     suspend fun appendData(data: List<T>, startIndex: Int = -1): List<T> =
         if (data.isEmpty()) dataRef
         else withContext(Dispatchers.Default) {
-            tmpDataRef.clear()
+            val tmpDataRef = mutableListOf<T>()
             tmpDataRef.addAll(dataRef)
             if (startIndex == -1)
                 tmpDataRef.addAll(data)
             else
                 tmpDataRef.addAll(startIndex, data)
             lastLoad = data.size
-            val tmp = dataRef
             dataRef = tmpDataRef
-            tmpDataRef = tmp
             dataRef
         }
 
     suspend fun removeData(startIndex: Int, size: Int): List<T> =
         if (data.isEmpty() || size == 0) dataRef
         else withContext(Dispatchers.Default) {
-            tmpDataRef.clear()
+            val tmpDataRef = mutableListOf<T>()
             tmpDataRef.addAll(dataRef)
             val a = tmpDataRef.iterator()
             val endIndex = startIndex + size
@@ -108,9 +103,7 @@ class MutableDynamicReferenceListData<T> : DynamicReferenceListData<T>() {
                 }
                 index++
             }
-            val tmp = dataRef
             dataRef = tmpDataRef
-            tmpDataRef = tmp
             dataRef
         }
 

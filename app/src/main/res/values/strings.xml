@@ -28,7 +28,7 @@
     <string name="check_update">检查更新</string>
     <string name="current_version">当前版本 %s</string>
     <string name="check_update_failed">检查更新失败</string>
-    <string name="checking_update">正在检查更新…</string>
+    <string name="checking">正在检查中…</string>
     <string name="find_new_version">发现新版本</string>
     <string name="is_latest_version">已是最新版本</string>
     <string name="start_download">开始下载，通知栏显示下载进度</string>
@@ -46,11 +46,12 @@
     <string name="no_download_video">没有缓存视频</string>
     <string name="read_download_data_file">正在读取缓存文件…</string>
     <string name="play_list">播放列表</string>
-    <string name="episode_bottom_sheet_format">共%d集（长按缓存）</string>
+    <string name="episode_bottom_sheet_format">共%d集</string>
     <string name="check_update_server">检查更新服务器</string>
     <string name="play_speed">倍速</string>
     <string name="device_list">设备列表</string>
     <string name="play_on_tv">投屏</string>
+    <string name="play_common_speed">常用倍速设置为%.1fX</string>
     <string name="sending_data_please_wait">正在发送数据，请稍候…</string>
     <string name="dark_mode">深色模式</string>
     <string name="license">许可证</string>
@@ -137,7 +138,7 @@
     <string name="old_path">旧</string>
     <string name="do_not_finish_the_page_when_parse_download_data">缓存失败，解析缓存数据时请勿关闭页面</string>
     <string name="restore_screen">还原屏幕</string>
-    <string name="touch_down_high_speed"><![CDATA[>> %sX倍速播放]]></string>
+    <string name="touch_down_high_speed"><![CDATA[>> %.1fX倍速播放]]></string>
     <string name="play_position_tip">上次看到：</string>
     <string name="will_you_try_to_sniffer_video">是否尝试嗅探视频？</string>
     <string name="getting_complex_video_failed">获取视频链接失败，%s</string>
@@ -242,8 +243,9 @@
     <string name="plugin_repo_load_error">😥插件信息拉取失败！\n\n💡解决办法：\n 1.检查网络\n 2.右下角设置打开代理\n 3.下拉刷新数据</string>
     <string name="menu_plugin_repo">插件仓库</string>
     <string name="menu_plugin_repo_office">官方网站</string>
+    <string name="menu_plugin_repo_dev_doc">插件开发指南</string>
     <string name="menu_plugin_repo_help">插件帮助</string>
-    <string name="menu_plugin_repo_help_hint">如果遇到无法正常调用系统下载器下载安装插件，可以手动打开插件官网下载插件包再选择本应用打开安装</string>
+    <string name="menu_plugin_repo_help_hint">如果遇到无法正常调用系统下载器下载安装插件，可以手动打开插件官网下载插件包再选择本应用打开安装。\n\n如果有任何想法，欢迎贡献插件到官网插件仓库，具体见右上角菜单。</string>
     <string name="app_no_update_hint">已是最新版本</string>
     <string name="plugin_manage_media_count_format">收藏：%d</string>
     <string name="plugin_manage_media_uninstall">卸载</string>
@@ -282,6 +284,7 @@
     <string name="media_update_desc">由 %s 更新到 %s</string>
     <string name="media_update_toast">发现%d个媒体内容有更新</string>
     <string name="media_update_battery_optimization">去设置</string>
+    <string name="media_update_check">媒体检查更新</string>
     <!--时间格式化-->
     <string name="time_format_now">刚刚</string>
     <string name="time_format_minutes">%d分钟前</string>
@@ -291,4 +294,19 @@
     <string name="time_format_in_month">%d天前</string>
     <string name="time_format_in_year">M月d日</string>
     <string name="time_format_out_year">yyyy年M月d日</string>
+    <string name="dlna_desc">1. 确保电视和手机在同一WiFi下，打开支持投屏的电视。\n2. 点击上方搜索到的设备进行投屏。\n3. 注意，部分未知格式的视频可能无法投屏。</string>
+    <!--插件安装-->
+    <string name="plugin_install_source">来源</string>
+    <string name="plugin_install_name">名称</string>
+    <string name="plugin_install_package_name">包名</string>
+    <string name="plugin_install_version">版本</string>
+    <string name="plugin_install_version_desc">升级 %s -> %s</string>
+    <string name="plugin_install_error">错误</string>
+    <string name="plugin_install_error_not_a_plugin">该文件不是插件包</string>
+    <string name="plugin_install_error_read_error">无法读取插件包</string>
+    <string name="plugin_install_error_install_error">请检查读写权限</string>
+    <string name="plugin_install_error_scheme_error">请尝试更换文件管理器打开</string>
+    <string name="plugin_install_error_online_preview_error">在线安装预览信息加载错误</string>
+    <string name="plugin_install_warning">警告</string>
+    <string name="plugin_install_warning_security">当前插件包与已安装插件签名不一致，请确认来源是否安全</string>
 </resources>

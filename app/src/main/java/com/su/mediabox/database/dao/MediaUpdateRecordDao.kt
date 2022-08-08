@@ -27,6 +27,9 @@ interface MediaUpdateRecordDao {
     @Query("DELETE FROM $UPDATE_RECORD_TABLE_NAME  WHERE confirmed = 1")
     suspend fun deleteAllConfirmed()
 
+    @Query("DELETE FROM $UPDATE_RECORD_TABLE_NAME WHERE targetMedia = :targetMedia")
+    suspend fun deleteByMedia(targetMedia: String)
+
     @Query("SELECT COUNT(1) FROM $UPDATE_RECORD_TABLE_NAME")
     suspend fun getMediaUpdateRecordCount(): Long
 

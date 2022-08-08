@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.su.mediabox.bean.MediaFavorite
 import com.su.mediabox.config.Const.Database.AppDataBase.FAVORITE_MEDIA_TABLE_NAME
+import com.su.mediabox.database.getOfflineDatabase
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -44,4 +45,10 @@ interface MediaFavoriteDao {
 
     @Query(value = "DELETE FROM $FAVORITE_MEDIA_TABLE_NAME WHERE mediaUrl = :mediaUrl")
     fun deleteFavorite(mediaUrl: String)
+
+    @Transaction
+    suspend fun deleteFavoritesAndUpdateRecords(mediaUrl: String) {
+        deleteFavorite(mediaUrl)
+        getOfflineDatabase().mediaUpdateDao().deleteByMedia(mediaUrl)
+    }
 }

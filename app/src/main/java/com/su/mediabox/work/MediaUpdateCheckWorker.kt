@@ -86,7 +86,7 @@ internal class MediaUpdateCheckWorker(context: Context, workerParameters: Worker
 
         val notification = NotificationCompat.Builder(applicationContext, mediaUpdateNofChannelId)
             .setContentTitle(applicationContext.getString(R.string.media_update_check_title))
-            .setContentText(applicationContext.getString(R.string.media_update_check_pref_now_summary))
+            .setContentText(applicationContext.getString(R.string.checking))
             .setSmallIcon(R.mipmap.ic_mediabox)
             .setOngoing(true)
             .setContentIntent(notifyPendingIntent)
@@ -142,9 +142,12 @@ internal class MediaUpdateCheckWorker(context: Context, workerParameters: Worker
                             if (plugin.checkPluginConfig()) {
                                 val favorites =
                                     plugin.getAppDataBase().favoriteDao().getFavoriteList()
-                                MediaUpdateCheck.checkMediaUpdate(favorites, plugin, component) {
-                                    emit(Pair(plugin, it))
-                                }
+                                if (favorites.isNotEmpty())
+                                    MediaUpdateCheck.checkMediaUpdate(
+                                        favorites, plugin, component
+                                    ) {
+                                        emit(Pair(plugin, it))
+                                    }
                             }
                         }
                     }
@@ -352,7 +355,7 @@ fun Context.checkBatteryOptimizations(state: Boolean = Pref.mediaUpdateCheck.val
     ) {
         MaterialDialog(this).show {
             title(res = R.string.media_update_check_title)
-            message(res = R.string.media_update_check_alert)
+            message(res = R.string.media_update_check_permission_alert)
             cancelable(false)
             negativeButton(res = R.string.cancel) { dismiss() }
             positiveButton(res = R.string.media_update_battery_optimization) {
@@ -361,7 +364,7 @@ fun Context.checkBatteryOptimizations(state: Boolean = Pref.mediaUpdateCheck.val
                 if (intent.resolveActivity(packageManager) != null)
                     startActivity(intent)
             }
-            countdownActionButton(WhichButton.NEGATIVE)
+            countdownActionButton(WhichButton.NEGATIVE, durationSeconds = 5)
         }
     }
 }

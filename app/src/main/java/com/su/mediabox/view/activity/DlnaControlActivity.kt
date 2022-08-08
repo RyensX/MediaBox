@@ -49,6 +49,8 @@ class DlnaControlActivity : BaseActivity() {
         title = intent.getStringExtra("title") ?: ""
         deviceKey = intent.getStringExtra("deviceKey") ?: ""
 
+        logD("投屏", url)
+
         if (deviceKey.isEmpty()) {
             getString(R.string.dlna_init_data_error).showToast()
             finish()
