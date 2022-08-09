@@ -7,10 +7,12 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import com.kuaishou.akdanmaku.DanmakuConfig
 import com.kuaishou.akdanmaku.data.DanmakuItemData
 import com.kuaishou.akdanmaku.ecs.component.filter.*
@@ -120,6 +122,12 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
                         return false
                     }
                     danmakuSend(text)
+                    //收起键盘并清除焦点
+                    etDanmakuInput?.apply {
+                        ContextCompat.getSystemService(mContext, InputMethodManager::class.java)
+                            ?.hideSoftInputFromWindow(windowToken, 0)
+                        clearFocus()
+                    }
                     return true
                 }
                 return true
@@ -186,6 +194,7 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
 
     private fun danmakuSend(danmakuText: String) =
         viewLifeCycleCoroutineScope.launch(Dispatchers.Main) {
+            etDanmakuInput?.disable()
             var time = currentPlayer.currentPositionWhenPlaying.toLong()
             withContext(Dispatchers.IO) {
                 playOperatingProxy?.putDanmaku(
@@ -195,6 +204,7 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
                     DanmakuItemData.DANMAKU_MODE_ROLLING
                 ) == true
             }.also {
+                etDanmakuInput?.enable()
                 if (it && mDanmakuPlayer != null) {
                     time += 500
                     val danmaku = DanmakuItemData(
