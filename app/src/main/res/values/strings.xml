@@ -152,7 +152,7 @@
     <string name="fail_to_parse_page_url">解析网页地址失败</string>
     <string name="loading_danmaku">加载弹幕中…</string>
     <string name="the_video_has_danmaku">此视频含弹幕</string>
-    <string name="send_a_danmaku">发个弹幕见证当下</string>
+    <string name="send_a_danmaku">已装载%d条弹幕，发个弹幕见证当下</string>
     <string name="send_a_danmaku_is_disabled">弹幕功能不可用</string>
     <string name="send_danmaku_failed">发送弹幕失败，%s</string>
     <string name="please_input_danmaku_text">请输入弹幕内容！</string>

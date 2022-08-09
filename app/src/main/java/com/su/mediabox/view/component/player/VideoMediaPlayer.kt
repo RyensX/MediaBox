@@ -1351,6 +1351,6 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
          * 一般为解析后调用player播放
          */
         fun playVideoMedia(episodeUrl: String)
-        suspend fun putDanmaku(danmaku: String): Boolean
+        suspend fun putDanmaku(danmaku: String, time: Long, color: Int, type: Int): Boolean
     }
 }

@@ -48,7 +48,8 @@ class VideoMediaPlayActivity : BasePluginActivity(),
 
     override val currentPlayEpisodeUrl: String get() = viewModel.currentPlayEpisodeUrl
     override fun playVideoMedia(episodeUrl: String) = viewModel.playVideoMedia(episodeUrl)
-    override suspend fun putDanmaku(danmaku: String) = viewModel.putDanmaku(danmaku)
+    override suspend fun putDanmaku(danmaku: String, time: Long, color: Int, type: Int) =
+        viewModel.putDanmaku(danmaku, time, color, type)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

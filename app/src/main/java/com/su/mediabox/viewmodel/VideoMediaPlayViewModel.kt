@@ -57,15 +57,29 @@ class VideoMediaPlayViewModel : ViewModel() {
         }
     }
 
-    suspend fun putDanmaku(danmaku: String): Boolean = playComponent.putDanmaku(danmaku)
+    suspend fun putDanmaku(danmaku: String, time: Long, color: Int, type: Int): Boolean {
+        logD("发送弹幕", danmaku)
+        return when (val dataState = currentVideoPlayMedia.value) {
+            is DataState.Success -> {
+                playComponent.putDanmaku(
+                    videoName, dataState.data!!.title, currentPlayEpisodeUrl,
+                    danmaku, time, color, type
+                )
+                true
+            }
+            else -> false
+        }
+    }
 
     fun initDanmakuData() {
         when (val dataState = currentVideoPlayMedia.value) {
             is DataState.Success -> {
                 dataState.data?.apply {
+                    logD("加载弹幕", "媒体:$videoName 集数:$title")
                     viewModelScope.launch(Dispatchers.PluginIO) {
                         playComponent.getDanmakuData(videoName, title, currentPlayEpisodeUrl)
                             ?.also {
+                                logD("加载弹幕成功", "媒体:$videoName 集数:$title 数量:${it.size}")
                                 _currentDanmakuData.postValue(it)
                             }
                     }
