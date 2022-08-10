@@ -8,13 +8,16 @@ import androidx.datastore.preferences.preferencesDataStoreFile
 import com.su.mediabox.App
 import com.su.mediabox.key
 import com.su.mediabox.model.PluginInfo
+import com.su.mediabox.plugin.PluginPreferenceImpl.checkKeyExist
 import com.su.mediabox.pluginapi.util.PluginPreference
+import com.su.mediabox.util.appCoroutineScope
 import kotlinx.coroutines.CoroutineScope
 import com.su.mediabox.util.getRawClass
 import com.su.mediabox.util.unsafeLazy
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 object PluginPreferenceImpl : PluginPreference {
 
@@ -85,5 +88,17 @@ object PluginPreferenceImpl : PluginPreference {
         value: T,
         isVisual: Boolean
     ): Boolean = getPluginDataStore().set(key, value, isVisual)
+
+    override fun <T> initKey(key: String, defaultValue: T, isVisual: Boolean) {
+        appCoroutineScope.launch {
+            runCatching {
+                getPluginDataStore()?.apply {
+                    if (!checkKeyExist(key, defaultValue.getRawClass()!!, isVisual)) {
+                        set(key, defaultValue, isVisual)
+                    }
+                }
+            }
+        }
+    }
 
 }
