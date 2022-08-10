@@ -274,6 +274,7 @@
     <string name="crash_error">崩溃信息</string>
     <string name="crash_info">系统信息</string>
     <string name="plugin_repo">仓库</string>
+    <string name="plugin_update_release">更新日志</string>
     <string name="plugin_official_tag">官方</string>
     <string name="plugin_api_version_too_low">该插件API版本过低(%d &lt; %d)，请升级插件</string>
     <string name="plugin_api_version_too_high">该插件API版本过高(%d &gt; %d)，请升级APP</string>
