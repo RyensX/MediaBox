@@ -79,6 +79,7 @@ interface Setting {
         const val MEDIA_UPDATE_CHECK_LAST_TIME = "media_update_check_last_time"
         const val MEDIA_UPDATE_CHECK_ON_METERED_NET = "media_update_check_on_metered_net"
         const val COMMONLY_USED_VIDEO_SPEED = "commonly_used_video_speed"
+        const val DANMAKU_SEND_COLOR = "danmaku_send_color"
     }
 }
 

@@ -102,7 +102,10 @@ class VideoMediaPlayActivity : BasePluginActivity(),
                 }
                 //弹幕
                 currentDanmakuData.observe(this@VideoMediaPlayActivity) {
-                    it?.also { mBinding.vmPlay.setDanmakuData(it) }
+                    it?.also {
+                        Analytics.trackEvent("功能：装载弹幕")
+                        mBinding.vmPlay.setDanmakuData(it)
+                    }
                 }
             }
 

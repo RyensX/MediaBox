@@ -7,18 +7,17 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import com.kuaishou.akdanmaku.DanmakuConfig
 import com.kuaishou.akdanmaku.data.DanmakuItemData
 import com.kuaishou.akdanmaku.ecs.component.filter.*
 import com.kuaishou.akdanmaku.render.SimpleRenderer
 import com.kuaishou.akdanmaku.ui.DanmakuPlayer
 import com.kuaishou.akdanmaku.ui.DanmakuView
+import com.microsoft.appcenter.analytics.Analytics
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoView
@@ -26,6 +25,7 @@ import com.su.mediabox.R
 import com.su.mediabox.util.*
 import com.su.mediabox.util.Util.hideKeyboard
 import com.su.mediabox.util.showToast
+import com.su.mediabox.view.component.DanmakuColorSelector
 import com.su.mediabox.view.listener.dsl.setOnSeekBarChangeListener
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -88,6 +88,9 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
     // 弹幕字号百分比
     private var mDanmakuTextScalePercent: Int = mDanmakuTextScaleMinPercent + 60
 
+    // 弹幕发送颜色
+    private var danmakuColor: DanmakuColorSelector? = null
+
     constructor(context: Context, fullFlag: Boolean?) : super(context, fullFlag)
 
     constructor(context: Context) : super(context)
@@ -108,6 +111,7 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
         sbDanmakuTextScale = findViewById(R.id.sb_danmaku_text_size_scale)
         tvDanmakuTextScaleHeader = findViewById(R.id.tv_danmaku_text_size_scale_header)
         tvDanmakuTextScale = findViewById(R.id.tv_danmaku_text_size_scale)
+        danmakuColor = findViewById(R.id.tv_danmaku_text_color)
         etDanmakuInput?.gone()
         ivShowDanmaku?.gone()
         // 设置高度是0
@@ -123,9 +127,9 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
                     }
                     danmakuSend(text)
                     //收起键盘并清除焦点
+                    startDismissControlViewTimer()
                     etDanmakuInput?.apply {
-                        ContextCompat.getSystemService(mContext, InputMethodManager::class.java)
-                            ?.hideSoftInputFromWindow(windowToken, 0)
+                        hideKeyboard()
                         clearFocus()
                     }
                     return true
@@ -180,8 +184,6 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
             seekDanmaku(currentPlayer.currentPositionWhenPlaying.toLong())
         }
 
-        //TODO 暂时不可用
-        sbDanmakuTextScale?.isEnabled = false
         sbDanmakuTextScale?.setOnSeekBarChangeListener {
             onProgressChanged { seekBar, progress, _ ->
                 seekBar ?: return@onProgressChanged
@@ -196,11 +198,13 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
         viewLifeCycleCoroutineScope.launch(Dispatchers.Main) {
             etDanmakuInput?.disable()
             var time = currentPlayer.currentPositionWhenPlaying.toLong()
+            val color = danmakuColor?.danmakuColor ?: Color.WHITE
             withContext(Dispatchers.IO) {
+                Analytics.trackEvent("功能：发送弹幕")
                 playOperatingProxy?.putDanmaku(
                     danmakuText, time,
                     //TODO 颜色和类型还需要实现自定义
-                    Color.WHITE,
+                    color,
                     DanmakuItemData.DANMAKU_MODE_ROLLING
                 ) == true
             }.also {
@@ -214,8 +218,7 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
                         DanmakuItemData.DANMAKU_MODE_ROLLING,
                         //TODO 自定义
                         25,
-                        //TODO 自定义
-                        Color.WHITE,
+                        color,
                         DanmakuItemData.DANMAKU_STYLE_ICON_UP
                     )
                     val item = mDanmakuPlayer!!.obtainItem(danmaku)
