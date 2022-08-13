@@ -34,9 +34,11 @@
     <string name="media_update_check_pref_on_metered_net_summary">移动网络下自动检查，注意流量消耗</string>
     <string name="media_update_check_pref_last_check_complete_time">上次检查：%s</string>
     <string name="media_update_check_plugin_result">发现%d个媒体有更新</string>
-
+    <!--播放设置-->
     <string-array name="play_action_core_text">
         <item>Exo2Player内核</item>
         <item>IjkPlayer内核</item>
     </string-array>
+    <string name="pref_video_play_position_title">自动跳转进度</string>
+    <string name="pref_video_play_position_summary">不开启则会在播放器右侧提示</string>
 </resources>

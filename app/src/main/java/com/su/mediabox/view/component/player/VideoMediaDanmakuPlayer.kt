@@ -17,6 +17,7 @@ import com.kuaishou.akdanmaku.ecs.component.filter.*
 import com.kuaishou.akdanmaku.render.SimpleRenderer
 import com.kuaishou.akdanmaku.ui.DanmakuPlayer
 import com.kuaishou.akdanmaku.ui.DanmakuView
+import com.microsoft.appcenter.analytics.Analytics
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoView
@@ -24,15 +25,18 @@ import com.su.mediabox.R
 import com.su.mediabox.util.*
 import com.su.mediabox.util.Util.hideKeyboard
 import com.su.mediabox.util.showToast
+import com.su.mediabox.view.component.DanmakuColorSelector
 import com.su.mediabox.view.listener.dsl.setOnSeekBarChangeListener
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.random.Random
 
 
 class VideoMediaDanmakuPlayer : VideoMediaPlayer {
     private lateinit var mDanmakuView: DanmakuView          //弹幕view
-    private lateinit var mDanmakuPlayer: DanmakuPlayer
+    private var mDanmakuPlayer: DanmakuPlayer? = null
     private val colorFilter = TextColorFilter()
     private var dataFilters = emptyMap<Int, DanmakuFilter>()
     private var config = DanmakuConfig().apply {
@@ -84,6 +88,9 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
     // 弹幕字号百分比
     private var mDanmakuTextScalePercent: Int = mDanmakuTextScaleMinPercent + 60
 
+    // 弹幕发送颜色
+    private var danmakuColor: DanmakuColorSelector? = null
+
     constructor(context: Context, fullFlag: Boolean?) : super(context, fullFlag)
 
     constructor(context: Context) : super(context)
@@ -93,9 +100,8 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
     override fun init(context: Context?) {
         super.init(context)
         mDanmakuView = findViewById(R.id.danmaku_view)
-        mDanmakuPlayer = DanmakuPlayer(SimpleRenderer()).also {
-            it.bindView(mDanmakuView)
-        }
+
+        initDanmaku()
         ivShowDanmaku = findViewById(R.id.iv_show_danmu)
         etDanmakuInput = findViewById(R.id.et_input_danmu)
         vgDanmakuController = findViewById(R.id.cl_danmu_controller)
@@ -105,6 +111,7 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
         sbDanmakuTextScale = findViewById(R.id.sb_danmaku_text_size_scale)
         tvDanmakuTextScaleHeader = findViewById(R.id.tv_danmaku_text_size_scale_header)
         tvDanmakuTextScale = findViewById(R.id.tv_danmaku_text_size_scale)
+        danmakuColor = findViewById(R.id.tv_danmaku_text_color)
         etDanmakuInput?.gone()
         ivShowDanmaku?.gone()
         // 设置高度是0
@@ -119,6 +126,12 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
                         return false
                     }
                     danmakuSend(text)
+                    //收起键盘并清除焦点
+                    startDismissControlViewTimer()
+                    etDanmakuInput?.apply {
+                        hideKeyboard()
+                        clearFocus()
+                    }
                     return true
                 }
                 return true
@@ -137,6 +150,11 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
             }
         }
 
+        viewLifeCycleCoroutineScope.launch {
+            delay(1000)
+            //TODO 这里的Boolean初始化有个很奇怪的问题，过快读取值为false，所以只能暂时延迟解决
+            ivShowDanmaku?.isSelected = mDanmakuShow
+        }
         ivShowDanmaku?.setOnClickListener {
             startDismissControlViewTimer()
             mDanmakuShow = !mDanmakuShow
@@ -177,22 +195,34 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
     }
 
     private fun danmakuSend(danmakuText: String) =
-        viewLifeCycleCoroutineScope.launch(Dispatchers.IO) {
-            (playOperatingProxy?.putDanmaku(danmakuText) == true).also {
-                if (it) {
-                    val time = mDanmakuPlayer.getCurrentTimeMs() + 500
+        viewLifeCycleCoroutineScope.launch(Dispatchers.Main) {
+            etDanmakuInput?.disable()
+            var time = currentPlayer.currentPositionWhenPlaying.toLong()
+            val color = danmakuColor?.danmakuColor ?: Color.WHITE
+            withContext(Dispatchers.IO) {
+                Analytics.trackEvent("功能：发送弹幕")
+                playOperatingProxy?.putDanmaku(
+                    danmakuText, time,
+                    //TODO 颜色和类型还需要实现自定义
+                    color,
+                    DanmakuItemData.DANMAKU_MODE_ROLLING
+                ) == true
+            }.also {
+                etDanmakuInput?.enable()
+                if (it && mDanmakuPlayer != null) {
+                    time += 500
                     val danmaku = DanmakuItemData(
                         Random.nextLong(),
                         time,
                         danmakuText,
                         DanmakuItemData.DANMAKU_MODE_ROLLING,
-                        (0.28f * 27F).toInt(),
                         //TODO 自定义
-                        Color.WHITE,
+                        25,
+                        color,
                         DanmakuItemData.DANMAKU_STYLE_ICON_UP
                     )
-                    val item = mDanmakuPlayer.obtainItem(danmaku)
-                    mDanmakuPlayer.send(item)
+                    val item = mDanmakuPlayer!!.obtainItem(danmaku)
+                    mDanmakuPlayer!!.send(item)
                     etDanmakuInput?.setText("")
                     "弹幕发送成功".showToast()
                 } else
@@ -275,7 +305,7 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
      */
     override fun onSpeedChanged(speed: Float) {
         super.onSpeedChanged(speed)
-        mDanmakuPlayer.updatePlaySpeed(speed)
+        mDanmakuPlayer?.updatePlaySpeed(speed)
     }
 
     /**
@@ -341,13 +371,14 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
         danmakuData: List<DanmakuItemData>,
         autoPlayIfVideoIsPlaying: Boolean = true    // 调用此方法后若视频在播放，则自动播放弹幕
     ) {
-        if (danmakuData.isEmpty()) {
-            "弹幕数据为空".showToast()
-            return
+        logD("设置弹幕", "数量:${danmakuData.size}")
+        if (mDanmakuData != null) {
+            releaseDanmaku()
+            initDanmaku()
         }
-
         mDanmakuData = danmakuData
-        mDanmakuPlayer.apply {
+        mDanmakuPlayer?.apply {
+            //这里的update是add的，不会删除原数据
             updateData(danmakuData)
             seekDanmaku(currentPlayer.currentPositionWhenPlaying.toLong())
             if (autoPlayIfVideoIsPlaying && mCurrentState == GSYVideoView.CURRENT_STATE_PLAYING)
@@ -372,7 +403,7 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
 
     private fun setDanmakuVisibility(visible: Boolean) {
         config = config.copy(visibility = visible)
-        mDanmakuPlayer.updateConfig(config)
+        mDanmakuPlayer?.updateConfig(config)
     }
 
     /**
@@ -387,10 +418,11 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
         sbDanmakuTextScale?.visible()
         tvDanmakuTextScaleHeader?.visible()
         tvDanmakuTextScale?.visible()
-        if (!mDanmakuData.isNullOrEmpty()) {
+        if (mDanmakuData != null) {
             etDanmakuInput?.enable()
             ivShowDanmaku?.enable()
-            etDanmakuInput?.hint = mContext.getString(R.string.send_a_danmaku)
+            etDanmakuInput?.hint =
+                mContext.getString(R.string.send_a_danmaku, mDanmakuData?.size ?: 0)
         } else {
             ivShowDanmaku?.disable()
             etDanmakuInput?.disable()
@@ -403,9 +435,7 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
      * 播放弹幕，要保证只在次方法内调用mDanmakuPlayer.start(config)
      */
     protected open fun playDanmaku() {
-        if (mDanmakuData.isNullOrEmpty()) return
-        // 若不加下面的if，则切换横竖屏后不管是否暂停，弹幕都会自动播放
-        mDanmakuPlayer.start(config)
+        mDanmakuPlayer?.start(config)
         onPrepareDanmaku()
     }
 
@@ -413,16 +443,16 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
      * 暂停弹幕
      */
     protected open fun pauseDanmaku() {
-        mDanmakuPlayer.pause()
+        mDanmakuPlayer?.pause()
     }
 
     /**
      * 停止弹幕
      */
     protected open fun stopDanmaku() {
-        mDanmakuPlayer.stop()
+        mDanmakuPlayer?.stop()
         // 加此句是因为stop后悔seek 0，又会播放
-        mDanmakuPlayer.pause()
+        mDanmakuPlayer?.pause()
     }
 
     /**
@@ -434,7 +464,7 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
         if (time + mDanmakuProgressDelta < 0L) {
             mDanmakuProgressDelta = 0L - time
         }
-        mDanmakuPlayer.seekTo(time + mDanmakuProgressDelta)
+        mDanmakuPlayer?.seekTo(time + mDanmakuProgressDelta)
         // 由于上面一条语句会导致弹幕开始播放，因此要判断是否暂停
         if (pauseDanmaku || mCurrentState == GSYVideoView.CURRENT_STATE_PAUSE ||
             mCurrentState == GSYVideoView.CURRENT_STATE_PLAYING_BUFFERING_START
@@ -453,14 +483,20 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
      */
     private fun setTextSizeScale(scale: Float) {
         config = config.copy(textSizeScale = scale)
-        mDanmakuPlayer.updateConfig(config)
+        mDanmakuPlayer?.updateConfig(config)
+    }
+
+    private fun initDanmaku() {
+        mDanmakuPlayer = DanmakuPlayer(SimpleRenderer()).also {
+            it.bindView(mDanmakuView)
+        }
     }
 
     /**
      * 释放弹幕控件
      */
     private fun releaseDanmaku() {
-        mDanmakuPlayer.release()
+        mDanmakuPlayer?.release()
     }
 
     /**

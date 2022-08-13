@@ -55,13 +55,4 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- 先放着 -->
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/main_nav"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        app:headerLayout="@layout/main_navigation_header_layout"
-        app:menu="@menu/main_bottom_nav" />
-
 </androidx.drawerlayout.widget.DrawerLayout>

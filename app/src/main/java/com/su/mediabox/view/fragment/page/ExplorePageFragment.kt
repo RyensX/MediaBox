@@ -98,9 +98,10 @@ class ExplorePageFragment : BaseViewBindingFragment<PageExploreBinding>() {
                                 //提取目标媒体信息
                                 bindingTypeAdapter.getData<MediaFavorite>(pos)?.run {
                                     //静默启动插件
-                                    bindingContext.launchPlugin(it.pluginInfo, false)
-                                    //路由到目标页面
-                                    DetailAction.obtain(mediaUrl).go(bindingContext)
+                                    bindingContext.launchPlugin(it.pluginInfo, false) {
+                                        //路由到目标页面
+                                        DetailAction.obtain(mediaUrl).go(bindingContext)
+                                    }
                                 }
                             }
                         }
@@ -110,8 +111,9 @@ class ExplorePageFragment : BaseViewBindingFragment<PageExploreBinding>() {
                         setOnClickListener(itemView) { pos ->
                             //向上查找所属插件的信息
                             bindingTypeAdapter.findTypeData<PluginManageModel>(pos, -1)?.also {
-                                bindingContext.launchPlugin(it.pluginInfo, false)
-                                requireActivity().goActivity<MediaDataActivity>()
+                                bindingContext.launchPlugin(it.pluginInfo, false) {
+                                    requireActivity().goActivity<MediaDataActivity>()
+                                }
                             }
                         }
                     }

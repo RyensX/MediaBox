@@ -152,7 +152,7 @@
     <string name="fail_to_parse_page_url">解析网页地址失败</string>
     <string name="loading_danmaku">加载弹幕中…</string>
     <string name="the_video_has_danmaku">此视频含弹幕</string>
-    <string name="send_a_danmaku">发个弹幕见证当下</string>
+    <string name="send_a_danmaku">已装载%d条弹幕，发个弹幕见证当下</string>
     <string name="send_a_danmaku_is_disabled">弹幕功能不可用</string>
     <string name="send_danmaku_failed">发送弹幕失败，%s</string>
     <string name="please_input_danmaku_text">请输入弹幕内容！</string>
@@ -206,6 +206,7 @@
     <string name="the_data_source_is_using_now">正在使用此数据源！</string>
     <string name="close">关闭</string>
     <string name="danmaku_text_size_scale">弹幕字号</string>
+    <string name="danmaku_text_color">弹幕发射颜色</string>
     <string name="please_wait_video_loaded">请等待视频加载完毕…</string>
     <string name="dlna_volume">音量：%s</string>
     <string name="dlna_stop">停止投屏</string>
@@ -274,6 +275,7 @@
     <string name="crash_error">崩溃信息</string>
     <string name="crash_info">系统信息</string>
     <string name="plugin_repo">仓库</string>
+    <string name="plugin_update_release">更新日志</string>
     <string name="plugin_official_tag">官方</string>
     <string name="plugin_api_version_too_low">该插件API版本过低(%d &lt; %d)，请升级插件</string>
     <string name="plugin_api_version_too_high">该插件API版本过高(%d &gt; %d)，请升级APP</string>

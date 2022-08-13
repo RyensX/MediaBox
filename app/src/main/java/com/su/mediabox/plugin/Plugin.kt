@@ -169,11 +169,26 @@ object PluginManager {
         )
     }
 
-    fun Context.launchPlugin(pluginInfo: PluginInfo?, isLaunchInitAction: Boolean = true) {
+    fun Context.launchPlugin(
+        pluginInfo: PluginInfo?,
+        isLaunchInitAction: Boolean = true,
+        initialized: (() -> Unit)? = null
+    ) {
         pluginInfo?.apply {
-            _currentLaunchPlugin.postValue(this)
-            if (isLaunchInitAction)
-                acquirePluginFactory().initAction.go(this@launchPlugin)
+            pluginWorkScope.launch(Dispatchers.Main) {
+                runCatching {
+                    _currentLaunchPlugin.value = this@apply
+                    acquirePluginFactory().apply {
+                        pluginLaunch()
+                        if (isLaunchInitAction)
+                            initAction.go(this@launchPlugin)
+                    }
+                    initialized?.invoke()
+                }.onFailure {
+                    it.message?.showToast()
+                    _currentLaunchPlugin.value = null
+                }
+            }
         }
     }
 
@@ -285,7 +300,7 @@ object PluginManager {
                 throw RuntimeException(
                     App.context.getString(
                         R.string.plugin_api_version_too_high, apiVersion,
-                        minPluginApiVersion
+                        appApiVersion
                     )
                 )
 

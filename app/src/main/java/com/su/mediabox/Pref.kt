@@ -1,6 +1,7 @@
 package com.su.mediabox
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Handler
 import android.os.Looper
 import androidx.datastore.core.DataStore
@@ -147,4 +148,6 @@ object Pref {
     val commonlyUsedVideoSpeed by lazyDataStoreStateFlow(
         Const.Setting.COMMONLY_USED_VIDEO_SPEED, 2.0f
     )
+    val danmakuSendColor by lazyDataStoreStateFlow(Const.Setting.DANMAKU_SEND_COLOR, Color.WHITE)
+    val autoSeekVidePosition by lazyDataStoreStateFlow(Const.Setting.AUTO_SEEK_PLAY_POSITION, false)
 }

@@ -72,6 +72,7 @@ interface Setting {
     companion object {
         const val NET_REPO_PROXY = "net_repo_proxy"
         const val SHOW_PLAY_BOTTOM_BAR = "show_play_bottom_bar"
+        const val AUTO_SEEK_PLAY_POSITION = "auto_seek_play_position"
         const val APP_LAUNCH_COUNT = "app_launch_count"
         const val PLAY_ACTION_DEFAULT_CORE = "play_action_default_core"
         const val MEDIA_UPDATE_CHECK = "media_update_check"
@@ -79,6 +80,7 @@ interface Setting {
         const val MEDIA_UPDATE_CHECK_LAST_TIME = "media_update_check_last_time"
         const val MEDIA_UPDATE_CHECK_ON_METERED_NET = "media_update_check_on_metered_net"
         const val COMMONLY_USED_VIDEO_SPEED = "commonly_used_video_speed"
+        const val DANMAKU_SEND_COLOR = "danmaku_send_color"
     }
 }
 

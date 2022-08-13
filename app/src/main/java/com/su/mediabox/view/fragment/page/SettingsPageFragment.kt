@@ -176,7 +176,7 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
 
                 titleRes(R.string.player_category_title)
 
-                switchPreference {
+                checkPreference {
                     key = Const.Setting.SHOW_PLAY_BOTTOM_BAR
                     titleRes(R.string.player_bottom_progress_title)
                     summaryRes(R.string.player_bottom_progress_summary)
@@ -184,6 +184,12 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
                     lifecycleCollect(Pref.isShowPlayerBottomProgressBar) {
                         isChecked = it
                     }
+                }
+
+                switchPreference {
+                    key = Const.Setting.AUTO_SEEK_PLAY_POSITION
+                    titleRes(R.string.pref_video_play_position_title)
+                    summaryRes(R.string.pref_video_play_position_summary)
                 }
 
                 singleSelectListPreference {

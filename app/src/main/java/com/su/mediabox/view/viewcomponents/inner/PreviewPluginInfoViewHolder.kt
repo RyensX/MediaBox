@@ -1,8 +1,10 @@
 package com.su.mediabox.view.viewcomponents.inner
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import com.su.mediabox.R
 import com.su.mediabox.model.PreviewPluginInfo
 import com.su.mediabox.config.Const
 import com.su.mediabox.databinding.ViewComponentPreviewPluginInfoBinding
@@ -17,6 +19,8 @@ class PreviewPluginInfoViewHolder private constructor(private val binding: ViewC
     TypeViewHolder<PreviewPluginInfo>(binding.root) {
 
     private var tmpData: PreviewPluginInfo? = null
+
+    private val styleColor = Util.getResColor(R.color.main_color_2_skin)
 
     constructor(parent: ViewGroup) : this(
         ViewComponentPreviewPluginInfoBinding.inflate(
@@ -61,6 +65,16 @@ class PreviewPluginInfoViewHolder private constructor(private val binding: ViewC
                 vcPpVersion.text = version
                 vcPpIcon.loadImage(iconBase64)
                 vcPpOfficialTag.isVisible = author == "RyensX"
+
+                vcPpRepo.apply {
+                    if (state == Const.Plugin.PLUGIN_STATE_UPDATABLE) {
+                        setText(R.string.plugin_update_release)
+                        setTextColor(styleColor)
+                    } else {
+                        setText(R.string.plugin_repo)
+                        setTextColor(Color.BLACK)
+                    }
+                }
 
                 //TODO 重新设计
                 vcPpAction.text = when (state) {

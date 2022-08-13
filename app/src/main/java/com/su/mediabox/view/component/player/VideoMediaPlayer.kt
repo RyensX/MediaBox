@@ -437,7 +437,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
                                 //标记当前选集pos
                                 adapter.setTag(pos)
                                 //暂停播放
-                                gsyVideoManager.pause()
+                                currentPlayer.onVideoPause()
                                 //开始解析
                                 playOperatingProxy?.playVideoMedia(episodeData.url)
                                 //TODO 在解析失败后当前剧集Tag并不会更新
@@ -1224,8 +1224,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
                     logD(PLAY_POS_TAG, "查询到进度：$it")
                     preSeekPlayPosition = it
                     if (it > 0L) {
-                        //TODO 自动跳转开关
-                        val isAutoSeek = true
+                        val isAutoSeek = Pref.autoSeekVidePosition.value
                         if (isAutoSeek) {
                             logD(PLAY_POS_TAG, "跳转进度：$it")
                             seekOnStart = it
@@ -1234,8 +1233,8 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
                             playPositionViewJob = launch(Dispatchers.Main) {
                                 tvPlayPosition?.text = positionFormat(it)
                                 vgPlayPosition?.visible()
-                                //展示5秒
-                                delay(5000)
+                                //展示10秒
+                                delay(10000)
                                 vgPlayPosition?.gone(true, 200L)
                             }
                     }
@@ -1248,13 +1247,6 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
     override fun startAfterPrepared() {
         super.startAfterPrepared()
         logD(PLAY_POS_TAG, "开始播放，当前进度：pos=${gsyVideoManager.currentPosition} url=$mOriginUrl")
-        //有时候跳转不成功
-        preSeekPlayPosition?.also {
-            if (gsyVideoManager.currentPosition < it) {
-                logD(PLAY_POS_TAG, "检测到预跳转进度失败，重试：pos=$it url=$mOriginUrl")
-                gsyVideoManager.seekTo(it)
-            }
-        }
     }
 
     /**
@@ -1263,6 +1255,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
     override fun onDetachedFromWindow() {
         storePlayPosition()
         playOperatingProxy = null
+        logI("进度记忆", "退出界面")
         super.onDetachedFromWindow()
     }
 
@@ -1276,8 +1269,10 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
         title: String?,
         changeState: Boolean
     ): Boolean {
+        logD("进度记忆", "当前:$url 原:$mOriginUrl")
         if (url != mOriginUrl) {
             vgPlayPosition?.gone()
+            logI("进度记忆", "切换选集")
             storePlayPosition()
         }
 
@@ -1302,14 +1297,14 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
         if (position < 0 ||
             (position > playPositionMemoryTimeLimit && duration > 0 && abs(position - duration) > 2000L)
         ) {
-            logD(PLAY_POS_TAG, "记录进度：pos=$position target=$url")
+            logI(PLAY_POS_TAG, "记录进度：pos=$position target=$url")
             playPositionMemoryStore?.apply {
                 playPositionMemoryStoreCoroutineScope.launch {
                     putPlayPosition(url, position)
                 }
             }
         } else
-            logD(PLAY_POS_TAG, "放弃记录进度：pos=$position target=$url")
+            logW(PLAY_POS_TAG, "放弃记录进度：pos=$position target=$url")
     }
 
     override fun onAutoCompletion() {
@@ -1351,6 +1346,6 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
          * 一般为解析后调用player播放
          */
         fun playVideoMedia(episodeUrl: String)
-        suspend fun putDanmaku(danmaku: String): Boolean
+        suspend fun putDanmaku(danmaku: String, time: Long, color: Int, type: Int): Boolean
     }
 }
