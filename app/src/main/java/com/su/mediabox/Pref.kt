@@ -149,4 +149,5 @@ object Pref {
         Const.Setting.COMMONLY_USED_VIDEO_SPEED, 2.0f
     )
     val danmakuSendColor by lazyDataStoreStateFlow(Const.Setting.DANMAKU_SEND_COLOR, Color.WHITE)
+    val autoSeekVidePosition by lazyDataStoreStateFlow(Const.Setting.AUTO_SEEK_PLAY_POSITION, false)
 }

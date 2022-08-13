@@ -415,6 +415,44 @@
 
     </RelativeLayout>
 
+    <LinearLayout
+        android:id="@+id/ll_play_position_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:background="@color/gray_2"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@id/layout_bottom"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="8dp"
+            android:layout_marginStart="10dp"
+            android:text="@string/play_position_tip"
+            android:textColor="@color/foreground_white_skin" />
+
+        <TextView
+            android:id="@+id/tv_play_position_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="8dp"
+            android:textColor="@color/foreground_main_color_2_skin"
+            tools:text="19:35" />
+
+        <!--margin缩小点击范围-->
+        <ImageView
+            android:id="@+id/iv_close_play_position_tip"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_margin="8dp"
+            android:src="@drawable/ic_close_white_24" />
+
+    </LinearLayout>
+
     <androidx.core.widget.NestedScrollView
         android:id="@+id/layout_setting"
         android:layout_width="wrap_content"
