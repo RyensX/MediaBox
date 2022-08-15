@@ -184,7 +184,8 @@ class PluginRepoPageFragment : BaseViewBindingFragment<PagePluginRepoBinding>(),
                 )
                 addAll(updatable)
             }
-            if (installed.isNotEmpty()) {
+            //已安装的仅在没有可下载时才显示
+            if (installed.isNotEmpty() && downloadable.isEmpty()) {
                 add(
                     getPluginCategoryText(
                         getString(
