@@ -1,6 +1,8 @@
 package com.su.mediabox.view.fragment.page
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Html
 import android.view.Menu
 import android.view.MenuInflater
@@ -28,6 +30,7 @@ import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
 class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreferenceClickListener {
 
     private lateinit var nowCheckMediaUpdatePreference: Preference
+    private val appHandler = Handler(Looper.getMainLooper())
 
     override fun onResume() {
         super.onResume()
@@ -131,7 +134,9 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
                         //launchMediaUpdateCheckWorker(ExistingPeriodicWorkPolicy.REPLACE)
                         WorkManager.getInstance(App.context)
                             .cancelUniqueWork(MEDIA_UPDATE_CHECK_WORKER_ID)
-                        auto.isChecked = false
+                        appHandler.post {
+                            auto.isChecked = false
+                        }
                         true
                     }
                 }
@@ -142,7 +147,9 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
                     titleRes(R.string.media_update_check_pref_on_metered_net_title)
                     summaryRes(R.string.media_update_check_pref_on_metered_net_summary)
                     setOnPreferenceClickListener {
-                        auto.isChecked = false
+                        appHandler.post {
+                            auto.isChecked = false
+                        }
                         true
                     }
                 }
@@ -164,10 +171,12 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
                 }
 
                 lifecycleCollect(mediaUpdateCheckWorkerIsRunning) { isRunning ->
-                    auto.isEnabled = !isRunning
-                    interval.isEnabled = !isRunning
-                    onMeteredNet.isEnabled = !isRunning
-                    nowCheckMediaUpdatePreference.isEnabled = !isRunning
+                    appHandler.post {
+                        auto.isEnabled = !isRunning
+                        interval.isEnabled = !isRunning
+                        onMeteredNet.isEnabled = !isRunning
+                        nowCheckMediaUpdatePreference.isEnabled = !isRunning
+                    }
                     updateMediaUpdateCheckLastTime()
                 }
             }
@@ -182,7 +191,9 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
                     summaryRes(R.string.player_bottom_progress_summary)
 
                     lifecycleCollect(Pref.isShowPlayerBottomProgressBar) {
-                        isChecked = it
+                        appHandler.post {
+                            isChecked = it
+                        }
                     }
                 }
 

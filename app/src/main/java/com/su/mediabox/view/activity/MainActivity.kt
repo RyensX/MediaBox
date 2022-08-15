@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.WhichButton
 import com.microsoft.appcenter.analytics.Analytics
 import com.su.mediabox.Pref
 import com.su.mediabox.R
@@ -93,13 +94,14 @@ class MainActivity : BaseActivity() {
 
         //支持开发
         Pref.appLaunchCount.apply {
-            if (value == 15) {
+            if (value == 10) {
                 MaterialDialog(this@MainActivity).show {
                     title(res = R.string.support_title)
                     message(res = R.string.app_recommend)
                     cancelable(false)
                     positiveButton(text = "Github") { Util.openBrowser(Const.Common.GITHUB_URL) }
                     negativeButton(res = R.string.cancel) { dismiss() }
+                    countdownActionButton(WhichButton.NEGATIVE, durationSeconds = 5)
                 }
                 saveData(value + 1)
             }
