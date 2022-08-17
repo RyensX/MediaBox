@@ -16,6 +16,7 @@ import com.shuyu.gsyvideoplayer.player.PlayerFactory
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoView
+import com.shuyu.gsyvideoplayer.video.base.GSYVideoView.CURRENT_STATE_PLAYING
 import com.su.mediabox.Pref
 import com.su.mediabox.R
 import com.su.mediabox.databinding.ActivityVideoMediaPlayBinding
@@ -43,6 +44,9 @@ class VideoMediaPlayActivity : BasePluginActivity(),
 
     private lateinit var orientationUtils: OrientationUtils
     private val viewModel by viewModels<VideoMediaPlayViewModel>()
+
+    //记录上次前台是否在播放
+    private var lastForegroundIsPlaying = false
 
     private lateinit var action: PlayAction
 
@@ -244,22 +248,30 @@ class VideoMediaPlayActivity : BasePluginActivity(),
     override fun onPause() {
         super.onPause()
         orientationUtils.setIsPause(true)
-        mBinding.vmPlay.currentPlayer.onVideoPause()
+        mBinding.vmPlay.currentPlayer.apply {
+            lastForegroundIsPlaying = currentState == CURRENT_STATE_PLAYING
+            onVideoPause()
+        }
     }
 
     override fun onResume() {
         super.onResume()
-        orientationUtils.setIsPause(false)
-        mBinding.vmPlay.currentPlayer.onVideoResume()
+        logD("恢复播放器", "上次播放状态:$lastForegroundIsPlaying")
+        if (lastForegroundIsPlaying) {
+            orientationUtils.setIsPause(false)
+            mBinding.vmPlay.currentPlayer.onVideoResume()
+        }
     }
 
     override fun onDestroy() {
+        runCatching {
+            mBinding.vmPlay.currentPlayer.release()
+            mBinding.vmPlay.setVideoAllCallBack(null)
+            GSYVideoManager.releaseAllVideos()
+            orientationUtils.releaseListener()
+            //释放播放列表
+            playList = null
+        }
         super.onDestroy()
-        mBinding.vmPlay.currentPlayer.release()
-        mBinding.vmPlay.setVideoAllCallBack(null)
-        GSYVideoManager.releaseAllVideos()
-        orientationUtils.releaseListener()
-        //释放播放列表
-        playList = null
     }
 }
