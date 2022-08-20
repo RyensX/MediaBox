@@ -490,6 +490,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
         episodeAdapter?.getTag<Int>()?.also { pos ->
             if (pos < (VideoMediaPlayActivity.playList?.size ?: pos) - 1)
                 VideoMediaPlayActivity.playList?.getOrNull(pos + 1)?.url?.also {
+                    currentPlayer.onVideoPause()
                     episodeAdapter.apply {
                         //更新上次选项
                         notifyItemChanged(pos)
@@ -502,7 +503,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
                     return true
                 }
             else {
-                "已是最后一集".showToast()
+                ResourceUtil.getString(R.string.play_end_hint).showToast()
                 return false
             }
         }
