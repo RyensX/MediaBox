@@ -14,10 +14,7 @@ import com.su.mediabox.database.entity.MediaUpdateRecord
 import com.su.mediabox.database.getOfflineDatabase
 import com.su.mediabox.databinding.ViewComponentUpdateBinding
 import com.su.mediabox.pluginapi.action.DetailAction
-import com.su.mediabox.util.Util
-import com.su.mediabox.util.appCoroutineScope
-import com.su.mediabox.util.friendlyTime
-import com.su.mediabox.util.unsafeLazy
+import com.su.mediabox.util.*
 import com.su.mediabox.view.adapter.type.TypeViewHolder
 import kotlinx.coroutines.launch
 
@@ -77,7 +74,9 @@ class MediaUpdateRecordViewHolder private constructor(private val binding: ViewC
             Spannable.SPAN_EXCLUSIVE_INCLUSIVE
         )
         //新标志
-        val newIndex = rawText.indexOf(newTag)
+        var newIndex = rawText.indexOf(newTag)
+        if (newIndex in oldIndex..(oldIndex + oldTag.length))
+            newIndex = rawText.indexOf(newTag, oldIndex + oldTag.length)
         style.setSpan(
             ForegroundColorSpan(styleColor),
             newIndex, newIndex + newTag.length,
