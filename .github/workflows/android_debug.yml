@@ -2,6 +2,8 @@ name: Android Debug CI
 
 on: 
   push:
+    branches:
+      - dev
     paths-ignore:
     # 构建无关文件不触发
       - '**.md'

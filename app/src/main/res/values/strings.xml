@@ -183,6 +183,7 @@
     <string name="continue_to_play">继续播放</string>
     <string name="play_video_now">立即播放</string>
     <string name="replay_video">重新播放</string>
+    <string name="play_end_hint">已是最后一集</string>
     <string name="jump_to_browser_http_warning">此网址使用HTTP协议，不能保证安全性，是否要继续打开浏览器访问？</string>
     <string name="jump_to_data_source_website_warning">若要访问，请谨慎下载来历不明的文件</string>
     <string name="input_custom_danmaku_url">输入自定义弹幕链接</string>
@@ -255,7 +256,7 @@
     <string name="plugin_manage_media_uninstall_title">确认卸载？</string>
     <string name="plugin_manage_media_uninstall_msg">注意：卸载后数据也会删除，并且无法恢复</string>
     <string name="media_more">仅预览最多4个，点击查看完整收藏列表</string>
-    <string name="app_recommend">用起来感觉还不错？\n欢迎到Github点Star支持开发者！</string>
+    <string name="app_recommend">用起来感觉还不错？\n本软件免费开源，没有任何盈利，Star是支持开发者持续维护的唯一动力，欢迎到Github点Star支持开发者！</string>
     <string name="media_data_page_favorite">收藏</string>
     <string name="media_data_page_history">历史</string>
     <string name="media_data_page_update">更新</string>
@@ -287,6 +288,7 @@
     <string name="media_update_toast">发现%d个媒体内容有更新</string>
     <string name="media_update_battery_optimization">去设置</string>
     <string name="media_update_check">媒体检查更新</string>
+    <string name="dlna_desc">1. 确保电视和手机在同一WiFi下，打开支持投屏的电视。\n2. 点击上方搜索到的设备进行投屏。\n3. 注意，部分未知格式的视频可能无法投屏。</string>
     <!--时间格式化-->
     <string name="time_format_now">刚刚</string>
     <string name="time_format_minutes">%d分钟前</string>
@@ -296,7 +298,6 @@
     <string name="time_format_in_month">%d天前</string>
     <string name="time_format_in_year">M月d日</string>
     <string name="time_format_out_year">yyyy年M月d日</string>
-    <string name="dlna_desc">1. 确保电视和手机在同一WiFi下，打开支持投屏的电视。\n2. 点击上方搜索到的设备进行投屏。\n3. 注意，部分未知格式的视频可能无法投屏。</string>
     <!--插件安装-->
     <string name="plugin_install_source">来源</string>
     <string name="plugin_install_name">名称</string>

@@ -93,12 +93,13 @@ class PluginRepoPageFragment : BaseViewBindingFragment<PagePluginRepoBinding>(),
 
         if (Pref.appLaunchCount.value == 1)
             help()
+
+        Analytics.trackEvent("功能：插件仓库")
     }
 
     private val pageLoadViewModel by viewModels<PageLoadViewModel>()
 
     private fun loadSuccess(loadState: PageLoadViewModel.LoadState.SUCCESS) {
-        Analytics.trackEvent("功能：插件仓库")
         mBinding.customDataList.apply {
             val dy = getFirstItemDecorationBy<DynamicGridItemDecoration>()
             if (loadState.data.isNullOrEmpty()) {
@@ -183,7 +184,8 @@ class PluginRepoPageFragment : BaseViewBindingFragment<PagePluginRepoBinding>(),
                 )
                 addAll(updatable)
             }
-            if (installed.isNotEmpty()) {
+            //已安装的仅在没有可下载时才显示
+            if (installed.isNotEmpty() && downloadable.isEmpty()) {
                 add(
                     getPluginCategoryText(
                         getString(

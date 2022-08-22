@@ -12,6 +12,7 @@ import com.su.mediabox.util.*
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlin.properties.Delegates
 
 class VideoMediaPlayViewModel : ViewModel() {
 
@@ -41,7 +42,16 @@ class VideoMediaPlayViewModel : ViewModel() {
             currentPlayEpisodeUrl = episodeUrl
             //开始解析
             viewModelScope.launch(videoPlayMediaDispatcher) {
-                playComponent.getVideoPlayMedia(episodeUrl).also {
+                //一次动作在未完成工作下重复解析两次，降低因为网络问题解析失败概率
+                let {
+                    var result by Delegates.notNull<VideoPlayMedia>()
+                    for (i in 0 until 2) {
+                        result = playComponent.getVideoPlayMedia(episodeUrl)
+                        if (result.videoPlayUrl.isNotBlank())
+                            break
+                    }
+                    result
+                }.also {
                     logD("视频解析结果", "剧集：${it.title} 链接：$${it.videoPlayUrl}")
                     if (it.videoPlayUrl.isBlank())
                         throw RuntimeException("无法解析出有效播放链接")

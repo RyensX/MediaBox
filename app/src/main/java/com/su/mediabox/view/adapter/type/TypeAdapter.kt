@@ -202,7 +202,8 @@ class TypeAdapter(
                         }
                 }
         }
-        super.submitList(submit, commitCallback)
+        bindingRecyclerView?.post { super.submitList(submit, commitCallback) }
+            ?: super.submitList(submit, commitCallback)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TypeViewHolder<Any> =
@@ -237,10 +238,10 @@ class TypeAdapter(
                 holder.onBind(it)
             } ?: logD("无法绑定", "$holder 找不到数据 position:$position")
         }
-            .onSuccess { holder.itemView.visible()}
+            .onSuccess { holder.itemView.visible() }
             .onFailure {
                 it.printStackTrace()
-                logE("VH绑定失败",it.message?:"")
+                logE("VH绑定失败", it.message ?: "")
                 holder.itemView.gone()
             }
     }
@@ -256,10 +257,10 @@ class TypeAdapter(
                 holder.onBind(it, payloads)
             } ?: logD("无法绑定", "$holder 找不到数据 position:$position")
         }
-            .onSuccess { holder.itemView.visible()}
+            .onSuccess { holder.itemView.visible() }
             .onFailure {
                 it.printStackTrace()
-                logE("VH绑定失败",it.message?:"")
+                logE("VH绑定失败", it.message ?: "")
                 holder.itemView.gone()
             }
     }

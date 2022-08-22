@@ -15,6 +15,7 @@ import com.su.mediabox.databinding.ActivityWebViewBinding
 import com.su.mediabox.pluginapi.action.WebBrowserAction
 import com.su.mediabox.util.Util.openUrl
 import com.su.mediabox.util.getAction
+import com.su.mediabox.util.logE
 import com.su.mediabox.util.viewBind
 
 class WebViewActivity : BasePluginActivity() {
@@ -54,6 +55,25 @@ class WebViewActivity : BasePluginActivity() {
     @SuppressLint("SetJavaScriptEnabled")
     private fun initWebView() {
         mBinding.wvWeb.apply {
+
+            settings.apply {
+                useWideViewPort = true
+                allowFileAccess = true
+                javaScriptEnabled = true
+                javaScriptCanOpenWindowsAutomatically = true
+                allowFileAccessFromFileURLs = true
+                allowUniversalAccessFromFileURLs = true
+                domStorageEnabled = true
+                databaseEnabled = true
+                mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
+                cacheMode = WebSettings.LOAD_DEFAULT
+                useWideViewPort = true
+                allowFileAccess = true
+                setSupportZoom(true)
+                allowContentAccess = true
+                setSupportMultipleWindows(true)
+            }
+
             scrollBarStyle = WebView.SCROLLBARS_INSIDE_OVERLAY
             isHorizontalScrollBarEnabled = false
             isHorizontalFadingEdgeEnabled = false
@@ -86,6 +106,9 @@ class WebViewActivity : BasePluginActivity() {
                     handler: SslErrorHandler?,
                     error: SslError?
                 ) {
+                    error?.toString()?.also {
+                        logE("网页加载错误", it)
+                    }
                     handler?.proceed()
                 }
             }

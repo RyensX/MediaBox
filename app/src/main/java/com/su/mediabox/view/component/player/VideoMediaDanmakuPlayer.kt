@@ -31,6 +31,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
 import kotlin.random.Random
 
 
@@ -100,8 +101,6 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
     override fun init(context: Context?) {
         super.init(context)
         mDanmakuView = findViewById(R.id.danmaku_view)
-
-        initDanmaku()
         ivShowDanmaku = findViewById(R.id.iv_show_danmu)
         etDanmakuInput = findViewById(R.id.et_input_danmu)
         vgDanmakuController = findViewById(R.id.cl_danmu_controller)
@@ -245,6 +244,19 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
         pauseDanmaku()
     }
 
+    override fun setUp(
+        url: String?,
+        cacheWithPlay: Boolean,
+        cachePath: File?,
+        title: String?,
+        changeState: Boolean
+    ): Boolean {
+        //播放前重置弹幕
+        releaseDanmaku()
+        onPrepareDanmaku()
+        return super.setUp(url, cacheWithPlay, cachePath, title, changeState)
+    }
+
     override fun onPrepared() {
         super.onPrepared()
         onPrepareDanmaku()
@@ -372,11 +384,11 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
         autoPlayIfVideoIsPlaying: Boolean = true    // 调用此方法后若视频在播放，则自动播放弹幕
     ) {
         logD("设置弹幕", "数量:${danmakuData.size}")
-        if (mDanmakuData != null) {
-            releaseDanmaku()
-            initDanmaku()
-        }
         mDanmakuData = danmakuData
+        if (mDanmakuData != null) {
+            initDanmaku()
+            onPrepareDanmaku()
+        }
         mDanmakuPlayer?.apply {
             //这里的update是add的，不会删除原数据
             updateData(danmakuData)
@@ -496,6 +508,7 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
      * 释放弹幕控件
      */
     private fun releaseDanmaku() {
+        mDanmakuData = null
         mDanmakuPlayer?.release()
     }
 
