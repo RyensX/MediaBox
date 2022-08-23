@@ -57,7 +57,7 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         viewBinding.apply {
             setSupportActionBar(mainBar)
-            mainPagers.apply {
+            mainPagers.getViewPager().apply {
                 val pageAdapter = PageAdapter()
                 offscreenPageLimit = pageAdapter.itemCount - 1
                 adapter = pageAdapter

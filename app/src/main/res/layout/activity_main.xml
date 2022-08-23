@@ -32,7 +32,7 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.viewpager2.widget.ViewPager2
+        <com.su.mediabox.view.component.ViewPager2View
             android:id="@+id/main_pagers"
             android:layout_width="match_parent"
             android:layout_height="0dp"
