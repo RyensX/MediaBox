@@ -16,6 +16,7 @@ import com.su.mediabox.pluginapi.data.SimpleTextData
 import com.su.mediabox.pluginapi.util.UIUtil.dp
 import com.su.mediabox.util.showToast
 import com.su.mediabox.util.transaction
+import com.su.mediabox.util.uninstallApp
 import com.su.mediabox.util.unsafeLazy
 import com.su.mediabox.view.adapter.type.dynamicGrid
 import com.su.mediabox.view.adapter.type.initTypeList
@@ -40,7 +41,7 @@ class PluginManageBottomSheetDialogFragment private constructor() : BottomSheetD
     }
 
     private lateinit var binding: DialogPluginManageBottomSheetBinding
-    private val pluginName by unsafeLazy{ arguments?.getString(PLUGIN_PACKAGE_NAME) }
+    private val pluginName by unsafeLazy { arguments?.getString(PLUGIN_PACKAGE_NAME) }
     private val pluginInfo by unsafeLazy {
         pluginName?.let { PluginManager.queryPluginInfo(it) }
     }
@@ -138,12 +139,16 @@ class PluginManageBottomSheetDialogFragment private constructor() : BottomSheetD
 
     override fun onMenuItemClick(item: MenuItem?): Boolean {
         when (item?.itemId) {
-            R.id.menu_pm_uninstall -> if (pluginInfo?.isExternalPlugin == true) "外部插件无法卸载".showToast() else
-                pluginInfo?.run {
-                    PluginManager.uninstallPlugin(this, requireActivity()) {
-                        dismiss()
+            R.id.menu_pm_uninstall ->
+                if (pluginInfo?.isExternalPlugin == true) {
+                    requireContext().uninstallApp(pluginInfo!!.packageName)
+                    dismiss()
+                } else
+                    pluginInfo?.run {
+                        PluginManager.uninstallPlugin(this, requireActivity()) {
+                            dismiss()
+                        }
                     }
-                }
         }
         return true
     }
