@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import android.util.Log
+import android.webkit.WebView
 import com.liulishuo.filedownloader.FileDownloader
 import com.microsoft.appcenter.AppCenter
 import com.microsoft.appcenter.analytics.Analytics
@@ -73,6 +74,8 @@ class App : Application() {
                     stopMediaUpdateCheckWorker()
             }
         }
+
+        WebView.setWebContentsDebuggingEnabled(BuildConfig.DEBUG)
 
         FileDownloader.setup(this)
     }

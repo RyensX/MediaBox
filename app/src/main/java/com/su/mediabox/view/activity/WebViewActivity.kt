@@ -55,7 +55,6 @@ class WebViewActivity : BasePluginActivity() {
     @SuppressLint("SetJavaScriptEnabled")
     private fun initWebView() {
         mBinding.wvWeb.apply {
-
             settings.apply {
                 useWideViewPort = true
                 allowFileAccess = true
@@ -112,8 +111,6 @@ class WebViewActivity : BasePluginActivity() {
                     handler?.proceed()
                 }
             }
-        }.settings.apply {
-            javaScriptEnabled = true
         }
     }
 

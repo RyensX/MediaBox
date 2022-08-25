@@ -12,6 +12,7 @@ import com.su.mediabox.App
 import com.su.mediabox.pluginapi.data.BaseData
 import com.su.mediabox.pluginapi.util.WebUtil
 import com.su.mediabox.util.Text.containStrs
+import com.su.mediabox.util.logI
 import kotlinx.coroutines.*
 import org.apache.commons.text.StringEscapeUtils
 import java.io.ByteArrayInputStream
@@ -51,14 +52,13 @@ object WebUtilImpl : WebUtil {
                 domStorageEnabled = true
                 databaseEnabled = true
                 mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
-                cacheMode = WebSettings.LOAD_DEFAULT
                 useWideViewPort = true
                 allowFileAccess = true
                 setSupportZoom(true)
                 allowContentAccess = true
                 setSupportMultipleWindows(true)
             }
-            CookieManager.getInstance().setAcceptThirdPartyCookies(this, true)
+            //CookieManager.getInstance().setAcceptThirdPartyCookies(this, true)
             //BlobHook回调
             addJavascriptInterface(object : BaseData() {
                 @JavascriptInterface
@@ -69,6 +69,17 @@ object WebUtilImpl : WebUtil {
                     }
                 }
             }, "blobHook")
+        }
+    }
+
+    private val cb = ValueCallback<Boolean> { }
+    private fun WebView.clearWeb() {
+        clearHistory()
+        clearFormData()
+        clearMatches()
+        CookieManager.getInstance().apply {
+            removeSessionCookies(cb)
+            removeAllCookies(cb)
         }
     }
 
@@ -132,6 +143,8 @@ object WebUtilImpl : WebUtil {
         timeOut: Long
     ): String =
         withContext(Dispatchers.Main) {
+
+            globalWebView.clearWeb()
 
             suspendCoroutine { con ->
                 Log.d("开始获取源码", url)
@@ -207,6 +220,9 @@ object WebUtilImpl : WebUtil {
     ): String =
         withContext(Dispatchers.Main) {
             Log.d("开始拦截请求", "正则:$regex")
+
+            globalWebView.clearWeb()
+
             var hasResult = false
             val regexE = Regex(regex)
             suspendCoroutine { con ->
@@ -263,6 +279,9 @@ object WebUtilImpl : WebUtil {
     ): String = withContext(Dispatchers.Main) {
         if (regex.isBlank())
             return@withContext ""
+
+        globalWebView.clearWeb()
+
         logD("开始拦截Blob", "正则:$regex")
         val regexE = Regex(regex)
         suspendCoroutine { con ->

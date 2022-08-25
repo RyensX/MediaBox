@@ -50,7 +50,8 @@ class MediaDetailActivity : BasePluginActivity() {
             // 分享
             setButtonEnable(0, false)
             setButtonClickListener(0) {
-                ShareDialogFragment().setShareContent(Api.MAIN_URL + viewModel.partUrl)
+                ShareDialogFragment()
+                    .setShareContent(if (viewModel.partUrl.startsWith("http")) viewModel.partUrl else Api.MAIN_URL + viewModel.partUrl)
                     .show(supportFragmentManager, "share_dialog")
             }
             addButton(null)

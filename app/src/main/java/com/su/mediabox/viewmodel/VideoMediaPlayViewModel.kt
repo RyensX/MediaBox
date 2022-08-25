@@ -33,6 +33,7 @@ class VideoMediaPlayViewModel : ViewModel() {
 
     private val videoPlayMediaDispatcher =
         Dispatchers.IO + CoroutineExceptionHandler { _, throwable ->
+            throwable.printStackTrace()
             _currentVideoPlayMedia.postValue(DataState.Failed(throwable))
         }
 
