@@ -73,7 +73,7 @@ object WebUtilImpl : WebUtil {
     }
 
     private val cb = ValueCallback<Boolean> { }
-    private fun WebView.clearWeb() {
+    fun WebView.clearWeb() {
         clearHistory()
         clearFormData()
         clearMatches()
@@ -81,6 +81,10 @@ object WebUtilImpl : WebUtil {
             removeSessionCookies(cb)
             removeAllCookies(cb)
         }
+    }
+
+    fun WebView.executeJavaScriptCode(code: String) {
+        loadUrl("javascript:(function(){$code})()")
     }
 
     /**
@@ -154,7 +158,8 @@ object WebUtilImpl : WebUtil {
                 fun callBack(web: WebView) {
                     hasResult = true
 
-                    web.evaluateJavascript("${actionJs ?: ""} \n (function() { return document.documentElement.outerHTML })()") {
+                    web.executeJavaScriptCode(actionJs ?: "")
+                    web.evaluateJavascript("(function() { return document.documentElement.outerHTML })()") {
                         Log.d("脚本返回", url)
                         if (it.isNullOrEmpty())
                             con.resume("")
@@ -244,7 +249,7 @@ object WebUtilImpl : WebUtil {
 
                     override fun onPageFinished(view: WebView?, url: String?) {
                         super.onPageFinished(view, url)
-                        actionJs?.let { view?.evaluateJavascript(it, null) }
+                        actionJs?.let { view?.executeJavaScriptCode(it) }
                     }
 
                     override fun onLoadResource(view: WebView?, url: String) {
@@ -308,7 +313,7 @@ object WebUtilImpl : WebUtil {
 
                 override fun onPageFinished(view: WebView?, url: String?) {
                     super.onPageFinished(view, url)
-                    actionJs?.let { view?.evaluateJavascript(it, null) }
+                    actionJs?.let { view?.executeJavaScriptCode(it) }
                 }
             }
 
