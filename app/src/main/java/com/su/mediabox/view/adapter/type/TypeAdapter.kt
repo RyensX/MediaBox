@@ -21,7 +21,7 @@ class TypeAdapter(
     private val bindingContext: Context,
     dataViewMapList: DataViewMapList,
     diff: DiffUtil.ItemCallback<Any>,
-    private val bindingRecyclerView: RecyclerView? = null,
+    private var bindingRecyclerView: RecyclerView? = null,
     var dataViewMapCache: Boolean = true
 ) :
     ListAdapter<Any, TypeViewHolder<Any>>(diff) {
@@ -206,8 +206,10 @@ class TypeAdapter(
             ?: super.submitList(submit, commitCallback)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TypeViewHolder<Any> =
-        if (viewType == UNKNOWN_TYPE)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TypeViewHolder<Any> {
+        if (bindingRecyclerView != parent)
+            bindingRecyclerView = parent as RecyclerView
+        return if (viewType == UNKNOWN_TYPE)
             TypeViewHolder.UnknownTypeViewHolder(parent)
         else {
             try {
@@ -230,6 +232,7 @@ class TypeAdapter(
                 TypeViewHolder.UnknownTypeViewHolder(parent)
             }
         }
+    }
 
     override fun onBindViewHolder(holder: TypeViewHolder<Any>, position: Int) {
         holder.checkBindingContext(bindingContext)
