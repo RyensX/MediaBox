@@ -37,6 +37,10 @@ class EditTextPreferenceLongClickWrapper(
 
     override var bindView: View? = null
 
+    init {
+        summaryProvider = SimpleSummaryProvider.getInstance()
+    }
+
     private val onViewLongClickListener = View.OnLongClickListener {
         onPreferenceLongClickListener?.onPreferenceLongClick(this) ?: false
     }

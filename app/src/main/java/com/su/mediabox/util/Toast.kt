@@ -18,7 +18,7 @@ private val toastView by unsafeLazy {
     }
 }
 
-fun CharSequence.showToast(duration: Int = Toast.LENGTH_SHORT) {
+fun CharSequence.showToast(duration: Int = Toast.LENGTH_LONG) {
     appCoroutineScope.launch(Dispatchers.Main) {
         val toast = Toast(App.context)
         toastView.text = this@showToast
