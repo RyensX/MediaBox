@@ -2,7 +2,6 @@ package com.su.mediabox.view.adapter.type
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.view.MotionEvent
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
@@ -40,7 +39,7 @@ class TypeAdapter(
         const val UNKNOWN_TYPE = -1
         val globalDataViewMap = DataViewMapList()
 
-        val globalTypeRecycledViewPool by lazy(LazyThreadSafetyMode.NONE) { RecyclerView.RecycledViewPool() }
+        val globalTypeRecycledViewPool by unsafeLazy { RecyclerView.RecycledViewPool() }
 
         /**
          * VH缓存池集，每种映射表对应一个VH缓存池
@@ -59,6 +58,13 @@ class TypeAdapter(
             logD("获取缓存池", "key=$key")
             return recycledViewPools[key] ?: RecyclerView.RecycledViewPool()
                 .also { recycledViewPools[key] = it }
+        }
+
+        fun clearAllTypeRecycledViewPool() {
+            recycledViewPools.forEach {
+                it.value.clear()
+            }
+            recycledViewPools.clear()
         }
 
         fun clearRecycledViewPool(dataViewMapList: DataViewMapList) =

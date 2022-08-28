@@ -21,6 +21,7 @@ import com.su.mediabox.databinding.ActivityMainBinding
 import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.util.*
 import com.su.mediabox.util.update.AppUpdateHelper
+import com.su.mediabox.view.adapter.type.TypeAdapter
 import com.su.mediabox.view.fragment.page.DownloadPageFragment
 import com.su.mediabox.view.fragment.page.ExplorePageFragment
 import com.su.mediabox.view.fragment.page.PluginRepoPageFragment
@@ -126,6 +127,10 @@ class MainActivity : BaseActivity() {
 
     override fun onStop() {
         Analytics.trackEvent("主界面停止")
+        TypeAdapter.apply {
+            clearAllTypeRecycledViewPool()
+            globalTypeRecycledViewPool.clear()
+        }
         super.onStop()
     }
 
