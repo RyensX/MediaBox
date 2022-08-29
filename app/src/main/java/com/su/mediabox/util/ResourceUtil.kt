@@ -24,4 +24,6 @@ object ResourceUtil {
     }
 
     fun getString(@StringRes id: Int, vararg args: Any) = App.context.getString(id, *args)
+
+    fun getColor(@ColorRes id: Int) = ContextCompat.getColor(App.context, id)
 }

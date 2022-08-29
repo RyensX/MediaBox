@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.text.Html
 import androidx.activity.viewModels
@@ -70,9 +71,10 @@ class MainActivity : BaseActivity() {
             pages.find { it.javaClass == PluginRepoPageFragment::class.java }
                 ?.let { pages.indexOf(it) }?.also { pos ->
                     mainBottomNav.addBadge(pos)?.also { badge ->
-                        pluginUpdateVM.updateCount.observe(this@MainActivity) {
-                            badge.isVisible = it > 0
-                            badge.text = it.toString()
+                        pluginUpdateVM.repoAvailableData.observe(this@MainActivity) {
+                            badge.backgroundTintList = ColorStateList.valueOf(it.second)
+                            badge.text = it.first.toString()
+                            badge.isVisible = it.first > 0
                         }
                     }
                 }
