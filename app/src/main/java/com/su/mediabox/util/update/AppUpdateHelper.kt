@@ -8,8 +8,10 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.WhichButton
 import com.afollestad.materialdialogs.actions.getActionButton
 import com.su.mediabox.R
+import com.su.mediabox.config.Const
 import com.su.mediabox.model.AppUpdateModel
 import com.su.mediabox.util.Text.githubProxy
+import com.su.mediabox.util.Util
 import com.su.mediabox.util.Util.openBrowser
 import com.su.mediabox.util.formatSize
 import kotlinx.coroutines.delay
@@ -87,12 +89,9 @@ class AppUpdateHelper private constructor() {
                         html()
                     }
                 }
-                val t = "下载更新"
+                val t = "前往更新"
                 positiveButton(text = t) {
-                    openBrowser(
-                        AppUpdateModel.updateBean?.assets?.get(0)?.browserDownloadUrl?.githubProxy
-                            ?: return@positiveButton
-                    )
+                    openBrowser("${Const.Common.GITHUB_PLUGIN_REPO_OFFICE_URL}download")
                 }
                 if (!isImportantUpdate)
                     negativeButton(text = "取消") {

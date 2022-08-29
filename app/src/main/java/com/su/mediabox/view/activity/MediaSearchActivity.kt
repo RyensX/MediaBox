@@ -46,6 +46,7 @@ class MediaSearchActivity : BasePluginActivity() {
             rvSearchActivity
                 .dynamicGrid()
                 .initTypeList(searchDataViewMapList) {
+                    emptyData = null
                     vHCreateDSL<SearchHistoryViewHolder> {
                         setOnClickListener(itemView) { pos ->
                             bindingTypeAdapter.getData<MediaSearchHistory>(pos)?.also {

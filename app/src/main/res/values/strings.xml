@@ -306,7 +306,7 @@
     <string name="plugin_install_version_desc">升级 %s -> %s</string>
     <string name="plugin_install_error">错误</string>
     <string name="plugin_install_error_not_a_plugin">该文件不是插件包</string>
-    <string name="plugin_install_error_read_error">无法读取插件包</string>
+    <string name="plugin_install_error_read_error">无法读取插件包，请尝试更换文件管理器打开</string>
     <string name="plugin_install_error_install_error">请检查读写权限</string>
     <string name="plugin_install_error_scheme_error">请尝试更换文件管理器打开</string>
     <string name="plugin_install_error_online_preview_error">在线安装预览信息加载错误</string>

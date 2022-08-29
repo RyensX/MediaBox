@@ -4,7 +4,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import android.net.Uri
-import com.su.mediabox.util.logD
 import android.view.Gravity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,9 +16,7 @@ import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.pluginapi.data.BaseData
 import com.su.mediabox.pluginapi.data.SimpleTextData
 import com.su.mediabox.pluginapi.util.TextUtil.urlDecode
-import com.su.mediabox.util.FileUri
-import com.su.mediabox.util.Util
-import com.su.mediabox.util.toLiveData
+import com.su.mediabox.util.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import com.su.mediabox.util.ResourceUtil.getString
@@ -143,6 +140,7 @@ class PluginInstallerViewModel : ViewModel() {
                     )
                 }
             } ?: run {
+                "插件安装错误：$data".showToast()
                 _pluginInstallState.postValue(
                     PluginInstallState.ERROR(
                         buildInfoPair(

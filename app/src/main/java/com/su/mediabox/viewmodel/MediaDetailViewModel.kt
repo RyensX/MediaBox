@@ -63,13 +63,12 @@ class MediaDetailViewModel : ViewModel() {
                     }
                     rawFavData = liveData
                 }
-                //智能更新封面
+                //更新信息
                 liveData.value?.also {
-                    if (it.cover != cover) {
-                        getAppDataBase().favoriteDao().updateFavorite(it.apply {
-                            cover = this@MediaDetailViewModel.cover
-                        })
-                    }
+                    getAppDataBase().favoriteDao().updateFavorite(it.apply {
+                        mediaTitle = title
+                        cover = this@MediaDetailViewModel.cover
+                    })
                 }
             }
         }

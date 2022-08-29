@@ -59,7 +59,7 @@ class ExplorePageFragment : BaseViewBindingFragment<PageExploreBinding>() {
                         .registerDataViewMap<MediaMoreViewHolder.DataStub, MediaMoreViewHolder>()
                         //TODO 暂时不能直接启动对于插件打开详情页
                         .registerDataViewMap<MediaFavorite, MediaFavoriteDataPageFragment.FavoriteViewHolder>(),
-                    PluginManageDiff
+                    PluginManageDiff, false
                 ) { rv ->
                     (rv.layoutManager as GridLayoutManager).spanSizeLookup =
                         ExploreSpanLookup(this::getItem)

@@ -173,7 +173,7 @@ class PluginRepoPageFragment : BaseViewBindingFragment<PagePluginRepoBinding>(),
         }
 
         combineData.apply {
-            pluginUpdateVM.updateCount.postValue(updatable.size)
+            pluginUpdateVM.updateCountData(updatable.size, downloadable.size)
             if (updatable.isNotEmpty()) {
                 add(
                     getPluginCategoryText(

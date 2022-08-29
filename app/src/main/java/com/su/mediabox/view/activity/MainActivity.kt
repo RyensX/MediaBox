@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.text.Html
 import androidx.activity.viewModels
@@ -21,6 +22,7 @@ import com.su.mediabox.databinding.ActivityMainBinding
 import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.util.*
 import com.su.mediabox.util.update.AppUpdateHelper
+import com.su.mediabox.view.adapter.type.TypeAdapter
 import com.su.mediabox.view.fragment.page.DownloadPageFragment
 import com.su.mediabox.view.fragment.page.ExplorePageFragment
 import com.su.mediabox.view.fragment.page.PluginRepoPageFragment
@@ -57,7 +59,7 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         viewBinding.apply {
             setSupportActionBar(mainBar)
-            mainPagers.apply {
+            mainPagers.getViewPager().apply {
                 val pageAdapter = PageAdapter()
                 offscreenPageLimit = pageAdapter.itemCount - 1
                 adapter = pageAdapter
@@ -69,9 +71,10 @@ class MainActivity : BaseActivity() {
             pages.find { it.javaClass == PluginRepoPageFragment::class.java }
                 ?.let { pages.indexOf(it) }?.also { pos ->
                     mainBottomNav.addBadge(pos)?.also { badge ->
-                        pluginUpdateVM.updateCount.observe(this@MainActivity) {
-                            badge.isVisible = it > 0
-                            badge.text = it.toString()
+                        pluginUpdateVM.repoAvailableData.observe(this@MainActivity) {
+                            badge.backgroundTintList = ColorStateList.valueOf(it.second)
+                            badge.text = it.first.toString()
+                            badge.isVisible = it.first > 0
                         }
                     }
                 }
@@ -126,6 +129,10 @@ class MainActivity : BaseActivity() {
 
     override fun onStop() {
         Analytics.trackEvent("主界面停止")
+        TypeAdapter.apply {
+            clearAllTypeRecycledViewPool()
+            globalTypeRecycledViewPool.clear()
+        }
         super.onStop()
     }
 
