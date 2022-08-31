@@ -31,9 +31,12 @@ object PluginPreferenceImpl : PluginPreference {
                 migrations = listOf(),
                 scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
             ) {
-                App.context.preferencesDataStoreFile("$PLUGIN_PREF_PREFIX$id")
+                prefDataStoreFile()
             }.also { pluginDataStoreCache[id] = it }
         }
+
+    fun PluginInfo.prefDataStoreFile() =
+        App.context.preferencesDataStoreFile("$PLUGIN_PREF_PREFIX$id")
 
     fun checkIsVisualPref(key: String) = key.contains(VISUAL_PLUGIN_PREF_PREFIX)
     fun getSimplifyKey(key: String) = key.replace(

@@ -20,6 +20,7 @@ import com.su.mediabox.database.getAppDataBaseFileName
 import com.su.mediabox.model.PluginInfo
 import com.su.mediabox.plugin.PluginPreferenceImpl.checkKeyExist
 import com.su.mediabox.plugin.PluginPreferenceImpl.get
+import com.su.mediabox.plugin.PluginPreferenceImpl.prefDataStoreFile
 import com.su.mediabox.plugin.PluginPreferenceImpl.set
 import com.su.mediabox.pluginapi.Constant
 import com.su.mediabox.pluginapi.IPluginFactory
@@ -228,7 +229,7 @@ object PluginManager {
                 }
             } else {
             pluginWorkScope.launch(Dispatchers.IO) {
-                //删除数据
+                //删除数据库
                 val dbFile = App.context.getDatabasePath(pluginInfo.getAppDataBaseFileName())
                 logD("数据库", dbFile.absolutePath)
                 dbFile.parentFile?.listFiles()?.forEach {
@@ -236,6 +237,8 @@ object PluginManager {
                         it.delete()
                 }
                 pluginInfo.destroyInstance()
+                //删除DataStore键对存储
+                pluginInfo.prefDataStoreFile().delete()
                 //删除插件包
                 pluginDir.listFiles()?.forEach {
                     if (it.name.contains(pluginInfo.packageName)) {
