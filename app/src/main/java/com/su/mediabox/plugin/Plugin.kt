@@ -170,15 +170,22 @@ object PluginManager {
         )
     }
 
+    /**
+     * 注意，如果不是在主线程调用，[currentLaunchPlugin]可能不会一下子就更新值
+     */
     fun Context.launchPlugin(
         pluginInfo: PluginInfo?,
         isLaunchInitAction: Boolean = true,
         initialized: (() -> Unit)? = null
     ) {
         pluginInfo?.apply {
+            val isMain = Thread.currentThread() == mainLooper.thread
+            if (isMain)
+                _currentLaunchPlugin.value = this@apply
             pluginWorkScope.launch(Dispatchers.Main) {
-                runCatching {
+                if (!isMain)
                     _currentLaunchPlugin.value = this@apply
+                runCatching {
                     acquirePluginFactory().apply {
                         pluginLaunch()
                         if (isLaunchInitAction)

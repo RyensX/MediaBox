@@ -12,9 +12,9 @@
         android:title="插件仓库" />
 
     <item
-        android:id="@+id/navigation_repository"
-        android:icon="@drawable/ic_baseline_archive_24"
-        android:title="缓存媒体" />
+        android:id="@+id/navigation_search"
+        android:icon="@drawable/travel_explore_48px"
+        android:title="聚合搜索" />
 
     <item
         android:id="@+id/navigation_rule_manager"
