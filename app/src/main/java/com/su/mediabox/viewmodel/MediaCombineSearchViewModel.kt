@@ -20,10 +20,10 @@ class MediaCombineSearchViewModel : ViewModel() {
 
     //惰性自动响应的插件媒体搜索组件流
     private val pluginSearchComponentsFlow =
-        PluginManager.pluginFlow.map {
-            logI("搜索插件信息", "数量:${it.size}")
+        PluginManager.pluginFlow.map { pluginList ->
+            logI("搜索插件信息", "数量:${pluginList.size}")
             mutableListOf<Pair<PluginInfo, IMediaSearchPageDataComponent>>().apply {
-                it.forEach { plugin ->
+                pluginList.forEach { plugin ->
                     logI("添加搜索插件", plugin.id)
                     Util.withoutExceptionGet(showErrMsg = false) {
                         plugin.acquireComponent(
@@ -85,9 +85,23 @@ class MediaCombineSearchViewModel : ViewModel() {
                     }
                 }
             }?.toList()?.let { combineResult ->
-                //TODO 多个插件的搜索结果整合排列还需要优化
+                //平行合并数据
+                //每个插件对等Index结果交织在一起
                 val combine = mutableListOf<BaseData>()
-                combineResult.forEach { combine.addAll(it) }
+                val pluginIterator = mutableListOf<Iterator<BaseData>>()
+                var maxCountOfIterations = 0
+                combineResult.forEach {
+                    if (it.size > maxCountOfIterations)
+                        maxCountOfIterations = it.size
+                    pluginIterator.add(it.iterator())
+                }
+                repeat(maxCountOfIterations) {
+                    pluginIterator.forEach {
+                        if (it.hasNext())
+                            combine.add(it.next())
+                    }
+                }
+                //准备更新
                 logD("聚合搜索结果", "共${combineResult.size}个数据源 ${combineResult.size}个结果")
                 _searchDataList.value =
                     this@MediaCombineSearchViewModel.successIns<MutableDynamicReferenceListData<BaseData>>()
