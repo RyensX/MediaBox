@@ -33,6 +33,8 @@ class SearchBarView @JvmOverloads constructor(
             binding.searchField.isEnabled = value
         }
 
+    var closeBtnClickListener: View.OnClickListener? = null
+
     init {
         useCompatPadding = true
         //清空键
@@ -42,6 +44,7 @@ class SearchBarView @JvmOverloads constructor(
             }
             setOnClickListener {
                 text = ""
+                closeBtnClickListener?.onClick(it)
             }
         }
     }

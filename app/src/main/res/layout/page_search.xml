@@ -20,7 +20,6 @@
             android:layout_height="0dp"
             android:layout_marginEnd="4dp"
             android:imeOptions="actionSearch"
-            android:layout_marginTop="4dp"
             app:cardCornerRadius="16dp"
             app:cardElevation="2dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -46,5 +45,13 @@
             tools:listitem="@layout/item_anime_cover_3" />
 
     </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+
+    <TextView
+        android:id="@+id/search_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_margin="12dp"
+        android:text="@string/combine_search_hint" />
 
 </RelativeLayout>

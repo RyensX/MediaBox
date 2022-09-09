@@ -1,7 +1,9 @@
 package com.su.mediabox.view.fragment.page
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.su.mediabox.R
 import com.su.mediabox.databinding.PageDownloadBinding
@@ -44,10 +46,17 @@ class MediaCombineSearchPageFragment : BaseViewBindingFragment<PageSearchBinding
             }
         }
 
+        mBinding.searchView.closeBtnClickListener = View.OnClickListener {
+            vm.combineSearch("")
+        }
+
         lifecycleCollect(vm.keywordFlow) {
             mBinding.searchView.apply {
-                if (text.toString() != it)
+                val key = text.toString()
+                if (key != it)
                     text = it
+                mBinding.searchHint.isVisible = key.isBlank()
+                mBinding.searchList.isVisible = key.isNotBlank()
             }
         }
 

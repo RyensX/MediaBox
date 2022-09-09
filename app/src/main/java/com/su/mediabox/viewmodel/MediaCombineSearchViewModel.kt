@@ -53,17 +53,17 @@ class MediaCombineSearchViewModel : ViewModel() {
 
     @OptIn(FlowPreview::class)
     fun combineSearch(keyword: String = keywordFlow.value, isReLoad: Boolean = false) {
+        val isSameKeyword = _keywordFlow.value == keyword
+        _keywordFlow.value = keyword
+
         if (keyword.isBlank())
             return
+
+        if (!isSameKeyword || isReLoad) {
+            page = DEFAULT_PAGE
+        }
+
         viewModelScope.launch(Dispatchers.IO) {
-
-            val isSameKeyword = _keywordFlow.value == keyword
-
-            if (!isSameKeyword || isReLoad) {
-                page = DEFAULT_PAGE
-            }
-
-            _keywordFlow.value = keyword
 
             logD(
                 "开始聚合搜索",
