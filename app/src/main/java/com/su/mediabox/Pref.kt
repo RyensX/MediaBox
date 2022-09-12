@@ -150,4 +150,9 @@ object Pref {
     )
     val danmakuSendColor by lazyDataStoreStateFlow(Const.Setting.DANMAKU_SEND_COLOR, Color.WHITE)
     val autoSeekVidePosition by lazyDataStoreStateFlow(Const.Setting.AUTO_SEEK_PLAY_POSITION, false)
+
+    val combineSearchIgnorePlugins by lazyDataStoreStateFlow(
+        Const.Setting.COMBINE_SEARCH_IGNORE_PLUGINS,
+        ""
+    )
 }

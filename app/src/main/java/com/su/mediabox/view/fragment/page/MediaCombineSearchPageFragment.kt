@@ -1,22 +1,27 @@
 package com.su.mediabox.view.fragment.page
 
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import com.su.mediabox.Pref
 import com.su.mediabox.R
 import com.su.mediabox.databinding.PageDownloadBinding
 import com.su.mediabox.databinding.PageSearchBinding
 import com.su.mediabox.lifecycleCollect
+import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.util.DataState
 import com.su.mediabox.util.logD
+import com.su.mediabox.util.logI
 import com.su.mediabox.util.showToast
 import com.su.mediabox.view.adapter.type.dynamicGrid
 import com.su.mediabox.view.adapter.type.initTypeList
 import com.su.mediabox.view.adapter.type.submitList
 import com.su.mediabox.view.fragment.BaseViewBindingFragment
 import com.su.mediabox.viewmodel.MediaCombineSearchViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 class MediaCombineSearchPageFragment : BaseViewBindingFragment<PageSearchBinding>() {
 
@@ -24,6 +29,11 @@ class MediaCombineSearchPageFragment : BaseViewBindingFragment<PageSearchBinding
 
     override fun buildViewBinding(inflater: LayoutInflater, container: ViewGroup?) =
         PageSearchBinding.inflate(inflater)
+
+    override fun onResume() {
+        super.onResume()
+        setHasOptionsMenu(true)
+    }
 
     override fun pagerInit() {
 
@@ -91,6 +101,34 @@ class MediaCombineSearchPageFragment : BaseViewBindingFragment<PageSearchBinding
                 }
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        menu.addSubMenu(getString(R.string.combine_search_ignores)).apply {
+            val ignores = Pref.combineSearchIgnorePlugins.value
+            logI("聚合搜索忽略", ignores)
+            lifecycleScope.launch(Dispatchers.Main) {
+                clear()
+                vm.pluginSearchComponentsFlow.collect { plugins ->
+                    plugins?.forEach {
+                        add(it.first.name).apply {
+                            titleCondensed = it.first.packageName
+                            isCheckable = true
+                            isChecked = !ignores.contains("${it.first.packageName}!")
+                        }
+                    }
+                }
+            }
+        }
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.subMenu == null) {
+            item.isChecked = !item.isChecked
+            vm.setPluginEnable(item.titleCondensed.toString(), item.isChecked)
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 }
