@@ -10,6 +10,6 @@ jobs:
       - name: Check Commit Format
         uses: gsactions/commit-message-checker@v1
         with:
-          pattern: '^\[(feature|fix|doc|optimize|refactor|perf|test|chore)((\|)?(feature|fix|doc|optimize|refactor|perf|test|chore))?\][^\[\]]+$'
+          pattern: '^((Merge pull request(.*))|(Release(.*))|(\[(feature|fix|doc|optimize|refactor|perf|test|chore)((\|)?(feature|fix|doc|optimize|refactor|perf|test|chore))?\][^\[\]]+))$'
           flags: 'gm'
           error: 'Please follow the commit style that the project.'
