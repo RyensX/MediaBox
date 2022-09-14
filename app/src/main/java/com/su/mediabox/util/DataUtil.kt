@@ -39,7 +39,7 @@ fun <T> DataState.Success<MutableDynamicReferenceListData<T>>.data() =
     data ?: MutableDynamicReferenceListData<T>().also { data = it }
 
 /**
- * 动态引用列表数据/
+ * 动态引用列表数据
  *
  * 每次修改的数据得到的data引用都不同，因此可触发[RecyclerView]异步更新
  */
@@ -58,21 +58,23 @@ class MutableDynamicReferenceListData<T> : DynamicReferenceListData<T>() {
 
     private var dataRef = mutableListOf<T>()
 
-    suspend fun putData(data: List<T>): List<T> =
-        if (data.isEmpty()) dataRef
-        else withContext(Dispatchers.Default) {
+    suspend fun putData(data: List<T>): List<T> {
+        lastLoad = data.size
+        return withContext(Dispatchers.Default) {
             val tmpDataRef = mutableListOf<T>()
             tmpDataRef.addAll(data)
             lastLoad = data.size
             dataRef = tmpDataRef
             dataRef
         }
+    }
 
     /**
      * @param startIndex -1则表示添加在末尾
      */
-    suspend fun appendData(data: List<T>, startIndex: Int = -1): List<T> =
-        if (data.isEmpty()) dataRef
+    suspend fun appendData(data: List<T>, startIndex: Int = -1): List<T> {
+        lastLoad = data.size
+        return if (data.isEmpty()) dataRef
         else withContext(Dispatchers.Default) {
             val tmpDataRef = mutableListOf<T>()
             tmpDataRef.addAll(dataRef)
@@ -84,6 +86,7 @@ class MutableDynamicReferenceListData<T> : DynamicReferenceListData<T>() {
             dataRef = tmpDataRef
             dataRef
         }
+    }
 
     suspend fun removeData(startIndex: Int, size: Int): List<T> =
         if (data.isEmpty() || size == 0) dataRef

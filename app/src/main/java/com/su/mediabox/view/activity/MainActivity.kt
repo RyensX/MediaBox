@@ -23,10 +23,7 @@ import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.util.*
 import com.su.mediabox.util.update.AppUpdateHelper
 import com.su.mediabox.view.adapter.type.TypeAdapter
-import com.su.mediabox.view.fragment.page.DownloadPageFragment
-import com.su.mediabox.view.fragment.page.ExplorePageFragment
-import com.su.mediabox.view.fragment.page.PluginRepoPageFragment
-import com.su.mediabox.view.fragment.page.SettingsPageFragment
+import com.su.mediabox.view.fragment.page.*
 import com.su.mediabox.viewmodel.PluginUpdateViewModel
 import com.su.mediabox.work.checkBatteryOptimizations
 
@@ -40,7 +37,7 @@ class MainActivity : BaseActivity() {
     private val pages = listOf(
         ExplorePageFragment(),
         PluginRepoPageFragment(),
-        DownloadPageFragment(),
+        MediaCombineSearchPageFragment(),
         SettingsPageFragment()
     )
 

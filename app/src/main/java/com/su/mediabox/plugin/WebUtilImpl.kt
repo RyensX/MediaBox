@@ -187,11 +187,6 @@ object WebUtilImpl : WebUtil {
 
                     override fun onPageStarted(view: WebView, url: String?, favicon: Bitmap?) {
                         super.onPageStarted(view, url, favicon)
-                        view.postDelayed({
-                            logD("获取源码", "${timeOut}ms超时返回")
-                            if (!hasResult)
-                                callBack(view)
-                        }, timeOut)
                     }
 
                     //由于ajax存在可能不是真正完全加载
@@ -213,6 +208,12 @@ object WebUtilImpl : WebUtil {
                 }
                 globalWebView.resumeTimers()
                 globalWebView.loadUrl(url)
+                launch(Dispatchers.Main) {
+                    delay(timeOut)
+                    logD("获取源码", "${timeOut}ms超时返回")
+                    if (!hasResult)
+                        callBack(globalWebView)
+                }
             }
         }
 
@@ -234,19 +235,6 @@ object WebUtilImpl : WebUtil {
                 globalWebView.settings.userAgentString = userAgentString
                 globalWebView.webViewClient = object : LightweightGettingWebViewClient(regexE) {
 
-                    override fun onPageStarted(view: WebView, url: String?, favicon: Bitmap?) {
-                        super.onPageStarted(view, url, favicon)
-                        view.postDelayed({
-                            logD("拦截资源", "${timeOut}ms超时返回")
-                            if (!hasResult) {
-                                hasResult = true
-                                con.resume("")
-                                view.stopLoading()
-                                view.pauseTimers()
-                            }
-                        }, timeOut)
-                    }
-
                     override fun onPageFinished(view: WebView?, url: String?) {
                         super.onPageFinished(view, url)
                         actionJs?.let { view?.executeJavaScriptCode(it) }
@@ -266,6 +254,16 @@ object WebUtilImpl : WebUtil {
                 }
                 globalWebView.resumeTimers()
                 globalWebView.loadUrl(url)
+                launch(Dispatchers.Main) {
+                    delay(timeOut)
+                    if (!hasResult) {
+                        logD("拦截资源", "${timeOut}ms超时返回")
+                        hasResult = true
+                        con.resume("")
+                        globalWebView.stopLoading()
+                        globalWebView.pauseTimers()
+                    }
+                }
 
             }
         }
@@ -300,15 +298,6 @@ object WebUtilImpl : WebUtil {
                     //提前注入
                     view.evaluateJavascript(blobHook, null)
                     super.onPageStarted(view, url, favicon)
-                    view.postDelayed({
-                        if (!hasResult) {
-                            logD("拦截Blob", "${timeOut}ms超时返回")
-                            hasResult = true
-                            con.resume("")
-                            view.stopLoading()
-                            view.pauseTimers()
-                        }
-                    }, timeOut)
                 }
 
                 override fun onPageFinished(view: WebView?, url: String?) {
@@ -329,6 +318,16 @@ object WebUtilImpl : WebUtil {
             }
             globalWebView.resumeTimers()
             globalWebView.loadUrl(url)
+            launch(Dispatchers.Main) {
+                delay(timeOut)
+                if (!hasResult) {
+                    logD("拦截Blob", "${timeOut}ms超时返回")
+                    hasResult = true
+                    con.resume("")
+                    globalWebView.stopLoading()
+                    globalWebView.pauseTimers()
+                }
+            }
         }
     }
 

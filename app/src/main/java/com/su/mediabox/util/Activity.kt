@@ -20,7 +20,7 @@ inline fun <reified T : Activity> Context.goActivity(
 }
 
 //<Action名称，Action实例>
-private val actionPoolMap = mutableMapOf<String, Action>()
+val actionPoolMap = mutableMapOf<String, Action>()
 
 fun <T : Action> putAction(action: T) {
     actionPoolMap[action.javaClass.simpleName] = action
