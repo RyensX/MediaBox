@@ -11,7 +11,7 @@ fun <T> Fragment.lifecycleCollect(
     flow: Flow<T>,
     state: Lifecycle.State = Lifecycle.State.RESUMED,
     collector: FlowCollector<T>
-) {
+) =
     lifecycleScope.launch {
         lifecycle.whenStateAtLeast(state) {
             viewLifecycleOwner.repeatOnLifecycle(state) {
@@ -19,13 +19,13 @@ fun <T> Fragment.lifecycleCollect(
             }
         }
     }
-}
+
 
 fun <T> ComponentActivity.lifecycleCollect(
     flow: Flow<T>,
     state: Lifecycle.State = Lifecycle.State.RESUMED,
     collector: FlowCollector<T>
-) {
+) =
     lifecycleScope.launch {
         lifecycle.whenStateAtLeast(state) {
             repeatOnLifecycle(state) {
@@ -33,4 +33,3 @@ fun <T> ComponentActivity.lifecycleCollect(
             }
         }
     }
-}

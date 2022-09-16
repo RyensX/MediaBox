@@ -111,14 +111,13 @@ class MediaCombineSearchPageFragment : BaseViewBindingFragment<PageSearchBinding
         menu.addSubMenu(getString(R.string.combine_search_ignores)).apply {
             val ignores = Pref.combineSearchIgnorePlugins.value
             logI("聚合搜索忽略", ignores)
-            searchMenuJob = lifecycleScope.launch(Dispatchers.Main) {
-                vm.pluginSearchComponentsFlow.collect { plugins ->
-                    plugins?.forEach {
-                        add(it.first.name).apply {
-                            titleCondensed = it.first.packageName
-                            isCheckable = true
-                            isChecked = !ignores.contains("${it.first.packageName}!")
-                        }
+            searchMenuJob = lifecycleCollect(vm.pluginSearchComponentsFlow) { plugins ->
+                clear()
+                plugins?.forEach {
+                    add(it.first.name).apply {
+                        titleCondensed = it.first.packageName
+                        isCheckable = true
+                        isChecked = !ignores.contains("${it.first.packageName}!")
                     }
                 }
             }
