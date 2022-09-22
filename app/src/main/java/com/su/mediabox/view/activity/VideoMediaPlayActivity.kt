@@ -125,7 +125,7 @@ class VideoMediaPlayActivity : BasePluginActivity(),
         if (viewModel.currentVideoPlayMedia.value is DataState.Failed && mBinding.vmLoadingLayer.isVisible)
             when (mBinding.vmPlay.currentState) {
                 //在已有正常播放时解析失败返回则只是关闭解析提示层
-                GSYVideoView.CURRENT_STATE_PLAYING, GSYVideoView.CURRENT_STATE_PAUSE -> mBinding.vmLoadingLayer.gone()
+                CURRENT_STATE_PLAYING, GSYVideoView.CURRENT_STATE_PAUSE -> mBinding.vmLoadingLayer.gone()
                 else -> super.onBackPressed()
             }
         else
@@ -139,18 +139,18 @@ class VideoMediaPlayActivity : BasePluginActivity(),
             playPositionMemoryStore = VideoPositionMemoryDbStore
             //设置旋转
             orientationUtils = OrientationUtils(this@VideoMediaPlayActivity, this).apply {
-                isRotateWithSystem = false
+                isRotateWithSystem = !action.autoRotate
                 if (screenType != ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
                     resolveByClick()
                 setLockClickListener { _, lock ->
-                    isRotateWithSystem = lock
+                    isRotateWithSystem = lock || !action.autoRotate
                 }
             }
 
             ivDownloadButton?.gone()
             fullscreenButton.gone()
             //是否开启自动旋转
-            isRotateViewAuto = false
+            isRotateViewAuto = action.autoRotate
             //是否需要全屏锁定屏幕功能
             isIfCurrentIsFullscreen = true
             isNeedLockFull = true
