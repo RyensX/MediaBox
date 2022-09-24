@@ -149,7 +149,7 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
             }
         }
 
-        viewLifeCycleCoroutineScope.launch {
+        viewLifeCycleCoroutineScope.launch(Dispatchers.Main) {
             delay(1000)
             //TODO 这里的Boolean初始化有个很奇怪的问题，过快读取值为false，所以只能暂时延迟解决
             ivShowDanmaku?.isSelected = mDanmakuShow
