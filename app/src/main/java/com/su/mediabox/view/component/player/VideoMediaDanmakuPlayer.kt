@@ -21,6 +21,7 @@ import com.microsoft.appcenter.analytics.Analytics
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoView
+import com.su.mediabox.Pref
 import com.su.mediabox.R
 import com.su.mediabox.util.*
 import com.su.mediabox.util.Util.hideKeyboard
@@ -36,6 +37,12 @@ import kotlin.random.Random
 
 
 class VideoMediaDanmakuPlayer : VideoMediaPlayer {
+
+    companion object {
+        // 弹幕字号缩放最小百分比
+        private const val mDanmakuTextScaleMinPercent: Int = 70
+    }
+
     private lateinit var mDanmakuView: DanmakuView          //弹幕view
     private var mDanmakuPlayer: DanmakuPlayer? = null
     private val colorFilter = TextColorFilter()
@@ -44,7 +51,7 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
         dataFilter = createDataFilters()
         dataFilters = dataFilter.associateBy { it.filterParams }
         layoutFilter = createLayoutFilters()
-        textSizeScale = 0.8f
+        textSizeScale = Pref.danmakuTextScalePercent.value
     }
 
     // 是否在显示弹幕
@@ -82,9 +89,6 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
 
     // 显示弹幕字号缩放百分比TextView
     private var tvDanmakuTextScale: TextView? = null
-
-    // 弹幕字号缩放最小百分比
-    private val mDanmakuTextScaleMinPercent: Int = 70
 
     // 弹幕字号百分比
     private var mDanmakuTextScalePercent: Int = mDanmakuTextScaleMinPercent + 60
@@ -183,12 +187,23 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
             seekDanmaku(currentPlayer.currentPositionWhenPlaying.toLong())
         }
 
-        sbDanmakuTextScale?.setOnSeekBarChangeListener {
-            onProgressChanged { seekBar, progress, _ ->
-                seekBar ?: return@onProgressChanged
-                mDanmakuTextScalePercent = progress + mDanmakuTextScaleMinPercent
-                setTextSizeScale(mDanmakuTextScalePercent / 100f)
-                tvDanmakuTextScale?.text = mDanmakuTextScalePercent.percentage
+        sbDanmakuTextScale?.apply {
+            Pref.danmakuTextScalePercent.also { scalePref ->
+                val initPref = (scalePref.value * 100).toInt()
+                progress = initPref - mDanmakuTextScaleMinPercent
+                mDanmakuTextScalePercent = initPref
+                tvDanmakuTextScale?.text = initPref.percentage
+                setOnSeekBarChangeListener {
+                    onProgressChanged { seekBar, progress, _ ->
+                        seekBar ?: return@onProgressChanged
+                        mDanmakuTextScalePercent = progress + mDanmakuTextScaleMinPercent
+                        setTextSizeScale(mDanmakuTextScalePercent / 100f)
+                        tvDanmakuTextScale?.text = mDanmakuTextScalePercent.percentage
+                    }
+                    onStopTrackingTouch {
+                        scalePref.saveData(mDanmakuTextScalePercent / 100F)
+                    }
+                }
             }
         }
     }

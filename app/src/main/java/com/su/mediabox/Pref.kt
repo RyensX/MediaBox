@@ -155,4 +155,9 @@ object Pref {
         Const.Setting.COMBINE_SEARCH_IGNORE_PLUGINS,
         ""
     )
+
+    val danmakuTextScalePercent by lazyDataStoreStateFlow(
+        Const.Setting.DANMAKU_TEXT_SCALE_PERCENT,
+        0.8f
+    )
 }

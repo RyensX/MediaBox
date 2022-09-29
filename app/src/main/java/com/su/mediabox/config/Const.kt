@@ -82,6 +82,7 @@ interface Setting {
         const val COMMONLY_USED_VIDEO_SPEED = "commonly_used_video_speed"
         const val DANMAKU_SEND_COLOR = "danmaku_send_color"
         const val COMBINE_SEARCH_IGNORE_PLUGINS = "combine_search_ignore_plugins"
+        const val DANMAKU_TEXT_SCALE_PERCENT = "danmaku_text_scale_percent"
     }
 }
 
