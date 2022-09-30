@@ -160,4 +160,9 @@ object Pref {
         Const.Setting.DANMAKU_TEXT_SCALE_PERCENT,
         0.8f
     )
+
+    val danmakuTopDisplayAreaMode by lazyDataStoreStateFlow(
+        Const.Setting.DANMAKU_TOP_DISPLAY_AREA_MODE,
+        50
+    )
 }
