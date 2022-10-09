@@ -16,6 +16,8 @@ inline fun <reified T : Activity> Context.goActivity(
     options: Bundle? = null
 ) {
     intent.setClass(this, T::class.java)
+    if (this !is Activity)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     startActivity(intent, options)
 }
 
