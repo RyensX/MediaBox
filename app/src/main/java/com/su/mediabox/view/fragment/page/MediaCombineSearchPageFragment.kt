@@ -20,6 +20,7 @@ import com.su.mediabox.view.adapter.type.submitList
 import com.su.mediabox.view.fragment.BaseViewBindingFragment
 import com.su.mediabox.viewmodel.MediaCombineSearchViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -103,23 +104,28 @@ class MediaCombineSearchPageFragment : BaseViewBindingFragment<PageSearchBinding
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    private var searchMenuJob: Job? = null
+    private fun pluginBind2Menu(menu: Menu) {
+        searchMenuJob?.cancel()
+        menu.clear()
         menu.addSubMenu(getString(R.string.combine_search_ignores)).apply {
             val ignores = Pref.combineSearchIgnorePlugins.value
             logI("聚合搜索忽略", ignores)
-            lifecycleScope.launch(Dispatchers.Main) {
+            searchMenuJob = lifecycleCollect(vm.pluginSearchComponentsFlow) { plugins ->
                 clear()
-                vm.pluginSearchComponentsFlow.collect { plugins ->
-                    plugins?.forEach {
-                        add(it.first.name).apply {
-                            titleCondensed = it.first.packageName
-                            isCheckable = true
-                            isChecked = !ignores.contains("${it.first.packageName}!")
-                        }
+                plugins?.forEach {
+                    add(it.first.name).apply {
+                        titleCondensed = it.first.packageName
+                        isCheckable = true
+                        isChecked = !ignores.contains("${it.first.packageName}!")
                     }
                 }
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        pluginBind2Menu(menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 

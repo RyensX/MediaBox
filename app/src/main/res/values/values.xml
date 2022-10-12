@@ -18,4 +18,18 @@
         <item>12_HOURS</item>
         <item>24_HOURS</item>
     </string-array>
+
+    <string-array name="danmaku_top_display_area_mode_text">
+        <item>1/4屏</item>
+        <item>半屏</item>
+        <item>3/4屏</item>
+        <item>全屏</item>
+    </string-array>
+
+    <integer-array name="danmaku_top_display_area_mode_value">
+        <item>25</item>
+        <item>50</item>
+        <item>75</item>
+        <item>100</item>
+    </integer-array>
 </resources>

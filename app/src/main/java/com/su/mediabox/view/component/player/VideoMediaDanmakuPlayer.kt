@@ -7,10 +7,9 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.SeekBar
-import android.widget.TextView
+import android.widget.*
+import androidx.appcompat.widget.AppCompatSpinner
+import androidx.core.view.marginBottom
 import com.kuaishou.akdanmaku.DanmakuConfig
 import com.kuaishou.akdanmaku.data.DanmakuItemData
 import com.kuaishou.akdanmaku.ecs.component.filter.*
@@ -21,11 +20,13 @@ import com.microsoft.appcenter.analytics.Analytics
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoView
+import com.su.mediabox.Pref
 import com.su.mediabox.R
 import com.su.mediabox.util.*
 import com.su.mediabox.util.Util.hideKeyboard
 import com.su.mediabox.util.showToast
 import com.su.mediabox.view.component.DanmakuColorSelector
+import com.su.mediabox.view.listener.dsl.setOnItemSelectedListener
 import com.su.mediabox.view.listener.dsl.setOnSeekBarChangeListener
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -36,6 +37,26 @@ import kotlin.random.Random
 
 
 class VideoMediaDanmakuPlayer : VideoMediaPlayer {
+
+    companion object {
+        // 弹幕字号缩放最小百分比
+        private const val mDanmakuTextScaleMinPercent: Int = 70
+
+        // 弹幕显示区域模式文本
+        private val danmakuTopDisplayAreaModeText by unsafeLazy {
+            ResourceUtil.resources.getStringArray(
+                R.array.danmaku_top_display_area_mode_text
+            )
+        }
+
+        // 弹幕显示区域模式值
+        private val danmakuTopDisplayAreaModeValue by unsafeLazy {
+            ResourceUtil.resources.getIntArray(
+                R.array.danmaku_top_display_area_mode_value
+            )
+        }
+    }
+
     private lateinit var mDanmakuView: DanmakuView          //弹幕view
     private var mDanmakuPlayer: DanmakuPlayer? = null
     private val colorFilter = TextColorFilter()
@@ -44,7 +65,7 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
         dataFilter = createDataFilters()
         dataFilters = dataFilter.associateBy { it.filterParams }
         layoutFilter = createLayoutFilters()
-        textSizeScale = 0.8f
+        textSizeScale = Pref.danmakuTextScalePercent.value
     }
 
     // 是否在显示弹幕
@@ -83,8 +104,8 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
     // 显示弹幕字号缩放百分比TextView
     private var tvDanmakuTextScale: TextView? = null
 
-    // 弹幕字号缩放最小百分比
-    private val mDanmakuTextScaleMinPercent: Int = 70
+    private var danmakuTopDisplayAreaMode: AppCompatSpinner? = null
+    private var danmakuViewContainer: View? = null
 
     // 弹幕字号百分比
     private var mDanmakuTextScalePercent: Int = mDanmakuTextScaleMinPercent + 60
@@ -111,6 +132,8 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
         tvDanmakuTextScaleHeader = findViewById(R.id.tv_danmaku_text_size_scale_header)
         tvDanmakuTextScale = findViewById(R.id.tv_danmaku_text_size_scale)
         danmakuColor = findViewById(R.id.tv_danmaku_text_color)
+        danmakuTopDisplayAreaMode = findViewById(R.id.danmaku_top_display_area_mode)
+        danmakuViewContainer = findViewById(R.id.danmaku_view_container)
         etDanmakuInput?.gone()
         ivShowDanmaku?.gone()
         // 设置高度是0
@@ -137,6 +160,27 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
             }
         })
 
+        // 弹幕显示区域
+        danmakuTopDisplayAreaMode?.apply {
+            adapter = ArrayAdapter<CharSequence>(
+                mContext,
+                R.layout.layout_danmaku_top_display_area_mode_drop_down,
+                danmakuTopDisplayAreaModeText
+            ).apply {
+                setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            }
+            val mode = Pref.danmakuTopDisplayAreaMode.value
+            setSelection(danmakuTopDisplayAreaModeValue.indexOf(mode))
+            setDanmakuViewTopDisplayArea(mode / 100f)
+            setOnItemSelectedListener {
+                onItemSelected { _, _, position, _ ->
+                    val smode = danmakuTopDisplayAreaModeValue[position]
+                    Pref.danmakuTopDisplayAreaMode.saveData(smode)
+                    setDanmakuViewTopDisplayArea(smode / 100f)
+                }
+            }
+        }
+
         etDanmakuInput?.setOnFocusChangeListener { v, hasFocus ->
             if (mIfCurrentIsFullscreen) {
                 if (hasFocus) cancelDismissControlViewTimer()
@@ -149,7 +193,7 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
             }
         }
 
-        viewLifeCycleCoroutineScope.launch {
+        viewLifeCycleCoroutineScope.launch(Dispatchers.Main) {
             delay(1000)
             //TODO 这里的Boolean初始化有个很奇怪的问题，过快读取值为false，所以只能暂时延迟解决
             ivShowDanmaku?.isSelected = mDanmakuShow
@@ -183,12 +227,23 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
             seekDanmaku(currentPlayer.currentPositionWhenPlaying.toLong())
         }
 
-        sbDanmakuTextScale?.setOnSeekBarChangeListener {
-            onProgressChanged { seekBar, progress, _ ->
-                seekBar ?: return@onProgressChanged
-                mDanmakuTextScalePercent = progress + mDanmakuTextScaleMinPercent
-                setTextSizeScale(mDanmakuTextScalePercent / 100f)
-                tvDanmakuTextScale?.text = mDanmakuTextScalePercent.percentage
+        sbDanmakuTextScale?.apply {
+            Pref.danmakuTextScalePercent.also { scalePref ->
+                val initPref = (scalePref.value * 100).toInt()
+                progress = initPref - mDanmakuTextScaleMinPercent
+                mDanmakuTextScalePercent = initPref
+                tvDanmakuTextScale?.text = initPref.percentage
+                setOnSeekBarChangeListener {
+                    onProgressChanged { seekBar, progress, _ ->
+                        seekBar ?: return@onProgressChanged
+                        mDanmakuTextScalePercent = progress + mDanmakuTextScaleMinPercent
+                        setTextSizeScale(mDanmakuTextScalePercent / 100f)
+                        tvDanmakuTextScale?.text = mDanmakuTextScalePercent.percentage
+                    }
+                    onStopTrackingTouch {
+                        scalePref.saveData(mDanmakuTextScalePercent / 100F)
+                    }
+                }
             }
         }
     }
@@ -498,9 +553,31 @@ class VideoMediaDanmakuPlayer : VideoMediaPlayer {
         mDanmakuPlayer?.updateConfig(config)
     }
 
+    /**
+     * 设置弹幕显示顶部区域
+     *
+     * 一般分为1/4 1/2 3/4 1
+     */
+    private fun setDanmakuViewTopDisplayArea(topPercent: Float) {
+        danmakuViewContainer?.also {
+            val lp = it.layoutParams
+            if (lp is MarginLayoutParams) {
+                lp.setMargins(0, 0, 0, (height * (1 - topPercent)).toInt())
+            }
+        }
+    }
+
     private fun initDanmaku() {
         mDanmakuPlayer = DanmakuPlayer(SimpleRenderer()).also {
+            setDanmakuVisibility(false)
             it.bindView(mDanmakuView)
+        }
+        //设置显示区域
+        val mode = Pref.danmakuTopDisplayAreaMode.value
+        danmakuTopDisplayAreaMode?.setSelection(danmakuTopDisplayAreaModeValue.indexOf(mode))
+        setDanmakuViewTopDisplayArea(mode / 100f)
+        post {
+            setDanmakuVisibility(true)
         }
     }
 

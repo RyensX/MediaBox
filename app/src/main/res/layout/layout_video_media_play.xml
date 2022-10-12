@@ -28,10 +28,18 @@
         android:visibility="gone"
         tools:visibility="visible" />
 
-    <com.kuaishou.akdanmaku.ui.DanmakuView
-        android:id="@+id/danmaku_view"
+    <FrameLayout
+        android:id="@+id/danmaku_view_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+        <com.kuaishou.akdanmaku.ui.DanmakuView
+            android:id="@+id/danmaku_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </FrameLayout>
+
 
     <RelativeLayout
         android:id="@+id/thumb"
@@ -617,6 +625,21 @@
                 android:max="150"
                 android:paddingVertical="6dp"
                 android:progress="0" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_danmaku_top_display_area_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/danmaku_top_display_area"
+                android:textColor="@color/foreground_white_skin"
+                android:textSize="12sp" />
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/danmaku_top_display_area_mode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/foreground_white_skin"
+                android:spinnerMode="dropdown" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
