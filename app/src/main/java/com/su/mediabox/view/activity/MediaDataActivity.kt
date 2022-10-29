@@ -108,7 +108,7 @@ class MediaDataActivity : BasePluginActivity() {
                 tabBinding.tabUpdateTitle.text = text
                 customView = tabBinding.root
 
-                getOfflineDatabase().mediaUpdateDao().getUnConfirmedMediaUpdateRecordCountLiveData()
+                getOfflineDatabase().mediaUpdateDao().getUnConfirmedMediaUpdateRecordCountFlow().asLiveData()
                     .observe(this@MediaDataActivity) {
                         tabBinding.tabUpdateCount.text = it.toString()
                     }

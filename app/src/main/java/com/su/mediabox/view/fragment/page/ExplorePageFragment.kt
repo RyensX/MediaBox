@@ -3,6 +3,7 @@ package com.su.mediabox.view.fragment.page
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isGone
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.su.mediabox.R
@@ -26,12 +27,12 @@ import com.su.mediabox.view.fragment.BaseViewBindingFragment
 import com.su.mediabox.view.viewcomponents.inner.ItemPluginViewHolder
 import com.su.mediabox.view.viewcomponents.SimpleTextViewHolder
 import com.su.mediabox.view.viewcomponents.inner.MediaMoreViewHolder
-import com.su.mediabox.viewmodel.ExploreViewModel
+import com.su.mediabox.viewmodel.PluginMediaViewModel
 
 //TODO 要重新设计为插件管理合并数据显示
 class ExplorePageFragment : BaseViewBindingFragment<PageExploreBinding>() {
 
-    private val viewModel by activityViewModels<ExploreViewModel>()
+    private val viewModel by activityViewModels<PluginMediaViewModel>()
 
     private val emptyView by unsafeLazy {
         SimpleTextData(requireContext().getString(R.string.plugin_list_empty)).apply {
@@ -160,6 +161,10 @@ class ExplorePageFragment : BaseViewBindingFragment<PageExploreBinding>() {
                     R.string.plugin_manage_media_count_format,
                     data.childData?.size ?: 0
                 )
+                updateCount.apply {
+                    isGone = data.updateMediaCount <= 0L
+                    text = data.updateMediaCount.toString()
+                }
                 pluginManageMedia.apply {
                     val r = if (!data.isExpand) 90F else 0F
                     rotation = r

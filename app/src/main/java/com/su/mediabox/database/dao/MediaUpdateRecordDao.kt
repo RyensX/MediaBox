@@ -37,7 +37,7 @@ interface MediaUpdateRecordDao {
     suspend fun getConfirmedMediaUpdateRecordCount(): Long
 
     @Query("SELECT COUNT(1) FROM $UPDATE_RECORD_TABLE_NAME WHERE confirmed = 0")
-    fun getUnConfirmedMediaUpdateRecordCountLiveData(): LiveData<Long>
+    fun getUnConfirmedMediaUpdateRecordCountFlow(): Flow<Long>
 
     //TODO 取消收藏番剧时删除相关更新记录
 }

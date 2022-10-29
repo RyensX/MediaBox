@@ -13,7 +13,6 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.work.WorkManager
 import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.WhichButton
 import com.shuyu.gsyvideoplayer.player.IjkPlayerManager
 import com.su.mediabox.*
 import com.su.mediabox.config.Const
@@ -22,6 +21,7 @@ import com.su.mediabox.util.*
 import com.su.mediabox.util.update.AppUpdateHelper
 import com.su.mediabox.util.update.AppUpdateStatus
 import com.su.mediabox.view.activity.LicenseActivity
+import com.su.mediabox.view.preference.*
 import com.su.mediabox.work.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -31,6 +31,7 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
 
     private lateinit var nowCheckMediaUpdatePreference: Preference
     private val appHandler = Handler(Looper.getMainLooper())
+    private var updateDebugVerifyCount = 0
 
     override fun onResume() {
         super.onResume()
@@ -248,7 +249,12 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
                         )
 
                         setOnPreferenceClickListener {
-                            AppUpdateHelper.instance.checkUpdate()
+                            if (updateDebugVerifyCount > 16)
+                                AppUpdateHelper.instance.noticeUpdate(requireActivity() as AppCompatActivity)
+                            else {
+                                updateDebugVerifyCount++
+                                AppUpdateHelper.instance.checkUpdate()
+                            }
                             true
                         }
                     }

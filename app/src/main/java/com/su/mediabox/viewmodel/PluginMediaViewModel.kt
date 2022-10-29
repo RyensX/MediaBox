@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.su.mediabox.bean.MediaFavorite
 import com.su.mediabox.database.getAppDataBase
+import com.su.mediabox.database.getOfflineDatabase
 import com.su.mediabox.model.PluginManageModel
 import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.util.*
@@ -17,7 +18,7 @@ import kotlinx.coroutines.launch
 import java.lang.Integer.min
 import kotlin.math.max
 
-class ExploreViewModel : ViewModel() {
+class PluginMediaViewModel : ViewModel() {
 
     private var currentPluginManageJob: Job? = null
 
@@ -43,9 +44,19 @@ class ExploreViewModel : ViewModel() {
                     plugins.map { plugin ->
                         logD("插件管理数据", "生成数据:${plugin.id}")
                         //绑定信息
-                        plugin.getAppDataBase().favoriteDao().getFavoriteListFlow().map {
-                            PluginManageModel(plugin, it)
-                        }
+                        plugin.getAppDataBase().favoriteDao().getFavoriteListFlow()
+                            //合并媒体列表和未处理更新数
+                            .combine(
+                                plugin.getOfflineDatabase().mediaUpdateDao()
+                                    .getUnConfirmedMediaUpdateRecordCountFlow()
+                            ) { medias, updateCount ->
+                                Pair(medias, updateCount)
+                            }
+                            .map {
+                                PluginManageModel(
+                                    plugin, it.first, it.second
+                                )
+                            }
                     }.also {
                         collectFlowManageData(it)
                     }
@@ -122,7 +133,11 @@ class ExploreViewModel : ViewModel() {
                             }
                         //因为是同一引用所以必须替换一个新值保证视图更新
                         dataState.data?.replaceData(pos,
-                            PluginManageModel(data.pluginInfo, data.childData).apply {
+                            PluginManageModel(
+                                data.pluginInfo,
+                                data.childData,
+                                data.updateMediaCount
+                            ).apply {
                                 isExpand = !data.isExpand
                             })
                     }

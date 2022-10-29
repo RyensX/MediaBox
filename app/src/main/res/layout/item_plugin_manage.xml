@@ -41,6 +41,24 @@
         app:layout_constraintTop_toBottomOf="@id/plugin_manage_name"
         tools:text="@string/plugin_manage_media_count_format" />
 
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/update_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="4dp"
+        android:background="@drawable/shape_fill_circle_corner_main_color_2_50_skin"
+        android:backgroundTint="?colorPrimary"
+        android:gravity="center"
+        android:paddingHorizontal="6dp"
+        android:paddingVertical="2dp"
+        android:textColor="@color/foreground_white_skin"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/plugin_manage_media"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="1" />
+
     <ImageView
         android:id="@+id/plugin_manage_media"
         android:layout_width="wrap_content"
