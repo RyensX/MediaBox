@@ -4,12 +4,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.su.mediabox.config.Const
+import com.su.mediabox.util.logD
 import com.su.mediabox.util.toLiveData
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class PageLoadViewModel : ViewModel() {
+
+    private val TAG = javaClass.simpleName
 
     private var page = Const.ViewComponent.DEFAULT_PAGE
 
@@ -24,6 +27,7 @@ class PageLoadViewModel : ViewModel() {
         }
 
     fun loadData() {
+        logD(TAG, "载入数据")
         _loadState.value = LoadState.LOADING
         viewModelScope.launch(jobContext) {
             try {
@@ -42,6 +46,7 @@ class PageLoadViewModel : ViewModel() {
     }
 
     fun reLoadData() {
+        logD(TAG, "重载数据")
         page = Const.ViewComponent.DEFAULT_PAGE
         LoadState.SUCCESS.getIns(this).data = null
         loadData()

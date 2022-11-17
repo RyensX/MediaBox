@@ -18,10 +18,7 @@ import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.pluginapi.Constant
 import com.su.mediabox.pluginapi.data.SimpleTextData
 import com.su.mediabox.pluginapi.util.UIUtil.dp
-import com.su.mediabox.util.Util
-import com.su.mediabox.util.getFirstItemDecorationBy
-import com.su.mediabox.util.logD
-import com.su.mediabox.util.showToast
+import com.su.mediabox.util.*
 import com.su.mediabox.view.adapter.type.*
 import com.su.mediabox.view.fragment.BaseViewBindingFragment
 import com.su.mediabox.view.viewcomponents.inner.PreviewPluginInfoViewHolder
@@ -32,7 +29,9 @@ import com.su.mediabox.viewmodel.PluginUpdateViewModel
 class PluginRepoPageFragment : BaseViewBindingFragment<PagePluginRepoBinding>(),
     PageLoadViewModel.LoadData {
 
-    private val emptyView by lazy(LazyThreadSafetyMode.NONE) {
+    private val TAG = javaClass.simpleName
+
+    private val emptyView by unsafeLazy {
         SimpleTextData(requireContext().getString(R.string.plugin_repo_load_error)).apply {
             val padding = 8.dp
             paddingLeft = padding
@@ -52,11 +51,6 @@ class PluginRepoPageFragment : BaseViewBindingFragment<PagePluginRepoBinding>(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         pageLoadViewModel.loadDataFun = this
-        //预先加载检查更新
-        PluginManager.pluginLiveData.observe(this) {
-            if (pageLoadViewModel.loadState.value !is PageLoadViewModel.LoadState.LOADING)
-                pageLoadViewModel.reLoadData()
-        }
     }
 
     override fun pagerInit() {
@@ -70,7 +64,8 @@ class PluginRepoPageFragment : BaseViewBindingFragment<PagePluginRepoBinding>(),
             emptyData = emptyView
         }
 
-        pageLoadViewModel.loadState.observe(this) {
+        pageLoadViewModel.loadState.observe(viewLifecycleOwner) {
+            logD(TAG, "更新状态数据:$it")
             when (it) {
                 is PageLoadViewModel.LoadState.FAILED -> loadFailed(it.throwable)
                 is PageLoadViewModel.LoadState.SUCCESS -> loadSuccess(it)
@@ -81,14 +76,24 @@ class PluginRepoPageFragment : BaseViewBindingFragment<PagePluginRepoBinding>(),
         mBinding.customDataSwipe.apply {
             //刷新
             setOnRefreshListener {
-                if (pageLoadViewModel.loadState.value !is PageLoadViewModel.LoadState.LOADING)
+                if (pageLoadViewModel.loadState.value !is PageLoadViewModel.LoadState.LOADING) {
+                    logD(TAG, "下拉刷新")
                     pageLoadViewModel.reLoadData()
+                }
             }
             //载入更多
             setOnLoadMoreListener {
-                if (pageLoadViewModel.loadState.value is PageLoadViewModel.LoadState.SUCCESS)
+                if (pageLoadViewModel.loadState.value is PageLoadViewModel.LoadState.SUCCESS) {
+                    logD(TAG, "上拉载入更多")
                     pageLoadViewModel.loadData()
+                }
             }
+        }
+
+        //预先加载检查更新
+        PluginManager.pluginLiveData.observe(viewLifecycleOwner) {
+            if (pageLoadViewModel.loadState.value !is PageLoadViewModel.LoadState.LOADING)
+                pageLoadViewModel.reLoadData()
         }
 
         if (Pref.appLaunchCount.value == 1)
