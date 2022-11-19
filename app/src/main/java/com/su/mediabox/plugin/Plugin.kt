@@ -59,6 +59,8 @@ object PluginManager {
      */
     const val minPluginApiVersion = 1
 
+    const val pluginFileSuffix = ".mpp"
+
     const val PLUGIN_DIR_NAME = "plugins"
     val pluginDir = App.context.getExternalFilesDir(PLUGIN_DIR_NAME)!!
 
@@ -108,8 +110,10 @@ object PluginManager {
                 logD("内部插件数量", "$size")
             }?.forEach { pluginPackage ->
                 val path = pluginPackage.absolutePath
-                logD("内部插件", path)
-                parsePluginInfo(path)?.also { plugins[it.packageName] = it }
+                if (path.endsWith(pluginFileSuffix)) {
+                    logD("内部插件", path)
+                    parsePluginInfo(path)?.also { plugins[it.packageName] = it }
+                }
             }
             //扫描已安装的，只在debug模式下有效以方便调试
             debug {
@@ -270,7 +274,8 @@ object PluginManager {
         val uri: Uri = Uri
             .parse(pluginInfo.sourcePath.githubProxy)
         val request = DownloadManager.Request(uri).apply {
-            val fileName = "${pluginInfo.name}_${pluginInfo.packageName}_${pluginInfo.version}.mpp"
+            val fileName =
+                "${pluginInfo.name}_${pluginInfo.packageName}_${pluginInfo.version}${pluginFileSuffix}"
             if (directInstall) {
                 setDestinationInExternalFilesDir(App.context, PLUGIN_DIR_NAME, "tmp_$fileName")
             } else {
@@ -373,7 +378,7 @@ object PluginManager {
             )
     }
 
-    private fun PluginInfo.installedPluginName() = "mediabox_plugin_${id}.mpp"
+    private fun PluginInfo.installedPluginName() = "mediabox_plugin_${id}${pluginFileSuffix}"
 
     /**
      * 插件包(安装/卸载)监听
@@ -403,7 +408,7 @@ object PluginManager {
                                 }
                             }
                         //插件变动
-                        path.startsWith("mediabox_plugin_") -> {
+                        path.startsWith("mediabox_plugin_") && path.endsWith(pluginFileSuffix) -> {
                             logD("更新插件", path)
                             scanPlugin()
                         }
