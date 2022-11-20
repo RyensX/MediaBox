@@ -116,30 +116,32 @@ class PluginMediaViewModel : ViewModel() {
             when (dataState) {
                 is DataState.Success -> {
                     dataState.data?.data?.getOrNull(pos)?.also { data ->
-                        //折叠
-                        if ((data as PluginManageModel).isExpand) {
-                            dataState.data?.removeData(
-                                pos + 1,
-                                data.childData?.size?.let { min(it, 4) + 1 } ?: 0)
-                        } else
-                        //展开
-                            data.childData?.apply {
-                                if (isNotEmpty()) {
-                                    val preData = mutableListOf<Any>()
-                                    preData.addAll(take(4))
-                                    preData.add(MediaMoreViewHolder.DataStub)
-                                    dataState.data?.appendData(preData, pos + 1)
+                        if (data is PluginManageModel) {
+                            //折叠
+                            if (data.isExpand && data.childData?.isNotEmpty() == true) {
+                                dataState.data?.removeData(
+                                    pos + 1,
+                                    data.childData.size.let { min(it, 4) + 1 })
+                            } else
+                            //展开
+                                data.childData?.apply {
+                                    if (isNotEmpty()) {
+                                        val preData = mutableListOf<Any>()
+                                        preData.addAll(take(4))
+                                        preData.add(MediaMoreViewHolder.DataStub)
+                                        dataState.data?.appendData(preData, pos + 1)
+                                    }
                                 }
-                            }
-                        //因为是同一引用所以必须替换一个新值保证视图更新
-                        dataState.data?.replaceData(pos,
-                            PluginManageModel(
-                                data.pluginInfo,
-                                data.childData,
-                                data.updateMediaCount
-                            ).apply {
-                                isExpand = !data.isExpand
-                            })
+                            //因为是同一引用所以必须替换一个新值保证视图更新
+                            dataState.data?.replaceData(pos,
+                                PluginManageModel(
+                                    data.pluginInfo,
+                                    data.childData,
+                                    data.updateMediaCount
+                                ).apply {
+                                    isExpand = !data.isExpand
+                                })
+                        }
                     }
                 }
                 else -> Unit

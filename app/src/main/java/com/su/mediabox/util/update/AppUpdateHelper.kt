@@ -63,14 +63,15 @@ class AppUpdateHelper private constructor() {
                 if (it.tagName.lowercase().contains("debug")) {
                     Pref.debugVersionUpdateId.apply {
                         if (it.url != value) {
+                            if (value.isNotBlank())
+                                MaterialDialog(activity)
+                                    .cancelable(true)
+                                    .title(R.string.exist_new_debug_version)
+                                    .positiveButton(res = R.string.go_update_download) {
+                                        openBrowser("${Const.Common.GITHUB_PLUGIN_REPO_OFFICE_URL}download")
+                                    }
+                                    .show {}
                             saveData(it.url)
-                            MaterialDialog(activity)
-                                .cancelable(true)
-                                .title(R.string.exist_new_debug_version)
-                                .positiveButton(res = R.string.go_update_download) {
-                                    openBrowser("${Const.Common.GITHUB_PLUGIN_REPO_OFFICE_URL}download")
-                                }
-                                .show {}
                         }
                     }
                     break
