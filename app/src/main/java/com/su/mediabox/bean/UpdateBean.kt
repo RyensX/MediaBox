@@ -3,6 +3,9 @@ package com.su.mediabox.bean
 import com.google.gson.annotations.SerializedName
 
 class UpdateBean(
+    @SerializedName("url")
+    var url: String,
+
     @SerializedName("tag_name")
     var tagName: String,
 

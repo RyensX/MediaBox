@@ -3,16 +3,17 @@ package com.su.mediabox.plugin
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.net.http.SslError
+import android.os.Build
 import android.util.Log
-import com.su.mediabox.util.logD
 import android.webkit.*
 import androidx.annotation.CallSuper
 import androidx.webkit.WebViewCompat
 import com.su.mediabox.App
+import com.su.mediabox.plugin.WebUtilImpl.BlobIntercept
 import com.su.mediabox.pluginapi.data.BaseData
 import com.su.mediabox.pluginapi.util.WebUtil
 import com.su.mediabox.util.Text.containStrs
-import com.su.mediabox.util.logI
+import com.su.mediabox.util.logD
 import kotlinx.coroutines.*
 import org.apache.commons.text.StringEscapeUtils
 import java.io.ByteArrayInputStream
@@ -58,7 +59,11 @@ object WebUtilImpl : WebUtil {
                 allowContentAccess = true
                 setSupportMultipleWindows(true)
             }
-            //CookieManager.getInstance().setAcceptThirdPartyCookies(this, true)
+            CookieManager.getInstance().also {
+                it.setAcceptCookie(true)
+                // 跨域cookie读取
+                it.setAcceptThirdPartyCookies(this, true)
+            }
             //BlobHook回调
             addJavascriptInterface(object : BaseData() {
                 @JavascriptInterface
