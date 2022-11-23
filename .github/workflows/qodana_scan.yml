@@ -19,6 +19,4 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-qodana-
       - name: 'Qodana Scan'
-        uses: JetBrains/qodana-action@v4.2.2
-        with:
-          linter: jetbrains/qodana-jvm  # pick the needed linter – https://www.jetbrains.com/help/qodana/docker-images.html
+        uses: JetBrains/qodana-action@v2022.2.2
