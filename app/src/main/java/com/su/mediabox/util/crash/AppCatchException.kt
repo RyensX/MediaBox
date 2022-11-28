@@ -1,8 +1,7 @@
-package com.su.appcrashhandler
+package com.su.mediabox.util.crash
 
 import android.content.Context
 import android.content.Intent
-import com.su.mediabox.util.crash.CrashActivity
 import kotlin.system.exitProcess
 
 class AppCatchException(val context: Context) : Thread.UncaughtExceptionHandler {

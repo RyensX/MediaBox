@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
 import com.afollestad.materialdialogs.MaterialDialog
+import com.microsoft.appcenter.crashes.Crashes
 import com.su.mediabox.App
 import com.su.mediabox.R
 import com.su.mediabox.database.destroyInstance
@@ -31,11 +32,8 @@ import com.su.mediabox.util.Text.githubProxy
 import com.su.mediabox.util.Util.getSignatures
 import com.su.mediabox.view.adapter.type.TypeAdapter
 import dalvik.system.PathClassLoader
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.io.File
 
 
@@ -183,12 +181,15 @@ object PluginManager {
         initialized: (() -> Unit)? = null
     ) {
         pluginInfo?.apply {
+            if (!isEnable)
+                return
             val isMain = Thread.currentThread() == mainLooper.thread
             if (isMain)
                 _currentLaunchPlugin.value = this@apply
             pluginWorkScope.launch(Dispatchers.Main) {
                 if (!isMain)
                     _currentLaunchPlugin.value = this@apply
+                //此处Catch仅仅是为了显示启动插件时所抛出的异常，大部分是自排除的提醒性异常，比如用于提示插件兼容性
                 runCatching {
                     acquirePluginFactory().apply {
                         pluginLaunch()
@@ -197,6 +198,8 @@ object PluginManager {
                     }
                     initialized?.invoke()
                 }.onFailure {
+                    Crashes.trackError(it)
+                    it.printStackTrace()
                     it.message?.showToast()
                     _currentLaunchPlugin.value = null
                 }
@@ -212,8 +215,10 @@ object PluginManager {
     suspend fun installPlugin(
         fileUri: Uri,
         pluginInfo: PluginInfo
-    ): File =
-        withContext(Dispatchers.IO) {
+    ): File? {
+        if (!pluginInfo.isEnable)
+            return null
+        return withContext(Dispatchers.IO) {
             logD("安装插件", "uri=$fileUri info=$pluginInfo")
             return@withContext fileUri.copyTo(File(pluginDir, pluginInfo.installedPluginName()))
                 .apply {
@@ -221,6 +226,7 @@ object PluginManager {
                         .showToast(Toast.LENGTH_LONG)
                 }
         }
+    }
 
     /**
      * @param confirmContext 如果提供则有确认
@@ -230,16 +236,24 @@ object PluginManager {
         confirmContext: Context? = null,
         onComplete: (() -> Unit)? = null
     ) {
-        if (confirmContext != null)
+        if (confirmContext != null) {
+            if (!pluginInfo.isEnable)
+                return
             MaterialDialog(confirmContext).show {
                 title(res = R.string.plugin_manage_media_uninstall_title)
                 message(res = R.string.plugin_manage_media_uninstall_msg)
                 negativeButton(res = R.string.cancel) { }
                 positiveButton(res = R.string.ok) {
+                    pluginInfo.isEnable = false
                     uninstallPlugin(pluginInfo, onComplete = onComplete)
                 }
-            } else {
-            pluginWorkScope.launch(Dispatchers.IO) {
+            }
+        } else {
+            pluginWorkScope.launch(Dispatchers.IO + CoroutineExceptionHandler { _, throwable ->
+                Crashes.trackError(throwable)
+                throwable.printStackTrace()
+                pluginInfo.isEnable = true
+            }) {
                 //删除数据库
                 val dbFile = App.context.getDatabasePath(pluginInfo.getAppDataBaseFileName())
                 logD("数据库", dbFile.absolutePath)
