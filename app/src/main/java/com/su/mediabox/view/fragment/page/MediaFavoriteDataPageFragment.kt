@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
@@ -13,7 +15,9 @@ import com.su.mediabox.R
 import com.su.mediabox.bean.DefaultEmpty
 import com.su.mediabox.bean.MediaFavorite
 import com.su.mediabox.database.getAppDataBase
+import com.su.mediabox.databinding.FragmentMediaFavoriteBinding
 import com.su.mediabox.databinding.ViewComponentFavBinding
+import com.su.mediabox.lifecycleCollect
 import com.su.mediabox.pluginapi.action.DetailAction
 import com.su.mediabox.pluginapi.util.UIUtil.dp
 import com.su.mediabox.util.appCoroutineScope
@@ -27,20 +31,23 @@ import kotlinx.coroutines.launch
 
 class MediaFavoriteDataPageFragment : BaseFragment() {
 
-    private lateinit var dataList: RecyclerView
+    private lateinit var mBinding: FragmentMediaFavoriteBinding
     private val viewModel by activityViewModels<MediaDataViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View = RecyclerView(inflater.context).also { dataList = it }
+    ): View {
+        mBinding = FragmentMediaFavoriteBinding.inflate(inflater, container, false)
+        return mBinding.root
+    }
 
     override fun pagerInit() {
-        dataList
+        mBinding.dataList
             .grid(3)
             .apply {
-                addItemDecoration(DynamicGridItemDecoration(10.dp))
+                addItemDecoration(DynamicGridItemDecoration(10.dp, hasTopBottomEdge = false))
                 (layoutManager as GridLayoutManager).spanSizeLookup =
                     object : GridLayoutManager.SpanSizeLookup() {
                         override fun getSpanSize(position: Int) =
@@ -69,10 +76,18 @@ class MediaFavoriteDataPageFragment : BaseFragment() {
                         true
                     }
                 }
-                viewModel.favorite.observe(this@MediaFavoriteDataPageFragment) {
-                    submitList(it)
+                lifecycleCollect(viewModel.favorite) {
+                    submitList(it) {
+                        mBinding.dataFilterResult.text =
+                            getString(R.string.media_data_page_filter_result_format, it.size)
+                        if (viewModel.filterCount > 0)
+                            mBinding.dataList.smoothScrollToPosition(0)
+                    }
                 }
             }
+        mBinding.dataFilter.addTextChangedListener {
+            viewModel.filter(it?.toString())
+        }
     }
 
     class FavoriteViewHolder private constructor(private val binding: ViewComponentFavBinding) :

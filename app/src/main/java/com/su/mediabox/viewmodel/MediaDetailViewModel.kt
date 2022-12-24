@@ -65,10 +65,11 @@ class MediaDetailViewModel : ViewModel() {
                 }
                 //更新信息
                 liveData.value?.also {
-                    getAppDataBase().favoriteDao().updateFavorite(it.apply {
-                        mediaTitle = title
-                        cover = this@MediaDetailViewModel.cover
-                    })
+                    if (it.mediaTitle != title || it.cover != cover)
+                        getAppDataBase().favoriteDao().updateFavorite(it.apply {
+                            mediaTitle = title
+                            cover = this@MediaDetailViewModel.cover
+                        })
                 }
             }
         }

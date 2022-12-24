@@ -268,6 +268,8 @@
     <string name="media_data_page_update_check_hint_format">检查更新：%d</string>
     <string name="media_data_page_clear_title">确认清空？</string>
     <string name="media_data_page_clear_desc">该记录不会云端备份，共%d条，删除后无法恢复，请谨慎操作</string>
+    <string name="media_data_page_filter_hint">输入名称过滤</string>
+    <string name="media_data_page_filter_result_format">%d项</string>
     <string name="empty_default_msg">空空如也</string>
     <string name="crash_title">应用崩溃</string>
     <string name="crash_msg">日志已上传分析，建议去github提交issue加快处理</string>
