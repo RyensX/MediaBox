@@ -1,6 +1,7 @@
 package com.su.mediabox.view.fragment.page
 
 import android.view.*
+import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -47,10 +48,7 @@ class MediaCombineSearchPageFragment : BaseViewBindingFragment<PageSearchBinding
         }
 
         mBinding.searchRefresh.apply {
-            setOnRefreshListener {
-                vm.combineSearch(isReLoad = true)
-                it.finishRefresh()
-            }
+            setEnableRefresh(false)
             setOnLoadMoreListener {
                 vm.combineSearch()
                 it.finishLoadMore()
@@ -76,9 +74,9 @@ class MediaCombineSearchPageFragment : BaseViewBindingFragment<PageSearchBinding
             mBinding.searchRefresh.apply {
                 val e = ds is DataState.Success
                 setEnableLoadMore(e)
-                setEnableRefresh(e)
             }
 
+            var isShowLoading = false
             when (ds) {
                 is DataState.Failed -> {
 
@@ -88,6 +86,7 @@ class MediaCombineSearchPageFragment : BaseViewBindingFragment<PageSearchBinding
                 }
                 DataState.Loading -> {
                     mBinding.searchView.isEdit = false
+                    isShowLoading = true
                 }
                 is DataState.Success -> {
                     //TODO 还需要排查为什么DS会重复两次分发
@@ -101,6 +100,7 @@ class MediaCombineSearchPageFragment : BaseViewBindingFragment<PageSearchBinding
                     }
                 }
             }
+            mBinding.searchLoadingBar.isGone = !isShowLoading
         }
     }
 
