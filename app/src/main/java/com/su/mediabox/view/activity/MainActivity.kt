@@ -15,6 +15,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.WhichButton
 import com.microsoft.appcenter.analytics.Analytics
+import com.su.mediabox.BuildConfig
 import com.su.mediabox.Pref
 import com.su.mediabox.R
 import com.su.mediabox.config.Const
@@ -78,7 +79,13 @@ class MainActivity : BaseActivity() {
         }
 
         //检测更新
-        AppUpdateHelper.instance.checkUpdate()
+        if (BuildConfig.DEBUG) {
+            //测试版通道
+            AppUpdateHelper.instance.checkDebugUpdate(this)
+        } else {
+            //正式版通道
+            AppUpdateHelper.instance.checkUpdate()
+        }
 
         //使用须知
         if (Util.lastReadUserNoticeVersion() < Const.Common.USER_NOTICE_VERSION) {

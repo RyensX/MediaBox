@@ -12,7 +12,7 @@ import com.microsoft.appcenter.crashes.Crashes
 import com.scwang.smart.refresh.footer.BallPulseFooter
 import com.scwang.smart.refresh.header.MaterialHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
-import com.su.appcrashhandler.AppCatchException
+import com.su.mediabox.util.crash.AppCatchException
 import com.su.mediabox.plugin.AppAction
 import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.plugin.PluginPreferenceImpl

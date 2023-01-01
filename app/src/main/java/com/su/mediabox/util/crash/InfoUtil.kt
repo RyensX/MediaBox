@@ -1,4 +1,4 @@
-package com.su.appcrashhandler
+package com.su.mediabox.util.crash
 
 import android.content.Context
 import android.content.pm.PackageManager

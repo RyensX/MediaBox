@@ -7,8 +7,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import com.microsoft.appcenter.analytics.Analytics
-import com.su.appcrashhandler.AppCatchException
 import com.su.mediabox.R
 import com.su.mediabox.config.Const
 import com.su.mediabox.databinding.ActivityCrashBinding
@@ -16,7 +14,6 @@ import com.su.mediabox.util.Util
 import com.su.mediabox.util.goActivity
 import com.su.mediabox.util.viewBind
 import com.su.mediabox.view.activity.MainActivity
-import kotlin.system.exitProcess
 
 class CrashActivity : AppCompatActivity() {
 

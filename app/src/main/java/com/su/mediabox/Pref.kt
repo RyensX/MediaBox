@@ -165,4 +165,8 @@ object Pref {
         Const.Setting.DANMAKU_TOP_DISPLAY_AREA_MODE,
         50
     )
+
+    val debugVersionUpdateId by lazyDataStoreStateFlow(
+        Const.Setting.DEBUG_VERSION, ""
+    )
 }

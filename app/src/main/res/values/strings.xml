@@ -268,6 +268,8 @@
     <string name="media_data_page_update_check_hint_format">检查更新：%d</string>
     <string name="media_data_page_clear_title">确认清空？</string>
     <string name="media_data_page_clear_desc">该记录不会云端备份，共%d条，删除后无法恢复，请谨慎操作</string>
+    <string name="media_data_page_filter_hint">输入名称过滤</string>
+    <string name="media_data_page_filter_result_format">%d项</string>
     <string name="empty_default_msg">空空如也</string>
     <string name="crash_title">应用崩溃</string>
     <string name="crash_msg">日志已上传分析，建议去github提交issue加快处理</string>
@@ -290,8 +292,10 @@
     <string name="media_update_battery_optimization">去设置</string>
     <string name="media_update_check">媒体检查更新</string>
     <string name="dlna_desc">1. 确保电视和手机在同一WiFi下，打开支持投屏的电视。\n2. 点击上方搜索到的设备进行投屏。\n3. 注意，部分未知格式的视频可能无法投屏。</string>
-    <string name="combine_search_hint">聚合搜索:\n集合所有实现了媒体搜索组件的插件一起进行搜索\n成功获取后平行合并结果</string>
+    <string name="combine_search_hint">集合所有实现了媒体搜索组件的插件一起进行搜索\n成功获取后平行合并结果</string>
     <string name="combine_search_ignores">聚合插件列表</string>
+    <string name="go_update_download">前往下载</string>
+    <string name="exist_new_debug_version">发现新的测试版</string>
     <!--时间格式化-->
     <string name="time_format_now">刚刚</string>
     <string name="time_format_minutes">%d分钟前</string>

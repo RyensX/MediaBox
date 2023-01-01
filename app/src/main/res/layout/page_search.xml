@@ -29,11 +29,20 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/search_loading_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/search_header"
+        android:indeterminate="true"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
     <com.scwang.smart.refresh.layout.SmartRefreshLayout
         android:id="@+id/search_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/search_header"
+        android:layout_below="@id/search_loading_bar"
         app:srlPrimaryColor="@color/main_color_3_skin">
 
         <androidx.recyclerview.widget.RecyclerView
@@ -42,7 +51,8 @@
             android:layout_height="match_parent"
             android:scrollbarSize="4dp"
             android:scrollbars="vertical"
-            tools:listitem="@layout/item_anime_cover_3" />
+            tools:listitem="@layout/item_anime_cover_3"
+            tools:visibility="invisible" />
 
     </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 
@@ -51,7 +61,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_margin="12dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="12dp"
         android:text="@string/combine_search_hint" />
 
 </RelativeLayout>

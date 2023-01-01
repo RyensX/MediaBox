@@ -49,7 +49,7 @@ class PluginInstallerViewModel : ViewModel() {
         viewModelScope.launch {
             when (val data = pluginInstallState.value) {
                 is PluginInstallState.READY -> {
-                    PluginManager.installPlugin(data.fileUrl, data.pluginInfo).apply {
+                    PluginManager.installPlugin(data.fileUrl, data.pluginInfo)?.apply {
                         _pluginInstallState.postValue(
                             if (exists())
                                 PluginInstallState.SUCCESS(data.pluginInfo)

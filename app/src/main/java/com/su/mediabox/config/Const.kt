@@ -84,6 +84,7 @@ interface Setting {
         const val COMBINE_SEARCH_IGNORE_PLUGINS = "combine_search_ignore_plugins"
         const val DANMAKU_TEXT_SCALE_PERCENT = "danmaku_text_scale_percent"
         const val DANMAKU_TOP_DISPLAY_AREA_MODE = "danmaku_top_display_area_mode"
+        const val DEBUG_VERSION = "debug_version"
     }
 }
 

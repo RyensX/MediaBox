@@ -1023,7 +1023,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
                 if (adapter?.currentList.isNullOrEmpty()) {
                     adapter?.setTag(2)
                     //倍速列表
-                    adapter?.submitList(listOf(0.5F, 0.75F, 1F, 1.5F, 2F, 3F, 4F, 8F))
+                    adapter?.submitList(listOf(0.5F, 0.75F, 1F, 1.25F, 1.5F, 2F, 3F, 4F, 8F))
                 }
                 adapter?.getTag<Int>()?.also {
                     rvSpeed?.smartScrollToPosition(it)

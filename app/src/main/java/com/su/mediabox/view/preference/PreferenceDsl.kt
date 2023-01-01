@@ -1,8 +1,7 @@
-package com.su.mediabox.util
+package com.su.mediabox.view.preference
 
 import androidx.annotation.StringRes
 import androidx.preference.*
-import com.su.mediabox.view.preference.SingleSelectListPreference
 
 inline fun PreferenceFragmentCompat.preferenceScreen(screenDsl: PreferenceScreen.() -> Unit): PreferenceScreen =
     preferenceManager.createPreferenceScreen(requireContext()).apply { screenDsl() }

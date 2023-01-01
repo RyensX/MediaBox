@@ -15,6 +15,9 @@ open class PluginInfo(
     var isExternalPlugin: Boolean = false
 ) {
 
+
+    var isEnable: Boolean = true
+
     //当前绑定插件标识，目前为插件包名
     val id: String
         get() = "$packageName#$signature"
