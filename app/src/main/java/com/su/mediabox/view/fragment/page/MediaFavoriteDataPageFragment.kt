@@ -77,12 +77,13 @@ class MediaFavoriteDataPageFragment : BaseFragment() {
                     }
                 }
                 lifecycleCollect(viewModel.favorite) {
-                    submitList(it) {
-                        mBinding.dataFilterResult.text =
-                            getString(R.string.media_data_page_filter_result_format, it.size)
-                        if (viewModel.filterCount > 0)
-                            mBinding.dataList.smoothScrollToPosition(0)
-                    }
+                    if (it != null)
+                        submitList(it) {
+                            mBinding.dataFilterResult.text =
+                                getString(R.string.media_data_page_filter_result_format, it.size)
+                            if (viewModel.filterCount > 0)
+                                mBinding.dataList.smoothScrollToPosition(0)
+                        }
                 }
             }
         mBinding.dataFilter.addTextChangedListener {
