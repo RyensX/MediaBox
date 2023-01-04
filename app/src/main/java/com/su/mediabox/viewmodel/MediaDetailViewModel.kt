@@ -9,6 +9,7 @@ import com.su.mediabox.database.getAppDataBase
 import com.su.mediabox.pluginapi.data.BaseData
 import com.su.mediabox.pluginapi.components.IMediaDetailPageDataComponent
 import com.su.mediabox.util.lazyAcquireComponent
+import com.su.mediabox.util.logD
 import com.su.mediabox.util.showToast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -49,10 +50,16 @@ class MediaDetailViewModel : ViewModel() {
         }
     }
 
+    private val COVER_TAG = "更新封面"
+
     //更新监听的目标视频作品
     private fun updateFavTarget() {
+        logD(COVER_TAG, "开始")
         viewModelScope.launch(Dispatchers.IO) {
-            getAppDataBase().favoriteDao().getFavoriteLiveData(partUrl).also { liveData ->
+            logD(COVER_TAG, "查找目标：$partUrl")
+            getAppDataBase().favoriteDao().getFavorite(partUrl).also { data ->
+                //TODO 重新设计
+                val liveData = getAppDataBase().favoriteDao().getFavoriteLiveData(partUrl)
                 //重新绑定
                 withContext(Dispatchers.Main) {
                     rawFavData?.also {
@@ -63,10 +70,13 @@ class MediaDetailViewModel : ViewModel() {
                     }
                     rawFavData = liveData
                 }
+                logD(COVER_TAG, "对象属性：${liveData.value}")
                 //更新信息
-                liveData.value?.also {
+                data?.also {
+                    logD(COVER_TAG, "title=$title cover=$cover")
                     if (it.mediaTitle != title || it.cover != cover)
                         getAppDataBase().favoriteDao().updateFavorite(it.apply {
+                            logD(COVER_TAG, "发起更新 $cover -> ${this@MediaDetailViewModel.cover}")
                             mediaTitle = title
                             cover = this@MediaDetailViewModel.cover
                         })
