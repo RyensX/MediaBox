@@ -26,16 +26,15 @@ class MediaDataViewModel : ViewModel() {
 
     //同时关注数据库数据和过滤名称
     val favorite = favoriteFlow.combine(filterNameFlow) { data, filter ->
-        (if (filter.isNotBlank())
-            data.filter { it.mediaTitle.contains(filter) }
-        else
-            data).also {
+        val result =
+            if (filter.isNotBlank()) data.filter { it.mediaTitle.contains(filter) } else data
+        result.also {
             //统计
             filterCount = data.size - it.size
         }
     }
         .flowOn(Dispatchers.Default)
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), mutableListOf())
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 
     val history = getAppDataBase().historyDao().getHistoryListLiveData()
 
@@ -66,18 +65,19 @@ class MediaDataViewModel : ViewModel() {
         favorite.value.also {
             PluginManager.currentLaunchPlugin.value?.also { plugin ->
                 viewModelScope.launch(updateDispatcher) {
-                    MediaUpdateCheck.checkMediaUpdate(it, plugin, mediaUpdateDataComponent, {
-                        _updateCount.apply { value += 1 }
-                    }, {
-                        _updateCount.apply { value -= 1 }
-                    }) {
-                        if (it.isNotEmpty())
-                            launch(Dispatchers.Main) {
-                                App.context.getString(R.string.media_update_toast, it.size)
-                                    .showToast(Toast.LENGTH_LONG)
-                            }
-                        _updateCount.value = 0
-                    }
+                    if (it != null)
+                        MediaUpdateCheck.checkMediaUpdate(it, plugin, mediaUpdateDataComponent, {
+                            _updateCount.apply { value += 1 }
+                        }, {
+                            _updateCount.apply { value -= 1 }
+                        }) {
+                            if (it.isNotEmpty())
+                                launch(Dispatchers.Main) {
+                                    App.context.getString(R.string.media_update_toast, it.size)
+                                        .showToast(Toast.LENGTH_LONG)
+                                }
+                            _updateCount.value = 0
+                        }
                 }
             }
         }

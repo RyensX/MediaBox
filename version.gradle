@@ -1,5 +1,5 @@
-ext.version_code = 50
-ext.version_name = "2.52"
+ext.version_code = 53
+ext.version_name = "2.53"
 
 def build_versions = [:]
 build_versions.compile_sdk = 31
