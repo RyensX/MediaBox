@@ -85,7 +85,10 @@ class ExplorePageFragment : BaseViewBindingFragment<PageExploreBinding>() {
                         }
                         //管理插件
                         setOnLongClickListener(itemView) { pos ->
-                            WebBrowserAction.obtain("https://www.yhdmp.net").go(requireContext())
+                            bindingTypeAdapter.getData<PluginManageModel>(pos)?.let { pm ->
+                                PluginManageBottomSheetDialogFragment.create(pm.pluginInfo.packageName)
+                                    .show(requireActivity())
+                            }
                             true
                         }
                     }

@@ -51,6 +51,11 @@ class PluginRepoPageFragment : BaseViewBindingFragment<PagePluginRepoBinding>(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         pageLoadViewModel.loadDataFun = this
+        //预先加载检查更新
+        PluginManager.pluginLiveData.observe(this) {
+            if (pageLoadViewModel.loadState.value !is PageLoadViewModel.LoadState.LOADING)
+                pageLoadViewModel.reLoadData()
+        }
     }
 
     override fun pagerInit() {
@@ -88,12 +93,6 @@ class PluginRepoPageFragment : BaseViewBindingFragment<PagePluginRepoBinding>(),
                     pageLoadViewModel.loadData()
                 }
             }
-        }
-
-        //预先加载检查更新
-        PluginManager.pluginLiveData.observe(viewLifecycleOwner) {
-            if (pageLoadViewModel.loadState.value !is PageLoadViewModel.LoadState.LOADING)
-                pageLoadViewModel.reLoadData()
         }
 
         if (Pref.appLaunchCount.value == 1)
