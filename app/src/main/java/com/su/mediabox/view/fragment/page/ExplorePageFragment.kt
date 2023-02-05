@@ -16,6 +16,7 @@ import com.su.mediabox.model.PluginManageModel
 import com.su.mediabox.plugin.PluginManager.launchPlugin
 import com.su.mediabox.pluginapi.Constant
 import com.su.mediabox.pluginapi.action.DetailAction
+import com.su.mediabox.pluginapi.action.WebBrowserAction
 import com.su.mediabox.pluginapi.data.SimpleTextData
 import com.su.mediabox.pluginapi.util.UIUtil.dp
 import com.su.mediabox.util.*
@@ -84,10 +85,7 @@ class ExplorePageFragment : BaseViewBindingFragment<PageExploreBinding>() {
                         }
                         //管理插件
                         setOnLongClickListener(itemView) { pos ->
-                            bindingTypeAdapter.getData<PluginManageModel>(pos)?.let { pm ->
-                                PluginManageBottomSheetDialogFragment.create(pm.pluginInfo.packageName)
-                                    .show(requireActivity())
-                            }
+                            WebBrowserAction.obtain("https://www.yhdmp.net").go(requireContext())
                             true
                         }
                     }

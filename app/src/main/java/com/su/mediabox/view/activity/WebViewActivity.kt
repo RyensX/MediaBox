@@ -1,34 +1,33 @@
 package com.su.mediabox.view.activity
 
 import android.annotation.SuppressLint
-import android.content.ActivityNotFoundException
-import android.content.Intent
 import android.graphics.Color
-import android.net.Uri
 import android.net.http.SslError
 import android.os.Bundle
-import com.su.mediabox.util.logD
+import android.util.Log
 import android.webkit.*
 import androidx.appcompat.content.res.AppCompatResources
 import com.su.mediabox.R
 import com.su.mediabox.databinding.ActivityWebViewBinding
+import com.su.mediabox.plugin.WebUtilImpl.clearWeb
 import com.su.mediabox.pluginapi.action.WebBrowserAction
 import com.su.mediabox.util.Util.openUrl
 import com.su.mediabox.util.getAction
+import com.su.mediabox.util.logD
 import com.su.mediabox.util.logE
 import com.su.mediabox.util.viewBind
 
 class WebViewActivity : BasePluginActivity() {
 
     private val mBinding by viewBind(ActivityWebViewBinding::inflate)
-    private lateinit var mainUrl: String
+    private lateinit var mAction: WebBrowserAction
 
     private val TAG = "网页浏览"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mainUrl = getAction<WebBrowserAction>()?.url ?: run {
+        mAction = getAction() ?: run {
             finish()
             return
         }
@@ -42,20 +41,34 @@ class WebViewActivity : BasePluginActivity() {
                     setTint(Color.WHITE)
                     addButton(this)
                     setButtonClickListener(0) {
-                        openUrl(mainUrl)
+                        openUrl(mAction.url)
                     }
                 }
 
             setBackButtonClickListener { finish() }
         }
 
-        mBinding.wvWeb.loadUrl(mainUrl)
+        mBinding.wvWeb.apply {
+            resumeTimers()
+            val loadPolicy = mAction.loadPolicy
+            if (loadPolicy.isClearEnv)
+                clearWeb()
+            val headers = loadPolicy.headers
+            Log.d("加载Headers", "$headers")
+            if (headers == null)
+                loadUrl(mAction.url)
+            else
+                loadUrl(mAction.url, headers)
+        }
     }
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun initWebView() {
+        val loadPolicy = mAction.loadPolicy
         mBinding.wvWeb.apply {
             settings.apply {
+                defaultTextEncodingName = loadPolicy.encoding
+                userAgentString = loadPolicy.userAgentString
                 useWideViewPort = true
                 allowFileAccess = true
                 javaScriptEnabled = true
@@ -116,9 +129,9 @@ class WebViewActivity : BasePluginActivity() {
 
     override fun onBackPressed() {
         mBinding.wvWeb.apply {
-            logD("链接", "原始：$mainUrl org：$originalUrl")
+            logD("链接", "原始：${(mAction.url)} org：$originalUrl")
             //有些网页重定向了无法有效判断
-            if (canGoBack() && !(originalUrl == mainUrl || originalUrl == "$mainUrl/index"))
+            if (canGoBack() && !(originalUrl == (mAction.url) || originalUrl == "${(mAction.url)}/index"))
                 goBack()
             else
                 super.onBackPressed()

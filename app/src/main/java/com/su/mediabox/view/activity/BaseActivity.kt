@@ -6,6 +6,7 @@ import android.view.ViewStub
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.su.mediabox.R
+import com.su.mediabox.plugin.WebUtilImpl
 import com.su.mediabox.util.gone
 import com.su.mediabox.util.logE
 import com.su.mediabox.util.visible
@@ -46,5 +47,11 @@ abstract class BaseActivity : AppCompatActivity() {
                 logE("showLoadFailedTip", "layout_image_text_tip_1 isn't initialized")
             }
         }
+    }
+
+    override fun onDestroy() {
+        //每次切换页面都停止加载
+        WebUtilImpl.stopLoading()
+        super.onDestroy()
     }
 }
