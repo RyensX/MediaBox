@@ -23,6 +23,8 @@ import kotlin.coroutines.suspendCoroutine
 @SuppressLint("SetJavaScriptEnabled", "JavascriptInterface")
 object WebUtilImpl : WebUtil {
 
+    //TODO 等待分析遇到cloudflare验证无法加载
+
     private const val blobHook = """
         let origin = window.URL.createObjectURL
         window.URL.createObjectURL = function (t) {
@@ -77,6 +79,13 @@ object WebUtilImpl : WebUtil {
         }
     }
 
+    fun stopLoading() {
+        globalWebView.apply {
+            stopLoading()
+            pauseTimers()
+        }
+    }
+
     private val cb = ValueCallback<Boolean> { }
     fun WebView.clearWeb() {
         clearHistory()
@@ -103,7 +112,8 @@ object WebUtilImpl : WebUtil {
             ".mp4", ".ts",
             ".mp3", ".m4a",
             ".gif", ",jpg", ".png", ".webp"
-        )
+        ),
+        private val loadPolicy: WebUtil.LoadPolicy
     ) : WebViewClient() {
 
         private val blockWebResourceRequest =
@@ -132,7 +142,7 @@ object WebUtilImpl : WebUtil {
             val url = request?.url?.toString()
                 ?: return@run super.shouldInterceptRequest(view, request)
             //阻止无关资源加载，加快获取速度
-            if (!targetRegex.matches(url) && url.containStrs(*blockRes)) {
+            if (loadPolicy.isBlockRes && !targetRegex.matches(url) && url.containStrs(*blockRes)) {
                 logD("禁止加载", url)
                 //转发回onLoadResource
                 if (blockReqForward)
@@ -150,45 +160,65 @@ object WebUtilImpl : WebUtil {
         userAgentString: String?,
         actionJs: String?,
         timeOut: Long
-    ): String =
-        withContext(Dispatchers.Main) {
+    ): String = getRenderedHtmlCode(
+        url, callBackRegex,
+        object : WebUtil.LoadPolicy by WebUtil.DefaultLoadPolicy {
+            override val userAgentString = userAgentString
+            override val timeOut: Long = timeOut
+            override val actionJs = actionJs
+            override val encoding = encoding
+            override val isClearEnv = true
+        })
 
+
+    override suspend fun getRenderedHtmlCode(
+        url: String,
+        callBackRegex: String,
+        loadPolicy: WebUtil.LoadPolicy
+    ): String = withContext(Dispatchers.Main) {
+
+        if (loadPolicy.isClearEnv)
             globalWebView.clearWeb()
 
-            suspendCoroutine { con ->
-                Log.d("开始获取源码", url)
-                val regexE = Regex(callBackRegex)
-                var hasResult = false
+        globalWebView.resumeTimers()
 
-                fun callBack(web: WebView) {
-                    hasResult = true
+        suspendCoroutine { con ->
+            Log.d("开始获取源码", url)
+            val regexE = Regex(callBackRegex)
+            var hasResult = false
 
-                    web.executeJavaScriptCode(actionJs ?: "")
-                    web.evaluateJavascript("(function() { return document.documentElement.outerHTML })()") {
-                        Log.d("脚本返回", url)
-                        if (it.isNullOrEmpty())
-                            con.resume("")
-                        else {
-                            launch(Dispatchers.Default) {
-                                val source = StringEscapeUtils.unescapeEcmaScript(it)
-                                Log.d("获取源码成功", source)
-                                con.resume(source)
-                                withContext(Dispatchers.Main) {
-                                    web.apply {
-                                        stopLoading()
-                                        pauseTimers()
-                                    }
+            fun callBack(web: WebView) {
+                hasResult = true
+
+                web.executeJavaScriptCode(loadPolicy.actionJs ?: "")
+                web.evaluateJavascript("(function() { return document.documentElement.outerHTML })()") {
+                    Log.d("脚本返回", url)
+                    if (it.isNullOrEmpty())
+                        con.resume("")
+                    else {
+                        launch(Dispatchers.Default) {
+                            val source = StringEscapeUtils.unescapeEcmaScript(it)
+                            Log.d("获取源码成功", source)
+                            con.resume(source)
+                            withContext(Dispatchers.Main) {
+                                web.apply {
+                                    stopLoading()
+                                    pauseTimers()
                                 }
                             }
                         }
                     }
                 }
+            }
 
-                globalWebView.settings.apply {
-                    setUserAgentString(userAgentString)
-                    defaultTextEncodingName = encoding
+            globalWebView.settings.apply {
+                loadPolicy.userAgentString?.also {
+                    userAgentString = it
                 }
-                globalWebView.webViewClient = object : LightweightGettingWebViewClient(regexE) {
+                defaultTextEncodingName = loadPolicy.encoding
+            }
+            globalWebView.webViewClient =
+                object : LightweightGettingWebViewClient(regexE, loadPolicy = loadPolicy) {
 
                     override fun onPageStarted(view: WebView, url: String?, favicon: Bitmap?) {
                         super.onPageStarted(view, url, favicon)
@@ -211,16 +241,21 @@ object WebUtilImpl : WebUtil {
                         super.onLoadResource(view, url)
                     }
                 }
-                globalWebView.resumeTimers()
+
+            val headers = loadPolicy.headers
+            Log.d("加载Headers", "$headers")
+            if (headers == null)
                 globalWebView.loadUrl(url)
-                launch(Dispatchers.Main) {
-                    delay(timeOut)
-                    logD("获取源码", "${timeOut}ms超时返回")
-                    if (!hasResult)
-                        callBack(globalWebView)
-                }
+            else
+                globalWebView.loadUrl(url, headers)
+            launch(Dispatchers.Main) {
+                delay(loadPolicy.timeOut)
+                logD("获取源码", "${loadPolicy.timeOut}ms超时返回")
+                if (!hasResult)
+                    callBack(globalWebView)
             }
         }
+    }
 
     override suspend fun interceptResource(
         url: String,
@@ -229,40 +264,65 @@ object WebUtilImpl : WebUtil {
         actionJs: String?,
         timeOut: Long
     ): String =
+        interceptResource(url, regex, object : WebUtil.LoadPolicy by WebUtil.DefaultLoadPolicy {
+            override val userAgentString = userAgentString
+            override val timeOut: Long = timeOut
+            override val actionJs = actionJs
+            override val isClearEnv = true
+        })
+
+    override suspend fun interceptResource(
+        url: String,
+        regex: String,
+        loadPolicy: WebUtil.LoadPolicy
+    ): String =
         withContext(Dispatchers.Main) {
             Log.d("开始拦截请求", "正则:$regex")
 
-            globalWebView.clearWeb()
+            if (loadPolicy.isClearEnv)
+                globalWebView.clearWeb()
+
+            globalWebView.resumeTimers()
 
             var hasResult = false
             val regexE = Regex(regex)
             suspendCoroutine { con ->
-                globalWebView.settings.userAgentString = userAgentString
-                globalWebView.webViewClient = object : LightweightGettingWebViewClient(regexE) {
-
-                    override fun onPageFinished(view: WebView?, url: String?) {
-                        super.onPageFinished(view, url)
-                        actionJs?.let { view?.executeJavaScriptCode(it) }
+                globalWebView.settings.apply {
+                    loadPolicy.userAgentString?.also {
+                        userAgentString = it
                     }
-
-                    override fun onLoadResource(view: WebView?, url: String) {
-                        Log.d("2.链接", url)
-                        if (!hasResult && regexE.matches(url)) {
-                            logD("匹配到资源", url)
-                            con.resume(url)
-                            hasResult = true
-                            view?.stopLoading()
-                            view?.pauseTimers()
-                        }
-                        super.onLoadResource(view, url)
-                    }
+                    defaultTextEncodingName = loadPolicy.encoding
                 }
-                globalWebView.resumeTimers()
-                globalWebView.loadUrl(url)
+                globalWebView.webViewClient =
+                    object : LightweightGettingWebViewClient(regexE, loadPolicy = loadPolicy) {
+
+                        override fun onPageFinished(view: WebView?, url: String?) {
+                            super.onPageFinished(view, url)
+                            loadPolicy.actionJs?.let { view?.executeJavaScriptCode(it) }
+                        }
+
+                        override fun onLoadResource(view: WebView?, url: String) {
+                            Log.d("2.链接", url)
+                            if (!hasResult && regexE.matches(url)) {
+                                logD("匹配到资源", url)
+                                con.resume(url)
+                                hasResult = true
+                                view?.stopLoading()
+                                view?.pauseTimers()
+                            }
+                            super.onLoadResource(view, url)
+                        }
+                    }
+                val headers = loadPolicy.headers
+                Log.d("加载Headers", "$headers")
+                if (headers == null)
+                    globalWebView.loadUrl(url)
+                else
+                    globalWebView.loadUrl(url, headers)
                 launch(Dispatchers.Main) {
-                    delay(timeOut)
+                    delay(loadPolicy.timeOut)
                     if (!hasResult) {
-                        logD("拦截资源", "${timeOut}ms超时返回")
+                        logD("拦截资源", "${loadPolicy.timeOut}ms超时返回")
                         hasResult = true
                         con.resume("")
                         globalWebView.stopLoading()
@@ -284,32 +344,52 @@ object WebUtilImpl : WebUtil {
         userAgentString: String?,
         actionJs: String?,
         timeOut: Long
+    ): String = interceptBlob(url, regex, object : WebUtil.LoadPolicy by WebUtil.DefaultLoadPolicy {
+        override val userAgentString = userAgentString
+        override val timeOut: Long = timeOut
+        override val actionJs = actionJs
+        override val isClearEnv = true
+    })
+
+    override suspend fun interceptBlob(
+        url: String,
+        regex: String,
+        loadPolicy: WebUtil.LoadPolicy
     ): String = withContext(Dispatchers.Main) {
         if (regex.isBlank())
             return@withContext ""
 
-        globalWebView.clearWeb()
+        if (loadPolicy.isClearEnv)
+            globalWebView.clearWeb()
+
+        globalWebView.resumeTimers()
 
         logD("开始拦截Blob", "正则:$regex")
         val regexE = Regex(regex)
         suspendCoroutine { con ->
             var hasResult = false
 
-            globalWebView.settings.userAgentString = userAgentString
-
-            globalWebView.webViewClient = object : LightweightGettingWebViewClient(regexE, false) {
-
-                override fun onPageStarted(view: WebView, url: String?, favicon: Bitmap?) {
-                    //提前注入
-                    view.evaluateJavascript(blobHook, null)
-                    super.onPageStarted(view, url, favicon)
+            globalWebView.settings.apply {
+                loadPolicy.userAgentString?.also {
+                    userAgentString = it
                 }
-
-                override fun onPageFinished(view: WebView?, url: String?) {
-                    super.onPageFinished(view, url)
-                    actionJs?.let { view?.executeJavaScriptCode(it) }
-                }
+                defaultTextEncodingName = loadPolicy.encoding
             }
+
+            globalWebView.webViewClient =
+                object : LightweightGettingWebViewClient(regexE, false, loadPolicy = loadPolicy) {
+
+                    override fun onPageStarted(view: WebView, url: String?, favicon: Bitmap?) {
+                        //提前注入
+                        view.evaluateJavascript(blobHook, null)
+                        super.onPageStarted(view, url, favicon)
+                    }
+
+                    override fun onPageFinished(view: WebView?, url: String?) {
+                        super.onPageFinished(view, url)
+                        loadPolicy.actionJs?.let { view?.executeJavaScriptCode(it) }
+                    }
+                }
 
             blobIntercept = BlobIntercept {
                 val test = regexE.containsMatchIn(it)
@@ -321,12 +401,17 @@ object WebUtilImpl : WebUtil {
                 }
                 test
             }
-            globalWebView.resumeTimers()
-            globalWebView.loadUrl(url)
+
+            val headers = loadPolicy.headers
+            Log.d("加载Headers", "$headers")
+            if (headers == null)
+                globalWebView.loadUrl(url)
+            else
+                globalWebView.loadUrl(url, headers)
             launch(Dispatchers.Main) {
-                delay(timeOut)
+                delay(loadPolicy.timeOut)
                 if (!hasResult) {
-                    logD("拦截Blob", "${timeOut}ms超时返回")
+                    logD("拦截Blob", "${loadPolicy.timeOut}ms超时返回")
                     hasResult = true
                     con.resume("")
                     globalWebView.stopLoading()
