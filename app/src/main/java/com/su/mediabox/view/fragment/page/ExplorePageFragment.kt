@@ -11,12 +11,11 @@ import com.su.mediabox.bean.MediaFavorite
 import com.su.mediabox.databinding.ItemPluginManageBinding
 import com.su.mediabox.model.PluginInfo
 import com.su.mediabox.databinding.PageExploreBinding
-import com.su.mediabox.lifecycleCollect
+import com.su.mediabox.util.lifecycleCollect
 import com.su.mediabox.model.PluginManageModel
 import com.su.mediabox.plugin.PluginManager.launchPlugin
 import com.su.mediabox.pluginapi.Constant
 import com.su.mediabox.pluginapi.action.DetailAction
-import com.su.mediabox.pluginapi.action.WebBrowserAction
 import com.su.mediabox.pluginapi.data.SimpleTextData
 import com.su.mediabox.pluginapi.util.UIUtil.dp
 import com.su.mediabox.util.*

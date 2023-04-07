@@ -1,4 +1,4 @@
-package com.su.mediabox
+package com.su.mediabox.util
 
 import androidx.activity.ComponentActivity
 import androidx.fragment.app.Fragment
