@@ -1,7 +1,6 @@
 package com.su.mediabox.util.update
 
 import android.app.Activity
-import android.text.Html
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
@@ -10,24 +9,17 @@ import com.afollestad.materialdialogs.WhichButton
 import com.afollestad.materialdialogs.actions.getActionButton
 import com.su.mediabox.Pref
 import com.su.mediabox.R
-import com.su.mediabox.bean.UpdateBean
 import com.su.mediabox.config.Const
 import com.su.mediabox.model.AppUpdateModel
 import com.su.mediabox.net.RetrofitManager
-import com.su.mediabox.net.service.UpdateService
-import com.su.mediabox.util.Text.githubProxy
-import com.su.mediabox.util.Util
+import com.su.mediabox.net.service.AppService
 import com.su.mediabox.util.Util.openBrowser
 import com.su.mediabox.util.appCoroutineScope
 import com.su.mediabox.util.formatSize
-import com.su.mediabox.util.logD
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
@@ -58,7 +50,7 @@ class AppUpdateHelper private constructor() {
 
     fun checkDebugUpdate(activity: Activity) {
         appCoroutineScope.launch(Dispatchers.Main) {
-            val request = RetrofitManager.get().create(UpdateService::class.java)
+            val request = RetrofitManager.get().create(AppService::class.java)
             for (it in withContext(Dispatchers.IO) { request.getReleases() }) {
                 if (it.tagName.lowercase().contains("debug")) {
                     Pref.debugVersionUpdateId.apply {

@@ -32,6 +32,7 @@ interface Const {
             const val GITHUB_PLUGIN_REPO_DEV_DOC_URL = "https://github.com/RyensX/MediaBox/wiki"
             const val USER_NOTICE_VERSION = 2
             const val TG_URL = "https://t.me/MediaBoxGithub"
+            const val ANNOUNCEMENT="https://raw.githubusercontent.com/RyensX/MediaBox/dev/doc/announcement.json"
 
             val licenses = listOf(
                 License("", "名称", "许可证", true),
@@ -85,6 +86,7 @@ interface Setting {
         const val DANMAKU_TEXT_SCALE_PERCENT = "danmaku_text_scale_percent"
         const val DANMAKU_TOP_DISPLAY_AREA_MODE = "danmaku_top_display_area_mode"
         const val DEBUG_VERSION = "debug_version"
+        const val ANNOUNCEMENT = "announcement"
     }
 }
 
