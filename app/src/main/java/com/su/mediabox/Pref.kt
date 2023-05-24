@@ -169,4 +169,6 @@ object Pref {
     val debugVersionUpdateId by lazyDataStoreStateFlow(
         Const.Setting.DEBUG_VERSION, ""
     )
+
+    val announcementVersion by lazyDataStoreStateFlow(Const.Setting.ANNOUNCEMENT, 0)
 }

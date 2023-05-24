@@ -30,7 +30,6 @@ import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
 class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreferenceClickListener {
 
     private lateinit var nowCheckMediaUpdatePreference: Preference
-    private val appHandler = Handler(Looper.getMainLooper())
     private var updateDebugVerifyCount = 0
 
     override fun onResume() {
@@ -135,7 +134,7 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
                         //launchMediaUpdateCheckWorker(ExistingPeriodicWorkPolicy.REPLACE)
                         WorkManager.getInstance(App.context)
                             .cancelUniqueWork(MEDIA_UPDATE_CHECK_WORKER_ID)
-                        appHandler.post {
+                        listView.post {
                             auto.isChecked = false
                         }
                         true
@@ -148,7 +147,7 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
                     titleRes(R.string.media_update_check_pref_on_metered_net_title)
                     summaryRes(R.string.media_update_check_pref_on_metered_net_summary)
                     setOnPreferenceClickListener {
-                        appHandler.post {
+                        listView.post {
                             auto.isChecked = false
                         }
                         true
@@ -172,7 +171,7 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
                 }
 
                 lifecycleCollect(mediaUpdateCheckWorkerIsRunning) { isRunning ->
-                    appHandler.post {
+                    listView.post {
                         auto.isEnabled = !isRunning
                         interval.isEnabled = !isRunning
                         onMeteredNet.isEnabled = !isRunning
@@ -192,7 +191,7 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
                     summaryRes(R.string.player_bottom_progress_summary)
 
                     lifecycleCollect(Pref.isShowPlayerBottomProgressBar) {
-                        appHandler.post {
+                        listView.post {
                             isChecked = it
                         }
                     }

@@ -7,7 +7,7 @@ import androidx.lifecycle.lifecycleScope
 import com.microsoft.appcenter.analytics.Analytics
 import com.su.mediabox.R
 import com.su.mediabox.databinding.ActivityMediaClassifyBinding
-import com.su.mediabox.lifecycleCollect
+import com.su.mediabox.util.lifecycleCollect
 import com.su.mediabox.pluginapi.action.ClassifyAction
 import com.su.mediabox.util.*
 import com.su.mediabox.viewmodel.MediaClassifyViewModel

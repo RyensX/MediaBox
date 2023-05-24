@@ -296,6 +296,7 @@
     <string name="combine_search_ignores">聚合插件列表</string>
     <string name="go_update_download">前往下载</string>
     <string name="exist_new_debug_version">发现新的测试版</string>
+    <string name="announcement_title">公告</string>
     <!--时间格式化-->
     <string name="time_format_now">刚刚</string>
     <string name="time_format_minutes">%d分钟前</string>

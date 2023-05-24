@@ -4,13 +4,10 @@ import android.view.*
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import com.su.mediabox.Pref
 import com.su.mediabox.R
-import com.su.mediabox.databinding.PageDownloadBinding
 import com.su.mediabox.databinding.PageSearchBinding
-import com.su.mediabox.lifecycleCollect
-import com.su.mediabox.plugin.PluginManager
+import com.su.mediabox.util.lifecycleCollect
 import com.su.mediabox.util.DataState
 import com.su.mediabox.util.logD
 import com.su.mediabox.util.logI
@@ -20,10 +17,7 @@ import com.su.mediabox.view.adapter.type.initTypeList
 import com.su.mediabox.view.adapter.type.submitList
 import com.su.mediabox.view.fragment.BaseViewBindingFragment
 import com.su.mediabox.viewmodel.MediaCombineSearchViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 
 class MediaCombineSearchPageFragment : BaseViewBindingFragment<PageSearchBinding>() {
 

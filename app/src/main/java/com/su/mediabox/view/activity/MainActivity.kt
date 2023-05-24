@@ -10,6 +10,7 @@ import android.text.Html
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.afollestad.materialdialogs.MaterialDialog
@@ -51,6 +52,7 @@ class MainActivity : BaseActivity() {
     override fun onResume() {
         PluginManager.initPluginEnv()
         super.onResume()
+        checkAnnouncement(this, lifecycleScope)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

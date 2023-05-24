@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import com.su.mediabox.App
 import com.su.mediabox.bean.UpdateBean
 import com.su.mediabox.net.RetrofitManager
-import com.su.mediabox.net.service.UpdateService
+import com.su.mediabox.net.service.AppService
 import com.su.mediabox.util.Util.isNewVersionByVersionCode
 import com.su.mediabox.util.editor
 import com.su.mediabox.util.logD
@@ -47,7 +47,7 @@ object AppUpdateModel {
             return
         }
         status.value = AppUpdateStatus.CHECKING
-        val request = RetrofitManager.get().create(UpdateService::class.java)
+        val request = RetrofitManager.get().create(AppService::class.java)
         val check = request.checkUpdate()
         check.enqueue(object : Callback<UpdateBean> {
             override fun onFailure(call: Call<UpdateBean>, t: Throwable) {
