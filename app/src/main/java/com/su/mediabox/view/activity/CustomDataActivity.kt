@@ -52,6 +52,9 @@ class CustomDataActivity : PageLoadActivity() {
                 navigationIcon = null
             }
         }
+
+        action?.let { customPageComponent?.initPage(it) }
+
         title = customPageComponent!!.pageName
     }
 
