@@ -38,6 +38,10 @@ class CustomDataActivity : PageLoadActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        //初始化，在低API版本的插件上会抽象错误，暂时先catch
+        runCatching { action?.let { customPageComponent?.initPage(it) } }
+
         super.onCreate(savedInstanceState)
         if (customPageComponent == null) {
             Toast.makeText(App.context, "找不到对应自定义页面数据组件", Toast.LENGTH_LONG).show()
@@ -52,8 +56,6 @@ class CustomDataActivity : PageLoadActivity() {
                 navigationIcon = null
             }
         }
-
-        action?.let { customPageComponent?.initPage(it) }
 
         title = customPageComponent!!.pageName
     }
