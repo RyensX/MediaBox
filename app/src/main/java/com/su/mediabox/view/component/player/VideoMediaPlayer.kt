@@ -7,7 +7,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Matrix
 import android.util.AttributeSet
-import com.su.mediabox.util.logD
 import android.view.*
 import android.view.View.OnClickListener
 import android.widget.*
@@ -32,14 +31,12 @@ import com.su.mediabox.databinding.ItemPlayEpisodeBinding
 import com.su.mediabox.databinding.ItemPlayerSpeedBinding
 import com.su.mediabox.pluginapi.data.EpisodeData
 import com.su.mediabox.pluginapi.util.UIUtil.dp
-import com.su.mediabox.saveData
 import com.su.mediabox.util.*
 import com.su.mediabox.util.Util.getResDrawable
 import com.su.mediabox.util.Util.getScreenBrightness
 import com.su.mediabox.util.Util.openVideoByExternalPlayer
-import com.su.mediabox.view.activity.VideoMediaPlayActivity
-import com.su.mediabox.viewmodel.VideoMediaPlayViewModel
 import com.su.mediabox.view.activity.DlnaActivity
+import com.su.mediabox.view.activity.VideoMediaPlayActivity
 import com.su.mediabox.view.adapter.type.*
 import com.su.mediabox.view.component.ZoomView
 import com.su.mediabox.view.component.textview.TypefaceTextView
@@ -47,7 +44,6 @@ import com.su.mediabox.view.listener.dsl.setOnSeekBarChangeListener
 import kotlinx.coroutines.*
 import java.io.File
 import kotlin.math.abs
-import kotlin.properties.Delegates
 
 //TODO 太乱了，需要后续整理重写
 open class VideoMediaPlayer : StandardGSYVideoPlayer {
@@ -154,7 +150,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
     private var playBottomProgress: ProgressBar? = null
 
     //控制进度条
-    private var pbBottomProgress: ProgressBar? = null
+    private var pbBottomProgress: SeekBar? = null
 
     // 外部播放器打开
     private var tvOpenByExternalPlayer: TextView? = null
@@ -404,6 +400,11 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
 
         //重试
         playErrorRetry?.setOnClickListener(this)
+    }
+
+    init {
+        //拖动进度实时显示当前播放时间
+        isShowDragProgressTextOnSeekBar = true
     }
 
     /**
