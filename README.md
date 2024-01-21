@@ -61,7 +61,7 @@
 * #### ⭐**Star**鼓励开发者
 * #### 👁️Watch关注开发进度
 * #### 📇Pull requests(**请尽量贴合项目的源码和commit风格**)
-* #### 💡~~加入[群组](https://t.me/MediaBoxGithub)~~ （开发者丢失tg数据导致无法找回账号，非跑路）讨论反馈
+* #### 💡加入[群组](https://t.me/+qjISW8q_aF1mMzRk)讨论反馈
 
 ## 安全说明
 
