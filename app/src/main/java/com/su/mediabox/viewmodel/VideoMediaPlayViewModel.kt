@@ -37,25 +37,31 @@ class VideoMediaPlayViewModel : ViewModel() {
             _currentVideoPlayMedia.postValue(DataState.Failed(throwable))
         }
 
+    private val episode2VideoInfoMap = mutableMapOf<String, VideoPlayMedia>()
+
     fun playVideoMedia(episodeUrl: String = currentPlayEpisodeUrl) {
         if (episodeUrl.isNotBlank()) {
             _currentVideoPlayMedia.postValue(DataState.Loading)
             currentPlayEpisodeUrl = episodeUrl
             //开始解析
             viewModelScope.launch(videoPlayMediaDispatcher) {
-                //一次动作在未完成工作下重复解析两次，降低因为网络问题解析失败概率
                 let {
-                    var result by Delegates.notNull<VideoPlayMedia>()
-                    for (i in 0 until 2) {
-                        result = playComponent.getVideoPlayMedia(episodeUrl)
-                        if (result.videoPlayUrl.isNotBlank())
-                            break
+                    var result = episode2VideoInfoMap[episodeUrl]
+                    if (result == null) {
+                        //一次动作在未完成工作下重复解析两次，降低因为网络问题解析失败概率
+                        for (i in 0 until 2) {
+                            result = playComponent.getVideoPlayMedia(episodeUrl)
+                            if (result.videoPlayUrl.isNotBlank()) {
+                                episode2VideoInfoMap[episodeUrl] = result
+                                break
+                            }
+                        }
                     }
-                    result
+                    result ?: throw RuntimeException("无法解析出有效播放链接")
                 }.also {
                     logD("视频解析结果", "剧集：${it.title} 链接：$${it.videoPlayUrl}")
                     if (it.videoPlayUrl.isBlank())
-                        throw RuntimeException("无法解析出有效播放链接")
+                        throw RuntimeException("无效播放链接")
                     // VideoPlayMedia("测试","file:///storage/emulated/0/Android/data/com.su.mediabox.debug/files/DownloadAnime/萌萌侵略者/GEfErSXSJIsA.mp4").also {
                     _currentVideoPlayMedia.postValue(DataState.Success(it))
                     //记录历史
