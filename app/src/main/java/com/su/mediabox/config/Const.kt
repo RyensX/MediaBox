@@ -87,6 +87,7 @@ interface Setting {
         const val DANMAKU_TOP_DISPLAY_AREA_MODE = "danmaku_top_display_area_mode"
         const val DEBUG_VERSION = "debug_version"
         const val ANNOUNCEMENT = "announcement"
+        const val VIDEO_PRELOAD = "video_preload"
     }
 }
 

@@ -216,6 +216,13 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
                     setIcon(R.drawable.ic_baseline_core_24)
                     titleRes(R.string.player_default_core_title)
                 }
+
+                switchPreference {
+                    key = Const.Setting.VIDEO_PRELOAD
+                    setDefaultValue(Pref.videoPreload.value)
+                    titleRes(R.string.pref_video_preload_title)
+                    summaryRes(R.string.pref_video_preload_summary)
+                }
             }
 
             preferenceCategory {

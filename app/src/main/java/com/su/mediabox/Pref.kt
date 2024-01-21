@@ -171,4 +171,6 @@ object Pref {
     )
 
     val announcementVersion by lazyDataStoreStateFlow(Const.Setting.ANNOUNCEMENT, 0)
+
+    val videoPreload by lazyDataStoreStateFlow(Const.Setting.VIDEO_PRELOAD, true)
 }

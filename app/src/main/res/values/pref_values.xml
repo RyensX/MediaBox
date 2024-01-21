@@ -41,4 +41,6 @@
     </string-array>
     <string name="pref_video_play_position_title">自动跳转进度</string>
     <string name="pref_video_play_position_summary">不开启则会在播放器右侧提示</string>
+    <string name="pref_video_preload_title">自动预载</string>
+    <string name="pref_video_preload_summary">开启后在看视频时自动预解析后面5集</string>
 </resources>
