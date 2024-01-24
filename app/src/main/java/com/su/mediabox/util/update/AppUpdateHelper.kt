@@ -59,6 +59,7 @@ class AppUpdateHelper private constructor() {
                                 MaterialDialog(activity)
                                     .cancelable(true)
                                     .title(R.string.exist_new_debug_version)
+                                    .message(text = it.body)
                                     .positiveButton(res = R.string.go_update_download) {
                                         openBrowser("${Const.Common.GITHUB_PLUGIN_REPO_OFFICE_URL}download")
                                     }
