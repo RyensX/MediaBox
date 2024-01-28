@@ -80,7 +80,7 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
                     titleRes(R.string.chat_group_title)
                     summaryRes(R.string.chat_group_summary)
                     onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                        Util.openBrowser(Const.Common.TG_URL)
+                        Util.openBrowser(Const.Common.GROUP_URL)
                         true
                     }
                 }
