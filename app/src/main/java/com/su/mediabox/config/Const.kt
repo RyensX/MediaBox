@@ -103,6 +103,7 @@ interface Database {
     object OfflineDataBase {
         const val PLAY_RECORD_TABLE_NAME = "playRecord"
         const val UPDATE_RECORD_TABLE_NAME = "mediaUpdateRecord"
+        const val SKIP_POS_RECORD_TABLE_NAME = "skipPosRecord"
     }
 }
 

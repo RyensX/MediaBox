@@ -39,6 +39,7 @@ import com.su.mediabox.view.activity.DlnaActivity
 import com.su.mediabox.view.activity.VideoMediaPlayActivity
 import com.su.mediabox.view.adapter.type.*
 import com.su.mediabox.view.component.ZoomView
+import com.su.mediabox.view.component.player.autoSkip.VideoAutoSkipViewController
 import com.su.mediabox.view.component.textview.TypefaceTextView
 import com.su.mediabox.view.listener.dsl.setOnSeekBarChangeListener
 import kotlinx.coroutines.*
@@ -121,6 +122,8 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
         private set
 
     val mBottomContainer: ViewGroup? = mBottomContainer
+
+    private lateinit var playerListener: VideoMediaPlayerListenerCombine
 
     //下一集按钮
     var ivNextEpisode: ImageView? = null
@@ -210,6 +213,11 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
     constructor(context: Context, fullFlag: Boolean?) : super(context, fullFlag)
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
+
+    init {
+        //拖动进度实时显示当前播放时间
+        isShowDragProgressTextOnSeekBar = true
+    }
 
     override fun getLayoutId() = R.layout.layout_video_media_play
 
@@ -400,12 +408,12 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
 
         //重试
         playErrorRetry?.setOnClickListener(this)
+        //监听器
+        playerListener = VideoMediaPlayerListenerCombine()
+        //智能跳过
+        VideoAutoSkipViewController(this)
     }
 
-    init {
-        //拖动进度实时显示当前播放时间
-        isShowDragProgressTextOnSeekBar = true
-    }
 
     /**
      * 第一次播放才进行初始化
@@ -480,6 +488,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
 
         setUp(playUrl, cacheWithPlay, String.format("%s %s", videoName, episodeName))
         startPlayLogic()
+        playerListener.onUpdateVideoMedia(videoName, episodeName, playUrl)
     }
 
     /**
@@ -636,6 +645,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
         }
         super.onClickUiToggle(e)
         setRestoreScreenTextViewVisibility()
+        playerListener.onClickBlank()
     }
 
     /**
@@ -1251,6 +1261,17 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
         logD(PLAY_POS_TAG, "开始播放，当前进度：pos=${gsyVideoManager.currentPosition} url=$mOriginUrl")
     }
 
+    override fun setProgressAndTime(
+        progress: Int,
+        secProgress: Int,
+        currentTime: Int,
+        totalTime: Int,
+        forceChange: Boolean
+    ) {
+        super.setProgressAndTime(progress, secProgress, currentTime, totalTime, forceChange)
+        playerListener.onPlayProgressUpdate(currentTime)
+    }
+
     /**
      * 1.退出界面时记忆进度
      */
@@ -1323,6 +1344,10 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
     override fun lockTouchLogic() {
         super.lockTouchLogic()
         mLockScreen.setImageResource(if (mLockCurScreen) R.drawable.ic_outline_lock_24 else R.drawable.ic_outline_lock_open_24)
+    }
+
+    fun addPlayerListener(listener: VideoMediaPlayerListener) {
+        playerListener.add(listener)
     }
 
     interface PlayPositionMemoryDataStore {

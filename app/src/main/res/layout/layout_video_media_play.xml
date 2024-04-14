@@ -106,6 +106,21 @@
             app:layout_constraintTop_toBottomOf="@id/progress"
             tools:visibility="visible" />
 
+        <ImageView
+            android:id="@+id/iv_auto_skip_layout"
+            android:layout_width="30dp"
+            android:layout_height="0px"
+            android:paddingHorizontal="5dp"
+            android:src="@drawable/baseline_speed_24"
+            android:backgroundTint="@color/foreground_white_skin"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:contentDescription="智能跳过"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_next"
+            app:layout_constraintTop_toBottomOf="@id/progress" />
+
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/current"
             android:layout_width="wrap_content"
@@ -114,7 +129,7 @@
             android:textColor="@color/foreground_white_skin"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/iv_next"
+            app:layout_constraintStart_toEndOf="@id/iv_auto_skip_layout"
             app:layout_constraintTop_toBottomOf="@id/progress"
             tools:text="00:00" />
 
@@ -460,6 +475,13 @@
             android:src="@drawable/ic_close_white_24" />
 
     </LinearLayout>
+
+    <include
+        android:id="@+id/layout_video_skip"
+        layout="@layout/layout_video_auto_skip"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"/>
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/layout_setting"

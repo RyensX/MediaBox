@@ -4,24 +4,30 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.su.mediabox.App
 import com.su.mediabox.config.Const
 import com.su.mediabox.database.dao.MediaUpdateRecordDao
 import com.su.mediabox.database.dao.PlayRecordDao
+import com.su.mediabox.database.dao.SkipPosRecordDao
 import com.su.mediabox.database.entity.MediaUpdateRecord
 import com.su.mediabox.database.entity.PlayRecordEntity
+import com.su.mediabox.database.entity.SkipPosEntity
 import com.su.mediabox.model.PluginInfo
 import com.su.mediabox.plugin.PluginManager
 import com.su.mediabox.util.getOrInit
 import com.su.mediabox.util.logD
 
 // 本地数据库，不参与WebDAV备份
-@Database(entities = [PlayRecordEntity::class, MediaUpdateRecord::class], version = 1)
+@Database(entities = [PlayRecordEntity::class, MediaUpdateRecord::class,SkipPosEntity::class], version = 2)
 abstract class OfflineDatabase : RoomDatabase() {
 
     abstract fun playRecordDao(): PlayRecordDao
 
     abstract fun mediaUpdateDao(): MediaUpdateRecordDao
+
+    abstract fun skipPosRecordDao(): SkipPosRecordDao
 
     companion object {
 
@@ -34,7 +40,15 @@ abstract class OfflineDatabase : RoomDatabase() {
                     context.applicationContext,
                     OfflineDatabase::class.java,
                     dbFile
-                ).build()
+                )
+//                    .addMigrations(object :Migration(1,2){
+//                        override fun migrate(database: SupportSQLiteDatabase) {
+//
+//                        }
+//
+//                    })
+                  //  .fallbackToDestructiveMigration()
+                    .build()
             }
         }
 
