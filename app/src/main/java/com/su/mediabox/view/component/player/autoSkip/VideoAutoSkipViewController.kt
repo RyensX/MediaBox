@@ -2,15 +2,12 @@ package com.su.mediabox.view.component.player.autoSkip
 
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.su.mediabox.App
 import com.su.mediabox.R
 import com.su.mediabox.database.entity.SkipPosEntity
-import com.su.mediabox.databinding.LayoutSkipDelToastBinding
 import com.su.mediabox.databinding.LayoutVideoAutoSkipBinding
 import com.su.mediabox.util.*
 import com.su.mediabox.util.Text.ifBlank
