@@ -126,6 +126,8 @@ class VideoAutoSkipViewController private constructor(private val playerRef: Wea
         val target = sec * 1000 + skipPosEntity.duration
         player?.apply {
             seekTo(target)
+            //返回跳转自动推进1s防止再次触发
+            showLastPos(skipPosEntity.position + 1000, 3000, R.string.play_position_skip_tip)
             "智能跳过： ${skipPosEntity.desc}(+${VideoPositionMemoryDbStore.positionFormat(skipPosEntity.duration)})".showToast()
         }
     }

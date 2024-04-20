@@ -134,6 +134,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
 
     // 进度文字
     private var tvPlayPosition: TextView? = null
+    private var tvPlayPositionTips: TextView? = null
 
     // 关闭进度提示ImageView
     private var ivClosePlayPositionTip: ImageView? = null
@@ -248,6 +249,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
         ivDlna = findViewById(R.id.iv_dlna)
         vgPlayPosition = findViewById(R.id.ll_play_position_view)
         tvPlayPosition = findViewById(R.id.tv_play_position_time)
+        tvPlayPositionTips = findViewById(R.id.tv_play_position_tip)
         ivClosePlayPositionTip = findViewById(R.id.iv_close_play_position_tip)
         playErrorRetry = findViewById(R.id.play_error_retry)
         loadingHint = findViewById(R.id.loading_hint)
@@ -1234,26 +1236,37 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
                 logD(PLAY_POS_TAG, "开始查找进度：$mOriginUrl")
                 getPlayPosition(mOriginUrl)?.also {
                     logD(PLAY_POS_TAG, "查询到进度：$it")
-                    preSeekPlayPosition = it
                     if (it > 0L) {
+                        preSeekPlayPosition = it
                         val isAutoSeek = Pref.autoSeekVidePosition.value
                         if (isAutoSeek) {
                             logD(PLAY_POS_TAG, "跳转进度：$it")
                             seekOnStart = it
                             context.getString(R.string.play_auto_seek).showToast(Toast.LENGTH_LONG)
-                        } else
-                            playPositionViewJob = launch(Dispatchers.Main) {
-                                tvPlayPosition?.text = positionFormat(it)
-                                vgPlayPosition?.visible()
-                                //展示10秒
-                                delay(10000)
-                                vgPlayPosition?.gone(true, 200L)
-                            }
+                        } else {
+                            showLastPos(it)
+                        }
                     }
                 }
             }
         }
         super.onPrepared()
+    }
+
+    fun showLastPos(
+        tarPos: Long,
+        showTimeMs: Long = 10000,
+        tipRes: Int = R.string.play_position_tip
+    ) {
+        playPositionViewJob?.cancel()
+        tvPlayPositionTips?.setText(tipRes)
+        playPositionViewJob = playPositionMemoryStoreCoroutineScope.launch(Dispatchers.Main) {
+            preSeekPlayPosition = tarPos
+            tvPlayPosition?.text = playPositionMemoryStore?.positionFormat(tarPos)
+            vgPlayPosition?.visible()
+            delay(showTimeMs)
+            vgPlayPosition?.gone(true, 200L)
+        }
     }
 
     override fun startAfterPrepared() {
