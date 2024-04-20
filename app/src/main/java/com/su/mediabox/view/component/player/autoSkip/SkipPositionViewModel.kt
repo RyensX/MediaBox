@@ -69,7 +69,11 @@ class SkipPositionViewModel : ViewModel() {
         }
     }
 
-    fun delete(id: Int) = dao.delete(id)
+    fun delete(id: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            dao.delete(id)
+        }
+    }
 
     fun checkSkip(sec: Int, onEqual: (SkipPosEntity) -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {

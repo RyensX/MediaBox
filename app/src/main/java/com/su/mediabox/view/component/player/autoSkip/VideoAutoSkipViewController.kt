@@ -4,6 +4,7 @@ import android.util.Log
 import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.su.mediabox.R
@@ -59,7 +60,7 @@ class VideoAutoSkipViewController private constructor(private val playerRef: Wea
                 skipVideo(vm?.value?.convertTime(currentTime) ?: -1, it)
             },
             onLongClick = {
-                //TODO
+                delSkip(it)
             }
         )
         binding?.apply {
@@ -125,7 +126,20 @@ class VideoAutoSkipViewController private constructor(private val playerRef: Wea
         val target = sec * 1000 + skipPosEntity.duration
         player?.apply {
             seekTo(target)
-            "智能跳转到 ${skipPosEntity.desc} (${VideoPositionMemoryDbStore.positionFormat(target)})".showToast()
+            "智能跳过： ${skipPosEntity.desc}(+${VideoPositionMemoryDbStore.positionFormat(skipPosEntity.duration)})".showToast()
         }
+    }
+
+    private fun delSkip(skipPosEntity: SkipPosEntity) {
+        activity?.let {
+            AlertDialog.Builder(it)
+                .setTitle("确认删除？")
+                .setMessage("即将删除 \"${skipPosEntity.desc}\",操作后无法恢复")
+                .setPositiveButton("删除") { _, _ ->
+                    vm?.value?.delete(skipPosEntity.id)
+                }
+                .setNegativeButton("取消") { _, _ -> }
+                .create()
+        }?.show()
     }
 }
