@@ -31,7 +31,7 @@ interface Const {
                 "https://ryensx.github.io/MediaBoxPluginRepository/"
             const val GITHUB_PLUGIN_REPO_DEV_DOC_URL = "https://github.com/RyensX/MediaBox/wiki"
             const val USER_NOTICE_VERSION = 2
-            const val TG_URL = "https://t.me/MediaBoxGithub"
+            const val GROUP_URL = "https://discord.com/invite/K5GN7FaQuX"
             const val ANNOUNCEMENT="https://raw.githubusercontent.com/RyensX/MediaBox/dev/doc/announcement.json"
 
             val licenses = listOf(
@@ -87,6 +87,7 @@ interface Setting {
         const val DANMAKU_TOP_DISPLAY_AREA_MODE = "danmaku_top_display_area_mode"
         const val DEBUG_VERSION = "debug_version"
         const val ANNOUNCEMENT = "announcement"
+        const val VIDEO_PRELOAD = "video_preload"
     }
 }
 
@@ -102,6 +103,7 @@ interface Database {
     object OfflineDataBase {
         const val PLAY_RECORD_TABLE_NAME = "playRecord"
         const val UPDATE_RECORD_TABLE_NAME = "mediaUpdateRecord"
+        const val SKIP_POS_RECORD_TABLE_NAME = "skipPosRecord"
     }
 }
 

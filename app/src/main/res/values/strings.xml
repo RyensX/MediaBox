@@ -140,6 +140,7 @@
     <string name="restore_screen">还原屏幕</string>
     <string name="touch_down_high_speed"><![CDATA[>> %.1fX倍速播放]]></string>
     <string name="play_position_tip">上次看到：</string>
+    <string name="play_position_skip_tip">点击返回：</string>
     <string name="will_you_try_to_sniffer_video">是否尝试嗅探视频？</string>
     <string name="getting_complex_video_failed">获取视频链接失败，%s</string>
     <string name="start_get_complex_video">开始获取视频链接…%s</string>
@@ -320,4 +321,6 @@
     <string name="plugin_install_error_online_preview_error">在线安装预览信息加载错误</string>
     <string name="plugin_install_warning">警告</string>
     <string name="plugin_install_warning_security">当前插件包与已安装插件签名不一致，请确认来源是否安全</string>
+    <string name="skip_end">点击设置目标</string>
+    <string name="skip_start">点击设置源头</string>
 </resources>

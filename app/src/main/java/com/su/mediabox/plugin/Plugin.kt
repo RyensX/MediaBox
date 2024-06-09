@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
 import com.afollestad.materialdialogs.MaterialDialog
+import com.microsoft.appcenter.analytics.Analytics
 import com.microsoft.appcenter.crashes.Crashes
 import com.su.mediabox.App
 import com.su.mediabox.R
@@ -189,6 +190,7 @@ object PluginManager {
             pluginWorkScope.launch(Dispatchers.Main) {
                 if (!isMain)
                     _currentLaunchPlugin.value = this@apply
+                Analytics.trackEvent("plugin launch:$name")
                 //此处Catch仅仅是为了显示启动插件时所抛出的异常，大部分是自排除的提醒性异常，比如用于提示插件兼容性
                 runCatching {
                     acquirePluginFactory().apply {

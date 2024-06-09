@@ -80,7 +80,7 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
                     titleRes(R.string.chat_group_title)
                     summaryRes(R.string.chat_group_summary)
                     onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                        Util.openBrowser(Const.Common.TG_URL)
+                        Util.openBrowser(Const.Common.GROUP_URL)
                         true
                     }
                 }
@@ -215,6 +215,13 @@ class SettingsPageFragment : PreferenceFragmentCompat(), Preference.OnPreference
                     setDefaultValue(Pref.playDefaultCore.value)
                     setIcon(R.drawable.ic_baseline_core_24)
                     titleRes(R.string.player_default_core_title)
+                }
+
+                switchPreference {
+                    key = Const.Setting.VIDEO_PRELOAD
+                    setDefaultValue(Pref.videoPreload.value)
+                    titleRes(R.string.pref_video_preload_title)
+                    summaryRes(R.string.pref_video_preload_summary)
                 }
             }
 

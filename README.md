@@ -13,8 +13,8 @@
         <a href="https://img.shields.io/badge/Android-5.0%2B-brightgreen" style="text-decoration:none" >
             <img src="https://img.shields.io/badge/Android-5.0%2B-brightgreen" alt="Android version"/>
         </a>
-        <a href="https://t.me/MediaBoxGithub" style="text-decoration:none" >
-            <img src="https://img.shields.io/badge/Telegram-Group-blue.svg?logo=telegram"                             alt="GitHub license"/>
+        <a href="https://discord.com/invite/K5GN7FaQuX" style="text-decoration:none" >
+            <img src="https://img.shields.io/discord/1201109322936090637?logo=discord" alt="GitHub license"/>
         </a>
         <a href="LICENSE" style="text-decoration:none" >
             <img src="https://img.shields.io/github/license/RyensX/MediaBox" alt="GitHub license"/>
@@ -61,7 +61,7 @@
 * #### ⭐**Star**鼓励开发者
 * #### 👁️Watch关注开发进度
 * #### 📇Pull requests(**请尽量贴合项目的源码和commit风格**)
-* #### 💡~~加入[群组](https://t.me/MediaBoxGithub)~~ （开发者丢失tg数据导致无法找回账号，非跑路）讨论反馈
+* #### 💡加入[群组](https://discord.com/invite/K5GN7FaQuX)讨论反馈
 
 ## 安全说明
 

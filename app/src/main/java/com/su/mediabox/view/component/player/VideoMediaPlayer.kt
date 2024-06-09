@@ -39,6 +39,7 @@ import com.su.mediabox.view.activity.DlnaActivity
 import com.su.mediabox.view.activity.VideoMediaPlayActivity
 import com.su.mediabox.view.adapter.type.*
 import com.su.mediabox.view.component.ZoomView
+import com.su.mediabox.view.component.player.autoSkip.VideoAutoSkipViewController
 import com.su.mediabox.view.component.textview.TypefaceTextView
 import com.su.mediabox.view.listener.dsl.setOnSeekBarChangeListener
 import kotlinx.coroutines.*
@@ -122,6 +123,8 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
 
     val mBottomContainer: ViewGroup? = mBottomContainer
 
+    private lateinit var playerListener: VideoMediaPlayerListenerCombine
+
     //下一集按钮
     var ivNextEpisode: ImageView? = null
         private set
@@ -131,6 +134,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
 
     // 进度文字
     private var tvPlayPosition: TextView? = null
+    private var tvPlayPositionTips: TextView? = null
 
     // 关闭进度提示ImageView
     private var ivClosePlayPositionTip: ImageView? = null
@@ -211,6 +215,11 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
 
+    init {
+        //拖动进度实时显示当前播放时间
+        isShowDragProgressTextOnSeekBar = true
+    }
+
     override fun getLayoutId() = R.layout.layout_video_media_play
 
     @SuppressLint("ClickableViewAccessibility")
@@ -240,6 +249,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
         ivDlna = findViewById(R.id.iv_dlna)
         vgPlayPosition = findViewById(R.id.ll_play_position_view)
         tvPlayPosition = findViewById(R.id.tv_play_position_time)
+        tvPlayPositionTips = findViewById(R.id.tv_play_position_tip)
         ivClosePlayPositionTip = findViewById(R.id.iv_close_play_position_tip)
         playErrorRetry = findViewById(R.id.play_error_retry)
         loadingHint = findViewById(R.id.loading_hint)
@@ -400,12 +410,12 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
 
         //重试
         playErrorRetry?.setOnClickListener(this)
+        //监听器
+        playerListener = VideoMediaPlayerListenerCombine()
+        //智能跳过
+        VideoAutoSkipViewController(this)
     }
 
-    init {
-        //拖动进度实时显示当前播放时间
-        isShowDragProgressTextOnSeekBar = true
-    }
 
     /**
      * 第一次播放才进行初始化
@@ -480,6 +490,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
 
         setUp(playUrl, cacheWithPlay, String.format("%s %s", videoName, episodeName))
         startPlayLogic()
+        playerListener.onUpdateVideoMedia(videoName, episodeName, playUrl)
     }
 
     /**
@@ -636,6 +647,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
         }
         super.onClickUiToggle(e)
         setRestoreScreenTextViewVisibility()
+        playerListener.onClickBlank()
     }
 
     /**
@@ -1224,21 +1236,16 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
                 logD(PLAY_POS_TAG, "开始查找进度：$mOriginUrl")
                 getPlayPosition(mOriginUrl)?.also {
                     logD(PLAY_POS_TAG, "查询到进度：$it")
-                    preSeekPlayPosition = it
                     if (it > 0L) {
+                        preSeekPlayPosition = it
                         val isAutoSeek = Pref.autoSeekVidePosition.value
                         if (isAutoSeek) {
                             logD(PLAY_POS_TAG, "跳转进度：$it")
                             seekOnStart = it
                             context.getString(R.string.play_auto_seek).showToast(Toast.LENGTH_LONG)
-                        } else
-                            playPositionViewJob = launch(Dispatchers.Main) {
-                                tvPlayPosition?.text = positionFormat(it)
-                                vgPlayPosition?.visible()
-                                //展示10秒
-                                delay(10000)
-                                vgPlayPosition?.gone(true, 200L)
-                            }
+                        } else {
+                            showLastPos(it)
+                        }
                     }
                 }
             }
@@ -1246,9 +1253,36 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
         super.onPrepared()
     }
 
+    fun showLastPos(
+        tarPos: Long,
+        showTimeMs: Long = 10000,
+        tipRes: Int = R.string.play_position_tip
+    ) {
+        playPositionViewJob?.cancel()
+        tvPlayPositionTips?.setText(tipRes)
+        playPositionViewJob = playPositionMemoryStoreCoroutineScope.launch(Dispatchers.Main) {
+            preSeekPlayPosition = tarPos
+            tvPlayPosition?.text = playPositionMemoryStore?.positionFormat(tarPos)
+            vgPlayPosition?.visible()
+            delay(showTimeMs)
+            vgPlayPosition?.gone(true, 200L)
+        }
+    }
+
     override fun startAfterPrepared() {
         super.startAfterPrepared()
         logD(PLAY_POS_TAG, "开始播放，当前进度：pos=${gsyVideoManager.currentPosition} url=$mOriginUrl")
+    }
+
+    override fun setProgressAndTime(
+        progress: Int,
+        secProgress: Int,
+        currentTime: Int,
+        totalTime: Int,
+        forceChange: Boolean
+    ) {
+        super.setProgressAndTime(progress, secProgress, currentTime, totalTime, forceChange)
+        playerListener.onPlayProgressUpdate(currentTime)
     }
 
     /**
@@ -1323,6 +1357,10 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
     override fun lockTouchLogic() {
         super.lockTouchLogic()
         mLockScreen.setImageResource(if (mLockCurScreen) R.drawable.ic_outline_lock_24 else R.drawable.ic_outline_lock_open_24)
+    }
+
+    fun addPlayerListener(listener: VideoMediaPlayerListener) {
+        playerListener.add(listener)
     }
 
     interface PlayPositionMemoryDataStore {

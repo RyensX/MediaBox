@@ -38,6 +38,7 @@ class VideoMediaPlayActivity : BasePluginActivity(),
     companion object {
         var playList: List<EpisodeData>? = null
         private const val DEFAULT_SEEK_LENGTH = 15000L
+        const val DEFAULT_VIDEO_PRELOAD_SIZE = 5
     }
 
     private val mBinding by viewBind(ActivityVideoMediaPlayBinding::inflate)
