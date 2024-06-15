@@ -1,6 +1,7 @@
 package com.su.mediabox.database
 
 import android.content.Context
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -20,7 +21,13 @@ import com.su.mediabox.util.getOrInit
 import com.su.mediabox.util.logD
 
 // 本地数据库，不参与WebDAV备份
-@Database(entities = [PlayRecordEntity::class, MediaUpdateRecord::class,SkipPosEntity::class], version = 2)
+@Database(
+    entities = [PlayRecordEntity::class, MediaUpdateRecord::class, SkipPosEntity::class],
+    version = 2,
+    autoMigrations = [
+        AutoMigration(from = 1, to = 2)
+    ]
+)
 abstract class OfflineDatabase : RoomDatabase() {
 
     abstract fun playRecordDao(): PlayRecordDao
@@ -41,13 +48,6 @@ abstract class OfflineDatabase : RoomDatabase() {
                     OfflineDatabase::class.java,
                     dbFile
                 )
-//                    .addMigrations(object :Migration(1,2){
-//                        override fun migrate(database: SupportSQLiteDatabase) {
-//
-//                        }
-//
-//                    })
-                  //  .fallbackToDestructiveMigration()
                     .build()
             }
         }
