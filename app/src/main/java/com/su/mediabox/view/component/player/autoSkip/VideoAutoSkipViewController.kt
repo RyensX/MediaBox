@@ -7,6 +7,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.microsoft.appcenter.analytics.Analytics
 import com.su.mediabox.R
 import com.su.mediabox.database.entity.SkipPosEntity
 import com.su.mediabox.databinding.LayoutVideoAutoSkipBinding
@@ -51,6 +52,7 @@ class VideoAutoSkipViewController private constructor(private val playerRef: Wea
         layoutView?.gone()
         enterView?.setOnClickListener {
             layoutView?.visible()
+            Analytics.trackEvent("功能：智能跳过-列表")
         }
         mAdapter = SkipPosListAdapter(
             onEnable = { skip, enable ->
@@ -58,6 +60,7 @@ class VideoAutoSkipViewController private constructor(private val playerRef: Wea
             },
             onClick = {
                 skipVideo(vm?.value?.convertTime(currentTime) ?: -1, it)
+                Analytics.trackEvent("功能：智能跳过-手动")
             },
             onLongClick = {
                 delSkip(it)
@@ -73,6 +76,7 @@ class VideoAutoSkipViewController private constructor(private val playerRef: Wea
                         getTextDialog(activity!!, "添加智能跳过")?.ifBlank { "跳过项" } ?: return@launch
                     vm?.value?.putPlayPosition(desc = desc)
                     Log.d(tag, "putPlayPosition")
+                    Analytics.trackEvent("功能：智能跳过-添加")
                 }
             }
             skipPosList.apply {
@@ -119,6 +123,7 @@ class VideoAutoSkipViewController private constructor(private val playerRef: Wea
         vm?.value?.checkSkip(sec) {
             Log.d(tag, "autoSkip: cur=$sec skip=$it")
             skipVideo(sec, it)
+            Analytics.trackEvent("功能：智能跳过-自动")
         }
     }
 
