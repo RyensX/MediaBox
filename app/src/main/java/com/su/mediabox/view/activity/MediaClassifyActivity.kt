@@ -128,6 +128,7 @@ class MediaClassifyActivity : BasePluginActivity() {
                     mBinding.mediaClassifyFabProgress.invisible()
                     "加载分类错误：${it.throwable?.message}".showToast()
                 }
+                else -> {}
             }
         }
 
