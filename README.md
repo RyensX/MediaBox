@@ -13,6 +13,9 @@
         <a href="https://img.shields.io/badge/Android-5.0%2B-brightgreen" style="text-decoration:none" >
             <img src="https://img.shields.io/badge/Android-5.0%2B-brightgreen" alt="Android version"/>
         </a>
+        <a href="https://pd.qq.com/s/1cii5y637" style="text-decoration:none" >
+            <img src="https://img.shields.io/badge/QQ-频道-red" alt="GitHub license"/>
+        </a>
         <a href="https://discord.com/invite/K5GN7FaQuX" style="text-decoration:none" >
             <img src="https://img.shields.io/discord/1201109322936090637?logo=discord" alt="GitHub license"/>
         </a>
