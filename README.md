@@ -61,7 +61,7 @@
 * #### ⭐**Star**鼓励开发者
 * #### 👁️Watch关注开发进度
 * #### 📇Pull requests(**请尽量贴合项目的源码和commit风格**)
-* #### 💡加入[群组](https://discord.com/invite/K5GN7FaQuX)讨论反馈
+* #### 💡加入[群组](https://pd.qq.com/s/1cii5y637)讨论反馈
 
 ## 安全说明
 
