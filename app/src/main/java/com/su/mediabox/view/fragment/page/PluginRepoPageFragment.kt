@@ -1,5 +1,7 @@
 package com.su.mediabox.view.fragment.page
 
+import android.util.Log
+
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast

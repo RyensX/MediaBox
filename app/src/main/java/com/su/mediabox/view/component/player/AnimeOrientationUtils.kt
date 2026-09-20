@@ -1,5 +1,7 @@
 package com.su.mediabox.view.component.player
 
+import android.util.Log
+
 import android.app.Activity
 import android.content.pm.ActivityInfo
 import android.os.Build

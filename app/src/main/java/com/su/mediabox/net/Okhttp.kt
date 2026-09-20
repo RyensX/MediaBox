@@ -1,5 +1,7 @@
 package com.su.mediabox.net
 
+import android.util.Log
+
 import com.su.mediabox.util.coil.CoilUtil
 import com.su.mediabox.util.showToast
 import okhttp3.Cache
@@ -18,7 +20,7 @@ var dns: DnsOverHttps? = DnsServer.dnsServer.let {
                 .url(it.toHttpUrl())
                 .build()
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e("MediaBox", "Error", e)
             e.message?.showToast()
             null
         }
@@ -34,7 +36,7 @@ fun changeDnsServer(server: String) {
                 .url(server.toHttpUrl())
                 .build()
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e("MediaBox", "Error", e)
             e.message?.showToast()
             null
         }

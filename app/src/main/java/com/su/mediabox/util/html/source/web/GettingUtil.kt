@@ -1,5 +1,7 @@
 package com.su.mediabox.util.html.source.web
 
+import android.util.Log
+
 import android.R
 import android.app.Activity
 import android.view.View
@@ -47,7 +49,7 @@ class GettingUtil private constructor() {
                 }
                 mWebView = null
             } catch (e: Exception) {
-                e.printStackTrace()
+                Log.e("MediaBox", "Error", e)
             }
         }
     }
@@ -127,7 +129,7 @@ class GettingUtil private constructor() {
                 mCallback.onGettingError(mWebView, mUrl, -1)
             }
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e("MediaBox", "Error", e)
             mCallback.onGettingError(mWebView, mUrl, -1)
         }
     }

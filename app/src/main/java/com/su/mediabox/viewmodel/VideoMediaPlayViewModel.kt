@@ -1,5 +1,7 @@
 package com.su.mediabox.viewmodel
 
+import android.util.Log
+
 import android.content.Context
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.MutableLiveData
@@ -56,7 +58,7 @@ class VideoMediaPlayViewModel : ViewModel() {
 
     private val videoPlayMediaDispatcher =
         Dispatchers.IO + CoroutineExceptionHandler { _, throwable ->
-            throwable.printStackTrace()
+            throwablLog.e("MediaBox", "Error", e)
             _currentVideoPlayMedia.postValue(DataState.Failed(throwable))
         }
 

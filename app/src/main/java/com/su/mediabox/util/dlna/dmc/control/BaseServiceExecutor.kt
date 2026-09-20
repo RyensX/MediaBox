@@ -1,5 +1,7 @@
 package com.su.mediabox.util.dlna.dmc.control
 
+import android.util.Log
+
 import android.os.Handler
 import org.fourthline.cling.controlpoint.ControlPoint
 import android.os.Looper
@@ -303,7 +305,7 @@ internal abstract class BaseServiceExecutor protected constructor(
                 })
             } catch (e: IllegalArgumentException) {
                 // service is null: ActionInvocation -> Action can not be null
-                e.printStackTrace()
+                Log.e("MediaBox", "Error", e)
                 e.message?.showToast()
             }
         }
@@ -329,7 +331,7 @@ internal abstract class BaseServiceExecutor protected constructor(
                 })
             } catch (e: IllegalArgumentException) {
                 // service is null: ActionInvocation -> Action can not be null
-                e.printStackTrace()
+                Log.e("MediaBox", "Error", e)
                 e.message?.showToast()
             }
         }

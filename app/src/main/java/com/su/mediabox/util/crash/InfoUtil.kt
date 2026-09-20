@@ -1,5 +1,7 @@
 package com.su.mediabox.util.crash
 
+import android.util.Log
+
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
@@ -39,7 +41,7 @@ object InfoUtil {
                 sb.append("$name=$value").append("\n")
             }
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e("MediaBox", "Error", e)
         }
         return sb.toString()
     }
@@ -61,7 +63,7 @@ object InfoUtil {
                 .append(")")
             versionInfo.toString()
         } catch (e: PackageManager.NameNotFoundException) {
-            e.printStackTrace()
+            Log.e("MediaBox", "Error", e)
             null
         }
     }

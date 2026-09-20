@@ -1,5 +1,7 @@
 package com.su.mediabox.util.html.source.web
 
+import android.util.Log
+
 import android.graphics.Bitmap
 import android.net.http.SslError
 import android.os.Handler
@@ -83,7 +85,7 @@ class GettingWebViewClient(
     //                if (video != null) mVideos.add(video);
     //            }
     //        } catch (Throwable e) {
-    //            e.printStackTrace();
+    //            Log.e("MediaBox", "Error", e);
     //        }
     //        return null;
     //    }

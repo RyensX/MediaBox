@@ -1,5 +1,7 @@
 package com.su.mediabox.util.html.source
 
+import android.util.Log
+
 import android.text.TextUtils
 import android.webkit.WebView
 import com.su.mediabox.util.logE
@@ -36,7 +38,7 @@ object Util {
             }
             logE("Util", "getContent code = $responseCode")
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e("MediaBox", "Error", e)
             logE("Util", "getContent error = $e")
         } finally {
             urlConnection?.disconnect()
@@ -74,7 +76,7 @@ object Util {
                 return split[0] + "//" + split[2] + "/" + url
             }
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e("MediaBox", "Error", e)
         }
         return url
     }
@@ -145,7 +147,7 @@ object Util {
             val newFactory = sc.socketFactory
             connection.sslSocketFactory = newFactory
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e("MediaBox", "Error", e)
         }
         return oldFactory
     }

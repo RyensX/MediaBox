@@ -1,5 +1,7 @@
 package com.su.mediabox.view.component
 
+import android.util.Log
+
 import android.content.Context
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -12,7 +14,7 @@ class WrapLinearLayoutManager(context: Context) : LinearLayoutManager(context) {
         try {
             super.onLayoutChildren(recycler, state)
         } catch (e: IndexOutOfBoundsException) {
-            e.printStackTrace()
+            Log.e("MediaBox", "Error", e)
             logD("WrapLinearLayoutManager", "捕获异常：" + e.message)
         }
     }

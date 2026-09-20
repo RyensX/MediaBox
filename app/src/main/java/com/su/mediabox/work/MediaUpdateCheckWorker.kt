@@ -1,5 +1,7 @@
 package com.su.mediabox.work
 
+import android.util.Log
+
 import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -123,7 +125,7 @@ internal class MediaUpdateCheckWorker(context: Context, workerParameters: Worker
             setForeground(createForegroundInfo())
         }
         withContext(Dispatchers.IO + CoroutineExceptionHandler { _, throwable ->
-            throwable.printStackTrace()
+            throwablLog.e("MediaBox", "Error", e)
             logD(TAG, "发生错误:${throwable.message}")
         }) {
             PluginManager.pluginFlow.first().apply {

@@ -1,5 +1,7 @@
 package com.su.mediabox.database
 
+import android.util.Log
+
 import com.su.mediabox.util.logD
 import com.su.mediabox.bean.MediaHistory
 import com.su.mediabox.util.showToast
@@ -27,7 +29,7 @@ object DatabaseOperations {
                     favoriteDao.updateFavorite(favorite)
                 }
             } catch (e: Exception) {
-                e.printStackTrace()
+                Log.e("MediaBox", "Error", e)
             }
         }
     }
@@ -55,7 +57,7 @@ object DatabaseOperations {
                     )
                 }
             } catch (e: Exception) {
-                e.printStackTrace()
+                Log.e("MediaBox", "Error", e)
             }
         }
     }

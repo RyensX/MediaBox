@@ -1,5 +1,7 @@
 package com.su.mediabox.util
 
+import android.util.Log
+
 import android.app.Activity
 import android.content.*
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
@@ -93,7 +95,7 @@ object Util {
                 sb.append(out)
             }
         } catch (e: IOException) {
-            e.printStackTrace()
+            Log.e("MediaBox", "Error", e)
         }
         return sb.toString()
     }
@@ -169,7 +171,7 @@ object Util {
     fun getScreenBrightness(activity: Activity): Int? = try {
         Settings.System.getInt(activity.contentResolver, Settings.System.SCREEN_BRIGHTNESS)
     } catch (e: Settings.SettingNotFoundException) {
-        e.printStackTrace()
+        Log.e("MediaBox", "Error", e)
         null
     }
 
@@ -203,7 +205,7 @@ object Util {
             } while (conn.responseCode == 302 && conn.getHeaderField("Location") != null)
             url
         } catch (e: IOException) {
-            e.printStackTrace()
+            Log.e("MediaBox", "Error", e)
             url
         }
     }
@@ -254,7 +256,7 @@ object Util {
                 context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             systemService.setPrimaryClip(ClipData.newPlainText("text", this))
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e("MediaBox", "Error", e)
         }
     }
 
@@ -263,7 +265,7 @@ object Util {
         return try {
             version != currentVersion
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e("MediaBox", "Error", e)
             "检查版本号失败，建议手动到Github查看是否有更新\n当前版本代码：$currentVersion".showToast(Toast.LENGTH_LONG)
             false
         }
@@ -275,7 +277,7 @@ object Util {
             version != currentVersion &&
                     version.replaceFirst("v", "", true) != currentVersion
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e("MediaBox", "Error", e)
             "检查版本号失败，建议手动到Github查看是否有更新\n当前版本：$currentVersion".showToast(Toast.LENGTH_LONG)
             false
         }
@@ -293,7 +295,7 @@ object Util {
                 packageInfo.versionCode.toLong()
             }
         } catch (e: PackageManager.NameNotFoundException) {
-            e.printStackTrace()
+            Log.e("MediaBox", "Error", e)
         }
         return appVersionCode
     }
@@ -306,7 +308,7 @@ object Util {
                 .getPackageInfo(App.context.packageName, 0)
             appVersionName = packageInfo.versionName
         } catch (e: PackageManager.NameNotFoundException) {
-            e.printStackTrace()
+            Log.e("MediaBox", "Error", e)
         }
         return appVersionName
     }
@@ -320,7 +322,7 @@ object Util {
             val labelRes: Int = packageInfo.applicationInfo.labelRes
             App.context.resources.getString(labelRes)
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e("MediaBox", "Error", e)
             null
         }
     }
@@ -340,7 +342,7 @@ object Util {
                 }
             }
         } catch (e: PackageManager.NameNotFoundException) {
-            e.printStackTrace()
+            Log.e("MediaBox", "Error", e)
         }
         return metaValue
     }
@@ -470,7 +472,7 @@ object Util {
                 }
             }
         } catch (e: java.lang.Exception) {
-            e.printStackTrace()
+            Log.e("MediaBox", "Error", e)
         }
         return arrayOf(subjectDN, issuerDN, serial, notBefore, notAfter)
     }
@@ -499,7 +501,7 @@ object Util {
             str.deleteCharAt(str.length - 1)
             str.toString()
         } catch (e: java.lang.Exception) {
-            e.printStackTrace()
+            Log.e("MediaBox", "Error", e)
             ""
         }
     }
@@ -516,7 +518,7 @@ object Util {
     } catch (e: Exception) {
         if (showErrMsg) {
             logD("取值错误", e.message ?: "")
-            e.printStackTrace()
+            Log.e("MediaBox", "Error", e)
         }
         if (showErrToast)
             e.message?.showToast()
