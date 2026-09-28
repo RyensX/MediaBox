@@ -1,5 +1,7 @@
 package com.su.mediabox.viewmodel
 
+import android.util.Log
+
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -32,7 +34,7 @@ class HistoryViewModel : ViewModel() {
             } catch (e: Exception) {
                 historyList.clear()
                 mldHistoryList.postValue(false)
-                e.printStackTrace()
+                Log.e("MediaBox", "Error", e)
                 (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToast()
             }
         }
@@ -47,7 +49,7 @@ class HistoryViewModel : ViewModel() {
                 mldDeleteHistory.postValue(index)
             } catch (e: Exception) {
                 mldDeleteHistory.postValue(-1)
-                e.printStackTrace()
+                Log.e("MediaBox", "Error", e)
                 (App.context.getString(R.string.delete_failed) + "\n" + e.message).showToast()
             }
         }
@@ -62,7 +64,7 @@ class HistoryViewModel : ViewModel() {
                 mldDeleteAllHistory.postValue(itemCount)
             } catch (e: Exception) {
                 mldDeleteAllHistory.postValue(0)
-                e.printStackTrace()
+                Log.e("MediaBox", "Error", e)
                 (App.context.getString(R.string.delete_failed) + "\n" + e.message).showToast()
             }
         }

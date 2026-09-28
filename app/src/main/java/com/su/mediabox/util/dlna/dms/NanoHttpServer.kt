@@ -1,5 +1,7 @@
 package com.su.mediabox.util.dlna.dms
 
+import android.util.Log
+
 import fi.iki.elonen.NanoHTTPD
 import java.io.File
 import java.io.FileInputStream
@@ -44,7 +46,7 @@ internal class NanoHttpServer(port: Int) : NanoHTTPD(port), IResourceServer {
         return try {
             newChunkedResponse(Response.Status.OK, mimeType, FileInputStream(file))
         } catch (e: FileNotFoundException) {
-            e.printStackTrace()
+            Log.e("MediaBox", "Error", e)
             newChunkedResponse(Response.Status.SERVICE_UNAVAILABLE, mimeType, null)
         }
     }
@@ -53,7 +55,7 @@ internal class NanoHttpServer(port: Int) : NanoHTTPD(port), IResourceServer {
         try {
             start()
         } catch (e: IOException) {
-            e.printStackTrace()
+            Log.e("MediaBox", "Error", e)
         }
     }
 

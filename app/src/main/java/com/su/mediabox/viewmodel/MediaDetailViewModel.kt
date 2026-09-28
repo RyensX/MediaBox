@@ -1,5 +1,7 @@
 package com.su.mediabox.viewmodel
 
+import android.util.Log
+
 import androidx.lifecycle.*
 import com.su.mediabox.App
 import com.su.mediabox.R
@@ -96,7 +98,7 @@ class MediaDetailViewModel : ViewModel() {
                 updateFavTarget()
             } catch (e: Exception) {
                 _videoData.postValue(Pair(ResponseDataType.FAILED, ArrayList()))
-                e.printStackTrace()
+                Log.e("MediaBox", "Error", e)
                 (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToast()
             }
         }

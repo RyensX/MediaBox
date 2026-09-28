@@ -1,5 +1,7 @@
 package com.su.mediabox.plugin
 
+import android.util.Log
+
 import com.su.mediabox.bean.MediaFavorite
 import com.su.mediabox.database.entity.MediaUpdateRecord
 import com.su.mediabox.database.getAppDataBase

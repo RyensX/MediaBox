@@ -1,5 +1,7 @@
 package com.su.mediabox.view.component.player
 
+import android.util.Log
+
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -984,7 +986,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
                     if (it is MyVideoAllCallBack) it.onVideoResume()
                 }
             } catch (e: java.lang.Exception) {
-                e.printStackTrace()
+                Log.e("MediaBox", "Error", e)
             }
         }
     }

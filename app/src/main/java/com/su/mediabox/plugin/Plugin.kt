@@ -1,5 +1,7 @@
 package com.su.mediabox.plugin
 
+import android.util.Log
+
 import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
@@ -255,7 +257,7 @@ object PluginManager {
         } else {
             pluginWorkScope.launch(Dispatchers.IO + CoroutineExceptionHandler { _, throwable ->
                 Crashes.trackError(throwable)
-                throwable.printStackTrace()
+                throwablLog.e("MediaBox", "Error", e)
                 pluginInfo.isEnable = true
             }) {
                 //删除数据库
@@ -424,7 +426,7 @@ object PluginManager {
                                             ?.let { it1 -> installPlugin(it1, it) }
                                     }
                                 } catch (e: Exception) {
-                                    e.printStackTrace()
+                                    Log.e("MediaBox", "Error", e)
                                 } finally {
                                     delete()
                                 }

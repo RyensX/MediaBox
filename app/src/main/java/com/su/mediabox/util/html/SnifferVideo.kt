@@ -1,5 +1,7 @@
 package com.su.mediabox.util.html
 
+import android.util.Log
+
 import android.app.Activity
 import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
@@ -89,7 +91,7 @@ object SnifferVideo {
                             getSrc(html, type)
                         } catch (e: IndexOutOfBoundsException) {
                             // 解析地址出现错误
-                            e.printStackTrace()
+                            Log.e("MediaBox", "Error", e)
                             logE("getSrc IOOBException", html)
                             onGettingError(webView, url, PARSE_URL_ERROR)
                             return

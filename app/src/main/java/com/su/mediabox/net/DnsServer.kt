@@ -1,5 +1,7 @@
 package com.su.mediabox.net
 
+import android.util.Log
+
 import androidx.appcompat.app.AppCompatActivity
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
@@ -91,7 +93,7 @@ object DnsServer {
                 url.toHttpUrl()
                 dnsServer = url
             } catch (e: Exception) {
-                e.printStackTrace()
+                Log.e("MediaBox", "Error", e)
                 e.message?.showToast()
             }
         }.show()

@@ -1,5 +1,7 @@
 package com.su.mediabox.util.update
 
+import android.util.Log
+
 import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
@@ -104,7 +106,7 @@ class AppUpdateHelper private constructor() {
                             }
                             append("发布于：${s}<br/>")
                         } catch (e: Exception) {
-                            e.printStackTrace()
+                            Log.e("MediaBox", "Error", e)
                         }
                     }
                     val downloadCount = updateBean.assets[0].downloadCount

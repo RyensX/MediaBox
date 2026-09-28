@@ -1,5 +1,7 @@
 package com.su.mediabox.viewmodel
 
+import android.util.Log
+
 import androidx.lifecycle.*
 import com.su.mediabox.App
 import com.su.mediabox.R
@@ -84,7 +86,7 @@ class MediaSearchViewModel : ViewModel() {
                 //空列表由RV自行提供空视图，非搜索失败
             } catch (e: Exception) {
                 _showState.postValue(ShowState.FAILED)
-                e.printStackTrace()
+                Log.e("MediaBox", "Error", e)
                 (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToast()
             }
         }
@@ -108,7 +110,7 @@ class MediaSearchViewModel : ViewModel() {
             try {
                 getAppDataBase().searchDao().deleteSearchHistory(keyWord)
             } catch (e: Exception) {
-                e.printStackTrace()
+                Log.e("MediaBox", "Error", e)
             }
         }
     }

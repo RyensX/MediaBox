@@ -1,5 +1,7 @@
 package com.su.mediabox.view.adapter.type
 
+import android.util.Log
+
 import android.annotation.SuppressLint
 import android.content.Context
 import android.view.ViewGroup
@@ -233,7 +235,7 @@ class TypeAdapter(
                         )
                     }
             } catch (e: Exception) {
-                e.printStackTrace()
+                Log.e("MediaBox", "Error", e)
                 logD("VH创建错误", e.message ?: viewType.toString())
                 TypeViewHolder.UnknownTypeViewHolder(parent)
             }

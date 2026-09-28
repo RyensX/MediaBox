@@ -1,5 +1,7 @@
 package com.su.mediabox.util
 
+import android.util.Log
+
 import android.content.Context
 import androidx.annotation.Keep
 import androidx.lifecycle.LifecycleCoroutineScope
@@ -22,7 +24,7 @@ private val api by lazy { RetrofitManager.get().create(AppService::class.java) }
 fun checkAnnouncement(context: Context, lifecycleCoroutineScope: LifecycleCoroutineScope) {
     lifecycleCoroutineScope.launch(Dispatchers.Main + CoroutineExceptionHandler { _, throwable ->
         logD("公告获取失败", throwable.message ?: "")
-        throwable.printStackTrace()
+        throwablLog.e("MediaBox", "Error", e)
     }) {
         val announcement = withContext(Dispatchers.IO) { api.getAnnouncement() }
         if (announcement.version > Pref.announcementVersion.value) {

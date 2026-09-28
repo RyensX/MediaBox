@@ -1,5 +1,7 @@
 package com.su.mediabox.view.activity
 
+import android.util.Log
+
 import android.os.Bundle
 import android.text.Html
 import com.su.mediabox.databinding.ActivityNoticeBinding
@@ -28,7 +30,7 @@ class NoticeActivity : BasePluginActivity() {
                     // 此处URL解码，因此要求传入的参数需要经过URL编码！！！
                     paramMap[it[0]] = URLDecoder.decode(it[1], "UTF-8")
                 } catch (e: UnsupportedEncodingException) {
-                    e.printStackTrace()
+                    Log.e("MediaBox", "Error", e)
                 }
             }
         }

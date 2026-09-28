@@ -1,5 +1,7 @@
 package com.su.mediabox.util
 
+import android.util.Log
+
 import android.app.Dialog
 import com.su.mediabox.util.logD
 import android.view.View
@@ -22,7 +24,7 @@ fun Dialog.createCoroutineScope(context: CoroutineContext = Dispatchers.Default)
     }
 
 val pluginExceptionHandler = CoroutineExceptionHandler { _, e ->
-    e.printStackTrace()
+    Log.e("MediaBox", "Error", e)
     when (e.javaClass) {
         NoSuchMethodError::class.java, InstantiationError::class.java -> "该插件API版本过低！请更新插件！".showToast()
         else -> e.message?.showToast()
