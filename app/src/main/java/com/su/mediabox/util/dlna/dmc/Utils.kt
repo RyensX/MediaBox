@@ -1,5 +1,7 @@
 package com.su.mediabox.util.dlna.dmc
 
+import android.util.Log
+
 import com.su.mediabox.util.dlna.dmc.ICast.ICastVideo
 import org.fourthline.cling.support.model.ProtocolInfo
 import org.fourthline.cling.support.model.item.VideoItem
@@ -70,7 +72,7 @@ object Utils {
         return try {
             s.toLong()
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e("MediaBox", "Error", e)
             0L
         }
     }

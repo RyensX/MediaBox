@@ -1,5 +1,7 @@
 package com.su.mediabox.plugin
 
+import android.util.Log
+
 import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
@@ -39,6 +41,8 @@ import java.io.File
 
 
 object PluginManager {
+
+    private const val TAG = "PluginManager"
 
     val appApiVersion by unsafeLazy {
         val appInfo: ApplicationInfo = App.context.packageManager
@@ -253,7 +257,7 @@ object PluginManager {
         } else {
             pluginWorkScope.launch(Dispatchers.IO + CoroutineExceptionHandler { _, throwable ->
                 Crashes.trackError(throwable)
-                throwable.printStackTrace()
+                throwablLog.e("MediaBox", "Error", e)
                 pluginInfo.isEnable = true
             }) {
                 //删除数据库
@@ -284,7 +288,7 @@ object PluginManager {
      * @param pluginInfo 至少要保证包含有效[PluginInfo.sourcePath]（作为下载地址）
      * @param directInstall 直接下载安装，一般只用于官方仓库插件，不经安装器验证直接安装
      */
-    fun downloadPlugin(pluginInfo: PluginInfo, directInstall: Boolean = false) {
+    fun downloadPlugin(pluginInfo: PluginInfo, directInstall: Boolean = false) = runCatching {
         val downloadManager =
             App.context.getSystemService(AppCompatActivity.DOWNLOAD_SERVICE) as DownloadManager
         val uri: Uri = Uri
@@ -302,6 +306,10 @@ object PluginManager {
             setAllowedOverRoaming(true)
         }
         downloadManager.enqueue(request)
+    }.onFailure {
+        logE(TAG, "downloadPlugin: error=${it.message} directInstall=$directInstall pluginInfo=$pluginInfo")
+        "插件下载失败: ${it.message}".showToast()
+        it.printStackTrace()
     }
 
     fun initPluginEnv() {
@@ -418,7 +426,7 @@ object PluginManager {
                                             ?.let { it1 -> installPlugin(it1, it) }
                                     }
                                 } catch (e: Exception) {
-                                    e.printStackTrace()
+                                    Log.e("MediaBox", "Error", e)
                                 } finally {
                                     delete()
                                 }

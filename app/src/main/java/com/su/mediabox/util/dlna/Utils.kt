@@ -1,5 +1,7 @@
 package com.su.mediabox.util.dlna
 
+import android.util.Log
+
 import android.content.Context
 import android.net.wifi.WifiManager
 import com.su.mediabox.util.dlna.dmc.DLNACastManager
@@ -39,7 +41,7 @@ object Utils {
             fileName = fileName.replace("\\+".toRegex(), "%20")
             newSourceUrl = newSourceUrl.replace(originFileName, fileName)
         } catch (e: UnsupportedEncodingException) {
-            e.printStackTrace()
+            Log.e("MediaBox", "Error", e)
         }
         return newSourceUrl
     }

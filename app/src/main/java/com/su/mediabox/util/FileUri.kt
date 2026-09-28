@@ -1,5 +1,7 @@
 package com.su.mediabox.util
 
+import android.util.Log
+
 import android.annotation.SuppressLint
 import android.content.*
 import android.database.Cursor
@@ -55,7 +57,7 @@ object FileUri {
                 if (isNewTask) intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 context.startActivity(intent)
             } catch (e: Exception) {
-                e.printStackTrace()
+                Log.e("MediaBox", "Error", e)
             }
         }
         return false
@@ -344,7 +346,7 @@ object FileUri {
                     outputStream.write(buffers, 0, read)
                 }
             } catch (e: Exception) {
-                e.printStackTrace()
+                Log.e("MediaBox", "Error", e)
             } finally {
                 inputStream?.close()
                 outputStream?.close()

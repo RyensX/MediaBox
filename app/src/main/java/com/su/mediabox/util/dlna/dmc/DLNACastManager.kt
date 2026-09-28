@@ -1,5 +1,7 @@
 package com.su.mediabox.util.dlna.dmc
 
+import android.util.Log
+
 import android.app.Activity
 import android.app.Application
 import android.app.Service
@@ -230,7 +232,7 @@ class DLNACastManager private constructor() : IControl, OnDeviceRegistryListener
                 it.cast(device, `object`)
             }
         } catch (e: NullPointerException) {
-            e.printStackTrace()
+            Log.e("MediaBox", "Error", e)
             e.message?.showToast()
         }
     }

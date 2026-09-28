@@ -1,5 +1,7 @@
 package com.su.mediabox.work
 
+import android.util.Log
+
 import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -68,6 +70,10 @@ internal class MediaUpdateCheckWorker(context: Context, workerParameters: Worker
     private val TAG = "媒体检查更新Worker"
     private val key = ResourceUtil.getString(R.string.media_update_check_title)
 
+    private val notifyFlag =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_IMMUTABLE
+        else PendingIntent.FLAG_UPDATE_CURRENT
+
     private fun createForegroundInfo(): ForegroundInfo {
 //        val cancel = applicationContext.getString(R.string.cancel)
 //        val intent = WorkManager.getInstance(applicationContext)
@@ -77,7 +83,7 @@ internal class MediaUpdateCheckWorker(context: Context, workerParameters: Worker
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
         val notifyPendingIntent = PendingIntent.getActivity(
-            applicationContext, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT
+            applicationContext, 0, notifyIntent, notifyFlag
         )
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -119,7 +125,7 @@ internal class MediaUpdateCheckWorker(context: Context, workerParameters: Worker
             setForeground(createForegroundInfo())
         }
         withContext(Dispatchers.IO + CoroutineExceptionHandler { _, throwable ->
-            throwable.printStackTrace()
+            throwablLog.e("MediaBox", "Error", e)
             logD(TAG, "发生错误:${throwable.message}")
         }) {
             PluginManager.pluginFlow.first().apply {
@@ -179,7 +185,7 @@ internal class MediaUpdateCheckWorker(context: Context, workerParameters: Worker
 
                         val pluginMediaDataManageNotifyPendingIntent = PendingIntent.getActivity(
                             applicationContext, index,
-                            pluginMediaDataManageIntent, PendingIntent.FLAG_UPDATE_CURRENT
+                            pluginMediaDataManageIntent, notifyFlag
                         )
 
                         val pluginMediaUpdateNofBuilder =
@@ -216,7 +222,7 @@ internal class MediaUpdateCheckWorker(context: Context, workerParameters: Worker
                                     Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                             }
                         val notifyPendingIntent = PendingIntent.getActivity(
-                            applicationContext, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT
+                            applicationContext, 0, notifyIntent, notifyFlag
                         )
 
                         val mediaUpdateCheckNofBuilder =

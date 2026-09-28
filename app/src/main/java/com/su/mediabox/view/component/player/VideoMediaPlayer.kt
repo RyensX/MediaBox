@@ -1,5 +1,7 @@
 package com.su.mediabox.view.component.player
 
+import android.util.Log
+
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -42,6 +44,7 @@ import com.su.mediabox.view.component.ZoomView
 import com.su.mediabox.view.component.player.autoSkip.VideoAutoSkipViewController
 import com.su.mediabox.view.component.textview.TypefaceTextView
 import com.su.mediabox.view.listener.dsl.setOnSeekBarChangeListener
+import com.su.mediabox.viewmodel.VideoMediaPlayViewModel
 import kotlinx.coroutines.*
 import java.io.File
 import kotlin.math.abs
@@ -426,14 +429,15 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
         tvEpisode = findViewById(R.id.tv_episode)
         //播放列表
         tvEpisode?.apply {
+            val playList = VideoMediaPlayViewModel.getCurrentPlayList(context)
             //只有存在选集数据和VM才显示选集
-            if (VideoMediaPlayActivity.playList == null || playOperatingProxy == null) {
+            if (playList == null || playOperatingProxy == null) {
                 gone()
                 return@apply
             }
             visible()
             rvEpisode
-                ?.grid(if (VideoMediaPlayActivity.playList!!.size > 8) 4 else 1)
+                ?.grid(if (playList.size > 8) 4 else 1)
                 ?.initTypeList(DataViewMapList().registerDataViewMap<EpisodeData, PlayerEpisodeViewHolder>()) {
                     vHCreateDSL<PlayerEpisodeViewHolder> {
                         setOnClickListener(itemView) { pos ->
@@ -478,7 +482,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
         //为了使下一集按钮有效，需要在第一次加载时初始化播放列表的初始定位
             playPositionMemoryStoreCoroutineScope.launch {
                 //查找初始定位
-                VideoMediaPlayActivity.playList?.forEachIndexed { index, episodeData ->
+                VideoMediaPlayViewModel.getCurrentPlayList(context)?.forEachIndexed { index, episodeData ->
                     if (episodeData.url.isNotBlank() && episodeData.url == playOperatingProxy?.currentPlayEpisodeUrl) {
                         logD("找到初始标记", index.toString())
                         rvEpisode?.typeAdapter()?.setTag(index)
@@ -500,8 +504,8 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
     fun playNextEpisode(): Boolean {
         val episodeAdapter = rvEpisode?.typeAdapter()
         episodeAdapter?.getTag<Int>()?.also { pos ->
-            if (pos < (VideoMediaPlayActivity.playList?.size ?: pos) - 1)
-                VideoMediaPlayActivity.playList?.getOrNull(pos + 1)?.url?.also {
+            if (pos < (VideoMediaPlayViewModel.getCurrentPlayList(context)?.size ?: pos) - 1)
+                VideoMediaPlayViewModel.getCurrentPlayList(context)?.getOrNull(pos + 1)?.url?.also {
                     currentPlayer.onVideoPause()
                     episodeAdapter.apply {
                         //更新上次选项
@@ -784,12 +788,15 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
             NO_REVERSE -> {  // 正常
                 transform.setScale(1f, 1f, mTextureView.width / 2.toFloat(), 0f)
             }
+
             HORIZONTAL_REVERSE -> {  // 左右镜像
                 transform.setScale(-1f, 1f, mTextureView.width / 2.toFloat(), 0f)
             }
+
             VERTICAL_REVERSE -> {  // 上下镜像
                 transform.setScale(1f, -1f, 0f, mTextureView.height / 2.toFloat())
             }
+
             else -> return
         }
         mTextureViewTransform = transformSize
@@ -819,12 +826,15 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
                 GSYVideoView.CURRENT_STATE_PLAYING -> {
                     imageView.setImageDrawable(getResDrawable(R.drawable.ic_pause_white_24))
                 }
+
                 GSYVideoView.CURRENT_STATE_ERROR -> {
                     imageView.setImageDrawable(getResDrawable(R.drawable.ic_play_white_24))
                 }
+
                 GSYVideoView.CURRENT_STATE_AUTO_COMPLETE -> {
                     imageView.setImageDrawable(getResDrawable(R.drawable.ic_refresh_white_24))
                 }
+
                 else -> {
                     imageView.setImageDrawable(getResDrawable(R.drawable.ic_play_white_24))
                 }
@@ -888,7 +898,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
         viewTopContainerShadow?.visible()
         mUiCleared = false
 
-        if (VideoMediaPlayActivity.playList != null)
+        if (VideoMediaPlayViewModel.getCurrentPlayList(context) != null)
             ivNextEpisode?.gone()
 
         playErrorRetry?.gone()
@@ -906,7 +916,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
         initFirstLoad = false
         mUiCleared = false
 
-        if (VideoMediaPlayActivity.playList != null)
+        if (VideoMediaPlayViewModel.getCurrentPlayList(context) != null)
             ivNextEpisode?.visible()
 
         ivSetting?.visible()
@@ -976,7 +986,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
                     if (it is MyVideoAllCallBack) it.onVideoResume()
                 }
             } catch (e: java.lang.Exception) {
-                e.printStackTrace()
+                Log.e("MediaBox", "Error", e)
             }
         }
     }
@@ -1019,11 +1029,13 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
                     startDismissControlViewTimer()
                 }
             }
+
             R.id.thumb -> {
                 vgSettingContainer?.gone()
                 vgRightContainer?.gone()
                 rvEpisode?.gone()
             }
+
             R.id.back -> (context as Activity).finish()
             //重试
             R.id.play_error_retry -> prepareVideo()
@@ -1049,7 +1061,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
                     val adapter = typeAdapter()
                     isVisible = true
                     showRightContainer()
-                    adapter.submitList(VideoMediaPlayActivity.playList) {
+                    adapter.submitList(VideoMediaPlayViewModel.getCurrentPlayList(context)) {
                         //定位
                         adapter.getTag<Int>()?.also {
                             smartScrollToPosition(it)
@@ -1156,6 +1168,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
                 MotionEvent.ACTION_DOWN -> {
                     touchSurfaceDown(x, y)
                 }
+
                 MotionEvent.ACTION_MOVE -> {
                     val deltaX = x - mDownX
                     val deltaY = y - mDownY
@@ -1170,6 +1183,7 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
                     }
                     touchSurfaceMove(deltaX, deltaY, y)
                 }
+
                 MotionEvent.ACTION_UP -> {
                     startDismissControlViewTimer()
                     touchSurfaceUp()
@@ -1271,7 +1285,10 @@ open class VideoMediaPlayer : StandardGSYVideoPlayer {
 
     override fun startAfterPrepared() {
         super.startAfterPrepared()
-        logD(PLAY_POS_TAG, "开始播放，当前进度：pos=${gsyVideoManager.currentPosition} url=$mOriginUrl")
+        logD(
+            PLAY_POS_TAG,
+            "开始播放，当前进度：pos=${gsyVideoManager.currentPosition} url=$mOriginUrl"
+        )
     }
 
     override fun setProgressAndTime(

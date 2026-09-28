@@ -1,5 +1,7 @@
 package com.su.mediabox.viewmodel
 
+import android.util.Log
+
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -32,7 +34,7 @@ class SettingViewModel : ViewModel() {
                 getAllHistoryCount()
             } catch (e: Exception) {
                 mldDeleteAllHistory.postValue(false)
-                e.printStackTrace()
+                Log.e("MediaBox", "Error", e)
                 (App.context.getString(R.string.delete_failed) + "\n" + e.message).showToast()
             }
         }
@@ -44,7 +46,7 @@ class SettingViewModel : ViewModel() {
             try {
                 mldCacheSize.postValue((App.context.imageLoader.diskCache?.size ?: 0).toString())
             } catch (e: Exception) {
-                e.printStackTrace()
+                Log.e("MediaBox", "Error", e)
                 "获取缓存大小失败".showToast()
             }
         }
@@ -59,7 +61,7 @@ class SettingViewModel : ViewModel() {
                 mldClearAllCache.postValue(true)
             } catch (e: Exception) {
                 mldClearAllCache.postValue(false)
-                e.printStackTrace()
+                Log.e("MediaBox", "Error", e)
                 (App.context.getString(R.string.delete_failed) + "\n" + e.message).showToast()
             }
         }
@@ -74,7 +76,7 @@ class SettingViewModel : ViewModel() {
                 mldAllHistoryCount.postValue(count)
             } catch (e: Exception) {
                 mldAllHistoryCount.postValue(-1)
-                e.printStackTrace()
+                Log.e("MediaBox", "Error", e)
             }
         }
     }

@@ -1,5 +1,7 @@
 package com.su.mediabox.net
 
+import android.util.Log
+
 import androidx.appcompat.app.AppCompatActivity
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
@@ -29,7 +31,7 @@ object DnsServer {
         override fun equals(other: Any?): Boolean {
             return when (other) {
                 null -> false
-                other === this -> true
+                (other === this) -> true
                 is String -> other == dnsServer
                 is Dns -> other.dnsServer == this.dnsServer && other.dnsName == this.dnsName
                 else -> false
@@ -91,7 +93,7 @@ object DnsServer {
                 url.toHttpUrl()
                 dnsServer = url
             } catch (e: Exception) {
-                e.printStackTrace()
+                Log.e("MediaBox", "Error", e)
                 e.message?.showToast()
             }
         }.show()

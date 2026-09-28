@@ -1,5 +1,7 @@
 package com.su.mediabox.util
 
+import android.util.Log
+
 import okio.ByteString
 import java.io.File
 import java.io.FileInputStream
@@ -24,9 +26,9 @@ fun File.toMD5(): String? {
         val b = md.digest()
         bi = BigInteger(1, b)
     } catch (e: NoSuchAlgorithmException) {
-        e.printStackTrace()
+        Log.e("MediaBox", "Error", e)
     } catch (e: IOException) {
-        e.printStackTrace()
+        Log.e("MediaBox", "Error", e)
     }
     return bi?.toString(16)
 }

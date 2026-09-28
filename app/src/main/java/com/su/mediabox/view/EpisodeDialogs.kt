@@ -1,5 +1,7 @@
 package com.su.mediabox.view
 
+import android.util.Log
+
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -94,7 +96,7 @@ fun episodeSheetDialog(
                             "开始解析 ${it.name}，请勿关闭...".showToast()
                             coroutineScope.launch(Dispatchers.IO + SupervisorJob() + CoroutineExceptionHandler { _, e ->
                                 coroutineScope.launch(Dispatchers.Main) {
-                                    e.printStackTrace()
+                                    Log.e("MediaBox", "Error", e)
                                     "缓存错误:${e.message}".showToast()
                                 }
                             }) {
